@@ -144,6 +144,10 @@
 							<numindex index="0">LLL:EXT:tt_products/locallang_db.xml:tt_content.pi_flexform.display_mode.34</numindex>
 							<numindex index="1">MEMODAM</numindex>
 						</numindex>
+						<numindex index="27">
+							<numindex index="0">LLL:EXT:tt_products/locallang_db.xml:tt_content.pi_flexform.display_mode.35</numindex>
+							<numindex index="1">MEMODAMOVERVIEW</numindex>
+						</numindex>
 						<numindex index="28">
 							<numindex index="0">LLL:EXT:tt_products/locallang_db.xml:tt_content.pi_flexform.display_mode.24</numindex>
 							<numindex index="1">LISTDAMCAT</numindex>
