@@ -29,7 +29,7 @@
  *
  * functions for creating sql queries on arrays
  *
- * $Id$
+ * $Id: class.tx_ttproducts_sql.php 90578 2016-01-30 08:08:08Z franzholz $
  *
  * @author	Franz Holzinger <kontakt@fholzinger.com>
  * @maintainer	Franz Holzinger <kontakt@fholzinger.com>
@@ -37,7 +37,7 @@
  * @subpackage tt_products
  */
 class tx_ttproducts_sql {
-	function isValid (&$row, $where)	{
+	static public function isValid (&$row, $where)	{
 		$whereArray = t3lib_div::trimExplode ('AND', $where);
 
 		$isValid = true;

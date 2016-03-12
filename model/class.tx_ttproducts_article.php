@@ -29,7 +29,7 @@
  *
  * functions for the product
  *
- * $Id$
+ * $Id: class.tx_ttproducts_article.php 90578 2016-01-30 08:08:08Z franzholz $
  *
  * @author  Franz Holzinger <kontakt@fholzinger.com>
  * @maintainer	Franz Holzinger <kontakt@fholzinger.com>
@@ -38,9 +38,6 @@
  *
  *
  */
-
-
-require_once (PATH_BE_ttproducts.'model/class.tx_ttproducts_article_base.php');
 
 
 class tx_ttproducts_article extends tx_ttproducts_article_base {
@@ -57,10 +54,10 @@ class tx_ttproducts_article extends tx_ttproducts_article_base {
 	 * @param	[type]		$tablename: ...
 	 * @return	[type]		...
 	 */
-	function init(&$cObj, $tablename)  {
+	function init($cObj, $tablename)  {
 		global $TYPO3_DB,$TSFE,$TCA;
 
-		$cnf = &t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
 		$conftablename = 'tt_products_articles';
 		parent::init($cObj, $conftablename);
 		$tablename = ($tablename ? $tablename : $conftablename);
@@ -81,18 +78,17 @@ class tx_ttproducts_article extends tx_ttproducts_article_base {
 		if ($tableconf['language.'] && is_array($tableconf['language.']['marker.']))	{
 			$this->getTableObj()->initMarkerFile($tableconf['language.']['marker.']['file']);
 		}
-
 	} // init
 
 
-	function get($uid=0,$pid=0,$bStore=true,$where_clause='',$limit='',$fields='',$bCount=FALSE) {
+	function get($uid = 0, $pid = 0, $bStore = true, $where_clause = '', $limit = '', $fields = '', $bCount = FALSE) {
 		global $TYPO3_DB;
 
 		$rc = $this->dataArray[$uid];
 		if (!$rc && $uid) {
-			$where = '1=1 '.$this->getTableObj()->enableFields().' AND uid = '.intval($uid);
+			$where = '1=1 '.$this->getTableObj()->enableFields().' AND uid = ' . intval($uid);
 			if ($where_clause)	{
-				$where .= ' '.$where_clause;
+				$where .= ' ' . $where_clause;
 			}
 			// Fetching the articles
 			$res = $this->getTableObj()->exec_SELECTquery('*', $where);
@@ -105,19 +101,20 @@ class tx_ttproducts_article extends tx_ttproducts_article_base {
 		return $rc;
 	}
 
+
 	/**
 	 * [Describe function...]
 	 *
 	 * @param	[type]		$where: ...
 	 * @return	[type]		...
 	 */
-	function &getWhereArray ($where) {
+	function getWhereArray ($where) {
 		global $TYPO3_DB;
 		$rowArray = array();
 		$enableWhere = $this->getTableObj()->enableFields();
-		$where = ($where ? $where.' '.$enableWhere : '1=1 '.$enableWhere);
+		$where = ($where ? $where.' '.$enableWhere : '1=1 ' . $enableWhere);
 
-		$res = $this->getTableObj()->exec_SELECTquery('*',$where);
+		$res = $this->getTableObj()->exec_SELECTquery('*', $where);
 		$variantFieldArray = $this->variant->getFieldArray();
 
 		while ($row = $TYPO3_DB->sql_fetch_assoc($res))	{
@@ -155,7 +152,7 @@ class tx_ttproducts_article extends tx_ttproducts_article_base {
 	 * @param	[type]		$row: ...
 	 * @return	[type]		...
 	 */
-	function &getProductRow($row)	{
+	function getProductRow($row)	{
 		$rc = $this->tt_products->get($row['uid_product']);
 		return $rc;
 	}

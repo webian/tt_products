@@ -29,7 +29,7 @@
  *
  * functions for the product
  *
- * $Id$
+ * $Id: class.tx_ttproducts_article_view.php 90578 2016-01-30 08:08:08Z franzholz $
  *
  * @author  Franz Holzinger <kontakt@fholzinger.com>
  * @maintainer	Franz Holzinger <kontakt@fholzinger.com>
@@ -38,9 +38,6 @@
  *
  *
  */
-
-
-require_once (PATH_BE_ttproducts.'view/class.tx_ttproducts_article_base_view.php');
 
 
 class tx_ttproducts_article_view extends tx_ttproducts_article_base_view {

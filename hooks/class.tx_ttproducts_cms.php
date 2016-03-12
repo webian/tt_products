@@ -29,7 +29,7 @@
  *
  * hook functions for the TYPO3 cms
  *
- * $Id$
+ * $Id: class.tx_ttproducts_cms.php 90578 2016-01-30 08:08:08Z franzholz $
  *
  * @author	Franz Holzinger <contact@fholzinger.com>
  * @maintainer	Franz Holzinger <contact@fholzinger.com>
@@ -39,10 +39,9 @@
  *
  */
 
-require_once(PATH_BE_div2007.'hooks/class.tx_div2007_hooks_cms.php');
 
 class tx_ttproducts_cms extends tx_div2007_hooks_cms {
-	public $extKey=TT_PRODUCTS_EXTkey;
+	public $extKey=TT_PRODUCTS_EXT;
 
 }
 

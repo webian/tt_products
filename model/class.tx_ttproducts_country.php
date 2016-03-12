@@ -29,7 +29,7 @@
  *
  * functions for the static_info_countries table
  *
- * $Id$
+ * $Id: class.tx_ttproducts_country.php 90578 2016-01-30 08:08:08Z franzholz $
  *
  * @author	Franz Holzinger <kontakt@fholzinger.com>
  * @maintainer	Franz Holzinger <kontakt@fholzinger.com>
@@ -39,8 +39,6 @@
  *
  */
 
-
-require_once(PATH_BE_table.'lib/class.tx_table_db.php');
 
 
 class tx_ttproducts_country extends tx_ttproducts_table_base {
@@ -54,10 +52,10 @@ class tx_ttproducts_country extends tx_ttproducts_table_base {
 	 * @param	[type]		$functablename: ...
 	 * @return	[type]		...
 	 */
-	function init(&$pibase, $functablename)	{
+	function init($pibase, $functablename)	{
 		parent::init($pibase, $functablename);
 		$tablename = $this->getTablename();
-		$cnf = &t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
 		$tablename = ($tablename ? $tablename : 'pages');
 		$this->tableconf = $cnf->getTableConf('static_countries');
 		$this->getTableObj()->setDefaultFieldArray(array('uid'=>'uid', 'pid'=>'pid'));
@@ -101,7 +99,7 @@ class tx_ttproducts_country extends tx_ttproducts_table_base {
 				$whereString .= ' AND '.$where;
 			}
 
-			$whereString .= ' '.$this->getTableObj()->enableFields();
+			$whereString .= ' ' . $this->getTableObj()->enableFields();
 			$fields = ($fields ? $fields : '*');
 			// Fetching the products
 			$res = $this->getTableObj()->exec_SELECTquery($fields, $whereString);
@@ -138,10 +136,9 @@ class tx_ttproducts_country extends tx_ttproducts_table_base {
 		$markerTable = implode('',t3lib_div::trimExplode('_',$this->getTableObj()->name));
 
 		foreach ($fieldsArray as $k => $field)	{
-			$markerArray['###'.strtoupper($markerTable.'_'.$field).'###'] = htmlentities($row [$field],ENT_QUOTES,$TSFE->renderCharset);
+			$markerArray['###' . strtoupper($markerTable . '_' . $field) . '###'] = htmlentities($row [$field], ENT_QUOTES, $TSFE->renderCharset);
 		}
 	}
-
 
 }
 

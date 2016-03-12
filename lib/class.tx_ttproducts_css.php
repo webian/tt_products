@@ -29,7 +29,7 @@
  *
  * functions for CSS matters
  *
- * $Id$
+ * $Id: class.tx_ttproducts_css.php 90578 2016-01-30 08:08:08Z franzholz $
  *
  * @author	Franz Holzinger <kontakt@fholzinger.com>
  * @maintainer	Franz Holzinger <kontakt@fholzinger.com>
@@ -46,21 +46,19 @@ class tx_ttproducts_css {
 	 * @param	[type]		$$pibase: ...
 	 * @return	[type]		...
 	 */
-	function init(&$pibase)	{
+	function init($pibase)	{
 		global $TYPO3_DB;
-		$this->pibase = &$pibase;
+		$this->pibase = $pibase;
 		$this->conf = &$this->getConf();
 	} // init
 
 
 	function &getConf ($tablename='', $theCode='ALL')	{
 
-		$cnf = &t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
 		$cssConf = $cnf->getSpecialConf('CSS', $tablename, $theCode);
 		return $cssConf;
 	}
-
-
 }
 
 

@@ -29,7 +29,7 @@
  *
  * functions for the static_info_countries table view
  *
- * $Id$
+ * $Id: class.tx_ttproducts_country_view.php 90578 2016-01-30 08:08:08Z franzholz $
  *
  * @author	Franz Holzinger <kontakt@fholzinger.com>
  * @maintainer	Franz Holzinger <kontakt@fholzinger.com>

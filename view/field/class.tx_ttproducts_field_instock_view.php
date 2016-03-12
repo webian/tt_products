@@ -29,7 +29,7 @@
  *
  * functions for the inStock field view
  *
- * $Id$
+ * $Id: class.tx_ttproducts_field_instock_view.php 90578 2016-01-30 08:08:08Z franzholz $
  *
  * @author	Franz Holzinger <kontakt@fholzinger.com>
  * @maintainer	Franz Holzinger <kontakt@fholzinger.com>

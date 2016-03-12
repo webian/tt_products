@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 1999-2007 Kasper Skårhøj <kasperYYYY@typo3.com>
+*  (c) 1999-2010 Kasper Skårhøj <kasperYYYY@typo3.com>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -31,15 +31,13 @@
  * Also controls basket, searching and payment.
  *
  *
- * $Id$
+ * $Id: class.tx_ttproducts_pi1.php 90578 2016-01-30 08:08:08Z franzholz $
  *
  * @author	Kasper Skårhøj <kasperYYYY@typo3.com>
  * @author	Renè Fritz <r.fritz@colorcube.de>
- * @author	Franz Holzinger <kontakt@fholzinger.com>
+ * @author	Franz Holzinger <franz@ttproducts.de>
  * @author	Klaus Zierer <zierer@pz-systeme.de>
- * @author	Milosz Klosowicz <typo3@miklobit.com>
- * @author	Els Verberne <verberne@bendoo.nl>
- * @maintainer	Franz Holzinger <kontakt@fholzinger.com>
+ * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products
  * @see file tt_products/static/old_style/constants.txt
@@ -47,8 +45,6 @@
  *
  *
  */
-
-require_once (PATH_BE_ttproducts.'pi1/class.tx_ttproducts_pi1_base.php');
 
 
 class tx_ttproducts_pi1 extends tx_ttproducts_pi1_base {

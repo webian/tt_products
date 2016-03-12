@@ -29,7 +29,7 @@
  *
  * JavaScript marker functions
  *
- * $Id$
+ * $Id: class.tx_ttproducts_javascript_marker.php 90578 2016-01-30 08:08:08Z franzholz $
  *
  * @author	Franz Holzinger <kontakt@fholzinger.com>
  * @maintainer	Franz Holzinger <kontakt@fholzinger.com>
@@ -44,9 +44,9 @@ class tx_ttproducts_javascript_marker {
 	var $marker = 'JAVASCRIPT';
 
 
-	function init(&$pibase) {
-		$this->pibase = &$pibase;
-		$cnf = &t3lib_div::getUserObj('&tx_ttproducts_config');
+	function init($pibase) {
+		$this->pibase = $pibase;
+		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
 
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
@@ -67,14 +67,16 @@ class tx_ttproducts_javascript_marker {
 	 * @access private
 	 */
 	function getMarkerArray (&$markerArray, &$itemMarkerArray)	{
-		$javaScriptObj = &t3lib_div::getUserObj('&tx_ttproducts_javascript');
-
-		$jsItemMarkerArray = array();
-		foreach ($itemMarkerArray as $marker => $value)	{
-			$jsItemMarkerArray[$marker] = $javaScriptObj->jsspecialchars($value);
-		}
 
 		if (is_array($this->conf['javaScript.']))	{
+
+			$javaScriptObj = t3lib_div::getUserObj('&tx_ttproducts_javascript');
+
+			$jsItemMarkerArray = array();
+			foreach ($itemMarkerArray as $marker => $value)	{
+				$jsItemMarkerArray[$marker] = $javaScriptObj->jsspecialchars($value);
+			}
+
 			foreach ($this->conf['javaScript.'] as $key => $confJS)	{
 				$marker = rtrim($key,'.');
 				$jsText = $this->pibase->cObj->substituteMarkerArray($confJS['value'], $jsItemMarkerArray);

@@ -29,7 +29,7 @@
  *
  * dummy variant class for tables which do not have any variants
  *
- * $Id$
+ * $Id: class.tx_ttproducts_variant_dummy_view.php 90578 2016-01-30 08:08:08Z franzholz $
  *
  * @author  Franz Holzinger <kontakt@fholzinger.com>
  * @maintainer	Franz Holzinger <kontakt@fholzinger.com>
@@ -39,17 +39,14 @@
  */
 
 
-require_once (PATH_BE_ttproducts.'view/interface.tx_ttproducts_variant_view_int.php');
-
-
 class tx_ttproducts_variant_dummy_view implements tx_ttproducts_variant_view_int {
 	public $modelObj;
 	public $cObj;
 	public $langObj;
 
-	public function init(&$langObj, &$modelObj)	{
-		$this->langObj = &$langObj;
-		$this->cObj = &$langObj->cObj;
+	public function init($langObj, $modelObj)	{
+		$this->langObj = $langObj;
+		$this->cObj = $langObj->cObj;
 		$this->modelObj = $modelObj;
 	}
 

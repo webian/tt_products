@@ -29,7 +29,7 @@
  *
  * functions for the voucher system
  *
- * $Id$
+ * $Id: class.tx_ttproducts_voucher_view.php 90578 2016-01-30 08:08:08Z franzholz $
  *
  * @author  Franz Holzinger <kontakt@fholzinger.com>
  * @maintainer	Franz Holzinger <kontakt@fholzinger.com>
@@ -59,15 +59,14 @@ class tx_ttproducts_voucher_view extends tx_ttproducts_table_base_view {
 		&$wrappedSubpartArray,
 		$charset=''
 	)	{
-		$modelObj = &$this->getModelObj();
-
+		$modelObj = $this->getModelObj();
 		$subpartArray['###SUB_VOUCHERCODE###'] = '';
 
 		if ($modelObj->getValid())	{
 			$subpartArray['###SUB_VOUCHERCODE_DISCOUNTWRONG###'] = '';
 			$wrappedSubpartArray['###SUB_VOUCHERCODE_DISCOUNT###'] = array();
 		} else {
-			$tmp = tx_div2007_alpha::getLL($this->langObj, 'voucher_invalid');
+			$tmp = tx_div2007_alpha5::getLL_fh002($this->langObj, 'voucher_invalid');
 			$tmpArray = explode('|',$tmp);
 			$subpartArray['###SUB_VOUCHERCODE_DISCOUNT###'] = $tmpArray[0] . htmlspecialchars($modelObj->getCode()) . $tmpArray[1];
 			$wrappedSubpartArray['###SUB_VOUCHERCODE_DISCOUNTWRONG###'] = array();
@@ -86,8 +85,8 @@ class tx_ttproducts_voucher_view extends tx_ttproducts_table_base_view {
 	function getMarkerArray (
 		&$markerArray
 	)	{
-		$priceViewObj = &t3lib_div::getUserObj('&tx_ttproducts_field_price_view');
-		$modelObj = &$this->getModelObj();
+		$priceViewObj = t3lib_div::getUserObj('&tx_ttproducts_field_price_view');
+		$modelObj = $this->getModelObj();
 		$markerArray['###INSERT_VOUCHERCODE###'] = 'recs[tt_products][vouchercode]';
 
 		$voucherCode = $modelObj->getCode();

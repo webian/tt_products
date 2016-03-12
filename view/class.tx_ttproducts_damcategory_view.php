@@ -29,7 +29,7 @@
  *
  * functions for the category
  *
- * $Id$
+ * $Id: class.tx_ttproducts_damcategory_view.php 90578 2016-01-30 08:08:08Z franzholz $
  *
  * @author  Franz Holzinger <contact@fholzinger.com>
  * @maintainer	Franz Holzinger <contact@fholzinger.com>
@@ -38,8 +38,6 @@
  *
  *
  */
-
-require_once(PATH_BE_ttproducts.'view/class.tx_ttproducts_category_view.php');
 
 
 class tx_ttproducts_damcategory_view extends tx_ttproducts_category_view {

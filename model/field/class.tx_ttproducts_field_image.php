@@ -29,7 +29,7 @@
  *
  * functions for the images
  *
- * $Id$
+ * $Id: class.tx_ttproducts_field_image.php 90578 2016-01-30 08:08:08Z franzholz $
  *
  * @author  Franz Holzinger <kontakt@fholzinger.com>
  * @maintainer	Franz Holzinger <kontakt@fholzinger.com>
@@ -37,9 +37,6 @@
  * @subpackage tt_products
  *
  */
-
-
-require_once (PATH_BE_ttproducts.'model/field/class.tx_ttproducts_field_media.php');
 
 
 class tx_ttproducts_field_image extends tx_ttproducts_field_media {

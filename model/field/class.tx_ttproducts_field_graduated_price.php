@@ -29,7 +29,7 @@
  *
  * functions for the product
  *
- * $Id$
+ * $Id: class.tx_ttproducts_field_graduated_price.php 90578 2016-01-30 08:08:08Z franzholz $
  *
  * @author  Franz Holzinger <kontakt@fholzinger.com>
  * @maintainer	Franz Holzinger <kontakt@fholzinger.com>
@@ -39,8 +39,6 @@
  *
  */
 
-
-require_once (PATH_BE_table.'lib/class.tx_table_db.php');
 
 class tx_ttproducts_field_graduated_price extends tx_ttproducts_field_base {
 

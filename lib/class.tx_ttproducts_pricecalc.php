@@ -29,7 +29,7 @@
  *
  * basket price calculation functions
  *
- * $Id$
+ * $Id: class.tx_ttproducts_pricecalc.php 90578 2016-01-30 08:08:08Z franzholz $
  *
  * @author	Franz Holzinger <kontakt@fholzinger.com>
  * @maintainer	Franz Holzinger <kontakt@fholzinger.com>
@@ -41,12 +41,10 @@
 
 
 
-require_once (PATH_BE_ttproducts.'lib/class.tx_ttproducts_pricecalc_base.php');
-
-
 class tx_ttproducts_pricecalc extends tx_ttproducts_pricecalc_base {
 
 	function getCalculatedData(&$itemArray, &$conf, $type, &$priceReduction, $priceTotalTax) {
+		$sql = t3lib_div::getUserObj('tx_ttproducts_sql');
 
 		if (!$itemArray || !count($itemArray)) {
 			return;
@@ -59,12 +57,19 @@ class tx_ttproducts_pricecalc extends tx_ttproducts_pricecalc_base {
 				continue;
 			}
 			$countedItems = array();
+			$pricefor1 = doubleval($priceCalcTemp['prod.']['1']);
 			$dumCount = 0;
 
 			// loop over all items in the basket indexed by sort string
 			foreach ($itemArray as $sort=>$actItemArray) {
 				foreach ($actItemArray as $k2=>$actItem) {
 					$row = $actItem['rec'];
+
+					if (is_array($priceCalcTemp['sql.']))    {
+						if (!($bIsValid = $sql->isValid($row, $priceCalcTemp['sql.']['where'])))    {
+							continue;
+						}
+					}
 
 					// has a price reduction already been calculated before ?
 					if ($priceReduction[$row['uid']] == 1) {

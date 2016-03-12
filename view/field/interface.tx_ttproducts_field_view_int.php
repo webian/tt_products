@@ -29,7 +29,7 @@
  *
  * interface for all database table field view classes
  *
- * $Id$
+ * $Id: interface.tx_ttproducts_field_view_int.php 90578 2016-01-30 08:08:08Z franzholz $
  *
  * @author  Franz Holzinger <kontakt@fholzinger.com>
  * @maintainer	Franz Holzinger <kontakt@fholzinger.com>
@@ -40,9 +40,9 @@
 
 
 
-interface tx_ttproducts_field_view_int	{
-	public function needsInit();
-	public function &getModelObj();
+interface tx_ttproducts_field_view_int {
+	public function needsInit ();
+	public function getModelObj ();
 	public function getItemMarkerArray ($functablename, $fieldname, &$row, $markerKey, &$markerArray, $tagArray, $theCode, $id, &$bSkip, $bHtml=true, $charset='', $prefix='');
 }
 

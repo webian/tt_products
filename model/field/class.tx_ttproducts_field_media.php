@@ -29,7 +29,7 @@
  *
  * functions for digital medias
  *
- * $Id$
+ * $Id: class.tx_ttproducts_field_media.php 90578 2016-01-30 08:08:08Z franzholz $
  *
  * @author  Franz Holzinger <kontakt@fholzinger.com>
  * @maintainer	Franz Holzinger <kontakt@fholzinger.com>
@@ -55,10 +55,11 @@ class tx_ttproducts_field_media extends tx_ttproducts_field_base {
 
 
 	function getDirname(&$imageRow)	{
+
 		if($imageRow['file_mime_type'] == 'image' && isset($imageRow['file_path']))	{
 			$dirname = $imageRow['file_path'];
 		} else {
-			$dirname = ($this->conf['defaultImageDir'] ? $this->conf['defaultImageDir'] : ( $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXTkey]['imageFolder'] ? $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXTkey]['imageFolder'] : 'uploads/pics/'));
+			$dirname = ($this->conf['defaultImageDir'] ? $this->conf['defaultImageDir'] : ( $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['imageFolder'] ? $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['imageFolder'] . '/' : 'uploads/pics/'));
 		}
 		return $dirname;
 	}

@@ -29,7 +29,7 @@
  *
  * interface for the variant classes
  *
- * $Id$
+ * $Id: int.tx_ttproducts_variant_int.php 90578 2016-01-30 08:08:08Z franzholz $
  *
  * @author  Franz Holzinger <kontakt@fholzinger.com>
  * @maintainer	Franz Holzinger <kontakt@fholzinger.com>
@@ -42,7 +42,7 @@
 
 
 interface tx_ttproducts_variant_int {
-	public function init(&$itemTable, $tablename, $useArticles);
+	public function init($itemTable, $tablename, $useArticles);
 	public function modifyRowFromVariant (&$row, $variant);
 	public function getVariantFromRow (&$row);
 	public function getVariantFromRawRow (&$row);

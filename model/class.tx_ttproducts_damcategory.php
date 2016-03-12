@@ -29,7 +29,7 @@
  *
  * functions for the DAM category
  *
- * $Id$
+ * $Id: class.tx_ttproducts_damcategory.php 90578 2016-01-30 08:08:08Z franzholz $
  *
  * @author  Franz Holzinger <contact@fholzinger.com>
  * @maintainer	Franz Holzinger <contact@fholzinger.com>
@@ -39,7 +39,6 @@
  *
  */
 
-require_once(PATH_BE_ttproducts.'model/class.tx_ttproducts_category.php');
 
 
 class tx_ttproducts_damcategory extends tx_ttproducts_category {

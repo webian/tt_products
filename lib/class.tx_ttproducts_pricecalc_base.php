@@ -29,7 +29,7 @@
  *
  * base class for all price calculation functions
  *
- * $Id$
+ * $Id: class.tx_ttproducts_pricecalc_base.php 90578 2016-01-30 08:08:08Z franzholz $
  *
  * @author	Franz Holzinger <kontakt@fholzinger.com>
  * @maintainer	Franz Holzinger <kontakt@fholzinger.com>
@@ -38,7 +38,7 @@
  */
 class tx_ttproducts_pricecalc_base {
 
-	function getPrice (&$conf, $offset, $num='1')	{
+	function getPrice (&$conf, $offset, $num = '1')	{
 		$rc = 0;
 		$priceCalcTemp = $conf[$offset];
 		if (is_array($priceCalcTemp))	{

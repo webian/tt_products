@@ -29,7 +29,7 @@
  *
  * article functions without object instance
  *
- * $Id$
+ * $Id: class.tx_ttproducts_variant.php 90578 2016-01-30 08:08:08Z franzholz $
  *
  * @author  Franz Holzinger <kontakt@fholzinger.com>
  * @maintainer	Franz Holzinger <kontakt@fholzinger.com>
@@ -38,8 +38,6 @@
  *
  */
 
-
-require_once (PATH_BE_ttproducts.'model/int.tx_ttproducts_variant_int.php');
 
 
 class tx_ttproducts_variant implements tx_ttproducts_variant_int {
@@ -59,12 +57,12 @@ class tx_ttproducts_variant implements tx_ttproducts_variant_int {
 	 * @param	[type]		$useArticles: ...
 	 * @return	[type]		...
 	 */
-	function init(&$itemTable, $tablename, $useArticles)  {
-		$cnf = &t3lib_div::getUserObj('&tx_ttproducts_config');
+	function init($itemTable, $tablename, $useArticles)  {
+		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
 
 		$tmpArray = $cnf->getTableDesc($tablename);
 		$this->conf = (is_array($tmpArray) && is_array($tmpArray['variant.']) ? $tmpArray['variant.'] : array());
-		$this->itemTable = &$itemTable;
+		$this->itemTable = $itemTable;
 		$this->useArticles = $useArticles;
 		$this->bSelectableArray = array();
 		$firstVariantArray = array();

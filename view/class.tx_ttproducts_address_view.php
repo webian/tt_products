@@ -29,7 +29,7 @@
  *
  * functions for the frontend users
  *
- * $Id$
+ * $Id: class.tx_ttproducts_address_view.php 90578 2016-01-30 08:08:08Z franzholz $
  *
  * @author  Franz Holzinger <kontakt@fholzinger.com>
  * @maintainer	Franz Holzinger <kontakt@fholzinger.com>
@@ -38,9 +38,6 @@
  *
  *
  */
-
-require_once(PATH_BE_table.'lib/class.tx_table_db.php');
-require_once(PATH_BE_ttproducts.'view/class.tx_ttproducts_category_base_view.php');
 
 
 class tx_ttproducts_address_view extends tx_ttproducts_category_base_view {
@@ -70,19 +67,18 @@ class tx_ttproducts_address_view extends tx_ttproducts_category_base_view {
 	 */
 	function getMarkerArray (&$markerArray, $category, $pid, $imageNum=0, $imageRenderObj='image', &$viewCatTagArray, $forminfoArray=array(), $pageAsCategory=0, $theCode, $id, $prefix,$linkWrap='')	{
 
-		$row = ($category ? $this->get($category) : array ('title' => '', 'pid' => $pid));
+		$row = ($category ? $this->modelObj->get($category) : array ('title' => '', 'pid' => $pid));
 
 		$catTitle = '';
 		$titleField = $this->fields['name'];
 		if (($row[$titleField]))	{
-			$cnf = &t3lib_div::getUserObj('&tx_ttproducts_config');
+			$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
 			$tableConfig = $cnf->getTableConf('address', $theCode);
 			$catTitle .= ($tableConfig['separator'].$row[$titleField]);
 		}
-		$this->setMarkerArrayCatTitle ($markerArray, $catTitle, $prefix);
-		parent::getItemMarkerArray ($row, $markerArray, $variantFieldArray, $variantMarkerArray, $viewCatTagArray, $theCode, $bHtml, $charset, $prefix, $imageRenderObj);
+		$this->setMarkerArrayCatTitle($markerArray, $catTitle, $prefix);
+		parent::getItemMarkerArray($row, $markerArray, $variantFieldArray, $variantMarkerArray, $viewCatTagArray, $theCode, $bHtml, $charset, $prefix, $imageRenderObj);
 	}
-
 }
 
 
