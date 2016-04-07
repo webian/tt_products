@@ -29,8 +29,6 @@
  *
  * function for the TYPO3 caching framework needed from TYPO3 4.3 to 4.5
  *
- * $Id$
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3

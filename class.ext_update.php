@@ -26,8 +26,6 @@
 /**
  * Class for updating the db
  *
- * $Id$
- *
  * @author	 Franz Holzinger <contact@fholzinger.com>
  */
 class ext_update  {

@@ -29,8 +29,6 @@
  *
  * currency functions
  *
- * $Id$
- *
  * @author  Milosz Klosowicz <typo3@miklobit.com>
  * @maintainer	Franz Holzinger <kontakt@fholzinger.com>
  * @package TYPO3

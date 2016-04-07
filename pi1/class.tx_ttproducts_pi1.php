@@ -31,8 +31,6 @@
  * Also controls basket, searching and payment.
  *
  *
- * $Id$
- *
  * @author	Kasper Skårhøj <kasperYYYY@typo3.com>
  * @author	Renè Fritz <r.fritz@colorcube.de>
  * @author	Franz Holzinger <franz@ttproducts.de>

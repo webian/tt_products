@@ -29,8 +29,6 @@
  *
  * base class with functions for the different activities of the ordering process
  *
- * $Id$
- *
  * @author  Franz Holzinger <kontakt@fholzinger.com>
  * @maintainer	Franz Holzinger <kontakt@fholzinger.com>
  * @package TYPO3

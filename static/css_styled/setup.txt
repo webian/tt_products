@@ -1,7 +1,6 @@
 ##
 ## @package TYPO3
 ## @subpackage tt_products
-## @version $Id$
 ##
 
 ## Includes tt_products as a TYPO3 extension:
@@ -272,7 +271,7 @@ plugin.tt_products {
     }
     overview {
 		check = basket
-		store = 0
+		store = 1
     }
   }
 
@@ -340,8 +339,7 @@ plugin.tt_products {
   conf.tt_products.LIST {
 	field {
 		note = TEXT
-		note.postUserFunc = tx_pmkhtmlcrop->htmlCrop
-		note.postUserFunc.htmlCrop = 50 | ... More
+		note.crop = {$plugin.tt_products.max_note_length} | ...
 	}
   }
 

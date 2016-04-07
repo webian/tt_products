@@ -29,8 +29,6 @@
  *
  * dashboard functions
  *
- * $Id$
- *
  * @author	Tim Lochmueller <webmaster@fruit-lab.de>
  * @package TYPO3
  * @subpackage tt_products

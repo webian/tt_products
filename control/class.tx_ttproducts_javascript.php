@@ -29,8 +29,6 @@
  *
  * JavaScript functions
  *
- * $Id$
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products

@@ -29,8 +29,6 @@
  *
  * base class for all database table fields view classes
  *
- * $Id$
- *
  * @author  Franz Holzinger <contact@fholzinger.com>
  * @maintainer	Franz Holzinger <contact@fholzinger.com>
  * @package TYPO3

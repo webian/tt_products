@@ -29,8 +29,6 @@
  *
  * functions for the static_info_countries table view
  *
- * $Id$
- *
  * @author	Franz Holzinger <contact@fholzinger.com>
  * @maintainer	Franz Holzinger <contact@fholzinger.com>
  * @package TYPO3

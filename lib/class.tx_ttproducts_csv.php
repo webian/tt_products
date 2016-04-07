@@ -29,8 +29,6 @@
  *
  * functions for the creation of CSV files
  *
- * $Id$
- *
  * @author	Klaus Zierer <zierer@pz-systeme.de>
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>

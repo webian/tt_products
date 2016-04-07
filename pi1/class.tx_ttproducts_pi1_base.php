@@ -31,8 +31,6 @@
  * Also controls basket, searching and payment.
  *
  *
- * $Id$
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3

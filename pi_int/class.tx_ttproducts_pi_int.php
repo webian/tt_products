@@ -30,8 +30,6 @@
  * variable content plugins for the shop system.
  *
  *
- * $Id$
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3

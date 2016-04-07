@@ -29,8 +29,6 @@
  *
  * functions for the note field
  *
- * $Id$
- *
  * @author	Franz Holzinger <kontakt@fholzinger.com>
  * @maintainer	Franz Holzinger <kontakt@fholzinger.com>
  * @package TYPO3

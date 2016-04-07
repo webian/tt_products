@@ -29,8 +29,6 @@
  *
  * functions for digital medias
  *
- * $Id$
- *
  * @author  Franz Holzinger <kontakt@fholzinger.com>
  * @maintainer	Franz Holzinger <kontakt@fholzinger.com>
  * @package TYPO3

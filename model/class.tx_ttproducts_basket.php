@@ -29,8 +29,6 @@
  *
  * basket functions for a basket object
  *
- * $Id$
- *
  * @author	Kasper Skårhøj <kasperYYYY@typo3.com>
  * @author	René Fritz <r.fritz@colorcube.de>
  * @author	Franz Holzinger <franz@ttproducts.de>

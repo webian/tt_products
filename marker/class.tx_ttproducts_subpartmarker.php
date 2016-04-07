@@ -29,8 +29,6 @@
  *
  * subpart marker functions
  *
- * $Id$
- *
  * @author	Kasper Skårhøj <kasperYYYY@typo3.com>
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>

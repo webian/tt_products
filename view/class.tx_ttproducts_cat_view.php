@@ -30,8 +30,6 @@
  * category single view functions
  * may be used for the category, party/partner/address, dam category and pages table
  *
- * $Id$
- *
  * @author	Franz Holzinger <contact@fholzinger.com>
  * @maintainer	Franz Holzinger <contact@fholzinger.com>
  * @package TYPO3

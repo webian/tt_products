@@ -1,8 +1,5 @@
 <?php
 
-/* $Id$ */
-
-
 $emClass = '\\TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility';
 
 if (
@@ -2098,16 +2095,6 @@ if (
 			),
 			'feInterface' => $GLOBALS['TCA']['tt_products_products_mm_articles']['feInterface'],
 			'columns' => array (
-		// 		'title' => array (
-		// 			'exclude' => 1,
-		// 			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.title',
-		// 			'config' => array (
-		// 				'type' => 'input',
-		// 				'size' => '40',
-		// 				'max' => '80',
-		// 				'eval' => 'required,trim',
-		// 			)
-		// 		),
 				'uid_local' => array (
 					'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products_products_mm_articles.uid_local',
 					'config' => array (
@@ -2137,12 +2124,6 @@ if (
 					)
 				),
 			),
-		// 	'types' => array (
-		// 		'1' => array('showitem' => 'title;;3;;3-3-3')
-		// 	),
-		// 	'palettes' => array (
-		// 		'1' => array('showitem' => ''),
-		// 	)
 		);
 	}
 

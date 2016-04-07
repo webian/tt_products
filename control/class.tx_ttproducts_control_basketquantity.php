@@ -29,8 +29,6 @@
  *
  * control function for the basket quantity. Todo: only this should be USER_INT
  *
- * $Id$
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3

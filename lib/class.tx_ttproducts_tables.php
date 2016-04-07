@@ -29,8 +29,6 @@
  *
  * table class for creation of database table classes and table view classes
  *
- * $Id$
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3

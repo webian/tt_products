@@ -29,8 +29,6 @@
  *
  * interface for the variant classes
  *
- * $Id$
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3

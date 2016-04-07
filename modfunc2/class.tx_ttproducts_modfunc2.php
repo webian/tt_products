@@ -25,8 +25,6 @@
 
 
 /**
- * $Id$
- *
  * Module extension (addition to function menu2 'Create Records in Alternative Languages' for the 'tt_products' extension.
  *
  * @author	Franz Holzinger <franz@ttproducts.de>

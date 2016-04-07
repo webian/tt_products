@@ -29,8 +29,6 @@
  *
  * dummy variant class for tables which do not have any variants
  *
- * $Id$
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3

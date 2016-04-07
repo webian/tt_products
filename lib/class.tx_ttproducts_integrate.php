@@ -25,8 +25,6 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 /**
- * $Id$
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products

@@ -29,8 +29,6 @@
  *
  * memo functions
  *
- * $Id$
- *
  * @author  Klaus Zierer <zierer@pz-systeme.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3

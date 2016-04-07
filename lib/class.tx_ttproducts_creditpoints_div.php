@@ -29,8 +29,6 @@
  *
  * creditpoints functions
  *
- * $Id$
- *
  * @author  Els Verberne <verberne@bendoo.nl>
  * @maintainer	Franz Holzinger <kontakt@fholzinger.com>
  * @package TYPO3

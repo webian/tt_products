@@ -29,8 +29,6 @@
  *
  * class for control initialization
  *
- * $Id$
- *
  * @author  Franz Holzinger <contact@fholzinger.com>
  * @maintainer	Franz Holzinger <contact@fholzinger.com>
  * @package TYPO3

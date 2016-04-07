@@ -29,8 +29,6 @@
  *
  * class with functions to control all activities
  *
- * $Id$
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -186,8 +184,9 @@ class tx_ttproducts_control {
 		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
 
 		if ($handleScript)	{
+			$infoViewObj = t3lib_div::getUserObj('&tx_ttproducts_info_view');
 			$paymentshippingObj = t3lib_div::getUserObj('&tx_ttproducts_paymentshipping');
-			$content = $paymentshippingObj->includeHandleScript($handleScript, $this->basket->basketExtra['payment.']['handleScript.'], $this->conf['paymentActivity'], $bFinalize, $this->pibase);
+			$content = $paymentshippingObj->includeHandleScript($handleScript, $this->basket->basketExtra['payment.']['handleScript.'], $this->conf['paymentActivity'], $bFinalize, $this->pibase, $infoViewObj);
 		} else if (strpos($handleLib, 'transactor') !== FALSE && t3lib_extMgm::isLoaded($handleLib))	{
 				// Payment Transactor
 			require_once(t3lib_extMgm::extPath($handleLib) . 'lib/class.tx_' . $handleLib . '_api.php');

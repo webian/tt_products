@@ -1,7 +1,6 @@
 ##
 ## @package TYPO3
 ## @subpackage tt_products
-## @version $Id$
 ##
 
 ## Includes tt_products as a TYPO3 extension:

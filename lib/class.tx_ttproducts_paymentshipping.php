@@ -29,8 +29,6 @@
  *
  * payment shipping and basket extra functions
  *
- * $Id$
- *
  * @author  Kasper Skårhøj <kasperYYYY@typo3.com>
  * @author  René Fritz <r.fritz@colorcube.de>
  * @author  Franz Holzinger <franz@ttproducts.de>
@@ -751,7 +749,6 @@ class tx_ttproducts_paymentshipping {
 	 */
 	function includeHandleScript ($handleScript, &$confScript, $activity, &$bFinalize, $pibase, $infoViewObj)	{
 		$content = '';
-		$infoViewObj = t3lib_div::getUserObj('&tx_ttproducts_info_view');
 
 		include($handleScript);
 		return $content;

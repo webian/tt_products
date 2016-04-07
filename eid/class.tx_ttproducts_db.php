@@ -30,8 +30,6 @@
  * main class for eID AJAX function to change the values of records for the
  * variant select box
  *
- * $Id$
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3

@@ -29,8 +29,6 @@
  *
  * functions for the static_banks_de table
  *
- * $Id$
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3

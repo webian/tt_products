@@ -29,8 +29,6 @@
  *
  * credit card functions
  *
- * $Id$
- *
  * @author	Franz Holzinger <kontakt@fholzinger.com>
  * @maintainer	Franz Holzinger <kontakt@fholzinger.com>
  * @package TYPO3
