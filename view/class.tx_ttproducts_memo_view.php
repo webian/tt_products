@@ -30,7 +30,7 @@
  * memo functions
  *
  * @author  Klaus Zierer <zierer@pz-systeme.de>
- * @maintainer	Franz Holzinger <kontakt@fholzinger.com>
+ * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products
  */

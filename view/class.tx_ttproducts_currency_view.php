@@ -30,7 +30,7 @@
  * currency functions
  *
  * @author  Milosz Klosowicz <typo3@miklobit.com>
- * @maintainer	Franz Holzinger <kontakt@fholzinger.com>
+ * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products
  *

@@ -114,8 +114,8 @@ abstract class tx_ttproducts_table_base	{
 	* @param	[type]		$fields: ...
 	* @param	[type]		$bCount: ...
 	* @return	[type]		...
-	* @author  Franz Holzinger <contact@fholzinger.com>
-	* @maintainer	Franz Holzinger <contact@fholzinger.com>
+	* @author  Franz Holzinger <franz@ttproducts.de>
+	* @maintainer	Franz Holzinger <franz@ttproducts.de>
 	* @package TYPO3
 	* @subpackage tt_products
 	*/
