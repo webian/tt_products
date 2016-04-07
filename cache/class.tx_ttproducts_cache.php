@@ -29,8 +29,6 @@
  *
  * function for the TYPO3 caching framework needed from TYPO3 4.3 to 4.5
  *
- * $Id: class.tx_ttproducts_cache.php 90578 2016-01-30 08:08:08Z franzholz $
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3

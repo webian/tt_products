@@ -29,8 +29,6 @@
  *
  * product single view functions
  *
- * $Id: class.tx_ttproducts_single_view.php 90578 2016-01-30 08:08:08Z franzholz $
- *
  * @author	Kasper Skårhøj <kasperYYYY@typo3.com>
  * @author	René Fritz <r.fritz@colorcube.de>
  * @author	Franz Holzinger <franz@ttproducts.de>

@@ -29,8 +29,6 @@
  *
  * hook functions for TYPO3 FE extensions
  *
- * $Id: class.tx_ttproducts_hooks_be.php 90578 2016-01-30 08:08:08Z franzholz $
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3

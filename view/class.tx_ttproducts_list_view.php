@@ -29,8 +29,6 @@
  *
  * product list view functions
  *
- * $Id: class.tx_ttproducts_list_view.php 90578 2016-01-30 08:08:08Z franzholz $
- *
  * @author	Kasper Skårhøj <kasperYYYY@typo3.com>
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>

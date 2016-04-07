@@ -1,7 +1,5 @@
 <?php
 
-/* $Id$ */
-
 // t3lib_div::requireOnce(PATH_BE_TTPRODUCTS . 'control/class.tx_ttproducts_control_address.php');
 
 $emClass = '\\TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility';

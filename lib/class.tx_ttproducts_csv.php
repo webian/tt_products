@@ -30,8 +30,6 @@
  *
  * functions for the creation of CSV files
  *
- * $Id: class.tx_ttproducts_csv.php 90578 2016-01-30 08:08:08Z franzholz $
- *
  * @author	Klaus Zierer <zierer@pz-systeme.de>
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>

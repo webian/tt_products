@@ -29,8 +29,6 @@
  *
  * AJAX control over select boxes for categories
  *
- * $Id: class.tx_ttproducts_selectcat_view.php 90578 2016-01-30 08:08:08Z franzholz $
- *
  * @author	Franz Holzinger <kontakt@fholzinger.com>
  * @maintainer	Franz Holzinger <kontakt@fholzinger.com>
  * @package TYPO3

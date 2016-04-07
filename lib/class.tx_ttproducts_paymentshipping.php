@@ -29,8 +29,6 @@
  *
  * payment shipping and basket extra functions
  *
- * $Id: class.tx_ttproducts_paymentshipping.php 90578 2016-01-30 08:08:08Z franzholz $
- *
  * @author  Kasper Skårhøj <kasperYYYY@typo3.com>
  * @author  Renè Fritz <r.fritz@colorcube.de>
  * @author  Franz Holzinger <franz@ttproducts.de>

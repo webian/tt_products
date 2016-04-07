@@ -29,8 +29,6 @@
  *
  * memo functions
  *
- * $Id: class.tx_ttproducts_memo_view.php 90578 2016-01-30 08:08:08Z franzholz $
- *
  * @author  Klaus Zierer <zierer@pz-systeme.de>
  * @maintainer	Franz Holzinger <kontakt@fholzinger.com>
  * @package TYPO3

@@ -29,8 +29,6 @@
  *
  * main class for eID AJAX
  *
- * $Id: class.tx_ttproducts_eid.php 90578 2016-01-30 08:08:08Z franzholz $
- *
  * @author  Kasper Skårhøj <kasperYYYY@typo3.com>
  * @author  Franz Holzinger <kontakt@fholzinger.com>
  * @maintainer	Franz Holzinger <kontakt@fholzinger.com>

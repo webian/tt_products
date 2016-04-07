@@ -25,8 +25,6 @@
 
 
 /**
- * $Id: class.tx_ttproducts_modfunc2.php 90578 2016-01-30 08:08:08Z franzholz $
- *
  * Module extension (addition to function menu2 'Create Records in Alternative Languages' for the 'tt_products' extension.
  *
  * @author	Franz Holzinger <franz@ttproducts.de>

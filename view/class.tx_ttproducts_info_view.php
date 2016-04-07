@@ -29,8 +29,6 @@
  *
  * functions for the info addresses view
  *
- * $Id: class.tx_ttproducts_info_view.php 90579 2016-01-30 10:09:05Z franzholz $
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3

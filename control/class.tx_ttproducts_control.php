@@ -29,8 +29,6 @@
  *
  * class with functions to control all activities
  *
- * $Id: class.tx_ttproducts_control.php 90578 2016-01-30 08:08:08Z franzholz $
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3

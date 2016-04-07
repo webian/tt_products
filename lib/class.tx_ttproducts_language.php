@@ -29,8 +29,6 @@
  *
  * class for language texts. This shall replace pi_base.
  *
- * $Id: class.tx_ttproducts_language.php 90578 2016-01-30 08:08:08Z franzholz $
- *
  * @author	Franz Holzinger <contact@fholzinger.com>
  * @maintainer	Franz Holzinger <contact@fholzinger.com>
  * @package TYPO3

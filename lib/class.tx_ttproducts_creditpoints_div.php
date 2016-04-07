@@ -29,8 +29,6 @@
  *
  * creditpoints functions
  *
- * $Id: class.tx_ttproducts_creditpoints_div.php 90578 2016-01-30 08:08:08Z franzholz $
- *
  * @author  Els Verberne <verberne@bendoo.nl>
  * @maintainer	Franz Holzinger <kontakt@fholzinger.com>
  * @package TYPO3

@@ -29,8 +29,6 @@
  *
  * functions for the category
  *
- * $Id: class.tx_ttproducts_damcategory_view.php 90578 2016-01-30 08:08:08Z franzholz $
- *
  * @author  Franz Holzinger <contact@fholzinger.com>
  * @maintainer	Franz Holzinger <contact@fholzinger.com>
  * @package TYPO3

@@ -29,8 +29,6 @@
  *
  * functions for the data sheets
  *
- * $Id: class.tx_ttproducts_field_datafield_view.php 90578 2016-01-30 08:08:08Z franzholz $
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3

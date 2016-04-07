@@ -29,8 +29,6 @@
  *
  * currency functions
  *
- * $Id: class.tx_ttproducts_currency_view.php 90578 2016-01-30 08:08:08Z franzholz $
- *
  * @author  Milosz Klosowicz <typo3@miklobit.com>
  * @maintainer	Franz Holzinger <kontakt@fholzinger.com>
  * @package TYPO3

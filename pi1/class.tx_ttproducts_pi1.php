@@ -30,9 +30,6 @@
  * Creates a list of products for the shopping basket in TYPO3.
  * Also controls basket, searching and payment.
  *
- *
- * $Id: class.tx_ttproducts_pi1.php 90578 2016-01-30 08:08:08Z franzholz $
- *
  * @author	Kasper Skårhøj <kasperYYYY@typo3.com>
  * @author	Renè Fritz <r.fritz@colorcube.de>
  * @author	Franz Holzinger <franz@ttproducts.de>

@@ -29,8 +29,6 @@
  *
  * functions for the product
  *
- * $Id: class.tx_ttproducts_product.php 90578 2016-01-30 08:08:08Z franzholz $
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -94,7 +92,6 @@ class tx_ttproducts_product extends tx_ttproducts_article_base {
 		}
 		$tablename = $cnf->getTableName($functablename);
 		$tableObj->setTCAFieldArray($tablename, 'products');
-debug ($tableconf, '$tableconf');
 
 		if ($cnf->bUseLanguageTable($tableconf))	{
 			$tableObj->setLanguage ($this->config['LLkey']);

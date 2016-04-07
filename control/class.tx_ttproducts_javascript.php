@@ -29,8 +29,6 @@
  *
  * JavaScript functions
  *
- * $Id: class.tx_ttproducts_javascript.php 90578 2016-01-30 08:08:08Z franzholz $
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products

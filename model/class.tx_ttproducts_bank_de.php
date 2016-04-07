@@ -29,8 +29,6 @@
  *
  * functions for the static_banks_de table
  *
- * $Id: class.tx_ttproducts_bank_de.php 90578 2016-01-30 08:08:08Z franzholz $
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
