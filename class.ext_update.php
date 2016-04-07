@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2008 Franz Holzinger <contact@fholzinger.com>
+*  (c) 2007-2008 Franz Holzinger <franz@ttproducts.de>
 *  All rights reserved
 *
 *  This script is part of the Typo3 project. The Typo3 project is
@@ -26,7 +26,7 @@
 /**
  * Class for updating the db
  *
- * @author	 Franz Holzinger <contact@fholzinger.com>
+ * @author	 Franz Holzinger <franz@ttproducts.de>
  */
 class ext_update  {
 

@@ -30,7 +30,7 @@
  * creditpoints functions
  *
  * @author  Els Verberne <verberne@bendoo.nl>
- * @maintainer	Franz Holzinger <kontakt@fholzinger.com>
+ * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products
  *
