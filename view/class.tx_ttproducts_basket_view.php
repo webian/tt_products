@@ -334,10 +334,10 @@ class tx_ttproducts_basket_view {
 			foreach ($basketObj->itemArray as $sort=>$actItemArray) {
 				foreach ($actItemArray as $k1=>$actItem) {
 					$row = $actItem['rec'];
-					$extArray = $row['ext'];
 					if (!$row)	{	// avoid bug with missing row
 						continue;
 					}
+					$extArray = $row['ext'];
 					$pid = intval($row['pid']);
 					if (!$basketObj->getPidListObj()->getPageArray($pid))	{
 						// product belongs to another basket
@@ -397,7 +397,7 @@ class tx_ttproducts_basket_view {
 					}
 
 					// $extRow = array('extTable' => $row['extTable'], 'extUid' => $row['extUid']);
-					$basketItemView->getItemMarkerArray (
+					$basketItemView->getItemMarkerArray(
 						$funcTablename,
 						$actItem,
 						$markerArray,
@@ -413,7 +413,7 @@ class tx_ttproducts_basket_view {
 					// $catTitle= $actItem['rec']['category'] ? $this->tt_products_cat->get($actItem['rec']['category']) : '';
 					$catTitle = $catRow['title'];
 					$tmp = array();
-					$itemTableView->getModelMarkerArray (
+					$itemTableView->getModelMarkerArray(
 						$row,
 						'',
 						$markerArray,
@@ -449,11 +449,10 @@ class tx_ttproducts_basket_view {
 						}
 
 						if (is_array($articleRows) && count($articleRows)) {
-							$bKeepNotEmpty = FALSE;
+							$bKeepNotEmpty = (boolean) $conf['keepProductData']; // auskommentieren nicht möglich wenn mehrere Artikel dem Produkt zugewiesen werden
 							if ($this->useArticles == 3)	{
 								$itemTable->fillVariantsFromArticles($prodVariantRow);
 								$itemTable->variant->modifyRowFromVariant($prodVariantRow);
-								$bKeepNotEmpty = TRUE;
 							}
 							foreach ($articleRows as $articleRow) {
 								$itemTable->mergeAttributeFields(

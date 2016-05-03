@@ -26,6 +26,8 @@ plugin.tt_products {
     # cat=plugin.products//; type=integer; label= use article table: You have to set this to 1 if you want that your entries in the products articles table get used. Set it to 2 if your articles do not use the variant fields.
     default is 3: The variants of the product need not be entered but are taken from the articles assigned to a product. Many articles are assigned to a product with the possibility of additional prices.
   useArticles = 3
+    # cat=plugin.products//; type=boolean; label= keep product data: Do not overwrite the product data with the articles fetched from the variants if they are not empty. This is visible in the basket views.
+  keepProductData = 1
 
     # cat=plugin.products/color; type=color; label= Color 1: This bgcolor is used in the template-file.
   color1 = #CCCCCC

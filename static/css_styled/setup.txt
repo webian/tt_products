@@ -92,6 +92,7 @@ plugin.tt_products {
   selectMaterial = {$plugin.tt_products.selectMaterial}
   selectQuality = {$plugin.tt_products.selectQuality}
   useArticles = {$plugin.tt_products.useArticles}
+  keepProductData = {$plugin.tt_products.keepProductData}
 
   displayListCatHeader = {$plugin.tt_products.displayListCatHeader}
   displayBasketCatHeader = {$plugin.tt_products.displayBasketCatHeader}
