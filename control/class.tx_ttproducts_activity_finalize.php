@@ -37,7 +37,7 @@
  *
  */
 
-require_once (PATH_BE_ttproducts.'control/class.tx_ttproducts_activity_base.php');
+// require_once (PATH_BE_ttproducts.'control/class.tx_ttproducts_activity_base.php');
 
 
 class tx_ttproducts_activity_finalize extends tx_ttproducts_activity_base {
@@ -65,8 +65,7 @@ class tx_ttproducts_activity_finalize extends tx_ttproducts_activity_base {
 		$orderUid,
 		&$orderConfirmationHTML,
 		&$errorMessage,
-		$address,
-		&$mainMarkerArray
+		$address
 	)	{
 		global $TSFE;
 		global $TYPO3_DB;

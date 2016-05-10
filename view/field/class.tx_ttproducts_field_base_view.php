@@ -36,7 +36,6 @@
  *
  */
 
-// require_once (PATH_BE_ttproducts.'view/field/interface.tx_ttproducts_field_view_int.php');
 
 
 abstract class tx_ttproducts_field_base_view implements tx_ttproducts_field_view_int	{
@@ -73,7 +72,6 @@ abstract class tx_ttproducts_field_base_view implements tx_ttproducts_field_view
 		$fieldname,
 		$key,
 		$value,
-		$fieldname,
 		$tableConf,
 		$tagArray
 	) {
@@ -164,7 +162,6 @@ abstract class tx_ttproducts_field_base_view implements tx_ttproducts_field_view
 						$fieldname,
 						$key,
 						$value,
-						$fieldname,
 						$tableConf,
 						$tagArray
 					);

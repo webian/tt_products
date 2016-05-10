@@ -810,8 +810,7 @@ class tx_ttproducts_control {
 					$orderUid,
 					$orderConfirmationHTML,
 					$errorMessage,
-					$infoViewObj,
-					$mainMarkerArray
+					$infoViewObj
 				);
 						// Important: 	 MUST come after the call of prodObj->getView, because this function, getView, calculates the order! And that information is used in the finalize-function
 				$contentTmp = $orderConfirmationHTML;
