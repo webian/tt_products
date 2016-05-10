@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 1999-2010 Kasper Skårhøj (kasperYYYY@typo3.com)
+*  (c) 1999-2016 Kasper Skårhøj (kasperYYYY@typo3.com)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -351,7 +351,7 @@ class tx_ttproducts_basket_view {
 					$count++;
 					$itemTable->tableObj->substituteMarkerArray($row);
 
-					$actItem['rec'] = $row;	// fix bug with PHP 5.2.1
+// 					$actItem['rec'] = $row;	// fix bug with PHP 5.2.1
 					$bIsNoMinPrice = $itemTable->hasAdditional($row,'noMinPrice');
 					if (!$bIsNoMinPrice)	{
 						$basketObj->checkMinPrice = TRUE;
@@ -391,7 +391,7 @@ class tx_ttproducts_basket_view {
 					$markerArray = $globalMarkerArray;
 
 					if (!is_object($basketItemView))	{
-						include_once (PATH_BE_ttproducts.'view/class.tx_ttproducts_basketitem_view.php');
+// 						include_once (PATH_BE_ttproducts.'view/class.tx_ttproducts_basketitem_view.php');
 						$basketItemView = t3lib_div::getUserObj('tx_ttproducts_basketitem_view');
 						$basketItemView->init($this->pibaseClass,$basketObj->basketExt,$basketObj->getItemObj());
 					}
@@ -454,6 +454,7 @@ class tx_ttproducts_basket_view {
 								$itemTable->fillVariantsFromArticles($prodVariantRow);
 								$itemTable->variant->modifyRowFromVariant($prodVariantRow);
 							}
+
 							foreach ($articleRows as $articleRow) {
 								$itemTable->mergeAttributeFields(
 									$prodVariantRow,
@@ -469,7 +470,7 @@ class tx_ttproducts_basket_view {
 							// use the fields of the article instead of the product
 						//
 						$prodVariantItem['rec'] = $prodVariantRow;
-						$articleViewObj->getModelMarkerArray (
+						$articleViewObj->getModelMarkerArray(
 							$prodVariantRow,
 							'',
 							$markerArray,
@@ -487,7 +488,7 @@ class tx_ttproducts_basket_view {
 							$TSFE->renderCharset
 						);
 
-						$articleViewObj->getItemMarkerSubpartArrays (
+						$articleViewObj->getItemMarkerSubpartArrays(
 							$t['item'],
 							$articleViewObj->getModelObj()->getFuncTablename(),
 							$prodVariantRow,
@@ -498,7 +499,7 @@ class tx_ttproducts_basket_view {
 							$theCode
 						);
 					}
-					$itemTableView->getItemMarkerSubpartArrays (
+					$itemTableView->getItemMarkerSubpartArrays(
 						$tempContent,
 						$itemTableView->getModelObj()->getFuncTablename(),
 						$prodVariantRow,
@@ -555,13 +556,13 @@ class tx_ttproducts_basket_view {
 						$damRow = $tablesObj->get('tx_dam')->get($damUid);
 						$damItem = array();
 						$damItem['rec'] = $damRow;
-						$damCategoryArray = $tablesObj->get('tx_dam_cat')->getCategoryArray ($damUid);
+						$damCategoryArray = $tablesObj->get('tx_dam_cat')->getCategoryArray($damUid);
 						if (count($damCategoryArray))	{
 							reset ($damCategoryArray);
 							$damCat = current($damCategoryArray);
 						}
 
-						$tablesObj->get('tx_dam_cat',TRUE)->getMarkerArray (
+						$tablesObj->get('tx_dam_cat',TRUE)->getMarkerArray(
 							$damCategoryMarkerArray,
 							'',
 							$damCat,
@@ -577,7 +578,7 @@ class tx_ttproducts_basket_view {
 							''
 						);
 
-						$tablesObj->get('tx_dam',TRUE)->getModelMarkerArray (
+						$tablesObj->get('tx_dam',TRUE)->getModelMarkerArray(
 							$damRow,
 							'',
 							$damMarkerArray,

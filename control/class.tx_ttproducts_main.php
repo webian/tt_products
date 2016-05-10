@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2011 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2007-2016 Franz Holzinger <franz@ttproducts.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -439,7 +439,6 @@ class tx_ttproducts_main {
 		}
 
 		$recs = $TSFE->fe_user->getKey('ses','recs');
-
 		$basketObj->init(
 			$pibaseClass,
 			$recs,
@@ -454,7 +453,6 @@ class tx_ttproducts_main {
 		// *************************************
 		$basketObj->getCalculatedBasket(); // get the basket->itemArray
 		$basketObj->getCalculatedSums();
-
 		$voucher = $tablesObj->get('voucher');
 		$voucher->doProcessing($recs);
 		$basketObj->addVoucherSums();
@@ -465,7 +463,7 @@ class tx_ttproducts_main {
 			$functablename = 'tt_products';
 			tx_ttproducts_control_memo::process($functablename, $pibaseObj->piVars, $this->conf);
 
-			$this->control->init (
+			$this->control->init(
 				$pibaseClass,
 				$basketObj->getFuncTablename(),
 				$templateCode,

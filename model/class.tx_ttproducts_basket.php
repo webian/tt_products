@@ -150,7 +150,6 @@ class tx_ttproducts_basket {
 		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
 		$viewTableObj = $tablesObj->get($funcTablename);
 		$tmpBasketExt = $TSFE->fe_user->getKey('ses','basketExt');
-
 		$this->order = $TSFE->fe_user->getKey('ses','order');
 
 		$basketExtRaw = t3lib_div::_GP('ttp_basket');
@@ -354,7 +353,6 @@ class tx_ttproducts_basket {
 	public function addItem ($viewTableObj, $uid, $damUid, $item, $updateMode, $bStoreBasket, $newGiftData = '', $identGiftnumber = 0, $sameGiftData = FALSE)	{
 
 		$newGiftData = t3lib_div::_GP('ttp_gift');
-
 		$priceObj = t3lib_div::getUserObj('&tx_ttproducts_field_price');
 		$variant = $viewTableObj->variant->getVariantFromRawRow($item);
 		$oldcount = $this->basketExt[$uid][$variant];
@@ -624,7 +622,6 @@ class tx_ttproducts_basket {
 			$isValidPage = $this->pidListObj->getPageArray($pid);
 			// only the basket items for the pages belonging to this shop shall be used here
 			if ($isValidPage)	{
-
 				foreach ($this->basketExt[$uid] as $bextVarLine => $bRow)	{
 
 					if (substr($bextVarLine,-1) == '.')	{
@@ -651,16 +648,12 @@ class tx_ttproducts_basket {
 						if (!is_array($this->extTableItemArray['tx_dam']))	{
 							$this->extTableItemArray['tx_dam'] = array();
 						}
-// 						$damUid = intval($bextVarArray[2]);
-/*						$damRow = $this->tx_dam->get($damUid);
-						$this->extTableItemArray['tx_dam'][$damUid] = $damRow;*/
 						$extTable = $bextVarArray[1];
 						$extUid = intval($bextVarArray[2]);
 						$damObj = $tablesObj->get('tx_dam');
 						$damObj->modifyItemRow($currRow, $extUid);
 						$currRow['ext'][$extTable][] = array('uid' => $extUid);
 					}
-					// $currRow['extVars'] = $bextVars;
 
 					if (in_array($this->useArticles, array(1,3)) && $funcTablename == 'tt_products') {
 						// get the article uid with these colors, sizes and gradings
@@ -668,13 +661,11 @@ class tx_ttproducts_basket {
 						if ($this->useArticles == 1)	 {
 							$articleRowArray[] = $viewTableObj->getArticleRow($currRow, 'BASKET',FALSE);
 						} else if ($this->useArticles == 3) {
-
 							$articleRowArray = $viewTableObj->getArticleRowsFromVariant($currRow, 'BASKET', $bextVars);
 						}
 
 						if (count($articleRowArray))	{
 							foreach ($articleRowArray as $articleRow)	{
-
 									// use the fields of the article instead of the product
 								// $viewTableObj->mergeAttributeFields($currRow, $articleRow, FALSE, TRUE); Preis wird sonst doppelt addiert!
 								$currRow['ext']['tt_products_articles'][] = array('uid' => $articleRow['uid']);
@@ -1071,7 +1062,7 @@ class tx_ttproducts_basket {
 	}
 
 
-	public function &getItem ($row, $fetchMode, $funcTablename='') {
+	public function getItem ($row, $fetchMode, $funcTablename='') {
 		$item = array();
 		$priceObj = t3lib_div::getUserObj('&tx_ttproducts_field_price');
 		$priceRow = $row;
@@ -1178,7 +1169,6 @@ class tx_ttproducts_basket {
 				}
 			}
 		}
-
 		return $item;
 	} // getItem
 

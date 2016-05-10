@@ -38,108 +38,118 @@
  *
  */
 
-define ('CRLF', "\r\n");
-define ('DQT', '"');
-define ('QT', "'");
+
+global $TYPO3_CONF_VARS, $TSFE, $TT, $BE_USER, $error;
 
 
-// // *********************
-// // Libraries included
-// // *********************
-// $TT->push('Include Frontend libraries','');
-//     require_once(PATH_tslib.'class.tslib_fe.php');
-//     require_once(PATH_t3lib.'class.t3lib_page.php');
-//     require_once(PATH_t3lib.'class.t3lib_userauth.php');
-//     require_once(PATH_tslib.'class.tslib_feuserauth.php');
-//     require_once(PATH_t3lib.'class.t3lib_tstemplate.php');
-//     require_once(PATH_t3lib.'class.t3lib_cs.php');
-// $TT->pull();
+if (version_compare(TYPO3_version, '6.2.0', '>=')) {
+
+	tx_div2007_alpha5::initFE();
+} else {
+
+	define ('CRLF', "\r\n");
+	define ('DQT', '"');
+	define ('QT', "'");
 
 
-// ***********************************
-// Create $TSFE object (TSFE = TypoScript Front End)
-// Connecting to database
-// ***********************************
-$TSFE = t3lib_div::makeInstance('tslib_fe',
-	$TYPO3_CONF_VARS,
-	t3lib_div::_GP('id'),
-	t3lib_div::_GP('type'),
-	t3lib_div::_GP('no_cache'),
-	t3lib_div::_GP('cHash'),
-	t3lib_div::_GP('jumpurl'),
-	t3lib_div::_GP('MP'),
-	t3lib_div::_GP('RDCT')
-);
-/** @var $TSFE tslib_fe */
+	// // *********************
+	// // Libraries included
+	// // *********************
+	// $TT->push('Include Frontend libraries','');
+	//     require_once(PATH_tslib.'class.tslib_fe.php');
+	//     require_once(PATH_t3lib.'class.t3lib_page.php');
+	//     require_once(PATH_t3lib.'class.t3lib_userauth.php');
+	//     require_once(PATH_tslib.'class.tslib_feuserauth.php');
+	//     require_once(PATH_t3lib.'class.t3lib_tstemplate.php');
+	//     require_once(PATH_t3lib.'class.t3lib_cs.php');
+	// $TT->pull();
 
 
-if($TYPO3_CONF_VARS['FE']['pageUnavailable_force'] &&
-	!t3lib_div::cmpIP(t3lib_div::getIndpEnv('REMOTE_ADDR'), $TYPO3_CONF_VARS['SYS']['devIPmask'])) {
-	$TSFE->pageUnavailableAndExit('This page is temporarily unavailable.');
-}
+	// ***********************************
+	// Create $TSFE object (TSFE = TypoScript Front End)
+	// Connecting to database
+	// ***********************************
+	$TSFE = t3lib_div::makeInstance('tslib_fe',
+		$TYPO3_CONF_VARS,
+		t3lib_div::_GP('id'),
+		t3lib_div::_GP('type'),
+		t3lib_div::_GP('no_cache'),
+		t3lib_div::_GP('cHash'),
+		t3lib_div::_GP('jumpurl'),
+		t3lib_div::_GP('MP'),
+		t3lib_div::_GP('RDCT')
+	);
+	/** @var $TSFE tslib_fe */
 
-$TSFE->connectToDB();
 
-if ($TSFE->RDCT)    {
-	$TSFE->sendRedirect();
-}
+	if($TYPO3_CONF_VARS['FE']['pageUnavailable_force'] &&
+		!t3lib_div::cmpIP(t3lib_div::getIndpEnv('REMOTE_ADDR'), $TYPO3_CONF_VARS['SYS']['devIPmask'])) {
+		$TSFE->pageUnavailableAndExit('This page is temporarily unavailable.');
+	}
 
-// *********
-// FE_USER
-// *********
-$TT->push('Front End user initialized','');
-$TSFE->initFEuser();
-$TT->pull();
+	$TSFE->connectToDB();
 
-// *****************************************
-// Proces the ID, type and other parameters
-// After this point we have an array, $page in TSFE, which is the
-// page-record of the current page, $id
-// *****************************************
-$TT->push('Process ID','');
-    // not needed and doesnot work with realurl //
-$TSFE->checkAlternativeIdMethods();
-$TSFE->clear_preview();
-$TSFE->determineId();
+	if ($TSFE->RDCT)    {
+		$TSFE->sendRedirect();
+	}
 
-        // Now, if there is a backend user logged in and he has NO access to
-	// this page, then re-evaluate the id shown!
-if ($TSFE->beUserLogin && !$BE_USER->extPageReadAccess($TSFE->page))    {
+	// *********
+	// FE_USER
+	// *********
+	$TT->push('Front End user initialized','');
+	$TSFE->initFEuser();
+	$TT->pull();
 
-	// Remove user
-	unset($BE_USER);
-	$TSFE->beUserLogin = 0;
-
-		// Re-evaluate the page-id.
+	// *****************************************
+	// Proces the ID, type and other parameters
+	// After this point we have an array, $page in TSFE, which is the
+	// page-record of the current page, $id
+	// *****************************************
+	$TT->push('Process ID','');
+		// not needed and doesnot work with realurl //
 	$TSFE->checkAlternativeIdMethods();
 	$TSFE->clear_preview();
 	$TSFE->determineId();
+
+			// Now, if there is a backend user logged in and he has NO access to
+		// this page, then re-evaluate the id shown!
+	if ($TSFE->beUserLogin && !$BE_USER->extPageReadAccess($TSFE->page))    {
+
+		// Remove user
+		unset($BE_USER);
+		$TSFE->beUserLogin = 0;
+
+			// Re-evaluate the page-id.
+		$TSFE->checkAlternativeIdMethods();
+		$TSFE->clear_preview();
+		$TSFE->determineId();
+	}
+
+	$TSFE->makeCacheHash();
+	$TT->pull();
+
+
+	// *******************************************
+	// Get compressed $TCA-Array();
+	// After this, we should now have a valid $TCA, though minimized
+	// *******************************************
+	$TSFE->getCompressedTCarray();
+
+
+	// ********************************
+	// Starts the template
+	// *******************************
+	$TT->push('Start Template','');
+	$TSFE->initTemplate();
+	$TSFE->tmpl->getFileName_backPath = PATH_site;
+	$TT->pull();
+
+	// ******************************************************
+	// Get config if not already gotten
+	// After this, we should have a valid config-array ready
+	// ******************************************************
+	$TSFE->getConfigArray();
 }
-
-$TSFE->makeCacheHash();
-$TT->pull();
-
-
-// *******************************************
-// Get compressed $TCA-Array();
-// After this, we should now have a valid $TCA, though minimized
-// *******************************************
-$TSFE->getCompressedTCarray();
-
-
-// ********************************
-// Starts the template
-// *******************************
-$TT->push('Start Template','');
-$TSFE->initTemplate();
-$TSFE->tmpl->getFileName_backPath = PATH_site;
-$TT->pull();
-
-// ******************************************************
-// Get config if not already gotten
-// After this, we should have a valid config-array ready
-// ******************************************************
-$TSFE->getConfigArray();
 
 
 if (version_compare(TYPO3_version, '6.1.0', '>=')) {

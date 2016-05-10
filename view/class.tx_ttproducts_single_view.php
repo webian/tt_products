@@ -146,7 +146,7 @@ class tx_ttproducts_single_view {
 				$itemTableConf['product'] = $cnf->getTableConf($itemTableArray['product']->getFuncTablename(), 'SINGLE');
 				$itemTableLangFields['product'] = $cnf->getTranslationFields($itemTableConf['product']);
 				$itemImageFields['product'] = $cnf->getImageFields($itemTableConf['product']);
-				$itemTableArray['article']->mergeAttributeFields($rowArray['product'], $rowArray['article']);
+				$itemTableArray['article']->mergeAttributeFields($rowArray['product'], $rowArray['article'], FALSE);
 			}
 		}
 		$origRow = $rowArray[$this->type];

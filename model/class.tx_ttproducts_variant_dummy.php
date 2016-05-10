@@ -105,10 +105,10 @@ class tx_ttproducts_variant_dummy implements tx_ttproducts_variant_int {
 		return $this->selectableArray;
 	}
 
-	public function getVariantValuesByArticle ($articleRowArray)	{
+	public function getVariantValuesByArticle ($articleRowArray,$productRow,$withSemicolon=FALSE) {
 	}
 
-	public function filterArticleRowsByVariant ($articleRows, $variant) {
+	public function filterArticleRowsByVariant($row, $variant, $articleRows, $bCombined=FALSE) {
 	}
 
 	public function getFieldArray ()	{

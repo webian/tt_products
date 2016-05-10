@@ -1,3 +1,6 @@
+2016-05-10 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: The variants coming from the product are considered in the basket. The products variants must also be considered if the variants are read in from many articles. Otherwise the basket stored variant index would refer to the wrong variant.
+
 2016-05-03 Franz Holzinger <franz@ttproducts.de>
 	* new feature: Add the constants keepProductData to determine for the basket views if the product data like the item number should be kept when it has been filled in. Otherwise the assigned article item number will overwrite the product number.
 

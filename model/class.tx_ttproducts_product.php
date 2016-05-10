@@ -116,7 +116,7 @@ class tx_ttproducts_product extends tx_ttproducts_article_base {
 
 		if (count($articleRowArray))	{
 			// $articleObj->sortArticleRowsByUidArray($row['uid'],$articleRowArray);
-			$variantRow = $this->variant->getVariantValuesByArticle($articleRowArray,$row);
+			$variantRow = $this->variant->getVariantValuesByArticle($articleRowArray,$row,TRUE);
 			$selectableFieldArray = $this->variant->getSelectableFieldArray();
 
 			foreach ($selectableFieldArray as $field)	{
@@ -127,31 +127,13 @@ class tx_ttproducts_product extends tx_ttproducts_article_base {
 		}
 	}
 
-/*
-		$fieldArray = $this->variant->getFieldArray();
-		foreach ($fieldArray as $field)	{
-			if (isset($row[$field]))	{
-				$valueArray = array();
-				foreach ($articleRowArray as $articleRow)	{
-					$articleValueArray = t3lib_div::trimExplode(';',$articleRow[$field]);
-					if ($articleValueArray[0])	{
-						$valueArray = array_merge ($valueArray, $articleValueArray);
-					}
-				}
-				$valueArray = array_unique($valueArray);
-				$row[$field] = implode(';', $valueArray);
-			}
-		}*/
-// 	}
 
-
-	public function &getArticleRowsFromVariant ($row, $theCode, $variant) {
+	public function getArticleRowsFromVariant ($row, $theCode, $variant) {
 
 		$articleRowArray = $this->getArticleRows(intval($row['uid']));
 		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
 		$articleObj = $tablesObj->get('tt_products_articles');
-	//	$articleRowArray = $articleObj->sortArticleRowsByUidArray($row['uid'],$articleRowArray);
-		$rc = $this->variant->filterArticleRowsByVariant($articleRowArray, $variant, TRUE);
+		$rc = $this->variant->filterArticleRowsByVariant($row, $variant, $articleRowArray, TRUE);
 		return $rc;
 	}
 
@@ -228,7 +210,7 @@ class tx_ttproducts_product extends tx_ttproducts_article_base {
 			$articleObj = $tablesObj->get('tt_products_articles');
 
 			$articleRow = $articleObj->get($articleNo);
-			$variantRow = $this->variant->getVariantValuesByArticle(array($articleRow), $row);
+			$variantRow = $this->variant->getVariantValuesByArticle(array($articleRow), $row, TRUE);
 			$currentRow = array_merge($row, $variantRow);
 
 			// $articleObj->mergeAttributeFields($currentRow, $articleRow, FALSE, TRUE);
