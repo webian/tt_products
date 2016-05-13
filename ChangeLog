@@ -1,3 +1,7 @@
+2016-05-13 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: missing $conf variable in main run method
+	* bugfix: error in the parameters for the call of the memoView init and printView methods
+
 2016-05-10 Franz Holzinger <franz@ttproducts.de>
 	* bugfix: The variants coming from the product are considered in the basket. The products variants must also be considered if the variants are read in from many articles. Otherwise the basket stored variant index would refer to the wrong variant.
 

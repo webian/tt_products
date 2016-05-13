@@ -406,6 +406,8 @@ class tx_ttproducts_main {
 		$templateObj = t3lib_div::getUserObj('&tx_ttproducts_template');
 		$errorObj = t3lib_div::getUserObj('&tx_ttproducts_model_error');
 		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$conf = $cnf->getConf();
+		$config = $cnf->getConfig();
 		$showAmount = $cnf->getBasketConf('view','showAmount');
 		$basketObj = t3lib_div::getUserObj('&tx_ttproducts_basket');
 
@@ -636,10 +638,11 @@ class tx_ttproducts_main {
 					$this->memoView->init(
 						$pibaseClass,
 						$theCode,
-						$this->config['pid_list'],
-						$this->conf['useArticles']
+						$config['pid_list'],
+						$conf,
+						$conf['useArticles']
 					);
-					$contentTmp = $this->memoView->printView($theCode, $templateCode, $this->pid, $this->conf, $error_code);
+					$contentTmp = $this->memoView->printView($theCode, $templateCode, $this->pid, $error_code);
 				break;
 				case 'CURRENCY':
 					if ($this->convertToUserInt()) {
