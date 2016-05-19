@@ -1102,9 +1102,12 @@ class tx_ttproducts_list_view {
 				}
 
 				$itemTable->getTableObj()->substituteMarkerArray($row,$selectableVariantFieldArray);
+
 				$itemTable->getTableObj()->transformRow($row, TT_PRODUCTS_EXT);
 				$itemArray[] = $row;
-				$uidArray[] = $row['uid'];
+				if (isset($row['uid'])) {
+					$uidArray[] = $row['uid'];
+				}
 			}
 
 			if ($iCount == $limit && ($row = $TYPO3_DB->sql_fetch_assoc($res)))	{

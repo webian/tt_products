@@ -91,7 +91,7 @@ class tx_ttproducts_graduated_price {
 				if (is_array($uid))	{
 					foreach ($uid as $v)	{
 						if (
-							tx_div2007_core::testInt($v)
+							!tx_div2007_core::testInt($v)
 						) {
 							return 'ERROR: not integer ' . $v;
 						}
@@ -114,7 +114,6 @@ class tx_ttproducts_graduated_price {
 			// INNER JOIN tt_products_mm_graduated_price ON tt_products_graduated_price.uid = tt_products_mm_graduated_price.graduated_price_uid
 
 			$from = $this->tableObj->name . ' INNER JOIN ' . $this->mm_table . ' ON ' . $this->tableObj->name . '.uid=' . $this->mm_table . '.graduated_price_uid';
-
 			// Fetching the products
 			$res = $this->tableObj->exec_SELECTquery('*', $where, $groupBy, $orderBy, $limit, $from);
 			$rc = array();
