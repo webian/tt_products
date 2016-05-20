@@ -3,6 +3,12 @@ if (!defined ('TYPO3_MODE')) {
 	die ('Access denied.');
 }
 
+$imageFolder = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['imageFolder'];
+if (!$imageFolder) {
+	$imageFolder = 'uploads/pics';
+}
+
+
 // ******************************************************************
 // This is the language overlay for the products table, tt_products
 // ******************************************************************
