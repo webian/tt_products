@@ -326,7 +326,7 @@ plugin.tt_products {
   conf.tt_products.LIST {
 	field {
 		note = TEXT
-		note.crop = {$plugin.tt_products.max_note_length} | ...
+		note.cropHTML = {$plugin.tt_products.max_note_length} | ...
 	}
   }
 

@@ -76,7 +76,6 @@ abstract class tx_ttproducts_field_base_view implements tx_ttproducts_field_view
 		$fieldname,
 		$key,
 		$value,
-		$fieldname,
 		$tableConf,
 		$tagArray
 	) {
@@ -162,7 +161,6 @@ abstract class tx_ttproducts_field_base_view implements tx_ttproducts_field_view
 						$fieldname,
 						$key,
 						$value,
-						$fieldname,
 						$tableConf,
 						$tagArray
 					);

@@ -3,6 +3,11 @@ if (!defined ('TYPO3_MODE')) {
 	die ('Access denied.');
 }
 
+$imageFolder = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['imageFolder'];
+if (!$imageFolder) {
+	$imageFolder = 'uploads/pics';
+}
+
 // ******************************************************************
 // This is the standard TypoScript products category table, tt_products_cat
 // ******************************************************************

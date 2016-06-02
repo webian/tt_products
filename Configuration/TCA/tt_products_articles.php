@@ -214,16 +214,6 @@ $result = array (
 				'max' => '10'
 			)
 		),
-		'basketmaxquantity' => array (
-			'exclude' => 1,
-			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.basketmaxquantity',
-			'config' => array (
-				'type' => 'input',
-				'size' => '10',
-				'eval' => 'trim,double2',
-				'max' => '10'
-			)
-		),
 		'weight' => array (
 			'exclude' => 1,
 			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.weight',

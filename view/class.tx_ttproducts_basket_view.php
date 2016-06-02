@@ -418,7 +418,7 @@ class tx_ttproducts_basket_view {
 						);
 					}
 
-					$basketItemView->getItemMarkerArray (
+					$basketItemView->getItemMarkerArray(
 						$funcTablename,
 						$actItem,
 						$markerArray,
@@ -433,7 +433,7 @@ class tx_ttproducts_basket_view {
 					$catRow = $row['category'] ? $tablesObj->get('tt_products_cat')->get($row['category']) : array();
 					$catTitle = $catRow['title'];
 					$tmp = array();
-					$itemTableView->getItemMarkerArray (
+					$itemTableView->getItemMarkerArray(
 						$actItem,
 						$markerArray,
 						$catTitle,
@@ -461,8 +461,8 @@ class tx_ttproducts_basket_view {
 						'',
 						$bSkip
 					);
-					$itemTableView->getItemMarkerSubpartArrays (
-						$tempContent,
+					$itemTableView->getItemMarkerSubpartArrays(
+						$t['item'],
 						$row,
 						$markerArray,
 						$subpartArray,

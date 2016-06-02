@@ -1,3 +1,10 @@
+2016-06-02 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: remove the dam_uid relation of tt_products
+	* bugfix: remove the basketmaxquantity relation of tt_products_articles
+	* bugfix: consider the imageFolder configuration for all tables with images
+	* bugfix: eID part for TYPO3 7.x
+	* bugfix: support PHP 7.x
+
 2016-03-12 Franz Holzinger <franz@ttproducts.de>
 	* bugfix: the product single view must always be reinitalized
 	* bugfix for TYPO3 7.6: copy the TCA into the Configuration folder
