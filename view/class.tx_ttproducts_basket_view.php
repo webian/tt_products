@@ -693,9 +693,17 @@ class tx_ttproducts_basket_view {
 				$markerArray['###FORM_NAME_GIFT_CERTIFICATE###']='BasketGiftForm';
 				$markerArray['###INSERT_GIFTCODE###'] = 'recs[tt_products][giftcode]';
 				$markerArray['###VALUE_GIFTCODE###'] = htmlspecialchars($basket->recs['tt_products']['giftcode']);
+				$creditpointsGifts = '';
 				$cpArray = $TSFE->fe_user->getKey('ses','cp');
 				$creditpointsGifts = $cpArray['gift']['amount'];
-				$markerArray['###CREDITPOINTS_GIFTS###'] = $creditpointsGifts;
+				if (
+					isset($cpArray['gift']) &&
+					is_array($cpArray['gift']) &&
+					isset($cpArray['gift']['amount'])
+				) {
+					$creditpointsGifts = $cpArray['gift']['amount'];
+				}
+				$markerArray['###CREDITPOINTS_GIFTS###'] = htmlspecialchars($creditpointsGifts);
 
 				if ($basket->recs['tt_products']['giftcode'] == '') {
 					$subpartArray['###SUB_GIFTCODE_DISCOUNT###'] = '';
