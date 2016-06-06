@@ -37,7 +37,7 @@ $result = array (
 		'searchFields' => 'title,subtitle,itemnumber,ean,note,note2,www',
 	),
 	'interface' => array (
-		'showRecordFieldList' => 'sys_language_uid,hidden,starttime,endtime,prod_uid,title,subtitle,keyword,unit,note,note2,datasheet,www,image,smallimage'
+		'showRecordFieldList' => 'sys_language_uid,hidden,starttime,endtime,prod_uid,title,subtitle,unit,note,note2,datasheet,www,image,smallimage'
 	),
 	'columns' => array (
 		't3ver_label' => array (
@@ -175,16 +175,6 @@ $result = array (
 			),
 			'l10n_mode' => 'prefixLangTitle',
 		),
-		'keyword' => array (
-			'exclude' => 1,
-			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.keyword',
-			'config' => array (
-				'type' => 'text',
-				'rows' => '5',
-				'cols' => '20',
-				'max' => '512'
-			)
-		),
 		'itemnumber' => array (
 			'exclude' => 1,
 			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.itemnumber',
@@ -284,7 +274,7 @@ $result = array (
 	),
 	'palettes' => array (
 		'1' => array('showitem' => 'starttime,endtime,fe_group'),
-		'2' => array('showitem' => 'subtitle, keyword, itemnumber, www'),
+		'2' => array('showitem' => 'subtitle, itemnumber, www'),
 	)
 );
 
