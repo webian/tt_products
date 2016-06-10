@@ -527,10 +527,11 @@ class tx_ttproducts_basket {
 					if ($this->useArticles == 1 && $funcTablename == 'tt_products') {
 						// get the article uid with these colors, sizes and gradings
 						$articleRow = $viewTableObj->getArticleRow($currRow, 'BASKET');
-
-							// use the fields of the article instead of the product
-						$viewTableObj->mergeAttributeFields($currRow, $articleRow, FALSE, TRUE);
-						$currRow['ext']['tt_products_articles'][] = array('uid' => $articleRow['uid']);
+						if ($articleRow) {
+								// use the fields of the article instead of the product
+							$viewTableObj->mergeAttributeFields($currRow, $articleRow, FALSE, TRUE);
+							$currRow['ext']['tt_products_articles'][] = array('uid' => $articleRow['uid']);
+						}
 					} else if ($this->useArticles == 2)	{
 						$productRow = $viewTableObj->getProductRow($currRow);
 						$viewTableObj->mergeAttributeFields($currRow, $productRow, TRUE);
