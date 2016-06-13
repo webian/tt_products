@@ -79,7 +79,7 @@ class tx_ttproducts_db {
 
 		$langObj = t3lib_div::getUserObj('&tx_ttproducts_language');
 		$pLangObj = $this;
-		$langObj->init($pLangObj, $this->cObj, $this->conf, 'pi1/class.tx_ttproducts_pi1.php');
+		$langObj->init1($pLangObj, $this->cObj, $this->conf, 'pi1/class.tx_ttproducts_pi1.php');
 
 		tx_div2007_alpha5::loadLL_fh002($langObj, 'EXT:' . TT_PRODUCTS_EXT . '/' . $dblangfile);
 		tx_div2007_alpha5::loadLL_fh002($langObj, 'EXT:' . TT_PRODUCTS_EXT . '/pi1/locallang.xml');

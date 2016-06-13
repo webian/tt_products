@@ -1,3 +1,6 @@
+2016-06-13 Franz Holzinger <franz@ttproducts.de>
+	* bugfix for PHP 7.x: The method init of tx_ttproducts_language cannot overload init of tx_div2007_alpha_language_base. init1 must be used instead.
+
 2016-06-02 Franz Holzinger <franz@ttproducts.de>
 	* bugfix: remove the dam_uid relation of tt_products
 	* bugfix: remove the basketmaxquantity relation of tt_products_articles

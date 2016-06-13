@@ -59,7 +59,7 @@ class tx_ttproducts_paymentlib {
 		$this->urlObj = $urlObj;
 
 		$langObj = t3lib_div::getUserObj('&tx_ttproducts_language');	// language object which replaces pibase
-		$langObj->init($pibase, $this->pibase->cObj, $this->conf, 'pi1/class.tx_ttproducts_pi1.php');
+		$langObj->init1($pibase, $this->pibase->cObj, $this->conf, 'pi1/class.tx_ttproducts_pi1.php');
 	}
 
 
