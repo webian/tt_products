@@ -95,7 +95,7 @@ class tx_ttproducts_control_search {
 		$config['templateSuffix'] = ($config['templateSuffix'] ? '_' . $config['templateSuffix'] : '');
 
 		$langObj = t3lib_div::getUserObj('&tx_ttproducts_language');
-		$langObj->init($pibaseObj, $pibaseObj->cObj, $conf, 'control/class.tx_ttproducts_control_search.php');
+		$langObj->init1($pibaseObj, $pibaseObj->cObj, $conf, 'control/class.tx_ttproducts_control_search.php');
 
 		$markerObj = t3lib_div::getUserObj('&tx_ttproducts_marker');
 		$markerObj->init(

@@ -61,7 +61,7 @@ class tx_ttproducts_control_creator {
 		} else {
 			$pLangObj = $this;
 		}
-		$langObj->init($pLangObj, $cObj, $conf, 'pi1/class.tx_ttproducts_pi1.php');
+		$langObj->init1($pLangObj, $cObj, $conf, 'pi1/class.tx_ttproducts_pi1.php');
 
 		tx_div2007_alpha5::loadLL_fh002($langObj, 'EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml');
 		tx_div2007_alpha5::loadLL_fh002($langObj, 'EXT:' . TT_PRODUCTS_EXT . '/pi_search/locallang_db.xml');

@@ -1,3 +1,8 @@
+2016-06-13 Franz Holzinger <franz@ttproducts.de>
+	* bugfix for PHP 7.x: The method init of tx_ttproducts_language cannot overload init of tx_div2007_alpha_language_base. init1 must be used instead.
+	* bugfix: Perform the correct array check for $cpArray['gift']
+	* bugfix: Skip the result of $viewTableObj->getArticleRow internally when it is no array.
+
 2016-05-13 Franz Holzinger <franz@ttproducts.de>
 	* bugfix: missing $conf variable in main run method
 	* bugfix: error in the parameters for the call of the memoView init and printView methods

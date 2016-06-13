@@ -500,7 +500,7 @@ class tx_ttproducts_basket_view {
 						);
 					}
 					$itemTableView->getItemMarkerSubpartArrays(
-						$tempContent,
+						$t['item'],
 						$itemTableView->getModelObj()->getFuncTablename(),
 						$prodVariantRow,
 						$markerArray,
@@ -775,8 +775,15 @@ class tx_ttproducts_basket_view {
 				$markerArray['###INSERT_GIFTCODE###'] = 'recs[tt_products][giftcode]';
 				$markerArray['###VALUE_GIFTCODE###'] = htmlspecialchars($basketObj->recs['tt_products']['giftcode']);
 				$cpArray = $TSFE->fe_user->getKey('ses','cp');
-				$creditpointsGifts = $cpArray['gift']['amount'];
-				$markerArray['###CREDITPOINTS_GIFTS###'] = $creditpointsGifts;
+				$creditpointsGifts = '';
+				if (
+					isset($cpArray['gift']) &&
+					is_array($cpArray['gift']) &&
+					isset($cpArray['gift']['amount'])
+				) {
+					$creditpointsGifts = $cpArray['gift']['amount'];
+				}
+				$markerArray['###CREDITPOINTS_GIFTS###'] = htmlspecialchars($creditpointsGifts);
 
 				if ($basketObj->recs['tt_products']['giftcode'] == '') {
 					$subpartArray['###SUB_GIFTCODE_DISCOUNT###'] = '';

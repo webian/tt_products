@@ -659,7 +659,10 @@ class tx_ttproducts_basket {
 						// get the article uid with these colors, sizes and gradings
 						$articleRowArray = array();
 						if ($this->useArticles == 1)	 {
-							$articleRowArray[] = $viewTableObj->getArticleRow($currRow, 'BASKET',FALSE);
+							$articleRow = $viewTableObj->getArticleRow($currRow, 'BASKET', FALSE);
+							if ($articleRow) {
+								$articleRowArray[] = $articleRow;
+							}
 						} else if ($this->useArticles == 3) {
 							$articleRowArray = $viewTableObj->getArticleRowsFromVariant($currRow, 'BASKET', $bextVars);
 						}
