@@ -149,7 +149,7 @@ if (
 	if (
 		version_compare(TYPO3_version, '6.1.0', '<')
 	) {
-		t3lib_div::loadTCA('fe_users');
+		call_user_func($divClass . '::loadTCA', 'fe_users');
 	}
 
 	call_user_func($emClass . '::addTCAcolumns', 'fe_users', $tempColumns);
@@ -622,7 +622,7 @@ if (!$loadTcaAdditions) {
 	}
 
 	if (version_compare(TYPO3_version, '6.1.0', '<')) {
-		t3lib_div::loadTCA('tt_content');
+		call_user_func($divClass . '::loadTCA', 'tt_content');
 	}
 
 	$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['5'] = 'layout,select_key';
