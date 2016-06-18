@@ -18,28 +18,25 @@ templateCheck = /([^#]+(#{2}|#{5}|#{7,8})([^#])+?)/
 endtimeYear = 2021
   # cat=basic/enable; type=string; label=category where: Foreign table where for the selection of categories. See TSConfig for more info.
 where.category =
-  # cat=basic/enable; type=string; label=tt_products exclude: exclude these fields from the table tt_products.
+  # cat=basic/enable; type=string; label=tt_products exclude: exclude these fields from the table tt_products. This requires the extension addons_em.
 exclude.tt_products =
-  # cat=basic/enable; type=string; label=tt_products_language exclude: exclude these fields from the table tt_products_language.
+  # cat=basic/enable; type=string; label=tt_products_language exclude: exclude these fields from the table tt_products_language. This requires the extension addons_em.
 exclude.tt_products_language = datasheet,www,image
   # cat=basic/enable; type=string; label=tt_products_cat exclude: exclude these fields from the table tt_products_cat.
 exclude.tt_products_cat =
-  # cat=basic/enable; type=string; label=tt_products_cat_language exclude: exclude these fields from the table tt_products_cat_language.
+  # cat=basic/enable; type=string; label=tt_products_cat_language exclude: exclude these fields from the table tt_products_cat_language. This requires the extension addons_em.
 exclude.tt_products_cat_language
-  # cat=basic/enable; type=string; label=tt_products_articles exclude: exclude these fields from the table tt_products_articles.
+  # cat=basic/enable; type=string; label=tt_products_articles exclude: exclude these fields from the table tt_products_articles. This requires the extension addons_em.
 exclude.tt_products_articles =
-  # cat=basic/enable; type=string; label=tt_products_articles_language exclude: exclude these fields from the table tt_products_articles_language.
+  # cat=basic/enable; type=string; label=tt_products_articles_language exclude: exclude these fields from the table tt_products_articles_language. This requires the extension addons_em.
 exclude.tt_products_articles_language =
-  # cat=basic/enable; type=string; label=tt_products_texts exclude: exclude these fields from the table tt_products_texts.
+  # cat=basic/enable; type=string; label=tt_products_texts exclude: exclude these fields from the table tt_products_texts. This requires the extension addons_em.
 exclude.tt_products_texts =
-  # cat=basic/enable; type=string; label=tt_products_texts_language exclude: exclude these fields from the table tt_products_texts_language.
+  # cat=basic/enable; type=string; label=tt_products_texts_language exclude: exclude these fields from the table tt_products_texts_language. This requires the extension addons_em.
 exclude.tt_products_texts_language =
   # cat=cache/enable; type=boolean; label=Cache for Backend: Click here if you want to activate the backend cache for tt_products tables.
 cache.backend = 0
   # cat=cache/enable; type=string; label=Cache Options for Server: Enter the cache options for the server.
 cache.options.servers =
-
-
-
 
 
