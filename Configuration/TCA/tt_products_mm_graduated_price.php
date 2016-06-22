@@ -25,6 +25,13 @@ $result = array (
 	),
 	'feInterface' => $TCA['tt_products_mm_graduated_price']['feInterface'],
 	'columns' => array (
+		'hidden' => array (
+			'exclude' => 1,
+			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.hidden',
+			'config' => array (
+				'type' => 'check'
+			)
+		),
 		'product_uid' => array (
 			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products_mm_graduated_price.product_uid',
 			'config' => array (
@@ -54,6 +61,9 @@ $result = array (
 			)
 		),
 	),
+	'types' => array(
+		0' => array('showitem' => 'hidden;;1;;1-1-1, product_uid, graduated_price_uid')
+	)
 );
 
 return $result;
