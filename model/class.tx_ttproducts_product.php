@@ -185,10 +185,11 @@ class tx_ttproducts_product extends tx_ttproducts_article_base {
 	}
 
 
-	public function &getArticleRow ($row, $theCode, $bUsePreset=TRUE) {
+	public function getArticleRow ($row, $theCode, $bUsePreset=TRUE) {
 		global $TYPO3_DB;
 
 		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$fieldArray = $this->variant->getSelectableFieldArray();
 		$articleNo = FALSE;
 		if ($bUsePreset)	{
 			$presetVarianArray = tx_ttproducts_control_product::getPresetVariantArray($row['uid']);
@@ -216,24 +217,22 @@ class tx_ttproducts_product extends tx_ttproducts_article_base {
 			// $articleObj->mergeAttributeFields($currentRow, $articleRow, FALSE, TRUE);
 		}
 
-		$fieldArray = $this->variant->getSelectableFieldArray();
 		$whereArray = array();
 		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
 		$articleObj = $tablesObj->get('tt_products_articles');
 
 		foreach ($fieldArray as $k => $field)	{
-			$whereClause = $field . '=\'' . $currentRow[$field] . '\'';
-
 			$value = trim($currentRow[$field]);
-			// $value = $TYPO3_DB->fullQuoteStr($value, $articleObj->getTablename());
+
 			$regexpValue = $TYPO3_DB->quoteStr(quotemeta($value), $articleObj->getTablename());
 			if ($value != '')	{
-				$whereClause = '(' . $whereClause;
-				$whereClause .= ' OR ' . $field . ' LIKE \'%;' . $value . ';%\''.
-				' OR ' . $field . ' REGEXP \'^(' . $regexpValue . ')[[:blank:]]*[[.semicolon.]]\''.
-				' OR ' . $field . ' REGEXP \'[[.semicolon.]][[:blank:]]*(' . $regexpValue . ')[[:blank:]]*$\')';
+				$whereClause =
+					$field . ' REGEXP \'^[[:blank:]]*(' . $regexpValue . ')[[:blank:]]*$\'' .
+					' OR ' . $field . ' REGEXP \'^[[:blank:]]*(' . $regexpValue . ')[[:blank:]]*[[.semicolon.]]\'' .
+					' OR ' . $field . ' REGEXP \'[[.semicolon.]][[:blank:]]*(' . $regexpValue . ')[[:blank:]]*$\'';
 				$whereArray[] = $whereClause;
 			} else if ($this->conf['useArticles'] == 1) {
+				$whereClause = $field . '=\'\'';
 				$whereArray[] = $whereClause;
 			}
 		}
@@ -248,7 +247,6 @@ class tx_ttproducts_product extends tx_ttproducts_article_base {
 
 		if (is_array($articleRows) && count($articleRows))	{
 
-// vorher:			$articleRow = $this->getMatchingArticleRows($row, $articleRows);
 			$articleRow = $this->getMatchingArticleRows($currentRow, $articleRows);
 			$articleConf = $cnf->getTableConf('tt_products_articles', $theCode);
 

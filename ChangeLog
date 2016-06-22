@@ -1,3 +1,6 @@
+2016-06-22 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: The SQL query to fetch a selected article for a product must not search the article table for the combination of a variant value but for each single possible variant value
+
 2016-06-13 Franz Holzinger <franz@ttproducts.de>
 	* bugfix for PHP 7.x: The method init of tx_ttproducts_language cannot overload init of tx_div2007_alpha_language_base. init1 must be used instead.
 	* bugfix: Perform the correct array check for $cpArray['gift']
