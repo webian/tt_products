@@ -38,7 +38,7 @@ $result = array (
 		'searchFields' => 'title,subtitle,itemnumber,ean,note,note2,www',
 	),
 	'interface' => array (
-		'showRecordFieldList' => 'sys_language_uid,hidden,starttime,endtime,prod_uid,title,subtitle,unit,note,note2,datasheet,www,image,smallimage'
+		'showRecordFieldList' => 'sys_language_uid,hidden,starttime,endtime,prod_uid,title,subtitle,unit,note,note2,datasheet,www,image'
 	),
 	'columns' => array (
 		'sys_language_uid' => array (
@@ -246,24 +246,9 @@ $result = array (
 				'minitems' => '0'
 			)
 		),
-		'smallimage' => Array (
-			'exclude' => 1,
-			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.smallimage',
-			'config' => Array (
-				'type' => 'group',
-				'internal_type' => 'file',
-				'allowed' => $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'],
-				'max_size' => $GLOBALS['TYPO3_CONF_VARS']['BE']['maxFileSize'],
-				'uploadfolder' => $imageFolder,
-				'show_thumbs' => '1',
-				'size' => '5',
-				'maxitems' => '10',
-				'minitems' => '0'
-			)
-		),
 	),
 	'types' => array (
-		'1' => array('showitem' => 'sys_language_uid;;;;1-1-1, l18n_diffsource, hidden;;1, prod_uid,title;;2;;3-3-3, unit, note;;;richtext[]:rte_transform[mode=ts_css|imgpath=uploads/tx_ttproducts/rte/], note2;;;richtext[]:rte_transform[mode=ts_css|imgpath=uploads/tx_ttproducts/rte/],image;;;;4-4-4, smallimage;;;;4-4-4, datasheet')
+		'1' => array('showitem' => 'sys_language_uid;;;;1-1-1, l18n_diffsource, hidden;;1, prod_uid,title;;2;;3-3-3, unit, note;;;richtext[]:rte_transform[mode=ts_css|imgpath=uploads/tx_ttproducts/rte/], note2;;;richtext[]:rte_transform[mode=ts_css|imgpath=uploads/tx_ttproducts/rte/],image;;;;4-4-4, datasheet')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => 'starttime,endtime,fe_group'),
