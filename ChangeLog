@@ -1,3 +1,6 @@
+2016-06-23 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: Initialize the row array before filling it with values in the model table base class. Otherwise values from the former record have been read in.
+
 2016-06-22 Franz Holzinger <franz@ttproducts.de>
 	* bugfix: The SQL query to fetch a selected article for a product must not search the article table for the combination of a variant value but for each single possible variant value
 

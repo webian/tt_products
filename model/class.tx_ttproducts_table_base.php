@@ -222,6 +222,7 @@ abstract class tx_ttproducts_table_base	{
 
 				while ($dbRow = $TYPO3_DB->sql_fetch_row($res)) {
 // 				while ($row = $TYPO3_DB->sql_fetch_assoc($res))	{
+					$row = array();
 					foreach ($dbRow as $index => $value) {
 						if ($res instanceof mysqli_result) {
 							$fieldObject = mysqli_fetch_field_direct($res, $index);
