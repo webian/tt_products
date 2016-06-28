@@ -75,18 +75,28 @@ class tx_ttproducts_javascript {
 
 	}
 
+	static public function convertHex ($m) {
+		$result = '\\x' . (ord($m[1]) < 16 ? '0' : '') . dechex(ord($m[1]));
+		return $result;
+	}
+
  /*
  * Escapes strings to be included in javascript
  *
  * @param	[type]		$s: ...
  * @return	[type]		...
  */
-	function jsspecialchars($s) {
-	   return preg_replace('/([\x09-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e])/e',
-	       "'\\x'.(ord('\\1')<16? '0': '').dechex(ord('\\1'))",$s);
+	public function jsspecialchars ($s) {
+		$result = preg_replace_callback(
+			'/([\x09-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e])/',
+			'tx_ttproducts_javascript::convertHex',
+			$s
+		);
+
+		return $result;
 	}
 
-		/**
+/**
  * Sets JavaScript code in the additionalJavaScript array
  *
  * @param	string		$fieldname is the field in the table you want to create a JavaScript for
