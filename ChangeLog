@@ -1,3 +1,6 @@
+2016-06-28 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: Use only the first variant values of a product in the single view and the associated article. Otherwise the inStock value will not match the value from the article.
+
 2016-06-23 Franz Holzinger <franz@ttproducts.de>
 	* bugfix: Initialize the row array before filling it with values in the model table base class. Otherwise values from the former record have been read in.
 

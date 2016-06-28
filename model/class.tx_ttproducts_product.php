@@ -202,7 +202,7 @@ class tx_ttproducts_product extends tx_ttproducts_article_base {
 
 		if ($articleNo === FALSE)	{
 			if (empty($presetVariantArray)) {
-				$currentRow = $row;
+				$currentRow = $this->variant->getVariantRow($row);
 			} else {
 				$currentRow = $this->variant->getVariantRow($row, $presetVariantArray);
 			}
