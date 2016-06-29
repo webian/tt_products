@@ -1,3 +1,6 @@
+2016-06-29 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: The inStock value of the product must be overwritten by the inStock value coming from the assigned article even when it is zero
+
 2016-06-28 Franz Holzinger <franz@ttproducts.de>
 	* bugfix: Use only the first variant values of a product in the single view and the associated article. Otherwise the inStock value will not match the value from the article.
 

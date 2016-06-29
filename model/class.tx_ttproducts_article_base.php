@@ -285,7 +285,11 @@ abstract class tx_ttproducts_article_base extends tx_ttproducts_table_base {
 						} else { // $bKeepNotEmpty == FALSE
 							if (
 								$type == 'number' &&
-								(!round($targetRow[$field], 16) || round($value, 16))
+								(
+									!round($targetRow[$field], 16) ||
+									round($value, 16) ||
+									($field == 'inStock')
+								)
 									||
 								$type != 'number' &&
 								(empty($targetRow[$field]) || !empty($value))
