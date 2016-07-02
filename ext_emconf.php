@@ -31,10 +31,10 @@ $EM_CONF[$_EXTKEY] = array(
 	'constraints' => array(
 		'depends' => array(
 			'div2007' => '1.6.6-0.0.0',
-			'php' => '5.1.2-7.7.99',
+			'php' => '5.1.2-7.99.99',
 			'table' => '0.3.0-0.0.0',
 			'tsparser' => '',
-			'typo3' => '4.5.0-7.9.99',
+			'typo3' => '4.5.0-7.99.99',
 		),
 		'conflicts' => array(
 			'mkl_products' => '',
