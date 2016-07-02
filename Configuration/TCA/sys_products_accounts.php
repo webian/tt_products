@@ -5,10 +5,6 @@ if (!defined ('TYPO3_MODE')) {
 
 $accountField = 'ac_number';
 
-if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['sepa']) {
-	$accountField = 'iban';
-}
-
 // ******************************************************************
 // These are the bank account data used for orders
 // ******************************************************************
@@ -25,16 +21,6 @@ $result = array (
 		'searchFields' => 'owner_name,' . $accountField,
 	),
 	'columns' => array (
-		'iban' => array (
-			'exclude' => 1,
-			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:sys_products_accounts.iban',
-			'config' => array (
-				'type' => 'input',
-				'size' => '24',
-				'max' => '24',
-				'eval' => 'required,trim',
-			)
-		),
 		'ac_number' => array (
 			'exclude' => 0,
 			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:sys_products_accounts.ac_number',
@@ -64,7 +50,7 @@ $result = array (
 		),
 	),
 	'types' => array (
-		'1' => array('showitem' => 'hidden;;;;1-1-1, iban, ac_number, owner_name, bic')
+		'1' => array('showitem' => 'hidden;;;;1-1-1, ac_number, owner_name, bic')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => '')
@@ -73,7 +59,6 @@ $result = array (
 
 
 if ($accountField != 'iban') {
-	unset($result['columns']['iban']['config']['eval']);
 	$result['columns'][$accountField]['config']['eval'] = 'required,trim';
 }
 

@@ -37,8 +37,6 @@
  *
  */
 
-// require_once (PATH_BE_ttproducts.'model/class.tx_ttproducts_pid_list.php');
-
 
 class tx_ttproducts_relatedlist_view {
 	public $conf;

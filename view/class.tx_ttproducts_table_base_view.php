@@ -36,8 +36,6 @@
  *
  */
 
-// require_once (PATH_BE_ttproducts.'view/field/class.tx_ttproducts_field_base_view.php');
-
 
 abstract class tx_ttproducts_table_base_view	{
 	private $bHasBeenInitialised = FALSE;
@@ -215,11 +213,6 @@ abstract class tx_ttproducts_table_base_view	{
 										continue;
 									}
 								}
-/*								foreach ($row as $field => $v1)	{
-									if (strtoupper($field) == $tagPartArray[1])	{
-										break;
-									}
-								}*/
 								$fieldArray = array($fieldname => array($comparator, intval($comparand)));
 								$bCondition = FALSE;
 
@@ -465,9 +458,6 @@ abstract class tx_ttproducts_table_base_view	{
 						if (strpos($theTag,$theMarker) === 0)	{
 							$rowMarkerArray['###' . $theTag . '###'] = '';
 						}
-					}
-					if (!isset($rowMarkerArray['###' . $theTag . '###']) && strpos($theTag,$markerKey) === 0)	{
-// Todo
 					}
 				}
 			}

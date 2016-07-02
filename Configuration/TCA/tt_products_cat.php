@@ -215,6 +215,5 @@ if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('addons_em')) {
 	}
 }
 
-
 return $result;
 
