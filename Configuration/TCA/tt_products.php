@@ -4,7 +4,6 @@ if (!defined ('TYPO3_MODE')) {
 }
 
 $whereCategory = '';
-$whereTaxCategory = '';
 
 if (
 	isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['where.']) &&
@@ -19,10 +18,6 @@ if (!$imageFolder) {
 	$imageFolder = 'uploads/pics';
 }
 
-
-if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded(STATIC_INFO_TABLES_TAXES_EXT)) {
-	$whereTaxCategory = \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields('static_tax_categories');
-}
 
 $result = array(
 	'ctrl' => array(
