@@ -12,6 +12,6 @@ if (
 	!empty($orderBySortingTablesArray) &&
 	in_array($table, $orderBySortingTablesArray)
 ) {
-	$result['ctrl']['sortby'] = 'sorting';
+	$GLOBALS['TCA'][$table]['ctrl']['sortby'] = 'sorting';
 }
 
