@@ -193,22 +193,5 @@ if (
 	$result['ctrl']['sortby'] = 'sorting';
 }
 
-
-if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('addons_em')) {
-	$excludeArray = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['exclude.'];
-
-	if (
-		is_array($excludeArray) &&
-		isset($excludeArray[$table])
-	) {
-		$fieldArray = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $excludeArray[$table], 1);
-		if (!class_exists('tx_addonsem_tca_div')) {
-			include_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::siteRelPath('addons_em') . 'lib/class.tx_addonsem_tca_div.php');
-		}
-		tx_addonsem_tca_div::removeFieldsFromTCA($result, $fieldArray);
-	}
-}
-
-
 return $result;
 
