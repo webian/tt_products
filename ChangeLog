@@ -1,3 +1,9 @@
+2016-07-08 Franz Holzinger <franz@ttproducts.de>
+	* bugfix for PHP 7.x: Move the TCA to remove the excluded fields into the folder Overrides. Use the div2007 method TcaUtility::removeField instead of tx_addonsem_tca_div::removeFieldsFromTCA
+
+2016-07-02 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: Remove the iban field from TCA. IBAN is only supported sice tt_products 2.11.0
+
 2016-06-29 Franz Holzinger <franz@ttproducts.de>
 	* bugfix: The inStock value of the product must be overwritten by the inStock value coming from the assigned article even when it is zero
 

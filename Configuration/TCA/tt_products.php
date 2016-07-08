@@ -374,23 +374,6 @@ $result = array(
 				'minitems' => '0'
 			)
 		),
-		'tax_id' => array (
-			'exclude' => 0,
-			'displayCond' => 'EXT:' . STATIC_INFO_TABLES_TAXES_EXT . ':LOADED:true',
-			'label' => 'LLL:EXT:' . STATIC_INFO_TABLES_TAXES_EXT . '/locallang_db.xml:static_taxes.tx_rate_id',
-			'config' => array (
-				'type' => 'select',
-				'renderType' => 'selectSingle',
-				'items' => array (
-					array('LLL:EXT:' . STATIC_INFO_TABLES_TAXES_EXT . '/locallang_db.xml:static_taxes.tx_rate_id.I.0', '0'),
-					array('LLL:EXT:' . STATIC_INFO_TABLES_TAXES_EXT . '/locallang_db.xml:static_taxes.tx_rate_id.I.1', '1'),
-					array('LLL:EXT:' . STATIC_INFO_TABLES_TAXES_EXT . '/locallang_db.xml:static_taxes.tx_rate_id.I.2', '2'),
-					array('LLL:EXT:' . STATIC_INFO_TABLES_TAXES_EXT . '/locallang_db.xml:static_taxes.tx_rate_id.I.3', '3'),
-					array('LLL:EXT:' . STATIC_INFO_TABLES_TAXES_EXT . '/locallang_db.xml:static_taxes.tx_rate_id.I.4', '4'),
-					array('LLL:EXT:' . STATIC_INFO_TABLES_TAXES_EXT . '/locallang_db.xml:static_taxes.tx_rate_id.I.5', '5'),
-				),
-			)
-		),
 		'weight' => array (
 			'exclude' => 1,
 			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.weight',
@@ -778,41 +761,6 @@ $result = array(
 );
 
 
-$bSelectTaxMode = FALSE;
-
-if (
-	\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('static_info_tables_taxes') &&
-	\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('div2007')
-) {
-	t3lib_div::requireOnce(PATH_BE_div2007 . 'class.tx_div2007_alpha5.php');
-	$eInfo = tx_div2007_alpha5::getExtensionInfo_fh003('static_info_tables_taxes');
-
-	if (is_array($eInfo)) {
-		$sittVersion = $eInfo['version'];
-		if (version_compare($sittVersion, '0.3.0', '>=')) {
-			$bSelectTaxMode = TRUE;
-		}
-	}
-}
-
-if (!$bSelectTaxMode) {
-	$result['interface']['showRecordFieldList'] = str_replace(',tax_id,', ',tax,', $result['interface']['showRecordFieldList']);
-	unset($result['columns']['tax_id']);
-	$result['columns']['tax'] =
-		array (
-			'exclude' => 1,
-			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.tax',
-			'config' => array (
-				'type' => 'input',
-				'size' => '12',
-				'max' => '19',
-				'eval' => 'trim,double2'
-			)
-		);
-
-	$result['types']['0']['showitem'] = str_replace(',tax_id,', ',tax,', $result['types']['0']['showitem']);
-}
-
 
 switch ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['articleMode']) {
 	case '0':
@@ -847,26 +795,12 @@ switch ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['articleMode']) 
 $table = 'tt_products';
 
 $orderBySortingTablesArray = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['orderBySortingTables']);
+
 if (
 	!empty($orderBySortingTablesArray) &&
 	in_array($table, $orderBySortingTablesArray)
 ) {
 	$result['ctrl']['sortby'] = 'sorting';
-}
-
-if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('addons_em')) {
-	$excludeArray = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['exclude.'];
-
-	if (
-		is_array($excludeArray) &&
-		isset($excludeArray[$table])
-	) {
-		$fieldArray = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $excludeArray[$table], 1);
-		if (!class_exists('tx_addonsem_tca_div')) {
-			include_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::siteRelPath('addons_em') . 'lib/class.tx_addonsem_tca_div.php');
-		}
-		tx_addonsem_tca_div::removeFieldsFromTCA($result, $fieldArray);
-	}
 }
 
 return $result;
