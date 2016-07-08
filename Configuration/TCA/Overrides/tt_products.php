@@ -54,8 +54,6 @@ if ($bSelectTaxMode) {
 		'',
 		'after:price,'
 	);
-
-	$GLOBALS['TCA'][$table]['interface']['showRecordFieldList'] = str_replace(',tax_id,', ',tax_id,', $GLOBALS['TCA'][$table]['interface']['showRecordFieldList']);
 } else {
 	$GLOBALS['TCA'][$table]['interface']['showRecordFieldList'] = str_replace(',tax_id,', ',tax,', $GLOBALS['TCA'][$table]['interface']['showRecordFieldList']);
 	unset($GLOBALS['TCA'][$table]['columns']['tax_id']);
