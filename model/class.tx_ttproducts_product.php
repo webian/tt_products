@@ -134,7 +134,7 @@ class tx_ttproducts_product extends tx_ttproducts_article_base {
 	 * @param	[type]		$theCode: ...
 	 * @return	[type]		...
 	 */
-	function &getArticleRow ($row, $theCode) {
+	function getArticleRow ($row, $theCode) {
 		global $TYPO3_DB;
 
 		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
@@ -265,19 +265,19 @@ class tx_ttproducts_product extends tx_ttproducts_article_base {
 
 
 	/**
-	 * Returns true if the item has the $check value checked
+	 * Returns TRUE if the item has the $check value checked
 	 *
-	 * @param	[type]		$$row: ...
-	 * @param	[type]		$check: ...
-	 * @return	[type]		...
 	 */
-	function hasAdditional (&$row, $check)  {
-		$hasAdditional = false;
-		$additional = t3lib_div::xml2array($row['additional']);
-		$hasAdditional = tx_div2007_ff::get($additional, $check);
+	public function hasAdditional (&$row, $check)  {
+		$hasAdditional = FALSE;
+		if (isset($row['additional'])) {
+			$additional = t3lib_div::xml2array($row['additional']);
+			$hasAdditional = tx_div2007_ff::get($additional, $check);
+		}
 
 		return $hasAdditional;
 	}
+
 
 	public function addWhereCat ($catObject, $theCode, $cat, $pid_list, $bLeadingOperator=TRUE) {
 		$bOpenBracket = FALSE;

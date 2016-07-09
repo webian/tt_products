@@ -1,3 +1,6 @@
+2016-07-09 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: PHP illegal string offset warnings
+
 2016-07-08 Franz Holzinger <franz@ttproducts.de>
 	* bugfix for PHP 7.x: Move the TCA to remove the excluded fields into the folder Overrides. Use the div2007 method TcaUtility::removeField instead of tx_addonsem_tca_div::removeFieldsFromTCA
 
