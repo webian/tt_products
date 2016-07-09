@@ -110,7 +110,7 @@ class tx_ttproducts_field_datafield_view extends tx_ttproducts_field_base_view {
 		$theCode='',
 		$id='1'
 	)	{
-		$this->getRepeatedSubpartArrays (
+		$this->getRepeatedSubpartArrays(
 			$subpartArray,
 			$wrappedSubpartArray,
 			$templateCode,
@@ -124,37 +124,39 @@ class tx_ttproducts_field_datafield_view extends tx_ttproducts_field_base_view {
 			$id
 		);
 
-		$dirname = $this->getModelObj()->getDirname($row, $fieldname);
-		$dataFileArray = t3lib_div::trimExplode(',', $row[$fieldname]);
-		$upperField = strtoupper($fieldname);
+		if (isset($row[$fieldname])) {
+			$dirname = $this->getModelObj()->getDirname($row, $fieldname);
+			$dataFileArray = t3lib_div::trimExplode(',', $row[$fieldname]);
+			$upperField = strtoupper($fieldname);
 
-		if (count($dataFileArray) && $dataFileArray[0])	{
-			foreach ($dataFileArray as $k => $dataFile)	{
+			if (count($dataFileArray) && $dataFileArray[0])	{
+				foreach ($dataFileArray as $k => $dataFile)	{
 
-				$marker = $markerKey . '_LINK_' . $upperField . ($k+1);
+					$marker = $markerKey . '_LINK_' . $upperField . ($k+1);
+					$this->getLinkArray(
+						$wrappedSubpartArray,
+						$tagArray,
+						$marker,
+						$dirname,
+						$dataFile,
+						$fieldname,
+						$tableConf
+					);
+				}
+
+				$marker = $markerKey.'_LINK_'.$upperField;
 				$this->getLinkArray(
 					$wrappedSubpartArray,
 					$tagArray,
 					$marker,
 					$dirname,
-					$dataFile,
+					$dataFileArray[0],
 					$fieldname,
 					$tableConf
 				);
+
+	// 			$wrappedSubpartArray[$marker] = array('<a href="'.$dirname.'/'.$dataFileArray[0].'">','</a>');
 			}
-
-			$marker = $markerKey.'_LINK_'.$upperField;
-			$this->getLinkArray(
-				$wrappedSubpartArray,
-				$tagArray,
-				$marker,
-				$dirname,
-				$dataFileArray[0],
-				$fieldname,
-				$tableConf
-			);
-
-// 			$wrappedSubpartArray[$marker] = array('<a href="'.$dirname.'/'.$dataFileArray[0].'">','</a>');
 		}
 
 		// empty all image fields with no available image

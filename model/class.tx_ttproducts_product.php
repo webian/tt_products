@@ -431,8 +431,10 @@ class tx_ttproducts_product extends tx_ttproducts_article_base {
 	 */
 	public function hasAdditional (&$row, $check)  {
 		$hasAdditional = FALSE;
-		$additional = t3lib_div::xml2array($row['additional']);
-		$hasAdditional = tx_div2007_ff::get($additional, $check);
+		if (isset($row['additional'])) {
+			$additional = t3lib_div::xml2array($row['additional']);
+			$hasAdditional = tx_div2007_ff::get($additional, $check);
+		}
 
 		return $hasAdditional;
 	}

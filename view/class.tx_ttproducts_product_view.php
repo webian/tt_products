@@ -77,7 +77,10 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 			$theCode,
 			$iCount
 		);
-		$extArray = $row['ext'];
+		$extArray = array();
+		if (isset($row['ext'])) {
+			$extArray = $row['ext'];
+		}
 
 		if (is_array($extArray) && is_array($extArray['tt_products']))	{
 			$variant = $extArray['tt_products'][0]['vars'];
