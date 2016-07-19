@@ -190,7 +190,7 @@ if (
 			'searchFields' => 'uid,title,subtitle,itemnumber,ean,note,note2,www',
 		),
 		'feInterface' => array (
-			'fe_admin_fieldList' => 'title,subtitle,itemnumber,price,price2,note,category,address,inStock,tax,tax_id,deposit,weight,bulkily,offer,highlight,directcost,color,size,description,gradings,unit,unit_factor,www,datasheet,special_preparation,image,smallimage,hidden,starttime,endtime',
+			'fe_admin_fieldList' => 'title,subtitle,itemnumber,price,price2,note,category,address,inStock,tax,deposit,weight,bulkily,offer,highlight,directcost,color,size,description,gradings,unit,unit_factor,www,datasheet,special_preparation,image,smallimage,hidden,starttime,endtime',
 		)
 	);
 
