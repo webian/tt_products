@@ -45,7 +45,7 @@ $result = array(
 		'searchFields' => 'uid,title,subtitle,itemnumber,ean,note,note2,www',
 	),
 	'interface' => array (
-		'showRecordFieldList' => 'hidden,starttime,endtime,fe_group,title,subtitle,accessory_uid,related_uid,itemnumber,ean,price,price2,creditpoints,graduated_price_uid,note,note2,note_uid,text_uid,category,address,inStock,weight,usebydate,bulkily,offer,highlight,directcost,color,color2,color3,size,size2,size3,description,gradings,material,quality,additional,unit,unit_factor,www,datasheet,special_preparation,image,sellstarttime,sellendtime,shipping,shipping2,handling'
+		'showRecordFieldList' => 'hidden,starttime,endtime,fe_group,title,subtitle,accessory_uid,related_uid,itemnumber,ean,price,price2,tax,creditpoints,graduated_price_uid,note,note2,note_uid,text_uid,category,address,inStock,weight,usebydate,bulkily,offer,highlight,directcost,color,color2,color3,size,size2,size3,description,gradings,material,quality,additional,unit,unit_factor,www,datasheet,special_preparation,image,sellstarttime,sellendtime,shipping,shipping2,handling'
 	),
 	'columns' => array (
 		't3ver_label' => array (
@@ -204,6 +204,16 @@ $result = array(
 				'size' => '20',
 				'eval' => 'trim,double2',
 				'max' => '20'
+			)
+		),
+		'tax' => array (
+			'exclude' => 1,
+			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.tax',
+			'config' => array (
+				'type' => 'input',
+				'size' => '12',
+				'max' => '19',
+				'eval' => 'trim,double2'
 			)
 		),
 		'creditpoints' => array (
@@ -705,7 +715,7 @@ $result = array(
 		),
 	),
 	'types' => array (
-		'0' => array('showitem' => 'title;;7;;3-3-3, itemnumber;;2, category, address, price;;3,offer;;6;;3-3-3,weight;;8,hidden;;1,' .
+		'0' => array('showitem' => 'title;;7;;3-3-3, itemnumber;;2, category, address, price;;3, tax;;4, offer;;6;;3-3-3,weight;;8,creditpoints,hidden;;1,' .
 			'--div--;LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.descriptions,note;;;richtext[]:rte_transform[mode=ts_css|imgpath=uploads/tx_ttproducts/rte/], note2;;;richtext[]:rte_transform[mode=ts_css|imgpath=uploads/tx_ttproducts/rte/],note_uid;;;;1-1-1,text_uid;;;;1-1-1,image;;;;4-4-4,datasheet;;;;1-1-1,'.
 			'--div--;LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.variants,color;;;;4-4-4,color2;;9;;,size,size2;;10,description,gradings,material,quality;;,additional;;11,'.
 			'--div--;LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.graduated,graduated_price_uid;;;;4-4-4,'.
@@ -720,7 +730,7 @@ $result = array(
 		'3' =>
 			array('showitem' => 'price2,directcost'),
 		'4' =>
-			array('showitem' => 'creditpoints'),
+			array('showitem' => 'tax_dummy'),
 		'6' =>
 			array('showitem' => 'highlight'),
 		'7' =>

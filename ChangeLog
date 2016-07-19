@@ -1,3 +1,6 @@
+2016-07-19 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: add the missing tax field in the TCA to the table tt_products
+
 2016-07-09 Franz Holzinger <franz@ttproducts.de>
 	* bugfix: PHP illegal string offset warnings
 
