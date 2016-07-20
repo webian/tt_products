@@ -1,3 +1,6 @@
+2016-07-20 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: rename class.tx_ttproducts_cms.php into class.tx_ttproducts_hooks_cms.php
+
 2016-07-19 Franz Holzinger <franz@ttproducts.de>
 	* bugfix: add the missing tax field in the TCA to the table tt_products
 
