@@ -122,7 +122,7 @@ class tx_ttproducts_field_price_view implements tx_ttproducts_field_view_int {
 	/**
 	 * Formatting a price
 	 */
-	public function priceFormat ($double) {
+	public static function priceFormat ($double) {
 		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
 		$conf = $cnf->conf;
 		$double = round($double, 10);
@@ -148,7 +148,7 @@ class tx_ttproducts_field_price_view implements tx_ttproducts_field_view_int {
 
 	public static function getItemMarkerArray (&$item, &$markerArray)	{
 
-		$newItem = &tx_ttproducts_field_price::convertNewPriceArray($item);
+		$newItem = tx_ttproducts_field_price::convertNewPriceArray($item);
 
 		foreach (self::$convertArray['price'] as $field => $mark)	{
 			if (isset($newItem[$field]))	{
