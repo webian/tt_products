@@ -60,6 +60,33 @@ if ($bSelectTaxMode) {
 
 }
 
+switch ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['articleMode']) {
+	case '0':
+		unset($GLOBALS['TCA'][$table]['columns']['article_uid']);
+		$GLOBALS['TCA'][$table]['types']['0'] = str_replace(',article_uid,', ',', $GLOBALS['TCA'][$table]['types']['0']);
+		break;
+	case '1':
+		$GLOBALS['TCA'][$table]['columns']['article_uid'] = array (
+			'exclude' => 1,
+			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.article_uid',
+			'config' => array (
+				'type' => 'group',
+				'internal_type' => 'db',
+				'allowed' => 'tt_products_articles',
+				'MM' => 'tt_products_products_mm_articles',
+				'foreign_table' => 'tt_products_articles',
+				'foreign_table_where' => ' ORDER BY tt_products_articles.title',
+				'size' => 10,
+				'selectedListStyle' => 'width:450px',
+				'minitems' => 0,
+				'maxitems' => 1000,
+			)
+		);
+		break;
+	case '2':
+		// leave the settings of article_uid
+		break;
+}
 
 
 $excludeArray = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['exclude.'];
