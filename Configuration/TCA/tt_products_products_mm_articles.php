@@ -53,6 +53,11 @@ if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['articleMode'] == '2
 				)
 			),
 		),
+		'types' => array(
+			'0' => array(
+				'showitem' => ''
+			)
+		)
 	);
 }
 
