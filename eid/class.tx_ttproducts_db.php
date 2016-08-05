@@ -37,23 +37,6 @@
  *
  */
 
-/*
-require_once (PATH_t3lib.'class.t3lib_stdgraphic.php');
-require_once (PATH_tslib.'class.tslib_content.php');
-require_once (PATH_tslib.'class.tslib_gifbuilder.php');
-
-require_once (PATH_BE_div2007.'class.tx_div2007_alpha.php');
-require_once (PATH_BE_div2007.'class.tx_div2007_alpha5.php');
-
-require_once (PATH_BE_ttproducts.'control/class.tx_ttproducts_control_creator.php');
-require_once (PATH_BE_ttproducts.'model/class.tx_ttproducts_model_creator.php');
-require_once (PATH_BE_ttproducts.'lib/class.tx_ttproducts_paymentshipping.php');
-require_once (PATH_BE_ttproducts.'model/field/class.tx_ttproducts_field_image.php');
-require_once (PATH_BE_ttproducts.'model/field/class.tx_ttproducts_field_price.php');
-require_once (PATH_BE_ttproducts.'view/field/class.tx_ttproducts_field_image_view.php');
-require_once (PATH_BE_ttproducts.'view/field/class.tx_ttproducts_field_price_view.php');
-require_once (PATH_BE_ttproducts.'view/field/class.tx_ttproducts_field_note_view.php');
-*/
 
 
 class tx_ttproducts_db {

@@ -39,11 +39,6 @@
  *
  */
 
-/*
-require_once (PATH_BE_div2007.'class.tx_div2007_alpha.php');
-require_once(PATH_BE_div2007.'class.tx_div2007_alpha5.php');
-require_once (PATH_BE_ttproducts.'pi_search/class.tx_ttproducts_pi_search_base.php');*/
-
 
 class tx_ttproducts_pi_search {
 	/**

@@ -154,8 +154,6 @@ class tx_ttproducts_field_datafield_view extends tx_ttproducts_field_base_view {
 					$fieldname,
 					$tableConf
 				);
-
-	// 			$wrappedSubpartArray[$marker] = array('<a href="'.$dirname.'/'.$dataFileArray[0].'">','</a>');
 			}
 		}
 

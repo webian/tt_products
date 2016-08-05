@@ -37,8 +37,6 @@
  *
  */
 
-// require_once (PATH_BE_ttproducts.'view/interface.tx_ttproducts_variant_view_int.php');
-
 
 class tx_ttproducts_variant_view implements tx_ttproducts_variant_view_int {
 	public $modelObj;
@@ -94,7 +92,11 @@ class tx_ttproducts_variant_view implements tx_ttproducts_variant_view_int {
 		if (is_array($variantConf))	{
 			foreach ($variantConf as $key => $field)	{
 				if ($field != 'additional')	{	// no additional here
-					if (!isset($row[$field]) || trim($row[$field]) == '' || !$conf['select' . ucfirst($field)])	{
+					if (
+						!isset($row[$field]) ||
+						trim($row[$field]) == '' ||
+						!$conf['select' . ucfirst($field)]
+					) {
 						$remSubpartArray[] = 'display_variant' . $key;
 					} else {
 						$remMarkerArray[] = 'display_variant' . $key;
