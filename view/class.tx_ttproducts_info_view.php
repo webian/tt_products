@@ -534,8 +534,8 @@ class tx_ttproducts_info_view {
 		$markerArray['###DELIVERY_ADDRESS_DISPLAY###'] = nl2br($markerArray['###DELIVERY_ADDRESS###']);
 
 		$orderAddressViewObj = $tablesObj->get('fe_users',TRUE);
-		$orderAddressViewObj->getRowMarkerArray($this->infoArray['billing'], $markerArray, $bSelectSalutation,'personinfo');
-		$orderAddressViewObj->getRowMarkerArray($this->infoArray['delivery'], $markerArray, $bSelectSalutation,'delivery');
+		$orderAddressViewObj->getAddressMarkerArray($this->infoArray['billing'], $markerArray, $bSelectSalutation,'personinfo');
+		$orderAddressViewObj->getAddressMarkerArray($this->infoArray['delivery'], $markerArray, $bSelectSalutation,'delivery');
 
 		$text = $TSFE->csConv($this->infoArray['delivery']['note'],$TSFE->metaCharset);
 		$markerArray['###DELIVERY_NOTE###'] = $text;

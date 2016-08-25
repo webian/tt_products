@@ -52,10 +52,10 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 	/**
 	 * Getting all tt_products_cat categories into internal array
 	 */
-	function init (&$pibase, $tablename)	{
+	function init ($cObj, $tablename)	{
 		global $TYPO3_DB;
 
-		parent::init($pibase, $tablename);
+		parent::init($cObj, $tablename);
 
 		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
 		$tablename = ($tablename ? $tablename : 'pages');
@@ -111,7 +111,7 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 		}
 	}
 
-
+/*
 	function get ($uid = 0, $pid = 0, $bStore = TRUE, $where_clause = '', $limit = '', $fields = '', $bCount = FALSE) {
 		global $TYPO3_DB;
 
@@ -128,7 +128,7 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 			$rc = $this->dataArray[$uid] = $row;
 		}
 		return $rc;
-	}
+	}*/
 
 
 	function getRootCat ()	{

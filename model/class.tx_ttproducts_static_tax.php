@@ -38,9 +38,6 @@
  */
 
 
-// require_once(PATH_BE_table.'lib/class.tx_table_db.php');
-
-
 class tx_ttproducts_static_tax extends tx_ttproducts_table_base {
 	protected $uidStore;
 	private $allTaxesArray;
@@ -51,9 +48,9 @@ class tx_ttproducts_static_tax extends tx_ttproducts_table_base {
 	/**
 	 * Getting all tt_products_cat categories into internal array
 	 */
-	function init (&$pibase, $functablename)	{
+	function init ($cObj, $functablename)	{
 		if ($this->isInstalled())	{
-			parent::init($pibase, $functablename);
+			parent::init($cObj, $functablename);
 			$tablename = $this->getTablename();
 			$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
 			$tableconf = $cnf->getTableConf('static_taxes');

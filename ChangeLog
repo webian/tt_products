@@ -1,3 +1,6 @@
+2016-08-25 Franz Holzinger <franz@ttproducts.de>
+	* bugfix issue#9: Remove PHP 7 warnings
+	* bugfix: Support STRICT mysql mode STRICT_ALL_TABLES and STRICT_TRANS_TABLES.
 
 2016-08-01 Franz Holzinger <franz@ttproducts.de>
 	* bugfix for TYPO3 7.6.10: At least one "types" array must be defined for table tt_products_products_mm_articles, preferred "0" UnexpectedValueException thrown in file /var/www/html/typo3_src-7.6.10/typo3/sysext/backend/Classes/Form/FormDataProvider/DatabaseRecordTypeValue.php in line 43
@@ -6,7 +9,7 @@
 	* bugfix: PHP illegal string offset warnings
 
 2016-07-08 Franz Holzinger <franz@ttproducts.de>
-	* bugfix for PHP 7.x: Move the TCA to remove the excluded fields into the folder Overrides. Use the div2007 method TcaUtility::removeField instead of tx_addonsem_tca_div::removeFieldsFromTCA
+	* bugfix for TYPO3 7.x: Move the TCA to remove the excluded fields into the folder Overrides. Use the div2007 method TcaUtility::removeField instead of tx_addonsem_tca_div::removeFieldsFromTCA
 
 2016-07-02 Franz Holzinger <franz@ttproducts.de>
 	* bugfix: Remove the iban field from TCA. IBAN is only supported sice tt_products 2.11.0

@@ -83,7 +83,7 @@ class tx_ttproducts_orderaddress_view extends tx_ttproducts_table_base_view {
 	 * @return	array
 	 * @access private
 	 */
-	function getRowMarkerArray (&$row, &$markerArray, $bSelect, $type)	{
+	function getAddressMarkerArray (&$row, &$markerArray, $bSelect, $type) {
 		global $TCA;
 
 		$fieldOutputArray = array();

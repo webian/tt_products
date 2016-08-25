@@ -37,10 +37,6 @@
  *
  */
 
-/*
-require_once (PATH_BE_table.'lib/class.tx_table_db.php');
-require_once (PATH_BE_ttproducts.'view/field/class.tx_ttproducts_field_datafield_view.php');*/
-
 
 abstract class tx_ttproducts_article_base extends tx_ttproducts_table_base {
 	public $table;	 // object of the type tx_table_db
@@ -57,7 +53,7 @@ abstract class tx_ttproducts_article_base extends tx_ttproducts_table_base {
 	/**
 	 * Getting all tt_products_cat categories into internal array
 	 */
-	public function init (&$cObj, $functablename)	{
+	public function init ($cObj, $functablename)	{
 		parent::init($cObj, $functablename);
 		$tablename = $this->getTablename();
 		$useArticles = $this->conf['useArticles'];

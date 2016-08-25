@@ -72,7 +72,7 @@ abstract class tx_ttproducts_article_base_view extends tx_ttproducts_table_base_
 	}
 
 
-	public function getItemSubpartArrays ($templateCode, $functablename, &$row, &$subpartArray, &$wrappedSubpartArray, &$tagArray, $theCode='', $id='1')	{
+	public function getItemSubpartArrays (&$templateCode, $functablename, $row, &$subpartArray, &$wrappedSubpartArray, &$tagArray, $theCode='', $id='') {
 		global $TCA;
 
 		parent::getItemSubpartArrays($templateCode, $functablename, $row, $subpartArray, $wrappedSubpartArray, $tagArray, $theCode, $id);

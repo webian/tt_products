@@ -55,10 +55,10 @@ class tx_ttproducts_address extends tx_ttproducts_category_base {
 	/**
 	 * Getting all address values into internal array
 	 */
-	function init(&$pibase, $functablename)	{
+	function init($cObj, $functablename)	{
 		global $TYPO3_DB,$TSFE,$TCA;
 
-		parent::init($pibase, $functablename);
+		parent::init($cObj, $functablename);
 		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
 
 		$tableconf = $cnf->getTableConf('address');

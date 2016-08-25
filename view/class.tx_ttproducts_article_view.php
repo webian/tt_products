@@ -38,16 +38,13 @@
  */
 
 
-// require_once (PATH_BE_ttproducts.'view/class.tx_ttproducts_article_base_view.php');
-
 
 class tx_ttproducts_article_view extends tx_ttproducts_article_base_view {
 	public $marker = 'ARTICLE';
 	public $type = 'article';
 	public $piVar = 'article';
 
-	function init(&$langObj, &$modelObj)	{
-		include_once (PATH_BE_ttproducts.'view/class.tx_ttproducts_variant_dummy_view.php');
+	function init($langObj, $modelObj)	{
 
 		$this->variant = t3lib_div::getUserObj('&tx_ttproducts_variant_dummy_view');
 		parent::init($langObj, $modelObj);
