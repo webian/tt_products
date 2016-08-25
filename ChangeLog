@@ -1,3 +1,7 @@
+2016-08-25 Franz Holzinger <franz@ttproducts.de>
+	* bugfix issue#9: Remove PHP 7 warnings
+	* bugfix: Support STRICT mysql mode STRICT_ALL_TABLES and STRICT_TRANS_TABLES.
+
 2016-07-20 Franz Holzinger <franz@ttproducts.de>
 	* bugfix: rename class.tx_ttproducts_cms.php into class.tx_ttproducts_hooks_cms.php
 

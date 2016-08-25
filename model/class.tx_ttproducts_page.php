@@ -46,14 +46,14 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 	/**
 	 * Getting all tt_products_cat categories into internal array
 	 *
-	 * @param	[type]		$$pibase: ...
+	 * @param	[type]		$cObj: ...
 	 * @param	[type]		$tablename: ...
 	 * @return	[type]		...
 	 */
-	function init($pibase, $tablename)	{
+	function init($cObj, $tablename)	{
 		global $TYPO3_DB;
 
-		parent::init($pibase, $tablename);
+		parent::init($cObj, $tablename);
 
 		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
 		$tablename = ($tablename ? $tablename : 'pages');
@@ -70,7 +70,7 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 		if (is_array($this->tableconf['language.']) &&
 			$this->tableconf['language.']['type'] == 'field' &&
 			is_array($this->tableconf['language.']['field.'])
-			)	{
+		)	{
 			$addRequiredFields = array();
 			$addRequiredFields = $this->tableconf['language.']['field.'];
 			$this->getTableObj()->addRequiredFieldArray($addRequiredFields);
@@ -113,23 +113,23 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 	 * @param	[type]		$bCount: ...
 	 * @return	[type]		...
 	 */
-	function get ($uid = 0, $pid = 0, $bStore = true, $where_clause = '', $limit = '', $fields = '', $bCount = FALSE) {
-		global $TYPO3_DB;
-
-		$bMultple = (strstr($uid, ',') ? true : false);
-
-		$rc = $this->dataArray[$uid];
-		if (!$rc && !$bMultple && isset($uid)) {
-			$where = '1=1 '.$this->getTableObj()->enableFields().' AND uid = '.intval($uid);
-
-			// Fetching the pages
-			$res = $this->getTableObj()->exec_SELECTquery('*', $where);
-			$row = $TYPO3_DB->sql_fetch_assoc($res);
-			$TYPO3_DB->sql_free_result($res);
-			$rc = $this->dataArray[$uid] = $row;
-		}
-		return $rc;
-	}
+// 	function get ($uid = 0, $pid = 0, $bStore = true, $where_clause = '', $limit = '', $fields = '', $bCount = FALSE) {
+// 		global $TYPO3_DB;
+//
+// 		$bMultple = (strstr($uid, ',') ? true : false);
+//
+// 		$rc = $this->dataArray[$uid];
+// 		if (!$rc && !$bMultple && isset($uid)) {
+// 			$where = '1=1 '.$this->getTableObj()->enableFields().' AND uid = '.intval($uid);
+//
+// 			// Fetching the pages
+// 			$res = $this->getTableObj()->exec_SELECTquery('*', $where);
+// 			$row = $TYPO3_DB->sql_fetch_assoc($res);
+// 			$TYPO3_DB->sql_free_result($res);
+// 			$rc = $this->dataArray[$uid] = $row;
+// 		}
+// 		return $rc;
+// 	}
 
 	/**
 	 * [Describe function...]

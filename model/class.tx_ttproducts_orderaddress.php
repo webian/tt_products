@@ -94,7 +94,7 @@ class tx_ttproducts_orderaddress extends tx_ttproducts_table_base {
 		return $result;
 	}
 
-
+/*
 	public function get ($uid) {
 		global $TYPO3_DB;
 
@@ -107,7 +107,7 @@ class tx_ttproducts_orderaddress extends tx_ttproducts_table_base {
 			$rc = $this->dataArray[$row['uid']] = $row;
 		}
 		return $rc;
-	}
+	}*/
 
 
 	public function getFieldName ($field)	{
