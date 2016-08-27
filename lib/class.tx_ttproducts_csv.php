@@ -103,7 +103,7 @@ class tx_ttproducts_csv {
 
 			$accountRow = array();
 			if ($this->accountUid)	{
-				$accountRow = $accountObj->get($this->accountUid, 0, TRUE);
+				$accountRow = $accountObj->getRow($this->accountUid, 0, TRUE);
 				if (is_array($accountRow) && count($accountRow))	{
 					$csvlineAccount = '"' . implode('";"', $accountRow) . '"';
 					$accountdescr = '"' . implode('";"', array_keys($accountRow)) . '"';

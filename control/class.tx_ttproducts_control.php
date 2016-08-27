@@ -514,7 +514,7 @@ class tx_ttproducts_control {
 			$cardViewObj = $tablesObj->get('sys_products_cards',TRUE);
 			$cardObj = $cardViewObj->getModelObj();
 			$cardUid = $cardObj->getUid();
-			$cardRow = $cardObj->get($cardUid);
+			$cardRow = $cardObj->getRow($cardUid);
 			$cardViewObj->getMarkerArray($mainMarkerArray);
 
 			// get bank account info

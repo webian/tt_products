@@ -37,12 +37,9 @@
  *
  */
 
-/*
-require_once (PATH_BE_ttproducts.'model/field/interface.tx_ttproducts_field_int.php');
-require_once (PATH_BE_ttproducts.'lib/class.tx_ttproducts_paymentshipping.php');*/
 
 
-class tx_ttproducts_field_price implements tx_ttproducts_field_int {
+class tx_ttproducts_field_price extends tx_ttproducts_field_base {
 	private $bHasBeenInitialised = FALSE;
 	private $bTaxIncluded;	// if tax is already included in the price
 	private $taxMode;
@@ -77,7 +74,9 @@ class tx_ttproducts_field_price implements tx_ttproducts_field_int {
 	 * Getting all tt_products_cat categories into internal array
 	 * Here $conf needs not be a member of $cnf in order to have local settings e.g. with shipping
 	 */
-	public function init ($cObj, &$priceConf)	{
+	public function preInit ($cObj, &$priceConf) {
+		parent::init($cObj);
+
 		$this->priceConf = &$priceConf;
 		if (!isset($this->priceConf['TAXincluded']))	{
 			$this->priceConf['TAXincluded'] = '1';	// default '1' for TAXincluded

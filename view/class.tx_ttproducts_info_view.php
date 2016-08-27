@@ -628,7 +628,8 @@ class tx_ttproducts_info_view {
 		$markerArray['###DELIVERY_FOUNDBY###'] = $text;
 		$markerArray['###DELIVERY_FOUNDBY_SELECTOR###'] = $foundbyText;
 		$markerArray['###DELIVERY_FOUNDBY_OTHERS###'] = $this->infoArray['delivery']['foundby_others'];
-	} // getMarkerArray
+
+	} // getRowMarkerArray
 }
 
 

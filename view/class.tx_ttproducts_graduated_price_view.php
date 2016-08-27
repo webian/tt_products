@@ -96,7 +96,7 @@ class tx_ttproducts_graduated_price_view {
 		}
 	}
 
-	public function &getItemSubpartArrays ($templateCode, &$row, $fieldname, &$subpartArray, &$wrappedSubpartArray, &$tagArray, $theCode='', $id='1')	{
+	public function &getPriceSubpartArrays ($templateCode, &$row, $fieldname, &$subpartArray, &$wrappedSubpartArray, &$tagArray, $theCode='', $id='1')	{
 
 		$subpartmarkerObj = t3lib_div::getUserObj('&tx_ttproducts_subpartmarker');
 		$t = array();
@@ -144,7 +144,7 @@ class tx_ttproducts_graduated_price_view {
 	 * @return	array
 	 * @access private
 	 */
-	public function getRowMarkerArray (
+	public function getPriceMarkerArray (
 		&$row,
 		&$markerArray,
 		&$tagArray

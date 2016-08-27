@@ -37,14 +37,6 @@
  *
  */
 
-/*
-require_once (PATH_BE_ttproducts.'model/field/class.tx_ttproducts_field_base.php');
-require_once (PATH_BE_ttproducts.'model/field/class.tx_ttproducts_field_tax.php');
-require_once (PATH_BE_ttproducts.'model/field/class.tx_ttproducts_field_price.php');
-require_once (PATH_BE_ttproducts.'model/class.tx_ttproducts_basket.php');*/
-
-
-require_once (PATH_BE_ttproducts.'model/class.tx_ttproducts_static_info.php');
 
 class tx_ttproducts_model_creator {
 
@@ -60,7 +52,7 @@ class tx_ttproducts_model_creator {
 		}
 
 		$taxObj = t3lib_div::getUserObj('&tx_ttproducts_field_tax');
-		$taxObj->init(
+		$taxObj->preInit(
 			$cObj,
 			$bUseStaticTaxes,
 			$UIDstore
@@ -68,7 +60,7 @@ class tx_ttproducts_model_creator {
 
 			// price
 		$priceObj = t3lib_div::getUserObj('&tx_ttproducts_field_price');
-		$priceObj->init(
+		$priceObj->preInit(
 			$cObj,
 			$conf
 		);

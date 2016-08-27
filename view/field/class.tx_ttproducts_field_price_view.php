@@ -100,7 +100,7 @@ class tx_ttproducts_field_price_view implements tx_ttproducts_field_view_int {
 	/**
 	 * Generate a graphical price tag or print the price as text
 	 */
-	public function printPrice ($priceText, $taxInclExcl = '')	{
+	public static function printPrice ($priceText, $taxInclExcl = '')	{
 		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
 		$conf = $cnf->conf;
 

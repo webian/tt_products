@@ -60,12 +60,6 @@ class tx_ttproducts_activity_base {
 	} // init
 
 
-	/**
-	 * Do all the things to be done for this activity
-	 */
-	function doProcessing ()	{
-		// override this
-	}
 }
 
 

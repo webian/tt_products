@@ -38,8 +38,6 @@
  */
 
 
-// require_once(PATH_BE_table.'lib/class.tx_table_db.php');
-
 
 class tx_ttproducts_country extends tx_ttproducts_table_base {
 	var $dataArray; // array of read in contents
@@ -51,8 +49,8 @@ class tx_ttproducts_country extends tx_ttproducts_table_base {
 	/**
 	 * Getting all tt_products_cat categories into internal array
 	 */
-	function init (&$pibase, $functablename)	{
-		parent::init($pibase, $functablename);
+	function init ($cObj, $functablename)	{
+		parent::init($cObj, $functablename);
 		$tablename = $this->getTablename();
 		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
 		$this->tableconf = $cnf->getTableConf('static_countries');

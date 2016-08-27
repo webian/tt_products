@@ -43,7 +43,7 @@ class tx_ttproducts_field_tax extends tx_ttproducts_field_base {
 	/**
 	 *
 	 */
-	public function init($cObj, $bUseStaticTaxes, $uidStore)	{
+	public function preInit($cObj, $bUseStaticTaxes, $uidStore) {
 		global $TYPO3_DB,$TSFE,$TCA;
 
 		parent::init($cObj);

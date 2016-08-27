@@ -487,9 +487,6 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 		$account = $tablesObj->get('sys_products_accounts');
 		$accountUid = $account->getUid();
 
-		// get bank account info
-		$account = $tablesObj->get('sys_products_accounts');
-		$accountUid = $account->getUid();
 		$address = t3lib_div::getUserObj('&tx_ttproducts_info_view');
 		if ($address->needsInit())	{
 			echo 'internal error in tt_products (setData)';
