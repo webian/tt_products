@@ -430,13 +430,13 @@ class tx_ttproducts_control {
 					$cardViewObj = $tablesObj->get('sys_products_cards',TRUE);
 					$cardObj = $cardViewObj->getModelObj();
 					$cardUid = $cardObj->getUid();
-					$cardRow = $cardObj->get($cardUid);
-					$cardViewObj->getItemMarkerArray($mainMarkerArray);
+					$cardRow = $cardObj->getRow($cardUid);
+					$cardViewObj->getMarkerArray($mainMarkerArray);
 
 					// get bank account info
 					$accountViewObj = $tablesObj->get('sys_products_accounts',TRUE);
 					$accountObj = $accountViewObj->getModelObj();
-					$accountViewObj->getItemMarkerArray($mainMarkerArray);
+					$accountViewObj->getMarkerArray($mainMarkerArray);
 				}
 
 				foreach ($this->activityArray as $activity => $value) {

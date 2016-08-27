@@ -140,21 +140,21 @@ abstract class tx_ttproducts_article_base_view extends tx_ttproducts_table_base_
 	 * 			 		for the tt_producst record, $row
 	 * @access private
 	 */
-	public function getItemMarkerArray (
-			$item,
-			&$markerArray,
-			$catTitle,
-			$imageNum=0,
-			$imageRenderObj='image',
-			&$tagArray,
-			$forminfoArray=array(),
-			$theCode='',
-			$id='1',
-			$prefix='',
-			$linkWrap='',
-			$bHtml=true,
-			$charset=''
-		)	{
+	public function getModelMarkerArray (
+		&$item,
+		&$markerArray,
+		$catTitle,
+		$imageNum=0,
+		$imageRenderObj='image',
+		&$tagArray,
+		$forminfoArray=array(),
+		$theCode='',
+		$id='1',
+		$prefix='',
+		$linkWrap='',
+		$bHtml=true,
+		$charset=''
+	)	{
 		global $TSFE, $TCA;
 
 		$modelObj = $this->getModelObj();

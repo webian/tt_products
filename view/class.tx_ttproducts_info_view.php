@@ -353,7 +353,7 @@ class tx_ttproducts_info_view {
 			$countryObj = $tablesObj->get('static_countries');
 			if (is_object($countryObj))	{
 				$type = ($this->bDeliveryAddress ? 'billing' : 'delivery');
-				$row = $countryObj->get($this->infoArray[$type]['country_code'], $where);
+				$row = $countryObj->isoGet($this->infoArray[$type]['country_code'], $where);
 				if (!$row)	{
 					$rc = 'country';
 				}

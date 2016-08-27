@@ -140,7 +140,7 @@ abstract class tx_ttproducts_article_base extends tx_ttproducts_table_base {
 	}
 
 
-	public function addWhereCat (&$catObject, $theCode, $cat, $pid_list) {
+	public function addWhereCat ($catObject, $theCode, $cat, $pid_list, $bLeadingOperator=TRUE) {
 		$where = '';
 
 		return $where;

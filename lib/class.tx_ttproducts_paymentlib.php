@@ -376,7 +376,7 @@ class tx_ttproducts_paymentlib {
 		$cardObj = $tablesObj->get('sys_products_cards');
 		if (is_object($this->card) && $gatewayMode == TX_PAYMENTLIB_GATEWAYMODE_WEBSERVICE)	{
 			$cardUid = $cardObj->getUid();
-			$cardRow = $cardObj->get($cardUid);
+			$cardRow = $cardObj->getRow($cardUid);
 			$transactionDetailsArr['cc'] = $cardRow;
 		}
 		return $transactionDetailsArr;

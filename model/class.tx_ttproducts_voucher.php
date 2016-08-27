@@ -53,7 +53,7 @@ class tx_ttproducts_voucher extends tx_ttproducts_table_base {
 	 * @param	[type]		$functablename: ...
 	 * @return	[type]		...
 	 */
-	function init(&$cObj, $functablename)  {
+	function init($cObj, $functablename)  {
 		global $TSFE;
 
 		parent::init($cObj, $functablename);

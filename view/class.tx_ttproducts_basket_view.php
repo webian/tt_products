@@ -217,7 +217,7 @@ class tx_ttproducts_basket_view {
 				$wrongPounds = preg_match_all($checkExpression, $t['basketFrameWork'], $matches);
 				if ($wrongPounds) {
 					$this->error_code[0] = 'template_invalid_marker_border';
-					$this->error_code[1] = '###' . $subpartMarker . '###';
+					$this->error_code[1] = $subpartMarker;
 					$this->error_code[2] = htmlspecialchars(implode('|', $matches['0']));
 					return '';
 				}
@@ -392,7 +392,7 @@ class tx_ttproducts_basket_view {
 							// use the fields of the article instead of the product
 
 						$prodVariantItem['rec'] = $prodVariantRow;
-						$articleViewObj->getItemMarkerArray(
+						$articleViewObj->getModelMarkerArray(
 							$prodVariantItem,
 							$markerArray,
 							$catTitle,
@@ -433,7 +433,7 @@ class tx_ttproducts_basket_view {
 					$catRow = $row['category'] ? $tablesObj->get('tt_products_cat')->get($row['category']) : array();
 					$catTitle = $catRow['title'];
 					$tmp = array();
-					$itemTableView->getItemMarkerArray(
+					$itemTableView->getModelMarkerArray(
 						$actItem,
 						$markerArray,
 						$catTitle,

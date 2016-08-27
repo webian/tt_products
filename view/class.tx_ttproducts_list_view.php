@@ -1013,7 +1013,7 @@ class tx_ttproducts_list_view {
 							$prodRow = $tablesObj->get('tt_products')->get($row['uid_product']);
 							// $variant = $itemTable->variant->getFirstVariantRow();
 							$item = $basketObj->getItem($prodRow, 'firstVariant');
-							$tablesObj->get('tt_products', TRUE)->getItemMarkerArray (
+							$tablesObj->get('tt_products', TRUE)->getModelMarkerArray(
 								$item,
 								$productMarkerArray,
 								$catTitle,
@@ -1108,7 +1108,7 @@ class tx_ttproducts_list_view {
 							// use the fields of the article instead of the product
 						//
 						$prodVariantItem['rec'] = $prodVariantRow;
-						$articleViewObj->getItemMarkerArray (
+						$articleViewObj->getModelMarkerArray(
 							$prodVariantItem,
 							$markerArray,
 							$catTitle,
@@ -1149,7 +1149,7 @@ class tx_ttproducts_list_view {
 						TRUE,
 						$TSFE->renderCharset
 					);
-					$itemTableView->getItemMarkerArray (
+					$itemTableView->getModelMarkerArray(
 						$item,
 						$markerArray,
 						$catTitle,

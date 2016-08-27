@@ -39,9 +39,9 @@
 
 
 class tx_ttproducts_language extends tx_div2007_alpha_language_base {
-	public function init ($pObj, $cObj, &$conf, $scriptRelPath)	{
+	public function init1 ($pObj, $cObj, &$conf, $scriptRelPath)	{
 
-		parent::init1(
+		parent::init(
 			$cObj,
 			TT_PRODUCTS_EXT,
 			$conf,

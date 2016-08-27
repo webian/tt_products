@@ -43,7 +43,7 @@ class tx_ttproducts_field_price_view implements tx_ttproducts_field_view_int {
 	public $cObj;
 	public $conf;			// original configuration
 	public $modelObj;
-	static $convertArray = array(
+	public static $convertArray = array(
 		'price' => array(
 			'tax' => 'PRICE_TAX',
 			'taxperc' => 'TAX',

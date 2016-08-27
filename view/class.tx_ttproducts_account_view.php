@@ -48,7 +48,7 @@ class tx_ttproducts_account_view extends tx_ttproducts_table_base_view {
 	 * @return	array
 	 * @access private
 	 */
-	function getItemMarkerArray (&$markerArray)	{
+	function getMarkerArray (&$markerArray)	{
 		global $TCA;
 
 		include_once (PATH_BE_ttproducts.'lib/class.tx_ttproducts_form_div.php');

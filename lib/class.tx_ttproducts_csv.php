@@ -103,7 +103,7 @@ class tx_ttproducts_csv {
 
 			$accountRow = array();
 			if ($this->accountUid)	{
-				$accountRow = $accountObj->get($this->accountUid,0,true);
+				$accountRow = $accountObj->getRow($this->accountUid,0,true);
 			}
 
 			$csvlinepayment = '"' . $basket->basketExtra['payment.']['title'] . '";"' .

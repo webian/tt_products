@@ -50,8 +50,8 @@ class tx_ttproducts_country extends tx_ttproducts_table_base {
 	 * @param	[type]		$functablename: ...
 	 * @return	[type]		...
 	 */
-	function init($pibase, $functablename)	{
-		parent::init($pibase, $functablename);
+	function init($cObj, $functablename)	{
+		parent::init($cObj, $functablename);
 		$tablename = $this->getTablename();
 		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
 		$tablename = ($tablename ? $tablename : 'pages');
@@ -80,7 +80,7 @@ class tx_ttproducts_country extends tx_ttproducts_table_base {
 	} // init
 
 
-	function get ($country_code, $where, $fields='') {
+	function isoGet ($country_code, $where, $fields='') {
 
 		global $TYPO3_DB, $TCA;
 

@@ -311,7 +311,7 @@ class tx_ttproducts_single_view {
 				$viewTextViewTable = $tablesObj->get('tt_products_texts',TRUE);
 				$textTagArray = $viewTextViewTable->getTagMarkerArray($viewTagArray, $itemTableArray['product']->marker);
 				$itemArray = $viewTextTable->getChildUidArray($theCode, $this->uid, $textTagArray, 'tt_products');
-				$viewTextViewTable->getItemMarkerArray($itemArray, $markerArray, $itemTableArray['product']->marker, $textTagArray);
+				$viewTextViewTable->getRowsMarkerArray($itemArray, $markerArray, $itemTableArray['product']->marker, $textTagArray);
 			}
 			$forminfoArray = array('###FORM_NAME###' => 'item_'.$this->uid);
 
@@ -446,7 +446,7 @@ class tx_ttproducts_single_view {
 					// use the fields of the article instead of the product
 				//
 				$prodVariantItem['rec'] = $prodVariantRow;
-				$itemTableViewArray['article']->getItemMarkerArray(
+				$itemTableViewArray['article']->getModelMarkerArray(
 					$prodVariantItem,
 					$markerArray,
 					$catTitle,
@@ -474,7 +474,7 @@ class tx_ttproducts_single_view {
 				$prodRow = $itemTableArray['product']->get($row['uid_product']);
 				// $variant = $itemTableArray['product']->variant->getFirstVariantRow();
 				$item = $basketObj->getItem($prodRow, 'firstVariant');
-				$itemTableViewArray['product']->getItemMarkerArray (
+				$itemTableViewArray['product']->getModelMarkerArray (
 					$item,
 					$markerArray,
 					$catTitle,
@@ -506,7 +506,7 @@ class tx_ttproducts_single_view {
 					1,
 					true
 				);
-				$itemTableViewArray[$this->type]->getItemMarkerArray(
+				$itemTableViewArray[$this->type]->getModelMarkerArray(
 					$item,
 					$markerArray,
 					$catTitle,

@@ -1,3 +1,7 @@
+2016-08-27 Franz Holzinger <franz@ttproducts.de>
+	* bugfix issue#9: Remove PHP 7 warnings
+	* fix wrong markers in file products_css_variants_de.html
+
 2016-08-25 Franz Holzinger <franz@ttproducts.de>
 	* bugfix issue#9: Remove PHP 7 warnings
 	* bugfix: Support STRICT mysql mode STRICT_ALL_TABLES and STRICT_TRANS_TABLES.

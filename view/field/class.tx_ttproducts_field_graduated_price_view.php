@@ -67,7 +67,7 @@ class tx_ttproducts_field_graduated_price_view extends tx_ttproducts_field_base_
 		global $TCA;
 
 		$priceTablesViewObj = t3lib_div::getUserObj('&tx_ttproducts_graduated_price_view');
-		$priceTablesViewObj->getItemSubpartArrays($templateCode, $row, $fieldname, $subpartArray, $wrappedSubpartArray, $tagArray, $theCode, $id);
+		$priceTablesViewObj->getPriceSubpartArrays($templateCode, $row, $fieldname, $subpartArray, $wrappedSubpartArray, $tagArray, $theCode, $id);
 	}
 
 	/**
@@ -91,7 +91,7 @@ class tx_ttproducts_field_graduated_price_view extends tx_ttproducts_field_base_
 	function getItemMarkerArray ($functablename, $fieldname, &$row, $markerKey, &$markerArray, $tagArray, $theCode, $id, &$bSkip, $bHtml=true, $charset='', $prefix='', $imageRenderObj='')	{
 
 		$priceTablesViewObj = t3lib_div::getUserObj('&tx_ttproducts_graduated_price_view');
-		$priceTablesViewObj->getItemMarkerArray ($row, $markerArray, $tagArray);
+		$priceTablesViewObj->getPriceMarkerArray ($row, $markerArray, $tagArray);
 	}
 }
 

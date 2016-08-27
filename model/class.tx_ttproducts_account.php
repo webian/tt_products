@@ -134,7 +134,7 @@ class tx_ttproducts_account extends tx_ttproducts_table_base {
 	 * @param	[type]		$bFieldArrayAll: ...
 	 * @return	[type]		...
 	 */
-	function get ($uid, $bFieldArrayAll=false) {
+	function getRow ($uid, $bFieldArrayAll=false) {
 		global $TYPO3_DB;
 		$rcArray = array();
 		if ($bFieldArrayAll)	{

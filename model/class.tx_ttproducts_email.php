@@ -41,12 +41,12 @@ class tx_ttproducts_email extends tx_ttproducts_table_base {
 	/**
 	 * Getting all tt_products_cat categories into internal array
 	 *
-	 * @param	[type]		$$pibase: ...
+	 * @param	[type]		$cObj: ...
 	 * @param	[type]		$functablename: ...
 	 * @return	[type]		...
 	 */
-	function init(&$pibase, $functablename)  {
-		parent::init($pibase, $functablename);
+	function init($cObj, $functablename)  {
+		parent::init($cObj, $functablename);
 		$tablename = $this->getTablename();
 		$this->getTableObj()->addDefaultFieldArray(array('sorting' => 'sorting'));
 		$this->getTableObj()->setTCAFieldArray('tt_products_emails');

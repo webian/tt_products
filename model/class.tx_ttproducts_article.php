@@ -79,27 +79,6 @@ class tx_ttproducts_article extends tx_ttproducts_article_base {
 	} // init
 
 
-	function get($uid = 0, $pid = 0, $bStore = true, $where_clause = '', $limit = '', $fields = '', $bCount = FALSE) {
-		global $TYPO3_DB;
-
-		$rc = $this->dataArray[$uid];
-		if (!$rc && $uid) {
-			$where = '1=1 '.$this->getTableObj()->enableFields().' AND uid = ' . intval($uid);
-			if ($where_clause)	{
-				$where .= ' ' . $where_clause;
-			}
-			// Fetching the articles
-			$res = $this->getTableObj()->exec_SELECTquery('*', $where);
-			$row = $TYPO3_DB->sql_fetch_assoc($res);
-			$TYPO3_DB->sql_free_result($res);
-			$variantFieldArray = $this->variant->getFieldArray();
-			$this->getTableObj()->substituteMarkerArray($row, $variantFieldArray);
-			$rc = $this->dataArray[$uid] = $row;
-		}
-		return $rc;
-	}
-
-
 	/**
 	 * [Describe function...]
 	 *

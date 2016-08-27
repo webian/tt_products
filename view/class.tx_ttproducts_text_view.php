@@ -63,7 +63,7 @@ class tx_ttproducts_text_view extends tx_ttproducts_table_base_view {
 	 * @return	[type]		...
 	 * @access private
 	 */
-	function getItemMarkerArray ($itemArray, &$markerArray, $parentMarker, $tagArray)	{
+	function getRowsMarkerArray ($itemArray, &$markerArray, $parentMarker, $tagArray)	{
 		$bFoundTagArray = array();
 
 		if (isset($itemArray) && is_array($itemArray) && count($itemArray)) {
