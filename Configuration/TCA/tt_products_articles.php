@@ -180,7 +180,9 @@ $result = array (
 			'config' => array (
 				'type' => 'text',
 				'cols' => '48',
-				'rows' => '5'
+				'rows' => '5',
+				'eval' => 'null',
+				'default' => NULL,
 			),
 			'l10n_mode' => 'prefixLangTitle',
 		),
@@ -189,7 +191,9 @@ $result = array (
 			'config' => array (
 				'type' => 'text',
 				'cols' => '48',
-				'rows' => '5'
+				'rows' => '5',
+				'eval' => 'null',
+				'default' => NULL,
 			),
 			'l10n_mode' => 'prefixLangTitle',
 		),
@@ -369,7 +373,9 @@ $result = array (
 				'show_thumbs' => '1',
 				'size' => '3',
 				'maxitems' => '10',
-				'minitems' => '0'
+				'minitems' => '0',
+				'eval' => 'null',
+				'default' => NULL,
 			)
 		),
 	),

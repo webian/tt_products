@@ -125,7 +125,9 @@ $result = array (
 			'config' => array (
 				'type' => 'input',
 				'size' => '50',
-				'max' => '256'
+				'max' => '256',
+				'eval' => 'null',
+				'default' => NULL,
 			)
 		),
 		'zip' => array (
@@ -300,6 +302,8 @@ $result = array (
 				'type' => 'text',
 				'cols' => '80',
 				'rows' => '4',
+				'eval' => 'null',
+				'default' => NULL,
 			)
 		),
 		'orderData' => array (
@@ -310,6 +314,8 @@ $result = array (
 				'cols' => '160',
 				'rows' => '160',
 				'wrap' => 'off',
+				'eval' => 'null',
+				'default' => NULL,
 			)
 		),
 		'orderHtml' => Array (
@@ -404,7 +410,9 @@ $result = array (
 			'config' => array (
 				'type' => 'text',
 				'cols' => '48',
-				'rows' => '5'
+				'rows' => '5',
+				'eval' => 'null',
+				'default' => NULL,
 			)
 		),
 		'giftservice' => array (
@@ -413,7 +421,9 @@ $result = array (
 			'config' => array (
 				'type' => 'text',
 				'cols' => '48',
-				'rows' => '5'
+				'rows' => '5',
+				'eval' => 'null',
+				'default' => NULL,
 			)
 		),
 		'cc_uid' => array (

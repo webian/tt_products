@@ -11,7 +11,9 @@ $temporaryColumns = array (
 		'config' => array (
 			'type' => 'input',
 			'size' => '50',
-			'max' => '256'
+			'max' => '256',
+			'eval' => 'null',
+			'default' => NULL,
 		)
 	),
 	'tt_products_discount' => array (
