@@ -172,7 +172,9 @@ $result = array (
 			'config' => array (
 				'type' => 'text',
 				'cols' => '48',
-				'rows' => '5'
+				'rows' => '5',
+				'eval' => 'null',
+				'default' => NULL,
 			),
 			'l10n_mode' => 'prefixLangTitle',
 		),
@@ -181,7 +183,9 @@ $result = array (
 			'config' => array (
 				'type' => 'text',
 				'cols' => '48',
-				'rows' => '5'
+				'rows' => '5',
+				'eval' => 'null',
+				'default' => NULL,
 			),
 			'l10n_mode' => 'prefixLangTitle',
 		),
@@ -223,7 +227,9 @@ $result = array (
 				'type' => 'text',
 				'cols' => '46',
 				'rows' => '5',
-				'default' => ''
+				'default' => '',
+				'eval' => 'null',
+				'default' => NULL,
 			)
 		),
 		'color2' => array (
@@ -232,7 +238,9 @@ $result = array (
 			'config' => array (
 				'type' => 'text',
 				'cols' => '46',
-				'rows' => '5'
+				'rows' => '5',
+				'eval' => 'null',
+				'default' => NULL,
 			)
 		),
 		'color3' => array (
@@ -241,7 +249,9 @@ $result = array (
 			'config' => array (
 				'type' => 'text',
 				'cols' => '46',
-				'rows' => '5'
+				'rows' => '5',
+				'eval' => 'null',
+				'default' => NULL,
 			)
 		),
 		'size' => array (
@@ -250,7 +260,9 @@ $result = array (
 			'config' => array (
 				'type' => 'text',
 				'cols' => '46',
-				'rows' => '5'
+				'rows' => '5',
+				'eval' => 'null',
+				'default' => NULL,
 			)
 		),
 		'size2' => array (
@@ -259,7 +271,9 @@ $result = array (
 			'config' => array (
 				'type' => 'text',
 				'cols' => '46',
-				'rows' => '5'
+				'rows' => '5',
+				'eval' => 'null',
+				'default' => NULL,
 			)
 		),
 		'size3' => array (
@@ -268,7 +282,9 @@ $result = array (
 			'config' => array (
 				'type' => 'text',
 				'cols' => '46',
-				'rows' => '5'
+				'rows' => '5',
+				'eval' => 'null',
+				'default' => NULL,
 			)
 		),
 		'description' => array (
@@ -277,7 +293,9 @@ $result = array (
 			'config' => array (
 				'type' => 'text',
 				'cols' => '46',
-				'rows' => '5'
+				'rows' => '5',
+				'eval' => 'null',
+				'default' => NULL,
 			)
 		),
 		'gradings' => array (
@@ -286,7 +304,9 @@ $result = array (
 			'config' => array (
 				'type' => 'text',
 				'cols' => '46',
-				'rows' => '5'
+				'rows' => '5',
+				'eval' => 'null',
+				'default' => NULL,
 			)
 		),
 		'material' => array (
@@ -295,7 +315,9 @@ $result = array (
 			'config' => array (
 				'type' => 'text',
 				'cols' => '46',
-				'rows' => '5'
+				'rows' => '5',
+				'eval' => 'null',
+				'default' => NULL,
 			)
 		),
 		'quality' => array (
@@ -304,7 +326,9 @@ $result = array (
 			'config' => array (
 				'type' => 'text',
 				'cols' => '46',
-				'rows' => '5'
+				'rows' => '5',
+				'eval' => 'null',
+				'default' => NULL,
 			)
 		),
 		'config_type' => array (
@@ -346,7 +370,8 @@ $result = array (
 							</meta>
 						</T3DataStructure>
 						',
-				)
+				),
+				'eval' => 'null',
 			)
 		),
 		'image' => array (
@@ -361,7 +386,9 @@ $result = array (
 				'show_thumbs' => '1',
 				'size' => '3',
 				'maxitems' => '10',
-				'minitems' => '0'
+				'minitems' => '0',
+				'eval' => 'null',
+				'default' => NULL,
 			)
 		),
 	),

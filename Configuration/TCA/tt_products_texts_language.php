@@ -131,7 +131,9 @@ $result = array (
 			'config' => array (
 				'type' => 'input',
 				'size' => '40',
-				'max' => '256'
+				'max' => '256',
+				'eval' => 'null',
+				'default' => NULL,
 			),
 			'l10n_mode' => 'prefixLangTitle',
 		),
@@ -140,7 +142,9 @@ $result = array (
 			'config' => array (
 				'type' => 'text',
 				'cols' => '48',
-				'rows' => '5'
+				'rows' => '5',
+				'eval' => 'null',
+				'default' => NULL,
 			),
 			'l10n_mode' => 'prefixLangTitle',
 		),
