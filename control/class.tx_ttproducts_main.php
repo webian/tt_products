@@ -312,7 +312,7 @@ class tx_ttproducts_main {
 
 			// image
 		$imageObj = t3lib_div::getUserObj('&tx_ttproducts_field_image');
-		$imageObj->init($this->pibase->cObj, $this->pibase);
+		$imageObj->init($this->pibase->cObj);
 
 			// image view
 		$imageViewObj = t3lib_div::getUserObj('&tx_ttproducts_field_image_view');
