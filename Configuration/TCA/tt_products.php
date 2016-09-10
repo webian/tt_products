@@ -791,11 +791,5 @@ if (
 	$result['ctrl']['sortby'] = 'sorting';
 }
 
-
-// debugBegin();
-// debug ($result, '$result');
-// debugEnd();
-
-
 return $result;
 
