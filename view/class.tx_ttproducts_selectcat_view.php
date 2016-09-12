@@ -57,7 +57,7 @@ class tx_ttproducts_selectcat_view extends tx_ttproducts_catlist_view_base {
 		$bSeparated = false;
 		$t = array();
 
-		parent::printView(
+		parent::getPrintViewArrays(
 			$functablename,
 			$templateCode,
 			$t,

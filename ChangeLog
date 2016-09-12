@@ -1,3 +1,6 @@
+2016-09-12 Franz Holzinger <franz@ttproducts.de>
+	* bugfix for PHP 7.x: Declaration of ... printView should be compatible with tx_ttproducts_catlist_view_base::printView
+
 2016-09-09 Franz Holzinger <franz@ttproducts.de>
 	* add new texts to the locallang files
 

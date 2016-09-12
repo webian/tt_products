@@ -45,7 +45,7 @@ class tx_ttproducts_catlist_view extends tx_ttproducts_catlist_view_base {
 		global $TSFE, $TCA;
 
 		$t = array();
-		parent::printView(
+		parent::getPrintViewArrays(
 			$functablename,
 			$templateCode,
 			$t,
