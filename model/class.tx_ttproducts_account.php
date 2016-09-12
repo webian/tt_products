@@ -128,11 +128,15 @@ class tx_ttproducts_account extends tx_ttproducts_table_base {
 	} // create
 
 
-	function getUid ()	{
+	function getUid () {
 		global $TSFE;
 
+		$result = 0;
 		$acArray = $TSFE->fe_user->getKey('ses', 'ac');
-		return $acArray['ac_uid'];
+		if (isset($acArray['ac_uid'])) {
+			$result = $acArray['ac_uid'];
+		}
+		return $result;
 	}
 
 

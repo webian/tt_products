@@ -28,6 +28,7 @@
 			<label index="no_csv_creation">Warning: Cannot create CSV file '|' for this order!</label>
 			<label index="no_feusers">No Front End Users have been found.</label>
 			<label index="wrong_code">Wrong display mode or code '|'.</label>
+			<label index="wrong_type">Wrong display type '|'.</label>
 			<label index="instock_warning">Warning: %s no. %s runs out of stock. Only %d pieces left.</label>
 			<label index="product">product</label>
 			<label index="article">article</label>
@@ -95,6 +96,7 @@
 			<label index="no_csv_creation">Warnung: Für diese Bestellung kann keine CSV Datei '|' erzeugt werden!</label>
 			<label index="no_feusers">Es sind keine Frontend Benutzer gefunden worden.</label>
 			<label index="wrong_code">Falscher Anzeigetyp oder CODE '|'.</label>
+			<label index="wrong_type">Falscher Anzeigetyp '|'.</label>
 			<label index="instock_warning">Warnung: %s Nr. %s ist bald nicht mehr auf Lager. Nur noch %d Stück verfügbar.</label>
 			<label index="product">Produkt</label>
 			<label index="article">Artikel</label>

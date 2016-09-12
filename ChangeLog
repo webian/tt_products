@@ -1,3 +1,7 @@
+2016-09-12 Franz Holzinger <franz@ttproducts.de>
+	* add new texts to the locallang files
+	* use isset with $acArray['ac_uid'] and $ccArray['cc_uid']
+
 2016-08-30 Franz Holzinger <franz@ttproducts.de>
 	* bugfix: text and blob must have a default null value by TCA and not by SQL
 

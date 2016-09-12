@@ -97,6 +97,7 @@
 			<label index="basket_required_message_fix">Please correct your entries!</label>
 			<label index="basket_required_button_fix">Correct entries</label>
 			<label index="basket_delete_item">To delete an item, just enter &quot;0&quot; for the order quantity and click on &quot;Update shopping cart&quot; below.</label>
+			<label index="basket_delete_x_item">To delete an item, just click on the X icon beside of the item!</label>
 			<label index="basket_change_amount">If you want to change the order quantity, just enter the required quantity in &quot;Quantity&quot; and click on &quot;Update shopping cart&quot; below.</label>
 			<label index="product_in_basket">The following items are in your cart</label>
 			<label index="product_ordered">You have ordered the following items</label>
@@ -358,7 +359,7 @@
 			<label index="new_user_login">For future orders you can log on with your user name and your password.</label>
 			<label index="new_user_keep_email">Please keep this e-mail in a safe place.</label>
 
-			<label index="register_now">If you have not registered yet start with ypur declaration now in the shop</label>
+			<label index="register_now">If you have not registered yet start with your declaration now in the shop</label>
 
 			<label index="gift_code">Gift coupon code</label>
 			<label index="gift_redeem">Cash in gift code.</label>
