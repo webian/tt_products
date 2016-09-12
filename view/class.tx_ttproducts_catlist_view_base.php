@@ -247,7 +247,7 @@ abstract class tx_ttproducts_catlist_view_base {
 
 
 	// returns the products list view
-	public function printView (
+	protected function getPrintViewArrays (
 		$functablename,
 		&$templateCode,
 		&$t,
