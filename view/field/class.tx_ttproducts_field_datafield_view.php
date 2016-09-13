@@ -51,7 +51,7 @@ class tx_ttproducts_field_datafield_view extends tx_ttproducts_field_base_view {
 		$tableConf
 	) {
 
-		if ($tagArray[$marker])	{
+		if (isset($tagArray[$marker])) {
 
 			if (
 				isset($tableConf['fieldLink.']) &&

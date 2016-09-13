@@ -386,7 +386,7 @@ class tx_ttproducts_single_view {
 				$linkPid = $backPID;
 			}
 
-			if ($viewTagArray['LINK_ITEM'])	{
+			if (isset($viewTagArray['LINK_ITEM'])) {
 				$addQueryString = array();
 
 				if (
@@ -411,7 +411,7 @@ class tx_ttproducts_single_view {
 				$linkUrl = htmlspecialchars($linkUrl);
 				$wrappedSubpartArray['###LINK_ITEM###'] = array('<a href="' . $linkUrl . '">', '</a>');
 			}
-			if ($viewCatTagArray['LINK_CATEGORY'])	{
+			if (isset($viewCatTagArray['LINK_CATEGORY'])) {
 				$catRow = $viewCatTable->get($cat);
 				$catListPid = $pageObj->getPID($this->conf['PIDlistDisplay'], $this->conf['PIDlistDisplay.'], $catRow);
 				$viewCatViewTable->getSubpartArrays($this->urlObj, $catRow, $subpartArray, $wrappedSubpartArray, $viewCatTagArray, $catListPid, 'LINK_CATEGORY');

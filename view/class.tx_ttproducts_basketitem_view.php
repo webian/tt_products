@@ -372,7 +372,7 @@ class tx_ttproducts_basketitem_view {
 		$markerArray['###PRODUCT_ADDITIONAL_SINGLE###'] = $prodAdditionalText['single'];
 		$markerArray['###PRODUCT_ADDITIONAL_GIFT_SERVICE###'] = $prodAdditionalText['giftService'];
 		$markerArray['###PRODUCT_ADDITIONAL_GIFT_SERVICE_DISPLAY###'] = ($value ? '1' : '');
-		if ($tagArray['PRODUCT_HIDDEN_TEXT'])	{
+		if (isset($tagArray['PRODUCT_HIDDEN_TEXT'])) {
 			$markerArray['###PRODUCT_HIDDEN_TEXT###'] = $hiddenText;
 			$hiddenText = '';
 		}
