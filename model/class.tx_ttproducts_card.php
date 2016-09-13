@@ -45,12 +45,12 @@ class tx_ttproducts_card extends tx_ttproducts_table_base {
 	var $sizeArray = array('cc_type' => 4, 'cc_number_1' => 4,'cc_number_2' => 4,'cc_number_3' => 4, 'cc_number_4' => 4, 'owner_name' => 0, 'cvv2' => 4, 'endtime_mm' => 2, 'endtime_yy'  => 2);
 	var $asteriskArray = array(2 => '**', 4 => '****');
 
-	function init ($pibase, $functablename) {
+	function init ($cObj, $functablename) {
 		$basketObj = t3lib_div::getUserObj('&tx_ttproducts_basket');
 		$formerBasket = $basketObj->recs;
 		$allowedUids = $basketObj->basketExtra['payment.']['creditcards'];
 
-		parent::init($pibase, $functablename);
+		parent::init($cObj, $functablename);
 
 		$this->ccArray = array();
 		$this->ccArray = $formerBasket['creditcard'];
