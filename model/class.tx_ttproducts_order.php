@@ -38,8 +38,8 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 	var $basket;
 
 
-	function init ($pibase, $functablename) {
-		parent::init($pibase, $functablename);
+	function init ($cObj, $functablename) {
+		parent::init($cObj, $functablename);
 		$this->basket = t3lib_div::getUserObj('&tx_ttproducts_basket');
 	}
 

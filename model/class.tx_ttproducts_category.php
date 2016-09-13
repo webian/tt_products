@@ -55,7 +55,7 @@ class tx_ttproducts_category extends tx_ttproducts_category_base {
 
 		$tablename = ($tablename ? $tablename : $functablename);
 
-		parent::init($pibase, $functablename);
+		parent::init($cObj, $functablename);
 
 		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
 		$this->tableconf = $cnf->getTableConf($functablename);

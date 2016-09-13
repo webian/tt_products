@@ -54,10 +54,10 @@ class tx_ttproducts_orderaddress extends tx_ttproducts_table_base {
 	/**
 	 * Getting all tt_products_cat categories into internal array
 	 */
-	public function init($pibase, $functablename)  {
+	public function init ($cObj, $functablename)  {
 		global $TYPO3_DB,$TSFE,$TCA;
 
-		parent::init($pibase, $functablename);
+		parent::init($cObj, $functablename);
 		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
 
 		$this->tableconf = $cnf->getTableConf($functablename);

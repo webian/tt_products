@@ -35,7 +35,6 @@
  * @subpackage tt_products
  */
 class tx_ttproducts_account extends tx_ttproducts_table_base {
-	var $pibase; // reference to object of pibase
 	var $conf;
 	var $acArray;	// credit card data
 	var $bIsAllowed = array(); // allowed uids of bank ACCOUNTS
@@ -44,12 +43,12 @@ class tx_ttproducts_account extends tx_ttproducts_table_base {
 	var $asterisk = '********';
 
 
-	function init ($pibase, $functablename) {
+	function init ($cObj, $functablename) {
 		$basketObj = t3lib_div::getUserObj('&tx_ttproducts_basket');
 		$formerBasket = $basketObj->recs;
 		$bIsAllowed = $basketObj->basketExtra['payment.']['accounts'];
 
-		parent::init($pibase, 'sys_products_accounts');
+		parent::init($cObj, 'sys_products_accounts');
 		$this->acArray = array();
 		$this->acArray = $formerBasket['account'];
 		if (isset($bIsAllowed))	{

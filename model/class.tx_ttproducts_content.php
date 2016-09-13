@@ -47,12 +47,12 @@ class tx_ttproducts_content extends tx_ttproducts_table_base {
 	/**
 	 * Getting all tt_products_cat categories into internal array
 	 *
-	 * @param	[type]		$$pibase: ...
+	 * @param	[type]		$cObj: ...
 	 * @param	[type]		$functablename: ...
 	 * @return	[type]		...
 	 */
-	function init(&$pibase, $functablename)  {
-		parent::init($pibase, $functablename);
+	function init ($cObj, $functablename)  {
+		parent::init($cObj, $functablename);
 
 		$this->getTableObj()->setDefaultFieldArray(array('uid' => 'uid', 'pid' => 'pid', 't3ver_oid' => 't3ver_oid', 't3ver_id' => 't3ver_id', 't3ver_label' => 't3ver_label', 'tstamp'=>'tstamp', 'sorting'=> 'sorting',
 		'deleted' => 'deleted', 'hidden'=>'hidden', 'starttime' => 'starttime', 'endtime' => 'endtime', 'fe_group' => 'fe_group'));
