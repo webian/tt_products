@@ -155,10 +155,10 @@ class tx_ttproducts_cat_view {
 				$linkPid = $backPID;
 			}
 
-			if ($viewTagArray['LINK_ITEM'])	{
+			if (isset($viewTagArray['LINK_ITEM'])) {
 				$wrappedSubpartArray['###LINK_ITEM###'] = array('<a href="'. htmlspecialchars($this->pibase->pi_getPageLink($linkPid,'',$this->urlObj->getLinkParams('',$addQueryString,TRUE,$bUseBackPid,'product',$tableViewObj->piVar),array('useCacheHash' => true))) .'">','</a>');
 			}
-			if ($viewCatTagArray['LINK_CATEGORY'])	{
+			if (isset($viewCatTagArray['LINK_CATEGORY'])) {
 				$catListPid = $pageObj->getPID(
 					$this->conf['PIDlistDisplay'],
 					$this->conf['PIDlistDisplay.'],
@@ -192,7 +192,7 @@ class tx_ttproducts_cat_view {
 				''
 			);
 
-			if ($viewCatTagArray['LINK_PARENT1_CATEGORY'])	{
+			if (isset($viewCatTagArray['LINK_PARENT1_CATEGORY'])) {
 				$catRow = $tableObj->getParent($cat);
 				$catListPid = $pageObj->getPID($this->conf['PIDlistDisplay'], $this->conf['PIDlistDisplay.'], $catRow);
 				$viewCatTable->getSubpartArrays($this->urlObj, $catRow, $subpartArray, $wrappedSubpartArray, $viewTagArray, $catListPid, 'LINK_PARENT1_CATEGORY');
@@ -266,7 +266,7 @@ class tx_ttproducts_cat_view {
 					$addQueryString ['backPID'] = $backPID;
 				}
 
-				$wrappedSubpartArray['###LINK_PREV_SINGLE###']= array(
+				$wrappedSubpartArray['###LINK_PREV_SINGLE###'] = array(
 					'<a href="' .
 					htmlspecialchars(
 						$this->pibase->pi_getPageLink(

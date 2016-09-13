@@ -45,9 +45,7 @@ class tx_ttproducts_field_datafield_view extends tx_ttproducts_field_base_view {
 		$fieldname,
 		$tableConf
 	) {
-		if ($tagArray[$marker])	{
-
-			// $wrappedSubpartArray['###' . $marker . '###'] = array('<a href="' . $dirname . '/' . $dataFile . '">','</a>');
+		if (isset($tagArray[$marker])) {
 
 			if (
 				isset($tableConf['fieldLink.']) &&
