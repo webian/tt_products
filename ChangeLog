@@ -1,3 +1,6 @@
+2016-09-20 Franz Holzinger <franz@ttproducts.de>
+	* new feature: Set the default value to the title field to a single space character instead of NULL. This has the purpose that the TYPO3 backend does not shadow this important field.
+
 2016-09-13 Franz Holzinger <franz@ttproducts.de>
 	* bugfix for PHP 7.x: Declaration of ... init should be compatible with tx_ttproducts_table_base::init($cObj, $functablename)
 

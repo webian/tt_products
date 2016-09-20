@@ -133,7 +133,7 @@ $result = array (
 				'size' => '40',
 				'max' => '256',
 				'eval' => 'null',
-				'default' => NULL,
+				'default' => ' ',
 			),
 			'l10n_mode' => 'prefixLangTitle',
 		),

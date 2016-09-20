@@ -114,7 +114,7 @@ $result = array (
 				'size' => '40',
 				'max' => '256',
 				'eval' => 'null',
-				'default' => NULL,
+				'default' => ' ',
 			)
 		),
 		'formula' => array (
