@@ -596,8 +596,27 @@ class tx_ttproducts_basket_view {
 						);
 					}
 					$markerArray = array_merge($markerArray, $damMarkerArray, $damCategoryMarkerArray);
-					$tempUrl = htmlspecialchars($this->pibase->pi_getPageLink($pid, '', $this->urlObj->getLinkParams('', $addQueryString, TRUE, TRUE, ''),array('useCacheHash' => TRUE)));
-					$wrappedSubpartArray['###LINK_ITEM###'] = array('<a href="' . $tempUrl . '"' . $css_current . '>', '</a>');
+
+					$tempUrl =
+						tx_div2007_alpha5::getPageLink_fh003(
+							$this->cObj,
+							$pid,
+							'',
+							$this->urlObj->getLinkParams(
+								'',
+								$addQueryString,
+								TRUE,
+								TRUE,
+								''
+							),
+							array('useCacheHash' => TRUE)
+						);
+					$wrappedSubpartArray['###LINK_ITEM###'] =
+						array(
+							'<a href="' . htmlspecialchars($tempUrl) . '"' . $css_current . '>',
+							'</a>'
+						);
+
 					if (is_object($itemTableView->variant))	{
 						$itemTableView->variant->removeEmptyMarkerSubpartArray($markerArray,$subpartArray, $wrappedSubpartArray, $prodVariantRow, $this->conf, $itemTable->hasAdditional($row,'isSingle'), !$itemTable->hasAdditional($row,'noGiftService'));
 					}
