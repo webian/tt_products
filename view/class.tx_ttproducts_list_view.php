@@ -354,10 +354,27 @@ class tx_ttproducts_list_view {
 
 		$excludeList = '';
 
-		if (strpos($theCode,'MEMO')===FALSE)	{	// if you link to MEMO from somewhere else, you must not set some parameters for it coming from this list view
+		if (strpos($theCode,'MEMO') === FALSE)	{	// if you link to MEMO from somewhere else, you must not set some parameters for it coming from this list view
 			$excludeList = $pibaseObj->prefixId.'[begin_at]';
 		}
-		$globalMarkerArray['###FORM_MEMO###'] = htmlspecialchars($pibaseObj->pi_getPageLink($pid, '', $this->urlObj->getLinkParams($excludeList, array(), TRUE, TRUE, $itemTableView->getPivar())));
+		$globalMarkerArray['###FORM_MEMO###'] =
+			htmlspecialchars(
+				tx_div2007_alpha5::getPageLink_fh003(
+					$this->cObj,
+					$pid,
+					'',
+					$this->urlObj->getLinkParams(
+						$excludeList,
+						array(),
+						TRUE,
+						TRUE,
+						$itemTableView->getPivar()
+					),
+					array(
+						'useCacheHash' => TRUE
+					)
+				)
+			);
 
 		if ($itemTable->type == 'product' && in_array($this->useArticles, array(1, 2, 3))) {
 			$articleViewObj = $tablesObj->get('tt_products_articles', TRUE);

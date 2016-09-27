@@ -435,7 +435,7 @@ class tx_ttproducts_single_view {
 				''
 			);
 
-			if ($viewCatTagArray['LINK_PARENT1_CATEGORY'])	{
+			if (isset($viewCatTagArray['LINK_PARENT1_CATEGORY'])) {
 				$catRow = $viewCatTable->getParent($cat);
 				$catListPid = $pageObj->getPID($this->conf['PIDlistDisplay'], $this->conf['PIDlistDisplay.'], $catRow);
 				$viewCatTable->getSubpartArrays($this->urlObj, $catRow, $subpartArray, $wrappedSubpartArray, $viewCatTagArray, $catListPid, 'LINK_PARENT1_CATEGORY');
@@ -576,7 +576,24 @@ class tx_ttproducts_single_view {
 			}
 			$markerArray['###FORM_NAME###'] = $forminfoArray['###FORM_NAME###'];
 			$pidMemo = ( $this->conf['PIDmemo'] ? $this->conf['PIDmemo'] : $TSFE->id);
-			$markerArray['###FORM_MEMO###'] = htmlspecialchars(tx_div2007_alpha5::getPageLink_fh003($this->cObj,$pidMemo,'',$this->urlObj->getLinkParams('', array(), TRUE, TRUE, $itemTableViewArray[$this->type]->getPivar())));
+			$markerArray['###FORM_MEMO###'] = htmlspecialchars(
+				tx_div2007_alpha5::getPageLink_fh003(
+					$this->cObj,
+					$pidMemo,
+					'',
+					$this->urlObj->getLinkParams(
+						'',
+						array(),
+						TRUE,
+						TRUE,
+						$itemTableViewArray[$this->type]->getPivar()
+					),
+					array(
+						'useCacheHash' => TRUE
+					)
+				)
+			);
+
 			//$markerArray['###FORM_URL###']=$this->formUrl.'&tt_products='.$this->uid ;
 			$addQueryString = array();
 
