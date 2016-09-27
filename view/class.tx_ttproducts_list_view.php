@@ -1259,7 +1259,24 @@ class tx_ttproducts_list_view {
 
 					$markerArray['###ITEM_SINGLE_POST_HTML###'] = $temp;
 					$pid = ( $this->conf['PIDmemo'] ? $this->conf['PIDmemo'] : $TSFE->id);
-					$markerArray['###FORM_MEMO###'] = htmlspecialchars($this->pibase->pi_getPageLink($pid,'',$this->urlObj->getLinkParams('', array(), TRUE, TRUE, $itemTableView->getPivar()))); //$this->getLinkUrl($this->conf['PIDmemo']);
+					$markerArray['###FORM_MEMO###'] =
+						htmlspecialchars(
+							tx_div2007_alpha5::getPageLink_fh003(
+								$this->cObj,
+								$pid,
+								'',
+								$this->urlObj->getLinkParams(
+									'',
+									array(),
+									TRUE,
+									TRUE,
+									$itemTableView->getPivar()
+								),
+								array(
+									'useCacheHash' => TRUE
+								)
+							)
+						);
 
 					// cuts note in list view
 					if (strlen($markerArray['###'.$itemTableView->marker.'_NOTE###']) > $this->conf['max_note_length']) {

@@ -535,9 +535,22 @@ class tx_ttproducts_single_view {
 
 			$markerArray['###FORM_NAME###'] = $forminfoArray['###FORM_NAME###'];
 			$pidMemo = ( $this->conf['PIDmemo'] ? $this->conf['PIDmemo'] : $TSFE->id);
-			$markerArray['###FORM_MEMO###'] = htmlspecialchars(tx_div2007_alpha5::getPageLink_fh003($this->cObj,$pidMemo,'',$this->urlObj->getLinkParams('', array(), TRUE)));
+			$markerArray['###FORM_MEMO###'] = htmlspecialchars(
+				tx_div2007_alpha5::getPageLink_fh003(
+					$this->cObj,
+					$pidMemo,
+					'',
+					$this->urlObj->getLinkParams(
+						'',
+						array(),
+						TRUE
+					),
+					array(
+						'useCacheHash' => TRUE
+					)
+				)
+			);
 
-			//$markerArray['###FORM_URL###']=$this->formUrl.'&tt_products='.$this->uid ;
 			$addQueryString = array();
 			if ($bNeedSingleParams)	{
 				// if the page remains the same then the product parameter will still be needed if there is no list view
