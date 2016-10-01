@@ -1,3 +1,6 @@
+2016-10-01 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: The tax field in a row must always be a valid floating point value. This is needed for the extension static_info_tables_taxes.
+
 2016-09-27 Franz Holzinger <franz@ttproducts.de>
 	* bugfix issue#13: cHash missing with pi_base class. Add the parameter useCacheHash at the div2007 method getPageLink_fh003 for the marker ###FORM_MEMO###.
 

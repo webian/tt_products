@@ -881,7 +881,7 @@ class tx_ttproducts_basket {
 				if ($row['bulkily'])	{
 					$value = floatval($this->conf['bulkilyAddition']) * $this->basketExt[$row['uid']][$viewTableObj->variant->getVariantFromRow($row)];
 					$tax = ($bulkilyFeeTax != '' ? $bulkilyFeeTax : $shippingTax);
-					$taxRow['tax'] = $tax;
+					$taxRow['tax'] = floatval($tax);
 					$this->calculatedArray['priceTax']['shipping'] += $priceObj->getModePrice($this->conf['TAXmode'], $value, TRUE, $taxRow, $this->conf['TAXincluded'], TRUE);
 					$this->calculatedArray['priceNoTax']['shipping'] += $priceObj->getModePrice($this->conf['TAXmode'], $value, FALSE, $taxRow, $this->conf['TAXincluded'], TRUE);
 				}
@@ -926,7 +926,7 @@ class tx_ttproducts_basket {
 			}
 		} // if (count($this->itemArray))
 		$paymentTax = $this->paymentshippingObj->getTaxPercentage('payment');
-		$paymentRow = array('tax' => $paymentTax);
+		$paymentRow = array('tax' => floatval($paymentTax));
 
 			// Shipping must be at the end in order to use the calculated values from before
 		$this->paymentshippingObj->getPaymentShippingData(
@@ -1155,7 +1155,7 @@ class tx_ttproducts_basket {
 				'weight' => $priceRow['weight'],
 				'totalTax' => 0,
 				'totalNoTax' => 0,
-				'tax' => $tax,
+				'tax' => floatval($tax),
 				'rec' => $row,
 			);
 			$item = array_merge($item, $oldPriceTaxArray);	// Todo: remove this line
