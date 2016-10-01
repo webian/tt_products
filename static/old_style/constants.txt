@@ -1,7 +1,6 @@
 ##
 ## @package TYPO3
 ## @subpackage tt_products
-## @version $Id: constants.txt 90578 2016-01-30 08:08:08Z franzholz $
 ##
 
 
