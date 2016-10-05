@@ -298,9 +298,9 @@ class tx_ttproducts_marker {
 					$fieldTmp = strtolower($fieldTmp);
 
 					$fieldPartArray = t3lib_div::trimExplode('_', $fieldTmp);
-					$field = $fieldPartArray[0];
-					$fieldPartArray = t3lib_div::trimExplode(':', $fieldTmp);
-					$field = $fieldPartArray[0];
+					$fieldTmp = $fieldPartArray[0];
+					$subFieldPartArray = t3lib_div::trimExplode(':', $fieldTmp);
+					$field = $subFieldPartArray[0];
 
 					if (strstr($field,'image'))	{	// IMAGE markers can contain following number
 						$field = 'image';

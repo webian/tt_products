@@ -1,3 +1,6 @@
+2016-10-05 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: marker and subpart marker names with underscores have not been supported
+
 2016-10-01 Franz Holzinger <franz@ttproducts.de>
 	* bugfix: The tax field in a row must always be a valid floating point value. This is needed for the extension static_info_tables_taxes.
 
