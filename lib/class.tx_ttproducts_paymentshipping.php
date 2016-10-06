@@ -56,6 +56,7 @@ class tx_ttproducts_paymentshipping {
 		$this->config = &$cnf->config;
 		$this->basket = t3lib_div::getUserObj('&tx_ttproducts_basket');
 		$this->priceObj = t3lib_div::getUserObj('tx_ttproducts_field_price');	// new independant price object
+		$this->priceObj->init($cObj, $this->conf);
 	}
 
 	public function getTypeArray () {
