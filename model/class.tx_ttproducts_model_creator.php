@@ -68,7 +68,8 @@ class tx_ttproducts_model_creator {
 			// paymentshipping
 		$paymentshippingObj = t3lib_div::getUserObj('&tx_ttproducts_paymentshipping');
 		$paymentshippingObj->init(
-			$cObj
+			$cObj,
+			$priceObj
 		);
 
 	}

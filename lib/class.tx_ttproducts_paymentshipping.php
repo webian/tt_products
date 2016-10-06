@@ -51,15 +51,13 @@ class tx_ttproducts_paymentshipping {
 	var $typeArray = array('shipping', 'payment');
 
 
-	function init (&$cObj)	{
-		global $TSFE;
-
-		$this->cObj = &$cObj;
+	public function init ($cObj, $priceObj) {
+		$this->cObj = $cObj;
 		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
 		$this->basket = t3lib_div::getUserObj('&tx_ttproducts_basket');
-		$this->priceObj = t3lib_div::getUserObj('tx_ttproducts_field_price');	// new independant price object
+		$this->priceObj = clone $priceObj;	// new independant price object
 	}
 
 

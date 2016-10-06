@@ -210,17 +210,12 @@ class tx_ttproducts_field_price extends tx_ttproducts_field_base {
 			$taxpercentage = doubleval($this->priceConf['TAXpercentage']);
 		}
 
-// 		} else {
-// 			$taxpercentage = 0;
-// 		}
-
 //		Buch 'Der TYPO3 Webshop'
 // 		if (doubleval($taxpercentage) == -1)  {
 // 			$taxpercentage = 0;
 // 		}
 
 		$taxFactor = 1 + $taxpercentage / 100;
-		// $bTaxIncluded = ($bTaxIncluded ? $bTaxIncluded : $this->conf['TAXincluded']);
 
 		$paymentshippingObj = t3lib_div::getUserObj('&tx_ttproducts_paymentshipping');
 		if (isset($paymentshippingObj) && is_object($paymentshippingObj))	{
@@ -357,14 +352,6 @@ class tx_ttproducts_field_price extends tx_ttproducts_field_base {
 				$priceArray[$field] = round($priceArray[$field], 2);
 			}
 		}
-
-
-// ToDo:
-// 		$markerArray['###USER_DISCOUNT_PERCENT###'] = $TSFE->fe_user->user['tt_products_discount'];
-// 		$markerArray['###USER_DISCOUNT_NO_TAX###'] = $priceViewObj->printPrice($priceViewObj->priceFormat($item['priceNoTax']-$oldPriceNoTax, $taxInclExcl));
-// 		$markerArray['###USER_DISCOUNT_TAX###'] = $priceViewObj->printPrice($priceViewObj->priceFormat($item['priceTax']-$oldPriceTax, $taxInclExcl));
-// 		$markerArray['###USER_DISCOUNT2_NO_TAX###'] = $priceViewObj->printPrice($priceViewObj->priceFormat($price2-$oldPriceNoTax, $taxInclExcl));
-// 		$markerArray['###USER_DISCOUNT2_TAX###'] = $priceViewObj->printPrice($priceViewObj->priceFormat($price2NoTax-$oldPriceTax, $taxInclExcl));
 
 		return $priceArray;
 	}
