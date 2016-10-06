@@ -1,5 +1,6 @@
 2016-10-06 Franz Holzinger <franz@ttproducts.de>
 	* bugfix: the shipping tax uses the global TAXincluded setup by default
+	* new feature: make control.ALL.links.FORM_MEMO.useCacheHash configurable
 
 2016-10-05 Franz Holzinger <franz@ttproducts.de>
 	* bugfix: marker and subpart marker names with underscores have not been supported

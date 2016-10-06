@@ -38,12 +38,6 @@
  *
  */
 
-// require_once (PATH_BE_ttproducts.'marker/class.tx_ttproducts_javascript_marker.php');
-// require_once (PATH_BE_ttproducts.'marker/class.tx_ttproducts_subpartmarker.php');
-// require_once (PATH_BE_ttproducts.'model/class.tx_ttproducts_pid_list.php');
-// require_once (PATH_BE_ttproducts.'view/class.tx_ttproducts_url_view.php');
-// require_once (PATH_BE_ttproducts.'view/class.tx_ttproducts_memo_view.php');
-// require_once (PATH_BE_ttproducts.'view/class.tx_ttproducts_relatedlist_view.php');
 
 
 
@@ -279,6 +273,24 @@ class tx_ttproducts_list_view {
 		$itemTableViewArray = array();
 		$globalMarkerArray = $markerObj->getGlobalMarkerArray();
 
+		$viewControlConf = $cnf->getViewControlConf($theCode);
+
+		if (count($viewControlConf)) {
+			if (
+				isset($viewControlConf['param.']) &&
+				is_array($viewControlConf['param.'])
+			) {
+				$viewParamConf = $viewControlConf['param.'];
+			}
+
+			if (
+				isset($viewControlConf['links.']) &&
+				is_array($viewControlConf['links.'])
+			) {
+				$linkConfArray = $viewControlConf['links.'];
+			}
+		}
+
 		if (strpos($theCode,'MEMO') === FALSE)	{
 			$memoViewObj = t3lib_div::makeInstance('tx_ttproducts_memo_view');
 			$memoViewObj->init(
@@ -357,6 +369,18 @@ class tx_ttproducts_list_view {
 		if (strpos($theCode,'MEMO') === FALSE)	{	// if you link to MEMO from somewhere else, you must not set some parameters for it coming from this list view
 			$excludeList = $pibaseObj->prefixId.'[begin_at]';
 		}
+
+		$linkMemoConf = array();
+			if (
+				isset($linkConfArray) &&
+				is_array($linkConfArray) &&
+				isset($linkConfArray['FORM_MEMO.'])
+			) {
+			$linkMemoConf = $linkConfArray['FORM_MEMO.'];
+		}
+
+		$linkMemoConf = array_merge( array('useCacheHash' => $bUseCache), $linkMemoConf);
+
 		$globalMarkerArray['###FORM_MEMO###'] =
 			htmlspecialchars(
 				tx_div2007_alpha5::getPageLink_fh003(
@@ -370,9 +394,7 @@ class tx_ttproducts_list_view {
 						TRUE,
 						$itemTableView->getPivar()
 					),
-					array(
-						'useCacheHash' => TRUE
-					)
+					$linkMemoConf
 				)
 			);
 

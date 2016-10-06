@@ -151,6 +151,11 @@ class tx_ttproducts_config {
 	}
 
 
+	public function getViewControlConf ($theCode) {
+		$viewConf = $this->getSpecialConf('control', '', $theCode);
+
+		return $viewConf;
+	}
 
 
 	public function getBasketConf ($feature, $detail = '')	{

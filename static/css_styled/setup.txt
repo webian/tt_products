@@ -483,6 +483,16 @@ plugin.tt_products {
 
   shopAdmin = BE
 
+  control.ALL.param {
+    use = backPID
+  }
+
+  control.ALL.links {
+    FORM_MEMO {
+      useCacheHash = 0
+    }
+  }
+
   orderEmail {
        10000.suffix = shop
        10000.from = customer
