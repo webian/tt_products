@@ -105,6 +105,21 @@ class tx_ttproducts_single_view {
 		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
 		$subpartmarkerObj = t3lib_div::getUserObj('&tx_ttproducts_subpartmarker');
 		$theCode = 'SINGLE';
+
+		$viewControlConf = $cnf->getViewControlConf('SINGLE');
+		if (count($viewControlConf)) {
+			if (isset($viewControlConf['param.']) && is_array($viewControlConf['param.'])) {
+				$viewParamConf = $viewControlConf['param.'];
+			}
+
+			if (
+				isset($viewControlConf['links.']) &&
+				is_array($viewControlConf['links.'])
+			) {
+				$linkConfArray = $viewControlConf['links.'];
+			}
+		}
+
 		$row = array();
 
 		$itemTableArray = array();
@@ -533,6 +548,15 @@ class tx_ttproducts_single_view {
 				);
 			}
 
+			$linkMemoConf = array();
+			if (
+				isset($linkConfArray) &&
+				is_array($linkConfArray) &&
+				isset($linkConfArray['FORM_MEMO.'])
+			) {
+				$linkMemoConf = $linkConfArray['FORM_MEMO.'];
+			}
+
 			$markerArray['###FORM_NAME###'] = $forminfoArray['###FORM_NAME###'];
 			$pidMemo = ( $this->conf['PIDmemo'] ? $this->conf['PIDmemo'] : $TSFE->id);
 			$markerArray['###FORM_MEMO###'] = htmlspecialchars(
@@ -545,9 +569,7 @@ class tx_ttproducts_single_view {
 						array(),
 						TRUE
 					),
-					array(
-						'useCacheHash' => TRUE
-					)
+					$linkMemoConf
 				)
 			);
 

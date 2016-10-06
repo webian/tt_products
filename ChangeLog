@@ -1,5 +1,6 @@
 2016-10-06 Franz Holzinger <franz@ttproducts.de>
 	* bugfix: the shipping tax uses the global TAXincluded setup by default
+	* new feature: make control.ALL.links.FORM_MEMO.useCacheHash configurable
 
 2016-09-27 Franz Holzinger <franz@ttproducts.de>
 	* bugfix issue#13: cHash missing with pi_base class. Add the parameter useCacheHash at the div2007 method getPageLink_fh003 for the marker ###FORM_MEMO###.

@@ -274,6 +274,24 @@ class tx_ttproducts_list_view {
 		$linkCat = '';
 		$depth = 1;	// TODO
 
+		$viewControlConf = $cnf->getViewControlConf($theCode);
+
+		if (count($viewControlConf)) {
+			if (
+				isset($viewControlConf['param.']) &&
+				is_array($viewControlConf['param.'])
+			) {
+				$viewParamConf = $viewControlConf['param.'];
+			}
+
+			if (
+				isset($viewControlConf['links.']) &&
+				is_array($viewControlConf['links.'])
+			) {
+				$linkConfArray = $viewControlConf['links.'];
+			}
+		}
+
 		if ($this->conf['displayBasketColumns'] == '{$plugin.tt_products.displayBasketColumns}')	{
 			$this->conf['displayBasketColumns'] = '1';
 		}
@@ -1259,6 +1277,18 @@ class tx_ttproducts_list_view {
 
 					$markerArray['###ITEM_SINGLE_POST_HTML###'] = $temp;
 					$pid = ( $this->conf['PIDmemo'] ? $this->conf['PIDmemo'] : $TSFE->id);
+
+					$linkMemoConf = array();
+					if (
+						isset($linkConfArray) &&
+						is_array($linkConfArray) &&
+						isset($linkConfArray['FORM_MEMO.'])
+					) {
+						$linkMemoConf = $linkConfArray['FORM_MEMO.'];
+					}
+
+					$linkMemoConf = array_merge( array('useCacheHash' => $bUseCache), $linkMemoConf);
+
 					$markerArray['###FORM_MEMO###'] =
 						htmlspecialchars(
 							tx_div2007_alpha5::getPageLink_fh003(
@@ -1272,9 +1302,7 @@ class tx_ttproducts_list_view {
 									TRUE,
 									$itemTableView->getPivar()
 								),
-								array(
-									'useCacheHash' => TRUE
-								)
+								$linkMemoConf
 							)
 						);
 
