@@ -41,15 +41,6 @@
  *
  */
 
-// require_once (PATH_t3lib.'class.tx_div2007_core.php');
-// require_once (PATH_BE_ttproducts.'lib/class.tx_ttproducts_pricecalc.php');
-// require_once (PATH_BE_ttproducts.'lib/class.tx_ttproducts_pricetablescalc.php');
-// require_once (PATH_BE_ttproducts.'model/field/class.tx_ttproducts_field_graduated_price.php');
-// require_once (PATH_BE_ttproducts.'model/class.tx_ttproducts_pid_list.php');
-// require_once (PATH_BE_ttproducts.'model/class.tx_ttproducts_basketitem.php');
-// include_once (PATH_BE_ttproducts.'model/field/class.tx_ttproducts_field_creditpoints.php');
-
-
 class tx_ttproducts_basket {
 	public $conf;
 	public $config;
@@ -1221,5 +1212,3 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/model/class.tx_ttproducts_basket.php']);
 }
 
-
-?>
