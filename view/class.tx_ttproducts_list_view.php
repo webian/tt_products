@@ -269,6 +269,10 @@ class tx_ttproducts_list_view {
 		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
 		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
 		$subpartmarkerObj = t3lib_div::getUserObj('&tx_ttproducts_subpartmarker');
+		$itemTableView = $tablesObj->get($functablename, TRUE);
+		$itemTable = $itemTableView->getModelObj();
+		$tablename = $itemTable->getTablename();
+
 		$itemTableArray = array();
 		$itemTableViewArray = array();
 		$globalMarkerArray = $markerObj->getGlobalMarkerArray();
@@ -325,9 +329,13 @@ class tx_ttproducts_list_view {
 		$displayColumns = $this->conf['displayBasketColumns'];
 		$sword = '';
 		$htmlSwords = '';
-		$limit = isset($tableConfArray[$functablename]['limit']) ? $tableConfArray[$functablename]['limit'] : $this->config['limit'];
+		$tableConfArray = array();
+		$tableConfArray[$functablename] = $itemTable->getTableConf($theCode);
+		$itemTable->initCodeConf($theCode, $tableConfArray[$functablename]);
 
+		$limit = isset($tableConfArray[$functablename]['limit']) ? $tableConfArray[$functablename]['limit'] : $this->config['limit'];
 		$limit = intval($limit);
+
 		if ($calllevel == 0)	{
 			$sword = t3lib_div::_GP('sword');
 			$sword = (isset($sword) ? $sword : t3lib_div::_GP('swords'));
@@ -348,15 +356,7 @@ class tx_ttproducts_list_view {
 		$where = '';
 		$formName = 'ShopListForm';
 
-		$itemTableView = $tablesObj->get($functablename, TRUE);
-		$itemTable = $itemTableView->getModelObj();
-		$tablename = $itemTable->getTablename();
 		$keyFieldArray = $itemTable->getKeyFieldArray($theCode);
-		$tableConfArray = array();
-		$tableConfArray[$functablename] = &$itemTable->getTableConf($theCode);
-
-	//(	$tableConf = &$itemTable->getTableConf($theCode);
-		$itemTable->initCodeConf($theCode,$tableConfArray[$functablename]);
 		$prodAlias = $itemTable->getTableObj()->getAlias();
 		$tableAliasArray[$tablename] = $itemTable->getAlias();
 		$itemTableArray[$itemTable->getType()] = &$itemTable;
@@ -1108,7 +1108,6 @@ class tx_ttproducts_list_view {
 				}
 			}
 
-		//	$tablename = $itemTable->getTableObj()->name;
 			$queryParts = $itemTable->getTableObj()->getQueryConf(
 				$this->cObj,
 				$tablename,
