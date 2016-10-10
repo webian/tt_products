@@ -1034,8 +1034,16 @@ class tx_ttproducts_list_view {
 					$selectConf['leftjoin'] = $joinTables;
 				}
 			}
+
+			$collateConf = array();
+			if (
+				isset($tableConfArray[$functablename]['collate.'])
+			) {
+				$collateConf[$functablename] = $tableConfArray[$functablename]['collate.'];
+			}
+
 			$selectFields = implode(',', $fieldsArray);
-			$selectConf['selectFields'] = 'DISTINCT ' . $itemTable->getTableObj()->transformSelect($selectFields) . $catSelect;
+			$selectConf['selectFields'] = 'DISTINCT ' . $itemTable->getTableObj()->transformSelect($selectFields, '', $collateConf) . $catSelect;
 
 			if (isset($damJoinTableArray) && is_array($damJoinTableArray) && in_array('address',$damJoinTableArray) && $addressAlias!='')	{
 
@@ -1071,7 +1079,12 @@ class tx_ttproducts_list_view {
 				unset($queryParts['GROUPBY']);
 			}
 
-			$res = $itemTable->getTableObj()->exec_SELECT_queryArray($queryParts);
+			$res = $itemTable->getTableObj()->exec_SELECT_queryArray(
+				$queryParts,
+				'',
+				FALSE,
+				$collateConf
+			);
 			$row = $TYPO3_DB->sql_fetch_row($res);
 			$TYPO3_DB->sql_free_result($res);
 			$productsCount = $row[0];
@@ -1123,8 +1136,14 @@ class tx_ttproducts_list_view {
 				return 'ERROR in tt_products';
 			}
 
-			$res = $itemTable->getTableObj()->exec_SELECT_queryArray($queryParts);
-			$itemArray=array();
+			$res =
+				$itemTable->getTableObj()->exec_SELECT_queryArray(
+					$queryParts,
+					'',
+					FALSE,
+					$collateConf
+				);
+			$itemArray = array();
 			$iCount = 0;
 			$uidArray = array();
 			while($iCount < $limit && ($row = $TYPO3_DB->sql_fetch_assoc($res)))	{

@@ -1,3 +1,6 @@
+2016-10-10 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: new feature: support for the COLLATE clause to the SQL statement in the product list view in order to have a better support for the search
+
 2016-10-06 Franz Holzinger <franz@ttproducts.de>
 	* bugfix: the shipping tax uses the global TAXincluded setup by default
 	* new feature: make control.ALL.links.FORM_MEMO.useCacheHash configurable
