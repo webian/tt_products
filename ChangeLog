@@ -1,3 +1,7 @@
+2016-10-11 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: Fatal error: Call to a member function getAlias() on a non-object in /path/typo3conf/ext/tt_products/model/class.tx_ttproducts_table_base.php on line 351
+	  Fix the table_label function. It must not call the get method of the uninitialized table model object
+
 2016-10-10 Franz Holzinger <franz@ttproducts.de>
 	* bugfix: new feature: support for the COLLATE clause to the SQL statement in the product list view in order to have a better support for the search
 

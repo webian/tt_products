@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2013-2013 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2013-2016 Franz Holzinger <franz@ttproducts.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -27,7 +27,7 @@
 /**
  * Part of the tt_products (Shop System) extension.
  *
- * labek functions for the tables
+ * label functions for the tables
  *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
@@ -51,7 +51,7 @@ class tx_ttproducts_table_label {
 		&$params,
 		$pObj
 	) {
-		// Only get labels for tt_products* tables
+		// Only get labels for tt_products* and sys_products* tables
 		if (
 			!substr($params['table'], 0, 11) == 'tt_products' &&
 			!substr($params['table'], 0, 12) == 'sys_products'
@@ -69,7 +69,8 @@ class tx_ttproducts_table_label {
 		// Get the label from the model
 		if ($className) {
 			$model = t3lib_div::makeInstance($className);
-			$row = $model->get($params['row']['uid']);
+			$row =
+				$GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow('*', $tablename, 'uid=' . intval($params['row']['uid']));
 			$label = $model->getLabel($row);
 		}
 
@@ -81,8 +82,6 @@ class tx_ttproducts_table_label {
 		return $label;
 	}
 }
-
-
 
 
 
