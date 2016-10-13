@@ -113,7 +113,6 @@ $result = array (
 				'type' => 'input',
 				'size' => '40',
 				'max' => '256',
-				'eval' => 'null',
 				'default' => ' ',
 			)
 		),
@@ -124,7 +123,6 @@ $result = array (
 				'type' => 'text',
 				'cols' => '48',
 				'rows' => '1',
-				'eval' => 'null',
 				'default' => NULL,
 			)
 		),
@@ -145,7 +143,6 @@ $result = array (
 				'type' => 'text',
 				'cols' => '48',
 				'rows' => '2',
-				'eval' => 'null',
 				'default' => NULL,
 			)
 		),

@@ -118,7 +118,6 @@ $result = array (
 				'type' => 'input',
 				'size' => '40',
 				'max' => '256',
-				'eval' => 'null',
 				'default' => ' ',
 			),
 			'l10n_mode' => 'prefixLangTitle',

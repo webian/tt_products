@@ -121,7 +121,6 @@ $result = array (
 				'type' => 'input',
 				'size' => '40',
 				'max' => '256',
-				'eval' => 'null',
 				'default' => ' ',
 			)
 		),
@@ -133,7 +132,6 @@ $result = array (
 				'rows' => '3',
 				'cols' => '20',
 				'max' => '512',
-				'eval' => 'null',
 				'default' => NULL,
 			)
 		),

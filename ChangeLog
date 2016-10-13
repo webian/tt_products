@@ -2,6 +2,7 @@
 	* new feature: add a subpart warning if missing for the TRACKING
 	* bugfix: feusersObj fe_users uses the renamed function getAddressMarkerArray instead of getItemMarkerArray
 	* bugfix: avoid a call to sys_products_orders with uid = 0
+	* bugfix: remove eval = null from TCA for fields in order to remove the checkbox from the field and when a space character should be the default.
 
 2016-10-11 Franz Holzinger <franz@ttproducts.de>
 	* bugfix: Fatal error: Call to a member function getAlias() on a non-object in /path/typo3conf/ext/tt_products/model/class.tx_ttproducts_table_base.php on line 351
