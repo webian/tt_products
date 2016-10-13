@@ -82,14 +82,6 @@ class tx_ttproducts_basketitem {
 		$prodTable = $tablesObj->get('tt_products', FALSE);
 		$articleRow = $prodTable->getArticleRowFromExt($row);
 
-// 		$extArray = $row['ext'];
-//
-// 		if (is_array($extArray) && is_array($extArray['tt_products_articles']) && is_array($extArray['tt_products_articles']['0']))	{
-// 			$articleUid = $extArray['tt_products_articles']['0']['uid'];
-// 			$articleTable = $tablesObj->get('tt_products_articles', FALSE);
-// 			$articleRow = $articleTable->get($articleUid);
-// 			$rc = ($articleRow['basketminquantity'] != '' ? $articleRow['basketminquantity'] : $rc);
-// 		}
 		if (is_array($articleRow) && count($articleRow))	{
 			$rc = ($articleRow['basketminquantity'] != '0.00' ? $articleRow['basketminquantity'] : $rc);
 		}

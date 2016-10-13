@@ -129,9 +129,16 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 
 	// an new orderUid has been created always because also payment systems can be used which do not accept a duplicate order id
 		$basketObj = t3lib_div::getUserObj('&tx_ttproducts_basket');
-		$orderUid = intval($basketObj->order['orderUid']);
-		$res = $TYPO3_DB->exec_SELECTquery('uid', 'sys_products_orders', 'uid='.intval($orderUid).' AND hidden AND NOT status');	// Checks if record exists, is marked hidden (all blank orders are hidden by default) and is not finished.
-		if (!$TYPO3_DB->sql_num_rows($res) || $this->conf['alwaysAdvanceOrderNumber'])	{
+		$orderUid = 0;
+		if (isset($basketObj->order['orderUid'])) {
+			$orderUid = intval($basketObj->order['orderUid']);
+		}
+
+		if ($orderUid) {
+			$res = $TYPO3_DB->exec_SELECTquery('uid', 'sys_products_orders', 'uid='.intval($orderUid).' AND hidden AND NOT status');	// Checks if record exists, is marked hidden (all blank orders are hidden by default) and is not finished.
+		}
+
+		if (!$orderUid || !$TYPO3_DB->sql_num_rows($res) || $this->conf['alwaysAdvanceOrderNumber'])	{
 			$orderUid = $this->create();
 			$basketObj->order['orderUid'] = $orderUid;
 			$basketObj->order['orderDate'] = time();
@@ -165,6 +172,14 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 	 */
 	public function getRecord ($orderUid, $tracking = '')	{
 		global $TYPO3_DB;
+
+		if (
+			empty($tracking) &&
+			!$orderUid
+		) {
+			return FALSE;
+		}
+
 		$res = $TYPO3_DB->exec_SELECTquery('*', 'sys_products_orders' , ($tracking ? 'tracking_code=' . $TYPO3_DB->fullQuoteStr($tracking, 'sys_products_orders') : 'uid=' . intval($orderUid)) . ' AND NOT deleted');
 		$rc = $TYPO3_DB->sql_fetch_assoc($res);
 		$TYPO3_DB->sql_free_result($res);
