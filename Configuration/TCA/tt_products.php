@@ -140,7 +140,6 @@ $result = array(
 				'type' => 'input',
 				'size' => '40',
 				'max' => '256',
-				'eval' => 'null',
 				'default' => NULL,
 			)
 		),
@@ -152,7 +151,6 @@ $result = array(
 				'rows' => '3',
 				'cols' => '20',
 				'max' => '512',
-				'eval' => 'null',
 				'default' => NULL,
 			)
 		),
@@ -252,7 +250,6 @@ $result = array(
 				'type' => 'text',
 				'cols' => '48',
 				'rows' => '5',
-				'eval' => 'null',
 				'default' => NULL,
 			)
 		),
@@ -263,7 +260,6 @@ $result = array(
 				'type' => 'text',
 				'cols' => '48',
 				'rows' => '2',
-				'eval' => 'null',
 				'default' => NULL,
 			)
 		),
@@ -667,7 +663,6 @@ $result = array(
 				'size' => '5',
 				'maxitems' => '30',
 				'minitems' => '0',
-				'eval' => 'null',
 				'default' => NULL,
 			)
 		),
