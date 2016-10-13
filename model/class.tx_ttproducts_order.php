@@ -142,17 +142,26 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 		global $TSFE, $TYPO3_DB;;
 
 	// an new orderUid has been created always because also payment systems can be used which do not accept a duplicate order id
+		$orderUid = 0;
+		if (isset($this->basket->order['orderUid'])) {
+			$orderUid = intval($this->basket->order['orderUid']);
+		}
 
-		$orderUid = intval($this->basket->order['orderUid']);
-		$res = $TYPO3_DB->exec_SELECTquery('uid', 'sys_products_orders', 'uid='.intval($orderUid).' AND hidden=1 AND NOT status');	// Checks if record exists, is marked hidden (all blank orders are hidden by default) and is not finished.
-		if (!$TYPO3_DB->sql_num_rows($res) || $this->conf['alwaysAdvanceOrderNumber'])	{
+		if ($orderUid) {
+			$res = $TYPO3_DB->exec_SELECTquery('uid', 'sys_products_orders', 'uid='.intval($orderUid).' AND hidden=1 AND NOT status');	// Checks if record exists, is marked hidden (all blank orders are hidden by default) and is not finished.
+		}
+
+		if (!$orderUid || !$TYPO3_DB->sql_num_rows($res) || $this->conf['alwaysAdvanceOrderNumber'])	{
 			$orderUid = $this->create();
 			$this->basket->order['orderUid'] = $orderUid;
 			$this->basket->order['orderDate'] = time();
 			$this->basket->order['orderTrackingNo'] = $this->getNumber($orderUid) . '-' . strtolower(substr(md5(uniqid(time())), 0, 6));
 			$TSFE->fe_user->setKey('ses', 'order', $this->basket->order);
 		}
-		$TYPO3_DB->sql_free_result($res);
+
+		if ($res) {
+			$TYPO3_DB->sql_free_result($res);
+		}
 		return $orderUid;
 	} // getBlankUid
 
@@ -181,6 +190,14 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 	 */
 	function getRecord ($orderUid,$tracking='')	{
 		global $TYPO3_DB;
+
+		if (
+			empty($tracking) &&
+			!$orderUid
+		) {
+			return FALSE;
+		}
+
 		$res = $TYPO3_DB->exec_SELECTquery('*', 'sys_products_orders', ($tracking ? 'tracking_code=' . $TYPO3_DB->fullQuoteStr($tracking, 'sys_products_orders') : 'uid=' . intval($orderUid)) . ' AND NOT deleted');
 		$rc = $TYPO3_DB->sql_fetch_assoc($res);
 		$TYPO3_DB->sql_free_result($res);

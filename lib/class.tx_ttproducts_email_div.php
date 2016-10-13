@@ -231,8 +231,8 @@ class tx_ttproducts_email_div {
 
 				$variantFieldArray = array();
 				$variantMarkerArray = array();
-				$feusersObj->getItemMarkerArray ($orderData['billing'], $markerArray, false, 'person');
-				$feusersObj->getItemMarkerArray ($orderData['delivery'], $markerArray, false, 'delivery');
+				$feusersObj->getAddressMarkerArray($orderData['billing'], $markerArray, false, 'person');
+				$feusersObj->getAddressMarkerArray($orderData['delivery'], $markerArray, false, 'delivery');
 
 				$markerArray['###ORDER_TRACKING_NO###'] = $tracking;
 				$markerArray['###ORDER_UID###'] = $orderNumber;

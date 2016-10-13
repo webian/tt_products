@@ -605,13 +605,13 @@ class tx_ttproducts_main {
 					if ($this->convertToUserInt()) {
 						return '';
 					}
-					$contentTmp=$this->products_tracking($theCode);
+					$contentTmp = $this->products_tracking($error_code, $theCode);
 				break;
 				case 'TRACKING':
 					if ($this->convertToUserInt()) {
 						return '';
 					}
-					$contentTmp=$this->products_tracking($theCode);
+					$contentTmp = $this->products_tracking($error_code, $theCode);
 				break;
 				case 'MEMO':
 					if ($this->convertToUserInt()) {
@@ -847,7 +847,7 @@ class tx_ttproducts_main {
 	 * @return	void
 	 * @see enableFields()
 	 */
-	function products_tracking ($theCode)	{ // t3lib_div::_GP('tracking')
+	function products_tracking (&$errorCode, $theCode)	{ // t3lib_div::_GP('tracking')
 		global $TSFE;
 
 		$urlObj = t3lib_div::getUserObj('&tx_ttproducts_url_view');
@@ -909,8 +909,16 @@ class tx_ttproducts_main {
 
 		if ($msgSubpart)	{
 			$content=$this->cObj->getSubpart($this->templateCode,$subpartmarkerObj->spMarker($msgSubpart));
+
+			if ($content == '') {
+				$errorCode[0] = 'no_subtemplate';
+				$errorCode[1] = '###' . $msgSubpart . $this->templateSuffix . '###';
+				$errorCode[2] = $this->templateFile;
+				return '';
+			}
+
 			if (!$TSFE->beUserLogin)	{
-				$content = $this->cObj->substituteSubpart($content,'###ADMIN_CONTROL###','');
+			 	$content = $this->cObj->substituteSubpart($content,'###ADMIN_CONTROL###','');
 			}
 		}
 
