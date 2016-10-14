@@ -152,7 +152,10 @@ if (version_compare(TYPO3_version, '6.2.0', '>=')) {
 }
 
 
-if (version_compare(TYPO3_version, '6.1.0', '>=')) {
+if (
+	version_compare(TYPO3_version, '6.1.0', '>=') &&
+	version_compare(TYPO3_version, '6.1.99', '<')
+) {
 	// Initialize admin panel since simulation settings are required here:
 	$callingClassName3 = '\\TYPO3\\CMS\\Core\\Core\\Bootstrap';
 	$bootStrap = call_user_func($callingClassName3 . '::getInstance');
