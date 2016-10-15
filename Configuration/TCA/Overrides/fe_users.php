@@ -24,10 +24,9 @@ $temporaryColumns = array (
 			'size' => '4',
 			'max' => '8',
 			'eval' => 'trim,double2',
-			'checkbox' => '0',
 			'range' => array (
 				'upper' => '1000',
-				'lower' => '1'
+				'lower' => '0'
 			),
 			'default' => 0
 		)

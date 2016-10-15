@@ -73,8 +73,7 @@ $result = array (
 				'size' => '8',
 				'max' => '20',
 				'eval' => 'date',
-				'default' => '0',
-				'checkbox' => '0'
+				'default' => '0'
 			)
 		),
 		'endtime' => array (
@@ -85,7 +84,6 @@ $result = array (
 				'size' => '8',
 				'max' => '20',
 				'eval' => 'date',
-				'checkbox' => '0',
 				'default' => '0',
 				'range' => array (
 					'upper' => mktime(0, 0, 0, 12, 31, $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['endtimeYear']),
