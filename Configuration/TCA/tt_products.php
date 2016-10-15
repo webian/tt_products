@@ -90,7 +90,6 @@ $result = array(
 				'size' => '8',
 				'max' => '20',
 				'eval' => 'date',
-				'checkbox' => '0',
 				'default' => '0'
 			)
 		),
@@ -102,7 +101,6 @@ $result = array(
 				'size' => '8',
 				'max' => '20',
 				'eval' => 'date',
-				'checkbox' => '0',
 				'default' => '0',
 				'range' => array (
 					'upper' => mktime(0, 0, 0, 12, 31, $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['endtimeYear']),
@@ -408,7 +406,6 @@ $result = array(
 				'size' => '8',
 				'max' => '20',
 				'eval' => 'date',
-				'checkbox' => '0',
 				'default' => '0'
 			)
 		),
@@ -745,7 +742,6 @@ $result = array(
 				'size' => '8',
 				'max' => '20',
 				'eval' => 'date',
-				'checkbox' => '0',
 				'default' => '0'
 			)
 		),
@@ -757,7 +753,6 @@ $result = array(
 				'size' => '8',
 				'max' => '20',
 				'eval' => 'date',
-				'checkbox' => '0',
 				'default' => '0',
 				'range' => array (
 					'upper' => mktime(0, 0, 0, 12, 31, 2300),
