@@ -24,7 +24,7 @@ $result = array (
 		'searchFields' => 'name,email',
 	),
 	'interface' => array (
-		'showRecordFieldList' => 'name,email,suffix,hidden,starttime,endtime,fe_group'
+		'showRecordFieldList' => 'name,email,hidden,starttime,endtime,fe_group'
 	),
 	'columns' => array (
 		't3ver_label' => array (
@@ -122,17 +122,9 @@ $result = array (
 				'max' => '80'
 			)
 		),
-		'suffix' => array (
-			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products_emails.suffix',
-			'config' => array (
-				'type' => 'input',
-				'size' => '24',
-				'max' => '24'
-			)
-		),
 	),
 	'types' => array (
-		'1' => array('showitem' => 'hidden;;;;1-1-1, name, email, suffix')
+		'1' => array('showitem' => 'hidden;;;;1-1-1, name, email')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => 'starttime, endtime, fe_group')
