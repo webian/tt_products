@@ -603,8 +603,24 @@ class tx_ttproducts_list_view {
 		switch ($theCode) {
 			case 'SEARCH':
 				$formName = 'ShopSearchForm';
+
+				$searchTemplateArea = 'ITEM_SEARCH';
 					// Get search subpart
-				$t['search'] = $this->cObj->getSubpart($templateCode,$subpartmarkerObj->spMarker('###ITEM_SEARCH###'.$this->config['templateSuffix']));
+				$t['search'] =
+					$this->cObj->getSubpart(
+						$templateCode,
+						$subpartmarkerObj->spMarker('###' . $searchTemplateArea . '###' . $this->config['templateSuffix'])
+					);
+
+				if (!($t['search'])) {
+					$templateObj = t3lib_div::getUserObj('&tx_ttproducts_template');
+
+					$error_code[0] = 'no_subtemplate';
+					$error_code[1] = '###' . $searchTemplateArea . '###';
+					$error_code[2] = $templateObj->getTemplateFile();
+
+					return '';
+				}
 
 					// Substitute a few markers
 				$out = $t['search'];

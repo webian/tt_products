@@ -210,9 +210,6 @@ class tx_ttproducts_db {
 
 		$csConvObj = $TSFE->csConvObj;
 
-//    error_log ('generateResponse ======================================= ');
-		$typoVersion = tx_div2007_core::getTypoVersion();
-
 		$theCode = strtoupper($view);
 		$langObj = t3lib_div::getUserObj('&tx_ttproducts_language');
 		$imageObj = t3lib_div::getUserObj('&tx_ttproducts_field_image');
@@ -249,8 +246,11 @@ class tx_ttproducts_db {
 					continue;
 				}
 				if (($field == 'title') || ($field == 'subtitle') || ($field == 'note') || ($field == 'note2'))	{
-					if ($typoVersion < '6000000') {
-						$v = $csConvObj->conv($v, $TSFE->renderCharset, $this->ajax->taxajax->getCharEncoding());
+					if (
+						version_compare(TYPO3_version, '6.0.0', '<') &&
+						$GLOBALS['TSFE']->renderCharset != ''
+					) {
+						$v = $csConvObj->conv($v, $GLOBALS['TSFE']->renderCharset, $this->ajax->taxajax->getCharEncoding());
 					}
 
 					if (($field == 'note') || ($field == 'note2'))	{
@@ -278,7 +278,7 @@ class tx_ttproducts_db {
 									''
 								);
 
-							if ($typoVersion < '6000000') {
+							if (version_compare(TYPO3_version, '6.0.0', '<')) {
 								if ($modifiedValue)	{
 									$v = $csConvObj->conv($modifiedValue, $TSFE->renderCharset, $this->ajax->taxajax->getCharEncoding());
 								}
@@ -333,7 +333,7 @@ class tx_ttproducts_db {
 					}
 					if (in_array($field, $priceFieldArray))	{
 						$v = $priceViewObj->priceFormat($v);
-						if ($typoVersion < '6000000') {
+						if (version_compare(TYPO3_version, '6.0.0', '<')) {
 							$v = $csConvObj->conv($v, $TSFE->renderCharset, $this->ajax->taxajax->getCharEncoding());
 						}
 					}

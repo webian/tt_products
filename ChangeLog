@@ -1,3 +1,6 @@
+2016-10-20 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: remove suffix from TCA of table tt_products_emails
+
 2016-10-15 Franz Holzinger <franz@ttproducts.de>
 	* bugfix: remove checkbox from TCA config which is deprecated since TYPO3 4.5
 
