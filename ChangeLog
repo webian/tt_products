@@ -1,3 +1,7 @@
+2016-10-24 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: A MYSQL REGEXP with [[.semicolon.]] leads to:
+		POSIX collating elements are not supported at offset 46 from regexp
+
 2016-10-20 Franz Holzinger <franz@ttproducts.de>
 	* bugfix: remove suffix from TCA of table tt_products_emails
 

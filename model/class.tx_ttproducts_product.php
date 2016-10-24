@@ -220,6 +220,7 @@ class tx_ttproducts_product extends tx_ttproducts_article_base {
 		$whereArray = array();
 		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
 		$articleObj = $tablesObj->get('tt_products_articles');
+		$regexpDelimiter = tx_ttproducts_model_control::determineRegExpDelimiter(';');
 
 		foreach ($fieldArray as $k => $field)	{
 			$value = trim($currentRow[$field]);
@@ -228,8 +229,8 @@ class tx_ttproducts_product extends tx_ttproducts_article_base {
 			if ($value != '')	{
 				$whereClause =
 					$field . ' REGEXP \'^[[:blank:]]*(' . $regexpValue . ')[[:blank:]]*$\'' .
-					' OR ' . $field . ' REGEXP \'^[[:blank:]]*(' . $regexpValue . ')[[:blank:]]*[[.semicolon.]]\'' .
-					' OR ' . $field . ' REGEXP \'[[.semicolon.]][[:blank:]]*(' . $regexpValue . ')[[:blank:]]*$\'';
+					' OR ' . $field . ' REGEXP \'^[[:blank:]]*(' . $regexpValue . ')[[:blank:]]*[' . $regexpDelimiter . ']\'' .
+					' OR ' . $field . ' REGEXP \'[' . $regexpDelimiter . '][[:blank:]]*(' . $regexpValue . ')[[:blank:]]*$\'';
 				$whereArray[] = $whereClause;
 			} else if ($this->conf['useArticles'] == 1) {
 				$whereClause = $field . '=\'\'';

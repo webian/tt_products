@@ -359,7 +359,8 @@ class tx_ttproducts_basket_view {
 
 					$pidcategory = ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['pageAsCategory'] == 1 ? $pid : '');
 					$currentPnew = $pidcategory . '_' . $actItem['rec']['category'];
-						// Print Category Title
+
+					// Print Category Title
 					if ($currentPnew != $currentP)	{
 						if ($itemsOut)	{
 							$out .= $this->cObj->substituteSubpart($t['itemFrameWork'], '###ITEM_SINGLE###', $itemsOut);
@@ -391,7 +392,6 @@ class tx_ttproducts_basket_view {
 					$markerArray = $globalMarkerArray;
 
 					if (!is_object($basketItemView))	{
-// 						include_once (PATH_BE_ttproducts.'view/class.tx_ttproducts_basketitem_view.php');
 						$basketItemView = t3lib_div::getUserObj('tx_ttproducts_basketitem_view');
 						$basketItemView->init($this->pibaseClass,$basketObj->basketExt,$basketObj->getItemObj());
 					}

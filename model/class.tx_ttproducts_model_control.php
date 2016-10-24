@@ -56,6 +56,16 @@ class tx_ttproducts_model_control {
 	static private $piVars = array();
 
 
+	static public function determineRegExpDelimiter ($delimiter) {
+		$regexpDelimiter = $delimiter;
+		if ($delimiter == ';') {
+// 			$regexpDelimiter = '[.semicolon.]';
+ 			$regexpDelimiter = ';';
+		}
+		return $regexpDelimiter;
+	}
+
+
 	public static function setPrefixId ($prefixId)	{
 		self::$prefixId = $prefixId;
 	}
@@ -225,12 +235,10 @@ class tx_ttproducts_model_control {
 		$fieldArray = t3lib_div::trimExplode(',', $fields);
 		if (isset($fieldArray) && is_array($fieldArray))	{
 			$rcArray = array();
-			if ($delimiter == ';')	{
-				$regDelimiter = '[[.semicolon.]]';
-			}
+			$regexpDelimiter = self::determineRegExpDelimiter($delimiter);
 
 			foreach ($fieldArray as $field)	{
-				$rcArray[] = $alias . $aliasPostfix . '.' . $field . ' REGEXP ' . $TYPO3_DB->fullQuoteStr('^([[:print:]]*'.$regDelimiter.')*' . '(' . $sword . ')([[:print:]]*[[:blank:]]*)*(' . $regDelimiter . '[[:print:]]*)*$', $tablename);
+				$rcArray[] = $alias . $aliasPostfix . '.' . $field . ' REGEXP ' . $TYPO3_DB->fullQuoteStr('^([[:print:]]*[' . $regexpDelimiter . '])*' . '(' . $sword . ')([[:print:]]*[[:blank:]]*)*([' . $regexpDelimiter . '][[:print:]]*)*$', $tablename);
 			}
 			$rc = implode(' OR ',$rcArray);
 		}
