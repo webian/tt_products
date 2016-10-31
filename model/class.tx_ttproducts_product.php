@@ -171,7 +171,7 @@ class tx_ttproducts_product extends tx_ttproducts_article_base {
 				// many articles fit here. So lets generated a merged article.
 				$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
 				$articleObj = $tablesObj->get('tt_products_articles');
-				for ($i=1; $i<=$articleCount; ++$i)	{
+				for ($i=1; $i < $articleCount; ++$i)	{
 
 					$articleObj->mergeAttributeFields($articleRow, $bFitArticleRowArray[$i], FALSE, TRUE, TRUE);
 				}
