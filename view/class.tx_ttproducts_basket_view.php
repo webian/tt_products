@@ -445,7 +445,10 @@ class tx_ttproducts_basket_view {
 								$articleRows[$k] = $articleTable->get($articleData['uid']);
 							}
 						} else {
-							$articleRows['0'] = $itemTable->getArticleRow($row, $theCode);
+							$articleRow = $itemTable->getArticleRow($row, $theCode);
+							if ($articleRow) {
+								$articleRows['0'] = $articleRow;
+							}
 						}
 
 						if (is_array($articleRows) && count($articleRows)) {

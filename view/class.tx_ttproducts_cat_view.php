@@ -37,8 +37,6 @@
  *
  */
 
-// require_once (PATH_BE_ttproducts.'model/class.tx_ttproducts_pid_list.php');
-
 
 class tx_ttproducts_cat_view {
 	var $pibase; // reference to object of pibase
@@ -121,6 +119,7 @@ class tx_ttproducts_cat_view {
 			// Add the template suffix
 			$subPartMarker = substr($subPartMarker, 0, -3).$templateSuffix.'###';
 			$itemFrameWork = $this->cObj->getSubpart($templateCode,$this->subpartmarkerObj->spMarker($subPartMarker));
+
 			if (!$itemFrameWork) {
 				$templateObj = t3lib_div::getUserObj('&tx_ttproducts_template');
 				$error_code[0] = 'no_subtemplate';
@@ -202,14 +201,20 @@ class tx_ttproducts_cat_view {
 				$viewCatTable->getSubpartArrays($this->urlObj, $catRow, $subpartArray, $wrappedSubpartArray, $viewTagArray, $catListPid, 'LINK_PARENT1_CATEGORY');
 			}
 
-			$tableViewObj->getModelMarkerArray (
-				$row,
+			$pageAsCategory = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['pageAsCategory'];
+			$tableViewObj->getMarkerArray(
 				$markerArray,
-				$variantFieldArray,
-				$variantMarkerArray,
+				'',
+				$uid,
+				$row['pid'],
+				10,
+				'image',
 				$viewTagArray,
+				array(),
+				$pageAsCategory,
 				$theCode,
-				TRUE,
+				'',
+				'',
 				''
 			);
 
@@ -328,8 +333,9 @@ class tx_ttproducts_cat_view {
 
 			$jsMarkerArray = array();
 			$this->javaScriptMarker->getMarkerArray($jsMarkerArray, $markerArray);
-			$markerArray = array_merge ($jsMarkerArray, $markerArray);
+			$globalMarkerArray = $markerObj->getGlobalMarkerArray();
 
+			$markerArray = array_merge ($jsMarkerArray, $markerArray, $globalMarkerArray);
 				// Substitute
 			$content = $this->cObj->substituteMarkerArrayCached($itemFrameWork, $markerArray, $subpartArray, $wrappedSubpartArray);
 
@@ -339,6 +345,7 @@ class tx_ttproducts_cat_view {
 			$error_code[2] = intval($uid);
 			$error_code[3] = $this->pidListObj->getPidlist();
 		}
+
 		return $content;
 	} // print
 }

@@ -1,5 +1,7 @@
-2016-10-31 Franz Holzinger <franz@ttproducts.de>
-	* bugfix: index error in loop getMatchingArticleRows which calls mergeAttributeFields for additional article rows
+2016-11-04 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: index error in loop getMatchingArticleRows which calls mergeAttributeFields for additional article rows. Only array rows must be used in the call of mergeAttributeFields.
+	* bugfix: category single view fix method call to getMarkerArray instead of getModelMarkerArray
+	* bugfix: apply the global markers
 
 2016-10-24 Franz Holzinger <franz@ttproducts.de>
 	* bugfix: A MYSQL REGEXP with [[.semicolon.]] leads to:
