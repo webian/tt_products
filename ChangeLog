@@ -1,3 +1,6 @@
+2016-11-17 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: add the TYPO3 standard fields uid, pid, tstamp, crdate, deleted, hidden and the PRIMARY KEY (uid) to all mm tables except for DAM
+
 2016-11-04 Franz Holzinger <franz@ttproducts.de>
 	* bugfix: index error in loop getMatchingArticleRows which calls mergeAttributeFields for additional article rows. Only array rows must be used in the call of mergeAttributeFields.
 	* bugfix: category single view fix method call to getMarkerArray instead of getModelMarkerArray
