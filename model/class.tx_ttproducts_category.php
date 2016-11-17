@@ -188,7 +188,7 @@ class tx_ttproducts_category extends tx_ttproducts_category_base {
 			}
 		}
 
-		if (!$bRootfound)	{
+		if (!$bRootfound || !is_array($rc))	{
 			$rc = array();
 		}
 		return $rc;

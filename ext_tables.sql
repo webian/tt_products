@@ -111,9 +111,17 @@ CREATE TABLE tt_products_language (
 #
 #
 CREATE TABLE tt_products_related_products_products_mm (
+	uid int(11) NOT NULL auto_increment,
+	pid int(11) DEFAULT '0' NOT NULL,
+	tstamp int(11) DEFAULT '0' NOT NULL,
+	crdate int(11) DEFAULT '0' NOT NULL,
+	deleted tinyint(4) DEFAULT '0' NOT NULL,
+	hidden tinyint(4) DEFAULT '0' NOT NULL,
 	uid_local int(11) DEFAULT '0' NOT NULL,
 	uid_foreign int(11) DEFAULT '0' NOT NULL,
 	sorting int(11) DEFAULT '0' NOT NULL,
+
+	PRIMARY KEY (uid),
 	KEY uid_local (uid_local),
 	KEY uid_foreign (uid_foreign),
 );
@@ -124,9 +132,17 @@ CREATE TABLE tt_products_related_products_products_mm (
 #
 #
 CREATE TABLE tt_products_accessory_products_products_mm (
+	uid int(11) NOT NULL auto_increment,
+	pid int(11) DEFAULT '0' NOT NULL,
+	tstamp int(11) DEFAULT '0' NOT NULL,
+	crdate int(11) DEFAULT '0' NOT NULL,
+	deleted tinyint(4) DEFAULT '0' NOT NULL,
+	hidden tinyint(4) DEFAULT '0' NOT NULL,
 	uid_local int(11) DEFAULT '0' NOT NULL,
 	uid_foreign int(11) DEFAULT '0' NOT NULL,
 	sorting int(11) DEFAULT '0' NOT NULL,
+
+	PRIMARY KEY (uid),
 	KEY uid_local (uid_local),
 	KEY uid_foreign (uid_foreign),
 );
@@ -150,9 +166,17 @@ CREATE TABLE tt_products_products_dam_mm (
 #
 #
 CREATE TABLE tt_products_products_note_pages_mm (
+	uid int(11) NOT NULL auto_increment,
+	pid int(11) DEFAULT '0' NOT NULL,
+	tstamp int(11) DEFAULT '0' NOT NULL,
+	crdate int(11) DEFAULT '0' NOT NULL,
+	deleted tinyint(4) DEFAULT '0' NOT NULL,
+	hidden tinyint(4) DEFAULT '0' NOT NULL,
 	uid_local int(11) DEFAULT '0' NOT NULL,
 	uid_foreign int(11) DEFAULT '0' NOT NULL,
 	sorting int(11) DEFAULT '0' NOT NULL,
+
+	PRIMARY KEY (uid),
 	KEY uid_local (uid_local),
 	KEY uid_foreign (uid_foreign),
 );
@@ -162,11 +186,19 @@ CREATE TABLE tt_products_products_note_pages_mm (
 # Table structure for table 'tt_products_cat'
 #
 CREATE TABLE tt_products_cat (
-	uid int(11) unsigned NOT NULL auto_increment,
-	pid int(11) unsigned DEFAULT '0' NOT NULL,
-	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
-	crdate int(11) unsigned DEFAULT '0' NOT NULL,
+	uid int(11) NOT NULL auto_increment,
+	pid int(11) DEFAULT '0' NOT NULL,
+	tstamp int(11) DEFAULT '0' NOT NULL,
+	crdate int(11) DEFAULT '0' NOT NULL,
 	cruser_id int(11) DEFAULT '0' NOT NULL,
+	t3ver_oid int(11) DEFAULT '0' NOT NULL,
+	t3ver_id int(11) DEFAULT '0' NOT NULL,
+	t3ver_wsid int(11) DEFAULT '0' NOT NULL,
+	t3ver_label varchar(30) DEFAULT '' NOT NULL,
+	t3ver_state tinyint(4) DEFAULT '0' NOT NULL,
+	t3ver_stage int(11) DEFAULT '0' NOT NULL,
+	t3ver_count int(11) DEFAULT '0' NOT NULL,
+	t3ver_tstamp int(11) DEFAULT '0' NOT NULL,
 	sorting int(10) DEFAULT '0' NOT NULL,
 	deleted tinyint(3) unsigned DEFAULT '0' NOT NULL,
 	hidden tinyint(4) unsigned DEFAULT '0' NOT NULL,
@@ -315,9 +347,17 @@ CREATE TABLE tt_products_gifts (
 #
 #
 CREATE TABLE tt_products_gifts_articles_mm (
+	uid int(11) NOT NULL auto_increment,
+	pid int(11) DEFAULT '0' NOT NULL,
+	tstamp int(11) DEFAULT '0' NOT NULL,
+	crdate int(11) DEFAULT '0' NOT NULL,
+	deleted tinyint(4) DEFAULT '0' NOT NULL,
+	hidden tinyint(4) DEFAULT '0' NOT NULL,
 	uid_local int(11) DEFAULT '0' NOT NULL,
 	uid_foreign int(11) DEFAULT '0' NOT NULL,
 	count int(11) DEFAULT '0' NOT NULL,
+
+	PRIMARY KEY (uid),
 	KEY uid_local (uid_local),
 	KEY uid_foreign (uid_foreign),
 );
@@ -368,6 +408,7 @@ CREATE TABLE tt_products_texts (
 	note text,
 	parentid int(11) DEFAULT '0' NOT NULL,
 	parenttable varchar(30) DEFAULT '' NOT NULL,
+
 	PRIMARY KEY (uid),
 	KEY parent (pid)
 );
@@ -416,6 +457,7 @@ CREATE TABLE tt_products_mm_graduated_price (
 	tablenames varchar(30) DEFAULT '' NOT NULL,
 	productsort int(10) DEFAULT '0' NOT NULL,
 	graduatedsort int(10) DEFAULT '0' NOT NULL,
+
 	PRIMARY KEY (uid),
 	KEY product_uid (product_uid),
 	KEY graduated_price_uid (graduated_price_uid),
@@ -443,6 +485,7 @@ CREATE TABLE tt_products_graduated_price (
 	startamount decimal(19,2) DEFAULT '0.00' NOT NULL,
 	note text,
 	items int(11) DEFAULT '0' NOT NULL,
+
 	PRIMARY KEY (uid),
 	KEY parent (pid)
 );
@@ -459,6 +502,7 @@ CREATE TABLE sys_products_accounts (
 	owner_name varchar(255) DEFAULT '' NOT NULL,
 	ac_number varchar(255) DEFAULT '' NOT NULL,
 	bic varchar(11) DEFAULT '' NOT NULL,
+
 	PRIMARY KEY (uid),
 	KEY parent (pid)
 );
@@ -477,6 +521,7 @@ CREATE TABLE sys_products_cards (
 	cc_number varchar(255) DEFAULT '' NOT NULL,
 	cc_type varchar(20) DEFAULT '' NOT NULL,
 	cvv2 int(11) unsigned DEFAULT '0' NOT NULL,
+
 	PRIMARY KEY (uid),
 	KEY parent (pid)
 );
@@ -532,6 +577,7 @@ CREATE TABLE sys_products_orders (
 	giftcode varchar(80) DEFAULT '' NOT NULL,
 	date_of_birth int(11) DEFAULT '0' NOT NULL,
 	radio1 int(11) unsigned DEFAULT '0' NOT NULL,
+
 	PRIMARY KEY (uid),
 	KEY parent (pid),
 	KEY tracking (tracking_code),
@@ -543,10 +589,18 @@ CREATE TABLE sys_products_orders (
 # Table structure for table 'sys_products_orders_mm_tt_products'
 #
 CREATE TABLE sys_products_orders_mm_tt_products (
+	uid int(11) NOT NULL auto_increment,
+	pid int(11) DEFAULT '0' NOT NULL,
+	tstamp int(11) DEFAULT '0' NOT NULL,
+	crdate int(11) DEFAULT '0' NOT NULL,
+	deleted tinyint(4) DEFAULT '0' NOT NULL,
+	hidden tinyint(4) DEFAULT '0' NOT NULL,
 	sys_products_orders_uid int(11) unsigned DEFAULT '0' NOT NULL,
 	sys_products_orders_qty int(11) unsigned DEFAULT '0' NOT NULL,
 	tt_products_uid int(11) unsigned DEFAULT '0' NOT NULL,
 	tt_products_articles_uid int(11) unsigned DEFAULT '0' NOT NULL,
+
+	PRIMARY KEY (uid),
 	KEY tt_products_uid (tt_products_uid),
 	KEY tt_products_articles_uid (tt_products_articles_uid),
 	KEY sys_products_orders_uid (sys_products_orders_uid)

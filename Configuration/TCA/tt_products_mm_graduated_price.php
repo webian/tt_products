@@ -23,7 +23,6 @@ $result = array (
 	'interface' => array (
 		'showRecordFieldList' => 'product_uid,graduated_price_uid'
 	),
-	'feInterface' => $TCA['tt_products_mm_graduated_price']['feInterface'],
 	'columns' => array (
 		'hidden' => array (
 			'exclude' => 1,

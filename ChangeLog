@@ -1,3 +1,7 @@
+2016-11-17 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: add the TYPO3 standard fields uid, pid, tstamp, crdate, deleted, hidden and the PRIMARY KEY (uid) to all mm tables except for DAM
+	* bugfix: category single view add call to getGlobalMarkerArray
+
 2016-10-20 Franz Holzinger <franz@ttproducts.de>
 	* bugfix: remove suffix from TCA of table tt_products_emails
 

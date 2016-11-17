@@ -330,7 +330,9 @@ class tx_ttproducts_cat_view {
 
 			$jsMarkerArray = array();
 			$this->javaScriptMarker->getMarkerArray($jsMarkerArray, $markerArray);
-			$markerArray = array_merge ($jsMarkerArray, $markerArray);
+			$globalMarkerArray = $markerObj->getGlobalMarkerArray();
+
+			$markerArray = array_merge ($jsMarkerArray, $markerArray, $globalMarkerArray);
 
 				// Substitute
 			$content = $this->cObj->substituteMarkerArrayCached($itemFrameWork,$markerArray,$subpartArray,$wrappedSubpartArray);
