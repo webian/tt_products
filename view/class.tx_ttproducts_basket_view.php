@@ -165,6 +165,7 @@ class tx_ttproducts_basket_view {
 		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
 		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
 		$langObj = t3lib_div::getUserObj('&tx_ttproducts_language');
+		$articleViewTagArray = array();
 
 		$funcTablename = $basket->getFuncTablename();
 		$itemTableView = $tablesObj->get($funcTablename, true);
@@ -265,7 +266,6 @@ class tx_ttproducts_basket_view {
 
 			if ($this->bUseArtcles == 1) {
 				$markerFieldArray = array();
-				$articleViewTagArray = array();
 				$articleParentArray = array();
 				$articleFieldsArray = $markerObj->getMarkerFields(
 					$t['item'],
