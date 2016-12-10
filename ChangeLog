@@ -1,3 +1,6 @@
+2016-12-10 Franz Holzinger <franz@ttproducts.de>
+	* workaround for TYPO3 bug #78944: remove transOrigPointerField and transOrigPointerTable from all language overlay tables
+
 2016-11-17 Franz Holzinger <franz@ttproducts.de>
 	* bugfix: add the TYPO3 standard fields uid, pid, tstamp, crdate, deleted, hidden and the PRIMARY KEY (uid) to all mm tables except for DAM
 	* bugfix: category single view add call to getGlobalMarkerArray

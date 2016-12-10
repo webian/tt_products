@@ -18,3 +18,8 @@ if (
 	);
 }
 
+if (version_compare(TYPO3_version, '7.6.0', '>=')) {
+
+	unset($GLOBALS['TCA'][$table]['ctrl']['transOrigPointerField']);
+	unset($GLOBALS['TCA'][$table]['ctrl']['transOrigPointerTable']);
+}
