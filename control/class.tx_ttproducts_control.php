@@ -573,6 +573,7 @@ class tx_ttproducts_control {
 										$orderObj->setData($orderUid, $paymentHTML, 0);
 									}
 								} else {	// If not all required info-fields are filled in, this is shown instead:
+									$langObj = t3lib_div::getUserObj('&tx_ttproducts_language');
 									$infoViewObj->infoArray['billing']['error'] = 1;
 									$content .= $this->cObj->getSubpart($this->templateCode, $this->subpartmarkerObj->spMarker('###BASKET_REQUIRED_INFO_MISSING###'));
 
