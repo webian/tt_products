@@ -83,7 +83,7 @@ class tx_ttproducts_field_tax extends tx_ttproducts_field_base {
 		} else {
 			$fieldValue = parent::getFieldValue($row, $fieldname);
 
-			if (!floatval($fieldValue))	{
+			if (!is_numeric($fieldValue))	{
 				if ($this->conf['TAXpercentage'])	{
 					$fieldValue = floatval($this->conf['TAXpercentage']);
 				} else {

@@ -181,6 +181,7 @@ class tx_ttproducts_basket_view {
 		$tableConf = $itemTable->getTableConf ($theCode);
 		$itemTable->initCodeConf($theCode, $tableConf);
 		$minQuantityArray = array();
+		$articleViewTagArray = array();
 
 		if ($this->useArticles == 1 || $this->useArticles == 3) {
 			$articleViewObj = $tablesObj->get('tt_products_articles', TRUE);
@@ -278,7 +279,6 @@ class tx_ttproducts_basket_view {
 
 			if ($this->useArticles == 1 || $this->useArticles == 3) {
 				$markerFieldArray = array();
-				$articleViewTagArray = array();
 				$articleParentArray = array();
 				$articleFieldsArray = $markerObj->getMarkerFields(
 					$t['item'],
