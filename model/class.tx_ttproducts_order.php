@@ -145,7 +145,10 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 			$basketObj->order['orderTrackingNo'] = $this->getNumber($orderUid) . '-' . strtolower(substr(md5(uniqid(time())), 0, 6));
 			$TSFE->fe_user->setKey('ses', 'order', $basketObj->order);
 		}
-		$TYPO3_DB->sql_free_result($res);
+
+		if ($res) {
+			$TYPO3_DB->sql_free_result($res);
+		}
 
 		return $orderUid;
 	} // getBlankUid
