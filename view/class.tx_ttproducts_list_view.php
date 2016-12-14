@@ -107,7 +107,7 @@ class tx_ttproducts_list_view {
 				}
 			}
 			$itemRowWrapArray = t3lib_div::trimExplode('|', $cssConf['itemRowWrap']);
-			$itemsOut.= ($tableRowOpen ? $itemRowWrapArray[1] : '');
+			$itemsOut .= ($tableRowOpen ? $itemRowWrapArray[1] : '');
 		}
 		$iColCount = 0;
 
@@ -1594,9 +1594,9 @@ class tx_ttproducts_list_view {
 
 						$markerArray = array_merge($markerArray, $currPriceMarkerArray);
 
-						include_once (PATH_BE_ttproducts.'view/class.tx_ttproducts_basketitem_view.php');
+// 						include_once (PATH_BE_ttproducts.'view/class.tx_ttproducts_basketitem_view.php');
 						$basketItemView = t3lib_div::getUserObj('tx_ttproducts_basketitem_view');
-						$basketItemView->init($this->pibaseClass,$basketObj->basketExt, $basketObj->getItemObj());
+						$basketItemView->init($this->pibaseClass, $basketObj->basketExt,  $basketObj->getItemObj());
 						$basketItemView->getItemMarkerArray(
 							$functablename,
 							$item,
