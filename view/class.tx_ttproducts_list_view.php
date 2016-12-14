@@ -1585,7 +1585,7 @@ class tx_ttproducts_list_view {
 						$itemTableViewArray[$itemTable->type]->getCurrentPriceMarkerArray(
 							$currPriceMarkerArray,
 							$itemTableArray['product']->getTablename(),
-							$prodRow,
+							$row, // $prodRow, bugfix
 							$articleTablename,
 							$prodVariantRow,
 							'',
