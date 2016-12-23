@@ -390,7 +390,7 @@ class tx_ttproducts_single_view {
 				}
 			}
 
-			if ($pid === $TSFE->id && isset($this->conf['PIDlistDisplay'])) {
+			if ($pid == $TSFE->id && isset($this->conf['PIDlistDisplay'])) {
 				$linkPid = $pageObj->getPID($this->conf['PIDlistDisplay'], $this->conf['PIDlistDisplay.'], $row);
 			} else {
 				$linkPid = $pid;
