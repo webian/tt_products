@@ -70,12 +70,12 @@ abstract class tx_ttproducts_catlist_view_base {
 
 		$this->urlObj = t3lib_div::getUserObj('&tx_ttproducts_url_view');
 		$this->pidListObj = t3lib_div::getUserObj('tx_ttproducts_pid_list');
-		$this->pidListObj->init($this->pibase->cObj);
+		$this->pidListObj->init($this->cObj);
 		$this->pidListObj->applyRecursive(99, $pid_list, TRUE);
 		$this->pidListObj->setPageArray();
 
 		$this->subpartmarkerObj = t3lib_div::makeInstance('tx_ttproducts_subpartmarker');
-		$this->subpartmarkerObj->init($pibase->cObj);
+		$this->subpartmarkerObj->init($this->cObj);
 
 		$this->htmlTagMain = ($this->htmlTagMain ? $this->htmlTagMain : $this->conf['displayCatListType']);
 		if (!$this->htmlTagElement)	{

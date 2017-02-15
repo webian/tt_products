@@ -85,7 +85,7 @@ class tx_ttproducts_basket_view {
 		$this->useArticles = $useArticles;
 
 		$this->subpartmarkerObj = t3lib_div::makeInstance('tx_ttproducts_subpartmarker');
-		$this->subpartmarkerObj->init($pibase->cObj);
+		$this->subpartmarkerObj->init($this->cObj);
 		$this->urlObj = t3lib_div::getUserObj('&tx_ttproducts_url_view'); // a copy of it
 		$this->urlObj->setUrlArray($urlArray);
 	} // init
@@ -678,28 +678,9 @@ class tx_ttproducts_basket_view {
 			$markerArray['###HIDDENFIELDS###'] = $hiddenFields;
 			$pid = ($this->conf['PIDbasket'] ? $this->conf['PIDbasket'] : $TSFE->id);
 
-// 			$tmpLinkParam = $this->urlObj->getLinkParams(
-// 				'',
-// 				array(),
-// 				TRUE,
-// 				TRUE,
-// 				''
-// 			);
-// 			$wrappedSubpartArray['###LINK_BASKET###'] = array(
-// 				'<a href="' . htmlspecialchars(
-// 					$this->pibase->pi_getPageLink(
-// 						$pid,
-// 						'',
-// 						$tmpLinkParam
-// 					)
-// 				) . '">',
-// 				'</a>'
-// 			);
-//
-
 			$conf = array('useCacheHash' => FALSE);
 			$url = tx_div2007_alpha5::getTypoLink_URL_fh003(
-				$this->pibase->cObj,
+				$this->cObj,
 				$pid,
 				$this->urlObj->getLinkParams(
 					'',
