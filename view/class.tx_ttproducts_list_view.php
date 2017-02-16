@@ -1509,6 +1509,7 @@ class tx_ttproducts_list_view {
 					$addQueryString[$itemTableView->getPivar()] = intval($row['uid']);
 					$piVarCat = $pibaseObj->piVars[$categoryTableView->getPivar()];
 					$bUseBackPid = ($pid != $TSFE->id);
+
 					if ($piVarCat)	{
 						if ($this->conf['PIDlistDisplay'])	{
 							$bUseBackPid = FALSE;
@@ -1520,10 +1521,11 @@ class tx_ttproducts_list_view {
 					} // 'tx_ttproducts_pi_search'
 					$queryString = $this->urlObj->getLinkParams('begin_at', $addQueryString, FALSE, $bUseBackPid, $itemTableView->getPivar(), $categoryTableView->getPivar());
 					$pageLink = htmlspecialchars($pibaseObj->pi_linkTP_keepPIvars_url($queryString,1,0,$pid));
+
 					if ($childCatWrap)	{
 						$wrappedSubpartArray['###LINK_ITEM###'] = t3lib_div::trimExplode('|',$childCatWrap);
 					} else {
-						$wrappedSubpartArray['###LINK_ITEM###'] = array('<a href="' . $pageLink . '"' . $css_current . '>','</a>');
+						$wrappedSubpartArray['###LINK_ITEM###'] = array('<a href="' . $pageLink . '"' . $css_current . '>', '</a>');
 					}
 
 					if (count($mergeRow))	{
@@ -1594,7 +1596,6 @@ class tx_ttproducts_list_view {
 
 						$markerArray = array_merge($markerArray, $currPriceMarkerArray);
 
-// 						include_once (PATH_BE_ttproducts.'view/class.tx_ttproducts_basketitem_view.php');
 						$basketItemView = t3lib_div::getUserObj('tx_ttproducts_basketitem_view');
 						$basketItemView->init($this->pibaseClass, $basketObj->basketExt,  $basketObj->getItemObj());
 						$basketItemView->getItemMarkerArray(

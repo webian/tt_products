@@ -1,3 +1,6 @@
+2017-02-16 Franz Holzinger <franz@ttproducts.de>
+    * ready for tt_products 2.8.14 in TER
+
 2016-12-10 Franz Holzinger <franz@ttproducts.de>
 	* workaround for TYPO3 bug #78944: remove transOrigPointerField and transOrigPointerTable from all language overlay tables
 	* bugfix: tax not taken from TAXpercentage because an is_numeric must be used instead of floatval

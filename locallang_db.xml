@@ -104,6 +104,7 @@
 			<label index="tt_products_cat.discount_disable">Disable Discount:</label>
 			<label index="tt_products_cat.highlight">Highlight</label>
 			<label index="tt_products_cat.sliderimage">Slider Image</label>
+			<label index="tt_products_cat.parent_category">Parent category</label>
 			<label index="tt_products_cat_language">Product category (alternative language)</label>
 			<label index="tt_products_cat_language.sys_language_uid">Language</label>
 			<label index="tt_products_cat_language.cat_uid">Product category record</label>
@@ -111,6 +112,8 @@
 			<label index="tt_products_articles.uid_product">Product</label>
 			<label index="tt_products_articles.config">Configuration:</label>
 			<label index="tt_products_articles.config.isaddedprice">price is added</label>
+			<label index="tt_products_articles.graduated_config">Graduated Price Configuration:</label>
+			<label index="tt_products_articles.graduated_config.addParentProductCount">Add the product counts of the parent product</label>
 			<label index="tt_products_articles_language">Product articles (alternative language)</label>
 			<label index="tt_products_articles_language.article_uid">Product article</label>
 			<label index="tt_products_attribute_mm_graduated_price">Relation product attributes to gradutated prices</label>

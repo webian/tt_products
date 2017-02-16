@@ -885,7 +885,7 @@ class tx_ttproducts_main {
 						$content = '<a href="' . $relfilename . '" >' . $message . '</a>';
 						break;
 					default:
-						debug('error in ' . TT_PRODUCTS_EXT . ' calling function products_tracking with $theCode = "' . $theCode . '"');
+						debug('error in ' . TT_PRODUCTS_EXT . ' calling function products_tracking with $theCode = "' . $theCode . '"'); // keep this
 				}
 			} else {	// ... else output error page
 				$msgSubpart = '###TRACKING_WRONG_NUMBER###';

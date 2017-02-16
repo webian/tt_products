@@ -112,7 +112,7 @@ class tx_ttproducts_tables	{
 		}
 
 		if (!$classNameArray['model'] || $bView && !$classNameArray['view'])	{
-			debug('Error in '.TT_PRODUCTS_EXT.'. No class found after calling function tx_ttproducts_tables::get with parameters "'.$functablename.'", '.$bView.'.','internal error', __LINE__, __FILE__);
+			debug('Error in '.TT_PRODUCTS_EXT.'. No class found after calling function tx_ttproducts_tables::get with parameters "'.$functablename.'", '.$bView.'.','internal error', __LINE__, __FILE__); // keep this
 			return 'ERROR';
 		}
 
@@ -125,7 +125,7 @@ class tx_ttproducts_tables	{
 					list($extKey, $className) = t3lib_div::trimExplode(':', $className, TRUE);
 
 					if (!t3lib_extMgm::isLoaded($extKey))	{
-						debug('Error in '.TT_PRODUCTS_EXT.'. No extension "' . $extKey . '" has been loaded to use class class.' . $className . '.','internal error',  __LINE__,  __FILE__);
+						debug('Error in '.TT_PRODUCTS_EXT.'. No extension "' . $extKey . '" has been loaded to use class class.' . $className . '.','internal error',  __LINE__,  __FILE__); // keep this
 						continue;
 					}
 					$path = t3lib_extMgm::extPath($extKey);
@@ -136,7 +136,7 @@ class tx_ttproducts_tables	{
 					$classRef = $classFile . ':&' . $className;
 					$tableObj[$k] = t3lib_div::getUserObj($classRef);	// fetch and store it as persistent object
 				} else {
-					debug ($classFile, 'File not found: ' . $classFile . ' in file class.tx_ttproducts_tables.php');
+					debug ($classFile, 'File not found: ' . $classFile . ' in file class.tx_ttproducts_tables.php'); // keep this
 				}
 			}
 		}
@@ -149,7 +149,7 @@ class tx_ttproducts_tables	{
 				);
 			}
 		} else {
-			debug ('Object for \''.$functablename.'\' has not been found.','internal error in '.TT_PRODUCTS_EXT, __LINE__, __FILE__);
+			debug ('Object for \''.$functablename.'\' has not been found.','internal error in '.TT_PRODUCTS_EXT, __LINE__, __FILE__); // keep this
 		}
 
 		if (isset($tableObj['view']) && is_object($tableObj['view']) && isset($tableObj['model']) && is_object($tableObj['model']))	{
@@ -178,7 +178,7 @@ class tx_ttproducts_tables	{
 				);
 			}
 		} else {
-			debug ('Object for \''.$functablename.'\' has not been found.','internal error in '.TT_PRODUCTS_EXT, __LINE__, __FILE__);
+			debug ('Object for \''.$functablename.'\' has not been found.','internal error in '.TT_PRODUCTS_EXT, __LINE__, __FILE__); // keep this
 		}
 		return $tableObj;
 	}
