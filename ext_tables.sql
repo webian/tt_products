@@ -73,9 +73,9 @@ CREATE TABLE tt_products (
 	sellendtime int(11) unsigned DEFAULT '0' NOT NULL,
 
 	PRIMARY KEY (uid),
-	KEY parent (pid)
+	KEY parent (pid),
 	KEY comp1 (pid,deleted,sorting),
-	KEY comp2 (pid,deleted,hidden,starttime,endtime,fe_group),
+	KEY comp2 (pid,deleted,hidden,starttime,endtime,fe_group)
 );
 
 
@@ -111,8 +111,8 @@ CREATE TABLE tt_products_language (
 	www varchar(160) DEFAULT '' NOT NULL,
 
 	PRIMARY KEY (uid),
-	KEY parent (pid)
-	KEY comp1 (pid,deleted,sorting),
+	KEY parent (pid),
+	KEY comp1 (pid,deleted,sorting)
 );
 
 
@@ -224,8 +224,8 @@ CREATE TABLE tt_products_cat (
 	email_uid int(11) DEFAULT '0' NOT NULL,
 
 	PRIMARY KEY (uid),
-	KEY parent (pid)
-	KEY comp1 (pid,deleted,sorting),
+	KEY parent (pid),
+	KEY comp1 (pid,deleted,sorting)
 );
 
 
@@ -255,8 +255,8 @@ CREATE TABLE tt_products_cat_language (
 	cat_uid int(11) DEFAULT '0' NOT NULL,
 
 	PRIMARY KEY (uid),
-	KEY parent (pid)
-	KEY comp1 (pid,deleted,sorting),
+	KEY parent (pid),
+	KEY comp1 (pid,deleted,sorting)
 );
 
 
@@ -327,8 +327,8 @@ CREATE TABLE tt_products_articles (
 	uid_product int(11) DEFAULT '0' NOT NULL,
 
 	PRIMARY KEY (uid),
-	KEY parent (pid)
-	KEY comp1 (pid,deleted,sorting),
+	KEY parent (pid),
+	KEY comp1 (pid,deleted,sorting)
 );
 
 
@@ -358,8 +358,8 @@ CREATE TABLE tt_products_articles_language (
 	note2 text,
 
 	PRIMARY KEY (uid),
-	KEY parent (pid)
-	KEY comp1 (pid,deleted,sorting),
+	KEY parent (pid),
+	KEY comp1 (pid,deleted,sorting)
 );
 
 
@@ -383,8 +383,8 @@ CREATE TABLE tt_products_gifts (
 	amount decimal(19,2) DEFAULT '0.00' NOT NULL,
 
 	PRIMARY KEY (uid),
-	KEY parent (pid)
-	KEY comp1 (pid,deleted,sorting),
+	KEY parent (pid),
+	KEY comp1 (pid,deleted,sorting)
 );
 
 
@@ -431,8 +431,8 @@ CREATE TABLE tt_products_emails (
 	email varchar(80) DEFAULT '' NOT NULL,
 
 	PRIMARY KEY (uid),
-	KEY parent (pid)
-	KEY comp1 (pid,deleted,sorting),
+	KEY parent (pid),
+	KEY comp1 (pid,deleted,sorting)
 );
 
 
@@ -458,8 +458,8 @@ CREATE TABLE tt_products_texts (
 	parenttable varchar(30) DEFAULT '' NOT NULL,
 
 	PRIMARY KEY (uid),
-	KEY parent (pid)
-	KEY comp1 (pid,deleted,sorting),
+	KEY parent (pid),
+	KEY comp1 (pid,deleted,sorting)
 );
 
 
@@ -486,8 +486,8 @@ CREATE TABLE tt_products_texts_language (
 	parenttable varchar(30) DEFAULT '' NOT NULL,
 
 	PRIMARY KEY (uid),
-	KEY parent (pid)
-	KEY comp1 (pid,deleted,sorting),
+	KEY parent (pid),
+	KEY comp1 (pid,deleted,sorting)
 );
 
 
@@ -537,8 +537,8 @@ CREATE TABLE tt_products_graduated_price (
 	items int(11) DEFAULT '0' NOT NULL,
 
 	PRIMARY KEY (uid),
-	KEY parent (pid)
-	KEY comp1 (pid,deleted,sorting),
+	KEY parent (pid),
+	KEY comp1 (pid,deleted,sorting)
 );
 
 
@@ -642,7 +642,7 @@ CREATE TABLE sys_products_orders (
 	PRIMARY KEY (uid),
 	KEY parent (pid),
 	KEY tracking (tracking_code),
-	KEY status (status)
+	KEY status (status),
 	KEY comp1 (pid,deleted),
 );
 
