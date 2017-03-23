@@ -39,9 +39,6 @@
 
 
 
-// require_once (PATH_BE_ttproducts.'marker/class.tx_ttproducts_marker.php');
-// require_once (PATH_BE_ttproducts.'marker/class.tx_ttproducts_subpartmarker.php');
-
 class tx_ttproducts_billdelivery {
 	public $cObj;
 	public $conf;		  // original configuration
@@ -305,7 +302,7 @@ class tx_ttproducts_billdelivery {
 								'',
 								'',
 								TRUE,
-								$TSFE->renderCharset
+								'UTF-8'
 							);
 
 							$articleViewObj->getItemMarkerSubpartArrays (
@@ -395,7 +392,7 @@ class tx_ttproducts_billdelivery {
 		$taxRateArray = t3lib_div::trimExplode(',', $this->conf['TAXrates']);
 		if (isset($taxRateArray) && is_array($taxRateArray))	{
 			foreach ($taxRateArray as $k => $taxrate)	{
-				$taxstr = strval(number_format($taxrate,2));
+				$taxstr = strval(number_format(floatval($taxrate), 2));
 				$label = chr(ord('A') + $k);
 				$markerArray['###PRICE_TAXRATE_NAME' . ($k + 1) . '###'] = $label;
 				$markerArray['###PRICE_TAXRATE_TAX' . ($k + 1) . '###'] = $taxrate;
