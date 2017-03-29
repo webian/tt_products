@@ -60,7 +60,7 @@ abstract class tx_ttproducts_catlist_view_base {
 
 		$this->urlObj = t3lib_div::getUserObj('&tx_ttproducts_url_view');
 		$this->pidListObj = t3lib_div::getUserObj('tx_ttproducts_pid_list');
-		$this->pidListObj->init($this->pibase->cObj);
+		$this->pidListObj->init($pibase->cObj);
 		$this->pidListObj->applyRecursive($recursive, $pid_list, TRUE);
 		$this->pidListObj->setPageArray();
 
