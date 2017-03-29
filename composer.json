@@ -1,0 +1,77 @@
+{
+  "name": "jambagecom/tt-products",
+  "type": "typo3-cms-extension",
+  "description": "Shop system extension for TYPO3 CMS",
+  "keywords": [
+    "TYPO3",
+    "extension",
+    "shop",
+    "basket",
+    "cart"
+  ],
+  "support": {
+    "issues": "http://jambage.com/kontakt/forum.html"
+  },
+  "homepage": "https://jambage.com",
+  "authors": [
+    {
+      "name": "Franz Holzinger",
+      "role": "Developer",
+      "homepage": "http://ttproducts.de"
+    }
+  ],
+  "license": [
+    "GPL-2.0+"
+  ],
+  "require": {
+    "typo3/cms-core": ">=4.5.0,<8.9.99",
+    "jambagecom/div2007": ">=1.7.0",
+    "jambagecom/table": ">=0.3.0",
+    "jambagecom/tsparser": "",
+  },
+  "suggest": {
+    "jambagecom/addons_em": "",
+  },
+  "autoload": {
+    "psr-4": {
+      "JambageCom\\TtProducts\\": "Classes"
+    },
+    "classmap": [
+      "api",
+      "cache",
+      "Classes",
+      "control",
+      "eid",
+      "hooks",
+      "lib",
+      "marker",
+      "model",
+      "modfunc1",
+      "modfunc2",
+      "pi1",
+      "pi_int",
+      "pi_search",
+      "view",
+      "widgets",
+    ]
+  },
+  "replace": {
+    "tt_products": "self.version",
+    "typo3-ter/tt-products": "self.version"
+  },
+  "config": {
+    "vendor-dir": ".Build/vendor",
+    "bin-dir": ".Build/bin",
+    "preferred-install": {
+      "typo3/cms": "source",
+      "typo3/cms-core": "source",
+      "*": "dist"
+    }
+  },
+  "extra": {
+    "typo3/cms": {
+      "cms-package-dir": "{$vendor-dir}/typo3/cms",
+      "web-dir": ".Build/Web"
+    }
+  }
+}
