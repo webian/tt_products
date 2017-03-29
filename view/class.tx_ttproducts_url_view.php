@@ -37,7 +37,7 @@
  */
 
 
-class tx_ttproducts_url_view {
+class tx_ttproducts_url_view implements t3lib_Singleton {
 	var $pibase; // reference to object of pibase
 	var $conf;
 	var $config;
@@ -54,7 +54,7 @@ class tx_ttproducts_url_view {
 
 	public function init ($pibase)	{
  		$this->pibase = $pibase;
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
 
  		$this->conf = &$cnf->conf;
  		$this->config = &$cnf->config;
@@ -99,7 +99,7 @@ class tx_ttproducts_url_view {
 	public function addURLMarkers ($pidNext, $markerArray, $addQueryString = array(), $excludeList = '', $bUseBackPid = TRUE, $bExcludeSingleVar = TRUE)	{
 		global $TSFE;
 
-		$charset = $TSFE->renderCharset;
+		$charset = 'UTF-8';
 		$urlMarkerArray = array();
 		$conf = array('useCacheHash' => TRUE);
 		$target = '';

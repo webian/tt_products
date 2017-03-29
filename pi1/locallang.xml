@@ -75,6 +75,8 @@
 			<label index="unregistered">unregistered</label>
 			<label index="first_order">first order</label>
 			<label index="download">Download</label>
+            <label index="download_requires_felogin">You must be logged in the Front End in order to download.</label>
+            <label index="error_download">Download Error</label>
 		</languageKey>
 		<languageKey index="dk" type="array">
 		</languageKey>
@@ -145,6 +147,7 @@
 			<label index="first_order">1. Bestellung</label>
 			<label index="undeclared">nicht angegeben</label>
 			<label index="download_requires_felogin">Sie müssen im Frontend eingeloggt sein, um eine Datei herunterladen zu können</label>
+            <label index="error_download">Download Fehler</label>
 		</languageKey>
 		<languageKey index="no" type="array">
 			<label index="open_bill">Klikk her for å åpne kvitteringen</label>

@@ -36,7 +36,7 @@
  *
  */
 
-class tx_ttproducts_control_search {
+class tx_ttproducts_control_search implements t3lib_Singleton {
 	public $cObj;
 	public $conf;
 	public $config;
@@ -49,8 +49,8 @@ class tx_ttproducts_control_search {
 	public function init (&$content, &$conf, &$config, $pibaseClass, &$error_code) {
 		global $TSFE, $TCA;
 
-		$pibaseObj = t3lib_div::getUserObj('&' . $pibaseClass);
-		$langObj = t3lib_div::getUserObj('&tx_ttproducts_language');
+		$pibaseObj = t3lib_div::getUserObj($pibaseClass);
+		$langObj = t3lib_div::getUserObj('tx_ttproducts_language');
 		$this->cObj = $pibaseObj->cObj;
 
 		$flexformArray = t3lib_div::xml2array($this->cObj->data['pi_flexform']);
@@ -69,7 +69,7 @@ class tx_ttproducts_control_search {
 		$this->piVars = &$pibaseObj->piVars;
 		$this->pibaseClass = $pibaseClass;
 
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
 		$cnf->init(
 			$conf,
 			$config
@@ -94,16 +94,16 @@ class tx_ttproducts_control_search {
 		$config['templateSuffix'] = ($templateSuffix ? $templateSuffix : $config['templateSuffix']);
 		$config['templateSuffix'] = ($config['templateSuffix'] ? '_' . $config['templateSuffix'] : '');
 
-		$langObj = t3lib_div::getUserObj('&tx_ttproducts_language');
+		$langObj = t3lib_div::getUserObj('tx_ttproducts_language');
 		$langObj->init1($pibaseObj, $pibaseObj->cObj, $conf, 'control/class.tx_ttproducts_control_search.php');
 
-		$markerObj = t3lib_div::getUserObj('&tx_ttproducts_marker');
+		$markerObj = t3lib_div::getUserObj('tx_ttproducts_marker');
 		$markerObj->init(
 			$this->cObj,
 			$pibaseObj->piVars
 		);
 
-		$searchViewObj = t3lib_div::getUserObj('&tx_ttproducts_search_view');
+		$searchViewObj = t3lib_div::getUserObj('tx_ttproducts_search_view');
 		$searchViewObj->init(
 			$this->cObj
 		);
@@ -113,7 +113,7 @@ class tx_ttproducts_control_search {
 
 
 	public function &getControlConfig ($cObj, &$conf, &$row)	{
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
 		$ctrlArray = tx_ttproducts_model_control::getParamsTableArray();
 
 		$config = array();
@@ -162,12 +162,12 @@ class tx_ttproducts_control_search {
 	public function &run ($pibaseClass,&$errorCode,$content='')	{
 		global $TSFE;
 
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
-		$templateObj = t3lib_div::getUserObj('&tx_ttproducts_template');
-		$langObj = t3lib_div::getUserObj('&tx_ttproducts_language');
-		$pibaseObj = t3lib_div::getUserObj('&' . $pibaseClass);
-		$subpartmarkerObj = t3lib_div::getUserObj('&tx_ttproducts_subpartmarker');
-		$searchViewObj = t3lib_div::getUserObj('&tx_ttproducts_search_view');
+		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
+		$templateObj = t3lib_div::getUserObj('tx_ttproducts_template');
+		$langObj = t3lib_div::getUserObj('tx_ttproducts_language');
+		$pibaseObj = t3lib_div::getUserObj($pibaseClass);
+		$subpartmarkerObj = t3lib_div::getUserObj('tx_ttproducts_subpartmarker');
+		$searchViewObj = t3lib_div::getUserObj('tx_ttproducts_search_view');
 		$error_code = array();
 		$errorMessage = '';
 

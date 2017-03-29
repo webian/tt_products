@@ -15,7 +15,7 @@ if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['articleMode'] == '2
 			'enablecolumns' => array (
 				'disabled' => 'hidden'
 			),
-			'prependAtCopy' => 'LLL:EXT:lang/locallang_general.php:LGL.prependAtCopy',
+			'prependAtCopy' => DIV2007_LANGUAGE_LGL . 'prependAtCopy',
 			'crdate' => 'crdate',
 			'iconfile' => PATH_TTPRODUCTS_ICON_TABLE_REL . 'tt_products_articles.gif',
 			'hideTable' => TRUE,

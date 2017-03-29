@@ -41,7 +41,7 @@
 
 
 
-class tx_ttproducts_pi_int {
+class tx_ttproducts_pi_int implements t3lib_Singleton {
 	/**
 	 * The backReference to the mother cObj object set at call time
 	 *
@@ -54,7 +54,7 @@ class tx_ttproducts_pi_int {
 	 */
 	public function main ($content, $conf)	{
 
-		$pibaseObj = t3lib_div::getUserObj('&tx_ttproducts_pi_int_base');
+		$pibaseObj = t3lib_div::getUserObj('tx_ttproducts_pi_int_base');
 		$pibaseObj->cObj = $this->cObj;
 
 		if ($conf['templateFile'] != '')	{

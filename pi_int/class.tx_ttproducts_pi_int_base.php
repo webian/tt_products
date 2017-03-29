@@ -42,14 +42,9 @@
  */
 
 
-// require_once (PATH_BE_ttproducts.'control/class.tx_ttproducts_main.php');
-// require_once (PATH_BE_ttproducts.'model/class.tx_ttproducts_model_control.php');
-//
-// require_once(PATH_tslib.'class.tslib_pibase.php');
-
 tx_div2007_core::activateCompatibility6();
 
-class tx_ttproducts_pi_int_base extends tslib_pibase {
+class tx_ttproducts_pi_int_base extends tslib_pibase implements t3lib_Singleton {
 	public $prefixId = TT_PRODUCTS_EXT;
 	public $scriptRelPath = 'pi_int_base/class.tx_ttproducts_pi_int_base.php';	// Path to this script relative to the extension dir.
 	public $extKey = TT_PRODUCTS_EXT;	// The extension key.
@@ -70,7 +65,7 @@ class tx_ttproducts_pi_int_base extends tslib_pibase {
 		$$this->conf = $confMain;
 
 		$config = array();
-		$mainObj = t3lib_div::getUserObj('&tx_ttproducts_main');	// fetch and store it as persistent object
+		$mainObj = t3lib_div::getUserObj('tx_ttproducts_main');	// fetch and store it as persistent object
 		$mainObj->bNoCachePossible = FALSE;
 		$errorCode = array();
 		$bDoProcessing = $mainObj->init($content, $this->conf, $config, get_class($this), $errorCode);

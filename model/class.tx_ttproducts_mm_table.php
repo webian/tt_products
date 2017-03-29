@@ -37,9 +37,6 @@
  *
  */
 
-// require_once (PATH_BE_table.'lib/class.tx_table_db.php');
-// require_once (PATH_BE_ttproducts.'model/class.tx_ttproducts_article_base.php');
-//
 
 class tx_ttproducts_mm_table extends tx_ttproducts_table_base {
 	protected $tableAlias = 'mm';

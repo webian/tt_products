@@ -103,7 +103,7 @@ class tx_ttproducts_pid_list {
 	}
 
 	public function applyRecursive ($recursive, &$pids, $bStore = FALSE) {
-		$cObj = t3lib_div::getUserObj('&tx_div2007_cobj');
+		$cObj = t3lib_div::getUserObj('tx_div2007_cobj');
 
 		if ($pids != '') {
 			$pid_list = &$pids;

@@ -128,7 +128,7 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 		global $TSFE, $TYPO3_DB;;
 
 	// an new orderUid has been created always because also payment systems can be used which do not accept a duplicate order id
-		$basketObj = t3lib_div::getUserObj('&tx_ttproducts_basket');
+		$basketObj = t3lib_div::getUserObj('tx_ttproducts_basket');
 		$orderUid = 0;
 		if (isset($basketObj->order['orderUid'])) {
 			$orderUid = intval($basketObj->order['orderUid']);
@@ -155,7 +155,7 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 
 
 	public function getUid ()	{
-		$basketObj = t3lib_div::getUserObj('&tx_ttproducts_basket');
+		$basketObj = t3lib_div::getUserObj('tx_ttproducts_basket');
 		$rc = $basketObj->order['orderUid'];
 		return $rc;
 	}
@@ -224,7 +224,7 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 		global $TYPO3_DB;
 		global $TSFE;
 
-		$basketObj = t3lib_div::getUserObj('&tx_ttproducts_basket');
+		$basketObj = t3lib_div::getUserObj('tx_ttproducts_basket');
 
 
 		$billingInfo = $address->infoArray['billing'];
@@ -322,7 +322,7 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 		if ($address->infoArray['billing']['tt_products_vat'] != '')	{
 			$fieldsArray['vat_id'] = $address->infoArray['billing']['tt_products_vat'];
 
-			$paymentshippingObj = t3lib_div::getUserObj('&tx_ttproducts_paymentshipping');
+			$paymentshippingObj = t3lib_div::getUserObj('tx_ttproducts_paymentshipping');
 			$taxPercentage = $paymentshippingObj->getReplaceTaxPercentage();
 			if (doubleval($taxPercentage) == 0)	{
 				$fieldsArray['tax_mode'] = 1;
@@ -429,8 +429,8 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 	public function createMM ($orderUid, &$itemArray)	{
 		global $TYPO3_DB;
 
-		$basketObj = t3lib_div::getUserObj('&tx_ttproducts_basket');
-		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+		$basketObj = t3lib_div::getUserObj('tx_ttproducts_basket');
+		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
 		if ($this->conf['useArticles'] != 2) {
 			$productTable = $tablesObj->get('tt_products', FALSE);
 			$productTablename = $productTable->getTablename();
@@ -489,8 +489,8 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 	 */
 	function setData ($orderUid, &$orderHTML, $status) {
 
-		$basketObj = t3lib_div::getUserObj('&tx_ttproducts_basket');
-		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+		$basketObj = t3lib_div::getUserObj('tx_ttproducts_basket');
+		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
 
 		$voucherObj = $tablesObj->get('voucher');
 		if ($status == 1)	{
@@ -505,7 +505,7 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 		$account = $tablesObj->get('sys_products_accounts');
 		$accountUid = $account->getUid();
 
-		$address = t3lib_div::getUserObj('&tx_ttproducts_info_view');
+		$address = t3lib_div::getUserObj('tx_ttproducts_info_view');
 		if ($address->needsInit())	{
 			echo 'internal error in tt_products (setData)';
 			return;

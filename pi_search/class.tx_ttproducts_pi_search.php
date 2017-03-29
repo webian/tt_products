@@ -40,7 +40,7 @@
  */
 
 
-class tx_ttproducts_pi_search {
+class tx_ttproducts_pi_search implements t3lib_Singleton {
 	/**
 	 * The backReference to the mother cObj object set at call time
 	 *
@@ -53,7 +53,7 @@ class tx_ttproducts_pi_search {
 	 */
 	public function main($content, $conf)	{
 
-		$pibaseObj = t3lib_div::getUserObj('&tx_ttproducts_pi_search_base');
+		$pibaseObj = t3lib_div::getUserObj('tx_ttproducts_pi_search_base');
 		$pibaseObj->cObj = $this->cObj;
 
 		if ($conf['templateFile'] != '')	{

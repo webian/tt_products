@@ -12,7 +12,7 @@ $result = array (
 		'label' => 'cc_number',
 		'default_sortby' => 'ORDER BY cc_number',
 		'tstamp' => 'tstamp',
-		'prependAtCopy' => 'LLL:EXT:lang/locallang_general.php:LGL.prependAtCopy',
+		'prependAtCopy' => DIV2007_LANGUAGE_LGL . 'prependAtCopy',
 		'crdate' => 'crdate',
 		'iconfile' => PATH_TTPRODUCTS_ICON_TABLE_REL . 'sys_products_cards.gif',
 		'searchFields' => 'owner_name,cc_number',
@@ -23,12 +23,13 @@ $result = array (
 	'columns' => array (
 		'endtime' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.endtime',
+			'label' => DIV2007_LANGUAGE_LGL . 'endtime',
 			'config' => array (
 				'type' => 'input',
 				'size' => '8',
 				'max' => '20',
 				'eval' => 'date',
+                'renderType' => 'inputDateTime',
 				'default' => '0',
 				'range' => array (
 					'upper' => mktime(0, 0, 0, 12, 31, $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['endtimeYear']),
@@ -48,7 +49,7 @@ $result = array (
 		),
 		'owner_name' => array (
 			'exclude' => 0,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.name',
+			'label' => DIV2007_LANGUAGE_LGL . 'name',
 			'config' => array (
 				'type' => 'input',
 				'size' => '40',
@@ -83,7 +84,7 @@ $result = array (
 		),
 	),
 	'types' => array (
-		'1' => array('showitem' => 'hidden;;;;1-1-1, cc_number, owner_name, cc_type, cvv2, endtime')
+		'1' => array('showitem' => 'cc_number, owner_name, cc_type, cvv2, endtime')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => '')

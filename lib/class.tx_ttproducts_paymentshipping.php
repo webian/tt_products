@@ -41,7 +41,7 @@
  */
 
 
-class tx_ttproducts_paymentshipping {
+class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 	var $cObj;
 	var $conf;
 	var $config;
@@ -53,10 +53,10 @@ class tx_ttproducts_paymentshipping {
 
 	public function init ($cObj, $priceObj) {
 		$this->cObj = $cObj;
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
-		$this->basket = t3lib_div::getUserObj('&tx_ttproducts_basket');
+		$this->basket = t3lib_div::getUserObj('tx_ttproducts_basket');
 		$this->priceObj = clone $priceObj;	// new independant price object
 	}
 
@@ -91,7 +91,7 @@ class tx_ttproducts_paymentshipping {
 	function setBasketExtras (&$basketRec) {
 		global $TSFE;
 
-		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
 
 			// shipping
 		if ($this->conf['shipping.']) {
@@ -191,11 +191,11 @@ class tx_ttproducts_paymentshipping {
 	 */
 	function getSubpartArrays ($markerArray, &$subpartArray, &$wrappedSubpartArray, $framework)	{
 
-		$markerObj = t3lib_div::getUserObj('&tx_ttproducts_marker');
+		$markerObj = t3lib_div::getUserObj('tx_ttproducts_marker');
 
 		if (strpos($handleLib, 'transactor') !== FALSE && t3lib_extMgm::isLoaded($handleLib)) {
 
-			$langObj = t3lib_div::getUserObj('&tx_ttproducts_language');
+			$langObj = t3lib_div::getUserObj('tx_ttproducts_language');
 				// Payment Transactor
 			tx_transactor_api::init($langObj, '', $conf);
 
@@ -317,7 +317,8 @@ class tx_ttproducts_paymentshipping {
 		$bUseXHTML = $TSFE->config['config']['xhtmlDoctype'] != '';
 		$selectedText = ($bUseXHTML ? 'selected="selected"' : 'selected');
 
-		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
+        $imageObj = t3lib_div::getUserObj('tx_ttproducts_field_image_view');
 		$active = $this->basket->basketExtra[$pskey];
 		$activeArray = is_array($active) ? $active : array($active);
 		$confArr = $this->cleanConfArr($this->conf[$pskey.'.']);
@@ -356,7 +357,7 @@ class tx_ttproducts_paymentshipping {
 							if (is_object($itemTable))	{
 								$markerFieldArray = array();
 								$parentArray = array();
-								$markerObj = t3lib_div::getUserObj('&tx_ttproducts_marker');
+								$markerObj = t3lib_div::getUserObj('tx_ttproducts_marker');
 								$fieldsArray = $markerObj->getMarkerFields(
 									$item['title'],
 									$itemTable->getTableObj()->tableFieldArray,
@@ -371,7 +372,7 @@ class tx_ttproducts_paymentshipping {
 								if (isset($addItems) && is_array($addItems))	{
 									foreach ($addItems as $k1 => $row)	{
 										foreach ($row as $field => $v)	{
-											$addItems[$k1][$field] = $TSFE->csConv($v, $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['static_info_tables']['charset']);
+											$addItems[$k1][$field] = tx_div2007_core::csConv($v, $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['static_info_tables']['charset']);
 										}
 									}
 								}
@@ -392,7 +393,7 @@ class tx_ttproducts_paymentshipping {
 									$markerArray = array();
 									$itemTableView->getRowMarkerArray($row, $markerArray, $fieldsArray);
 									$title = $this->cObj->substituteMarkerArrayCached($t['title'], $markerArray);
-									$title = htmlentities($title,ENT_QUOTES,$TSFE->renderCharset);
+									$title = htmlentities($title, ENT_QUOTES, 'UTF-8');
 									$value = $key . '-' . $row['uid'];
 									if ($value == implode('-',$activeArray))	{
 										$actTitle = $item['title'];
@@ -410,10 +411,17 @@ class tx_ttproducts_paymentshipping {
 								$markerArray = array();
 								$imageCode = '';
 								if ($image != '') {
-									$imageCode = $this->cObj->IMAGE($image);
-									if ($theCode == 'EMAIL') {
-										tx_div2007_alpha5::fixImageCodeAbsRefPrefix($imageCode);
-									}
+                                    $imageCode =
+                                        $imageObj->getImageCode(
+                                            $this->cOb,
+                                            $image,
+                                            $theCode
+                                        ); // neu
+
+// 									$imageCode = $this->cObj->IMAGE($image);
+// 									if ($theCode == 'EMAIL') {
+// 									    tx_div2007_alpha5::fixImageCodeAbsRefPrefix($imageCode);
+// 									}
 								}
 
 								$this->getModelMarkerArray(
@@ -433,7 +441,7 @@ class tx_ttproducts_paymentshipping {
 									$markerArray = array();
 									$itemTableView->getRowMarkerArray ($row, $markerArray, $fieldsArray);
 									$title = $this->cObj->substituteMarkerArrayCached($t['title'], $markerArray);
-									$title = htmlentities($title,ENT_QUOTES,$TSFE->renderCharset);
+									$title = htmlentities($title, ENT_QUOTES, 'UTF-8');
 									$value = $key . '-' . $row['uid'];
 									if ($value == implode('-', $activeArray))	{
 										$actTitle = $item['title'];
@@ -451,7 +459,7 @@ class tx_ttproducts_paymentshipping {
 		}
 
 		if (strstr($actTitle, '###'))	{
-			$markerObj = t3lib_div::getUserObj('&tx_ttproducts_marker');
+			$markerObj = t3lib_div::getUserObj('tx_ttproducts_marker');
 			$markerArray = array();
 			$viewTagArray = array();
 			$parentArray = array();
@@ -871,7 +879,7 @@ class tx_ttproducts_paymentshipping {
 	public function getHandleLib ($request)	{ // getGatewayRequestExt
 
 		$rc = FALSE;
-		$basketObj = t3lib_div::getUserObj('&tx_ttproducts_basket');
+		$basketObj = t3lib_div::getUserObj('tx_ttproducts_basket');
 		$payConf = $basketObj->basketExtra['payment.'];
 
 		if (is_array($payConf))	{

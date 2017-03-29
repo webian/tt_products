@@ -57,7 +57,7 @@ class tx_ttproducts_card_view extends tx_ttproducts_table_base_view {
 		global $TCA, $TSFE;
 
 		$modelObj = $this->getModelObj();
-		$langObj = t3lib_div::getUserObj('&tx_ttproducts_language');
+		$langObj = t3lib_div::getUserObj('tx_ttproducts_language');
 		$ccNumberArray = array();
 		$ccTypeTextSelected = '';
 		$tablename = $modelObj->getTablename();
@@ -84,7 +84,7 @@ class tx_ttproducts_card_view extends tx_ttproducts_table_base_view {
 			$ccOwnerName = '';
 		}
 
-		$markerArray['###PERSON_CARDS_OWNER_NAME###'] = htmlentities($ccOwnerName,ENT_QUOTES,$TSFE->renderCharset);
+		$markerArray['###PERSON_CARDS_OWNER_NAME###'] = htmlentities($ccOwnerName, ENT_QUOTES, 'UTF-8');
 		$markerArray['###PERSON_CARDS_CC_TYPE###'] = $ccTypeText;
 		$markerArray['###PERSON_CARDS_CC_TYPE_SELECTED###'] = $modelObj->ccArray['cc_type'];
 		if (isset($modelObj->ccArray['cc_type']))	{ //

@@ -18,7 +18,7 @@ $result = array (
 		'enablecolumns' => array (
 			'disabled' => 'hidden',
 		),
-		'prependAtCopy' => 'LLL:EXT:lang/locallang_general.php:LGL.prependAtCopy',
+		'prependAtCopy' => DIV2007_LANGUAGE_LGL . 'prependAtCopy',
 		'crdate' => 'crdate',
 		'mainpalette' => 1,
 		'iconfile' => PATH_TTPRODUCTS_ICON_TABLE_REL . 'sys_products_orders.gif',
@@ -31,7 +31,7 @@ $result = array (
 	'columns' => array (
 		'hidden' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.hidden',
+			'label' => DIV2007_LANGUAGE_LGL . 'hidden',
 			'config' => array (
 				'type' => 'check',
 				'default' => '0'
@@ -45,6 +45,7 @@ $result = array (
 				'size' => '8',
 				'max' => '20',
 				'eval' => 'date',
+                'renderType' => 'inputDateTime',
 				'default' => '0'
 			)
 		),
@@ -56,26 +57,27 @@ $result = array (
 				'size' => '8',
 				'max' => '20',
 				'eval' => 'date',
+                'renderType' => 'inputDateTime',
 				'default' => '0'
 			)
 		),
 		'sys_language_uid' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.language',
+			'label' => DIV2007_LANGUAGE_LGL . 'language',
 			'config' => array (
 				'type' => 'select',
 				'renderType' => 'selectSingle',
 				'foreign_table' => 'sys_language',
 				'foreign_table_where' => 'ORDER BY sys_language.title',
 				'items' => array(
-					array('LLL:EXT:lang/locallang_general.php:LGL.allLanguages', -1),
-					array('LLL:EXT:lang/locallang_general.php:LGL.default_value', 0)
+					array(DIV2007_LANGUAGE_LGL . 'allLanguages', -1),
+					array(DIV2007_LANGUAGE_LGL . 'default_value', 0)
 				)
 			)
 		),
 		'name' => array (
 			'exclude' => 0,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.name',
+			'label' => DIV2007_LANGUAGE_LGL . 'name',
 			'config' => array (
 				'type' => 'input',
 				'size' => '40',
@@ -105,7 +107,7 @@ $result = array (
 		),
 		'company' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.company',
+			'label' => DIV2007_LANGUAGE_LGL . 'company',
 			'config' => array (
 				'type' => 'input',
 				'size' => '40',
@@ -140,7 +142,7 @@ $result = array (
 		),
 		'address' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.address',
+			'label' => DIV2007_LANGUAGE_LGL . 'address',
 			'config' => array (
 				'type' => 'input',
 				'size' => '50',
@@ -149,7 +151,7 @@ $result = array (
 		),
 		'zip' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.zip',
+			'label' => DIV2007_LANGUAGE_LGL . 'zip',
 			'config' => array (
 				'type' => 'input',
 				'size' => '10',
@@ -159,7 +161,7 @@ $result = array (
 		),
 		'city' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.city',
+			'label' => DIV2007_LANGUAGE_LGL . 'city',
 			'config' => array (
 				'type' => 'input',
 				'size' => '40',
@@ -169,7 +171,7 @@ $result = array (
 		),
 		'country' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.country',
+			'label' => DIV2007_LANGUAGE_LGL . 'country',
 			'config' => array (
 				'type' => 'input',
 				'size' => '40',
@@ -179,7 +181,7 @@ $result = array (
 		),
 		'telephone' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.phone',
+			'label' => DIV2007_LANGUAGE_LGL . 'phone',
 			'config' => array (
 				'type' => 'input',
 				'size' => '20',
@@ -188,7 +190,7 @@ $result = array (
 		),
 		'email' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.email',
+			'label' => DIV2007_LANGUAGE_LGL . 'email',
 			'config' => array (
 				'type' => 'input',
 				'size' => '20',
@@ -197,7 +199,7 @@ $result = array (
 		),
 		'fax' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.fax',
+			'label' => DIV2007_LANGUAGE_LGL . 'fax',
 			'config' => array (
 				'type' => 'input',
 				'size' => '4',
@@ -466,7 +468,7 @@ $result = array (
 		),
 		'note' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.note',
+			'label' => DIV2007_LANGUAGE_LGL . 'note',
 			'config' => array (
 				'type' => 'text',
 				'cols' => '48',
@@ -546,6 +548,7 @@ $result = array (
 				'size' => '8',
 				'max' => '20',
 				'eval' => 'date',
+                'renderType' => 'inputDateTime',
 				'default' => '0'
 			)
 		),
@@ -557,6 +560,7 @@ $result = array (
 				'size' => '8',
 				'max' => '20',
 				'eval' => 'date',
+                'renderType' => 'inputDateTime',
 				'default' => '0'
 			)
 		),
@@ -568,6 +572,7 @@ $result = array (
 				'size' => '8',
 				'max' => '20',
 				'eval' => 'date',
+                'renderType' => 'inputDateTime',
 				'default' => '0'
 			)
 		),
@@ -597,8 +602,15 @@ $result = array (
 	'types' => array (
 		'1' =>
 			array(
-				'showitem' => 'hidden;;;;1-1-1, name;;3;;3-3-3, sys_language_uid,first_name,last_name,company,vat_id,salutation,address,zip,city,country,telephone,email,payment,shipping,amount,tax_mode,pay_mode,email_notify,tracking_code,status,fax,business_partner,organisation_form,agb,feusers_uid,creditpoints,creditpoints_spended,creditpoints_saved,creditpoints_gifts,desired_date,desired_time,client_ip,note,giftservice,foundby,giftcode,cc_uid,ac_uid,date_of_birth,date_of_payment,date_of_delivery,bill_no,radio1,' .
-				'--div--;LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:sys_products_orders.orderHtmlDiv,orderHtml;;3;;3-3-3,'
+                'columnsOverrides' => array(
+                        'note' => array(
+                            'config' => array(
+                                'enableRichtext' => '1'
+                            )
+                        )
+                    ),
+				'showitem' => 'hidden,--palette--;;1, name, sys_language_uid,first_name,last_name,company,vat_id,salutation,address,zip,city,country,telephone,email,payment,shipping,amount,tax_mode,pay_mode,email_notify,tracking_code,status,fax,business_partner,organisation_form,agb,feusers_uid,creditpoints,creditpoints_spended,creditpoints_saved,creditpoints_gifts,desired_date,desired_time,client_ip,note,giftservice,foundby,giftcode,cc_uid,ac_uid,date_of_birth,date_of_payment,date_of_delivery,bill_no,radio1,' .
+				'--div--;LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:sys_products_orders.orderHtmlDiv,orderHtml,'
 			)
 	),
 	'palettes' => array (
@@ -606,6 +618,15 @@ $result = array (
 	)
 );
 
+if (
+    version_compare(TYPO3_version, '8.5.0', '<')
+) {
+    $result['types']['1']['showitem'] =
+        preg_replace(
+            '/(^|,)\s*note\s*(,|$)/', '$1 note;;;richtext[]:rte_transform[mode=ts_css|imgpath=uploads/tx_ttproducts/rte/] $2',
+            $result['types']['1']['showitem']
+        );
+}
 
 
 if (!$GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['sepa']) {

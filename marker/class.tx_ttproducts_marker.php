@@ -38,10 +38,8 @@
  */
 
 
-// require_once (PATH_BE_ttproducts.'model/class.tx_ttproducts_language.php');
 
-
-class tx_ttproducts_marker {
+class tx_ttproducts_marker implements t3lib_Singleton {
 	public $cObj;
 	public $conf;
 	public $config;
@@ -62,7 +60,7 @@ class tx_ttproducts_marker {
 	 */
 	public function init ($cObj, $piVars)	{
 		$this->cObj = $cObj;
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
 		$this->markerArray = array('CATEGORY', 'PRODUCT', 'ARTICLE');

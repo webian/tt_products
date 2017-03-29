@@ -36,10 +36,9 @@
  *
  */
 
-// require_once (PATH_BE_ttproducts.'model/interface.tx_ttproducts_variant_int.php');
 
 
-class tx_ttproducts_variant_dummy implements tx_ttproducts_variant_int {
+class tx_ttproducts_variant_dummy implements tx_ttproducts_variant_int, t3lib_Singleton {
 	private $selectableArray = array();
 	public $conf;	// reduced local conf
 

@@ -188,6 +188,7 @@ class tx_ttproducts_field_datafield_view extends tx_ttproducts_field_base_view {
 			$markerArray,
 			$marker,
 			$tagArray,
+			$theCode,
 			$imageConf,
 			$dirname,
 			$value
@@ -197,6 +198,7 @@ class tx_ttproducts_field_datafield_view extends tx_ttproducts_field_base_view {
 			$markerArray,
 			$marker1,
 			$tagArray,
+            $theCode,
 			'datasheetIcon',
 			$value
 		);
@@ -209,12 +211,20 @@ class tx_ttproducts_field_datafield_view extends tx_ttproducts_field_base_view {
 		&$markerArray,
 		$marker,
 		$tagArray,
+        $theCode, // neu
 		$imageConf,
 		$dirname,
 		$dataFile
 	) {
 		$imageConf['file'] = $dirname . '/' . $dataFile;
-		$iconImgCode = $this->cObj->IMAGE($imageConf);
+// 		$iconImgCode = $this->cObj->IMAGE($imageConf);
+        $imageObj = t3lib_div::getUserObj('tx_ttproducts_field_image_view');
+        $iconImgCode =
+            $imageObj->getImageCode(
+                $this->cObj,
+                $imageConf,
+                $theCode
+            ); // neu
 
 		if (isset($tagArray[$marker])) {
 			$markerArray['###' . $marker . '###'] = $iconImgCode; // new marker now
@@ -230,6 +240,7 @@ class tx_ttproducts_field_datafield_view extends tx_ttproducts_field_base_view {
 		&$markerArray,
 		$marker,
 		$tagArray,
+        $theCode, // neu
 		$imageRenderObj,
 		$filename
 	) {
@@ -241,6 +252,7 @@ class tx_ttproducts_field_datafield_view extends tx_ttproducts_field_base_view {
 
 		if (isset($imageRenderObj)) {
 
+            $imageObj = t3lib_div::getUserObj('tx_ttproducts_field_image_view');
 			$imageConf = $this->conf[$imageRenderObj . '.'];
 
 			if (isset($tagArray[$marker]) && isset($this->conf['datasheetIcon.']))	{
@@ -264,7 +276,13 @@ class tx_ttproducts_field_datafield_view extends tx_ttproducts_field_base_view {
 
 				if ($imageFilename != '') {
 					$imageConf['file'] = $imageFilename;
-					$iconImgCode = $this->cObj->IMAGE($imageConf);
+                    $iconImgCode =
+                        $imageObj->getImageCode(
+                            $this->cObj,
+                            $imageConf,
+                            $theCode
+                        ); // neu
+// 					$iconImgCode = $this->cObj->IMAGE($imageConf);
 
 					$markerArray['###' . $marker . '###'] = $iconImgCode;
 				} else {
@@ -313,6 +331,7 @@ class tx_ttproducts_field_datafield_view extends tx_ttproducts_field_base_view {
 			$markerArray,
 			$marker1,
 			$tagArray,
+            $theCode,
 			$imageRenderObj,
 			''
 		);
@@ -325,6 +344,7 @@ class tx_ttproducts_field_datafield_view extends tx_ttproducts_field_base_view {
 					$markerArray,
 					$marker,
 					$tagArray,
+					$theCode,
 					$imageConf,
 					$dirname,
 					$dataFile

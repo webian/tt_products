@@ -52,7 +52,7 @@ class tx_ttproducts_country extends tx_ttproducts_table_base {
 	function init ($cObj, $functablename)	{
 		parent::init($cObj, $functablename);
 		$tablename = $this->getTablename();
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
 		$this->tableconf = $cnf->getTableConf('static_countries');
 		$this->getTableObj()->setDefaultFieldArray(array('uid' => 'uid', 'pid' => 'pid'));
 		$this->getTableObj()->setTCAFieldArray('static_countries');

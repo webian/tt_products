@@ -15,7 +15,7 @@ $result = array (
 		'enablecolumns' => array (
 			'disabled' => 'hidden'
 		),
-		'prependAtCopy' => 'LLL:EXT:lang/locallang_general.php:LGL.prependAtCopy',
+		'prependAtCopy' => DIV2007_LANGUAGE_LGL . 'prependAtCopy',
 		'crdate' => 'crdate',
 		'iconfile' => PATH_TTPRODUCTS_ICON_TABLE_REL . 'tt_products_cat.gif',
 		'hideTable' => TRUE,
@@ -26,7 +26,7 @@ $result = array (
 	'columns' => array (
 		'hidden' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.hidden',
+			'label' => DIV2007_LANGUAGE_LGL . 'hidden',
 			'config' => array (
 				'type' => 'check'
 			)
@@ -61,7 +61,7 @@ $result = array (
 		),
 	),
 	'types' => array(
-		'0' => array('showitem' => 'hidden;;1;;1-1-1, product_uid, graduated_price_uid')
+		'0' => array('showitem' => 'hidden,--palette--;;1, product_uid, graduated_price_uid')
 	)
 );
 

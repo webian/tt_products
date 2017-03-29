@@ -37,8 +37,6 @@
  *
  */
 
-// require_once (PATH_BE_ttproducts.'model/class.tx_ttproducts_article_base.php');
-
 
 class tx_ttproducts_voucher extends tx_ttproducts_table_base {
 	var $amount;
@@ -91,7 +89,7 @@ class tx_ttproducts_voucher extends tx_ttproducts_table_base {
 		$amount = $this->getAmount();
 
 		if ($amountType == 1)	{
-			$basketObj = t3lib_div::getUserObj('&tx_ttproducts_basket');
+			$basketObj = t3lib_div::getUserObj('tx_ttproducts_basket');
 			$calculatedArray = $basketObj->getCalculatedArray();
 			$amount = $calculatedArray['priceTax']['goodstotal'] * ($amount / 100);
 		}
@@ -262,7 +260,7 @@ class tx_ttproducts_voucher extends tx_ttproducts_table_base {
 			if ($uid_voucher) {
 				// first check if not inserted own vouchercode
 				if ($TSFE->fe_user->user['uid'] != $uid_voucher) {
-					$basket = t3lib_div::getUserObj('&tx_ttproducts_basket');
+					$basket = t3lib_div::getUserObj('tx_ttproducts_basket');
 					$basket->calculatedArray['priceTax']['voucher'] = $this->conf['voucher.']['price'];
 				}
 			}

@@ -37,10 +37,8 @@
  */
 
 
-// require_once (PATH_BE_ttproducts.'model/field/interface.tx_ttproducts_field_int.php');
 
-
-abstract class tx_ttproducts_field_base implements tx_ttproducts_field_int {
+abstract class tx_ttproducts_field_base implements tx_ttproducts_field_int, t3lib_Singleton {
 	private $bHasBeenInitialised = FALSE;
 	var $cObj;
 	var $conf;		// original configuration
@@ -49,7 +47,7 @@ abstract class tx_ttproducts_field_base implements tx_ttproducts_field_int {
 
 	function init ($cObj)	{
 		$this->cObj = $cObj;
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
 

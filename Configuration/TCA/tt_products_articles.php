@@ -28,12 +28,11 @@ $result = array (
 			'fe_group' => 'fe_group',
 		),
 		'thumbnail' => 'image',
-		'prependAtCopy' => 'LLL:EXT:lang/locallang_general.php:LGL.prependAtCopy',
+		'prependAtCopy' => DIV2007_LANGUAGE_LGL . 'prependAtCopy',
 		'crdate' => 'crdate',
 		'cruser_id' => 'cruser_id',
 		'iconfile' => PATH_TTPRODUCTS_ICON_TABLE_REL . 'tt_products_articles.gif',
 		'dividers2tabs' => '1',
-		'transForeignTable' => 'tt_products_articles_language',
 		'searchFields' => 'title,subtitle,itemnumber,note,note2',
 	),
 	'interface' => array (
@@ -48,6 +47,7 @@ $result = array (
 				'size' => '8',
 				'max' => '20',
 				'eval' => 'date',
+                'renderType' => 'inputDateTime',
 				'default' => '0'
 			)
 		),
@@ -59,6 +59,7 @@ $result = array (
 				'size' => '8',
 				'max' => '20',
 				'eval' => 'date',
+                'renderType' => 'inputDateTime',
 				'default' => '0'
 			)
 		),
@@ -69,7 +70,7 @@ $result = array (
 		),
 		'hidden' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.hidden',
+			'label' => DIV2007_LANGUAGE_LGL . 'hidden',
 			'config' => array (
 				'type' => 'check',
 				'default' => '0'
@@ -77,23 +78,25 @@ $result = array (
 		),
 		'starttime' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.starttime',
+			'label' => DIV2007_LANGUAGE_LGL . 'starttime',
 			'config' => array (
 				'type' => 'input',
 				'size' => '8',
 				'max' => '20',
 				'eval' => 'date',
+                'renderType' => 'inputDateTime',
 				'default' => '0'
 			)
 		),
 		'endtime' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.endtime',
+			'label' => DIV2007_LANGUAGE_LGL . 'endtime',
 			'config' => array (
 				'type' => 'input',
 				'size' => '8',
 				'max' => '20',
 				'eval' => 'date',
+                'renderType' => 'inputDateTime',
 				'default' => '0',
 				'range' => array (
 					'upper' => mktime(0, 0, 0, 12, 31, $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['endtimeYear']),
@@ -103,22 +106,22 @@ $result = array (
 		),
 		'fe_group' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.fe_group',
+			'label' => DIV2007_LANGUAGE_LGL . 'fe_group',
 			'config' => array (
 				'type' => 'select',
 				'renderType' => 'selectSingle',
 				'items' => array (
 					array('', 0),
-					array('LLL:EXT:lang/locallang_general.php:LGL.hide_at_login', -1),
-					array('LLL:EXT:lang/locallang_general.php:LGL.any_login', -2),
-					array('LLL:EXT:lang/locallang_general.php:LGL.usergroups', '--div--')
+					array(DIV2007_LANGUAGE_LGL . 'hide_at_login', -1),
+					array(DIV2007_LANGUAGE_LGL . 'any_login', -2),
+					array(DIV2007_LANGUAGE_LGL . 'usergroups', '--div--')
 				),
 				'foreign_table' => 'fe_groups'
 			)
 		),
 		'title' => array (
 			'exclude' => 0,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.title',
+			'label' => DIV2007_LANGUAGE_LGL . 'title',
 			'config' => array (
 				'type' => 'input',
 				'size' => '40',
@@ -372,14 +375,13 @@ $result = array (
 		),
 		'image' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.image',
+			'label' => DIV2007_LANGUAGE_LGL . 'image',
 			'config' => array (
 				'type' => 'group',
 				'internal_type' => 'file',
 				'allowed' => $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'],
 				'max_size' => $GLOBALS['TYPO3_CONF_VARS']['BE']['maxFileSize'],
 				'uploadfolder' => $imageFolder,
-				'show_thumbs' => '1',
 				'size' => '3',
 				'maxitems' => '10',
 				'minitems' => '0',
@@ -389,7 +391,23 @@ $result = array (
 		),
 	),
 	'types' => array (
-		'1' => array('showitem' => 'hidden;;1, title;;3;;1-1-1, itemnumber, inStock;;;;1-1-1, basketminquantity, price;;2;;, weight, color, color2, color3, size, size2, size3, description, gradings, material, quality, note;;;richtext[]:rte_transform[mode=ts_css|imgpath=uploads/tx_ttproducts/rte/],note2;;;richtext[]:rte_transform[mode=ts_css|imgpath=uploads/tx_ttproducts/rte/],image;;;;3-3-3')
+		'1' =>
+            array(
+                'columnsOverrides' => array(
+                    'note' => array(
+                        'config' => array(
+                            'enableRichtext' => '1'
+                        )
+                    ),
+                    'note2' => array(
+                        'config' => array(
+                            'enableRichtext' => '1'
+                        )
+                    )
+                ),
+
+                'showitem' => 'hidden,--palette--;;1, title,--palette--;;3, itemnumber, inStock, basketminquantity, price,--palette--;;2, weight, color, color2, color3, size, size2, size3, description, gradings, material, quality, note,note2,image'
+            )
 	),
 	'palettes' => array (
 		'1' => array('showitem' => 'starttime, endtime, fe_group'),
@@ -397,6 +415,23 @@ $result = array (
 		'3' => array('showitem' => 'subtitle'),
 	)
 );
+
+
+if (
+    version_compare(TYPO3_version, '8.5.0', '<')
+) {
+    $result['types']['1']['showitem'] =
+        preg_replace(
+            '/(^|,)\s*note\s*(,|$)/', '$1 note;;;richtext[]:rte_transform[mode=ts_css|imgpath=uploads/tx_ttproducts/rte/] $2',
+            $result['types']['1']['showitem']
+        );
+
+    $result['types']['1']['showitem'] =
+        preg_replace(
+            '/(^|,)\s*note2\s*(,|$)/', '$1 note2;;;richtext[]:rte_transform[mode=ts_css|imgpath=uploads/tx_ttproducts/rte/] $2',
+            $result['types']['1']['showitem']
+        );
+}
 
 
 switch ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['articleMode']) {
@@ -416,7 +451,7 @@ switch ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['articleMode']) 
 			)
 		);
 
-		$result['types']['1'] = str_replace('title;', 'uid_product;;;;1-1-1,title;', $result['types']['1']);
+		$result['types']['1'] = str_replace('title;', 'uid_product,title;', $result['types']['1']);
 
 		break;
 }

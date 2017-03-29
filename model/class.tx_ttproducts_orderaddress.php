@@ -39,9 +39,6 @@
 
 
 
-// require_once (PATH_BE_table.'lib/class.tx_table_db.php');
-
-
 class tx_ttproducts_orderaddress extends tx_ttproducts_table_base {
 	var $dataArray; // array of read in frontend users
 	var $table;		 // object of the type tx_table_db
@@ -60,7 +57,7 @@ class tx_ttproducts_orderaddress extends tx_ttproducts_table_base {
 		global $TYPO3_DB,$TSFE,$TCA;
 
 		parent::init($cObj, $functablename);
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
 
 		$this->tableconf = $cnf->getTableConf($functablename);
 		$tablename = $this->getTablename ();
@@ -138,7 +135,7 @@ class tx_ttproducts_orderaddress extends tx_ttproducts_table_base {
 
 		if (isset($this->conf['conf.'][$funcTablename.'.']['ALL.']['fe_users.']['date_of_birth.']['period.']['y']))	{
 			$year = $this->conf['conf.'][$funcTablename.'.']['ALL.']['fe_users.']['date_of_birth.']['period.']['y'];
-			$infoObj = t3lib_div::getUserObj('&tx_ttproducts_info_view');
+			$infoObj = t3lib_div::getUserObj('tx_ttproducts_info_view');
 
 			if ($infoObj->infoArray['billing']['date_of_birth'])	{
 				$timeTemp = $infoObj->infoArray['billing']['date_of_birth'];

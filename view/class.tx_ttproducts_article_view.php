@@ -46,7 +46,7 @@ class tx_ttproducts_article_view extends tx_ttproducts_article_base_view {
 
 	function init($langObj, $modelObj)	{
 
-		$this->variant = t3lib_div::getUserObj('&tx_ttproducts_variant_dummy_view');
+		$this->variant = t3lib_div::getUserObj('tx_ttproducts_variant_dummy_view');
 		parent::init($langObj, $modelObj);
 	}
 }

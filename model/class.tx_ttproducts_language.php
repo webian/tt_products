@@ -39,7 +39,7 @@
 
 
 
-class tx_ttproducts_language extends tx_div2007_alpha_language_base {
+class tx_ttproducts_language extends tx_div2007_alpha_language_base implements t3lib_Singleton {
 	public function init1 ($pObj, $cObj, &$conf, $scriptRelPath) {
 		parent::init(
 			$cObj,

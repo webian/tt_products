@@ -37,7 +37,7 @@
  */
 
 
-class tx_ttproducts_basketitem_view {
+class tx_ttproducts_basketitem_view implements t3lib_Singleton {
 	private $conf;
 	private $config;
 	var $basketExt; 	// basket
@@ -55,7 +55,7 @@ class tx_ttproducts_basketitem_view {
 	 */
 	function init ($pibaseClass, &$basketExt, $itemObj)	{
 		$this->pibaseClass = $pibaseClass;
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
 		$this->basketExt = &$basketExt;
@@ -67,7 +67,7 @@ class tx_ttproducts_basketitem_view {
 		$uid,
 		$callFunctableArray
 	)	{
-		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
 
 		$funcQuantityMarker = '';
 		foreach ($callFunctableArray as $callFunctablename)	{
@@ -106,14 +106,15 @@ class tx_ttproducts_basketitem_view {
 	)	{
 		global $TCA, $TSFE;
 
-		$pibaseObj = t3lib_div::getUserObj('&'.$this->pibaseClass);
-		$basketObj = t3lib_div::getUserObj('&tx_ttproducts_basket');
-		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
-		$langObj = t3lib_div::getUserObj('&tx_ttproducts_language');
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$pibaseObj = t3lib_div::getUserObj($this->pibaseClass);
+		$basketObj = t3lib_div::getUserObj('tx_ttproducts_basket');
+		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
+		$langObj = t3lib_div::getUserObj('tx_ttproducts_language');
+		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
 		$viewTable = $tablesObj->get($functablename);
 		$bUseXHTML = $TSFE->config['config']['xhtmlDoctype'] != '';
 		$fieldArray = $viewTable->variant->getFieldArray();
+        $imageObj = t3lib_div::getUserObj('tx_ttproducts_field_image_view');
 
 		$row = &$item['rec'];
 		$uid = $row['uid'];
@@ -239,7 +240,12 @@ class tx_ttproducts_basketitem_view {
 
 											if ($imageFile != '')	{
 												$imageConf['file'] = $imagePath . $imageFile;
-												$tmpImgCode = $pibaseObj->cObj->IMAGE($imageConf);
+                                                $tmpImgCode =
+                                                    $imageObj->getImageCode(
+                                                        $pibaseObj->cObj,
+                                                        $imageConf,
+                                                        $theCode
+                                                    );
 											}
 										}
 									}

@@ -39,7 +39,7 @@
 
 
 
-class tx_ttproducts_billdelivery {
+class tx_ttproducts_billdelivery implements t3lib_Singleton {
 	public $cObj;
 	public $conf;		  // original configuration
 	public $config;		// updated configuration
@@ -59,7 +59,7 @@ class tx_ttproducts_billdelivery {
 		global $TSFE;
 
 		$this->cObj = $cObj;
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
 	}
@@ -109,13 +109,13 @@ class tx_ttproducts_billdelivery {
 		*/
 		global $TSFE;
 
-		$priceObj = t3lib_div::getUserObj('&tx_ttproducts_field_price');
-		$basketObj = t3lib_div::getUserObj('&tx_ttproducts_basket');
-		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
-		$priceViewObj = t3lib_div::getUserObj('&tx_ttproducts_field_price_view');
-		$subpartmarkerObj = t3lib_div::getUserObj('&tx_ttproducts_subpartmarker');
-		$langObj = t3lib_div::getUserObj('&tx_ttproducts_language');
-		$markerObj = t3lib_div::getUserObj('&tx_ttproducts_marker');
+		$priceObj = t3lib_div::getUserObj('tx_ttproducts_field_price');
+		$basketObj = t3lib_div::getUserObj('tx_ttproducts_basket');
+		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
+		$priceViewObj = t3lib_div::getUserObj('tx_ttproducts_field_price_view');
+		$subpartmarkerObj = t3lib_div::getUserObj('tx_ttproducts_subpartmarker');
+		$langObj = t3lib_div::getUserObj('tx_ttproducts_language');
+		$markerObj = t3lib_div::getUserObj('tx_ttproducts_marker');
 		$globalMarkerArray = $markerObj->getGlobalMarkerArray();
 
 			// initialize order data.
@@ -175,7 +175,7 @@ class tx_ttproducts_billdelivery {
 		$articleTable = $articleViewObj->getModelObj();
 		$viewTagArray = array();
 		$parentArray = array();
-		$markerObj = t3lib_div::getUserObj('&tx_ttproducts_marker');
+		$markerObj = t3lib_div::getUserObj('tx_ttproducts_marker');
 		$markerFieldArray = array('BULKILY_WARNING' => 'bulkily',
 			'PRODUCT_SPECIAL_PREP' => 'special_preparation',
 			'PRODUCT_ADDITIONAL_SINGLE' => 'additional',

@@ -38,7 +38,7 @@
  */
 
 
-abstract class tx_ttproducts_catlist_view_base {
+abstract class tx_ttproducts_catlist_view_base implements t3lib_Singleton {
 	var $pibase; // reference to object of pibase
 	public $pibaseClass;
 	public $cObj;
@@ -61,14 +61,14 @@ abstract class tx_ttproducts_catlist_view_base {
 		$pid
 	) {
 		$this->pibaseClass = $pibaseClass;
-		$this->pibase = t3lib_div::getUserObj('&' . $pibaseClass);
+		$this->pibase = t3lib_div::getUserObj($pibaseClass);
 		$this->cObj = $this->pibase->cObj;
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
 		$this->pid = $pid;
 
-		$this->urlObj = t3lib_div::getUserObj('&tx_ttproducts_url_view');
+		$this->urlObj = t3lib_div::getUserObj('tx_ttproducts_url_view');
 		$this->pidListObj = t3lib_div::getUserObj('tx_ttproducts_pid_list');
 		$this->pidListObj->init($this->cObj);
 		$this->pidListObj->applyRecursive(99, $pid_list, TRUE);
@@ -170,7 +170,7 @@ abstract class tx_ttproducts_catlist_view_base {
 		if (is_array($this->tMarkers))	{
 			$rc = &$this->tMarkers;
 		} else {
-			$markerObj = t3lib_div::getUserObj('&tx_ttproducts_marker');
+			$markerObj = t3lib_div::getUserObj('tx_ttproducts_marker');
 			$rc = &$markerObj->getAllMarkers($t['listFrameWork']);
 			$this->setTemplateMarkers($rc);
 		}
@@ -188,7 +188,7 @@ abstract class tx_ttproducts_catlist_view_base {
 		&$templateCode,
 		$area
 	)	{
-		$markerObj = t3lib_div::getUserObj('&tx_ttproducts_marker');
+		$markerObj = t3lib_div::getUserObj('tx_ttproducts_marker');
 		$subpart = $this->subpartmarkerObj->spMarker('###'.$area.'###');
 		$t['listFrameWork'] = $this->pibase->cObj->getSubpart($templateCode,$subpart);
 
@@ -206,17 +206,17 @@ abstract class tx_ttproducts_catlist_view_base {
 
 
 	public function getBrowserMarkerArray (&$markerArray, &$t, $resCount, $limit, $maxPages, $bShowFirstLast, $bAlwaysPrev, $pagefloat, $imageArray, $imageActiveArray)	{
-		$subpartmarkerObj = t3lib_div::getUserObj('&tx_ttproducts_subpartmarker');
+		$subpartmarkerObj = t3lib_div::getUserObj('tx_ttproducts_subpartmarker');
 
 		$t['browseFrameWork'] = $this->cObj->getSubpart($t['listFrameWork'],$subpartmarkerObj->spMarker('###LINK_BROWSE###'));
 		$markerArray['###BROWSE_LINKS###']='';
 
 		if ($t['browseFrameWork'] != '')	{
 			include_once (PATH_BE_div2007.'class.tx_div2007_alpha_browse_base.php');
-			$pibaseObj = t3lib_div::getUserObj('&'.$this->pibaseClass);
+			$pibaseObj = t3lib_div::getUserObj($this->pibaseClass);
 
 			$piVars = tx_ttproducts_model_control::getPiVars();
-			$browseObj = t3lib_div::getUserObj('&tx_div2007_alpha_browse_base');
+			$browseObj = t3lib_div::getUserObj('tx_div2007_alpha_browse_base');
 			$browseObj->init_fh001 (
 				$piVars,
 				array(),
@@ -231,7 +231,7 @@ abstract class tx_ttproducts_catlist_view_base {
 				$imageArray,
 				$imageActiveArray
 			);
-			$langObj = t3lib_div::getUserObj('&tx_ttproducts_language');
+			$langObj = t3lib_div::getUserObj('tx_ttproducts_language');
 			$markerArray['###BROWSE_LINKS###'] =
 				tx_div2007_alpha5::list_browseresults_fh003(
 					$browseObj,
@@ -266,7 +266,7 @@ abstract class tx_ttproducts_catlist_view_base {
 	 ) {
 		global $TSFE, $TCA, $TYPO3_DB;
 
-		$pibaseObj = t3lib_div::getUserObj('&' . $this->pibaseClass);
+		$pibaseObj = t3lib_div::getUserObj($this->pibaseClass);
 		$rc = TRUE;
 		$mode = '';
 		$this->getFrameWork($t, $templateCode, $templateArea . $templateSuffix);
@@ -285,7 +285,7 @@ abstract class tx_ttproducts_catlist_view_base {
 
 		$bUseFilter = FALSE;
 		$ctrlArray['bUseBrowser'] = FALSE;
-		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
 
 		$functableArray = array($functablename);
 		$tableConfArray = array();
@@ -309,7 +309,7 @@ abstract class tx_ttproducts_catlist_view_base {
 		$latest = '';
 		tx_ttproducts_model_control::getSearchInfo($this->cObj, $searchVars, $functablename, $tablename, $searchboxWhere, $bUseSearchboxArray, $sqlTableArray, $sqlTableIndex, $latest);
 		$orderBy = $TYPO3_DB->stripOrderBy($tableConf['orderBy']);
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
 
 		if (!count($error_code) && $t['listFrameWork'] && is_object($categoryTable))	{
 //		###SUBCATEGORY_A_1###
@@ -498,7 +498,7 @@ abstract class tx_ttproducts_catlist_view_base {
 				$t['listFrameWork'] = $pibaseObj->cObj->substituteMarkerArray($t['listFrameWork'], $browseMarkerArray);
 			}
 		} else if (!$t['listFrameWork']) {
-			$templateObj = t3lib_div::getUserObj('&tx_ttproducts_template');
+			$templateObj = t3lib_div::getUserObj('tx_ttproducts_template');
 			$error_code[0] = 'no_subtemplate';
 			$error_code[1] = '###'.$templateArea.$templateSuffix.'###';
 			$error_code[2] = $templateObj->getTemplateFile();

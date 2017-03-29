@@ -38,7 +38,7 @@
  */
 
 
-class tx_ttproducts_cat_view {
+class tx_ttproducts_cat_view implements t3lib_Singleton {
 	var $pibase; // reference to object of pibase
 	var $conf;
 	var $config;
@@ -54,14 +54,14 @@ class tx_ttproducts_cat_view {
 	function init($pibase, $pid, $pid_list, $recursive) {
 		$this->pibase = $pibase;
 		$this->cObj = $pibase->cObj;
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
 
 		$this->pid = $pid;
 		$this->subpartmarkerObj = t3lib_div::makeInstance('tx_ttproducts_subpartmarker');
 		$this->subpartmarkerObj->init($this->cObj);
-		$this->urlObj = t3lib_div::getUserObj('&tx_ttproducts_url_view');
+		$this->urlObj = t3lib_div::getUserObj('tx_ttproducts_url_view');
 
 		$this->pidListObj = t3lib_div::getUserObj('tx_ttproducts_pid_list');
 		$this->pidListObj->init($this->cObj);
@@ -77,12 +77,12 @@ class tx_ttproducts_cat_view {
 	function &printView(&$templateCode, $functablename, $uid, $theCode, &$error_code, $templateSuffix = '') {
 		global $TSFE, $TCA, $TYPO3_DB;
 
-		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
 		$tableViewObj = $tablesObj->get($functablename, TRUE);
 		$tableObj = $tableViewObj->getModelObj();
-		$markerObj = t3lib_div::getUserObj('&tx_ttproducts_marker');
-		$javaScriptObj = t3lib_div::getUserObj('&tx_ttproducts_javascript');
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$markerObj = t3lib_div::getUserObj('tx_ttproducts_marker');
+		$javaScriptObj = t3lib_div::getUserObj('tx_ttproducts_javascript');
+		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
 
 		if ($this->config['displayCurrentRecord'])	{
 			$row = $this->cObj->data;
@@ -121,7 +121,7 @@ class tx_ttproducts_cat_view {
 			$itemFrameWork = $this->cObj->getSubpart($templateCode,$this->subpartmarkerObj->spMarker($subPartMarker));
 
 			if (!$itemFrameWork) {
-				$templateObj = t3lib_div::getUserObj('&tx_ttproducts_template');
+				$templateObj = t3lib_div::getUserObj('tx_ttproducts_template');
 				$error_code[0] = 'no_subtemplate';
 				$error_code[1] = $subPartMarker;
 				$error_code[2] = $templateObj->getTemplateFile();

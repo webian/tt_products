@@ -128,7 +128,7 @@ $temporaryColumns = array (
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('fe_users', $temporaryColumns);
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
 	'fe_users',
-	'tt_products_creditpoints;;;;1-1-1,tt_products_vouchercode;;;;1-1-1,tt_products_memoItems;;;;1-1-1,tt_products_memodam;;;;1-1-1,tt_products_discount;;;;1-1-1,tt_products_vat;;;;1-1-1,tt_products_business_partner;;;;1-1-1,tt_products_organisation_form;;;;1-1-1'
+	'tt_products_creditpoints,tt_products_vouchercode,tt_products_memoItems,tt_products_memodam,tt_products_discount,tt_products_vat,tt_products_business_partner,tt_products_organisation_form'
 );
 
 

@@ -36,7 +36,7 @@
  *
  */
 
-class tx_ttproducts_tables	{
+class tx_ttproducts_tables implements t3lib_Singleton {
 	protected $tableClassArray = array(
 		'address' => 'tx_ttproducts_address',
 		'fe_users' => 'tx_ttproducts_orderaddress',
@@ -72,7 +72,7 @@ class tx_ttproducts_tables	{
 	public function init ($langObj)	{
 
 		$this->langObj = $langObj;
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
 
 		$this->cnf = &$cnf;
 		$this->conf = &$cnf->conf;
@@ -133,7 +133,7 @@ class tx_ttproducts_tables	{
 				$classRef = 'class.'.$className;
 				$classFile = $path . $k . '/' . $classRef . '.php';
 				if (file_exists($classFile)) {
-					$classRef = $classFile . ':&' . $className;
+					$classRef = $classFile . ':' . $className;
 					$tableObj[$k] = t3lib_div::getUserObj($classRef);	// fetch and store it as persistent object
 				} else {
 					debug ($classFile, 'File not found: ' . $classFile . ' in file class.tx_ttproducts_tables.php'); // keep this
@@ -168,7 +168,7 @@ class tx_ttproducts_tables	{
 	public function &getMM ($functablename)	{
 
 		include_once (PATH_BE_ttproducts.'model/class.tx_ttproducts_mm_table.php');
-		$tableObj = t3lib_div::getUserObj('&tx_ttproducts_mm_table');
+		$tableObj = t3lib_div::getUserObj('tx_ttproducts_mm_table');
 
 		if (isset($tableObj) && is_object($tableObj))	{
 			if ($tableObj->needsInit() || $tableObj->getFuncTablename() != $functablename)	{

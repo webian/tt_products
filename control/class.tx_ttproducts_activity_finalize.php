@@ -37,10 +37,8 @@
  *
  */
 
-// require_once (PATH_BE_ttproducts.'control/class.tx_ttproducts_activity_base.php');
 
-
-class tx_ttproducts_activity_finalize extends tx_ttproducts_activity_base {
+class tx_ttproducts_activity_finalize extends tx_ttproducts_activity_base implements t3lib_Singleton {
 	var $pibase; // reference to object of pibase
 	var $conf;
 	var $alwaysInStock;
@@ -70,12 +68,12 @@ class tx_ttproducts_activity_finalize extends tx_ttproducts_activity_base {
 		global $TSFE;
 		global $TYPO3_DB;
 
-		$basketView = t3lib_div::getUserObj('&tx_ttproducts_basket_view');
-		$basketObj = t3lib_div::getUserObj('&tx_ttproducts_basket');
-		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
-		$billdeliveryObj = t3lib_div::getUserObj('&tx_ttproducts_billdelivery');
-		$markerObj = t3lib_div::getUserObj('&tx_ttproducts_marker');
-		$langObj = t3lib_div::getUserObj('&tx_ttproducts_language');
+		$basketView = t3lib_div::getUserObj('tx_ttproducts_basket_view');
+		$basketObj = t3lib_div::getUserObj('tx_ttproducts_basket');
+		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
+		$billdeliveryObj = t3lib_div::getUserObj('tx_ttproducts_billdelivery');
+		$markerObj = t3lib_div::getUserObj('tx_ttproducts_marker');
+		$langObj = t3lib_div::getUserObj('tx_ttproducts_language');
 
 		$instockTableArray='';
 		$empty = '';
@@ -294,7 +292,7 @@ class tx_ttproducts_activity_finalize extends tx_ttproducts_activity_base {
 		}
 
 		$orderObj->setData($orderUid, $orderConfirmationHTML, 1);
-		$creditpointsObj = t3lib_div::getUserObj('&tx_ttproducts_field_creditpoints');
+		$creditpointsObj = t3lib_div::getUserObj('tx_ttproducts_field_creditpoints');
 		$creditpointsObj->pay();
 
 		// any gift orders in the extended basket?

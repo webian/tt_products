@@ -62,7 +62,7 @@ class tx_ttproducts_text extends tx_ttproducts_table_base {
 	function getChildUidArray ($theCode, $uid, $tagMarkerArray, $parenttable = 'tt_products')	{
 		global $TYPO3_DB;
 
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
 		$functablename = $this->getFuncTablename();
 		$fallback = FALSE;
 		$tableConf = $cnf->getTableConf($functablename, $theCode);

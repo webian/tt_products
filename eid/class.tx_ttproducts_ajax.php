@@ -38,10 +38,8 @@
  */
 
 
-// require_once (PATH_BE_ttproducts.'control/class.tx_ttproducts_javascript.php');
 
-
-class tx_ttproducts_ajax {
+class tx_ttproducts_ajax implements t3lib_Singleton {
 	var $taxajax;	// xajax object
 	var $conf; 	// conf coming from JavaScript via Ajax
 
@@ -51,11 +49,10 @@ class tx_ttproducts_ajax {
 
 		include_once(PATH_BE_taxajax.'class.tx_taxajax.php');
 		$this->taxajax = t3lib_div::makeInstance('tx_taxajax');
-//		$charset = $TSFE->renderCharset;
 
 			// Encoding of the response to FE charset
 //		$this->taxajax->setCharEncoding($charset);
-		$this->taxajax->setCharEncoding('utf-8');
+		$this->taxajax->setCharEncoding('UTF-8');
 	}
 
 

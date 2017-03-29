@@ -56,7 +56,7 @@ class tx_ttproducts_country_view extends tx_ttproducts_table_base_view {
 
 		foreach ($fieldsArray as $k => $field)	{
 			$markerKey = strtoupper($markerTable . '_' . $field);
-			$markerArray['###'.$markerKey.'###'] = htmlentities($row[$field], ENT_QUOTES, $TSFE->renderCharset);
+			$markerArray['###'.$markerKey.'###'] = htmlentities($row[$field], ENT_QUOTES, 'UTF-8');
 		}
 	}
 }

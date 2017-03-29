@@ -76,8 +76,8 @@ class tx_ttproducts_catlist_view extends tx_ttproducts_catlist_view_base {
 		$out='';
 		$where='';
 		$bFinished = FALSE;
-		$markerObj = t3lib_div::getUserObj('&tx_ttproducts_marker');
-		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+		$markerObj = t3lib_div::getUserObj('tx_ttproducts_marker');
+		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
 		$catTableObj = $tablesObj->get($functablename);
 
 		if (count($error_code)) {
@@ -218,7 +218,7 @@ class tx_ttproducts_catlist_view extends tx_ttproducts_catlist_view_base {
 				$markerArray = $this->urlObj->addURLMarkers($TSFE->id, $markerArray, $addQueryString, FALSE);
 
 // 				require_once (PATH_BE_ttproducts.'view/class.tx_ttproducts_control_view.php');
-				$controlViewObj = t3lib_div::getUserObj('&tx_ttproducts_control_view');
+				$controlViewObj = t3lib_div::getUserObj('tx_ttproducts_control_view');
 				$controlViewObj->getMarkerArray($markerArray, $allMarkers, $this->getTableConfArray());
 			}
 			$out = $this->pibase->cObj->substituteMarkerArrayCached($t['listFrameWork'], $markerArray, $subpartArray, $wrappedSubpartArray);
@@ -254,12 +254,12 @@ class tx_ttproducts_catlist_view extends tx_ttproducts_catlist_view_base {
 		$row,
 		$theCode
 	) {
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
 		$css = 'class="w' . $iCount . '"';
 		$css = ($actCategory == $currentCat ? 'class="act"' : $css);
 
 		// $pid = $row['pid'];
-		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
 		$pageObj = $tablesObj->get('pages');
 		$categoryTableViewObj = $tablesObj->get($functablename,TRUE);
 		$categoryTable = $categoryTableViewObj->getModelObj();

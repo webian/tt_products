@@ -46,7 +46,7 @@ class tx_ttproducts_card extends tx_ttproducts_table_base {
 	var $asteriskArray = array(2 => '**', 4 => '****');
 
 	function init ($cObj, $functablename) {
-		$basketObj = t3lib_div::getUserObj('&tx_ttproducts_basket');
+		$basketObj = t3lib_div::getUserObj('tx_ttproducts_basket');
 		$formerBasket = $basketObj->recs;
 		$allowedUids = $basketObj->basketExtra['payment.']['creditcards'];
 

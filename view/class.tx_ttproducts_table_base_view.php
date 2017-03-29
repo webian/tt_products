@@ -123,13 +123,13 @@ abstract class tx_ttproducts_table_base_view	{
 		$classNameView = $className.'_view';
 		$path = $classArray['path'];
 
-		$fieldViewObj = t3lib_div::getUserObj('&'.$classNameView);	// fetch and store it as persistent object
+		$fieldViewObj = t3lib_div::getUserObj($classNameView);	// fetch and store it as persistent object
 		if (!is_object($fieldViewObj)) {
 			throw new RuntimeException('Error in tt_products: The class "' . $classNameView . '" is not found.', 50001);
 		}
 
 		if ($fieldViewObj->needsInit())	{
-			$fieldObj = t3lib_div::getUserObj('&'.$className);	// fetch and store it as persistent object
+			$fieldObj = t3lib_div::getUserObj($className);	// fetch and store it as persistent object
 			if (!is_object($fieldObj)) {
 				throw new RuntimeException('Error in tt_products: The class "' . $className . '" is not found.', 50002);
 			}
@@ -160,8 +160,8 @@ abstract class tx_ttproducts_table_base_view	{
 	)	{
 		global $TCA;
 
-		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
+		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
 		$tableconf = $cnf->getTableConf($functablename, $theCode);
 
 		if (is_array($row))	{
@@ -221,7 +221,6 @@ abstract class tx_ttproducts_table_base_view	{
 									if ($row[$field] != '' && $comparator!='')	{
 										$evalString = "return $row[$field]$comparator$fieldCondition[1];";
 										$bCondition = eval($evalString);
-										// eval("return ".$row[$field].$comparator.$fieldArray[1].";");
 									}
 								}
 								if ($bCondition == TRUE)	{
@@ -360,7 +359,7 @@ abstract class tx_ttproducts_table_base_view	{
 			$markerPrefix = ($marker != '' ? $marker . '_' : '');
 			$rowMarkerArray['###' . $markerPrefix . 'ID###'] = $mainId;
 			$rowMarkerArray['###' . $markerPrefix . 'NAME###'] = $extTableName . '-' . $row['uid'];
-			$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+			$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
 			$tableconf = $cnf->getTableConf($functablename, $theCode);
 			$tabledesc = $cnf->getTableDesc($functablename);
 			$fieldMarkerArray = array();
@@ -431,7 +430,7 @@ abstract class tx_ttproducts_table_base_view	{
 				}
 			}
 		} else {
-			$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+			$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
 			$tablename = $this->getModelObj()->getTablename();
 			$tmpMarkerArray = array();
 			$tmpMarkerArray[] = $marker;

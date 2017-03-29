@@ -39,7 +39,7 @@
 
 
 
-class tx_ttproducts_creditpoints_div {
+class tx_ttproducts_creditpoints_div implements t3lib_Singleton {
 
 	/**
 	 * Returns the number of creditpoints for the frontend user

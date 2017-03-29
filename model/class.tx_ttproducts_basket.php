@@ -41,7 +41,7 @@
  *
  */
 
-class tx_ttproducts_basket {
+class tx_ttproducts_basket implements t3lib_Singleton {
 	public $conf;
 	public $config;
 
@@ -73,7 +73,7 @@ class tx_ttproducts_basket {
 
 
 	static public function getGoodsTotalTax ($basketExtra, $itemArray) {
-		$priceObj = t3lib_div::getUserObj('&tx_ttproducts_field_price');
+		$priceObj = t3lib_div::getUserObj('tx_ttproducts_field_price');
 
 		$goodsTotalTax = 0;
 
@@ -104,12 +104,12 @@ class tx_ttproducts_basket {
 	)	{
 		global $TSFE;
 
-		$pibaseObj = t3lib_div::getUserObj('&'.$pibaseClass);
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$pibaseObj = t3lib_div::getUserObj($pibaseClass);
+		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
 		$this->recs = $formerBasket;	// Sets it internally
-		$this->itemObj = t3lib_div::getUserObj('&tx_ttproducts_basketitem');
+		$this->itemObj = t3lib_div::getUserObj('tx_ttproducts_basketitem');
 
 		if (isset($pibaseObj->piVars) && is_array($pibaseObj->piVars) && isset($pibaseObj->piVars['type']) && is_array($pibaseObj->piVars['type']))	{
 			$typeArray = $pibaseObj->piVars['type'];
@@ -124,7 +124,7 @@ class tx_ttproducts_basket {
 		}
 		$this->basket = array();
 		$this->itemArray = array();
-		$this->paymentshippingObj = t3lib_div::getUserObj('&tx_ttproducts_paymentshipping');
+		$this->paymentshippingObj = t3lib_div::getUserObj('tx_ttproducts_paymentshipping');
 		$this->pidListObj = t3lib_div::getUserObj('tx_ttproducts_pid_list');
 		$this->pidListObj->init($pibaseObj->cObj);
 		$this->pidListObj->applyRecursive(99, $pid_list, TRUE);
@@ -138,7 +138,7 @@ class tx_ttproducts_basket {
 		}
 
 		$this->setFuncTablename($funcTablename);
-		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
 		$viewTableObj = $tablesObj->get($funcTablename);
 		$tmpBasketExt = $TSFE->fe_user->getKey('ses','basketExt');
 		$this->order = $TSFE->fe_user->getKey('ses','order');
@@ -311,7 +311,7 @@ class tx_ttproducts_basket {
 	public function getRadioInputArray (
 		$row
 	)	{
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
 		$basketConf = $cnf->getBasketConf('view','input');
 		$result = FALSE;
 
@@ -344,7 +344,7 @@ class tx_ttproducts_basket {
 	public function addItem ($viewTableObj, $uid, $damUid, $item, $updateMode, $bStoreBasket, $newGiftData = '', $identGiftnumber = 0, $sameGiftData = FALSE)	{
 
 		$newGiftData = t3lib_div::_GP('ttp_gift');
-		$priceObj = t3lib_div::getUserObj('&tx_ttproducts_field_price');
+		$priceObj = t3lib_div::getUserObj('tx_ttproducts_field_price');
 		$variant = $viewTableObj->variant->getVariantFromRawRow($item);
 		$oldcount = $this->basketExt[$uid][$variant];
 
@@ -497,7 +497,7 @@ class tx_ttproducts_basket {
 		$count = 0;
 
 		if ($this->conf['basketMaxQuantity'] == 'inStock' && !$this->conf['alwaysInStock'] && !empty($uid)) {
-			$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+			$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
 			$viewTableObj = $tablesObj->get('tt_products');
 			$row = $viewTableObj->get($uid);
 			$count = tx_div2007_core::intInRange($quantity, 0, $row['inStock'], 0);
@@ -588,10 +588,10 @@ class tx_ttproducts_basket {
 		}
 
 		$funcTablename = $this->getFuncTablename();
-		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
 		$viewTableObj = $tablesObj->get($funcTablename);
 
-		$cnfObj = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnfObj = t3lib_div::getUserObj('tx_ttproducts_config');
 		$conf = &$cnfObj->conf;
 		$itemTableConf = $cnfObj->getTableConf($funcTablename, 'BASKET');
 		$orderBy = $viewTableObj->getTableObj()->transformOrderby($itemTableConf['orderBy']);
@@ -689,9 +689,9 @@ class tx_ttproducts_basket {
 		}
 		$this->itemArray = array(); // array of the items in the basket
 		$this->calculatedArray = array(); // this array is usede for all calculated things
-		$priceObj = t3lib_div::getUserObj('&tx_ttproducts_field_price');
+		$priceObj = t3lib_div::getUserObj('tx_ttproducts_field_price');
 		$maxTax = 0;
-		$taxObj = t3lib_div::getUserObj('&tx_ttproducts_field_tax');
+		$taxObj = t3lib_div::getUserObj('tx_ttproducts_field_tax');
 		$uidArray = array();
 
 		foreach ($productsArray as $k1 => $row)	{
@@ -756,7 +756,7 @@ class tx_ttproducts_basket {
 				$pricecalc->getCalculatedData($this->itemArray, $this->conf['pricecalc.'], 'calcprice', $priceReduction, '', FALSE);
 			}
 
-			$pricetablescalc = t3lib_div::getUserObj('&tx_ttproducts_pricetablescalc');
+			$pricetablescalc = t3lib_div::getUserObj('tx_ttproducts_pricetablescalc');
 			$pricetablescalc->init($pibaseObj);
 			$pricetablescalc->getCalculatedData($this->itemArray, $tmp='', 'calcprice', $priceReduction, '', TRUE);
 
@@ -963,7 +963,7 @@ class tx_ttproducts_basket {
 
 	// get gradutated prices for all products in a list view or a single product in a single view
 	public function getGraduatedPrices ($uid)	{
-		$graduatedPriceObj = t3lib_div::getUserObj('&tx_ttproducts_graduated_price');
+		$graduatedPriceObj = t3lib_div::getUserObj('tx_ttproducts_graduated_price');
 		$this->formulaArray = $graduatedPriceObj->getFormulasByProduct($uid);
 	}
 
@@ -1003,7 +1003,7 @@ class tx_ttproducts_basket {
 
 	public function getAddressArray ()	{
 		$rc = array();
-		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
 		$addressObj = $tablesObj->get('address',FALSE);
 
 		foreach ($this->itemArray as $sort => $actItemArray) {
@@ -1058,7 +1058,7 @@ class tx_ttproducts_basket {
 
 	public function getItem ($row, $fetchMode, $funcTablename='') {
 		$item = array();
-		$priceObj = t3lib_div::getUserObj('&tx_ttproducts_field_price');
+		$priceObj = t3lib_div::getUserObj('tx_ttproducts_field_price');
 		$priceRow = $row;
 
 		if (!$funcTablename)	{
@@ -1066,9 +1066,9 @@ class tx_ttproducts_basket {
 		}
 
 		if ($funcTablename == 'tt_products') {
-			$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+			$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
 			$viewTableObj = $tablesObj->get($funcTablename);
-			$cnfObj = t3lib_div::getUserObj('&tx_ttproducts_config');
+			$cnfObj = t3lib_div::getUserObj('tx_ttproducts_config');
 
 			$count = 0;
 			if ($fetchMode == 'useExt')	{
@@ -1079,6 +1079,7 @@ class tx_ttproducts_basket {
 			} else if ($fetchMode == 'firstVariant') {
 				$variant = $viewTableObj->variant->getVariantFromProductRow($row, 0);
 			}
+
 			$priceTaxArray = $priceObj->getPriceTaxArray('price', tx_ttproducts_control_basket::getRoundFormat(),$priceRow);
 			$price2TaxArray = $priceObj->getPriceTaxArray('price2', tx_ttproducts_control_basket::getRoundFormat(), $priceRow);
 			$priceTaxArray = array_merge($priceTaxArray, $price2TaxArray);
@@ -1107,39 +1108,6 @@ class tx_ttproducts_basket {
 			if (!$this->conf['quantityIsFloat'])	{
 				$count = intval($count);
 			}
-
-	// 		$priceTax = $priceObj->getResellerPrice($priceRow,1);
-	// 		$priceNoTax = $priceObj->getResellerPrice($priceRow,0);
-	// 		$price0Tax = $priceObj->getResellerPrice($priceRow,1,0);
-	// 		$price0NoTax = $priceObj->getResellerPrice($priceRow,0,0);
-	// 		$priceUnitNoTax = $priceObj->getPrice(($priceRow['unit_factor'] > 0 ? ($priceNoTax / $priceRow['unit_factor']) : 0),FALSE,$priceRow['tax'],FALSE);
-	// 		$priceUnitTax = $priceObj->getPrice($priceUnitNoTax,TRUE,$row['tax'],FALSE);
-	// 		$priceWeightNoTax = $priceObj->getPrice(($priceRow['weight'] > 0 ? ($priceNoTax / $priceRow['weight']) : 0),FALSE,$priceRow['tax'],FALSE);
-	// 		$priceWeightTax = $priceObj->getPrice($priceWeightNoTax,TRUE,$priceRow['tax'],FALSE);
-	// 		$item = array (
-	// 			'calcprice' => 0,
-	// 			'count' => $count,
-	// 			'priceTax' => $priceTax,
-	// 			'priceNoTax' => $priceNoTax,
-	// 			'priceUnitTax' => $priceUnitTax,
-	// 			'priceUnitNoTax' => $priceUnitNoTax,
-	// 			'priceWeightUnitNoTax' => $priceWeightNoTax,
-	// 			'priceWeightUnitTax' => $priceWeightTax,
-	// 			'price0Tax' => $price0Tax,
-	// 			'price0NoTax' => $price0NoTax,
-	// 			'totalTax' => 0,
-	// 			'totalNoTax' => 0,
-	// 			'tax' => $tax,
-	// 			'rec' => $row,
-	// 		);
-	//
-	//
-	// 		if ($this->conf['TAXmode'] == '2')	{
-	// 			$taxFieldArray = array('priceTax', 'priceNoTax', 'price0Tax', 'price0NoTax', 'price2Tax', 'price2NoTax');
-	// 			foreach ($taxFieldArray as $k => $field)	{
-	// 				$item[$field] = round ($item[$field], 2);
-	// 			}
-	// 		}
 
 			$item = array (
 				'count' => $count,
@@ -1173,7 +1141,7 @@ class tx_ttproducts_basket {
 
 		$pricefactor = doubleval($this->conf['creditpoints.']['priceprod']);
 
-		$creditpointsObj = t3lib_div::getUserObj('&tx_ttproducts_field_creditpoints');
+		$creditpointsObj = t3lib_div::getUserObj('tx_ttproducts_field_creditpoints');
 		$autoCreditpointsTotal = $creditpointsObj->getBasketTotal();
 		if ($autoCreditpointsTotal > 0)	{
 			$creditpoints = $autoCreditpointsTotal;
@@ -1198,7 +1166,7 @@ class tx_ttproducts_basket {
 
 	// This calculates the total for everything in the basket
 	public function addVoucherSums () {
-		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
 		$voucher = $tablesObj->get('voucher');
 		$voucherAmount = $voucher->getRebateAmount();
 

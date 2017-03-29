@@ -39,7 +39,7 @@
 
 
 
-class tx_ttproducts_pricecalc_base {
+class tx_ttproducts_pricecalc_base implements t3lib_Singleton {
 
 	function getPrice (&$conf, $offset, $num='1')	{
 		$rc = 0;

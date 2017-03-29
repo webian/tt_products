@@ -39,10 +39,7 @@
 
 
 
-// require_once (PATH_BE_ttproducts.'lib/class.tx_ttproducts_email_div.php');
-
-
-class tx_ttproducts_tracking {
+class tx_ttproducts_tracking implements t3lib_Singleton {
 	var $cObj;
 	var $conf;		  // original configuration
 	private $statusCodeArray;
@@ -58,14 +55,14 @@ class tx_ttproducts_tracking {
 		global $TSFE;
 
 		$this->cObj = $cObj;
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 
 		if ($this->conf['statusCodesSource'])	{
 
 			switch ($this->conf['statusCodesSource'])	{
 				case 'marker_locallang':
-					$markerObj = t3lib_div::getUserObj('&tx_ttproducts_marker');
+					$markerObj = t3lib_div::getUserObj('tx_ttproducts_marker');
 					$langArray = $markerObj->getLangArray();
 					if (is_array($langArray))	{
 						$statusMessage = 'tracking_status_message_';
@@ -172,10 +169,10 @@ class tx_ttproducts_tracking {
 	function getTrackingInformation ($orderRow, $templateCode, $trackingCode, $updateCode, &$orderRecord, $admin) {
 		global $TSFE, $TYPO3_DB;
 
-		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
 		$orderObj = $tablesObj->get('sys_products_orders');
-		$markerObj = t3lib_div::getUserObj('&tx_ttproducts_marker');
-		$pibaseObj = t3lib_div::getUserObj('&tx_ttproducts_pi1_base');
+		$markerObj = t3lib_div::getUserObj('tx_ttproducts_marker');
+		$pibaseObj = t3lib_div::getUserObj('tx_ttproducts_pi1_base');
 		$statusCodeArray = $this->getStatusCodeArray();
 		$allowUpdateFields = array('email', 'email_notify', 'status', 'status_log');
 		$newData = $pibaseObj->piVars['data'];
@@ -399,7 +396,7 @@ class tx_ttproducts_tracking {
 					}
 				}
 			}
-			$priceViewObj = t3lib_div::getUserObj('&tx_ttproducts_field_price_view');
+			$priceViewObj = t3lib_div::getUserObj('tx_ttproducts_field_price_view');
 
 				// Get unprocessed orders.
 			$res = $TYPO3_DB->exec_SELECTquery('uid,name,tracking_code,amount,status,status_log,bill_no', 'sys_products_orders', 'NOT deleted AND status!=0 AND status<100', '', 'crdate');

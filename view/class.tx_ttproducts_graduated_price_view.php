@@ -38,7 +38,7 @@
  */
 
 
-class tx_ttproducts_graduated_price_view {
+class tx_ttproducts_graduated_price_view implements t3lib_Singleton {
 	public $marker = 'GRADPRICE';
 	public $modelObj;
 	public $langObj;
@@ -53,8 +53,8 @@ class tx_ttproducts_graduated_price_view {
 
 		if (isset($priceFormula) && is_array($priceFormula))	{
 			$tablename = $this->modelObj->tableObj->getName();
-			$priceObj = t3lib_div::getUserObj('&tx_ttproducts_field_price');
-			$priceViewObj = t3lib_div::getUserObj('&tx_ttproducts_field_price_view');
+			$priceObj = t3lib_div::getUserObj('tx_ttproducts_field_price');
+			$priceViewObj = t3lib_div::getUserObj('tx_ttproducts_field_price_view');
 			foreach ($priceFormula as $field => $value)	{
 				$keyMarker = '###' . $this->marker . '_' . strtoupper($field) . $suffix . '###';
 				if (strpos($TCA[$tablename]['interface']['showRecordFieldList'], $field) === FALSE)	{
@@ -98,7 +98,7 @@ class tx_ttproducts_graduated_price_view {
 
 	public function &getPriceSubpartArrays ($templateCode, &$row, $fieldname, &$subpartArray, &$wrappedSubpartArray, &$tagArray, $theCode='', $id='1')	{
 
-		$subpartmarkerObj = t3lib_div::getUserObj('&tx_ttproducts_subpartmarker');
+		$subpartmarkerObj = t3lib_div::getUserObj('tx_ttproducts_subpartmarker');
 		$t = array();
 		$t['listFrameWork'] = $this->langObj->cObj->getSubpart($templateCode, '###GRADPRICE_FORMULA_ITEMS###');
 		$t['itemFrameWork'] = $this->langObj->cObj->getSubpart($t['listFrameWork'], '###ITEM_FORMULA###');

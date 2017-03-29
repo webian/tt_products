@@ -37,7 +37,6 @@
  *
  */
 
-// require_once (PATH_BE_ttproducts.'model/class.tx_ttproducts_model_control.php');
 
 
 class tx_ttproducts_control_product {

@@ -38,7 +38,6 @@
  */
 
 
-// require_once (PATH_BE_ttproducts.'view/class.tx_ttproducts_catlist_view_base.php');
 
 class tx_ttproducts_menucat_view extends tx_ttproducts_catlist_view_base {
 	var $htmlTagMain = 'ul';	// main HTML tag
@@ -77,11 +76,11 @@ class tx_ttproducts_menucat_view extends tx_ttproducts_catlist_view_base {
 		);
 
 		if (!count($error_code))	{
-			$markerObj = t3lib_div::getUserObj('&tx_ttproducts_marker');
-			$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+			$markerObj = t3lib_div::getUserObj('tx_ttproducts_marker');
+			$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
 			$categoryTableViewObj = $tablesObj->get($functablename, TRUE);
 			$categoryTable = $categoryTableViewObj->getModelObj();
-			$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+			$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
 
 			$content='';
 			$out='';
@@ -93,7 +92,7 @@ class tx_ttproducts_menucat_view extends tx_ttproducts_catlist_view_base {
 			$countArray[0] = 0;
 			$countArray[1] = 0;
 			$catConf = $categoryTable->getTableConf($theCode);
-			$cssObj = t3lib_div::getUserObj('&tx_ttproducts_css');
+			$cssObj = t3lib_div::getUserObj('tx_ttproducts_css');
 			$cssConf = $cssObj->getConf($functablename, $theCode);
 			$menu = $categoryTableViewObj->getPivar() . $depth;
 			$fill = '';
@@ -138,7 +137,7 @@ class tx_ttproducts_menucat_view extends tx_ttproducts_catlist_view_base {
 					$addQueryString = array($categoryTableViewObj->getPivar() => $actCategory);
 					$tempUrl = $this->pibase->pi_linkTP_keepPIvars_url($addQueryString, 1, 1, $pid);
 					$linkOutArray = array('<a href="' . htmlspecialchars($tempUrl) . '"' . $css . '>','</a>');
-					$linkOut = $linkOutArray[0] . htmlentities($row['title'], ENT_QUOTES, $TSFE->renderCharset) . $linkOutArray[1];
+					$linkOut = $linkOutArray[0] . htmlentities($row['title'], ENT_QUOTES, 'UTF-8') . $linkOutArray[1];
 					$markerArray = array();
 					$categoryTableViewObj->getMarkerArray (
 						$markerArray,

@@ -50,7 +50,7 @@ class tx_ttproducts_account extends tx_ttproducts_table_base {
 
 
 	function init ($cObj, $functablename) {
-		$basketObj = t3lib_div::getUserObj('&tx_ttproducts_basket');
+		$basketObj = t3lib_div::getUserObj('tx_ttproducts_basket');
 		$formerBasket = $basketObj->recs;
 		$bIsAllowed = $basketObj->basketExtra['payment.']['accounts'];
 		if (isset($basketObj->basketExtra['payment.']['useAsterisk']))	{
@@ -182,7 +182,7 @@ class tx_ttproducts_account extends tx_ttproducts_table_base {
 	 */
 	function checkRequired ()	{
 		$rc = '';
-		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
 		if (t3lib_extMgm::isLoaded('static_info_tables_banks_de')) {
 			$bankObj = $tablesObj->get('static_banks_de');
 		}

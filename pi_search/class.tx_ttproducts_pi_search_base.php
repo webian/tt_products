@@ -44,7 +44,7 @@
 
 tx_div2007_core::activateCompatibility6();
 
-class tx_ttproducts_pi_search_base extends tslib_pibase {
+class tx_ttproducts_pi_search_base extends tslib_pibase implements t3lib_Singleton {
 	public $prefixId = TT_PRODUCTS_EXT;
 	public $scriptRelPath = 'pi_search_base/class.tx_ttproducts_pi_search_base.php';	// Path to this script relative to the extension dir.
 	public $extKey = TT_PRODUCTS_EXT;	// The extension key.
@@ -62,7 +62,7 @@ class tx_ttproducts_pi_search_base extends tslib_pibase {
 		$confMain = $TSFE->tmpl->setup['plugin.'][TT_PRODUCTS_EXT.'.'];
 		$this->conf = array_merge($confMain, $conf);
 		$config = array();
-		$mainObj = t3lib_div::getUserObj('&tx_ttproducts_control_search');	// fetch and store it as persistent object
+		$mainObj = t3lib_div::getUserObj('tx_ttproducts_control_search');	// fetch and store it as persistent object
 		$errorCode = array();
 		$bDoProcessing = $mainObj->init($content, $this->conf, $config, get_class($this), $errorCode);
 

@@ -45,7 +45,7 @@ class tx_ttproducts_order_view extends tx_ttproducts_table_base_view {
 	public function getBasketRecsMarkerArray (&$markerArray)	{
 			// order
 		$orderObj = $this->getModelObj();
-		$basketObj = t3lib_div::getUserObj('&tx_ttproducts_basket');
+		$basketObj = t3lib_div::getUserObj('tx_ttproducts_basket');
 
 		if (
 			isset($basketObj->order) &&
@@ -69,10 +69,10 @@ class tx_ttproducts_order_view extends tx_ttproducts_table_base_view {
 		global $TSFE, $TYPO3_DB;
 
 		$feusers_uid = $TSFE->fe_user->user['uid'];
-		$priceViewObj = t3lib_div::getUserObj('&tx_ttproducts_field_price_view');
-		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
-		$subpartmarkerObj = t3lib_div::getUserObj('&tx_ttproducts_subpartmarker');
-		$markerObj = t3lib_div::getUserObj('&tx_ttproducts_marker');
+		$priceViewObj = t3lib_div::getUserObj('tx_ttproducts_field_price_view');
+		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
+		$subpartmarkerObj = t3lib_div::getUserObj('tx_ttproducts_subpartmarker');
+		$markerObj = t3lib_div::getUserObj('tx_ttproducts_marker');
 		$globalMarkerArray = $markerObj->getGlobalMarkerArray();
 
 			// order

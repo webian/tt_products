@@ -170,7 +170,7 @@ if (
 			'label_alt' => 'subtitle',
 			'default_sortby' => 'ORDER BY title',
 			'tstamp' => 'tstamp',
-			'prependAtCopy' => 'LLL:EXT:lang/locallang_general.php:LGL.prependAtCopy',
+			'prependAtCopy' => DIV2007_LANGUAGE_LGL . 'prependAtCopy',
 			'crdate' => 'crdate',
 			'cruser_id' => 'cruser_id',
 			'delete' => 'deleted',
@@ -208,7 +208,7 @@ if (
 				'endtime' => 'endtime',
 				'fe_group' => 'fe_group',
 			),
-			'prependAtCopy' => 'LLL:EXT:lang/locallang_general.php:LGL.prependAtCopy',
+			'prependAtCopy' => DIV2007_LANGUAGE_LGL . 'prependAtCopy',
 			'crdate' => 'crdate',
 			'cruser_id' => 'cruser_id',
 			'iconfile' => PATH_TTPRODUCTS_ICON_TABLE_REL . 'tt_products_language.gif',
@@ -233,7 +233,7 @@ if (
 			'enablecolumns' => array (
 				'disabled' => 'hidden'
 			),
-			'prependAtCopy' => 'LLL:EXT:lang/locallang_general.php:LGL.prependAtCopy',
+			'prependAtCopy' => DIV2007_LANGUAGE_LGL . 'prependAtCopy',
 			'crdate' => 'crdate',
 			'iconfile' => PATH_TTPRODUCTS_ICON_TABLE_REL . 'tt_products_cat.gif',
 			'dynamicConfigFile' => PATH_BE_TTPRODUCTS . 'tca.php',
@@ -252,7 +252,7 @@ if (
 			'default_sortby' => 'ORDER BY title',
 			'tstamp' => 'tstamp',
 			'delete' => 'deleted',
-			'prependAtCopy' => 'LLL:EXT:lang/locallang_general.php:LGL.prependAtCopy',
+			'prependAtCopy' => DIV2007_LANGUAGE_LGL . 'prependAtCopy',
 			'crdate' => 'crdate',
 			'delete' => 'deleted',
 			'enablecolumns' => array (
@@ -285,7 +285,7 @@ if (
 				'fe_group' => 'fe_group',
 			),
 			'thumbnail' => 'image',
-			'prependAtCopy' => 'LLL:EXT:lang/locallang_general.php:LGL.prependAtCopy',
+			'prependAtCopy' => DIV2007_LANGUAGE_LGL . 'prependAtCopy',
 			'crdate' => 'crdate',
 			'cruser_id' => 'cruser_id',
 			'iconfile' => PATH_TTPRODUCTS_ICON_TABLE_REL . 'tt_products_cat.gif',
@@ -312,7 +312,7 @@ if (
 				'endtime' => 'endtime',
 				'fe_group' => 'fe_group',
 			),
-			'prependAtCopy' => 'LLL:EXT:lang/locallang_general.php:LGL.prependAtCopy',
+			'prependAtCopy' => DIV2007_LANGUAGE_LGL . 'prependAtCopy',
 			'crdate' => 'crdate',
 			'cruser_id' => 'cruser_id',
 			'iconfile' => PATH_TTPRODUCTS_ICON_TABLE_REL . 'tt_products_cat_language.gif',
@@ -343,7 +343,7 @@ if (
 				'endtime' => 'endtime',
 				'fe_group' => 'fe_group',
 			),
-			'prependAtCopy' => 'LLL:EXT:lang/locallang_general.php:LGL.prependAtCopy',
+			'prependAtCopy' => DIV2007_LANGUAGE_LGL . 'prependAtCopy',
 			'crdate' => 'crdate',
 			'cruser_id' => 'cruser_id',
 			'iconfile' => PATH_TTPRODUCTS_ICON_TABLE_REL . 'tt_products_texts.gif',
@@ -369,7 +369,7 @@ if (
 				'endtime' => 'endtime',
 				'fe_group' => 'fe_group',
 			),
-			'prependAtCopy' => 'LLL:EXT:lang/locallang_general.php:LGL.prependAtCopy',
+			'prependAtCopy' => DIV2007_LANGUAGE_LGL . 'prependAtCopy',
 			'crdate' => 'crdate',
 			'cruser_id' => 'cruser_id',
 			'iconfile' => PATH_TTPRODUCTS_ICON_TABLE_REL . 'tt_products_texts_language.gif',
@@ -394,7 +394,7 @@ if (
 				'enablecolumns' => array (
 					'disabled' => 'hidden'
 				),
-				'prependAtCopy' => 'LLL:EXT:lang/locallang_general.php:LGL.prependAtCopy',
+				'prependAtCopy' => DIV2007_LANGUAGE_LGL . 'prependAtCopy',
 				'crdate' => 'crdate',
 				'iconfile' => PATH_TTPRODUCTS_ICON_TABLE_REL . 'tt_products_articles.gif',
 				'dynamicConfigFile' => PATH_BE_TTPRODUCTS . 'tca.php',
@@ -421,7 +421,7 @@ if (
 				'fe_group' => 'fe_group',
 			),
 			'thumbnail' => 'image',
-			'prependAtCopy' => 'LLL:EXT:lang/locallang_general.php:LGL.prependAtCopy',
+			'prependAtCopy' => DIV2007_LANGUAGE_LGL . 'prependAtCopy',
 			'crdate' => 'crdate',
 			'cruser_id' => 'cruser_id',
 			'iconfile' => PATH_TTPRODUCTS_ICON_TABLE_REL . 'tt_products_articles.gif',
@@ -449,7 +449,7 @@ if (
 				'endtime' => 'endtime',
 				'fe_group' => 'fe_group',
 			),
-			'prependAtCopy' => 'LLL:EXT:lang/locallang_general.php:LGL.prependAtCopy',
+			'prependAtCopy' => DIV2007_LANGUAGE_LGL . 'prependAtCopy',
 			'crdate' => 'crdate',
 			'cruser_id' => 'cruser_id',
 			'iconfile' => PATH_TTPRODUCTS_ICON_TABLE_REL . 'tt_products_articles_language.gif',
@@ -478,7 +478,7 @@ if (
 				'endtime' => 'endtime',
 				'fe_group' => 'fe_group',
 			),
-			'prependAtCopy' => 'LLL:EXT:lang/locallang_general.php:LGL.prependAtCopy',
+			'prependAtCopy' => DIV2007_LANGUAGE_LGL . 'prependAtCopy',
 			'crdate' => 'crdate',
 			'cruser_id' => 'cruser_id',
 			'mainpalette' => 1,
@@ -504,7 +504,7 @@ if (
 			'label_userFunc' => 'tx_ttproducts_table_label->getLabel',
 			'default_sortby' => 'ORDER BY ' . $accountField,
 			'tstamp' => 'tstamp',
-			'prependAtCopy' => 'LLL:EXT:lang/locallang_general.php:LGL.prependAtCopy',
+			'prependAtCopy' => DIV2007_LANGUAGE_LGL . 'prependAtCopy',
 			'crdate' => 'crdate',
 			'iconfile' => PATH_TTPRODUCTS_ICON_TABLE_REL . 'sys_products_accounts.gif',
 			'dynamicConfigFile' => PATH_BE_TTPRODUCTS . 'tca.php',
@@ -521,7 +521,7 @@ if (
 			'label' => 'cc_number',
 			'default_sortby' => 'ORDER BY cc_number',
 			'tstamp' => 'tstamp',
-			'prependAtCopy' => 'LLL:EXT:lang/locallang_general.php:LGL.prependAtCopy',
+			'prependAtCopy' => DIV2007_LANGUAGE_LGL . 'prependAtCopy',
 			'crdate' => 'crdate',
 			'iconfile' => PATH_TTPRODUCTS_ICON_TABLE_REL . 'sys_products_cards.gif',
 			'dynamicConfigFile' => PATH_BE_TTPRODUCTS . 'tca.php',
@@ -543,7 +543,7 @@ if (
 			'enablecolumns' => array (
 				'disabled' => 'hidden',
 			),
-			'prependAtCopy' => 'LLL:EXT:lang/locallang_general.php:LGL.prependAtCopy',
+			'prependAtCopy' => DIV2007_LANGUAGE_LGL . 'prependAtCopy',
 			'crdate' => 'crdate',
 			'mainpalette' => 1,
 			'iconfile' => PATH_TTPRODUCTS_ICON_TABLE_REL . 'sys_products_orders.gif',
@@ -569,7 +569,7 @@ if (
 				'enablecolumns' => array (
 					'disabled' => 'hidden'
 				),
-				'prependAtCopy' => 'LLL:EXT:lang/locallang_general.php:LGL.prependAtCopy',
+				'prependAtCopy' => DIV2007_LANGUAGE_LGL . 'prependAtCopy',
 				'crdate' => 'crdate',
 				'iconfile' => PATH_TTPRODUCTS_ICON_TABLE_REL . 'sys_products_orders.gif',
 				'hideTable' => TRUE,
@@ -613,13 +613,24 @@ if (
 
 
 if (!$loadTcaAdditions) {
-	call_user_func($emClass . '::addStaticFile', TT_PRODUCTS_EXT, 'static/old_style/', '(deprecated) Shop System Old Style');
-	call_user_func($emClass . '::addStaticFile', TT_PRODUCTS_EXT, 'static/css_styled/', 'Shop System CSS Styled');
-	call_user_func($emClass . '::addStaticFile', TT_PRODUCTS_EXT, 'static/int/',  'Shop System Variable Content');
+    call_user_func($emClass . '::addStaticFile', TT_PRODUCTS_EXT, 'Configuration/TypoScript/PluginSetup/Main/', 'Shop System');
+    call_user_func($emClass . '::addStaticFile', TT_PRODUCTS_EXT, 'Configuration/TypoScript/PluginSetup/Int/',  'Shop System Variable Content');
 
-	if (call_user_func($emClass . '::isLoaded', 'searchbox')) {
-		call_user_func($emClass . '::addStaticFile', TT_PRODUCTS_EXT, 'static/searchbox/', 'Shop System Search Box');
-	}
+    if (call_user_func($emClass . '::isLoaded', 'searchbox')) {
+        call_user_func($emClass . '::addStaticFile', TT_PRODUCTS_EXT, 'Configuration/TypoScript/PluginSetup/Searchbox/', 'Shop System Search Box');
+    }
+
+    if (version_compare(TYPO3_version, '6.1.0', '<')) {
+        call_user_func($emClass . '::addStaticFile', TT_PRODUCTS_EXT, 'Configuration/TypoScript/PluginSetup/Compatibility4.5/', 'Compatibility TYPO3 4.5 Shop System');
+    }
+
+// 	call_user_func($emClass . '::addStaticFile', TT_PRODUCTS_EXT, 'static/old_style/', '(deprecated) Shop System Old Style');
+// 	call_user_func($emClass . '::addStaticFile', TT_PRODUCTS_EXT, 'static/css_styled/', 'Shop System CSS Styled');
+// 	call_user_func($emClass . '::addStaticFile', TT_PRODUCTS_EXT, 'static/int/',  'Shop System Variable Content');
+//
+// 	if (call_user_func($emClass . '::isLoaded', 'searchbox')) {
+// 		call_user_func($emClass . '::addStaticFile', TT_PRODUCTS_EXT, 'static/searchbox/', 'Shop System Search Box');
+// 	}
 
 	if (version_compare(TYPO3_version, '6.1.0', '<')) {
 		call_user_func($divClass . '::loadTCA', 'tt_content');
@@ -710,68 +721,6 @@ if (!$loadTcaAdditions) {
 				}
 			}
 		}
-	}
-}
-
-if (TYPO3_MODE == 'BE') {
-
-	$GLOBALS['TBE_MODULES_EXT']['xMOD_db_new_content_el']['addElClasses']['tx_ttproducts_wizicon'] = PATH_BE_TTPRODUCTS . 'class.tx_ttproducts_wizicon.php';
-
-	call_user_func(
-		$emClass . '::insertModuleFunction',
-		'web_func',
-		'tx_ttproducts_modfunc1',
-		PATH_BE_TTPRODUCTS . 'modfunc1/class.tx_ttproducts_modfunc1.php',
-		'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang.xml:moduleFunction.tx_ttproducts_modfunc1',
-		'wiz'
-	);
-
-	call_user_func(
-		$emClass . '::insertModuleFunction',
-		'web_func',
-		'tx_ttproducts_modfunc2',
-		PATH_BE_TTPRODUCTS . 'modfunc2/class.tx_ttproducts_modfunc2.php',
-		'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang.xml:moduleFunction.tx_ttproducts_modfunc2',
-		'wiz'
-	);
-
-	// add folder icon
-	$pageType = 'ttpproduct';
-	$imageFile = PATH_TTPRODUCTS_ICON_TABLE_REL . 'tt_products.gif';
-
-	$callingClassName = '\\TYPO3\\CMS\\Backend\\Sprite\\SpriteManager';
-	if (
-		class_exists($callingClassName) &&
-		method_exists($callingClassName, 'addTcaTypeIcon')
-	) {
-		call_user_func(
-			$callingClassName . '::addTcaTypeIcon',
-			'pages',
-			'contains-' . $pageType,
-			$imageFile
-		);
-	} else {
-		t3lib_SpriteManager::addTcaTypeIcon(
-			'pages',
-			'contains-' . $pageType,
-			$imageFile
-		);
-	}
-
-	$addToModuleSelection = TRUE;
-	foreach ($GLOBALS['TCA']['pages']['columns']['module']['config']['items'] as $item) {
-		if ($item['1'] == $pageType) {
-			$addToModuleSelection = FALSE;
-			continue;
-		}
-	}
-
-	if ($addToModuleSelection) {
-		$GLOBALS['TCA']['pages']['columns']['module']['config']['items'][] = array(
-			0 => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang.xml:pageModule.plugin',
-			1 => $pageType,
-			2 => 'EXT:' . TT_PRODUCTS_EXT . '/res/icons/table/tt_products.gif'
-		);
 	}
 }
 

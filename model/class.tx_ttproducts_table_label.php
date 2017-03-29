@@ -34,7 +34,7 @@
  * @package TYPO3
  * @subpackage tt_products
  */
-class tx_ttproducts_table_label {
+class tx_ttproducts_table_label implements t3lib_Singleton {
 
 
 	/**
@@ -59,7 +59,7 @@ class tx_ttproducts_table_label {
 			return '';
 		}
 
-		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
 
 		// Init
 		$label = '';

@@ -42,7 +42,7 @@
  */
 
 
-class tx_ttproducts_basket_view {
+class tx_ttproducts_basket_view implements t3lib_Singleton {
 	public $pibase; // reference to object of pibase
 	public $pibaseClass;
 	public $cObj;
@@ -75,9 +75,9 @@ class tx_ttproducts_basket_view {
 		&$error_code
 	)	{
 		$this->pibaseClass = $pibaseClass;
-		$this->pibase = t3lib_div::getUserObj('&' . $pibaseClass);
+		$this->pibase = t3lib_div::getUserObj($pibaseClass);
 		$this->cObj = $this->pibase->cObj;
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
 		$this->templateCode = &$templateCode;
@@ -86,14 +86,14 @@ class tx_ttproducts_basket_view {
 
 		$this->subpartmarkerObj = t3lib_div::makeInstance('tx_ttproducts_subpartmarker');
 		$this->subpartmarkerObj->init($this->cObj);
-		$this->urlObj = t3lib_div::getUserObj('&tx_ttproducts_url_view'); // a copy of it
+		$this->urlObj = t3lib_div::getUserObj('tx_ttproducts_url_view'); // a copy of it
 		$this->urlObj->setUrlArray($urlArray);
 	} // init
 
 
 	public function getMarkerArray ()	{
-		$basketObj = t3lib_div::getUserObj('&tx_ttproducts_basket');
-		$priceViewObj = t3lib_div::getUserObj('&tx_ttproducts_field_price_view');
+		$basketObj = t3lib_div::getUserObj('tx_ttproducts_basket');
+		$priceViewObj = t3lib_div::getUserObj('tx_ttproducts_field_price_view');
 
 		$markerArray = array();
 
@@ -165,15 +165,15 @@ class tx_ttproducts_basket_view {
 
 
 		$out = '';
-		$basketObj = t3lib_div::getUserObj('&tx_ttproducts_basket');
-		$markerObj = t3lib_div::getUserObj('&tx_ttproducts_marker');
-		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
-		$billdeliveryObj = t3lib_div::getUserObj('&tx_ttproducts_billdelivery');
+		$basketObj = t3lib_div::getUserObj('tx_ttproducts_basket');
+		$markerObj = t3lib_div::getUserObj('tx_ttproducts_marker');
+		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
+		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
+		$billdeliveryObj = t3lib_div::getUserObj('tx_ttproducts_billdelivery');
 // #### START
-		$creditpointsObj = t3lib_div::getUserObj('&tx_ttproducts_field_creditpoints');
+		$creditpointsObj = t3lib_div::getUserObj('tx_ttproducts_field_creditpoints');
 // #### ENDE
-		$langObj = t3lib_div::getUserObj('&tx_ttproducts_language');
+		$langObj = t3lib_div::getUserObj('tx_ttproducts_language');
 
 		$funcTablename = $basketObj->getFuncTablename();
 		$itemTableView = $tablesObj->get($funcTablename, TRUE);
@@ -188,8 +188,8 @@ class tx_ttproducts_basket_view {
 			$articleTable = $articleViewObj->getModelObj();
 		}
 			// basket
-		$paymentshippingObj = t3lib_div::getUserObj('&tx_ttproducts_paymentshipping');
-		$priceViewObj = t3lib_div::getUserObj('&tx_ttproducts_field_price_view');
+		$paymentshippingObj = t3lib_div::getUserObj('tx_ttproducts_paymentshipping');
+		$priceViewObj = t3lib_div::getUserObj('tx_ttproducts_field_price_view');
 
 		if ($templateCode == '')	{
 			$templateCode = &$this->templateCode;
@@ -217,7 +217,7 @@ class tx_ttproducts_basket_view {
 
 		$subpartEmptyArray = array('EMAIL_PLAINTEXT_TEMPLATE_SHOP', 'BASKET_ORDERCONFIRMATION_NOSAVE_TEMPLATE');
 		if (!$t['basketFrameWork'] && !in_array($subpartMarker, $subpartEmptyArray)) {
-			$templateObj = t3lib_div::getUserObj('&tx_ttproducts_template');
+			$templateObj = t3lib_div::getUserObj('tx_ttproducts_template');
 			$this->error_code[0] = 'no_subtemplate';
 			$this->error_code[1] = '###' . $subpartMarker . $templateObj->getTemplateSuffix() . '###';
 			$this->error_code[2] = ($templateFilename ? $templateFilename : $templateObj->getTemplateFile());
@@ -229,7 +229,7 @@ class tx_ttproducts_basket_view {
 			if (!empty($checkExpression)) {
 				$wrongPounds = preg_match_all($checkExpression, $t['basketFrameWork'], $matches);
 				if ($wrongPounds) {
-					$templateObj = t3lib_div::getUserObj('&tx_ttproducts_template');
+					$templateObj = t3lib_div::getUserObj('tx_ttproducts_template');
 					$this->error_code[0] = 'template_invalid_marker_border';
 					$this->error_code[1] = '###' . $subpartMarker . $templateObj->getTemplateSuffix() . '###';
 					$this->error_code[2] = htmlspecialchars(implode('|', $matches['0']));
@@ -239,7 +239,7 @@ class tx_ttproducts_basket_view {
 			}
 
 			if (!$bHtml)	{
-				$t['basketFrameWork'] = html_entity_decode($t['basketFrameWork'],ENT_QUOTES,$TSFE->renderCharset);
+				$t['basketFrameWork'] = html_entity_decode($t['basketFrameWork'],ENT_QUOTES,'UTF-8');
 			}
 
 				// If there is a specific section for the billing address if user is logged in (used because the address may then be hardcoded from the database
@@ -406,7 +406,7 @@ class tx_ttproducts_basket_view {
 						$theCode,
 						$count,
 						FALSE,
-						$TSFE->renderCharset
+						'UTF-8'
 					);
 
 					$catRow = $row['category'] ? $tablesObj->get('tt_products_cat')->get($row['category']) : array();
@@ -428,7 +428,7 @@ class tx_ttproducts_basket_view {
 						'',
 						'',
 						$bHtml,
-						$TSFE->renderCharset
+						'UTF-8'
 					);
 
 						// use the product if no article row has been found
@@ -488,7 +488,7 @@ class tx_ttproducts_basket_view {
 							'',
 							'',
 							$bHtml,
-							$TSFE->renderCharset
+							'UTF-8'
 						);
 
 						$articleViewObj->getItemMarkerSubpartArrays(
@@ -695,7 +695,7 @@ class tx_ttproducts_basket_view {
 			$htmlUrl = htmlspecialchars(
 					$url,
 					ENT_NOQUOTES,
-					$GLOBALS['TSFE']->renderCharset
+					'UTF-8'
 				);
 
 			$wrappedSubpartArray['###LINK_BASKET###'] = array('<a href="'. $htmlUrl .'">','</a>');
@@ -707,16 +707,15 @@ class tx_ttproducts_basket_view {
 
 			$basketUrl = htmlspecialchars(tx_div2007_alpha5::getTypoLink_URL_fh003($this->cObj,$pid,$this->urlObj->getLinkParams('',array(),TRUE,TRUE,''),'',''));
 			$markerArray['###SHIPPING_SELECTOR###'] = $paymentshippingObj->generateRadioSelect($theCode, 'shipping', $basketObj->calculatedArray, $basketUrl);
-			$imageCode = $this->cObj->IMAGE($basketObj->basketExtra['shipping.']['image.']);
-			if ($theCode == 'EMAIL') {
-				tx_div2007_alpha5::fixImageCodeAbsRefPrefix($imageCode);
-			}
-			$markerArray['###SHIPPING_IMAGE###'] = $imageCode;
 
-	//		$shippingMarkerArray = array();
-	//		$itemTable->getItemMarkerArray ($this->basket->basketExtra['shipping.'], $markerArray, $fieldsArray);
-	//		$this->paymentshipping->getItemMarkerArray ($this->basket->basketExtra['shipping.'], $shippingMarkerArray, '', array());
-	//		$shippingTitle = $this->cObj->substituteMarkerArrayCached($this->basket->basketExtra['shipping.']['title'], $shippingMarkerArray);
+			$imageObj = t3lib_div::getUserObj('tx_ttproducts_field_image_view');
+            $imageCode =
+                $imageObj->getImageCode(
+                    $this->cObj,
+                    $basketObj->basketExtra['shipping.']['image.'],
+                    $theCode
+                );
+			$markerArray['###SHIPPING_IMAGE###'] = $imageCode;
 
 			$shippingTitle = $basketObj->basketExtra['shipping.']['title'];
 			$markerArray['###SHIPPING_TITLE###'] = htmlspecialchars($shippingTitle);
@@ -729,11 +728,12 @@ class tx_ttproducts_basket_view {
 			$markerArray['###PRICE_PAYMENT_ONLY_TAX###'] = $priceViewObj->priceFormat($basketObj->calculatedArray['priceTax']['payment']-$basketObj->calculatedArray['priceNoTax']['payment'] );
 	/* Added els4: payment layout (used in basket_payment_template, winkelwagen.tmpl) */
 			$markerArray['###PAYMENT_SELECTOR###'] = $paymentshippingObj->generateRadioSelect($theCode, 'payment', $basketObj->calculatedArray, $basketUrl);
-
-			$imageCode = $this->cObj->IMAGE($basketObj->basketExtra['payment.']['image.']);
-			if ($theCode == 'EMAIL') {
-				tx_div2007_alpha5::fixImageCodeAbsRefPrefix($imageCode);
-			}
+            $imageCode =
+                $imageObj->getImageCode(
+                    $this->cObj,
+                    $basketObj->basketExtra['payment.']['image.'],
+                    $theCode
+                );
 			$markerArray['###PAYMENT_IMAGE###'] = $imageCode;
 			$markerArray['###PAYMENT_TITLE###'] = $basketObj->basketExtra['payment.']['title'];
 	/* Added els4: output for payment (used in basket_payment_template, winkelwagen.tmpl)*/
@@ -913,8 +913,8 @@ class tx_ttproducts_basket_view {
 				$subpartArray['###MESSAGE_MINQUANTITY###'] = '';
 				$tmpSubpart = $this->cObj->getSubpart($t['basketFrameWork'],'###MESSAGE_MINQUANTITY_ERROR###');
 					//	$minQuantityArray[] = array('rec' => $row, 'minQuantity' => $minQuantity, 'quantity' => $quantity);
-				$errorObj = t3lib_div::getUserObj('&tx_ttproducts_model_error');
-				$langObj = t3lib_div::getUserObj('&tx_ttproducts_language');
+				$errorObj = t3lib_div::getUserObj('tx_ttproducts_model_error');
+				$langObj = t3lib_div::getUserObj('tx_ttproducts_language');
 				$error_code = array();
 				$error_code[0] = 'error_minquantity';
 				$error_code[1] = '';
@@ -1106,7 +1106,7 @@ class tx_ttproducts_basket_view {
 			}
 
 			$pidListObj = $basketObj->getPidListObj();
-			$relatedListView = t3lib_div::getUserObj('&tx_ttproducts_relatedlist_view');
+			$relatedListView = t3lib_div::getUserObj('tx_ttproducts_relatedlist_view');
 			$relatedListView->init($this->cObj, $pidListObj->getPidlist(), $pidListObj->getRecursive());
 			$relatedMarkerArray = $relatedListView->getListMarkerArray(
 				$theCode,

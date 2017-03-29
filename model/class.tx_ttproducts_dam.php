@@ -37,8 +37,6 @@
  */
 
 
-// require_once (PATH_BE_ttproducts.'model/class.tx_ttproducts_article_base.php');
-
 
 class tx_ttproducts_dam extends tx_ttproducts_article_base {
 	public $dataArray; // array of read in categories
@@ -64,7 +62,7 @@ class tx_ttproducts_dam extends tx_ttproducts_article_base {
 		$tableObj = $this->getTableObj();
 		$tableObj->addDefaultFieldArray(array('sorting' => 'sorting'));
 
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
 		$tablename = $cnf->getTableName($functablename);
 		$tableObj->setTCAFieldArray($tablename, 'dam');
 	} // init
@@ -74,7 +72,7 @@ class tx_ttproducts_dam extends tx_ttproducts_article_base {
 
 		$rcArray = array();
 		if ($type == 'products')	{
-			$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+			$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
 			$productTable = $tablesObj->get('tt_products', FALSE);
 			$additional = $productTable->getFlexQuery('isImage', 1);
 			$rowArray = $productTable->getWhere('additional REGEXP ' . $TYPO3_DB->fullQuoteStr($additional, $productTable->getTablename)); // quotemeta
@@ -213,7 +211,7 @@ class tx_ttproducts_dam extends tx_ttproducts_article_base {
 
 	public function getRequiredFields ($theCode = '')	{
 		$tableConf = $this->getTableConf($theCode);
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
 
 		if ($tableConf['requiredFields'])	{
 			$requiredFields = $tableConf['requiredFields'];

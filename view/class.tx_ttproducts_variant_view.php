@@ -38,7 +38,7 @@
  */
 
 
-class tx_ttproducts_variant_view implements tx_ttproducts_variant_view_int {
+class tx_ttproducts_variant_view implements tx_ttproducts_variant_view_int, t3lib_Singleton {
 	public $modelObj;
 	public $cObj;
 	public $langObj;

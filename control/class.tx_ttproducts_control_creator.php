@@ -39,7 +39,7 @@
 
 
 
-class tx_ttproducts_control_creator {
+class tx_ttproducts_control_creator implements t3lib_Singleton {
 
 	public function init (&$conf, &$config, $pObj, $cObj)  {
 
@@ -49,13 +49,13 @@ class tx_ttproducts_control_creator {
 			$conf['errorLog'] = t3lib_div::resolveBackPath(PATH_typo3conf . '../' . $conf['errorLog']);
 		}
 
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
 		$cnf->init(
 			$conf,
 			$config
 		);
 
-		$langObj = t3lib_div::getUserObj('&tx_ttproducts_language');
+		$langObj = t3lib_div::getUserObj('tx_ttproducts_language');
 		if (is_object($pObj))	{
 			$pLangObj = $pObj;
 		} else {
@@ -67,7 +67,7 @@ class tx_ttproducts_control_creator {
 		tx_div2007_alpha5::loadLL_fh002($langObj, 'EXT:' . TT_PRODUCTS_EXT . '/pi_search/locallang_db.xml');
 		tx_div2007_alpha5::loadLL_fh002($langObj, 'EXT:' . TT_PRODUCTS_EXT . '/pi1/locallang.xml');
 
-		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
 		$tablesObj->init($langObj);
 			// Call all init hooks
 		if (

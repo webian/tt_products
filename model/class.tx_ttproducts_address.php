@@ -37,10 +37,6 @@
  *
  */
 
-/*
-require_once(PATH_BE_table.'lib/class.tx_table_db.php');
-require_once(PATH_BE_ttproducts.'model/class.tx_ttproducts_category_base.php');*/
-
 
 class tx_ttproducts_address extends tx_ttproducts_category_base {
 	var $dataArray = array(); // array of read in categories
@@ -59,7 +55,7 @@ class tx_ttproducts_address extends tx_ttproducts_category_base {
 		global $TYPO3_DB,$TSFE,$TCA;
 
 		parent::init($cObj, $functablename);
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
 
 		$tableconf = $cnf->getTableConf('address');
 		$tabledesc = $cnf->getTableDesc('address');

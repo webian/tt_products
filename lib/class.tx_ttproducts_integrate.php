@@ -31,7 +31,7 @@
  */
 
 
-class tx_ttproducts_integrate {
+class tx_ttproducts_integrate implements t3lib_Singleton {
 
 	/**
 	 * Includes the locallang.xml and returns the $LOCAL_LANG array found in that file.

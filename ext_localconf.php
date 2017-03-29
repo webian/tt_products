@@ -24,17 +24,24 @@ if (!defined ('PATH_BE_TTPRODUCTS')) {
 	define('PATH_BE_TTPRODUCTS', call_user_func($emClass . '::extPath', $_EXTKEY));
 }
 
-if (!defined ('PATH_BE_TTPRODUCTS_REL')) {
-	define('PATH_BE_TTPRODUCTS_REL', call_user_func($emClass . '::extRelPath', $_EXTKEY));
+if (version_compare(TYPO3_version, '7.0.0', '>=')) {
+    if (!defined ('PATH_TTPRODUCTS_ICON_TABLE_REL')) {
+        define('PATH_TTPRODUCTS_ICON_TABLE_REL', 'EXT:' . $_EXTKEY . '/res/icons/table/');
+    }
+} else {
+    if (!defined ('PATH_BE_TTPRODUCTS_REL')) {
+        define('PATH_BE_TTPRODUCTS_REL', call_user_func($emClass . '::extRelPath', $_EXTKEY));
+    }
+
+    if (!defined ('PATH_TTPRODUCTS_ICON_TABLE_REL')) {
+        define('PATH_TTPRODUCTS_ICON_TABLE_REL', PATH_BE_TTPRODUCTS_REL . 'res/icons/table/');
+    }
 }
 
 if (!defined ('PATH_FE_TTPRODUCTS_REL')) {
 	define('PATH_FE_TTPRODUCTS_REL', call_user_func($emClass . '::siteRelPath', $_EXTKEY));
 }
 
-if (!defined ('PATH_TTPRODUCTS_ICON_TABLE_REL')) {
-	define('PATH_TTPRODUCTS_ICON_TABLE_REL', PATH_BE_TTPRODUCTS_REL . 'res/icons/table/');
-}
 
 if (!defined ('ADDONS_EXT')) {
 	define('ADDONS_EXT', 'addons_tt_products');
@@ -82,17 +89,11 @@ if (!defined ('PATH_BE_ttproducts')) {
 	define('PATH_BE_ttproducts', call_user_func($emClass . '::extPath', TT_PRODUCTS_EXT));
 }
 
-if (!defined ('PATH_BE_ttproducts_rel')) {
-	define('PATH_BE_ttproducts_rel', call_user_func($emClass . '::extRelPath', TT_PRODUCTS_EXT));
-}
 
 if (!defined ('PATH_FE_ttproducts_rel')) {
 	define('PATH_FE_ttproducts_rel', call_user_func($emClass . '::siteRelPath', TT_PRODUCTS_EXT));
 }
 
-if (!defined ('PATH_ttproducts_icon_table_rel')) {
-	define('PATH_ttproducts_icon_table_rel', PATH_BE_ttproducts_rel.'res/icons/table/');
-}
 
 if (!defined ('TABLE_EXTkey')) {
 	define('TABLE_EXTkey','table');

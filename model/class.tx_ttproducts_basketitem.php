@@ -37,7 +37,7 @@
  */
 
 
-class tx_ttproducts_basketitem {
+class tx_ttproducts_basketitem implements t3lib_Singleton {
 
 	/**
 	 * gets the quantity of an item
@@ -78,7 +78,7 @@ class tx_ttproducts_basketitem {
 
 		$row = $item['rec'];
 		$rc = $row['basketminquantity'];
-		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
 		$prodTable = $tablesObj->get('tt_products', FALSE);
 		$articleRow = $prodTable->getArticleRowFromExt($row);
 

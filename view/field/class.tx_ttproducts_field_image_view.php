@@ -36,8 +36,6 @@
  *
  */
 
-// require_once (PATH_BE_ttproducts.'view/field/class.tx_ttproducts_field_media_view.php');
-
 
 class tx_ttproducts_field_image_view extends tx_ttproducts_field_media_view {
 
@@ -53,7 +51,7 @@ class tx_ttproducts_field_image_view extends tx_ttproducts_field_media_view {
 	} // init
 
 	public function getSingleImageMarkerArray ($markerKey, &$markerArray, &$imageConf, $theCode)	{
-		$tmpImgCode = $this->getImageCode($imageConf, $theCode);
+		$tmpImgCode = $this->getImageCode($this->cObj, $imageConf, $theCode);
 		$markerArray['###'.$markerKey.'###'] = $tmpImgCode;
 	}
 
@@ -94,9 +92,9 @@ class tx_ttproducts_field_image_view extends tx_ttproducts_field_media_view {
 
 		$imageRow = $row;
 		$bImages = FALSE;
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
 		$tableConf = $cnf->getTableConf($functablename, $theCode);
-		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
 
 			// Get image
 		$theImgDAM = array();

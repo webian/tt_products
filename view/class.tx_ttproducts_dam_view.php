@@ -43,9 +43,7 @@ class tx_ttproducts_dam_view extends tx_ttproducts_article_base_view {
 	public $piVar = 'dam';
 
 	function init($langObj, $modelObj)	{
-		include_once (PATH_BE_ttproducts.'view/class.tx_ttproducts_variant_dummy_view.php');
-
-		$this->variant = t3lib_div::getUserObj('&tx_ttproducts_variant_dummy_view');
+		$this->variant = t3lib_div::getUserObj('tx_ttproducts_variant_dummy_view');
 		parent::init($langObj, $modelObj);
 	}
 
@@ -98,7 +96,7 @@ class tx_ttproducts_dam_view extends tx_ttproducts_article_base_view {
 			$suffix,
 			$linkWrap
 		);
-		$imageObj = t3lib_div::getUserObj('&tx_ttproducts_field_image_view');
+		$imageObj = t3lib_div::getUserObj('tx_ttproducts_field_image_view');
 		$markerKey = $this->getMarkerKey($markerKey);
 
 			// Get image

@@ -38,7 +38,7 @@
 
 
 
-abstract class tx_ttproducts_field_base_view implements tx_ttproducts_field_view_int	{
+abstract class tx_ttproducts_field_base_view implements tx_ttproducts_field_view_int, t3lib_Singleton {
 	private $bHasBeenInitialised = FALSE;
 	public $modelObj;
 	public $cObj;
@@ -111,7 +111,7 @@ abstract class tx_ttproducts_field_base_view implements tx_ttproducts_field_view
 	)	{
 		$result = FALSE;
 		$newContent = '';
-		$markerObj = t3lib_div::getUserObj('&tx_ttproducts_marker');
+		$markerObj = t3lib_div::getUserObj('tx_ttproducts_marker');
 		$upperField = strtoupper($fieldname);
 		$templateAreaList = $markerKey . '_' . $upperField . '_LIST';
 		$t = array();

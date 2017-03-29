@@ -39,10 +39,7 @@
  */
 
 
-// require_once (PATH_t3lib . 'class.t3lib_parsehtml.php');
-
-
-class tx_ttproducts_subpartmarker {
+class tx_ttproducts_subpartmarker implements t3lib_Singleton {
 	var $cObj; // reference to object
 	var $conf;
 
@@ -57,7 +54,7 @@ class tx_ttproducts_subpartmarker {
  	 */
 	function init ($cObj)	{
  		$this->cObj = $cObj;
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
 
  		$this->conf = &$cnf->conf;
 	}
@@ -109,7 +106,7 @@ class tx_ttproducts_subpartmarker {
 	public function getSubpart ($content, $marker, &$error_code) {
 		$rc = t3lib_parsehtml::getSubpart($content, $marker);
 		if (!$rc)	{
-			$templateObj = t3lib_div::getUserObj('&tx_ttproducts_template');
+			$templateObj = t3lib_div::getUserObj('tx_ttproducts_template');
 			$error_code[0] = 'no_subtemplate';
 			$error_code[1] = $marker;
 			$error_code[2] = $templateObj->getTemplateFile();

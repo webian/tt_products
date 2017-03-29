@@ -38,7 +38,7 @@
  */
 
 
-class tx_ttproducts_model_creator {
+class tx_ttproducts_model_creator implements t3lib_Singleton {
 
 	public function init (&$conf, &$config, $cObj)  {
 
@@ -51,7 +51,7 @@ class tx_ttproducts_model_creator {
 			$UIDstore = $tmpArray['0'];
 		}
 
-		$taxObj = t3lib_div::getUserObj('&tx_ttproducts_field_tax');
+		$taxObj = t3lib_div::getUserObj('tx_ttproducts_field_tax');
 		$taxObj->preInit(
 			$cObj,
 			$bUseStaticTaxes,
@@ -59,14 +59,14 @@ class tx_ttproducts_model_creator {
 		);
 
 			// price
-		$priceObj = t3lib_div::getUserObj('&tx_ttproducts_field_price');
+		$priceObj = t3lib_div::getUserObj('tx_ttproducts_field_price');
 		$priceObj->preInit(
 			$cObj,
 			$conf
 		);
 
 			// paymentshipping
-		$paymentshippingObj = t3lib_div::getUserObj('&tx_ttproducts_paymentshipping');
+		$paymentshippingObj = t3lib_div::getUserObj('tx_ttproducts_paymentshipping');
 		$paymentshippingObj->init(
 			$cObj,
 			$priceObj

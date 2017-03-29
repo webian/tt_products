@@ -85,7 +85,7 @@ class tx_ttproducts_voucher_view extends tx_ttproducts_table_base_view {
 	function getMarkerArray (
 		&$markerArray
 	)	{
-		$priceViewObj = t3lib_div::getUserObj('&tx_ttproducts_field_price_view');
+		$priceViewObj = t3lib_div::getUserObj('tx_ttproducts_field_price_view');
 		$modelObj = $this->getModelObj();
 		$markerArray['###INSERT_VOUCHERCODE###'] = 'recs[tt_products][vouchercode]';
 

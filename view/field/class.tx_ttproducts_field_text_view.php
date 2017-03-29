@@ -42,7 +42,7 @@ class tx_ttproducts_field_text_view extends tx_ttproducts_field_base_view {
 	function getRowMarkerArray ($functablename, $fieldname, &$row, $markerKey, &$markerArray, $tagArray, $theCode, $id, &$bSkip, $bHtml = TRUE, $charset = '', $prefix = '', $suffix = '', $imageRenderObj = '')	{
 
 		$htmlentitiesArray = array();
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
 		$tableconf = $cnf->getTableConf($functablename, $theCode);
 
 		if (is_array($tableconf['functions.']) && isset($tableconf['functions.']['htmlentities']))	{

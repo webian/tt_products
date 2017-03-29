@@ -1,3 +1,7 @@
+2017-03-29 Franz Holzinger <franz@ttproducts.de>
+    * compatibility to TYPO3 8.6.1
+    * add a composer.json file
+
 2017-02-16 Franz Holzinger <franz@ttproducts.de>
     * ready for tt_products 2.8.14 in TER
 

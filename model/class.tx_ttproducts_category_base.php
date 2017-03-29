@@ -142,7 +142,7 @@ abstract class tx_ttproducts_category_base extends tx_ttproducts_table_base {
 	}
 
 	public function getDepth ($theCode)	{
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
 		$functablename = $this->getFuncTablename();
 		$conf = $this->getTableConf ($theCode);
 		$tableconf = $cnf->getTableConf($functablename, $theCode);

@@ -37,7 +37,7 @@
  */
 
 
-class tx_ttproducts_config {
+class tx_ttproducts_config implements t3lib_Singleton {
 	public $conf;
 	public $config;
 	private $bHasBeenInitialised = FALSE;
