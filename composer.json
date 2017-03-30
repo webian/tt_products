@@ -27,10 +27,10 @@
     "typo3/cms-core": ">=4.5.0,<8.9.99",
     "jambagecom/div2007": ">=1.7.0",
     "jambagecom/table": ">=0.3.0",
-    "jambagecom/tsparser": "",
+    "jambagecom/tsparser": ""
   },
   "suggest": {
-    "jambagecom/addons_em": "",
+    "jambagecom/addons_em": ""
   },
   "autoload": {
     "psr-4": {
@@ -52,7 +52,7 @@
       "pi_int",
       "pi_search",
       "view",
-      "widgets",
+      "widgets"
     ]
   },
   "replace": {
