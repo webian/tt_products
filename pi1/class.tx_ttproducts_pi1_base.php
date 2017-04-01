@@ -42,7 +42,6 @@
  */
 
 
-tx_div2007_core::activateCompatibility6();
 
 class tx_ttproducts_pi1_base extends tslib_pibase implements t3lib_Singleton {
 	public $prefixId = TT_PRODUCTS_EXT;

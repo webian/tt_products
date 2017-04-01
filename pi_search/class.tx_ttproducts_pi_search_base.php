@@ -42,8 +42,6 @@
  */
 
 
-tx_div2007_core::activateCompatibility6();
-
 class tx_ttproducts_pi_search_base extends tslib_pibase implements t3lib_Singleton {
 	public $prefixId = TT_PRODUCTS_EXT;
 	public $scriptRelPath = 'pi_search_base/class.tx_ttproducts_pi_search_base.php';	// Path to this script relative to the extension dir.

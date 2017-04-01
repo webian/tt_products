@@ -1,3 +1,7 @@
+
+2017-04-01 Franz Holzinger <franz@ttproducts.de>
+    * remove call to tx_div2007_core::activateCompatibility6. div2007/Migrations/ already does the class mapping between TYPO3 6.2 and 4.5 .
+
 2017-03-29 Franz Holzinger <franz@ttproducts.de>
     * compatibility to TYPO3 8.6.1
     * add a composer.json file
