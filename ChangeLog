@@ -1,3 +1,6 @@
+2017-04-06 Franz Holzinger <franz@ttproducts.de>
+    * bugfix to composer.json file
+    * bugfix in the shop template products_css_variants_de.html
 
 2017-04-01 Franz Holzinger <franz@ttproducts.de>
     * remove call to tx_div2007_core::activateCompatibility6. div2007/Migrations/ already does the class mapping between TYPO3 6.2 and 4.5 .

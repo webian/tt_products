@@ -132,3 +132,8 @@ $temporaryColumns = array (
 );
 
 
+
+$searchFields = explode(',', $GLOBALS['TCA']['fe_users']['ctrl']['searchFields'] . ',tt_products_vouchercode,comments,tt_products_organisation_form');
+$searchFields = array_unique($searchFields);
+$GLOBALS['TCA']['fe_users']['ctrl']['searchFields'] = implode(',', $searchFields);
+
