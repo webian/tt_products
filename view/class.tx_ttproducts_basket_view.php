@@ -452,7 +452,7 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 						}
 
 						if (is_array($articleRows) && count($articleRows)) {
-							$bKeepNotEmpty = (boolean) $conf['keepProductData']; // auskommentieren nicht möglich wenn mehrere Artikel dem Produkt zugewiesen werden
+							$bKeepNotEmpty = (boolean) $this->conf['keepProductData']; // auskommentieren nicht möglich wenn mehrere Artikel dem Produkt zugewiesen werden
 							if ($this->useArticles == 3)	{
 								$itemTable->fillVariantsFromArticles($prodVariantRow);
 								$itemTable->variant->modifyRowFromVariant($prodVariantRow);
@@ -678,7 +678,7 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 			$markerArray['###HIDDENFIELDS###'] = $hiddenFields;
 			$pid = ($this->conf['PIDbasket'] ? $this->conf['PIDbasket'] : $TSFE->id);
 
-			$conf = array('useCacheHash' => FALSE);
+            $linkConf = array('useCacheHash' => FALSE);
 			$url = tx_div2007_alpha5::getTypoLink_URL_fh003(
 				$this->cObj,
 				$pid,
@@ -690,7 +690,7 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 					''
 				),
 				$target = '',
-				$conf
+				$linkConf
 			);
 			$htmlUrl = htmlspecialchars(
 					$url,
@@ -705,7 +705,8 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 			$markerArray['###PRICE_SHIPPING_NO_TAX###'] = $priceViewObj->priceFormat($basketObj->calculatedArray['priceNoTax']['shipping']);
 			$markerArray['###PRICE_SHIPPING_ONLY_TAX###'] = $priceViewObj->priceFormat($basketObj->calculatedArray['priceTax']['shipping']-$basketObj->calculatedArray['priceNoTax']['shipping']);
 
-			$basketUrl = htmlspecialchars(tx_div2007_alpha5::getTypoLink_URL_fh003($this->cObj,$pid,$this->urlObj->getLinkParams('',array(),TRUE,TRUE,''),'',''));
+            $linkConf = array('useCacheHash' => TRUE);
+			$basketUrl = htmlspecialchars(tx_div2007_alpha5::getTypoLink_URL_fh003($this->cObj, $pid, $this->urlObj->getLinkParams('', array(), TRUE, TRUE, ''), '',$linkConf));
 			$markerArray['###SHIPPING_SELECTOR###'] = $paymentshippingObj->generateRadioSelect($theCode, 'shipping', $basketObj->calculatedArray, $basketUrl);
 
 			$imageObj = t3lib_div::getUserObj('tx_ttproducts_field_image_view');
