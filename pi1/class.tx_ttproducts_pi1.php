@@ -38,7 +38,7 @@
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products
- * @see file tt_products/static/old_style/constants.txt
+ * @see file tt_products/Configuration/TypoScript/PluginSetup/Main/constants.txt
  * @see TSref
  *
  */
