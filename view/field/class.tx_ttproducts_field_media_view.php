@@ -221,7 +221,7 @@ public function getImageCode ($cObj, $imageConf, $theCode) {
 		} else if ($this->conf['noImageAvailable'] != '') {	// if (count($imageArray))
 			$imageConf = $this->conf[$imageRenderObj . '.'];
 			$imageConf['file'] = $this->conf['noImageAvailable'];
-			$tmpImgCode = $this->getImageCode($this-cObj, $imageConf, $theCode);
+			$tmpImgCode = $this->getImageCode($this->cObj, $imageConf, $theCode);
 			$imgCodeArray[0] = $tmpImgCode;
 		}
 		return $imgCodeArray;
