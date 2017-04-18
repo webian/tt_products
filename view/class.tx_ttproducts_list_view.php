@@ -1796,7 +1796,6 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 					}
 
 					$itemsOut .= $tempContent;
-	//				} // foreach ($productList as $k2 => $row)
 
 					// max. number of columns reached?
 					if (!$displayColumns || $iColCount == $displayColumns || $displayCatHeader == 'always') {
@@ -1805,8 +1804,6 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 							if (!$displayColumns || $iColCount == $displayColumns)	{
 								$itemsOut .= $this->finishHTMLRow($cssConf, $iColCount, $tableRowOpen, $displayColumns);
 							}
-							// $itemListOut .= $this->cObj->substituteSubpart($t['itemFrameWork'],'###ITEM_SINGLE###',$itemsOut,0);
-
 							$markerArray = array_merge($productMarkerArray, $categoryMarkerArray, $markerArray);
 							$subpartArray = array();
 
@@ -1860,9 +1857,6 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 						}
 
 						if (($nextArray['category'] != $currentArray['category'] && $t['categoryFrameWork'] || $nextRow == '') && $itemsOut && $t['itemFrameWork'])	{
-
-							// $itemListOut .= $this->cObj->substituteSubpart($t['itemFrameWork'],'###ITEM_SINGLE###',$itemsOut,0);
-/*							$markerArray = array_merge($productMarkerArray, $categoryMarkerArray, $markerArray);*/
 							$subpartArray = array();
 							$subpartArray['###ITEM_SINGLE###'] = $itemsOut;
 
@@ -1958,11 +1952,6 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 			if ($cat)	{
 				$addQueryString['cat'] = $cat;
 			}
-// 			$backPID = $pibaseObj->piVars['backPID'];
-// 			$pid = ($backPID ? $backPID : $TSFE->id);
-// 			$linkUrl = $pibaseObj->pi_getPageLink($pid,'',$this->urlObj->getLinkParams('',array(),TRUE, TRUE, $itemTableView->getPivar()));
-// 			$linkUrl = htmlspecialchars($linkUrl);
-// 			$wrappedSubpartArray['###LINK_ITEM###'] = array('<a href="'. $linkUrl . '">', '</a>', array('useCacheHash' => TRUE));
 
 			if ($sword) 	{
 				$addQueryString['sword'] = $sword;

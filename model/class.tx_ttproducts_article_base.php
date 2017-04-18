@@ -187,12 +187,21 @@ abstract class tx_ttproducts_article_base extends tx_ttproducts_table_base {
 		$tableConf = $this->getTableConf($theCode);
 
 		$bUseLanguageTable = $this->bUseLanguageTable($tableConf);
-		if ($bUseLanguageTable) {
-			$where = $this->getTableObj()->searchWhere($sw, $searchFieldList);
-		} else {
-			$searchTable = $this->getTableObj()->getAlias();
-			$where = $this->cObj->searchWhere($sw, $searchFieldList, $searchTable);
-		}
+        if ($bUseLanguageTable) {
+            $where =
+                $this->getTableObj()->searchWhere(
+                    $sw,
+                    $searchFieldList,
+                    TRUE
+                );
+        } else {
+            $where =
+                $this->getTableObj()->searchWhere(
+                    $sw,
+                    $searchFieldList,
+                    FALSE
+                );
+        }
 
 		return $where;
 	} // searchWhere

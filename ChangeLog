@@ -1,3 +1,6 @@
+2017-04-18 Franz Holzinger <franz@ttproducts.de>
+    * bugfix for TYPO3 8.x: searchWhere from the extension "table library" and a new getSubpart
+
 2017-04-06 Franz Holzinger <franz@ttproducts.de>
     * bugfix to composer.json file
     * bugfix in the shop template products_css_variants_de.html

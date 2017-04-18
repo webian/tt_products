@@ -104,14 +104,15 @@ class tx_ttproducts_subpartmarker implements t3lib_Singleton {
 	 * @see substituteSubpart(), t3lib_parsehtml::getSubpart()
 	 */
 	public function getSubpart ($content, $marker, &$error_code) {
-		$rc = t3lib_parsehtml::getSubpart($content, $marker);
-		if (!$rc)	{
+        $result = tx_div2007_core::getSubpart($content, $marker);
+
+		if (!$result) {
 			$templateObj = t3lib_div::getUserObj('tx_ttproducts_template');
 			$error_code[0] = 'no_subtemplate';
 			$error_code[1] = $marker;
 			$error_code[2] = $templateObj->getTemplateFile();
 		}
-		return $rc;
+		return $result;
 	}
 }
 
