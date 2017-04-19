@@ -1,3 +1,7 @@
+2017-04-19 Franz Holzinger <franz@ttproducts.de>
+    * bugfix: TAXmode must be set to 1 if unset
+    * bugfix: only stop processing after convertToUserInt if a conversion has been executed
+
 2017-04-18 Franz Holzinger <franz@ttproducts.de>
     * bugfix: Javascript shall use lower case for boolean true and false
     * bugfix for TYPO3 8.x: searchWhere from the extension "table library" and a new getSubpart

@@ -190,8 +190,9 @@ class tx_ttproducts_main implements t3lib_Singleton {
 		if ($bDoProcessing && $this->cObj->getUserObjectType() == tslib_cObj::OBJECTTYPE_USER) {
 			$intersection = array_intersect(self::$uncachedCodes, $this->codeArray);
 			if (count($intersection)) {
-				$this->convertToUserInt();
-				$bDoProcessing = FALSE;
+				if ($this->convertToUserInt()) {
+                    $bDoProcessing = FALSE;
+				}
 			}
 		}
 		if (!$bDoProcessing)	{
@@ -240,7 +241,7 @@ class tx_ttproducts_main implements t3lib_Singleton {
 		$this->pid = ($this->conf['PIDbasket'] && $this->conf['clickIntoBasket'] ? $this->conf['PIDbasket'] : ($backPID ? $backPID : $TSFE->id));
 
 		if ($this->conf['TAXmode'] == '' ||  $this->conf['TAXmode'] == '{$plugin.tt_products.TAXmode}')	{
-			$this->conf['TAXmode'] == 1;
+			$this->conf['TAXmode'] = 1;
 		}
 		$this->pageAsCategory = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['pageAsCategory'];
 		// get template suffix string
