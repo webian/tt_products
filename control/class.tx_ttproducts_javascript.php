@@ -130,23 +130,23 @@ class tx_ttproducts_javascript implements t3lib_Singleton {
 				$code .= '
 	function test(eing) {
 		var reg = /@/;
-		var rc = TRUE;
+		var rc = true;
 		if (!reg.exec(eing)) {
-	 		rc = FALSE;
+	 		rc = false;
 	 	}
 	 	return rc;
 	}
 
 	function checkEmail(element) {
 		if (test(element.value)){
-			return (TRUE);
+			return (true);
 		}
 		alert("' . $emailArr[0] . '\'"+element.value+"\'' . $emailArr[1] . '");
-		return (FALSE);
+		return (false);
 	}
 
 	function checkParams(formObj) {
-		var rc = TRUE;
+		var rc = true;
 		for (var i = 0; i < formObj.length; i++) {
 			if (formObj[i].type == "text") {
 				var email = /email/i;
@@ -186,7 +186,7 @@ class tx_ttproducts_javascript implements t3lib_Singleton {
 					$code .= 'var c = new Array(); // categories
 		var boxCount = '.$count.'; // number of select boxes
 		var pi = new Array(); // names of select boxes;
-		var inAction = FALSE; // is the script still running?
+		var inAction = false; // is the script still running?
 		var maxFunc = '.$funcs.';
 		';
 					foreach ($piVarArray as $fnr => $pivar)	{
@@ -232,10 +232,10 @@ class tx_ttproducts_javascript implements t3lib_Singleton {
 		var idel;
 		var category;
 
-		if (inAction == TRUE)	{
-			return FALSE;
+		if (inAction == true)	{
+			return false;
 		}
-		inAction = TRUE;
+		inAction = true;
 		index = select.selectedIndex;
 		selOption = select.options[index];
 		category = selOption.value;
@@ -248,7 +248,7 @@ class tx_ttproducts_javascript implements t3lib_Singleton {
 			func = sb.selectedIndex - 1;
 			if (maxFunc == 1 || func < 0 || func > maxFunc)	{
 				func = 0;
-				bRootFunctions = FALSE;
+				bRootFunctions = false;
 			}
 			for (var l = boxCount; l >= id+1; l--)	{
 				idel = "'.$catid.'" + l;
@@ -307,8 +307,8 @@ class tx_ttproducts_javascript implements t3lib_Singleton {
 		}
 		';
 				$code .= '
-		inAction = FALSE;
-		return TRUE;
+		inAction = false;
+		return true;
 	}
 		';
 				$code .= '
@@ -349,7 +349,7 @@ class tx_ttproducts_javascript implements t3lib_Singleton {
 		        		$code .= $this->pibase->extKey . '_showList(data);';
 				}
 				$code .= '
-		return TRUE;
+		return true;
 	}
 	'		;
 				break;
@@ -398,7 +398,7 @@ class tx_ttproducts_javascript implements t3lib_Singleton {
 		}
 	';
 				$code .= '	' . $this->pibase->extKey . '_fetchRow(data);
-		return TRUE;
+		return true;
 	}';
 				break;
 

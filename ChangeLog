@@ -1,4 +1,5 @@
 2017-04-18 Franz Holzinger <franz@ttproducts.de>
+    * bugfix: Javascript shall use lower case for boolean true and false
     * bugfix for TYPO3 8.x: searchWhere from the extension "table library" and a new getSubpart
 
 2017-04-06 Franz Holzinger <franz@ttproducts.de>
