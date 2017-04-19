@@ -353,6 +353,6 @@ plugin.tt_products {
 }
 
 
-<INCLUDE_TYPOSCRIPT: source="FILE:EXT:tt_products/Configuration/TypoScript/PluginSetup/Main/constants.txt">
+<INCLUDE_TYPOSCRIPT: source="FILE:EXT:tt_products/Configuration/TypoScript/PluginSetup/Share/constants.txt">
 
 
