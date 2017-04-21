@@ -61,10 +61,6 @@ if ($bSelectTaxMode) {
 }
 
 switch ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['articleMode']) {
-	case '0':
-		unset($GLOBALS['TCA'][$table]['columns']['article_uid']);
-		$GLOBALS['TCA'][$table]['types']['0'] = str_replace(',article_uid,', ',', $GLOBALS['TCA'][$table]['types']['0']);
-		break;
 	case '1':
 		$GLOBALS['TCA'][$table]['columns']['article_uid'] = array (
 			'exclude' => 1,
@@ -86,6 +82,11 @@ switch ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['articleMode']) 
 	case '2':
 		// leave the settings of article_uid
 		break;
+    case '0':
+    default:
+        unset($GLOBALS['TCA'][$table]['columns']['article_uid']);
+        $GLOBALS['TCA'][$table]['types']['0'] = str_replace(',article_uid,', ',', $GLOBALS['TCA'][$table]['types']['0']);
+        break;
 }
 
 $addressTable = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['addressTable'];
