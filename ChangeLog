@@ -1,4 +1,7 @@
 2017-04-19 Franz Holzinger <franz@ttproducts.de>
+    * bugfix for TYPO3 8.7.1: remove max from TCA of renderType inputDateTime
+
+2017-04-19 Franz Holzinger <franz@ttproducts.de>
     * bugfix: TAXmode must be set to 1 if unset
     * bugfix: only stop processing after convertToUserInt if a conversion has been executed
 
