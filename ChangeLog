@@ -1,3 +1,6 @@
+2017-04-27 Franz Holzinger <franz@ttproducts.de>
+    * bugfix: the TCA renderType inputDateTime is only available since TYPO3 8.7.0
+
 2017-04-21 Franz Holzinger <franz@ttproducts.de>
     * bugfix: TCA override for tt_products field article_uid must not be used if articleMode is unset.
     * bugfix for TYPO3 8.7.1: remove max from TCA of renderType inputDateTime

@@ -5,6 +5,18 @@ if (!defined ('TYPO3_MODE')) {
 }
 
 $table = 'tt_products_cat_language';
+
+if (
+    version_compare(TYPO3_version, '8.7.0', '<')
+) {
+    $fieldArray = array('tstamp', 'crdate', 'starttime', 'endtime');
+
+    foreach ($fieldArray as $field) {
+        unset($GLOBALS['TCA'][$table]['columns'][$field]['config']['renderType']);
+        $GLOBALS['TCA'][$table]['columns'][$field]['config']['max'] = '20';
+    }
+}
+
 $excludeArray = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['exclude.'];
 
 if (

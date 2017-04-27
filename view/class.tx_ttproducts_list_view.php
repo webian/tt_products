@@ -1010,8 +1010,6 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 
 			if ($orderByCat && ($pageAsCategory < 2 || $itemTable->getType() == 'dam'))	{
 
-			// if ($orderByCat && ($pageAsCategory < 2) || $itemTable->type == 'dam')	{ //  && $tableConfArray[$categoryfunctablename]['language.']['type'] == 'table'
-				// $catFields = ($orderByCat == 'uid' ? $orderByCat : 'uid,'.$orderByCat);
 				$catOrderBy = $categoryTable->getTableObj()->transformOrderby($orderByCat);
 
 				$orderByCatFieldArray = t3lib_div::trimExplode(',',$catOrderBy);

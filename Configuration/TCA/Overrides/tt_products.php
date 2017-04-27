@@ -5,7 +5,30 @@ if (!defined ('TYPO3_MODE')) {
 }
 
 $table = 'tt_products';
+
+if (
+    version_compare(TYPO3_version, '8.7.0', '<')
+) {
+    $fieldArray = array('tstamp', 'crdate', 'starttime', 'endtime');
+
+    foreach ($fieldArray as $field) {
+        unset($GLOBALS['TCA'][$table]['columns'][$field]['config']['renderType']);
+        $GLOBALS['TCA'][$table]['columns'][$field]['config']['max'] = '20';
+    }
+}
+
 $bSelectTaxMode = FALSE;
+
+if (
+    version_compare(TYPO3_version, '8.7.0', '<')
+) {
+    $fieldArray = array('tstamp', 'crdate', 'starttime', 'endtime', 'usebydate', 'sellstarttime', 'sellendtime');
+
+    foreach ($fieldArray as $field) {
+        unset($GLOBALS['TCA'][$table]['columns'][$field]['config']['renderType']);
+        $GLOBALS['TCA'][$table]['columns'][$field]['config']['max'] = '20';
+    }
+}
 
 if (
 	\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded(STATIC_INFO_TABLES_TAXES_EXT)
