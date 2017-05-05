@@ -154,7 +154,7 @@ class tx_ttproducts_paymentlib implements t3lib_Singleton {
 				$this->getPaymentBasket($totalArr, $addrArr, $paymentBasketArray);
 				$referenceId = $this->getReferenceUid();
 				if (!$referenceId)	{
-					$errorMessage = tx_div2007_alpha5::getLL_fh002($langObj, 'error_reference_id');
+					$errorMessage = tx_div2007_alpha5::getLL_fh003($langObj, 'error_reference_id');
 					return '';
 				}
 
@@ -163,7 +163,7 @@ class tx_ttproducts_paymentlib implements t3lib_Singleton {
 					// Set payment details and get the form data:
 				$ok = $providerObject->transaction_setDetails($transactionDetailsArr);
 				if (!$ok) {
-					$errorMessage = tx_div2007_alpha5::getLL_fh002($langObj, 'error_transaction_details');
+					$errorMessage = tx_div2007_alpha5::getLL_fh003($langObj, 'error_transaction_details');
 					return '';
 				}
 
@@ -226,7 +226,7 @@ class tx_ttproducts_paymentlib implements t3lib_Singleton {
 							if ($bError)	{
 								$errorMessage = $formuri;
 							} else {
-								$errorMessage = tx_div2007_alpha5::getLL_fh002($langObj, 'error_relay_url');
+								$errorMessage = tx_div2007_alpha5::getLL_fh003($langObj, 'error_relay_url');
 							}
 						}
 					} else if ($gatewayMode == $compGatewayWebservice)	{
@@ -506,7 +506,7 @@ class tx_ttproducts_paymentlib implements t3lib_Singleton {
 
 		if ($calculatedArray['priceTax']['vouchertotal'] != $calculatedArray['priceTax']['total'])	{
 			$voucherAmount = $calculatedArray['priceTax']['vouchertotal'] - $calculatedArray['priceTax']['total'];
-			$voucherText = tx_div2007_alpha5::getLL_fh002($langObj, 'voucher_payment_article');
+			$voucherText = tx_div2007_alpha5::getLL_fh003($langObj, 'voucher_payment_article');
 
 			$basketArr['VOUCHER'][] =
 				array(

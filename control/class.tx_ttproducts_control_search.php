@@ -76,7 +76,7 @@ class tx_ttproducts_control_search implements t3lib_Singleton {
 		);
 
 		tx_div2007_alpha5::loadLL_fh002($pibaseObj, 'EXT:' . TT_PRODUCTS_EXT . '/pi_search/locallang.xml');
-		$allText = tx_div2007_alpha5::getLL_fh002($langObj, 'all');
+		$allText = tx_div2007_alpha5::getLL_fh003($langObj, 'all');
 
 			// get all extending TCAs
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['extendingTCA']))	{

@@ -354,8 +354,8 @@ class tx_ttproducts_billdelivery implements t3lib_Singleton {
 			// Final things
 			// Personal and delivery info:
 
-		$orderData['billing']['salutation'] = tx_div2007_alpha5::getLL_fh002($langObj, 'salutation' . $orderData['billing']['salutation']);
-		$orderData['delivery']['salutation'] = tx_div2007_alpha5::getLL_fh002($langObj, 'salutation'.$orderData['delivery']['salutation']);
+		$orderData['billing']['salutation'] = tx_div2007_alpha5::getLL_fh003($langObj, 'salutation' . $orderData['billing']['salutation']);
+		$orderData['delivery']['salutation'] = tx_div2007_alpha5::getLL_fh003($langObj, 'salutation'.$orderData['delivery']['salutation']);
 
 		$infoFields = explode(',','feusers_uid,name,cnum,first_name,last_name,company,salutation,address,telephone,fax,email,company,city,zip,state,country');
 		  // Fields...

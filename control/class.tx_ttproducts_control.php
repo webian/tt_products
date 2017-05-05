@@ -262,9 +262,9 @@ class tx_ttproducts_control implements t3lib_Singleton {
 				} else {
 					$langObj = t3lib_div::getUserObj('tx_ttproducts_language');
 					if ($gatewayExtName == '')	{
-						$message = tx_div2007_alpha5::getLL_fh002($langObj, 'extension_payment_missing');
+						$message = tx_div2007_alpha5::getLL_fh003($langObj, 'extension_payment_missing');
 					} else {
-						$message = tx_div2007_alpha5::getLL_fh002($langObj, 'extension_missing');
+						$message = tx_div2007_alpha5::getLL_fh003($langObj, 'extension_missing');
 						$messageArr =  explode('|', $message);
 						$errorMessage = $messageArr[0] . $gatewayExtName . $messageArr[1];
 					}
@@ -358,7 +358,7 @@ class tx_ttproducts_control implements t3lib_Singleton {
 			} else if ($this->activityArray['products_finalize'])	{
 				// Todo: Neuabsenden einer bereits abgesendeten Bestellung. Der Warenkorb ist schon gelöscht.
 				if (!$this->basket->order)	{
-					$contentEmpty = tx_div2007_alpha5::getLL_fh002($langObj, 'order_already_finalized');
+					$contentEmpty = tx_div2007_alpha5::getLL_fh003($langObj, 'order_already_finalized');
 				}
 			}
 			if ($contentEmpty != '')	{
@@ -442,8 +442,8 @@ class tx_ttproducts_control implements t3lib_Singleton {
 				}
 
 				if (!$label) {
-					$tmpArray = t3lib_div::trimExplode('|', tx_div2007_alpha5::getLL_fh002($langObj, 'missing'));
-					$label = tx_div2007_alpha5::getLL_fh002($langObj, 'missing_' . $checkRequired);
+					$tmpArray = t3lib_div::trimExplode('|', tx_div2007_alpha5::getLL_fh003($langObj, 'missing'));
+					$label = tx_div2007_alpha5::getLL_fh003($langObj, 'missing_' . $checkRequired);
 					if ($label)	{
 						$label = $tmpArray[0] .' '. $label . ' '. $tmpArray[1];
 					} else {
@@ -452,16 +452,16 @@ class tx_ttproducts_control implements t3lib_Singleton {
 				}
 			} else if ($pidagb && !$_REQUEST['recs']['personinfo']['agb'] && !t3lib_div::_GET('products_payment') && !$infoViewObj->infoArray['billing']['agb']) {
 					// so AGB has not been accepted
-				$label = tx_div2007_alpha5::getLL_fh002($langObj, 'accept_AGB');
+				$label = tx_div2007_alpha5::getLL_fh003($langObj, 'accept_AGB');
 				$addQueryString['agb']=0;
 			} else if ($cardRequired)	{
-				$label = '*'.tx_div2007_alpha5::getLL_fh002($langObj, $cardObj->getTablename() . '.' . $cardRequired) . '*';
+				$label = '*'.tx_div2007_alpha5::getLL_fh003($langObj, $cardObj->getTablename() . '.' . $cardRequired) . '*';
 			} else if ($accountRequired)	{
-				$label = '*' . tx_div2007_alpha5::getLL_fh002($langObj, $accountObj->getTablename()) . ': '.tx_div2007_alpha5::getLL_fh002($langObj, $accountObj->getTablename() . '.' . $accountRequired) . '*';
+				$label = '*' . tx_div2007_alpha5::getLL_fh003($langObj, $accountObj->getTablename()) . ': '.tx_div2007_alpha5::getLL_fh003($langObj, $accountObj->getTablename() . '.' . $accountRequired) . '*';
 			} else if ($paymentErrorMsg)	{
 				$label = $paymentErrorMsg;
 			} else {
-				$message = tx_div2007_alpha5::getLL_fh002($langObj, 'internal_error');
+				$message = tx_div2007_alpha5::getLL_fh003($langObj, 'internal_error');
 				$messageArr = explode('|', $message);
 				$label = $messageArr[0].'TTP_3' . $messageArr[1] . 'products_payment' . $messageArr[2];
 			}

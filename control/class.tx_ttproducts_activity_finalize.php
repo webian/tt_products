@@ -486,11 +486,11 @@ class tx_ttproducts_activity_finalize extends tx_ttproducts_activity_base implem
 				if (is_array($instockTableArray) && $this->conf['warningInStockLimit'])	{
 					$tableDescArray = array ('tt_products' => 'product', 'tt_products_articles' => 'article');
 					foreach ($instockTableArray as $tablename => $instockArray)	{
-						$tableDesc = tx_div2007_alpha5::getLL_fh002($langObj, $tableDescArray[$tablename]);
+						$tableDesc = tx_div2007_alpha5::getLL_fh003($langObj, $tableDescArray[$tablename]);
 						foreach ($instockArray as $instockTmp => $count)	{
 							$uidItemnrTitle = t3lib_div::trimExplode(',', $instockTmp);
 							if ($count <= $this->conf['warningInStockLimit'])	{
-								$subject = sprintf(tx_div2007_alpha5::getLL_fh002($langObj, 'instock_warning'), $tableDesc, $uidItemnrTitle[2], $uidItemnrTitle[1], intval($count));
+								$subject = sprintf(tx_div2007_alpha5::getLL_fh003($langObj, 'instock_warning'), $tableDesc, $uidItemnrTitle[2], $uidItemnrTitle[1], intval($count));
 								foreach ($recipientsArray['shop'] as $key => $recipient) {
 									// $headers variable removed everywhere!
 									tx_ttproducts_email_div::send_mail(

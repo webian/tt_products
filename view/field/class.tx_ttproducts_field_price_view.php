@@ -108,7 +108,7 @@ class tx_ttproducts_field_price_view implements tx_ttproducts_field_view_int, t3
 			$ptconf = $conf['priceTagObj.'];
 			$markContentArray = array();
 			$markContentArray['###PRICE###'] = $priceText;
-			$markContentArray['###TAX_INCL_EXCL###'] = ($taxInclExcl ? tx_div2007_alpha5::getLL_fh002($this->langObj, $taxInclExcl) : '');
+			$markContentArray['###TAX_INCL_EXCL###'] = ($taxInclExcl ? tx_div2007_alpha5::getLL_fh003($this->langObj, $taxInclExcl) : '');
 
 			$this->cObj->substituteMarkerInObject($ptconf, $markContentArray);
 			$rc = $this->cObj->cObjGetSingle($conf['priceTagObj'], $ptconf);
@@ -187,7 +187,7 @@ class tx_ttproducts_field_price_view implements tx_ttproducts_field_view_int, t3
 			}
 		}
 		$priceMarkerArray['###CUR_SYM###'] = ' ' . ($conf['currencySymbol'] ? ($charset ? htmlentities($conf['currencySymbol'], ENT_QUOTES, $charset) : $conf['currencySymbol']) : '');
-		$priceMarkerArray['###TAX_INCL_EXCL###'] = ($taxInclExcl ? tx_div2007_alpha5::getLL_fh002($this->langObj, $taxInclExcl) : '');
+		$priceMarkerArray['###TAX_INCL_EXCL###'] = ($taxInclExcl ? tx_div2007_alpha5::getLL_fh003($this->langObj, $taxInclExcl) : '');
 
 		if (is_array($markerArray))	{
 			$markerArray = array_merge($markerArray, $priceMarkerArray);

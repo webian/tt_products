@@ -185,7 +185,7 @@ class tx_ttproducts_basketitem_view implements t3lib_Singleton {
 		$markerArray['###BASKET_INPUT###'] = '';
 		$markerArray['###DISABLED###'] = ($row['inStock'] > 0 ? '' : 'disabled');
 		$markerArray['###IN_STOCK_ID###'] = 'in-stock-id-' . $row['uid'];
-		$markerArray['###BASKET_IN_STOCK###'] = tx_div2007_alpha5::getLL_fh002($langObj,($row['inStock'] > 0 ? 'in_stock' : 'not_in_stock'));
+		$markerArray['###BASKET_IN_STOCK###'] = tx_div2007_alpha5::getLL_fh003($langObj,($row['inStock'] > 0 ? 'in_stock' : 'not_in_stock'));
 		$basketFile = $TSFE->tmpl->getFileName($this->conf['basketPic']);
 		$markerArray['###IMAGE_BASKET_SRC###'] = $basketFile;
 		$fileresource = $pibaseObj->cObj->fileResource($this->conf['basketPic']);
@@ -341,7 +341,7 @@ class tx_ttproducts_basketitem_view implements t3lib_Singleton {
 		if ($keyAdditional !== FALSE) {
 			$isSingleProduct = $viewTable->hasAdditional($row,'isSingle');
 			if ($isSingleProduct)	{
-				$message = tx_div2007_alpha5::getLL_fh002($langObj, 'additional_single');
+				$message = tx_div2007_alpha5::getLL_fh003($langObj, 'additional_single');
 				$prodAdditionalText['single'] = $message . '<input type="checkbox" name="' . $basketQuantityName . '" ' . ($quantity ? 'checked="checked"':'') . 'onchange = "this.form[this.name+\'[1]\'].value=(this.checked ? 1 : 0);"' . ' value="1">';
 				$hiddenText .= '<input type="hidden" name="' . $basketQuantityName . '[1]" value="' . ($quantity ? '1' : '0') . '">';
 			}
@@ -366,7 +366,7 @@ class tx_ttproducts_basketitem_view implements t3lib_Singleton {
 			$basketAdditionalName = $this->basketVar . '[' . $row['uid'] . '][additional][' . md5($variant) . ']';
 			$bGiftService = $this->basketExt[$row['uid']][$variant . '.']['additional']['giftservice'];
 			$giftServicePostfix = '[giftservice]';
-			$message = tx_div2007_alpha5::getLL_fh002($pibaseObj, 'additional_gift_service');
+			$message = tx_div2007_alpha5::getLL_fh003($pibaseObj, 'additional_gift_service');
 			$value = ($bGiftService ? '1' : '0');
 			$prodAdditionalText['giftService'] = $message . '<input type="checkbox" name="' . $basketAdditionalName . $giftServicePostfix . '" ' . ($value ? 'checked="checked"':'') . 'onchange = "this.form[this.name+\'[1]\'].value=(this.checked ? 1 : 0);"' . ' value="' . $value . '">';
 			$hiddenText .= '<input type="hidden" name="' . $basketAdditionalName . $giftServicePostfix . '[1]" value="' . $value . '">';

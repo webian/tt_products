@@ -69,7 +69,7 @@ class tx_ttproducts_template implements t3lib_Singleton {
 				$tmplText = $theCode.'.';
 			}
 			$tmplText .= 'templateFile';
-			$errorMessage .= tx_div2007_alpha5::getLL_fh002($langObj, 'no_template') . ' plugin.' . TT_PRODUCTS_EXT . '.' . $tmplText.' = ';
+			$errorMessage .= tx_div2007_alpha5::getLL_fh003($langObj, 'no_template') . ' plugin.' . TT_PRODUCTS_EXT . '.' . $tmplText.' = ';
 			$errorMessage .= ($conf['templateFile'] ? "'" . $conf['templateFile'] . "'" : '""');
 		}
 

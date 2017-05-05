@@ -554,12 +554,12 @@ class tx_ttproducts_main implements t3lib_Singleton {
 							$tablename == 'tx_partner_main' && !t3lib_extMgm::isLoaded(PARTNER_EXTkey) ||
 							$tablename == 'tt_address' && !t3lib_extMgm::isLoaded(TT_ADDRESS_EXTkey)
 						) {
-							$message = tx_div2007_alpha5::getLL_fh002($langObj, 'extension_missing');
+							$message = tx_div2007_alpha5::getLL_fh003($langObj, 'extension_missing');
 							$messageArr =  explode('|', $message);
 							$extTableArray = array('tt_address' => TT_ADDRESS_EXTkey, 'tx_partner_main' => PARTNER_EXTkey, 'tx_party_addresses' => PARTY_EXTkey);
 							$errorMessage = $messageArr[0] . $extTableArray[$tablename] . $messageArr[1];
 						} else if (!$tablename) {
-							$message = tx_div2007_alpha5::getLL_fh002($langObj, 'setup_missing');
+							$message = tx_div2007_alpha5::getLL_fh003($langObj, 'setup_missing');
 							$messageArr =  explode('|', $message);
 							$errorMessage = $messageArr[0] . 'table.address' . $messageArr[1];
 						}
@@ -737,8 +737,8 @@ class tx_ttproducts_main implements t3lib_Singleton {
 					}
 
 					if ($key == 0) {
-						$messageArr = explode('|', $message = tx_div2007_alpha5::getLL_fh002($langObj, $indice));
-						$contentTmp .= '<b>'.tx_div2007_alpha5::getLL_fh002($langObj, 'tt_products') . ': ' . $messageArr[0] . '</b>';
+						$messageArr = explode('|', $message = tx_div2007_alpha5::getLL_fh003($langObj, $indice));
+						$contentTmp .= '<b>'.tx_div2007_alpha5::getLL_fh003($langObj, 'tt_products') . ': ' . $messageArr[0] . '</b>';
 					} else {
 						$contentTmp .= '<b>' . $indice . $messageArr[$i] . '</b>';
 					}
@@ -882,7 +882,7 @@ class tx_ttproducts_main implements t3lib_Singleton {
 						$content = $billdeliveryObj->getInformation($theCode, $orderRow, $trackingTemplateCode, $trackingCode, $type);
 						$billdeliveryObj->writeFile($type, $trackingCode, $content);
 						$relfilename = $billdeliveryObj->getRelFilename($trackingCode, $type);
-						$message = tx_div2007_alpha5::getLL_fh002($langObj, 'open_' . $type);
+						$message = tx_div2007_alpha5::getLL_fh003($langObj, 'open_' . $type);
 						$content = '<a href="' . $relfilename . '" >' . $message . '</a>';
 						break;
 					default:

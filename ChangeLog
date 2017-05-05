@@ -1,3 +1,7 @@
+
+2017-05-05 Franz Holzinger <franz@ttproducts.de>
+    * bugfix: replace getLL_fh002 by getLL_fh003
+
 2017-04-27 Franz Holzinger <franz@ttproducts.de>
     * bugfix: the TCA renderType inputDateTime is only available since TYPO3 8.7.0
 

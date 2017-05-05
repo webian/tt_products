@@ -61,7 +61,7 @@ class tx_ttproducts_pi_search implements t3lib_Singleton {
 			$content = $pibaseObj->main($content, $conf);
 		} else {
 			tx_div2007_alpha5::loadLL_fh002($pibaseObj, 'EXT:' . TT_PRODUCTS_EXT . '/pi_search/locallang.xml');
-			$content = tx_div2007_alpha5::getLL_fh002($pibaseObj, 'no_template') . ' plugin.tt_products_pi_search.templateFile';
+			$content = tx_div2007_alpha5::getLL_fh003($pibaseObj, 'no_template') . ' plugin.tt_products_pi_search.templateFile';
 		}
 
 		return $content;

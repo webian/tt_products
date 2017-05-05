@@ -62,7 +62,7 @@ class tx_ttproducts_pi_int implements t3lib_Singleton {
 			$content = $pibaseObj->main($content,$conf);
 		} else {
 			tx_div2007_alpha5::loadLL_fh002($pibaseObj, 'EXT:' . TT_PRODUCTS_EXT . '/pi_int/locallang.xml');
-			$content = tx_div2007_alpha5::getLL_fh002($pibaseObj, 'no_template') . ' plugin.tx_ttproducts_pi_int.templateFile';
+			$content = tx_div2007_alpha5::getLL_fh003($pibaseObj, 'no_template') . ' plugin.tx_ttproducts_pi_int.templateFile';
 		}
 
 		return $content;

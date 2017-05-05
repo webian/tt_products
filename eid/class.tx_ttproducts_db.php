@@ -325,7 +325,7 @@ class tx_ttproducts_db implements t3lib_Singleton {
 							} else {
 								$objResponse->addAssign('basket-into-id-' . $uid, 'disabled', 'disabled');
 							}
-							$objResponse->addAssign('in-stock-id-' . $uid, 'innerHTML', tx_div2007_alpha5::getLL_fh002($langObj, ($v > 0 ? 'in_stock' : 'not_in_stock')));
+							$objResponse->addAssign('in-stock-id-' . $uid, 'innerHTML', tx_div2007_alpha5::getLL_fh003($langObj, ($v > 0 ? 'in_stock' : 'not_in_stock')));
 
 							break;
 

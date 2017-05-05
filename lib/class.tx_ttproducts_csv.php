@@ -199,7 +199,7 @@ class tx_ttproducts_csv implements t3lib_Singleton {
 			}
 			fclose($csvfile);
 		} else {
-			$message = tx_div2007_alpha5::getLL_fh002($langObj, 'no_csv_creation');
+			$message = tx_div2007_alpha5::getLL_fh003($langObj, 'no_csv_creation');
 			$messageArr =  explode('|', $message);
 			$errorMessage = $messageArr[0] . $csvfilepath . $messageArr[1];
 		}

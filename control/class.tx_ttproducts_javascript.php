@@ -114,7 +114,7 @@ class tx_ttproducts_javascript implements t3lib_Singleton {
 		$bError = FALSE;
 		$langObj = t3lib_div::getUserObj('tx_ttproducts_language');
 
-		$emailArr =  explode('|', $message = tx_div2007_alpha5::getLL_fh002($langObj, 'invalid_email'));
+		$emailArr =  explode('|', $message = tx_div2007_alpha5::getLL_fh003($langObj, 'invalid_email'));
 
 		if (!$this->bCopyrightShown && $fieldname != 'xajax')	{
 			$code = $this->copyright;
