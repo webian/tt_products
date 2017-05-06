@@ -1,6 +1,6 @@
 <?php
 if (!defined ('TYPO3_MODE')) {
-	die ('Access denied.');
+    die ('Access denied.');
 }
 
 
@@ -15,5 +15,14 @@ if (
         unset($GLOBALS['TCA'][$table]['columns'][$field]['config']['renderType']);
         $GLOBALS['TCA'][$table]['columns'][$field]['config']['max'] = '20';
     }
+}
+
+$orderBySortingTablesArray = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['orderBySortingTables']);
+
+if (
+    !empty($orderBySortingTablesArray) &&
+    in_array($table, $orderBySortingTablesArray)
+) {
+    $GLOBALS['TCA'][$table]['ctrl']['sortby'] = 'sorting';
 }
 
