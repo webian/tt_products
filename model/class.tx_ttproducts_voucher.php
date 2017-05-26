@@ -54,7 +54,6 @@ class tx_ttproducts_voucher extends tx_ttproducts_table_base {
 
 		parent::init($cObj, $functablename);
 		$usedCodeArray = $TSFE->fe_user->getKey('ses', 'vo');
-
 		if (isset($usedCodeArray) && is_array($usedCodeArray))	{
 			list($voucherCode, $voucherArray) = each($usedCodeArray);
 			$amount = $voucherArray['amount'];
@@ -137,13 +136,16 @@ class tx_ttproducts_voucher extends tx_ttproducts_table_base {
 		$this->code = $code;
 	}
 
-	function getVoucherTableName ()	{
-		$rc = 'fe_users';
-		if ($this->conf['voucher.']['table'])	{
-			$rc = $this->conf['voucher.']['table'];
-		}
-		return $rc;
-	}
+    function getVoucherTableName () {
+        $result = 'fe_users';
+        if ($this->conf['table.']['voucher'])   {
+            $result = $this->conf['table.']['voucher'];
+        } else if ($this->conf['voucher.']['table'])    {
+            $result = $this->conf['voucher.']['table'];
+        }
+
+        return $result;
+    }
 
 	function setValid($bValid=TRUE)	{
 		$this->bValid = $bValid;
@@ -208,7 +210,14 @@ class tx_ttproducts_voucher extends tx_ttproducts_table_base {
 			$this->setValid(FALSE);
 		}
 
-		if ($voucherCode && !$this->isCodeUsed($voucherCode) && is_array($this->conf['voucher.']))	{
+        if (
+            $voucherCode &&
+            !$this->isCodeUsed($voucherCode) &&
+            (
+                is_array($this->conf['voucher.']) ||
+                isset($this->conf['table.']['voucher'])
+            )
+        ) {
 			$uid_voucher = "";
 			$voucherfieldArray = array();
 			$whereGeneral = '';
@@ -229,7 +238,10 @@ class tx_ttproducts_voucher extends tx_ttproducts_table_base {
 			if ($row = $TYPO3_DB->sql_fetch_assoc($res)) {
 				if ($voucherTable == 'fe_users')	{
 					$uid_voucher = $row['uid'];
-					$row['amount'] = $this->conf['voucher.']['amount'];
+                    if (isset($this->conf['voucher.'])) {
+                        $row['amount'] = doubleval($this->conf['voucher.']['amount']);
+                        $row['amount_type'] = intval($this->conf['voucher.']['amount_type']);
+                    }
 					$row['starttime'] = 0;
 					$row['endtime'] = 0;
 					$row['code'] = $row['tt_products_vouchercode'];
@@ -246,6 +258,7 @@ class tx_ttproducts_voucher extends tx_ttproducts_table_base {
 				$this->setAmountType($amountType);
 				$this->setAmount($row['amount']);
 				$newAmount = $this->getRebateAmount();
+
 				$amount += $newAmount;
 				$this->setAmount($amount);
 				$this->setAmountType(0);

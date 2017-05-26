@@ -1,3 +1,6 @@
+2017-05-26 Franz Holzinger <franz@ttproducts.de>
+    * bugfix: voucher setup should use the table configuration of the voucher table
+    * new default constant as an unused email domain for My TYPO3 Shop
 
 2017-05-05 Franz Holzinger <franz@ttproducts.de>
     * bugfix: replace getLL_fh002 by getLL_fh003
