@@ -16,7 +16,7 @@
 *  A copy is found in the textfile GPL.txt and important notices to the license
 *  from the author is found in LICENSE.txt distributed with these scripts.
 *
-*
+*spMarker
 *  This script is distributed in the hope that it will be useful,
 *  but WITHOUT ANY WARRANTY; without even the implied warranty of
 *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -62,14 +62,19 @@ class tx_ttproducts_subpartmarker implements t3lib_Singleton {
 	/**
 	 * Returning template subpart marker
 	 */
-	function spMarker ($subpartMarker)	{
-		$sPBody = substr($subpartMarker,3,-3);
+	function spMarker ($subpartMarker) {
 		$altSPM = '';
 		if (isset($this->conf['altMainMarkers.']))	{
+            $sPBody = substr($subpartMarker, 3, -3);
 			$altSPM = trim($this->cObj->stdWrap($this->conf['altMainMarkers.'][$sPBody], $this->conf['altMainMarkers.'][$sPBody . '.']));
-			$GLOBALS['TT']->setTSlogMessage('Using alternative subpart marker for "' . $subpartMarker . '": ' . $altSPM, 1);
+            if (
+                version_compare(TYPO3_version, '8.5.0', '<')
+            ) {
+                $GLOBALS['TT']->setTSlogMessage('Using alternative subpart marker for "' . $subpartMarker . '": ' . $altSPM, 1);
+            }
 		}
 		$rc = $altSPM ? $altSPM : $subpartMarker;
+
 		return $rc;
 	} // spMarker
 

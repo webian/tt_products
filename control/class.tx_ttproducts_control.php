@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2006-2010 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2006-2017 Franz Holzinger <franz@ttproducts.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -407,7 +407,16 @@ class tx_ttproducts_control implements t3lib_Singleton {
 			}
 		} else {	// If not all required info-fields are filled in, this is shown instead:
 			$infoViewObj->infoArray['billing']['error'] = 1;
-			$content .= $markerObj->replaceGlobalMarkers($this->cObj->getSubpart($this->templateCode, $this->subpartmarkerObj->spMarker('###BASKET_REQUIRED_INFO_MISSING###')));
+            $requiredOut = $markerObj->replaceGlobalMarkers($this->cObj->getSubpart($this->templateCode, $this->subpartmarkerObj->spMarker('###BASKET_REQUIRED_INFO_MISSING###')));
+
+            if (!$requiredOut) {
+                $templateObj = t3lib_div::getUserObj('tx_ttproducts_template');
+                $this->error_code[0] = 'no_subtemplate';
+                $this->error_code[1] = '###BASKET_REQUIRED_INFO_MISSING###';
+                $this->error_code[2] = $templateObj->getTemplateFile();
+                return '';
+            }
+            $content .= $requiredOut;
 			$label = '';
 			$addQueryString = array();
 			$overwriteMarkerArray = array();
@@ -463,7 +472,7 @@ class tx_ttproducts_control implements t3lib_Singleton {
 			} else {
 				$message = tx_div2007_alpha5::getLL_fh003($langObj, 'internal_error');
 				$messageArr = explode('|', $message);
-				$label = $messageArr[0].'TTP_3' . $messageArr[1] . 'products_payment' . $messageArr[2];
+				$label = $messageArr[0] . 'TTP_3' . $messageArr[1] . 'products_payment' . $messageArr[2];
 			}
 			$markerArray = $this->urlObj->addURLMarkers(0, array(), $addQueryString);
 			$markerArray['###ERROR_DETAILS###'] = $label;

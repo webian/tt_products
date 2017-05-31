@@ -74,6 +74,7 @@ class tx_ttproducts_activity_finalize extends tx_ttproducts_activity_base implem
 		$billdeliveryObj = t3lib_div::getUserObj('tx_ttproducts_billdelivery');
 		$markerObj = t3lib_div::getUserObj('tx_ttproducts_marker');
 		$langObj = t3lib_div::getUserObj('tx_ttproducts_language');
+        $fileArray = array(); // bill or delivery
 
 		$instockTableArray='';
 		$empty = '';
@@ -268,28 +269,25 @@ class tx_ttproducts_activity_finalize extends tx_ttproducts_activity_base implem
 				$TYPO3_DB->sql_free_result($res);
 			}
 		}
+
 		$bdArray = $billdeliveryObj->getTypeArray();
-		foreach ($bdArray as $type)	{
-			if (isset($this->conf[$type.'.']) && is_array($this->conf[$type.'.']) && $this->conf[$type.'.']['generation']=='auto')	{
 
-				$typeCode = strtoupper($type);
-				$subpart = $typeCode.'_TEMPLATE';
-				$content = $basketView->getView(
-					$templateCode,
-					$typeCode,
-					$address,
-					FALSE,
-					TRUE,
-					TRUE,
-					$subpart,
-					$mainMarkerArray
-				);
-
-				if (!isset($basketView->error_code) || $basketView->error_code[0] == '')	{
-					$billdeliveryObj->writeFile($type, $basketObj->order['orderTrackingNo'], $content);
-				}
-			}
-		}
+        foreach ($bdArray as $type) {
+            if (
+                isset($this->conf[$type . '.']) &&
+                is_array($this->conf[$type . '.']) &&
+                $this->conf[$type . '.']['generation'] == 'auto'
+            ) {
+                $absFilename =
+                    $billdeliveryObj->generateBill(
+                        $templateCode,
+                        $mainMarkerArray,
+                        $type,
+                        $this->conf[$type . '.']
+                    );
+                $fileArray[$type] = $absFilename;
+            }
+        }
 
 		$orderObj->setData($orderUid, $orderConfirmationHTML, 1);
 		$creditpointsObj = t3lib_div::getUserObj('tx_ttproducts_field_creditpoints');
@@ -428,6 +426,9 @@ class tx_ttproducts_activity_finalize extends tx_ttproducts_activity_base implem
 					// nothing to initialize
 				}
 				$agbAttachment = ($this->conf['AGBattachment'] ? t3lib_div::getFileAbsFileName($this->conf['AGBattachment']) : '');
+                if ($agbAttachment) {
+                    $fileArray[] = $agbAttachment;
+                }
 
 				if (is_array($recipientsArray['customer']))	{
 
@@ -440,7 +441,7 @@ class tx_ttproducts_activity_finalize extends tx_ttproducts_activity_base implem
 							$HTMLmailContent,
 							$fromArray['customer']['email'],
 							$fromArray['customer']['name'],
-							$agbAttachment,
+                            $fileArray,
 							'',
 							$fromArray['customer']['returnPath']
 						);

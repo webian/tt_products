@@ -1,3 +1,6 @@
+2017-05-31 Franz Holzinger <franz@ttproducts.de>
+    * new feature: support for PDF bill using extension tcpdfbill_tt_products .
+
 2017-05-26 Franz Holzinger <franz@ttproducts.de>
     * bugfix: voucher setup should use the table configuration of the voucher table
     * new default constant as an unused email domain for My TYPO3 Shop

@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2005-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2005-2017 Franz Holzinger <franz@ttproducts.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -87,15 +87,135 @@ class tx_ttproducts_billdelivery implements t3lib_Singleton {
 	}
 
 
-	public function writeFile ($type, $tracking, $content)	{
+    public function getFileAbsFileName ($type, $tracking, $fileExtension) {
+        $relfilename = $this->getRelFilename($tracking, $type, $fileExtension);
+        $filename = t3lib_div::getFileAbsFileName($relfilename);
+        return $filename;
+    }
 
-		$relfilename = $this->getRelFilename($tracking, $type);
-		$filename = t3lib_div::getFileAbsFileName($relfilename);
 
-		$theFile = fopen($filename, 'wb');
-		fwrite($theFile, $content);
-		fclose($theFile);
-	}
+    public function writeFile ($filename, $content) {
+        $theFile = fopen($filename, 'wb');
+        fwrite($theFile, $content);
+        fclose($theFile);
+    }
+
+
+    public function generateBill ($templateCode, $mainMarkerArray, $type, $generationConf) {
+
+        $basketView = t3lib_div::getUserObj('tx_ttproducts_basket_view');
+        $basketObj = t3lib_div::getUserObj('tx_ttproducts_basket');
+        $infoViewObj = t3lib_div::getUserObj('tx_ttproducts_info_view');
+
+        $typeCode = strtoupper($type);
+        $generationType = strtolower($generationConf['type']);
+        $result = FALSE;
+
+        // Hook
+            // Call all billing delivery hooks
+        if (is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['billdelivery'])) {
+            foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['billdelivery'] as $classRef) {
+                $hookObj= t3lib_div::getUserObj($classRef);
+
+                if (method_exists($hookObj, 'generateBill')) {
+                    $billGeneratedFromHook = $hookObj->generateBill(
+                        $this,
+                        $this->cObj,
+                        $templateCode,
+                        $mainMarkerArray,
+                        $basketObj->getItemArray(),
+                        $basketObj->getCalculatedArray(),
+                        $basketObj->order,
+                        $basketObj->basketExtra,
+                        $basketObj->recs,
+                        $type,
+                        $generationConf,
+                        $result
+                    );
+                }
+
+                if ($billGeneratedFromHook) {
+                    break;
+                }
+            }
+        }
+
+
+        if (!$billGeneratedFromHook) {
+
+            if ($generationType == 'pdf') {
+                $pdfViewObj = t3lib_div::getUserObj('tx_ttproducts_pdf_view');
+
+                $subpart = $typeCode . '_PDF_HEADER_TEMPLATE';
+                $header = $basketView->getView(
+                    $templateCode,
+                    $typeCode,
+                    $infoViewObj,
+                    FALSE,
+                    TRUE,
+                    $basketObj->getCalculatedArray(),
+                    FALSE,
+                    $subpart,
+                    $mainMarkerArray
+                );
+                $subpart = $typeCode . '_PDF_TEMPLATE';
+                $body = $basketView->getView(
+                    $templateCode,
+                    $typeCode,
+                    $infoViewObj,
+                    FALSE,
+                    TRUE,
+                    $basketObj->getCalculatedArray(),
+                    FALSE,
+                    $subpart,
+                    $mainMarkerArray
+                );
+
+                $subpart = $typeCode . '_PDF_FOOTER_TEMPLATE';
+                $footer = $basketView->getView(
+                    $templateCode,
+                    $typeCode,
+                    $infoViewObj,
+                    FALSE,
+                    TRUE,
+                    $basketObj->getCalculatedArray(),
+                    FALSE,
+                    $subpart,
+                    $mainMarkerArray
+                );
+                $absFileName = $this->getFileAbsFileName($type, $basketObj->order['orderTrackingNo'], 'pdf');
+
+                $result = $pdfViewObj->generate(
+                    $this->cObj,
+                    $header,
+                    $body,
+                    $footer,
+                    $absFileName
+                );
+            } else {
+                $subpart = $typeCode . '_TEMPLATE';
+
+                $content = $basketView->getView(
+                    $templateCode,
+                    $typeCode,
+                    $infoViewObj,
+                    FALSE,
+                    TRUE,
+                    $basketObj->getCalculatedArray(),
+                    TRUE,
+                    $subpart,
+                    $mainMarkerArray
+                );
+
+                if (!isset($basketView->error_code) || $basketView->error_code[0]=='') {
+                    $absFileName = $this->getFileAbsFileName($type, $basketObj->order['orderTrackingNo'], 'html');
+                    $this->writeFile($absFileName, $content);
+                    $result = $absFileName;
+                }
+            }
+        }
+        return $result;
+    }
 
 
 	/**
@@ -215,12 +335,7 @@ class tx_ttproducts_billdelivery implements t3lib_Singleton {
 					$count++;
 					$row = $actItem['rec'];
 
-					// $itemTable->mergeAttributeFields($row, $articleRow, FALSE);
 					$itemTable->variant->modifyRowFromVariant($row);
-
-					// $row = $itemTable->getRowFromExt('tt_products', $row, $this->conf['useArticles']);
-// 					$theItem = $basketObj->getItem($row, 'useExt');
-// 					$row = $theItem['rec'];
 
 						// Print Category Title
 					if ($row['category']==$currentCategory)	{

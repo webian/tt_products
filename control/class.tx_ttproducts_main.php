@@ -880,7 +880,16 @@ class tx_ttproducts_main implements t3lib_Singleton {
 					case 'DELIVERY':
 						$billdeliveryObj = t3lib_div::getUserObj('tx_ttproducts_billdelivery');
 						$content = $billdeliveryObj->getInformation($theCode, $orderRow, $trackingTemplateCode, $trackingCode, $type);
-						$billdeliveryObj->writeFile($type, $trackingCode, $content);
+                        $absFileName =
+                            $billdeliveryObj->getFileAbsFileName(
+                                $type,
+                                $trackingCode,
+                                'html'
+                            );
+                        $billdeliveryObj->writeFile(
+                            $absFileName,
+                            $content
+                        );
 						$relfilename = $billdeliveryObj->getRelFilename($trackingCode, $type);
 						$message = tx_div2007_alpha5::getLL_fh003($langObj, 'open_' . $type);
 						$content = '<a href="' . $relfilename . '" >' . $message . '</a>';

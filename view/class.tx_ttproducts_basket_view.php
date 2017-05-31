@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 1999-2016 Kasper Skårhøj (kasperYYYY@typo3.com)
+*  (c) 1999-2017 Kasper Skårhøj (kasperYYYY@typo3.com)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -163,16 +163,13 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 		global $TSFE, $TCA;
 		global $TYPO3_DB;
 
-
 		$out = '';
 		$basketObj = t3lib_div::getUserObj('tx_ttproducts_basket');
 		$markerObj = t3lib_div::getUserObj('tx_ttproducts_marker');
 		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
 		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
 		$billdeliveryObj = t3lib_div::getUserObj('tx_ttproducts_billdelivery');
-// #### START
 		$creditpointsObj = t3lib_div::getUserObj('tx_ttproducts_field_creditpoints');
-// #### ENDE
 		$langObj = t3lib_div::getUserObj('tx_ttproducts_language');
 
 		$funcTablename = $basketObj->getFuncTablename();
@@ -200,7 +197,9 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 		$feuserWrappedSubpartArray = array();
 		$feUsersViewObj = $tablesObj->get('fe_users', TRUE);
 		$feUsersViewObj->getWrappedSubpartArray($feuserSubpartArray, $feuserWrappedSubpartArray, $funcTablename);
-		$tempContent = $this->cObj->getSubpart($templateCode,$this->subpartmarkerObj->spMarker('###' . $subpartMarker . $this->config['templateSuffix'] . '###'));
+
+        $markerPart = $this->subpartmarkerObj->spMarker('###' . $subpartMarker . trim($this->config['templateSuffix']) . '###');
+		$tempContent = $this->cObj->getSubpart($templateCode, $markerPart);
 
 		if (!$tempContent)	{
 			$tempContent = $this->cObj->getSubpart($templateCode, $this->subpartmarkerObj->spMarker('###' . $subpartMarker . '###'));
