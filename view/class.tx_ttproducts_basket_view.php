@@ -120,14 +120,21 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 				$label = chr(ord('A') + $k);
 				$markerArray['###PRICE_TAXRATE_NAME' . ($k + 1) . '###'] = $label;
 				$markerArray['###PRICE_TAXRATE_TAX' . ($k + 1) . '###'] = $taxrate;
-				$label = $priceViewObj->priceFormat($basketObj->calculatedArray['priceNoTax']['sametaxtotal'][$taxstr]);
-				$markerArray['###PRICE_TAXRATE_TOTAL' . ($k + 1) . '###'] = $label;
-				$label = $priceViewObj->priceFormat($basketObj->calculatedArray['priceNoTax']['goodssametaxtotal'][$taxstr]);
-				$markerArray['###PRICE_TAXRATE_GOODSTOTAL' . ($k + 1) . '###'] = $label;
-				$label = $priceViewObj->priceFormat($basketObj->calculatedArray['priceNoTax']['sametaxtotal'][$taxstr] * ($taxrate / 100));
-				$markerArray['###PRICE_TAXRATE_ONLY_TAX' . ($k + 1) . '###'] = $label;
-				$label = $priceViewObj->priceFormat($basketObj->calculatedArray['priceNoTax']['goodssametaxtotal'][$taxstr] * ($taxrate / 100));
-				$markerArray['###PRICE_TAXRATE_GOODSTOTAL_ONLY_TAX' . ($k + 1) . '###'] = $label;
+				if (isset($basketObj->calculatedArray['priceNoTax']['sametaxtotal'][$taxstr])) {
+                    $label = $priceViewObj->priceFormat($basketObj->calculatedArray['priceNoTax']['sametaxtotal'][$taxstr]);
+                    $markerArray['###PRICE_TAXRATE_TOTAL' . ($k + 1) . '###'] = $label;
+                    $label = $priceViewObj->priceFormat($basketObj->calculatedArray['priceNoTax']['goodssametaxtotal'][$taxstr]);
+                    $markerArray['###PRICE_TAXRATE_GOODSTOTAL' . ($k + 1) . '###'] = $label;
+                    $label = $priceViewObj->priceFormat($basketObj->calculatedArray['priceNoTax']['sametaxtotal'][$taxstr] * ($taxrate / 100));
+                    $markerArray['###PRICE_TAXRATE_ONLY_TAX' . ($k + 1) . '###'] = $label;
+                    $label = $priceViewObj->priceFormat($basketObj->calculatedArray['priceNoTax']['goodssametaxtotal'][$taxstr] * ($taxrate / 100));
+                    $markerArray['###PRICE_TAXRATE_GOODSTOTAL_ONLY_TAX' . ($k + 1) . '###'] = $label;
+                } else {
+                    $markerArray['###PRICE_TAXRATE_GOODSTOTAL' . ($k + 1) . '###'] =
+                        $markerArray['###PRICE_TAXRATE_ONLY_TAX' . ($k + 1) . '###'] =
+                            $markerArray['###PRICE_TAXRATE_GOODSTOTAL_ONLY_TAX' . ($k + 1) . '###'] =
+                                $priceViewObj->priceFormat(0);
+                }
 			}
 		}
 
@@ -801,7 +808,7 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 					$row = $TYPO3_DB->sql_fetch_assoc($giftRes);
 					$TYPO3_DB->sql_free_result($giftRes);
 					$pricefactor = doubleval($this->conf['creditpoints.']['pricefactor']);
-					$creditpointsDiscount = $creditpointsGifts * $pricefactor;
+					$creditpointsDiscount = intval($creditpointsGifts) * $pricefactor;
 					$markerArray['###GIFT_DISCOUNT###'] = $creditpointsDiscount;
 					$markerArray['###VALUE_GIFTCODE_USED###'] = htmlspecialchars($basketObj->recs['tt_products']['giftcode']);
 
@@ -819,7 +826,7 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 				}
 			}
 
-			$amountCreditpoints = $TSFE->fe_user->user['tt_products_creditpoints']+$creditpointsGifts;
+			$amountCreditpoints = $TSFE->fe_user->user['tt_products_creditpoints'] + intval($creditpointsGifts);
 			$markerArray['###AMOUNT_CREDITPOINTS###'] = htmlspecialchars($amountCreditpoints);
 
 // #### START
@@ -837,7 +844,7 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 // #### ENDE
 
 			// maximum1 amount of creditpoint to change is amount on account minus amount already spended in the credit-shop
-			$max1_creditpoints = $TSFE->fe_user->user['tt_products_creditpoints'] + $creditpointsGifts;
+			$max1_creditpoints = $TSFE->fe_user->user['tt_products_creditpoints'] + intval($creditpointsGifts);
 			// maximum2 amount of creditpoint to change is amount bought multiplied with creditpointfactor
 			$pricefactor = doubleval($this->conf['creditpoints.']['pricefactor']);
 
@@ -851,6 +858,7 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 			if ($amountCreditpoints == '0') {
 				$subpartArray['###SUB_CREDITPOINTS_DISCOUNT###'] = '';
 				$wrappedSubpartArray['###SUB_CREDITPOINTS_DISCOUNT_EMPTY###'] = '';
+                $subpartArray['###SUB_CREDITPOINTS_AMOUNT_EMPTY###'] = '';
 				$subpartArray['###SUB_CREDITPOINTS_AMOUNT###'] = '';
 			} else {
 				$wrappedSubpartArray['###SUB_CREDITPOINTS_DISCOUNT###'] = '';
@@ -858,6 +866,7 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 				$wrappedSubpartArray['###SUB_CREDITPOINTS_AMOUNT_EMPTY###'] = '';
 				$wrappedSubpartArray['###SUB_CREDITPOINTS_AMOUNT###'] = '';
 			}
+
 			$markerArray['###CHANGE_AMOUNT_CREDITPOINTS###'] = 'recs[tt_products][creditpoints]';
 			if ($basketObj->recs['tt_products']['creditpoints'] == '') {
 				$markerArray['###AMOUNT_CREDITPOINTS_QTY###'] = 0;

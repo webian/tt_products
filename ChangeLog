@@ -1,3 +1,6 @@
+2017-07-07 Franz Holzinger <franz@ttproducts.de>
+    * fix issue #19: warning messages in the basket view under PHP 7.1 because some variables have not been initialized
+
 2017-07-04 Franz Holzinger <franz@ttproducts.de>
     * bugfix: The ###FORM_URL### marker should always point to the current page or the result of a controlled calculation. The basket pid should not be used by default.
 
