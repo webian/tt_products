@@ -1,3 +1,8 @@
+2017-07-15 Franz Holzinger <franz@ttproducts.de>
+    * bugfix: voucher where clause
+    * bugfix: use the product title in the product single view as the page title
+    * bugfix: support of tt_products page folder icon for TYPO3 7 and 8
+
 2017-07-07 Franz Holzinger <franz@ttproducts.de>
     * fix issue #19: warning messages in the basket view under PHP 7.1 because some variables have not been initialized
 

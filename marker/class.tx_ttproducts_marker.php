@@ -80,8 +80,8 @@ class tx_ttproducts_marker implements t3lib_Singleton {
 			if (!$markerFile)	{
 				if ($language == 'de')	{
 					$markerFile = $language . '.locallang.xml';
-				} else if (t3lib_extMgm::isLoaded(ADDONS_EXTkey))	{
-					$markerFile = 'EXT:' . ADDONS_EXTkey . '/' . $language . '.locallang.xml';
+				} else if (t3lib_extMgm::isLoaded(ADDONS_TT_PRODUCTS_EXT))	{
+					$markerFile = 'EXT:' . ADDONS_TT_PRODUCTS_EXT . '/' . $language . '.locallang.xml';
 				}
 			} else if (substr($markerFile, 0, 4) == 'EXT:')	{	// extension
 				list($extKey,$local) = explode('/', substr($markerFile, 4), 2);
@@ -148,7 +148,7 @@ class tx_ttproducts_marker implements t3lib_Singleton {
 		$markerArray['###GC3###'] = $this->cObj->stdWrap($this->conf['color3'], $this->conf['color3.']);
 		$markerArray['###DOMAIN###'] = $this->conf['domain'];
 		$markerArray['###PATH_FE_REL###'] = PATH_FE_ttproducts_rel;
-		if (t3lib_extMgm::isLoaded(ADDONS_EXTkey)) {
+		if (t3lib_extMgm::isLoaded(ADDONS_TT_PRODUCTS_EXT)) {
 			$markerArray['###PATH_FE_REL###'] = PATH_FE_addons_rel;
 			$markerArray['###PATH_FE_ICONS###'] = PATH_FE_addons_icon_rel;
 		}

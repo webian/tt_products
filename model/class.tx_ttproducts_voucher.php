@@ -222,10 +222,10 @@ class tx_ttproducts_voucher extends tx_ttproducts_table_base {
 			$voucherfieldArray = array();
 			$whereGeneral = '';
 			$voucherTable = $this->getVoucherTableName();
-			if ($voucherTable == 'fe_users')	{
-				$voucherfieldArray = array('uid', 'tt_products_vouchercode');
-				$voucherTable = 'fe_users';
-				$where = 'username=' . $TYPO3_DB->fullQuoteStr($voucherCode, $voucherTable);
+            if ($voucherTable == 'fe_users') {
+                $voucherfieldArray = array('uid', 'tt_products_vouchercode');
+                $whereGeneral = $voucherTable . '.uid=' . intval($TSFE->fe_user->user['uid']);
+                $whereGeneral .= ' AND ' . $voucherTable . '.tt_products_vouchercode=' . $TYPO3_DB->fullQuoteStr($voucherCode, $voucherTable);
 			} else {
 				$voucherfieldArray = array('starttime', 'endtime', 'title', 'fe_users_uid', 'code', 'amount', 'amount_type', 'note');
 				$whereGeneral = '(fe_users_uid="' . intval($TSFE->fe_user->user['uid']) . '" OR fe_users_uid=0) ';

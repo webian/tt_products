@@ -106,10 +106,6 @@ if (call_user_func($emClass . '::isLoaded', TABLE_EXTkey)) {
 }
 
 
-if (!defined ('ADDONS_EXTkey')) {
-	define('ADDONS_EXTkey', 'addons_tt_products');
-}
-
 if (!defined ('TT_ADDRESS_EXTkey')) {
 	define('TT_ADDRESS_EXTkey','tt_address');
 }
@@ -310,6 +306,15 @@ if (TYPO3_MODE=='FE')	{ // hooks for FE extensions
 
 	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['transactor']['listener'][TT_PRODUCTS_EXT] = 'tx_ttproducts_hooks_transactor';
 
+    if (
+        version_compare(TYPO3_version, '6.1.0', '>') &&
+        version_compare(PHP_VERSION, '5.5.0', '>=')
+    ) {
+        // TYPO3 page title
+        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-output'][] = '\\JambageCom\\TtProducts\\Hooks\\ContentPostProcessor->setPageTitle';
+
+        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-cached'][] = '\\JambageCom\\TtProducts\\Hooks\\ContentPostProcessor->setPageTitle';
+    }
 }
 
 
@@ -458,4 +463,21 @@ if (
 }
 
 
-?>
+if (
+    TYPO3_MODE == 'BE' &&
+    version_compare(TYPO3_version, '7.5.0', '>')
+) {
+    $pageType = 'ttproducts'; // a maximum of 10 characters
+    $icons = array(
+        'apps-pagetree-folder-contains-' . $pageType => 'apps-pagetree-folder-contains-tt_products.svg'
+    );
+    $iconRegistry = t3lib_div::makeInstance('\\TYPO3\\CMS\\Core\\Imaging\\IconRegistry');
+    foreach ($icons as $identifier => $filename) {
+        $iconRegistry->registerIcon(
+            $identifier,
+            $iconRegistry->detectIconProvider($filename),
+            array('source' => 'EXT:' . $_EXTKEY . '/Resources/Public/Icons/apps/' . $filename)
+        );
+    }
+}
+

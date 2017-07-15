@@ -825,32 +825,7 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 			} while($row_parent['uid'] != $this->conf['id_shop']);
 			$markerArray['###LINK_BACK2LIST###'] = implode(' &laquo; ', array_reverse($breadcrumbArray));
 			// edit jf end
-
-			// set the title of the single view
-			switch ($this->conf['substitutePagetitle']) {
-				case 1:
-					$titleStr = $row['title'];
-					break;
-				case 2:
-					$titleStr = $row['subtitle'] ? $row['subtitle'] : $row['title'];
-					break;
-				case 12:
-					$titleStr = $row['title'] . ' / ' . $row['subtitle'];
-					break;
-				case 21:
-					$titleStr = $row['subtitle'] . ' / ' . $row['title'];
-					break;
-				case 3:
-					$titleStr = implode(' : ', $rootlineArray);
-					break;
-			}
-			if (isset($titleStr)) {
-				$GLOBALS['TSFE']->page['title'] = $titleStr;
-				// set pagetitle for indexed search to the tt_products title
-				$GLOBALS['TSFE']->indexedDocTitle = $titleStr;
-			}
-
-			$markerArray = $markerObj->reduceMarkerArray($itemFrameWork, $markerArray); // neu +++
+			$markerArray = $markerObj->reduceMarkerArray($itemFrameWork, $markerArray);
 
 				// Substitute
 			$content = $this->cObj->substituteMarkerArrayCached($itemFrameWork, $markerArray, $subpartArray, $wrappedSubpartArray);

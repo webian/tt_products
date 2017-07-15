@@ -9,16 +9,35 @@ $imageFile = PATH_TTPRODUCTS_ICON_TABLE_REL . 'tt_products.gif';
 if (
     version_compare(TYPO3_version, '7.5.0', '>')
 ) {
-    $iconRegistry =
-    \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
-    $iconRegistry->registerIcon(
-        'tcarecords-pages-contains-tt_products',
-        \TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider::class,
-        array('source' => $imageFile)
-    );
 
-    $GLOBALS['TCA']['pages']['ctrl']['typeicon_classes']['contains-tt_products'] =
-    'tcarecords-pages-contains-tt_products';
+    // add folder icon
+    $pageType = 'ttproducts'; // a maximum of 10 characters
+    $iconReference = 'apps-pagetree-folder-contains-' . $pageType;
+
+    $addToModuleSelection = true;
+    foreach ($GLOBALS['TCA']['pages']['columns']['module']['config']['items'] as $item) {
+        if ($item['1'] == $pageType) {
+            $addToModuleSelection = false;
+            break;
+        }
+    }
+
+    if ($addToModuleSelection) {
+        $GLOBALS['TCA']['pages']['ctrl']['typeicon_classes']['contains-' . $pageType] = $iconReference;
+        $GLOBALS['TCA']['pages']['columns']['module']['config']['items'][] = array(
+            0 => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang.xml:pageModule.plugin',
+            1 => $pageType,
+            2 => $iconReference
+        );
+    }
+
+    $callingClassName = '\\TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility';
+    call_user_func(
+        $callingClassName . '::registerPageTSConfigFile',
+        $pageType,
+        'Configuration/TSconfig/Page/folder_tables.txt',
+        'EXT:' . TT_PRODUCTS_EXT . ' :: Restrict pages to tt_products records'
+    );
 } else {
     // add folder icon
     $pageType = 'ttpproduct';
@@ -46,7 +65,7 @@ if (
     foreach ($GLOBALS['TCA']['pages']['columns']['module']['config']['items'] as $item) {
         if ($item['1'] == $pageType) {
             $addToModuleSelection = FALSE;
-            continue;
+            break;
         }
     }
 
@@ -54,7 +73,7 @@ if (
         $GLOBALS['TCA']['pages']['columns']['module']['config']['items'][] = array(
             0 => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang.xml:pageModule.plugin',
             1 => $pageType,
-            2 => 'EXT:' . TT_PRODUCTS_EXT . '/res/icons/table/tt_products.gif'
+            2 => $imageFile
         );
     }
 }
