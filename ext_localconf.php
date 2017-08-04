@@ -471,7 +471,7 @@ if (
     $icons = array(
         'apps-pagetree-folder-contains-' . $pageType => 'apps-pagetree-folder-contains-tt_products.svg'
     );
-    $iconRegistry = t3lib_div::makeInstance('\\TYPO3\\CMS\\Core\\Imaging\\IconRegistry');
+    $iconRegistry = t3lib_div::makeInstance('TYPO3\\CMS\\Core\\Imaging\\IconRegistry');
     foreach ($icons as $identifier => $filename) {
         $iconRegistry->registerIcon(
             $identifier,
