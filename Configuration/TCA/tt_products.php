@@ -41,7 +41,6 @@ $result = array(
 		'mainpalette' => 1,
 		'iconfile' => PATH_TTPRODUCTS_ICON_TABLE_REL . 'tt_products.gif',
 		'dividers2tabs' => '1',
-		'transForeignTable' => 'tt_products_language',
 		'searchFields' => 'uid,title,subtitle,itemnumber,ean,note,note2,www',
 	),
 	'interface' => array (
@@ -76,6 +75,7 @@ $result = array(
 				'size' => '8',
 				'max' => '20',
 				'eval' => 'date',
+                'renderType' => 'inputDateTime',
 				'default' => '0'
 			)
 		),
@@ -87,6 +87,7 @@ $result = array(
 				'size' => '8',
 				'max' => '20',
 				'eval' => 'date',
+                'renderType' => 'inputDateTime',
 				'default' => '0'
 			)
 		),
@@ -98,6 +99,7 @@ $result = array(
 				'size' => '8',
 				'max' => '20',
 				'eval' => 'date',
+                'renderType' => 'inputDateTime',
 				'default' => '0'
 			)
 		),
@@ -109,6 +111,7 @@ $result = array(
 				'size' => '8',
 				'max' => '20',
 				'eval' => 'date',
+                'renderType' => 'inputDateTime',
 				'default' => '0',
 				'range' => array (
 					'upper' => mktime(0, 0, 0, 12, 31, $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['endtimeYear']),
@@ -273,7 +276,6 @@ $result = array(
 				'autoSizeMax' => '12',
 				'minitems' => '0',
 				'maxitems' => '30',
-				'show_thumbs' => '1',
 			),
 		),
 		'text_uid' => array (
@@ -331,18 +333,6 @@ $result = array(
 				'foreign_table_where' => $whereCategory
 			)
 		),
-		'address' => array (
-			'exclude' => 1,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.address',
-			'config' => array (
-				'type' => 'group',
-				'internal_type' => 'db',
-				'allowed' => $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['addressTable'],
-				'size' => 1,
-				'minitems' => 0,
-				'maxitems' => 1,
-			),
-		),
 		'inStock' => array (
 			'exclude' => 1,
 			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.inStock',
@@ -363,7 +353,6 @@ $result = array(
 				'allowed' => 'doc,htm,html,pdf,sxw,txt,xls,gif,jpg,png',
 				'max_size' => $GLOBALS['TYPO3_CONF_VARS']['BE']['maxFileSize'],
 				'uploadfolder' => 'uploads/tx_ttproducts/datasheet',
-				'show_thumbs' => '1',
 				'size' => '3',
 				'maxitems' => '20',
 				'minitems' => '0',
@@ -389,6 +378,7 @@ $result = array(
 				'size' => '8',
 				'max' => '20',
 				'eval' => 'date',
+                'renderType' => 'inputDateTime',
 				'default' => '0'
 			)
 		),
@@ -434,7 +424,6 @@ $result = array(
 				'foreign_table' => 'tt_products',
 				'foreign_table_where' => ' ORDER BY tt_products.uid',
 				'size' => 10,
-				'selectedListStyle' => 'width:450px',
 				'minitems' => 0,
 				'maxitems' => 12,
 			),
@@ -450,7 +439,6 @@ $result = array(
 				'foreign_table' => 'tt_products',
 				'foreign_table_where' => ' ORDER BY tt_products.uid',
 				'size' => 10,
-				'selectedListStyle' => 'width:450px',
 				'minitems' => 0,
 				'maxitems' => 50,
 			),
@@ -656,7 +644,6 @@ $result = array(
 				'allowed' => $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'],
 				'max_size' => $GLOBALS['TYPO3_CONF_VARS']['BE']['maxFileSize'],
 				'uploadfolder' => $imageFolder,
-				'show_thumbs' => '1',
 				'size' => '5',
 				'maxitems' => '30',
 				'minitems' => '0',
@@ -718,6 +705,7 @@ $result = array(
 				'size' => '8',
 				'max' => '20',
 				'eval' => 'date',
+                'renderType' => 'inputDateTime',
 				'default' => '0'
 			)
 		),
@@ -729,6 +717,7 @@ $result = array(
 				'size' => '8',
 				'max' => '20',
 				'eval' => 'date',
+                'renderType' => 'inputDateTime',
 				'default' => '0',
 				'range' => array (
 					'upper' => mktime(0, 0, 0, 12, 31, 2300),
@@ -738,12 +727,28 @@ $result = array(
 		),
 	),
 	'types' => array (
-		'0' => array('showitem' => 'title;;7;;3-3-3, itemnumber;;2, category, address, price;;3, tax;;4, offer;;6;;3-3-3,weight;;8,creditpoints,hidden;;1,' .
-			'--div--;LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.descriptions,note;;;richtext[]:rte_transform[mode=ts_css|imgpath=uploads/tx_ttproducts/rte/], note2;;;richtext[]:rte_transform[mode=ts_css|imgpath=uploads/tx_ttproducts/rte/],note_uid;;;;1-1-1,text_uid;;;;1-1-1,image;;;;4-4-4,datasheet;;;;1-1-1,'.
-			'--div--;LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.variants,color;;;;4-4-4,color2;;9;;,size,size2;;10,description,gradings,material,quality;;,additional;;11,'.
-			'--div--;LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.graduated,graduated_price_uid;;;;4-4-4,'.
-			'--div--;LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.relations,related_uid,accessory_uid,'.
-			'--div--;LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.shippingdiv,shipping,shipping2,handling,delivery,')
+		'0' =>
+            array(
+                'columnsOverrides' => array(
+                    'note' => array(
+                        'config' => array(
+                            'enableRichtext' => '1'
+                        )
+                    ),
+                    'note2' => array(
+                        'config' => array(
+                            'enableRichtext' => '1'
+                        )
+                    )
+                ),
+
+                'showitem' => 'title,--palette--;;7, itemnumber,--palette--;;2, category, price,--palette--;;3, tax,--palette--;;4, offer,--palette--;;6,weight,--palette--;;8,creditpoints,hidden,--palette--;;1,' .
+                '--div--;LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.descriptions,note, note2,note_uid,text_uid,image,datasheet,'.
+                '--div--;LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.variants,color,color2,--palette--;;9;;,size,size2,--palette--;;10,description,gradings,material,quality,--palette--;;,additional,--palette--;;11,'.
+                '--div--;LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.graduated,graduated_price_uid,'.
+                '--div--;LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.relations,related_uid,accessory_uid,'.
+                '--div--;LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.shippingdiv,shipping,shipping2,handling,delivery,'
+            )
 	),
 	'palettes' => array (
 		'1' =>
@@ -768,6 +773,22 @@ $result = array(
 			array('showitem' => 'usebydate')
 	)
 );
+
+if (
+    version_compare(TYPO3_version, '8.5.0', '<')
+) {
+    $result['types']['0']['showitem'] =
+        preg_replace(
+            '/(^|,)\s*note\s*(,|$)/', '$1 note;;;richtext[]:rte_transform[mode=ts_css|imgpath=uploads/tx_ttproducts/rte/] $2',
+            $result['types']['0']['showitem']
+        );
+
+    $result['types']['0']['showitem'] =
+        preg_replace(
+            '/(^|,)\s*note2\s*(,|$)/', '$1 note2;;;richtext[]:rte_transform[mode=ts_css|imgpath=uploads/tx_ttproducts/rte/] $2',
+            $result['types']['0']['showitem']
+        );
+}
 
 
 

@@ -119,7 +119,7 @@ class tx_ttproducts_orderaddress_view extends tx_ttproducts_table_base_view {
 					}
 
 					$tmp = tx_div2007_alpha5::sL_fh002($tcaValue);
-					$fieldOutputArray[$field] = htmlspecialchars(tx_div2007_alpha5::getLL_fh002($langObj, $tmp));
+					$fieldOutputArray[$field] = htmlspecialchars(tx_div2007_alpha5::getLL_fh003($langObj, $tmp));
 				} else {
 					$fieldOutputArray[$field] = '';
 				}

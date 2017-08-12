@@ -30,8 +30,6 @@ $result = array (
 		'crdate' => 'crdate',
 		'cruser_id' => 'cruser_id',
 		'iconfile' => PATH_TTPRODUCTS_ICON_TABLE_REL . 'tt_products_language.gif',
-		'transOrigPointerField' => 'prod_uid',
-		'transOrigPointerTable' => 'tt_products',
 		'languageField' => 'sys_language_uid',
 		'mainpalette' => 1,
 		'searchFields' => 'title,subtitle,itemnumber,ean,note,note2,www',
@@ -83,6 +81,7 @@ $result = array (
 				'size' => '8',
 				'max' => '20',
 				'eval' => 'date',
+                'renderType' => 'inputDateTime',
 				'default' => '0'
 			)
 		),
@@ -94,6 +93,7 @@ $result = array (
 				'size' => '8',
 				'max' => '20',
 				'eval' => 'date',
+                'renderType' => 'inputDateTime',
 				'default' => '0'
 			)
 		),
@@ -105,6 +105,7 @@ $result = array (
 				'size' => '8',
 				'max' => '20',
 				'eval' => 'date',
+                'renderType' => 'inputDateTime',
 				'default' => '0'
 			)
 		),
@@ -116,6 +117,7 @@ $result = array (
 				'size' => '8',
 				'max' => '20',
 				'eval' => 'date',
+                'renderType' => 'inputDateTime',
 				'default' => '0',
 				'range' => array (
 					'upper' => mktime(0, 0, 0, 12, 31, $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['endtimeYear']),
@@ -223,7 +225,6 @@ $result = array (
 				'allowed' => 'doc,htm,html,pdf,sxw,txt,xls,gif,jpg,png',
 				'max_size' => $GLOBALS['TYPO3_CONF_VARS']['BE']['maxFileSize'],
 				'uploadfolder' => 'uploads/tx_ttproducts/datasheet',
-				'show_thumbs' => '1',
 				'size' => '1',
 				'maxitems' => '20',
 				'minitems' => '0',
@@ -251,7 +252,6 @@ $result = array (
 				'allowed' => $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'],
 				'max_size' => $GLOBALS['TYPO3_CONF_VARS']['BE']['maxFileSize'],
 				'uploadfolder' => $imageFolder,
-				'show_thumbs' => '1',
 				'size' => '3',
 				'maxitems' => '10',
 				'minitems' => '0',
@@ -261,13 +261,46 @@ $result = array (
 		),
 	),
 	'types' => array (
-		'1' => array('showitem' => 'sys_language_uid;;;;1-1-1, l18n_diffsource, hidden;;1, prod_uid,title;;2;;3-3-3, unit, note;;;richtext[]:rte_transform[mode=ts_css|imgpath=uploads/tx_ttproducts/rte/], note2;;;richtext[]:rte_transform[mode=ts_css|imgpath=uploads/tx_ttproducts/rte/],image;;;;4-4-4, datasheet')
+		'1' =>
+            array(
+                'columnsOverrides' => array(
+                    'note' => array(
+                        'config' => array(
+                            'enableRichtext' => '1'
+                        )
+                    ),
+                    'note2' => array(
+                        'config' => array(
+                            'enableRichtext' => '1'
+                        )
+                    )
+                ),
+                'showitem' => 'sys_language_uid, l18n_diffsource, hidden,--palette--;;1, prod_uid,title,--palette--;;2, unit, note, note2, image, datasheet'
+            )
 	),
 	'palettes' => array (
 		'1' => array('showitem' => 'starttime,endtime,fe_group'),
 		'2' => array('showitem' => 'subtitle, itemnumber, www'),
 	)
 );
+
+
+
+if (
+    version_compare(TYPO3_version, '8.5.0', '<')
+) {
+    $result['types']['1']['showitem'] =
+        preg_replace(
+            '/(^|,)\s*note\s*(,|$)/', '$1 note;;;richtext[]:rte_transform[mode=ts_css|imgpath=uploads/tx_ttproducts/rte/] $2',
+            $result['types']['1']['showitem']
+        );
+
+    $result['types']['1']['showitem'] =
+        preg_replace(
+            '/(^|,)\s*note2\s*(,|$)/', '$1 note2;;;richtext[]:rte_transform[mode=ts_css|imgpath=uploads/tx_ttproducts/rte/] $2',
+            $result['types']['1']['showitem']
+        );
+}
 
 
 $table = 'tt_products_language';

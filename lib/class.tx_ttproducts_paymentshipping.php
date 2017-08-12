@@ -284,7 +284,14 @@ class tx_ttproducts_paymentshipping {
 
 		$imageCode = '';
 		if (isset($row['image.'])) {
-			$imageCode = $this->cObj->IMAGE($row['image.']);
+            $imageObj = \t3lib_div::getUserObj('tx_ttproducts_field_image_view');
+            $imageCode =
+                $imageObj->getImageCode(
+                    $this->cObj,
+                    $row['image.'],
+                    $theCode
+                ); // neu
+// 			$imageCode = $this->cObj->IMAGE($row['image.']);
 			if ($theCode == 'EMAIL') {
 				tx_div2007_alpha5::fixImageCodeAbsRefPrefix($imageCode);
 			}

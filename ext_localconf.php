@@ -69,10 +69,6 @@ if (!defined ('DAM_EXT')) {
 	define('DAM_EXT', 'dam');
 }
 
-if (!defined ('STATIC_INFO_TABLES_TAXES_EXT')) {
-	define('STATIC_INFO_TABLES_TAXES_EXT', 'static_info_tables_taxes');
-}
-
 
 
 
@@ -152,10 +148,6 @@ if (!defined ('TAXAJAX_EXT')) {
 
 if (!defined ('DAM_EXTkey')) {
 	define('DAM_EXTkey','dam');
-}
-
-if (!defined ('STATIC_INFO_TABLES_TAXES_EXTkey')) {
-	define('STATIC_INFO_TABLES_TAXES_EXTkey', 'static_info_tables_taxes');
 }
 
 if (call_user_func($emClass . '::isLoaded', TAXAJAX_EXT)) {
@@ -309,6 +301,15 @@ if (TYPO3_MODE=='FE')	{ // hooks for FE extensions
 
 	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['transactor']['listener'][TT_PRODUCTS_EXT] = 'tx_ttproducts_hooks_transactor';
 
+    if (
+        version_compare(TYPO3_version, '6.1.0', '>') &&
+        version_compare(PHP_VERSION, '5.5.0', '>=')
+    ) {
+        // TYPO3 page title
+        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-output'][] = 'JambageCom\\TtProducts\\Hooks\\ContentPostProcessor->setPageTitle';
+
+        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-cached'][] = 'JambageCom\\TtProducts\\Hooks\\ContentPostProcessor->setPageTitle';
+    }
 }
 
 

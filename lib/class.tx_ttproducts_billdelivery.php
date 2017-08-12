@@ -242,8 +242,8 @@ class tx_ttproducts_billdelivery {
 			// Final things
 			// Personal and delivery info:
 
-		$orderData['billing']['salutation'] = tx_div2007_alpha5::getLL_fh002($langObj, 'salutation'.$orderData['billing']['salutation']);
-		$orderData['delivery']['salutation'] = tx_div2007_alpha5::getLL_fh002($langObj, 'salutation'.$orderData['delivery']['salutation']);
+		$orderData['billing']['salutation'] = tx_div2007_alpha5::getLL_fh003($langObj, 'salutation'.$orderData['billing']['salutation']);
+		$orderData['delivery']['salutation'] = tx_div2007_alpha5::getLL_fh003($langObj, 'salutation'.$orderData['delivery']['salutation']);
 
 		/* Added Els: 'feusers_uid,'*/
 		$infoFields = explode(',','feusers_uid,name,cnum,first_name,last_name,salutation,address,telephone,fax,email,company,city,zip,state,country');
@@ -282,7 +282,7 @@ class tx_ttproducts_billdelivery {
 		$taxRateArray = t3lib_div::trimExplode(',', $this->conf['TAXrates']);
 		if (isset($taxRateArray) && is_array($taxRateArray))	{
 			foreach ($taxRateArray as $k => $taxrate)	{
-				$taxstr = strval(number_format($taxrate,2));
+				$taxstr = strval(number_format(floatval($taxrate), 2));
 				$label = chr(ord('A')+$k);
 				$markerArray['###PRICE_TAXRATE_NAME'.($k+1).'###'] = $label;
 				$markerArray['###PRICE_TAXRATE_TAX'.($k+1).'###'] = $taxrate;
@@ -317,7 +317,7 @@ class tx_ttproducts_billdelivery {
 		fwrite($datei, $content);
 		fclose($datei);
 
-		$message = tx_div2007_alpha5::getLL_fh002($langObj, 'open_' . $this->type);
+		$message = tx_div2007_alpha5::getLL_fh003($langObj, 'open_' . $this->type);
 		$content = '<a href="' . $reldateiname . '" >'.$message.'</a>';
 
 		return $content;

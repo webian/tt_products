@@ -441,11 +441,11 @@ class tx_ttproducts_activity_finalize {
 				if (is_array($instockTableArray) && $this->conf['warningInStockLimit'])	{
 					$tableDescArray = array ('tt_products' => 'product', 'tt_products_articles' => 'article');
 					foreach ($instockTableArray as $tablename => $instockArray)	{
-						$tableDesc = tx_div2007_alpha5::getLL_fh002($langObj, $tableDescArray[$tablename]);
+						$tableDesc = tx_div2007_alpha5::getLL_fh003($langObj, $tableDescArray[$tablename]);
 						foreach ($instockArray as $instockTmp => $count)	{
 							$uidItemnrTitle = t3lib_div::trimExplode(',', $instockTmp);
 							if ($count <= $this->conf['warningInStockLimit'])	{
-								$messageArr =  explode('|', $message = tx_div2007_alpha5::getLL_fh002($langObj, 'instock_warning'));
+								$messageArr =  explode('|', $message = tx_div2007_alpha5::getLL_fh003($langObj, 'instock_warning'));
 								$subject = $messageArr[0] . $tableDesc . ' "' . $uidItemnrTitle[2] . '"' . $messageArr[1] . $uidItemnrTitle[1] . $messageArr[2];
 								foreach ($recipientsArray['shop'] as $key => $recipient) {
 									// $headers variable removed everywhere!

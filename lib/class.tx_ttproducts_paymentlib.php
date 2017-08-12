@@ -166,7 +166,7 @@ class tx_ttproducts_paymentlib {
 				$referenceId = $this->getReferenceUid();
 
 				if (!$referenceId)	{
-					$errorMessage = tx_div2007_alpha5::getLL_fh002($langObj,'error_reference_id');
+					$errorMessage = tx_div2007_alpha5::getLL_fh003($langObj,'error_reference_id');
 					return '';
 				}
 
@@ -175,7 +175,7 @@ class tx_ttproducts_paymentlib {
 					// Set payment details and get the form data:
 				$ok = $providerObject->transaction_setDetails($transactionDetailsArr);
 				if (!$ok) {
-					$errorMessage = tx_div2007_alpha5::getLL_fh002($langObj,'error_transaction_details');
+					$errorMessage = tx_div2007_alpha5::getLL_fh003($langObj,'error_transaction_details');
 					return '';
 				}
 
@@ -227,7 +227,13 @@ class tx_ttproducts_paymentlib {
 							$markerArray['###REDIRECT_URL###'] = $formuri;
 							$markerArray['###PAYMENTLIB_TITLE###'] = $lConf['extTitle'];
 							$markerArray['###PAYMENTLIB_INFO###'] = $lConf['extInfo'];
-							$markerArray['###PAYMENTLIB_IMAGE###'] = ($lConf['extImage'] == 'IMAGE' && isset($lConf['extImage.']) && is_array($lConf['extImage.']) ? $this->pibase->cObj->IMAGE($lConf['extImage.']) : $lConf['extImage']);
+                            $markerArray['###PAYMENTLIB_IMAGE###'] = (
+                                $lConf['extImage'] == 'IMAGE' &&
+                                isset($lConf['extImage.']) &&
+                                is_array($lConf['extImage.']) ?
+                                $this->pibase->cObj->getContentObject('IMAGE')->render($lConf['extImage.']) :
+                                $lConf['extImage']
+                            );
 							$markerArray['###PAYMENTLIB_WWW###'] = $lConf['extWww'];
 
 							$content=$this->basketView->getView($localTemplateCode,'PAYMENT', $this->info, FALSE, FALSE, TRUE, 'PAYMENTLIB_FORM_TEMPLATE', $markerArray, $templateFilename);
@@ -235,7 +241,7 @@ class tx_ttproducts_paymentlib {
 							if ($bError)	{
 								$errorMessage = $formuri;
 							} else {
-								$errorMessage = tx_div2007_alpha5::getLL_fh002($langObj,'error_relay_url');
+								$errorMessage = tx_div2007_alpha5::getLL_fh003($langObj,'error_relay_url');
 							}
 						}
 					} else if ($gatewayMode == $compGatewayWebservice)	{

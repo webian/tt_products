@@ -101,7 +101,7 @@ class tx_ttproducts_field_price_view implements tx_ttproducts_field_view_int {
 			$ptconf = $this->conf['priceTagObj.'];
 			$markContentArray = array();
 			$markContentArray['###PRICE###'] = $priceText;
-			$markContentArray['###TAX_INCL_EXCL###'] = ($taxInclExcl ? tx_div2007_alpha5::getLL_fh002($this->langObj, $taxInclExcl) : '');
+			$markContentArray['###TAX_INCL_EXCL###'] = ($taxInclExcl ? tx_div2007_alpha5::getLL_fh003($this->langObj, $taxInclExcl) : '');
 
 			$this->cObj->substituteMarkerInObject($ptconf, $markContentArray);
 			return $this->cObj->cObjGetSingle($this->conf['priceTagObj'], $ptconf);

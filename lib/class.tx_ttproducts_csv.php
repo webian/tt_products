@@ -183,7 +183,7 @@ class tx_ttproducts_csv {
 			fclose($csvfile);
 		} else {
 			$langObj = t3lib_div::getUserObj('&tx_ttproducts_language');
-			$message = tx_div2007_alpha5::getLL_fh002($langObj,'no_csv_creation');
+			$message = tx_div2007_alpha5::getLL_fh003($langObj,'no_csv_creation');
 			$messageArr =  explode('|', $message);
 			$error_message=$messageArr[0] . $csvfilepath . $messageArr[1];
 		}

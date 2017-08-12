@@ -1153,7 +1153,6 @@ class tx_ttproducts_list_view {
 						);
 					}
 
-// 					include_once (PATH_BE_ttproducts.'view/class.tx_ttproducts_basketitem_view.php');
 					$basketItemView = t3lib_div::getUserObj('tx_ttproducts_basketitem_view');
 					$basketItemView->init($this->pibase, $basketObj->basketExt);
 					$basketItemView->getItemMarkerArray (
@@ -1522,7 +1521,7 @@ class tx_ttproducts_list_view {
 			$excludeList = ($theCode == 'SEARCH' ? 'sword' : '');
 			$this->getSearchParams($addQueryString);
 			$markerArray = $this->urlObj->addURLMarkers($TSFE->id,$markerArray,$addQueryString,$excludeList,$bUseBackPid); //Applied it here also...
-			$markerArray['###AMOUNT_CREDITPOINTS###'] = number_format($TSFE->fe_user->user['tt_products_creditpoints'],0);
+			$markerArray['###AMOUNT_CREDITPOINTS###'] = number_format(floatval($TSFE->fe_user->user['tt_products_creditpoints']), 0);
 			$markerArray['###ITEMS_SELECT_COUNT###'] = $productsCount;
  			$this->javaScriptMarker->getMarkerArray($jsMarkerArray, $markerArray);
  			$markerArray = array_merge ($jsMarkerArray, $markerArray);

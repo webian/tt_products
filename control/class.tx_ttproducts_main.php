@@ -175,8 +175,9 @@ class tx_ttproducts_main {
 		if ($bDoProcessing && $this->cObj->getUserObjectType() == tslib_cObj::OBJECTTYPE_USER) {
 			$intersection = array_intersect(self::$uncachedCodes, $this->codeArray);
 			if (count($intersection)) {
-				$this->convertToUserInt();
-				$bDoProcessing = FALSE;
+				if ($this->convertToUserInt()) {
+                    $bDoProcessing = FALSE;
+				}
 			}
 		}
 		if (!$bDoProcessing)	{
@@ -225,7 +226,7 @@ class tx_ttproducts_main {
 		$this->pid = ($this->conf['PIDbasket'] && $this->conf['clickIntoBasket'] ? $this->conf['PIDbasket'] : ($backPID ? $backPID : $TSFE->id));
 
 		if ($this->conf['TAXmode'] == '' ||  $this->conf['TAXmode'] == '{$plugin.tt_products.TAXmode}')	{
-			$this->conf['TAXmode'] == 1;
+			$this->conf['TAXmode'] = 1;
 		}
 		$this->pageAsCategory = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['pageAsCategory'];
 		// get template suffix string
@@ -540,12 +541,12 @@ class tx_ttproducts_main {
 							$tablename == 'tx_partner_main' && !t3lib_extMgm::isLoaded(PARTNER_EXTkey) ||
 							$tablename == 'tt_address' && !t3lib_extMgm::isLoaded(TT_ADDRESS_EXTkey)
 						) {
-							$message = tx_div2007_alpha5::getLL_fh002($langObj, 'extension_missing');
+							$message = tx_div2007_alpha5::getLL_fh003($langObj, 'extension_missing');
 							$messageArr =  explode('|', $message);
 							$extTableArray = array('tt_address' => TT_ADDRESS_EXTkey, 'tx_partner_main' => PARTNER_EXTkey, 'tx_party_addresses' => PARTY_EXTkey);
 							$this->errorMessage=$messageArr[0]. $extTableArray[$tablename] .$messageArr[1];
 						} else if (!$tablename) {
-							$message = tx_div2007_alpha5::getLL_fh002($langObj, 'setup_missing');
+							$message = tx_div2007_alpha5::getLL_fh003($langObj, 'setup_missing');
 							$messageArr =  explode('|', $message);
 							$this->errorMessage=$messageArr[0]. 'table.address' .$messageArr[1];
 						}
@@ -721,8 +722,8 @@ class tx_ttproducts_main {
 					}
 
 					if ($key == 0) {
-						$messageArr = explode('|', $message = tx_div2007_alpha5::getLL_fh002($langObj, $indice));
-						$contentTmp .= '<b>'.tx_div2007_alpha5::getLL_fh002($langObj, 'tt_products').': '.$messageArr[0].'</b>';
+						$messageArr = explode('|', $message = tx_div2007_alpha5::getLL_fh003($langObj, $indice));
+						$contentTmp .= '<b>'.tx_div2007_alpha5::getLL_fh003($langObj, 'tt_products').': '.$messageArr[0].'</b>';
 					} else {
 						$contentTmp .= '<b>'.$indice.$messageArr[$i].'</b>';
 					}
@@ -810,7 +811,7 @@ class tx_ttproducts_main {
 				$tmplText = $theCode.'.';
 			}
 			$tmplText .= 'templateFile';
-			$this->errorMessage .= tx_div2007_alpha5::getLL_fh002($langObj, 'no_template') . ' plugin.' . TT_PRODUCTS_EXT . '.' . $tmplText . ' = ';
+			$this->errorMessage .= tx_div2007_alpha5::getLL_fh003($langObj, 'no_template') . ' plugin.' . TT_PRODUCTS_EXT . '.' . $tmplText . ' = ';
 			$this->errorMessage .= ($this->conf['templateFile'] ? "'".$this->conf['templateFile']."'" : '""');
 		} else {
 			$markerObj = t3lib_div::getUserObj('&tx_ttproducts_marker');

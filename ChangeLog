@@ -1,3 +1,8 @@
+2017-08-12 Franz Holzinger <franz@ttproducts.de>
+    * Support the date for TYPO3 8
+    * the TCA renderType inputDateTime is only available since TYPO3 8.7.0
+    * bufix for TYPO3 8.6: The IMAGE rendering call has been changed.
+
 2016-12-10 Franz Holzinger <franz@ttproducts.de>
 	* workaround for TYPO3 bug #78944: remove transOrigPointerField and transOrigPointerTable from all language overlay tables
 	* bugfix: ###ERROR_DETAILS### marker did not show anything

@@ -2340,7 +2340,7 @@ if (
 			),
 		),
 		'types' => array (
-			'0' => array('showitem' => 'hidden;;;;1-1-1, title, marker, note;;;richtext[]:rte_transform[mode=ts_css|imgpath=uploads/tx_ttproducts/rte/], parentid;;;;2-2-2, parenttable')
+			'0' => array('showitem' => 'hidden;;1;;1-1-1, title, marker, note;;;richtext[]:rte_transform[mode=ts_css|imgpath=uploads/tx_ttproducts/rte/], parentid;;;;2-2-2, parenttable')
 		),
 		'palettes' => array (
 			'1' => array('showitem' => 'starttime,endtime,fe_group'),
@@ -2581,7 +2581,7 @@ if (
 			),
 		),
 		'types' => array (
-			'1' => array('showitem' => 'hidden;;;;1-1-1, iban, ac_number, owner_name, bic')
+			'1' => array('showitem' => 'iban, ac_number, owner_name, bic')
 		),
 		'palettes' => array (
 			'1' => array('showitem' => '')
@@ -2667,7 +2667,7 @@ if (
 			),
 		),
 		'types' => array (
-			'1' => array('showitem' => 'hidden;;;;1-1-1, cc_number, owner_name, cc_type, cvv2, endtime')
+			'1' => array('showitem' => 'cc_number, owner_name, cc_type, cvv2, endtime')
 		),
 		'palettes' => array (
 			'1' => array('showitem' => '')
@@ -3154,8 +3154,8 @@ if (
 		'types' => array (
 			'1' => array
 				(
-					'showitem' => 'hidden;;;;1-1-1, name;;3;;3-3-3, sys_language_uid,first_name,last_name,salutation,address,zip,city,country,telephone,email,payment,shipping,amount,email_notify,tracking_code,status,fax,business_partner,organisation_form,agb,feusers_uid,creditpoints,creditpoints_spended,creditpoints_saved,creditpoints_gifts,desired_date,client_ip,note,giftservice,foundby,giftcode,cc_uid,ac_uid,date_of_birth,radio1,' .
-					'--div--;LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:sys_products_orders.orderHtmlDiv,orderHtml;;3;;3-3-3,'
+					'showitem' => 'hidden, name, sys_language_uid,first_name,last_name,salutation,address,zip,city,country,telephone,email,payment,shipping,amount,email_notify,tracking_code,status,fax,business_partner,organisation_form,agb,feusers_uid,creditpoints,creditpoints_spended,creditpoints_saved,creditpoints_gifts,desired_date,client_ip,note,giftservice,foundby,giftcode,cc_uid,ac_uid,date_of_birth,radio1,' .
+					'--div--;LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:sys_products_orders.orderHtmlDiv,orderHtml,'
 				)
 		),
 		'palettes' => array (

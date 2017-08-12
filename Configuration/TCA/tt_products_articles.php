@@ -33,7 +33,6 @@ $result = array (
 		'cruser_id' => 'cruser_id',
 		'iconfile' => PATH_TTPRODUCTS_ICON_TABLE_REL . 'tt_products_articles.gif',
 		'dividers2tabs' => '1',
-		'transForeignTable' => 'tt_products_articles_language',
 		'searchFields' => 'title,subtitle,itemnumber,note,note2',
 	),
 	'interface' => array (
@@ -56,6 +55,7 @@ $result = array (
 				'size' => '8',
 				'max' => '20',
 				'eval' => 'date',
+                'renderType' => 'inputDateTime',
 				'default' => '0'
 			)
 		),
@@ -67,6 +67,7 @@ $result = array (
 				'size' => '8',
 				'max' => '20',
 				'eval' => 'date',
+                'renderType' => 'inputDateTime',
 				'default' => '0'
 			)
 		),
@@ -91,6 +92,7 @@ $result = array (
 				'size' => '8',
 				'max' => '20',
 				'eval' => 'date',
+                'renderType' => 'inputDateTime',
 				'default' => '0'
 			)
 		),
@@ -102,6 +104,7 @@ $result = array (
 				'size' => '8',
 				'max' => '20',
 				'eval' => 'date',
+                'renderType' => 'inputDateTime',
 				'default' => '0',
 				'range' => array (
 					'upper' => mktime(0, 0, 0, 12, 31, $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['endtimeYear']),
@@ -366,7 +369,6 @@ $result = array (
 				'allowed' => $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'],
 				'max_size' => $GLOBALS['TYPO3_CONF_VARS']['BE']['maxFileSize'],
 				'uploadfolder' => $imageFolder,
-				'show_thumbs' => '1',
 				'size' => '3',
 				'maxitems' => '10',
 				'minitems' => '0',
@@ -376,7 +378,23 @@ $result = array (
 		),
 	),
 	'types' => array (
-		'1' => array('showitem' => 'hidden;;1, title;;3;;1-1-1, itemnumber, inStock;;;;1-1-1, basketminquantity, price;;2;;, weight, color, color2, color3, size, size2, size3, description, gradings, material, quality, note;;;richtext[]:rte_transform[mode=ts_css|imgpath=uploads/tx_ttproducts/rte/],note2;;;richtext[]:rte_transform[mode=ts_css|imgpath=uploads/tx_ttproducts/rte/],image;;;;3-3-3')
+		'1' =>
+            array(
+                'columnsOverrides' => array(
+                    'note' => array(
+                        'config' => array(
+                            'enableRichtext' => '1'
+                        )
+                    ),
+                    'note2' => array(
+                        'config' => array(
+                            'enableRichtext' => '1'
+                        )
+                    )
+                ),
+
+                'showitem' => 'hidden,--palette--;;1, title,--palette--;;3, itemnumber, inStock, basketminquantity, price,--palette--;;2, weight, color, color2, color3, size, size2, size3, description, gradings, material, quality, note, note2, image'
+            )
 	),
 	'palettes' => array (
 		'1' => array('showitem' => 'starttime, endtime, fe_group'),
@@ -384,6 +402,23 @@ $result = array (
 		'3' => array('showitem' => 'subtitle'),
 	)
 );
+
+
+if (
+    version_compare(TYPO3_version, '8.5.0', '<')
+) {
+    $result['types']['1']['showitem'] =
+        preg_replace(
+            '/(^|,)\s*note\s*(,|$)/', '$1 note;;;richtext[]:rte_transform[mode=ts_css|imgpath=uploads/tx_ttproducts/rte/] $2',
+            $result['types']['1']['showitem']
+        );
+
+    $result['types']['1']['showitem'] =
+        preg_replace(
+            '/(^|,)\s*note2\s*(,|$)/', '$1 note2;;;richtext[]:rte_transform[mode=ts_css|imgpath=uploads/tx_ttproducts/rte/] $2',
+            $result['types']['1']['showitem']
+        );
+}
 
 
 switch ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['articleMode']) {
@@ -403,7 +438,7 @@ switch ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['articleMode']) 
 			)
 		);
 
-		$result['types']['1'] = str_replace('title;', 'uid_product;;;;1-1-1,title;', $result['types']['1']);
+		$result['types']['1'] = str_replace('title;', 'uid_product,title;', $result['types']['1']);
 
 		break;
 }

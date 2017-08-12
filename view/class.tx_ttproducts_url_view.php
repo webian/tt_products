@@ -120,7 +120,7 @@ class tx_ttproducts_url_view {
 		// $addQueryString['no_cache'] = 1;
 			// Add's URL-markers to the $markerArray and returns it
 		$pidBasket = ($this->conf['PIDbasket'] ? $this->conf['PIDbasket'] : $TSFE->id);
-		$pidFormUrl = ($pidNext ? $pidNext : $pidBasket);
+		$pidFormUrl = ($pidNext ? $pidNext : $TSFE->id); // formerly: $pidBasket
 
 		$singleExcludeList = $this->getSingleExcludeList($excludeList);
 

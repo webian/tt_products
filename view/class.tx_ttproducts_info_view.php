@@ -552,7 +552,7 @@ class tx_ttproducts_info_view {
 		$foundbyKey = $this->infoArray['delivery']['foundby'];
 		if (is_array($valueArray[$foundbyKey]))	{
 			$tmp = tx_div2007_alpha5::sL_fh002($valueArray[$foundbyKey][0]);
-			$text = tx_div2007_alpha5::getLL_fh002($langObj, $tmp);
+			$text = tx_div2007_alpha5::getLL_fh003($langObj, $tmp);
 		}
 
 		$markerArray['###DELIVERY_FOUNDBY###'] = $text;

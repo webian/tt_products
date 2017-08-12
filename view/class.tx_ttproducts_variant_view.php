@@ -113,6 +113,7 @@ class tx_ttproducts_variant_view implements tx_ttproducts_variant_view_int {
 		$remMarkerArray = array();
 		$variantConf = &$this->modelObj->conf;
 
+        $maxKey = 0;
 		if (is_array($variantConf))	{
 			foreach ($variantConf as $key => $field)	{
 				if ($field != 'additional')	{	// no additional here
@@ -126,6 +127,9 @@ class tx_ttproducts_variant_view implements tx_ttproducts_variant_view_int {
 						$remMarkerArray[] = 'display_variant'.$key;
 					}
 				}
+                if ($key > $maxKey) {
+                    $maxKey = $key;
+                }
 			}
 		}
 
@@ -145,6 +149,10 @@ class tx_ttproducts_variant_view implements tx_ttproducts_variant_view_int {
 			$remSubpartArray[] = 'display_variant5_giftService';
 			$remMarkerArray[] = 'display_variant5_NoGiftService';
 		}
+
+        for ($i = $maxKey + 1; $i <= 32; ++$i) { // remove more variants from the future
+            $remSubpartArray[] = 'display_variant' . $i;
+        }
 
 		foreach ($remSubpartArray as $k => $subpart) {
 			$subpartArray['###'.$subpart.'###'] = '';

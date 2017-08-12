@@ -117,7 +117,7 @@ class tx_ttproducts_javascript {
 		$code = '';
 		$bError = false;
 		$langObj = t3lib_div::getUserObj('&tx_ttproducts_language');
-		$message = tx_div2007_alpha5::getLL_fh002($langObj, 'invalid_email');
+		$message = tx_div2007_alpha5::getLL_fh003($langObj, 'invalid_email');
 		$emailArr =  explode('|', $message);
 
 		if (!$this->bCopyrightShown && $fieldname != 'xajax')	{

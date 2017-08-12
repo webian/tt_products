@@ -43,6 +43,7 @@ $result = array (
 				'size' => '8',
 				'max' => '20',
 				'eval' => 'date',
+                'renderType' => 'inputDateTime',
 				'default' => '0'
 			)
 		),
@@ -54,6 +55,7 @@ $result = array (
 				'size' => '8',
 				'max' => '20',
 				'eval' => 'date',
+                'renderType' => 'inputDateTime',
 				'default' => '0'
 			)
 		),
@@ -73,6 +75,7 @@ $result = array (
 				'size' => '8',
 				'max' => '20',
 				'eval' => 'date',
+                'renderType' => 'inputDateTime',
 				'default' => '0'
 			)
 		),
@@ -84,6 +87,7 @@ $result = array (
 				'size' => '8',
 				'max' => '20',
 				'eval' => 'date',
+                'renderType' => 'inputDateTime',
 				'default' => '0',
 				'range' => array (
 					'upper' => mktime(0, 0, 0, 12, 31, $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['endtimeYear']),
@@ -124,27 +128,13 @@ $result = array (
 		),
 	),
 	'types' => array (
-		'1' => array('showitem' => 'hidden;;;;1-1-1, name, email')
+		'1' => array('showitem' => 'hidden,--palette--;;1, name, email')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => 'starttime, endtime, fe_group')
 	)
 
 );
-
-
-
-$table = 'tt_products_emails';
-
-$orderBySortingTablesArray = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['orderBySortingTables']);
-if (
-	!empty($orderBySortingTablesArray) &&
-	in_array($table, $orderBySortingTablesArray)
-) {
-	$result['ctrl']['sortby'] = 'sorting';
-}
-
-
 
 return $result;
 

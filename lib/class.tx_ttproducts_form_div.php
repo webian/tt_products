@@ -54,7 +54,7 @@ class tx_ttproducts_form_div {
 				}
 				if ($bTranslateText)	{
 					$tmp = tx_div2007_alpha5::sL_fh002($selectValue);
-					$text = tx_div2007_alpha5::getLL_fh002($langObj, $tmp);
+					$text = tx_div2007_alpha5::getLL_fh003($langObj, $tmp);
 				} else {
 					$text = '';
 				}

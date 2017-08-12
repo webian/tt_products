@@ -50,7 +50,7 @@ $result = array (
 		),
 	),
 	'types' => array (
-		'1' => array('showitem' => 'hidden;;;;1-1-1, ac_number, owner_name, bic')
+		'1' => array('showitem' => 'ac_number, owner_name, bic')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => '')

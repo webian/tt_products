@@ -63,9 +63,9 @@ class tx_ttproducts_subpartmarker {
 	 * @return	[type]		...
 	 */
 	function spMarker($subpartMarker)	{
-		$sPBody = substr($subpartMarker,3,-3);
 		$altSPM = '';
 		if (isset($this->conf['altMainMarkers.']))	{
+            $sPBody = substr($subpartMarker, 3, -3);
 			$altSPM = trim($this->cObj->stdWrap($this->conf['altMainMarkers.'][$sPBody], $this->conf['altMainMarkers.'][$sPBody.'.']));
 			$GLOBALS['TT']->setTSlogMessage('Using alternative subpart marker for "' . $subpartMarker . '": ' . $altSPM, 1);
 		}

@@ -575,8 +575,16 @@ class tx_ttproducts_control {
 								} else {	// If not all required info-fields are filled in, this is shown instead:
 									$langObj = t3lib_div::getUserObj('&tx_ttproducts_language');
 									$infoViewObj->infoArray['billing']['error'] = 1;
-									$content .= $this->cObj->getSubpart($this->templateCode, $this->subpartmarkerObj->spMarker('###BASKET_REQUIRED_INFO_MISSING###'));
+									$requiredOut = $this->cObj->getSubpart($this->templateCode, $this->subpartmarkerObj->spMarker('###BASKET_REQUIRED_INFO_MISSING###'));
 
+                                    if (!$requiredOut) {
+                                        $mainObj = t3lib_div::getUserObj('&tx_ttproducts_main');
+                                        $this->error_code[0] = 'no_subtemplate';
+                                        $this->error_code[1] = '###BASKET_REQUIRED_INFO_MISSING###';
+                                        $this->error_code[2] = $mainObj->templateFile;
+                                        return '';
+                                    }
+                                    $content .= $requiredOut;
 									$addQueryString = array();
 									$overwriteMarkerArray = array();
 									$label = '';
@@ -584,11 +592,11 @@ class tx_ttproducts_control {
 									if ($pidagb && !$_REQUEST['recs']['personinfo']['agb'] && !t3lib_div::_GET('products_payment') && !$infoViewObj->infoArray['billing']['agb']) {
 										// so AGB has not been accepted
 										$addQueryString['agb']=0;
-										$label = tx_div2007_alpha5::getLL_fh002($langObj, 'accept_AGB');
+										$label = tx_div2007_alpha5::getLL_fh003($langObj, 'accept_AGB');
 									} else if ($cardRequired)	{
-										$label = '*' . tx_div2007_alpha5::getLL_fh002($langObj, $cardObj->tablename . '.' . $cardRequired) . '*';
+										$label = '*' . tx_div2007_alpha5::getLL_fh003($langObj, $cardObj->tablename . '.' . $cardRequired) . '*';
 									} else if ($accountRequired)	{
-										$label = '*'.tx_div2007_alpha5::getLL_fh002($langObj, $accountObj->tablename) . ': ' . tx_div2007_alpha5::getLL_fh002($langObj, $accountObj->tablename . '.' . $accountRequired) . '*';
+										$label = '*'.tx_div2007_alpha5::getLL_fh003($langObj, $accountObj->tablename) . ': ' . tx_div2007_alpha5::getLL_fh003($langObj, $accountObj->tablename . '.' . $accountRequired) . '*';
 									} else if ($paymentErrorMsg)	{
 										$label = $paymentErrorMsg;
 									} else {
@@ -621,8 +629,8 @@ class tx_ttproducts_control {
 										}
 
 										if (!$label) {
-											$tmpArray = t3lib_div::trimExplode('|', tx_div2007_alpha5::getLL_fh002($langObj, 'missing'));
-											$label = tx_div2007_alpha5::getLL_fh002($langObj, 'missing_' . $checkRequired);
+											$tmpArray = t3lib_div::trimExplode('|', tx_div2007_alpha5::getLL_fh003($langObj, 'missing'));
+											$label = tx_div2007_alpha5::getLL_fh003($langObj, 'missing_' . $checkRequired);
 											if ($label) {
 												$label = $tmpArray[0] . ' ' . $label . ' ' . $tmpArray[1];
 											} else {
@@ -683,7 +691,16 @@ class tx_ttproducts_control {
 
 									if($bFinalize == FALSE ){
 										$label = $errorMessage;
-										$content = $this->cObj->getSubpart($this->templateCode, $this->subpartmarkerObj->spMarker('###BASKET_REQUIRED_INFO_MISSING###'));
+										$requiredOut = $this->cObj->getSubpart($this->templateCode, $this->subpartmarkerObj->spMarker('###BASKET_REQUIRED_INFO_MISSING###'));
+
+                                        if (!$requiredOut) {
+                                            $mainObj = t3lib_div::getUserObj('&tx_ttproducts_main');
+                                            $this->error_code[0] = 'no_subtemplate';
+                                            $this->error_code[1] = '###BASKET_REQUIRED_INFO_MISSING###';
+                                            $this->error_code[2] = $mainObj->templateFile;
+                                            return '';
+                                        }
+                                        $content .= $requiredOut;
 
 										$markerArray = $this->urlObj->addURLMarkers(0, $markerArray,$addQueryString);
 										$markerArray['###ERROR_DETAILS###'] = $mainMarkerArray['###ERROR_DETAILS###'] = $label;
@@ -830,10 +847,18 @@ class tx_ttproducts_control {
 							$label = $checkAllowed;
 						}
 						$mainMarkerArray['###ERROR_DETAILS###'] = $label;
-						$content .= $this->cObj->getSubpart(
+						$requiredOut = $this->cObj->getSubpart(
 							$this->templateCode,
 							$this->subpartmarkerObj->spMarker('###BASKET_REQUIRED_INFO_MISSING###')
 						);
+                        if (!$requiredOut) {
+                            $mainObj = t3lib_div::getUserObj('&tx_ttproducts_main');
+                            $this->error_code[0] = 'no_subtemplate';
+                            $this->error_code[1] = '###BASKET_REQUIRED_INFO_MISSING###';
+                            $this->error_code[2] = $mainObj->templateFile;
+                            return '';
+                        }
+                        $content .= $requiredOut;
 
 						$content = $this->cObj->substituteMarkerArray(
 							$content,

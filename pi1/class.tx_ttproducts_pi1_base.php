@@ -40,7 +40,6 @@
  *
  */
 
-tx_div2007_core::activateCompatibility6();
 
 class tx_ttproducts_pi1_base extends tslib_pibase {
 	var $prefixId = 'tt_products';	// Same as class name
@@ -73,7 +72,7 @@ class tx_ttproducts_pi1_base extends tslib_pibase {
 			}
 		} else {
 			tx_div2007_alpha5::loadLL_fh002($this, 'EXT:' . TT_PRODUCTS_EXT . '/pi1/locallang.xml');
-			$content = tx_div2007_alpha5::getLL_fh002($this,'no_template').' plugin.tt_products.templateFile';
+			$content = tx_div2007_alpha5::getLL_fh003($this,'no_template').' plugin.tt_products.templateFile';
 		}
 
 		return $content;

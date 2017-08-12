@@ -61,7 +61,7 @@ $result = array (
 		),
 	),
 	'types' => array(
-		'0' => array('showitem' => 'hidden;;1;;1-1-1, product_uid, graduated_price_uid')
+		'0' => array('showitem' => 'hidden, product_uid, graduated_price_uid')
 	)
 );
 

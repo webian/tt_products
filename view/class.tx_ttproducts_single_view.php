@@ -271,27 +271,6 @@ class tx_ttproducts_single_view {
 				$itemFrameWork = $this->cObj->getSubpart($itemFrameWork, '###PRODUCT_DATA###');
 			}
 
-			// set the title of the single view
-			switch ($this->conf['substitutePagetitle']) {
-				case 1:
-					$titleStr = $row['title'];
-					break;
-				case 2:
-					$titleStr = $row['subtitle'] ? $row['subtitle'] : $row['title'];
-					break;
-				case 12:
-					$titleStr = $row['title'] . ' / ' . $row['subtitle'];
-					break;
-				case 21:
-					$titleStr = $row['subtitle'] . ' / ' . $row['title'];
-					break;
-			}
-			if (isset($titleStr)) {
-				$GLOBALS['TSFE']->page['title'] = $titleStr;
-				// set pagetitle for indexed search to the tt_products title
-				$GLOBALS['TSFE']->indexedDocTitle = $titleStr;
-			}
-
 				// Fill marker arrays
 			$backPID = $this->pibase->piVars['backPID'];
 			$backPID = ($backPID ? $backPID : t3lib_div::_GP('backPID'));

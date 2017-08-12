@@ -198,7 +198,7 @@ abstract class tx_ttproducts_article_base_view extends tx_ttproducts_table_base_
 		$taxFromShipping = $paymentshippingObj->getReplaceTaxPercentage();
 		$taxInclExcl = (isset($taxFromShipping) && is_double($taxFromShipping) && $taxFromShipping == 0 ? 'tax_zero' : 'tax_included');
 
-		$markerArray['###TAX_INCL_EXCL###'] = ($taxInclExcl ? tx_div2007_alpha5::getLL_fh002($this->langObj, $taxInclExcl) : '');
+		$markerArray['###TAX_INCL_EXCL###'] = ($taxInclExcl ? tx_div2007_alpha5::getLL_fh003($this->langObj, $taxInclExcl) : '');
 
 		$markerArray['###'.$priceMarkerPrefix.'DIRECTCOST_TAX###'] = $priceViewObj->printPrice($priceViewObj->priceFormat($priceObj->getPrice($row['directcost'],1,$row['tax'],$this->conf['TAXincluded'],$taxInclExcl)));
 		$markerArray['###'.$priceMarkerPrefix.'DIRECTCOST_NO_TAX###'] = $priceViewObj->printPrice($priceViewObj->priceFormat($priceObj->getPrice($row['directcost'],0,$row['tax'],$this->conf['TAXincluded'],$taxInclExcl)));

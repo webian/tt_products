@@ -1,10 +1,10 @@
 <?php
-
 if (!defined ('TYPO3_MODE')) {
 	die ('Access denied.');
 }
 
-$table = 'tt_products_cat';
+
+$table = 'tt_products_emails';
 
 if (
     version_compare(TYPO3_version, '8.7.0', '<')
@@ -17,16 +17,12 @@ if (
     }
 }
 
-$excludeArray = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['exclude.'];
+$orderBySortingTablesArray = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['orderBySortingTables']);
 
 if (
-	isset($excludeArray) &&
-	is_array($excludeArray) &&
-	isset($excludeArray[$table])
+    !empty($orderBySortingTablesArray) &&
+    in_array($table, $orderBySortingTablesArray)
 ) {
-	\JambageCom\Div2007\Utility\TcaUtility::removeField(
-		$GLOBALS['TCA'][$table],
-		$excludeArray[$table]
-	);
+    $GLOBALS['TCA'][$table]['ctrl']['sortby'] = 'sorting';
 }
 
