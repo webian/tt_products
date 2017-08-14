@@ -26,7 +26,7 @@ $result = array(
 		'label_alt' => 'subtitle',
 		'default_sortby' => 'ORDER BY title',
 		'tstamp' => 'tstamp',
-		'prependAtCopy' => 'LLL:EXT:lang/locallang_general.php:LGL.prependAtCopy',
+		'prependAtCopy' => DIV2007_LANGUAGE_LGL . 'prependAtCopy',
 		'crdate' => 'crdate',
 		'cruser_id' => 'cruser_id',
 		'delete' => 'deleted',
@@ -48,7 +48,7 @@ $result = array(
 	),
 	'columns' => array (
 		't3ver_label' => array (
-			'label'  => 'LLL:EXT:lang/locallang_general.xml:LGL.versionLabel',
+			'label'  => DIV2007_LANGUAGE_LGL . 'versionLabel',
 			'config' => array (
 				'type' => 'input',
 				'size' => '30',
@@ -62,14 +62,14 @@ $result = array(
 		),
 		'hidden' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.hidden',
+            'label'  => DIV2007_LANGUAGE_LGL . 'hidden',
 			'config' => array (
 				'type' => 'check'
 			)
 		),
 		'tstamp' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tstamp',
+            'label'  => DIV2007_LANGUAGE_LGL . 'tstamp',
 			'config' => array (
 				'type' => 'input',
 				'size' => '8',
@@ -93,7 +93,7 @@ $result = array(
 		),
 		'starttime' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.starttime',
+            'label' => DIV2007_LANGUAGE_LGL . 'starttime',
 			'config' => array (
 				'type' => 'input',
 				'size' => '8',
@@ -105,7 +105,7 @@ $result = array(
 		),
 		'endtime' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.endtime',
+            'label' => DIV2007_LANGUAGE_LGL . 'endtime',
 			'config' => array (
 				'type' => 'input',
 				'size' => '8',
@@ -121,15 +121,15 @@ $result = array(
 		),
 		'fe_group' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.fe_group',
+			'label' => DIV2007_LANGUAGE_LGL . 'fe_group',
 			'config' => array (
 				'type' => 'select',
 				'renderType' => 'selectSingle',
 				'items' => array (
 					array('', 0),
-					array('LLL:EXT:lang/locallang_general.php:LGL.hide_at_login', -1),
-					array('LLL:EXT:lang/locallang_general.php:LGL.any_login', -2),
-					array('LLL:EXT:lang/locallang_general.php:LGL.usergroups', '--div--')
+					array(DIV2007_LANGUAGE_LGL . 'hide_at_login', -1),
+					array(DIV2007_LANGUAGE_LGL . 'any_login', -2),
+					array(DIV2007_LANGUAGE_LGL . 'usergroups', '--div--')
 				),
 				'foreign_table' => 'fe_groups'
 			)
@@ -312,7 +312,7 @@ $result = array(
 		),
 		'www' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.www',
+			'label' => DIV2007_LANGUAGE_LGL . 'www',
 			'config' => array (
 				'type' => 'input',
 				'eval' => 'trim',
@@ -322,7 +322,7 @@ $result = array(
 		),
 		'category' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.category',
+			'label' => DIV2007_LANGUAGE_LGL . 'category',
 			'config' => array (
 				'type' => 'select',
 				'renderType' => 'selectSingle',
@@ -637,7 +637,7 @@ $result = array(
 		),
 		'image' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.image',
+			'label' => DIV2007_LANGUAGE_LGL . 'image',
 			'config' => array (
 				'type' => 'group',
 				'internal_type' => 'file',

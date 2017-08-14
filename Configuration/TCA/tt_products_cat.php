@@ -26,7 +26,7 @@ $result = array (
 			'fe_group' => 'fe_group',
 		),
 		'thumbnail' => 'image',
-		'prependAtCopy' => 'LLL:EXT:lang/locallang_general.php:LGL.prependAtCopy',
+		'prependAtCopy' => DIV2007_LANGUAGE_LGL . 'prependAtCopy',
 		'crdate' => 'crdate',
 		'cruser_id' => 'cruser_id',
 		'iconfile' => PATH_TTPRODUCTS_ICON_TABLE_REL . 'tt_products_cat.gif',
@@ -37,7 +37,7 @@ $result = array (
 	),
 	'columns' => array (
 		't3ver_label' => array (
-			'label'  => 'LLL:EXT:lang/locallang_general.xml:LGL.versionLabel',
+            'label'  => DIV2007_LANGUAGE_LGL . 'versionLabel',
 			'config' => array (
 				'type' => 'input',
 				'size' => '30',
@@ -51,7 +51,7 @@ $result = array (
 		),
 		'hidden' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.hidden',
+            'label'  => DIV2007_LANGUAGE_LGL . 'hidden',
 			'config' => array (
 				'type' => 'check'
 			)
@@ -82,7 +82,7 @@ $result = array (
 		),
 		'starttime' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.starttime',
+            'label' => DIV2007_LANGUAGE_LGL . 'starttime',
 			'config' => array (
 				'type' => 'input',
 				'size' => '8',
@@ -94,7 +94,7 @@ $result = array (
 		),
 		'endtime' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.endtime',
+            'label' => DIV2007_LANGUAGE_LGL . 'endtime',
 			'config' => array (
 				'type' => 'input',
 				'size' => '8',
@@ -110,22 +110,22 @@ $result = array (
 		),
 		'fe_group' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.fe_group',
+			'label' => DIV2007_LANGUAGE_LGL . 'fe_group',
 			'config' => array (
 				'type' => 'select',
 				'renderType' => 'selectSingle',
 				'items' => array (
 					array('', 0),
-					array('LLL:EXT:lang/locallang_general.php:LGL.hide_at_login', -1),
-					array('LLL:EXT:lang/locallang_general.php:LGL.any_login', -2),
-					array('LLL:EXT:lang/locallang_general.php:LGL.usergroups', '--div--')
+					array(DIV2007_LANGUAGE_LGL . 'hide_at_login', -1),
+					array(DIV2007_LANGUAGE_LGL . 'any_login', -2),
+					array(DIV2007_LANGUAGE_LGL . 'usergroups', '--div--')
 				),
 				'foreign_table' => 'fe_groups'
 			)
 		),
 		'title' => array (
 			'exclude' => 0,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.title',
+			'label' => DIV2007_LANGUAGE_LGL . 'title',
 			'config' => array (
 				'type' => 'input',
 				'size' => '40',
@@ -168,7 +168,7 @@ $result = array (
 		),
 		'image' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.image',
+			'label' => DIV2007_LANGUAGE_LGL . 'image',
 			'config' => array (
 				'type' => 'group',
 				'internal_type' => 'file',

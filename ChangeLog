@@ -1,3 +1,6 @@
+2017-08-14 Franz Holzinger <franz@ttproducts.de>
+    * Bugfix for the TCA problems caused by TYPO3 8
+
 2017-08-12 Franz Holzinger <franz@ttproducts.de>
     * Support the date for TYPO3 8
     * the TCA renderType inputDateTime is only available since TYPO3 8.7.0

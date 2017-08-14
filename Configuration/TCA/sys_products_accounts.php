@@ -15,7 +15,7 @@ $result = array (
 		'label_userFunc' => 'tx_ttproducts_table_label->getLabel',
 		'default_sortby' => 'ORDER BY ' . $accountField,
 		'tstamp' => 'tstamp',
-		'prependAtCopy' => 'LLL:EXT:lang/locallang_general.php:LGL.prependAtCopy',
+		'prependAtCopy' => DIV2007_LANGUAGE_LGL . 'prependAtCopy',
 		'crdate' => 'crdate',
 		'iconfile' => PATH_TTPRODUCTS_ICON_TABLE_REL . 'sys_products_accounts.gif',
 		'searchFields' => 'owner_name,' . $accountField,
@@ -32,7 +32,7 @@ $result = array (
 		),
 		'owner_name' => array (
 			'exclude' => 0,
-			'label' => 'LLL:EXT:lang/locallang_general.php:LGL.name',
+			'label' => DIV2007_LANGUAGE_LGL . 'name',
 			'config' => array (
 				'type' => 'input',
 				'size' => '40',

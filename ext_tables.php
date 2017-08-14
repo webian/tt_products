@@ -750,7 +750,7 @@ if (TYPO3_MODE == 'BE') {
 			'contains-' . $pageType,
 			$imageFile
 		);
-	} else {
+	} else if (class_exists('t3lib_SpriteManager')) {
 		t3lib_SpriteManager::addTcaTypeIcon(
 			'pages',
 			'contains-' . $pageType,
