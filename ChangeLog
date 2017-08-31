@@ -1,3 +1,6 @@
+2017-08-31 Franz Holzinger <franz@ttproducts.de>
+    * bugfix for TYPO3 8.7.1: show product assigned to an article for article mode 0
+
 2017-07-15 Franz Holzinger <franz@ttproducts.de>
     * bugfix: voucher where clause
     * bugfix: use the product title in the product single view as the page title

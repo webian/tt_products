@@ -430,38 +430,6 @@ if (
 }
 
 
-switch ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['articleMode']) {
-	case '0':
-		$result['interface']['showRecordFieldList'] = str_replace(',subtitle,', ',subtitle,uid_product,',$result['interface']['showRecordFieldList']);
-
-		$result['columns']['uid_product'] = array (
-			'exclude' => 1,
-			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products_articles.uid_product',
-			'config' => array (
-				'type' => 'group',
-				'internal_type' => 'db',
-				'allowed' => 'tt_products',
-				'size' => 1,
-				'minitems' => 0,
-				'maxitems' => 1,
-			)
-		);
-
-		$result['types']['1'] = str_replace('title;', 'uid_product,title;', $result['types']['1']);
-
-		break;
-}
-
-
-$table = 'tt_products_articles';
-
-$orderBySortingTablesArray = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['orderBySortingTables']);
-if (
-	!empty($orderBySortingTablesArray) &&
-	in_array($table, $orderBySortingTablesArray)
-) {
-	$result['ctrl']['sortby'] = 'sorting';
-}
 
 return $result;
 
