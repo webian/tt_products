@@ -17,21 +17,31 @@ if (
     }
 }
 
+$orderBySortingTablesArray = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['orderBySortingTables']);
+
+if (
+    !empty($orderBySortingTablesArray) &&
+    in_array($table, $orderBySortingTablesArray)
+) {
+    $GLOBALS['TCA'][$table]['ctrl']['sortby'] = 'sorting';
+}
+
+
 $excludeArray = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['exclude.'];
 
 if (
-	isset($excludeArray) &&
-	is_array($excludeArray) &&
-	isset($excludeArray[$table])
+    isset($excludeArray) &&
+    is_array($excludeArray) &&
+    isset($excludeArray[$table])
 ) {
-	\JambageCom\Div2007\Utility\TcaUtility::removeField(
-		$GLOBALS['TCA'][$table],
-		$excludeArray[$table]
-	);
+    \JambageCom\Div2007\Utility\TcaUtility::removeField(
+        $GLOBALS['TCA'][$table],
+        $excludeArray[$table]
+    );
 }
 
 if (version_compare(TYPO3_version, '7.6.0', '>=')) {
 
-	unset($GLOBALS['TCA'][$table]['ctrl']['transOrigPointerField']);
-	unset($GLOBALS['TCA'][$table]['ctrl']['transOrigPointerTable']);
+    unset($GLOBALS['TCA'][$table]['ctrl']['transOrigPointerField']);
+    unset($GLOBALS['TCA'][$table]['ctrl']['transOrigPointerTable']);
 }
