@@ -283,7 +283,7 @@ class tx_ttproducts_main implements t3lib_Singleton {
 		$pid_list = ($this->cObj->data['pages'] ? $this->cObj->data['pages'] : ($this->conf['pid_list.'] ? trim($tmp) : ''));
 		$pid_list = ($pid_list ? $pid_list : $this->conf['pid_list']);
 
-		$config['pid_list'] = ($pid_list ? $pid_list : $config['storeRootPid']);
+		$config['pid_list'] = (isset($pid_list) ? $pid_list : $config['storeRootPid']);
 
 			// If the current record should be displayed.
 		$config['displayCurrentRecord'] = $this->conf['displayCurrentRecord'];

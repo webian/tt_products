@@ -1,3 +1,6 @@
+2017-09-02 Franz Holzinger <franz@ttproducts.de>
+    * bugfix: pid_list = 0 must be possible like before. In this case the products from the current page and all subpages are used and listed.
+
 2017-08-31 Franz Holzinger <franz@ttproducts.de>
     * bugfix for TYPO3 8.7.1: show product assigned to an article for article mode 0
 
