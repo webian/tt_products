@@ -115,13 +115,28 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 			$typeArray = $pibaseObj->piVars['type'];
 		}
 
-		if (t3lib_div::_POST('products_payment'))	{	// use AGB checkbox if coming from INFO page. It could have been unchecked again.
-			$bAgbSet = $this->recs['personinfo']['agb'];
-			$this->recs['personinfo']['agb'] = (boolean) $_REQUEST['recs']['personinfo']['agb'];
-			if ($bAgbSet != $this->recs['personinfo']['agb'])	{
-				$TSFE->fe_user->setKey('ses', 'recs', $this->recs);	// store this change
-			}
-		}
+        // neu Anfang
+        $gpVars = t3lib_div::_GP(TT_PRODUCTS_EXT);
+        $payment =
+            t3lib_div::_POST('products_payment') ||
+            t3lib_div::_POST('products_payment_x') ||
+            isset($gpVars['activity']) &&
+            $gpVars['activity']['payment'];
+
+        if (    // use AGB checkbox if coming from INFO
+            $payment &&
+            isset($_REQUEST['recs']) &&
+            is_array($_REQUEST['recs']) &&
+            isset($_REQUEST['recs']['personinfo']) &&
+            is_array($_REQUEST['recs']['personinfo'])
+        ) {
+            $bAgbSet = $this->recs['personinfo']['agb'];
+            $this->recs['personinfo']['agb'] = (boolean) $_REQUEST['recs']['personinfo']['agb'];
+            if ($bAgbSet != $this->recs['personinfo']['agb'])   {
+                $TSFE->fe_user->setKey('ses', 'recs', $this->recs); // store this change
+            }
+        }
+
 		$this->basket = array();
 		$this->itemArray = array();
 		$this->paymentshippingObj = t3lib_div::getUserObj('tx_ttproducts_paymentshipping');

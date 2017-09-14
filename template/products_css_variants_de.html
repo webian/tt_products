@@ -502,7 +502,7 @@ Andrea: Warenkorbansicht Anfang -->
         ###GW1B### ###PRICE_TAX###<br />(MwSt. ###PRICE_ONLY_TAX###)###GW1E###
       </div>
       <div id="FIELD_QTY_BASKET2">
-        <input size="2" maxlength="4" type="text" name="###FIELD_NAME_BASKET###" value="###FIELD_QTY###">
+        <input size="5" maxlength="6" type="text" name="###FIELD_NAME_BASKET###" value="###FIELD_QTY###">
       </div>
       <div id="PRICE_TOTAL_TAX_BASKET2">
         ###GW1B### <b>###TAX_INCL_EXCL### ###PRICE_TOTAL_TAX###</b> <br />(exkl. MwSt. ###PRICE_TOTAL_NO_TAX###)###GW1E###
@@ -842,8 +842,8 @@ Exact same features as BASKET_TEMPLATE
        ###GW1B###<!--###LINK_AGB###-->Die Allgemeinen Gesch&auml;ftsbedingungen <!--###LINK_AGB###--> erkenne ich hiermit an.###GW1E###
     </div>
     <!--<div align="center">-->
-      <input type="submit" id="button5" name="products_update" value="zur&uuml;ck zum Warenkorb" />
-      <input type="submit" id="button4" name="products_payment" value="AGBs akzeptiert">
+      <input type="submit" id="button5" name="products_update" value="zur&uuml;ck zum Warenkorb" onclick="this.form.action='###FORM_URL_BASKET###';">
+      <input type="submit" id="button4" name="products_payment" value="AGBs akzeptiert" onclick="this.form.action='###FORM_URL_PAYMENT###';">
 ###HIDDENFIELDS###
   </div>
 
@@ -1086,9 +1086,9 @@ Exact same features as BASKET_TEMPLATE
   <div id="SUBMIT_BASKET_PAYMENT_TEMPLATE7">
   <br />
   <form method="post" action="###FORM_URL###" name="###FORM_NAME###" id="paymentForm">
-  <input type="submit" name="products_update" value="zur&uuml;ck zum Warenkorb">
+  <input type="submit" name="products_update" value="zur&uuml;ck zum Warenkorb" onclick="this.form.action='###FORM_URL_BASKET###';">
   <input type="hidden" name="products_cmd" value="cardno" />
-  <input type="submit" name="products_finalize" value="Zahlungspflichtig bestellen" onclick="document.forms[0].action='###FORM_URL_THANKS###'; document.forms[0].target='###FORM_URL_TARGET###';">###GW1B### <!--(auch PayPal)-->###GW1E###
+  <input type="submit" name="products_finalize" value="Zahlungspflichtig bestellen" onclick="this.form.action='###FORM_URL_THANKS###'; this.form.target='###FORM_URL_TARGET###';">###GW1B### <!--(auch PayPal)-->###GW1E###
  </div>
 </div>
 ###HIDDENFIELDS###

@@ -311,9 +311,9 @@ if (TYPO3_MODE=='FE')	{ // hooks for FE extensions
         version_compare(PHP_VERSION, '5.5.0', '>=')
     ) {
         // TYPO3 page title
-        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-output'][] = '\\JambageCom\\TtProducts\\Hooks\\ContentPostProcessor->setPageTitle';
+        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-output'][] = 'JambageCom\\TtProducts\\Hooks\\ContentPostProcessor->setPageTitle';
 
-        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-cached'][] = '\\JambageCom\\TtProducts\\Hooks\\ContentPostProcessor->setPageTitle';
+        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-cached'][] = 'JambageCom\\TtProducts\\Hooks\\ContentPostProcessor->setPageTitle';
     }
 }
 
