@@ -218,9 +218,6 @@ class tx_ttproducts_main implements t3lib_Singleton {
 			$db->init($conf, $config, $this->ajax, $pibaseObj);
 		}
 
-//            $this->taxajax->registerFunction(array('tt_products_changeValue',&$this,'tt_products_changeValue'));
-//            $this->taxajax->registerFunction(array('tt_products_processFormData',&$this,'tt_products_processFormData'));
-
 		if (!$bRunAjax && t3lib_extMgm::isLoaded('taxajax')) {
 			if($_POST['xajax']){
 				global $trans;
@@ -328,10 +325,6 @@ class tx_ttproducts_main implements t3lib_Singleton {
 			// image view
 		$imageViewObj = t3lib_div::getUserObj('tx_ttproducts_field_image_view');
 		$imageViewObj->init($pibaseObj, $imageObj);
-
-// 		tx_div2007_alpha5::loadLL_fh002($langObj,'EXT:'.TT_PRODUCTS_EXT.'/locallang_db.xml');
-// 		tx_div2007_alpha5::loadLL_fh002($langObj,'EXT:'.TT_PRODUCTS_EXT.'/pi_search/locallang_db.xml');
-// 		tx_div2007_alpha5::loadLL_fh002($langObj,'EXT:'.TT_PRODUCTS_EXT.'/pi1/locallang.xml');
 
 			// get all extending TCAs
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['extendingTCA']))	{
@@ -541,7 +534,6 @@ class tx_ttproducts_main implements t3lib_Singleton {
 						'MENUDAMCAT' => 'ITEM_DAMCATMENU_TEMPLATE',
 						'MENUAD' => 'ITEM_ADDRESS_MENU_TEMPLATE',
 					);
-// 					t3lib_div::requireOnce(PATH_BE_ttproducts . 'view/class.tx_ttproducts_catlist_view.php');
 
 					if (substr($theCode, -2, 2) == 'AD')	{
 						$tablename = '';
@@ -572,6 +564,7 @@ class tx_ttproducts_main implements t3lib_Singleton {
 							$functablename = 'tt_products_cat';
 						}
 					}
+
 					if (!$errorMessage)	{
 						$templateArea = $codeTemplateArray[$theCode];
 						if (substr($theCode,0, 6) == 'SELECT') {
@@ -581,7 +574,6 @@ class tx_ttproducts_main implements t3lib_Singleton {
 						} else if (substr($theCode,0, 4) == 'MENU') {
 							$categoryClass = 'tx_ttproducts_menucat_view';
 						}
-// 						t3lib_div::requireOnce(PATH_BE_ttproducts . 'view/class.' . $categoryClass . '.php');
 
 							// category view
 						$categoryView = t3lib_div::makeInstance($categoryClass);

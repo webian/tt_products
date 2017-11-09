@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 Kasper Skårhøj <kasperYYYY@typo3.com>
+*  (c) 2017 Kasper Skårhøj <kasperYYYY@typo3.com>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -157,7 +157,6 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 		$viewTableObj = $tablesObj->get($funcTablename);
 		$tmpBasketExt = $TSFE->fe_user->getKey('ses','basketExt');
 		$this->order = $TSFE->fe_user->getKey('ses','order');
-
 		$basketExtRaw = t3lib_div::_GP('ttp_basket');
 		$basketInputConf = &$cnf->getBasketConf('view','input');
 

@@ -109,7 +109,7 @@
     <input type="image" src="###IMAGE_BASKET_SRC###" name="basket" class="inputimage_list" alt="In den Warenkorb" />
   </div>
   <div class="SEE_PRODUCT"><!--###LINK_ITEM###--><img src="fileadmin/images/ansehen.jpg" height="19" width="100" alt="Produkt ansehen"/><!--###LINK_ITEM###--></div>
-  <!--  <input type="button" class="button2_LIST" name="warenkorb" value="Warenkorbinhalt ansehen" onclick="self.location.href='index.php?id=###PID_BASKET###'" /> -->
+  <!--  <input type="button" class="button2_LIST" name="warenkorb" value="Warenkorbinhalt ansehen" onclick="self.location.href='index.php?id=###PID_BASKET###';" /> -->
 </div>
 </form>
      <!--###ITEM_SINGLE_POST_HTML###-->
@@ -317,7 +317,7 @@ Sie sind eingeloggt!
     <input type="submit" name="order2" value="In den Warenkorb">
   </div>
   <div align="justify">
-    <input type="button" id="button3" name="warenkorb" value="zum Warenkorb" onclick="self.location.href='index.php?id=###PID_BASKET###'">
+    <input type="button" id="button3" name="warenkorb" value="zum Warenkorb" onclick="self.location.href='index.php?id=###PID_BASKET###';">
   </div>
 </form>
 
@@ -1087,12 +1087,18 @@ Exact same features as BASKET_TEMPLATE
   <br />
   <form method="post" action="###FORM_URL###" name="###FORM_NAME###" id="paymentForm">
   <input type="submit" name="products_update" value="zur&uuml;ck zum Warenkorb" onclick="this.form.action='###FORM_URL_BASKET###';">
-  <input type="hidden" name="products_cmd" value="cardno" />
-  <input type="submit" name="products_finalize" value="Zahlungspflichtig bestellen" onclick="this.form.action='###FORM_URL_THANKS###'; this.form.target='###FORM_URL_TARGET###';">###GW1B### <!--(auch PayPal)-->###GW1E###
- </div>
+  <input type="hidden" name="products_cmd" value="cardno">
+  <input type="submit" name="products_finalize" value="Zahlungspflichtig bestellen" onclick="this.form.action='###FORM_URL_THANKS###'; this.form.target='###FORM_URL_TARGET###';">
+    ###HIDDENFIELDS###
+   </form>
+   </div>
+   <div id="PAYMENT_SCRIPT_BASKET_PAYMENT_TEMPLATE7">
+    ###MESSAGE_PAYMENT_SCRIPT###
+   </div>
+
+
 </div>
-###HIDDENFIELDS###
-</form>
+
 
 <!-- ###BASKET_PAYMENT_TEMPLATE### end -->
 

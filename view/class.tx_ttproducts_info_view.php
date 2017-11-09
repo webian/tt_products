@@ -195,7 +195,6 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 			unset ($this->infoArray['billing']['error']);
 			$this->overwriteMode = 1;
 		}
-
 		if ($bProductsPayment && isset($_REQUEST['recs']) && is_array($_REQUEST['recs']) &&
 			isset($_REQUEST['recs']['personinfo']) && is_array($_REQUEST['recs']['personinfo']) && !$_REQUEST['recs']['personinfo']['agb'])	{
 			$this->infoArray['billing']['agb'] = FALSE;

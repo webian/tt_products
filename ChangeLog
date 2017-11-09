@@ -1,3 +1,6 @@
+2017-11-09 Franz Holzinger <franz@ttproducts.de>
+    * new feature: support for the new transactor 0.6.1 extension API
+
 2017-09-02 Franz Holzinger <franz@ttproducts.de>
     * bugfix: pid_list = 0 must be possible like before. In this case the products from the current page and all subpages are used and listed.
 

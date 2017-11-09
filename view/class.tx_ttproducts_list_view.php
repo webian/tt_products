@@ -1518,7 +1518,25 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 						$addQueryString[$categoryTableView->getPivar()] = $cat;
 					} // 'tx_ttproducts_pi_search'
 					$queryString = $this->urlObj->getLinkParams('begin_at', $addQueryString, FALSE, $bUseBackPid, $itemTableView->getPivar(), $categoryTableView->getPivar());
-					$pageLink = htmlspecialchars($pibaseObj->pi_linkTP_keepPIvars_url($queryString,1,0,$pid));
+
+                    $linkConf = array();
+
+                    $linkConf = array_merge( array('useCacheHash' => $bUseCache), $linkConf);
+                    if (
+                        !$bUseCache &&
+                        version_compare(TYPO3_version, '7.0.0', '<')
+                    ) {
+                        $linkConf = array_merge( array('no_cache' => 1), $linkConf);
+                    }
+
+                    $target = '';
+                    $pageLink = tx_div2007_alpha5::getTypoLink_URL_fh003(
+                        $this->cObj,
+                        $pid,
+                        $queryString,
+                        $target,
+                        $linkConf
+                    );
 
 					if ($childCatWrap)	{
 						$wrappedSubpartArray['###LINK_ITEM###'] = t3lib_div::trimExplode('|',$childCatWrap);

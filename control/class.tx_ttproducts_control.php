@@ -109,6 +109,18 @@ class tx_ttproducts_control implements t3lib_Singleton {
 		return $result;
 	}
 
+// neu Anfang
+	protected function getOrdernumber ($orderUid) {
+        $result = '';
+
+        if ($orderUid) {
+            $tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
+            $orderObj = $tablesObj->get('sys_products_orders');
+            $result = $orderObj->getNumber($orderUid);
+        }
+        return $result;
+	}
+// neu Ende
 
 	/**
 	 * returns the activities in the order in which they have to be processed
@@ -166,58 +178,117 @@ class tx_ttproducts_control implements t3lib_Singleton {
 	}
 
 
-
-	public function &processPayment ($orderUid, $cardRow, $pidArray, $currentPaymentActivity, &$bFinalize, &$errorMessage)	{
+    public function processPayment (
+        $orderUid,
+        $orderNumber, // neu FHO
+        $cardRow,
+        $pidArray,
+        $currentPaymentActivity,
+        &$bFinalize,
+        &$errorMessage
+    ) {
 		global $TSFE;
 
 		$content = '';
+		$localTemplateCode = '';
 		$basketView = t3lib_div::getUserObj('tx_ttproducts_basket_view');
 		$handleScript = $TSFE->tmpl->getFileName($this->basket->basketExtra['payment.']['handleScript']);
 
 		$handleLib = $this->basket->basketExtra['payment.']['handleLib'];
 		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
+		$bFinalVerify = false;
 
 		if ($handleScript)	{
 			$infoViewObj = t3lib_div::getUserObj('tx_ttproducts_info_view');
 			$paymentshippingObj = t3lib_div::getUserObj('tx_ttproducts_paymentshipping');
 			$content = $paymentshippingObj->includeHandleScript($handleScript, $this->basket->basketExtra['payment.']['handleScript.'], $this->conf['paymentActivity'], $bFinalize, $this->pibase, $infoViewObj);
 		} else if (strpos($handleLib, 'transactor') !== FALSE && t3lib_extMgm::isLoaded($handleLib))	{
+            $transactorConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$handleLib]);
+            $useNewTransactor = false;
+            if (
+                isset($transactorConf['compatibility']) &&
+                $transactorConf['compatibility'] == '0'
+            ) {
+                $useNewTransactor = true;
+            }
+
 				// Payment Transactor
-			require_once(t3lib_extMgm::extPath($handleLib) . 'lib/class.tx_' . $handleLib . '_api.php');
 		// Get references to the concerning baskets
 			$calculatedArray = $this->basket->getCalculatedArray();
 			$infoViewObj = t3lib_div::getUserObj('tx_ttproducts_info_view');
 			$langObj = t3lib_div::getUserObj('tx_ttproducts_language');
 			$addQueryString = array();
 			$excludeList = '';
-			$linkParams = $this->urlObj->getLinkParams($excludeList, $addQueryString,TRUE);
+			$linkParams = $this->urlObj->getLinkParams($excludeList, $addQueryString, TRUE);
 
 			$markerArray = array();
-			tx_transactor_api::init($langObj, $this->cObj, $this->conf);
-			$content = tx_transactor_api::includeHandleLib(
-				$handleLib,
-				$this->basket->basketExtra['payment.']['handleLib.'],
-				TT_PRODUCTS_EXT,
-				$this->basket->getItemArray(),
-				$calculatedArray,
-				$this->basket->recs['delivery']['note'],
-				$this->conf['paymentActivity'],
-				$currentPaymentActivity,
-				$infoViewObj->infoArray,
-				$pidArray,
-				$linkParams,
-				$this->basket->order['orderTrackingNo'],
-				$orderUid,
-				$cardRow,
-				$bFinalize,
-				$bFinalVerify,
-				$markerArray,
-				$templateFilename,
-				$localTemplateCode,
-				$errorMessage
-			);
+            if ($useNewTransactor) {
+                $callingClassName = '\\JambageCom\\Transactor\\Api\\Start';
+                call_user_func($callingClassName . '::test');
 
-			if (!$errorMessage && $content=='' && !$bFinalize && $localTemplateCode != '')	{
+                if (
+                    class_exists($callingClassName) &&
+                    method_exists($callingClassName, 'init') &&
+                    method_exists($callingClassName, 'includeHandleLib')
+                ) {
+                    call_user_func($callingClassName . '::init', $langObj, $this->cObj, $this->conf);
+                    $parameters = array(
+                        $handleLib,
+                        $this->basket->basketExtra['payment.']['handleLib.'],
+                        TT_PRODUCTS_EXT,
+                        $this->basket->getItemArray(),
+                        $calculatedArray,
+                        $this->basket->recs['delivery']['note'],
+                        $this->conf['paymentActivity'],
+                        $currentPaymentActivity,
+                        $infoViewObj->infoArray,
+                        $pidArray,
+                        $linkParams,
+                        $this->basket->order['orderTrackingNo'],
+                        $orderUid,
+                        $orderNumber,  // neu FHO
+                        $this->conf['orderEmail_to'], // neu FHO
+                        $cardRow,
+                        &$bFinalize,
+                        &$bFinalVerify,
+                        &$markerArray,
+                        &$templateFilename,
+                        &$localTemplateCode,
+                        &$errorMessage
+                    );
+
+                    $content = call_user_func_array(
+                        $callingClassName . '::includeHandleLib',
+                        $parameters
+                    );
+                }
+            } else {
+                tx_transactor_api::init($langObj, $this->cObj, $this->conf);
+                $content = tx_transactor_api::includeHandleLib(
+                    $handleLib,
+                    $this->basket->basketExtra['payment.']['handleLib.'],
+                    TT_PRODUCTS_EXT,
+                    $this->basket->getItemArray(),
+                    $calculatedArray,
+                    $this->basket->recs['delivery']['note'],
+                    $this->conf['paymentActivity'],
+                    $currentPaymentActivity,
+                    $infoViewObj->infoArray,
+                    $pidArray,
+                    $linkParams,
+                    $this->basket->order['orderTrackingNo'],
+                    $orderUid,
+                    $cardRow,
+                    $bFinalize,
+                    $bFinalVerify,
+                    $markerArray,
+                    $templateFilename,
+                    $localTemplateCode,
+                    $errorMessage
+                );
+            }
+
+			if (!$errorMessage && $content=='' && !$bFinalize && $localTemplateCode != '') {
 				$content = $basketView->getView(
 					$localTemplateCode,
 					'PAYMENT',
@@ -283,6 +354,7 @@ class tx_ttproducts_control implements t3lib_Singleton {
 		$basket_tmpl,
 		$bPayment,
 		$orderUid,
+		$orderNumber, // neu
 		$currentPaymentActivity,
 		$pidArray,
 		$checkBasket,
@@ -380,6 +452,7 @@ class tx_ttproducts_control implements t3lib_Singleton {
 				$mainMarkerArray['###MESSAGE_PAYMENT_SCRIPT###'] =
 					$this->processPayment(
 						$orderUid,
+						$orderNumber, // neu
 						$cardRow,
 						$pidArray,
 						$currentPaymentActivity,
@@ -393,7 +466,6 @@ class tx_ttproducts_control implements t3lib_Singleton {
 			} else {
 				$mainMarkerArray['###MESSAGE_PAYMENT_SCRIPT###'] = '';
 			}
-
 			$paymentHTML = '';
 
 			if (!$bFinalize && $basket_tmpl!='')	{
@@ -615,6 +687,7 @@ class tx_ttproducts_control implements t3lib_Singleton {
 					break;
 					case 'products_payment':
 						$orderUid = $this->getOrderUid();
+						$orderNumber = $this->getOrdernumber($orderUid);
 						tx_div2007_alpha5::load_noLinkExtCobj_fh002($this->pibase);	// TODO
 						$bPayment = TRUE;
 
@@ -633,19 +706,58 @@ class tx_ttproducts_control implements t3lib_Singleton {
 								$addQueryString = array();
 								$excludeList = '';
 								$linkParams = $this->urlObj->getLinkParams($excludeList, $addQueryString, TRUE);
-								$paymentErrorMsg = tx_transactor_api::checkRequired(
-									$referenceId,
-									$this->basket->basketExtra['payment.']['handleLib'],
-									$this->basket->basketExtra['payment.']['handleLib.'],
-									TT_PRODUCTS_EXT,
-									$this->basket->getCalculatedArray(),
-									$this->conf['paymentActivity'],
-									$pidArray,
-									$linkParams,
-									$this->basket->order['orderTrackingNo'],
-									$orderUid,
-									$cardRow
-								);
+                                $transactorConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$handleLib]);
+                                $useNewTransactor = false;
+                                if (
+                                    isset($transactorConf['compatibility']) &&
+                                    $transactorConf['compatibility'] == '0'
+                                ) {
+                                    $useNewTransactor = true;
+                                }
+
+                                if ($useNewTransactor) {
+                                    $callingClassName = '\\JambageCom\\Transactor\\Api\\Start';
+
+                                    if (
+                                        class_exists($callingClassName) &&
+                                        method_exists($callingClassName, 'checkRequired')
+                                    ) {
+                                        $parameters = array(
+                                            $referenceId,
+                                            $this->basket->basketExtra['payment.']['handleLib'],
+                                            $this->basket->basketExtra['payment.']['handleLib.'],
+                                            TT_PRODUCTS_EXT,
+                                            $this->basket->getCalculatedArray(),
+                                            $this->conf['paymentActivity'],
+                                            $pidArray,
+                                            $linkParams,
+                                            $this->basket->order['orderTrackingNo'],
+                                            $orderUid,
+                                            $orderNumber, // neu
+                                            $this->conf['orderEmail_to'], // neu
+                                            $cardRow
+                                        );
+
+                                        $paymentErrorMsg = call_user_func_array(
+                                            $callingClassName . '::checkRequired',
+                                            $parameters
+                                        );
+                                    }
+                                } else {
+                                    $paymentErrorMsg = tx_transactor_api::checkRequired(
+                                        $referenceId,
+                                        $this->basket->basketExtra['payment.']['handleLib'],
+                                        $this->basket->basketExtra['payment.']['handleLib.'],
+                                        TT_PRODUCTS_EXT,
+                                        $this->basket->getCalculatedArray(),
+                                        $this->conf['paymentActivity'],
+                                        $pidArray,
+                                        $linkParams,
+                                        $this->basket->order['orderTrackingNo'],
+                                        $orderUid,
+                                        $cardRow
+                                    );
+                                }
 							} else if (strpos($handleLib, 'paymentlib') !== FALSE)	{
 								require_once (PATH_BE_ttproducts.'lib/class.tx_ttproducts_paymentlib.php');
 								$paymentlib = t3lib_div::makeInstance('tx_ttproducts_paymentlib');
@@ -668,9 +780,11 @@ class tx_ttproducts_control implements t3lib_Singleton {
 						if ($this->conf['paymentActivity']=='verify' || $this->conf['paymentActivity']=='customized' /* deprecated */)	{
 
 							$orderUid = $this->getOrderUid();
+							$orderNumber = $this->getOrdernumber($orderUid);
 							$mainMarkerArray['###MESSAGE_PAYMENT_SCRIPT###'] =
 								$this->processPayment(
 									$orderUid,
+									$orderNumber, // neu
 									$cardRow,
 									$pidArray,
 									$currentPaymentActivity,
@@ -695,8 +809,10 @@ class tx_ttproducts_control implements t3lib_Singleton {
 						}
 						if ($handleLib != '') {
 							$orderUid = $this->getOrderUid();
+                            $orderNumber = $this->getOrdernumber($orderUid);
 							$rc = $this->processPayment(
 								$orderUid,
+								$orderNumber, // neu
 								$cardRow,
 								$pidArray,
 								$currentPaymentActivity,
@@ -728,9 +844,7 @@ class tx_ttproducts_control implements t3lib_Singleton {
 			}	// if ($value)
 
 			$bBasketEmpty = (count($this->basket->getItemArray()) == 0);
-
 			if ($value) {
-
 				$newContent = $this->getContent(
 					$mainMarkerArray,
 					$calculatedArray,
@@ -738,6 +852,7 @@ class tx_ttproducts_control implements t3lib_Singleton {
 					$basket_tmpl,
 					$bPayment,
 					$orderUid,
+					$orderNumber, // neu
 					$currentPaymentActivity,
 					$pidArray,
 					$checkBasket,
@@ -777,11 +892,13 @@ class tx_ttproducts_control implements t3lib_Singleton {
 				$handleScript = $TSFE->tmpl->getFileName($this->basket->basketExtra['payment.']['handleScript']);
 				$orderObj = $tablesObj->get('sys_products_orders');
 				$orderUid = $this->getOrderUid();
+                $orderNumber = $this->getOrdernumber($orderUid);
 
 				if (trim($this->conf['paymentActivity']) == 'finalize')	{
 					$mainMarkerArray['###MESSAGE_PAYMENT_SCRIPT###'] =
 						$this->processPayment(
 							$orderUid,
+							$orderNumber,
 							$cardRow,
 							$pidArray,
 							'finalize',
@@ -914,6 +1031,7 @@ class tx_ttproducts_control implements t3lib_Singleton {
 				$pidArray[$pidType] = $cnf->conf[$pidType];
 			}
 		}
+
 		$activityVarsArray = array(
 			'clear_basket' => 'products_clear_basket',
 			'customized_payment' => 'products_customized_payment',
@@ -934,6 +1052,7 @@ class tx_ttproducts_control implements t3lib_Singleton {
 		if (!$update && !$payment && !$info && isset($gpVars) && is_array($gpVars) && isset($gpVars['activity']) && is_array($gpVars['activity']))	{
 			$changedActivity = key($gpVars['activity']);
 			$theActivity = $activityVarsArray[$changedActivity];
+
 			if ($theActivity)	{
 				$activityArray[$theActivity] = $gpVars['activity'][$changedActivity];
 			}
@@ -966,22 +1085,41 @@ class tx_ttproducts_control implements t3lib_Singleton {
 			$activityArray['products_finalize'] = TRUE;
 		}
 
-		$codeActivityArray=array();
+		$codeActivityArray = array();
 		$bBasketCode = FALSE;
 		if (is_array($codes)) {
 			foreach ($codes as $k => $code) {
 				if ($code=='BASKET')	{
 					$codeActivityArray['products_basket']=TRUE;
 					$bBasketCode = TRUE;
-				} elseif ($code=='INFO' && !($activityArray['products_payment'] || $activityArray['products_verify'] || $activityArray['products_finalize']))	{
-					$codeActivityArray['products_info']=TRUE;
-					$bBasketCode = TRUE;
+				} elseif ($code=='INFO') {
+                    if (
+                        !(
+                            $activityArray['products_verify'] ||
+                            $activityArray['products_customized_payment'] ||
+                            $activityArray['products_payment'] ||
+                            $activityArray['products_finalize']
+                        )
+                    ) {
+                        $codeActivityArray['products_info'] = TRUE;
+                        $bBasketCode = TRUE;
+                    }
 				} elseif ($code=='OVERVIEW') {
 					$codeActivityArray['products_overview']=TRUE;
-				} elseif ($code=='PAYMENT' && !($activityArray['products_finalize']))	{
-					$codeActivityArray['products_payment']=TRUE;
-				} elseif ($code=='FINALIZE')	{
-					$codeActivityArray['products_finalize']=TRUE;
+                } elseif ($code=='PAYMENT') {
+                    if (
+                        !$activityArray['products_finalize']
+                    ) {
+                        $codeActivityArray['products_payment'] = TRUE;
+                    }
+                    if ($activityArray['products_verify']) {
+                        $bBasketCode = TRUE;
+                    }
+                } elseif ($code == 'FINALIZE')	{
+                    $codeActivityArray['products_finalize'] = TRUE;
+                    if ($activityArray['products_verify']) {
+                        $bBasketCode = TRUE;
+					}
 				}
 			}
 		}

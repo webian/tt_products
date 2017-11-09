@@ -196,12 +196,13 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 	 */
 	public function getNumber ($orderUid)	{
 		$orderNumberPrefix = substr($this->conf['orderNumberPrefix'], 0, 30);
-		if ($orderNumberPrefix[0] == '%')	{
-			$orderNumberPrefix = date(substr($orderNumberPrefix, 1));
+		if (($position = strpos($orderNumberPrefix, '%')) !== FALSE)	{
+			$orderDate = date(substr($orderNumberPrefix, $position + 1));
+			$orderNumberPrefix = substr($orderNumberPrefix, 0, $position) . $orderDate;
 		}
 
-		$rc = $orderNumberPrefix . $orderUid;
-		return $rc;
+		$result = $orderNumberPrefix . $orderUid;
+		return $result;
 	} // getNumber
 
 
