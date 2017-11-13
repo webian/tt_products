@@ -1529,6 +1529,17 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
                         $linkConf = array_merge( array('no_cache' => 1), $linkConf);
                     }
 
+                    $excludeList = '';
+                    $queryString = $this->urlObj->getLinkParams(
+                        $excludeList,
+                        $addQueryString,
+                        true,
+                        $bUseBackPid,
+                        $backPid,
+                        $itemTableView->getPivar(),
+                        $categoryTableView->getPivar()
+                    );
+
                     $target = '';
                     $pageLink = tx_div2007_alpha5::getTypoLink_URL_fh003(
                         $this->cObj,
