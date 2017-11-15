@@ -307,6 +307,8 @@ if (TYPO3_MODE=='FE')	{ // hooks for FE extensions
 	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['transactor']['listener'][TT_PRODUCTS_EXT] = 'tx_ttproducts_hooks_transactor';
 
     if (
+        isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['hook.']) &&
+        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['hook.']['setPageTitle'] &&
         version_compare(TYPO3_version, '6.1.0', '>') &&
         version_compare(PHP_VERSION, '5.5.0', '>=')
     ) {

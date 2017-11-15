@@ -1,5 +1,8 @@
+2017-11-15 Franz Holzinger <franz@ttproducts.de>
+    * new feature: Make the hooks ContentPostProcessor and ContentPostProcessor configurable in the Extension Manager, which are used for the setting of the page title.
+
 2017-11-13 Franz Holzinger <franz@ttproducts.de>
-    * bufix issue #24: add correct $queryString to get the parameters for the ###LINK_ITEM### link to the single view
+    * bugfix issue #24: add correct $queryString to get the parameters for the ###LINK_ITEM### link to the single view
 
 2017-11-09 Franz Holzinger <franz@ttproducts.de>
     * new feature: support for the new transactor 0.6.1 extension API
