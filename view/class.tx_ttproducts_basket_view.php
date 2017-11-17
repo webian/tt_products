@@ -1135,7 +1135,7 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 				$markerArray = array_merge($markerArray, $relatedMarkerArray);
 			}
 			$frameWork = $this->cObj->substituteSubpart($t['basketFrameWork'], '###ITEM_CATEGORY_AND_ITEMS###', $out);
-			$paymentshippingObj->getSubpartArrays($markerArray, $subpartArray, $wrappedSubpartArray, $frameWork);
+			$paymentshippingObj->getSubpartArrays($basketObj->basketExtra, $markerArray, $subpartArray, $wrappedSubpartArray, $frameWork);
 			$feUsersViewObj->getWrappedSubpartArray($subpartArray, $wrappedSubpartArray, $funcTablename, $bUseBackPid);
 				// substitute the main subpart with the rendered content.
 

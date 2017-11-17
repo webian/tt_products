@@ -1,3 +1,8 @@
+
+2017-11-17 Franz Holzinger <franz@ttproducts.de>
+    * new feature: Add support for the subpart marker ###MESSAGE_PAYMENT_TRANSACTOR_NO### .
+    * html cleanup away from the xhtml input format
+
 2017-11-15 Franz Holzinger <franz@ttproducts.de>
     * new feature: Make the hooks ContentPostProcessor and ContentPostProcessor configurable in the Extension Manager, which are used for the setting of the page title.
 

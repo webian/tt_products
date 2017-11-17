@@ -189,10 +189,16 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 	 * @param	array		reference to an item array with all the data of the item
 	 * @access private
 	 */
-	function getSubpartArrays ($markerArray, &$subpartArray, &$wrappedSubpartArray, $framework)	{
-
+    public function getSubpartArrays (
+        $basketExtra,
+        $markerArray,
+        &$subpartArray,
+        &$wrappedSubpartArray,
+        $framework
+    ) {
 		$markerObj = t3lib_div::getUserObj('tx_ttproducts_marker');
 
+        $handleLib = $basketExtra['payment.']['handleLib'];
 		if (strpos($handleLib, 'transactor') !== FALSE && t3lib_extMgm::isLoaded($handleLib)) {
 
 			$langObj = t3lib_div::getUserObj('tx_ttproducts_language');
