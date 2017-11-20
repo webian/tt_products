@@ -18,7 +18,7 @@ templateCheck = /([^#]+(#{2}|#{5}|#{7,8})([^#])+?)/
 endtimeYear = 2027
   # cat=basic/enable; type=string; label=category where: Foreign table where for the selection of categories. See TSConfig for more info.
 where.category =
-  # cat=cache/enable; type=boolean; label=Page Title: Here you can activate the hook of tt_products to show the product title in the single view and maybe on other places.
+  # cat=basic/enable; type=boolean; label=Page Title: Here you can activate the hook of tt_products to show the product title in the single view and maybe on other places.
 hook.setPageTitle = 1
   # cat=basic/enable; type=string; label=tt_products exclude: exclude these fields from the table tt_products. For TYPO3 < 6.1: This requires the extension addons_em.
 exclude.tt_products =
