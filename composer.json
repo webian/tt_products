@@ -25,7 +25,7 @@
   ],
   "require": {
     "typo3/cms-core": ">=4.5.0,<8.9.99",
-    "typo3-ter/div2007": ">=1.7.0",
+    "typo3-ter/div2007": ">=1.7.11",
     "typo3-ter/table": ">=0.3.0",
     "typo3-ter/tsparser": ""
   },
