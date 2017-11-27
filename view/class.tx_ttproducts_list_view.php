@@ -1327,6 +1327,7 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 						$currentCat = $row['category'];
 					}
 					$catArray = $categoryTable->getCategoryArray($row['uid'],'sorting');
+					$childCatWrap = '';
 
 					if (count($catArray))	{
 						reset($catArray);

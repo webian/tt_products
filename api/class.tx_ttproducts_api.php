@@ -257,7 +257,7 @@ class tx_ttproducts_api {
 						$calculatedArray,
 						FALSE,
 						'EMAIL_NEWUSER_TEMPLATE',
-						$mainMarkerArray
+						array()
 					)
 				);
 
