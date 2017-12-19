@@ -49,7 +49,7 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 	var $basketView;
 	var $priceObj;	// price functions
 	var $typeArray = array('shipping', 'payment');
-
+    protected $voucher;
 
 	public function init ($cObj, $priceObj) {
 		$this->cObj = $cObj;
@@ -58,6 +58,8 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 		$this->config = &$cnf->config;
 		$this->basket = t3lib_div::getUserObj('tx_ttproducts_basket');
 		$this->priceObj = clone $priceObj;	// new independant price object
+		$voucher = t3lib_div::makeInstance('tx_ttproducts_voucher');
+		$this->setVoucher($voucher);
 	}
 
 
@@ -65,6 +67,13 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 		return $this->typeArray;
 	}
 
+	public function setVoucher ($voucher) {
+        $this->voucher = $voucher;
+	}
+
+    public function getVoucher () {
+        return $this->voucher;
+    }
 
 	function getScriptPrices ($pskey='shipping', &$calculatedArray, &$itemArray)	{
 		$hookVar = 'scriptPrices';
@@ -616,13 +625,28 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 			if ($minPrice > $priceNew) {
 				$priceNew = $minPrice;
 			}
-			// the total products price as from the payment/shipping is free
-			$noCostsAmount = (double) $confArr['noCostsAmount'];
-			if ($noCostsAmount && ($priceTotalTax >= $noCostsAmount)) {
-				$priceNew = 0;
-				$priceTax = $priceNoTax = 0;
-			}
-			$taxIncluded = $this->priceObj->getTaxIncluded();
+
+			if (
+                isset($confArr['noCostsAmount'])
+            ) {
+                // the total products price as from the payment/shipping is free
+                $noCostsAmount = (double) $confArr['noCostsAmount'];
+                if ($noCostsAmount && ($priceTotalTax >= $noCostsAmount)) {
+                    $priceNew = 0;
+                    $priceTax = $priceNoTax = 0;
+                }
+            }
+            if (
+                isset($confArr['noCostsVoucher']) &&
+                is_object($voucher = $this->getVoucher()) &&
+                $voucher->getValid() &&
+                t3lib_div::inList($confArr['noCostsVoucher'], $voucher->getCode())
+            ) {
+                $priceNew = 0;
+                $priceTax = $priceNoTax = 0;
+            }
+
+            $taxIncluded = $this->priceObj->getTaxIncluded();
 			$priceTax += $this->priceObj->getPrice($priceNew, 1, $row, $taxIncluded, TRUE);
 			$priceNoTax += $this->priceObj->getPrice($priceNew, 0, $row, $taxIncluded, TRUE);
 		}

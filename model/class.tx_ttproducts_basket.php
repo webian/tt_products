@@ -66,11 +66,9 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 	public $giftServiceRow;
 	protected $itemObj;
 
-
 	public function getCalculatedArray ()	{
 		return $this->calculatedArray;
 	}
-
 
 	static public function getGoodsTotalTax ($basketExtra, $itemArray) {
 		$priceObj = t3lib_div::getUserObj('tx_ttproducts_field_price');

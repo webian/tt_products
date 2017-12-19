@@ -1,4 +1,8 @@
 
+2017-19-12 Franz Holzinger <franz@ttproducts.de>
+    * new feature: noCostsVoucher: voucher codes which result in no shipping costs
+    * new feature: The row with the used voucher code must be deleted at the finalization of the order if a voucher code is not reusable.
+
 2017-11-17 Franz Holzinger <franz@ttproducts.de>
     * new feature: Add support for the subpart marker ###MESSAGE_PAYMENT_TRANSACTOR_NO### .
     * html cleanup away from the xhtml input format

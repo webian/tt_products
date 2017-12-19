@@ -54,6 +54,7 @@ class tx_ttproducts_voucher extends tx_ttproducts_table_base {
 
 		parent::init($cObj, $functablename);
 		$usedCodeArray = $TSFE->fe_user->getKey('ses', 'vo');
+
 		if (isset($usedCodeArray) && is_array($usedCodeArray))	{
 			list($voucherCode, $voucherArray) = each($usedCodeArray);
 			$amount = $voucherArray['amount'];
@@ -65,7 +66,6 @@ class tx_ttproducts_voucher extends tx_ttproducts_table_base {
 	} // init
 
 	function getAmount ()	{
-
 		return $this->amount;
 	}
 
@@ -167,27 +167,33 @@ class tx_ttproducts_voucher extends tx_ttproducts_table_base {
 
 			if ($voucherTable == 'fe_users')	{
 				$whereGeneral = '';
-				$uid_voucher = $row['uid'];
+				$uid_voucher = intval($row['uid']);
 			} else {
-				$uid_voucher = $row['fe_users_uid'];
-				$whereGeneral = '(fe_users_uid="' . $TSFE->fe_user->user['uid'] . '" OR fe_users_uid=0) ';
+				$uid_voucher = intval($row['fe_users_uid']);
+				$whereGeneral = '(fe_users_uid="' . $uid_voucher . '" OR fe_users_uid=0) ';
 				$whereGeneral .= 'AND code="'.$voucherCode.'"';
 			}
 
-			if ($uid_voucher) {
-				if ($TSFE->fe_user->user['uid'] == $uid_voucher)	{
-					$updateArray = array();
-					$where = $whereGeneral;
-					if ($voucherTable == 'fe_users')	{
-						$where = 'uid="'.$row['uid'].'"';
-						$updateArray['tt_products_vouchercode'] = '';
-					} else {
-						$updateArray['deleted'] = 1;
-					}
+            if (
+                $uid_voucher &&
+                $TSFE->fe_user->user['uid'] == $uid_voucher
+                    ||
+                $voucherTable != 'fe_users' &&
+                !$row['reusable']
+            ) {
+                if ($TSFE->fe_user->user['uid'] == $uid_voucher)	{
+                    $updateArray = array();
+                    $where = $whereGeneral;
+                    if ($voucherTable == 'fe_users')	{
+                        $where = 'uid="'.$row['uid'].'"';
+                        $updateArray['tt_products_vouchercode'] = '';
+                    } else {
+                        $updateArray['deleted'] = 1;
+                    }
 
-					$TYPO3_DB->exec_UPDATEquery($voucherTable, $where, $updateArray);
-				}
-			}
+                    $TYPO3_DB->exec_UPDATEquery($voucherTable, $where, $updateArray);
+                }
+            }
 		}
 	}
 
@@ -196,14 +202,13 @@ class tx_ttproducts_voucher extends tx_ttproducts_table_base {
 		global $TYPO3_DB, $TSFE;
 
 		$voucherCode = $recs['tt_products']['vouchercode'];
-
 		$this->setCode($voucherCode);
+
 		if ($this->isCodeUsed($voucherCode))	{
 			$this->setValid(TRUE);
 			$lastVoucherCode = $this->getLastCodeUsed();
 
 			$row = $this->usedCodeArray[$lastVoucherCode];
-
 			$this->setAmount($row['amount']);
 			$this->setAmountType($row['amount_type']);
 		} else {
@@ -227,7 +232,7 @@ class tx_ttproducts_voucher extends tx_ttproducts_table_base {
                 $whereGeneral = $voucherTable . '.uid=' . intval($TSFE->fe_user->user['uid']);
                 $whereGeneral .= ' AND ' . $voucherTable . '.tt_products_vouchercode=' . $TYPO3_DB->fullQuoteStr($voucherCode, $voucherTable);
 			} else {
-				$voucherfieldArray = array('starttime', 'endtime', 'title', 'fe_users_uid', 'code', 'amount', 'amount_type', 'note');
+				$voucherfieldArray = array('starttime', 'endtime', 'title', 'fe_users_uid', 'reusable', 'code', 'amount', 'amount_type', 'note');
 				$whereGeneral = '(fe_users_uid="' . intval($TSFE->fe_user->user['uid']) . '" OR fe_users_uid=0) ';
 				$whereGeneral .= 'AND code=' . $TYPO3_DB->fullQuoteStr($voucherCode, $voucherTable);
 			}
@@ -249,6 +254,7 @@ class tx_ttproducts_voucher extends tx_ttproducts_table_base {
 					$uid_voucher = $row['fe_users_uid'];
 				}
 			}
+
 			$TYPO3_DB->sql_free_result($res);
 
 			if ($row && ($voucherTable != 'fe_users' || $uid_voucher == $TSFE->fe_user->user['uid']))	{
@@ -258,7 +264,6 @@ class tx_ttproducts_voucher extends tx_ttproducts_table_base {
 				$this->setAmountType($amountType);
 				$this->setAmount($row['amount']);
 				$newAmount = $this->getRebateAmount();
-
 				$amount += $newAmount;
 				$this->setAmount($amount);
 				$this->setAmountType(0);

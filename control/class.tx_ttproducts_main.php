@@ -447,10 +447,11 @@ class tx_ttproducts_main implements t3lib_Singleton {
 		// *************************************
 		// *** Listing items:
 		// *************************************
+        $voucher = $tablesObj->get('voucher');
+        $voucher->doProcessing($recs);
+
 		$basketObj->getCalculatedBasket(); // get the basket->itemArray
 		$basketObj->getCalculatedSums();
-		$voucher = $tablesObj->get('voucher');
-		$voucher->doProcessing($recs);
 		$basketObj->addVoucherSums();
 
 		$templateCode = $templateObj->get('BASKET', $langObj, $this->cObj, $templateFile, $errorMessage); // this is needed also if fe=0, because you could want so send emails.
