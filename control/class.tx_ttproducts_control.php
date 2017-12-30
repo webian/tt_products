@@ -445,10 +445,14 @@ class tx_ttproducts_control implements t3lib_Singleton {
 			(empty($pidagb) ||
 			$_REQUEST['recs']['personinfo']['agb'] || ($bPayment && t3lib_div::_GET('products_payment')) || $infoViewObj->infoArray['billing']['agb'])) {
 
-			if (
-				$bPayment &&
-				($this->conf['paymentActivity'] == 'payment' || $this->conf['paymentActivity'] == 'verify')
-			)	{
+            if (
+                !$bBasketEmpty &&
+                $bPayment &&
+                (
+                    $this->conf['paymentActivity'] == 'payment' ||
+                    $this->conf['paymentActivity'] == 'verify'
+                )
+            ) {
 				$mainMarkerArray['###MESSAGE_PAYMENT_SCRIPT###'] =
 					$this->processPayment(
 						$orderUid,
@@ -580,6 +584,7 @@ class tx_ttproducts_control implements t3lib_Singleton {
 		$paymentshippingObj = t3lib_div::getUserObj('tx_ttproducts_paymentshipping');
 		$markerObj = t3lib_div::getUserObj('tx_ttproducts_marker');
 
+        $bBasketEmpty = (count($this->basket->getItemArray()) == 0);
 		$mainMarkerArray = array();
 		$mainMarkerArray['###EXTERNAL_COBJECT###'] = $externalCObject . '';  // adding extra preprocessing CObject
 		$bFinalize = FALSE; // no finalization must be called.
@@ -777,8 +782,13 @@ class tx_ttproducts_control implements t3lib_Singleton {
 					case 'products_verify':
 						$bPayment = TRUE;
 
-						if ($this->conf['paymentActivity']=='verify' || $this->conf['paymentActivity']=='customized' /* deprecated */)	{
-
+                        if (
+                            !$bBasketEmpty &&
+                            (
+                                $this->conf['paymentActivity']=='verify' ||
+                                $this->conf['paymentActivity']=='customized' /* deprecated */
+                            )
+                        ) {
 							$orderUid = $this->getOrderUid();
 							$orderNumber = $this->getOrdernumber($orderUid);
 							$mainMarkerArray['###MESSAGE_PAYMENT_SCRIPT###'] =
@@ -807,7 +817,10 @@ class tx_ttproducts_control implements t3lib_Singleton {
 						if ($handleLib == '')	{
 							$handleLib = $paymentshippingObj->getHandleLib('form');
 						}
-						if ($handleLib != '') {
+                        if (
+                            !$bBasketEmpty &&
+                            $handleLib != ''
+                        ) {
 							$orderUid = $this->getOrderUid();
                             $orderNumber = $this->getOrdernumber($orderUid);
 							$rc = $this->processPayment(
@@ -843,7 +856,6 @@ class tx_ttproducts_control implements t3lib_Singleton {
 
 			}	// if ($value)
 
-			$bBasketEmpty = (count($this->basket->getItemArray()) == 0);
 			if ($value) {
 				$newContent = $this->getContent(
 					$mainMarkerArray,
@@ -894,7 +906,10 @@ class tx_ttproducts_control implements t3lib_Singleton {
 				$orderUid = $this->getOrderUid();
                 $orderNumber = $this->getOrdernumber($orderUid);
 
-				if (trim($this->conf['paymentActivity']) == 'finalize')	{
+                if (
+                    !$bBasketEmpty &&
+                    trim($this->conf['paymentActivity']) == 'finalize'
+                ) {
 					$mainMarkerArray['###MESSAGE_PAYMENT_SCRIPT###'] =
 						$this->processPayment(
 							$orderUid,

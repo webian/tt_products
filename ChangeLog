@@ -1,3 +1,5 @@
+2017-12-30 Franz Holzinger <franz@ttproducts.de>
+    * bugfix: do not start any payment transactor extension when there is no product in the basket
 
 2017-19-12 Franz Holzinger <franz@ttproducts.de>
     * new feature: noCostsVoucher: voucher codes which result in no shipping costs
