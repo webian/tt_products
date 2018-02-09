@@ -1,3 +1,10 @@
+2018-02-09 Franz Holzinger <franz@ttproducts.de>
+    * Bugfix for ###PERSON_COUNTRY###; if static_info_tables has not been installed but no marker ###PERSON_COUNTRY_CODE### with a county selector has been used on the INFO page
+    * transform the example HTML template files from XHTML into normal HTML
+
+2017-11-15 Franz Holzinger <franz@ttproducts.de>
+    * new feature: Make the hooks ContentPostProcessor and ContentPostProcessor configurable in the Extension Manager, which are used for the setting of the page title.
+
 2017-08-14 Franz Holzinger <franz@ttproducts.de>
     * Bugfix for the TCA problems caused by TYPO3 8
 

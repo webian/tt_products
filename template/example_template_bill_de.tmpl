@@ -105,7 +105,7 @@ Weiterentwicklungen zum Shop k&ouml;nnen Sie unter <a href="http://ttproducts.de
           </tr>
           <tr>
             <td colspan="3" align="CENTER">
-            <input type="button" name="warenkorb" value="zum Warenkorb" onclick="self.location.href='index.php?id=###PID_BASKET###'"></td>
+            <input type="button" name="warenkorb" value="zum Warenkorb" onclick="self.location.href='index.php?id=###PID_BASKET###';"></td>
           </tr>
         </table>
 			</form>
@@ -290,7 +290,7 @@ auf <a href="http://jambage.com/index.php?id=170">tt_products - Open Source Shop
           </tr>
           <tr>
             <td colspan="3" align="CENTER">
-            <input type="button" name="warenkorb" value="zum Warenkorb" onclick="self.location.href='index.php?id=###PID_BASKET###'"></td>
+            <input type="button" name="warenkorb" value="zum Warenkorb" onclick="self.location.href='index.php?id=###PID_BASKET###';"></td>
           </tr>
         </table>
 			</form>
@@ -466,7 +466,7 @@ auf <a href="http://jambage.com/index.php?id=170">tt_products - Open Source Shop
           </tr>
           <tr>
             <td colspan="3" align="CENTER">
-            <input type="button" name="warenkorb" value="zum Warenkorb" onclick="self.location.href='index.php?id=###PID_BASKET###'"></td>
+            <input type="button" name="warenkorb" value="zum Warenkorb" onclick="self.location.href='index.php?id=###PID_BASKET###';"></td>
           </tr>
         </table>
 			</form>
@@ -741,12 +741,12 @@ This whole subpart, message_payment is substituted with the subpart 'message_pay
 <!-- ###MESSAGE_SHIPPING_10### -->
 <!-- ###MESSAGE_SHIPPING_20### -->
 <br><B>Versand erfolgt in die EU</b><br>
-<br /><b>Lieferung EU mit g&uuml;ltiger VAT Reg. No.</b><br />
+<br><b>Lieferung EU mit g&uuml;ltiger VAT Reg. No.</b><br>
 Lieferung ab Werk. Lieferkosten berechnen wir Ihnen g&uuml;nstigst nach
 Aufwand analog unserer <a
 href="http://www.bananaguard.de/index.php?id=9737">Transportkosten&uuml;bersicht
-</a>.<br />
-Ihre g&uuml;ltige VAT Reg. No. Hier eingeben: <input type="text" name="recs[personinfo][tt_products_vat]" size="30" value="###PERSON_TT_PRODUCTS_VAT###"><br />
+</a>.<br>
+Ihre g&uuml;ltige VAT Reg. No. Hier eingeben: <input type="text" name="recs[personinfo][tt_products_vat]" size="30" value="###PERSON_TT_PRODUCTS_VAT###"><br>
 <!-- ###MESSAGE_SHIPPING_20### -->
 <!-- ###MESSAGE_SHIPPING_20_20### -->
 <br><B>Versand erfolgt nach &Ouml;sterreich</b><br>
@@ -924,26 +924,26 @@ If this part is not empty then this will be used instead of BILLING_ADDRESS if t
 </tr>
 <tr>
 <td>###GW1B###<strong>Kontonummer:</strong>###GW1E###</td>
-<td><input name="recs[account][ac_number]" value="###PERSON_ACCOUNTS_AC_NUMBER###" size="12" maxlength="12"/>
+<td><input name="recs[account][ac_number]" value="###PERSON_ACCOUNTS_AC_NUMBER###" size="12" maxlength="12">
 <td>###GW1B###<strong>Bankleitzahl:</strong>###GW1E###</td>
-<td><input name="recs[account][bic]" value="###PERSON_ACCOUNTS_BIC###" size="11" maxlength="11"/>
+<td><input name="recs[account][bic]" value="###PERSON_ACCOUNTS_BIC###" size="11" maxlength="11">
 </td>
 </tr>
 <tr>
   <td >###GW1B###<strong>Konto Inhaber</strong>###GW1E###</td>
-  <td colspan="3"><input name="recs[account][owner_name]" value="###PERSON_ACCOUNTS_OWNER_NAME###" size="20"/>
+  <td colspan="3"><input name="recs[account][owner_name]" value="###PERSON_ACCOUNTS_OWNER_NAME###" size="20">
   </td>
 </tr>
 <tr>
 <td>###GW1B###<strong>Kreditkarte:</strong>###GW1E###</td>
 <td>###PERSON_CARDS_CC_TYPE###   zuletzt: ###PERSON_CARDS_CC_TYPE_SELECTED###</td>
-<td><input name="recs[creditcard][cc_number_1]" value="###PERSON_CARDS_CC_NUMBER_1###" size="4" maxlength="4"/>-<input name="recs[creditcard][cc_number_2]" value="###PERSON_CARDS_CC_NUMBER_2###" size="4" maxlength="4" />-<input name="recs[creditcard][cc_number_3]" value="###PERSON_CARDS_CC_NUMBER_3###" size="4" maxlength="4" />-<input name="recs[creditcard][cc_number_4]" value="###PERSON_CARDS_CC_NUMBER_4###" size="4" maxlength="4" /> Sicherheitszahl <input name="recs[creditcard][cvv2]" value="###PERSON_CARDS_CVV2###" size="4" maxlength="4" />
+<td><input name="recs[creditcard][cc_number_1]" value="###PERSON_CARDS_CC_NUMBER_1###" size="4" maxlength="4">-<input name="recs[creditcard][cc_number_2]" value="###PERSON_CARDS_CC_NUMBER_2###" size="4" maxlength="4">-<input name="recs[creditcard][cc_number_3]" value="###PERSON_CARDS_CC_NUMBER_3###" size="4" maxlength="4">-<input name="recs[creditcard][cc_number_4]" value="###PERSON_CARDS_CC_NUMBER_4###" size="4" maxlength="4"> Sicherheitszahl <input name="recs[creditcard][cvv2]" value="###PERSON_CARDS_CVV2###" size="4" maxlength="4">
 </td>
-<td>G&uuml;ltigkeit bis: <input name="recs[creditcard][endtime_mm]" value="###PERSON_CARDS_ENDTIME_MM###" size="2" maxlength="2"/> / <input name="recs[creditcard][endtime_yy]" value="###PERSON_CARDS_ENDTIME_YY###" size="2" maxlength="2"/></td>
+<td>G&uuml;ltigkeit bis: <input name="recs[creditcard][endtime_mm]" value="###PERSON_CARDS_ENDTIME_MM###" size="2" maxlength="2"> / <input name="recs[creditcard][endtime_yy]" value="###PERSON_CARDS_ENDTIME_YY###" size="2" maxlength="2"></td>
 </tr>
 <tr>
   <td >###GW1B###<strong>Inhaber</strong>###GW1E###</td>
-  <td colspan="3"><input name="recs[creditcard][owner_name]" value="###PERSON_CARDS_OWNER_NAME###" size="20"/>
+  <td colspan="3"><input name="recs[creditcard][owner_name]" value="###PERSON_CARDS_OWNER_NAME###" size="20">
   </td>
 </tr>
 <tr>
@@ -1046,7 +1046,7 @@ Hier k&ouml;nnen Sie Ihrer Bestellung einen Kommentar hinzufgen:
 </tr>
 <tr>
 <td colspan="3">###GW1B###<!--###LINK_AGB###-->Die Allgemeinen Gesch&auml;ftsbedingungen<!--###LINK_AGB###--> habe ich gelesen und erkenne sie hiermit an.:
-<input type="checkbox" name="recs[personinfo][agb]" ###PERSON_AGB### /></td>
+<input type="checkbox" name="recs[personinfo][agb]" ###PERSON_AGB###></td>
 <td colspan="3"></td>
 </tr>
 </table>
@@ -1056,7 +1056,7 @@ Hier k&ouml;nnen Sie Ihrer Bestellung einen Kommentar hinzufgen:
 <td><input type="Submit" name="products_update" value="zur&uuml;ck zum Warenkorb"></td>
 <td align="right">
 <input type="Submit" name="products_payment" value="AGBs akzeptiert" onclick="document.forms[0].action='###FORM_URL_FINALIZE###';">
-<input type="hidden" name="products_cmd" value="cardno" />
+<input type="hidden" name="products_cmd" value="cardno">
 ###HIDDENFIELDS###
 </td>
 </tr></table>
@@ -1303,7 +1303,7 @@ Exact same features as BASKET_TEMPLATE
 <form method="post" action="###FORM_URL###" name="###FORM_NAME###" id="paymentForm">
 <table width="100%"><tr>
 <td><input type="Submit" name="products_update" value="zur&uuml;ck zum Warenkorb">
-<input type="hidden" name="products_cmd" value="cardno" /></td>
+<input type="hidden" name="products_cmd" value="cardno"></td>
 <td align="right"><input type="Submit" name="products_finalize" value="Zahlungspflichtig bestellen" onclick="document.forms[0].action='###FORM_URL_THANKS###'; document.forms[0].target='###FORM_URL_TARGET###';">###GW1B### (auch PayPal)###GW1E###</td>
 </tr></table>
 </form>
@@ -1977,7 +1977,7 @@ Ihre Bestellung:
 1) ARTIKEL:
 <!-- ###ITEM_CATEGORY_AND_ITEMS### -->
 <!-- ###ITEM_LIST### begin -->
-<!-- ###ITEM_SINGLE### begin-->
+<!-- ###ITEM_SINGLE### begin -->
 ###PRODUCT_TITLE### ###PRODUCT_IMAGE###
 Anzahl: ###FIELD_QTY### Price: ###PRICE_TAX### (Steuer: ###PRICE_ONLY_TAX###)
 <!-- ###ITEM_SINGLE### end -->

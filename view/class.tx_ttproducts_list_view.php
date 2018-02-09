@@ -916,6 +916,7 @@ class tx_ttproducts_list_view {
 						$currentCat = $row['category'];
 					}
 					$catArray = $categoryTable->getCategoryArray($row['uid'], 'sorting');
+					$childCatWrap = '';
 					if (count($catArray))	{
 						reset($catArray);
 						$this->getCategories($categoryTable, $catArray, $rootCatArray, $rootLineArray, $cat, $currentCat, $displayCat);

@@ -2,7 +2,7 @@
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<title>tt_procucts template</title>
 </head>
 
@@ -36,12 +36,12 @@
 	                    ###PRODUCT_IMAGE###
 	                    <div class="product_note">###PRODUCT_NOTE###</div>
 	                    <p class="price">
-	                        Prezzo-web: <strong>EUR ###PRICE_TAX###</strong><br />
+	                        Prezzo-web: <strong>EUR ###PRICE_TAX###</strong><br>
 	                        <em class="price_no_vat">(escluso IVA: EUR ###PRICE_NO_TAX###)</em>
 	                    </p>
 	                    <div class="order_form">
     						<label for="###FIELD_ID###">Quantita': </label>
-                        		<input size="3" maxlength="4" type="text" id="###FIELD_ID###" name="###FIELD_NAME###" value="###FIELD_QTY###" />
+                        		<input size="3" maxlength="4" type="text" id="###FIELD_ID###" name="###FIELD_NAME###" value="###FIELD_QTY###">
                             <a href="###FORM_MEMO###&amp;tx_ttproducts_pi1[addmemo]=###PRODUCT_ID###">Aggiugi al memo</a>
 	                    </div>
 	                    <p class="link">[<!--###LINK_ITEM###-->###PRODUCT_TITLE###<!--###LINK_ITEM###-->]</p>
@@ -50,7 +50,7 @@
 	            <!-- ###ITEM_SINGLE### end -->
 	        <!-- ###ITEM_LIST### end -->
             	<div>
-                	<input type="submit" name="order" value="Inserisci nel carrello" />
+                	<input type="submit" name="order" value="Inserisci nel carrello">
                 </div>
 	    	</form>
 	    <!-- ###ITEM_CATEGORY_AND_ITEMS### end -->
@@ -62,7 +62,7 @@
 	    </div>
     </div>
 <!-- ###ITEM_LIST_TEMPLATE### end -->
-<br /><br />
+<br><br>
 
 
 <h2>ARTICLE_LIST_TEMPLATE</h2>
@@ -101,7 +101,7 @@
 	    </div>
     </div>
 <!-- ###ARTICLE_LIST_TEMPLATE### end -->
-<br /><br />
+<br><br>
 
 
 <h2>ITEM_CATLIST_TEMPLATE</h2>
@@ -124,7 +124,7 @@
     </div>
 
 <!-- ###ITEM_CATLIST_TEMPLATE### end -->
-<br /><br />
+<br><br>
 
 
 <h2>ITEM_SINGLE_DISPLAY</h2>
@@ -145,15 +145,15 @@
 	        <dt>Num. articolo:</dt>
             	<dd>###PRODUCT_ITEMNUMBER###</dd>
 	        <dt>Prezzo-web:</dt>
-            	<dd><strong>EUR ###PRICE_TAX###</strong><br />
+            	<dd><strong>EUR ###PRICE_TAX###</strong><br>
 	            <em class="price_no_vat">(escluso IVA: EUR ###PRICE_NO_TAX###)</em></dd>
 	    </dl>
 	    <div class="order_form">
 	        <form method="post" action="###FORM_URL###">
             	<div>
                 	<label for="quantity">Quantita': </label>
-                    	<input size="3" maxlength="4" type="text" id="quantity" name="###FIELD_NAME###" value="###FIELD_QTY###" />
-                	<input type="submit" name="order" value="Inserisci nel carrello" /><br />
+                    	<input size="3" maxlength="4" type="text" id="quantity" name="###FIELD_NAME###" value="###FIELD_QTY###">
+                	<input type="submit" name="order" value="Inserisci nel carrello"><br>
                 	<a href="###FORM_MEMO###&amp;tx_ttproducts_pi1[addmemo]=###PRODUCT_ID###">Aggiungi a memo</a>
                 </div>
 	        </form>
@@ -161,7 +161,7 @@
         <div class="list_link"><!--###LINK_ITEM###--><strong>&lt;- Back to the list</strong><!--###LINK_ITEM###--></div>
 	</div>
 <!-- ###ITEM_SINGLE_DISPLAY### end -->
-<br /><br />
+<br><br>
 
 
 <h2>BASKET_OVERVIEW_TEMPLATE</h2>
@@ -174,12 +174,12 @@
             <a href="http://###DOMAIN###/index.php?id=102">Supporto</a>
         </p>
 		<p class="basket">
-        	<a href="http://###DOMAIN###/index.php?id=###PID_BASKET###"><img src="fileadmin/template/res/basket_icon.gif" alt="Carrello" /></a>&nbsp;
+        	<a href="http://###DOMAIN###/index.php?id=###PID_BASKET###"><img src="fileadmin/template/res/basket_icon.gif" alt="Carrello"></a>&nbsp;
             <a href="http://###DOMAIN###/index.php?id=###PID_BASKET###">###NUMBER_GOODSTOTAL### Prodotti (EUR ###PRICE_GOODSTOTAL_TAX###)</a>
         </p>
 	</div>
 <!-- ###BASKET_OVERVIEW_TEMPLATE### end -->
-<br /><br />
+<br><br>
 
 
 <h2>BASKET_OVERVIEW_EMPTY</h2>
@@ -192,12 +192,12 @@
             <a href="http://###DOMAIN###/index.php?id=102">Supporto</a>
         </p>
 		<p class="basket">
-        	<a href="http://###DOMAIN###/index.php?id=###PID_BASKET###"><img src="fileadmin/template/res/basket_icon.gif" alt="Carrello" /></a>&nbsp;
+        	<a href="http://###DOMAIN###/index.php?id=###PID_BASKET###"><img src="fileadmin/template/res/basket_icon.gif" alt="Carrello"></a>&nbsp;
 			<a href="http://###DOMAIN###/index.php?id=###PID_BASKET###">0 Prodotti (EUR 0,00)</a>
         </p>
 	</div>
 <!-- ###BASKET_OVERVIEW_EMPTY### end -->
-<br /><br />
+<br><br>
 
 
 <h2>ITEM_SEARCH</h2>
@@ -209,13 +209,13 @@
     	<form method="post" action="###FORM_URL###">
         	<div>
 	            <label for="sword">Cerca: </label>
-	                <input size="30" maxlength="100" type="text" id="sword" name="sword" value="###SWORD###" />
-	            <input type="submit" name="order" value="Cerca" />
+	                <input size="30" maxlength="100" type="text" id="sword" name="sword" value="###SWORD###">
+	            <input type="submit" name="order" value="Cerca">
             </div>
         </form>
     </div>
 <!-- ###ITEM_SEARCH### end -->
-<br /><br />
+<br><br>
 
 
 <h2>ITEM_SEARCH_EMPTY</h2>
@@ -225,12 +225,12 @@
 	-->
     <p class="error"><strong>Nessun risultato con il criterio di ricerca selezionato.</strong></p>
 <!-- ###ITEM_SEARCH_EMPTY### end -->
-<br /><br />
+<br><br>
 
 
 <h2>BASKET_TEMPLATE</h2>
-<p><em>Subpart utilizzata per visualizzare il contenuto del carrello.<br />
-La lista prodotti ha esattamente le stesse proprieta' della subpart LIST_ITEM_TEMPLATE.<br />
+<p><em>Subpart utilizzata per visualizzare il contenuto del carrello.<br>
+La lista prodotti ha esattamente le stesse proprieta' della subpart LIST_ITEM_TEMPLATE.<br>
 In piu' ci sono alcuni campi per le info di pagamento e spedizione.</em></p>
 <!-- ###BASKET_TEMPLATE### begin
 	Subpart used to display the content of the shopping basket.
@@ -264,7 +264,7 @@ In piu' ci sono alcuni campi per le info di pagamento e spedizione.</em></p>
 	                        <!-- ###ITEM_LIST### begin -->
 	                            <!-- ###ITEM_SINGLE### begin-->
 	                                <tr class="listitem">
-	                                    <td headers="quantity" class="quantity"><input size="3" maxlength="4" type="text" name="###FIELD_NAME_BASKET###" value="###FIELD_QTY###" /></td>
+	                                    <td headers="quantity" class="quantity"><input size="3" maxlength="4" type="text" name="###FIELD_NAME_BASKET###" value="###FIELD_QTY###"></td>
 	                                    <td headers="image" class="image">###PRODUCT_IMAGE###</td>
 	                                    <td headers="product" class="product"><!--###LINK_ITEM###-->###PRODUCT_TITLE###<!--###LINK_ITEM###--></td>
 	                                    <td headers="product_number" class="product_number">###PRODUCT_ITEMNUMBER###</td>
@@ -284,8 +284,8 @@ In piu' ci sono alcuni campi per le info di pagamento e spedizione.</em></p>
                 <label for="shipping-select">Tipo di spedizione: </label>
                 	###SHIPPING_SELECTOR######SHIPPING_IMAGE###
                 <p>
-                    Peso totale: <strong>###SHIPPING_WEIGHT### kg</strong><br />
-                    Spedizione: <strong>###SHIPPING_TITLE###</strong><br />
+                    Peso totale: <strong>###SHIPPING_WEIGHT### kg</strong><br>
+                    Spedizione: <strong>###SHIPPING_TITLE###</strong><br>
                     Costi: <strong>EUR ###PRICE_SHIPPING_TAX###</strong>&nbsp;<em class="price_no_vat">(escluso IVA: EUR ###PRICE_SHIPPING_NO_TAX###)</em>
                 </p>
                 <!-- ###MESSAGE_SHIPPING###
@@ -302,7 +302,7 @@ In piu' ci sono alcuni campi per le info di pagamento e spedizione.</em></p>
                 <label for="payment-select">Forma di pagamento: </label>
                 	###PAYMENT_SELECTOR######PAYMENT_IMAGE###
                 <p>
-                    Pagamento: <strong>###PAYMENT_TITLE###</strong><br />
+                    Pagamento: <strong>###PAYMENT_TITLE###</strong><br>
                     Costi: <strong>EUR ###PRICE_PAYMENT_TAX###</strong>&nbsp;<em class="price_no_vat">(escluso IVA: EUR ###PRICE_PAYMENT_NO_TAX###)</em>
                 </p>
                 <!-- ###MESSAGE_PAYMENT### begin
@@ -317,25 +317,25 @@ In piu' ci sono alcuni campi per le info di pagamento e spedizione.</em></p>
             <div class="price_summary">
                 <h2>Totale</h2>
                 <p>
-                    <strong>Totale: EUR ###PRICE_TOTAL_TAX###</strong><br />
+                    <strong>Totale: EUR ###PRICE_TOTAL_TAX###</strong><br>
                     <em class="price_no_vat">(escluso IVA: EUR ###PRICE_TOTAL_NO_TAX###)</em>
                 </p>
             </div>
 
             <div class="form_control">
-                <input type="hidden" name="mode_update" value="1" />
-                <input type="submit" name="products_update" value="Aggiorna carrello" />
-                <input type="submit" name="products_info" value="Pagamento/Ordine" />
+                <input type="hidden" name="mode_update" value="1">
+                <input type="submit" name="products_update" value="Aggiorna carrello">
+                <input type="submit" name="products_info" value="Pagamento/Ordine">
             </div>
         </form>
     </div>
 <!-- ###BASKET_TEMPLATE### end -->
-<br /><br />
+<br><br>
 
 
 <h2>BASKET_INFO_TEMPLATE</h2>
-<p><em>Subpart usata se e' stata settata la GPvar "products_info".<br />
-Usata normalmente per permettere agli utenti di inserire un indirizzo separatamente dal vero carrello.<br />
+<p><em>Subpart usata se e' stata settata la GPvar "products_info".<br>
+Usata normalmente per permettere agli utenti di inserire un indirizzo separatamente dal vero carrello.<br>
 Stesse proprieta' di BASKET_TEMPLATE.</em></p>
 <!-- ###BASKET_INFO_TEMPLATE### begin
 	Subpart utilizzata se e' stata settata la GPvar"products_info" was set.
@@ -348,23 +348,23 @@ Stesse proprieta' di BASKET_TEMPLATE.</em></p>
 	            <fieldset>
 	                <legend>Indirizzo di fatturazione</legend>
 	                <p class="billing_address_info">
-                    	Inserisci il tuo codice postale qui. Questi dati saranno stampati sulla fattura.<br />
-						Normalmente gli articoli acquistati saranno spediti a questo indirizzo, ma se viene specificato un indirizzo diverso nei campi sottostanti, gli articoli verranno spediti la'.<br />
+                    	Inserisci il tuo codice postale qui. Questi dati saranno stampati sulla fattura.<br>
+						Normalmente gli articoli acquistati saranno spediti a questo indirizzo, ma se viene specificato un indirizzo diverso nei campi sottostanti, gli articoli verranno spediti la'.<br>
 						Se viene selezionato "Ritiro" ovviamente non verra' spedito alcun bene.
                     </p>
 	                <div class="billing_address">
 	                    <label for="billing_name"><strong>Nome/Azienda*: </strong></label>
-	                        <input type="text" name="recs[personinfo][name]" size="30" id="billing_name" value="###PERSON_NAME###" /><br />
+	                        <input type="text" name="recs[personinfo][name]" size="30" id="billing_name" value="###PERSON_NAME###"><br>
 	                    <label for="billing_address"><strong>Via*: </strong></label>
-	                        <input type="text" name="recs[personinfo][address]" size="30" id="billing_address" value="###PERSON_ADDRESS###" /><br />
+	                        <input type="text" name="recs[personinfo][address]" size="30" id="billing_address" value="###PERSON_ADDRESS###"><br>
 	                    <label for="billing_zip"><strong>CAP/Citta'*: </strong></label>
-	                        <input type="text" name="recs[personinfo][zip]" size="5" id="billing_zip" value="###PERSON_ZIP###" />&nbsp;<input type="text" name="recs[personinfo][city]" size="20" id="billing_city" value="###PERSON_CITY###" /><br />
+	                        <input type="text" name="recs[personinfo][zip]" size="5" id="billing_zip" value="###PERSON_ZIP###">&nbsp;<input type="text" name="recs[personinfo][city]" size="20" id="billing_city" value="###PERSON_CITY###"><br>
 	                    <label for="billing_country"><strong>PÜaese*: </strong></label>
-	                        <input type="text" name="recs[personinfo][country]" size="30" id="billing_country" value="###PERSON_COUNTRY###" /><br />
+	                        <input type="text" name="recs[personinfo][country]" size="30" id="billing_country" value="###PERSON_COUNTRY###"><br>
 	                    <label for="billing_email"><strong>Email*: </strong></label>
-	                        <input type="text" name="recs[personinfo][email]" size="30" id="billing_email" value="###PERSON_EMAIL###" /><br />
+	                        <input type="text" name="recs[personinfo][email]" size="30" id="billing_email" value="###PERSON_EMAIL###"><br>
 	                    <label for="billing_telephone">Telefono: </label>
-	                        <input type="text" name="recs[personinfo][telephone]" size="30" id="billing_telephone" value="###PERSON_TELEPHONE###" />
+	                        <input type="text" name="recs[personinfo][telephone]" size="30" id="billing_telephone" value="###PERSON_TELEPHONE###">
 	                </div>
 	            </fieldset>
             <!-- ###BILLING_ADDRESS### end-->
@@ -393,7 +393,7 @@ Stesse proprieta' di BASKET_TEMPLATE.</em></p>
 	                    This whole subpart, message_payment is substituted with the subpart 'message_payment_[number-of-method-in-typoscript]'
 	                    -->
 	                    <!-- ###MESSAGE_SHIPPING_10### begin -->
-	                        Inserisca qui i dati se desidera un indirizzo di spedizione alternativo.<br />
+	                        Inserisca qui i dati se desidera un indirizzo di spedizione alternativo.<br>
 	                    <!-- ###MESSAGE_SHIPPING_10### end -->
 	                    <!-- ###MESSAGE_SHIPPING_90### begin -->
 	                        Dato che e' stato selezionato il ritiro non c'e' bisogno di inserire un indirizzo qui.
@@ -403,17 +403,17 @@ Stesse proprieta' di BASKET_TEMPLATE.</em></p>
                 </p>
 	            <div class="delivery_address">
 	                <label for="delivery_name">Contatto: </label>
-	                    <input type="text" name="recs[delivery][name]" size="30" id="delivery_name" value="###DELIVERY_NAME###" /><br />
+	                    <input type="text" name="recs[delivery][name]" size="30" id="delivery_name" value="###DELIVERY_NAME###"><br>
 	                <label for="delivery_address">Via: </label>
-	                    <input type="text" name="recs[delivery][address]" size="30" id="delivery_address" value="###DELIVERY_ADDRESS###" /><br />
+	                    <input type="text" name="recs[delivery][address]" size="30" id="delivery_address" value="###DELIVERY_ADDRESS###"><br>
 					<label for="delivery_zip">CAP/Citta': </label>
-                    	<input type="text" name="recs[delivery][zip]" size="5" id="delivery_zip" value="###DELIVERY_ZIP###" />&nbsp;<input type="text" name="recs[delivery][city]" size="20" id="delivery_city" value="###DELIVERY_CITY###" /><br />
+                    	<input type="text" name="recs[delivery][zip]" size="5" id="delivery_zip" value="###DELIVERY_ZIP###">&nbsp;<input type="text" name="recs[delivery][city]" size="20" id="delivery_city" value="###DELIVERY_CITY###"><br>
                     <label for="delivery_country">Paese: </label>
-                    	<input type="text" name="recs[delivery][country]" size="30" id="delivery_country" value="###DELIVERY_COUNTRY###" /><br />
+                    	<input type="text" name="recs[delivery][country]" size="30" id="delivery_country" value="###DELIVERY_COUNTRY###"><br>
 	                <label for="delivery_email">Email: </label>
-	                    <input type="text" name="recs[delivery][email]" size="30" id="delivery_email" value="###DELIVERY_EMAIL###" /><br />
+	                    <input type="text" name="recs[delivery][email]" size="30" id="delivery_email" value="###DELIVERY_EMAIL###"><br>
 	                <label for="delivery_telephone">Telefono: </label>
-	                    <input type="text" name="recs[delivery][telephone]" size="30" id="delivery_telephone" value="###DELIVERY_TELEPHONE###" />
+	                    <input type="text" name="recs[delivery][telephone]" size="30" id="delivery_telephone" value="###DELIVERY_TELEPHONE###">
 	            </div>
 	        </fieldset>
 
@@ -426,8 +426,8 @@ Stesse proprieta' di BASKET_TEMPLATE.</em></p>
 	            </div>
 	            <div class="delivery_date">
 	                <p>E' possibile, opzionalmente, specificare una data di spedizione. Si noti che questo e' dipendente dal corriere.</p>
-	                <label for="delivery_date">Data di spedizione: </label><br />
-						<input type="text" name="recs[delivery][desired_date]" size="10" maxlength="10" id="delivery_date" value="###DELIVERY_DESIRED_DATE###" />
+	                <label for="delivery_date">Data di spedizione: </label><br>
+						<input type="text" name="recs[delivery][desired_date]" size="10" maxlength="10" id="delivery_date" value="###DELIVERY_DESIRED_DATE###">
 	            </div>
 	        </fieldset>
 
@@ -443,17 +443,17 @@ Stesse proprieta' di BASKET_TEMPLATE.</em></p>
             <p><em>Attenzion: i campi con * sono obbligatori!</em></p>
 
 			<div class="form_control">
-	            <input type="submit" name="products_update" value="Torna al carrello" />
-	            <input type="submit" name="products_payment" value="Pagamento/Ordine" />
+	            <input type="submit" name="products_update" value="Torna al carrello">
+	            <input type="submit" name="products_payment" value="Pagamento/Ordine">
 	        </div>
         </form>
     </div>
 <!-- ###BASKET_INFO_TEMPLATE### end -->
-<br /><br />
+<br><br>
 
 
 <h2>BASKET_PAYMENT_TEMPLATE</h2>
-<p><em>Subpart utilizzata se e' stata settata la GPvar "products_payment". Questa template visualizza le informazioni finali prima del pagamento.<br />
+<p><em>Subpart utilizzata se e' stata settata la GPvar "products_payment". Questa template visualizza le informazioni finali prima del pagamento.<br>
 Stesse proprieta' di BASKET_TEMPLATE.</em></p>
 <!-- ###BASKET_PAYMENT_TEMPLATE### begin
 	Subpart utilizzata se e' stata settata la GPvar"products_payment" was set. This displays the final information about the order before the payment is initiated.
@@ -573,7 +573,7 @@ Stesse proprieta' di BASKET_TEMPLATE.</em></p>
 	    <div class="price_summary">
         	<h2>Totale</h2>
 			<p>
-            	<strong>Totale: EUR ###PRICE_TOTAL_TAX###</strong><br />
+            	<strong>Totale: EUR ###PRICE_TOTAL_TAX###</strong><br>
 	        	<span class="price_no_vat">(escluso IVA: EUR ###PRICE_TOTAL_NO_TAX###)</span>
 			</p>
 	    </div>
@@ -581,18 +581,18 @@ Stesse proprieta' di BASKET_TEMPLATE.</em></p>
         <div class="form_control">
 	        <form method="post" action="###FORM_URL###">
             	<div>
-	                <input type="submit" name="products_update" value="Ritorna al carrello" />
-	                <input type="submit" name="products_finalize" value="Completa l'ordine!" />
+	                <input type="submit" name="products_update" value="Ritorna al carrello">
+	                <input type="submit" name="products_finalize" value="Completa l'ordine!">
                 </div>
 	        </form>
         </div>
     </div>
 <!-- ###BASKET_PAYMENT_TEMPLATE### end -->
-<br /><br />
+<br><br>
 
 
 <h2>BASKET_ORDERCONFIRMATION_TEMPLATE</h2>
-<p><em>Subpart utilizzata se e' stata settata la GPvar"products_payment". Questa template visualizza le informazioni finali prima del pagamento.<br />
+<p><em>Subpart utilizzata se e' stata settata la GPvar"products_payment". Questa template visualizza le informazioni finali prima del pagamento.<br>
 Stesse proprieta' di BASKET_TEMPLATE.</em></p>
 <!-- ###BASKET_ORDERCONFIRMATION_TEMPLATE### begin
 	Subpart used if the order is finalized and this is thus the confirmation shown.
@@ -611,17 +611,17 @@ Stesse proprieta' di BASKET_TEMPLATE.</em></p>
 	                <dd><strong>###FE_USER_UID###</strong></dd>
 	        </dl>
 	        <p>
-            	Per cortesia utilizzi questo numero quando ci vuole contattare.<br />
-	        	<em>La conferma d'ordine e' stata spedita anche via email all'indirizzo specificato in "Indirizzo di spedizione" (<a href="mailto:###PERSON_EMAIL###">###PERSON_EMAIL###</a>).<br />
+            	Per cortesia utilizzi questo numero quando ci vuole contattare.<br>
+	        	<em>La conferma d'ordine e' stata spedita anche via email all'indirizzo specificato in "Indirizzo di spedizione" (<a href="mailto:###PERSON_EMAIL###">###PERSON_EMAIL###</a>).<br>
 	        	E' consigliato in ogni caso di stampare e conservare questa pagina.</em>
             </p>
         </div>
 
 	    <h2>Informazioni sull'ordine</h2>
         <p>
-        	La spedizione verra' effettuata secondo le nostre condizioni di vendita. Il suo ordine ha la data ###ORDER_DATE###.<br />
-        	Puo' seguire lo stato dell'ordine tramite il numero di tracking: <strong>###ORDER_TRACKING_NO###</strong>. Clikkare qui <a href="index.php?id=###PID_TRACKING###&type=0&tracking=###ORDER_TRACKING_NO##">per vedere lo stato adesso.</a><br />
-			Clikkare qui <a href="index.php?id=###PID_TRACKING###&type=0&tracking=###ORDER_TRACKING_NO###"> per vedere la fattura</a>.<br />
+        	La spedizione verra' effettuata secondo le nostre condizioni di vendita. Il suo ordine ha la data ###ORDER_DATE###.<br>
+        	Puo' seguire lo stato dell'ordine tramite il numero di tracking: <strong>###ORDER_TRACKING_NO###</strong>. Clikkare qui <a href="index.php?id=###PID_TRACKING###&type=0&tracking=###ORDER_TRACKING_NO##">per vedere lo stato adesso.</a><br>
+			Clikkare qui <a href="index.php?id=###PID_TRACKING###&type=0&tracking=###ORDER_TRACKING_NO###"> per vedere la fattura</a>.<br>
             Clikkare qui <a href="index.php?id=###PID_DELIVERY###&type=0&tracking=###ORDER_TRACKING_NO###"> per vedere la bolla di spedizione</a>.
         </p>
 
@@ -639,20 +639,20 @@ Stesse proprieta' di BASKET_TEMPLATE.</em></p>
 	                Message for payment method 20, in this case PayPal.
 	                -->
 	                <p>
-                    	Ha scelto di pagare tramite PayPal. I suoi beni verranno spediti appena il pagamento sara' ricevuto.<br />
+                    	Ha scelto di pagare tramite PayPal. I suoi beni verranno spediti appena il pagamento sara' ricevuto.<br>
                         Clikkare di seguito per procedere al pagamento.
                     </p>
 	                <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
                     	<div>
-	                        <input type="hidden" name="cmd" value="_xclick" />
-	                        <input type="hidden" name="business" value="shop@myshop.tld" />
-	                        <input type="hidden" name="item_name" value="###ORDER_UID###" />
-	                        <input type="hidden" name="amount" value="###PRICE_TOTAL_TAX###" />
-	                        <input type="hidden" name="no_note" value="1" />
-	                        <input type="hidden" name="currency_code" value="EUR" />
-	                        <input type="hidden" name="lc" value="IT" />
-	                        <input type="hidden" name="tax" value="0,00" />
-	                        <input type="submit" name="submit" value="Paga ora" />
+	                        <input type="hidden" name="cmd" value="_xclick">
+	                        <input type="hidden" name="business" value="shop@myshop.tld">
+	                        <input type="hidden" name="item_name" value="###ORDER_UID###">
+	                        <input type="hidden" name="amount" value="###PRICE_TOTAL_TAX###">
+	                        <input type="hidden" name="no_note" value="1">
+	                        <input type="hidden" name="currency_code" value="EUR">
+	                        <input type="hidden" name="lc" value="IT">
+	                        <input type="hidden" name="tax" value="0,00">
+	                        <input type="submit" name="submit" value="Paga ora">
                         </div>
 	                </form>
 	            <!-- ###MESSAGE_PAYMENT_20### end -->
@@ -798,7 +798,7 @@ Stesse proprieta' di BASKET_TEMPLATE.</em></p>
 
 	    <div class="price_summary">
 			<p>
-            	<strong>Total: EUR ###PRICE_TOTAL_TAX###</strong><br />
+            	<strong>Total: EUR ###PRICE_TOTAL_TAX###</strong><br>
 	        	<em class="price_no_vat">(escluso IVA: EUR ###PRICE_TOTAL_NO_TAX###)</em>
 			</p>
 	    </div>
@@ -807,14 +807,14 @@ Stesse proprieta' di BASKET_TEMPLATE.</em></p>
         	<h2>Il nostro indirizzo</h2>
         	Cordiali saluti
 	        <p>
-            	<strong>My company</strong><br />
-	            My street<br />
-	            12345 My City<br />
-	            My Country<br />
+            	<strong>My company</strong><br>
+	            My street<br>
+	            12345 My City<br>
+	            My Country<br>
 	        </p>
             <p>
-	            Telefono: +xx / xxxxx / xxxxxxx-xxx<br />
-	            Fax: +xx / xxxxx / xxxxxxx-xxx<br />
+	            Telefono: +xx / xxxxx / xxxxxxx-xxx<br>
+	            Fax: +xx / xxxxx / xxxxxxx-xxx<br>
 	            Email: <a href="mailto:shop@myshop.tld">shop@myshop.tld</a>
             </p>
 	    </div>
@@ -822,7 +822,7 @@ Stesse proprieta' di BASKET_TEMPLATE.</em></p>
         <p class="printlink"><a href="javascript:window.print();">Stampa</a></p>
     </div>
 <!-- ###BASKET_ORDERCONFIRMATION_TEMPLATE### end -->
-<br /><br />
+<br><br>
 
 
 <h2>BASKET_TEMPLATE_EMPTY</h2>
@@ -832,7 +832,7 @@ Stesse proprieta' di BASKET_TEMPLATE.</em></p>
 	-->
     <p><strong>Il carrello e' vuoto.</strong></p>
 <!-- ###BASKET_TEMPLATE_EMPTY### end -->
-<br /><br />
+<br><br>
 
 
 <h2>BASKET_REQUIRED_INFO_MISSING</h2>
@@ -842,19 +842,19 @@ Stesse proprieta' di BASKET_TEMPLATE.</em></p>
 	-->
     <div class="tt_products_basket_required_info_missing">
 	    <p class="error">
-	        <strong>Non sono state inserite tutte le informazioni obbligatorie:<br />
-	        ###ERROR_DETAILS###<br />
+	        <strong>Non sono state inserite tutte le informazioni obbligatorie:<br>
+	        ###ERROR_DETAILS###<br>
 	        Per cortesia torni indietro e inserisca i dati mancanti.</strong>
 	    </p>
 
 	    <form method="post" action="###FORM_URL###">
         	<div>
-	        	<input type="submit" name="products_info" value="Inserire i dati mancanti" />
+	        	<input type="submit" name="products_info" value="Inserire i dati mancanti">
             </div>
 	    </form>
     </div>
 <!-- ###BASKET_REQUIRED_INFO_MISSING### end -->
-<br /><br />
+<br><br>
 
 
 <h2>TRACKING_ENTER_NUMBER</h2>
@@ -867,8 +867,8 @@ Stesse proprieta' di BASKET_TEMPLATE.</em></p>
 	    <form method="post" action="###FORM_URL###">
 	        <div>
 	            <label for="tracking">Numero di tracking: </label>
-	                <input type="text" name="tracking" id="tracking" />&nbsp;
-	            <input type="submit" name="submit" value="Stato ordine" />
+	                <input type="text" name="tracking" id="tracking">&nbsp;
+	            <input type="submit" name="submit" value="Stato ordine">
 	        </div>
 	    </form>
 
@@ -879,8 +879,8 @@ Stesse proprieta' di BASKET_TEMPLATE.</em></p>
 	                <form method="post" action="###FORM_URL###">
 	                    <div>
 	                        <label for="password">Password: </label>
-	                            <input type="password" size="40" name="update_code" id="password" value="" />&nbsp;
-	                        <input type="submit" name="submit" value="Entra" />
+	                            <input type="password" size="40" name="update_code" id="password" value="">&nbsp;
+	                        <input type="submit" name="submit" value="Entra">
 	                    </div>
 	                </form>
 	            <!-- ###ADMIN_CONTROL_DENY### end -->
@@ -888,7 +888,7 @@ Stesse proprieta' di BASKET_TEMPLATE.</em></p>
 	    <!-- ###ADMIN_CONTROL### end -->
     </div>
 <!-- ###TRACKING_ENTER_NUMBER### end -->
-<br /><br />
+<br><br>
 
 
 <h2>TRACKING_WRONG_NUMBER</h2>
@@ -901,13 +901,13 @@ Stesse proprieta' di BASKET_TEMPLATE.</em></p>
 	    <form method="post" action="###FORM_URL###">
 	        <div>
 	            <label for="tracking">Numero di tracking: </label>
-	                <input type="text" name="tracking" id="tracking" />&nbsp;
-	            <input type="submit" name="submit" value="Stato" />
+	                <input type="text" name="tracking" id="tracking">&nbsp;
+	            <input type="submit" name="submit" value="Stato">
 	        </div>
 	    </form>
     </div>
 <!-- ###TRACKING_WRONG_NUMBER### end -->
-<br /><br />
+<br><br>
 
 
 <h2>TRACKING_DISPLAY_INFO</h2>
@@ -957,15 +957,15 @@ Stesse proprieta' di BASKET_TEMPLATE.</em></p>
 	                            <legend>Cambia stato ordine</legend>
 	                            <select name="orderRecord[status][]" id="orderRecord_status" size="9" multiple="multiple">
 	                                ###STATUS_OPTIONS###
-	                            </select><br />
+	                            </select><br>
 	                            <label for="orderRecord_status_comment">Commenti al nuovo stato ordine: </label>
 	                                <textarea cols="40" rows="5" name="orderRecord[status_comment]" id="orderRecord_status_comment"></textarea>
 	                        </fieldset>
 
 	                        <div class="form_control">
-	                            <input type="hidden" name="tracking" value="###TRACKING_NUMBER###" />
-	                            <input type="hidden" name="update_code" value="###UPDATE_CODE###" />
-	                            <input type="submit" name="submit" value="Aggiungi" />
+	                            <input type="hidden" name="tracking" value="###TRACKING_NUMBER###">
+	                            <input type="hidden" name="update_code" value="###UPDATE_CODE###">
+	                            <input type="submit" name="submit" value="Aggiungi">
 	                        </div>
 	                    </form>
                     </div>
@@ -977,8 +977,8 @@ Stesse proprieta' di BASKET_TEMPLATE.</em></p>
 	                            <select name="tracking" size="9">
 	                                ###OTHER_ORDERS_OPTIONS###
 	                            </select>&nbsp;
-	                            <input type="submit" name="submit" value="Scegli" />
-	                            <input type="hidden" name="update_code" value="###UPDATE_CODE###" />
+	                            <input type="submit" name="submit" value="Scegli">
+	                            <input type="hidden" name="update_code" value="###UPDATE_CODE###">
 	                        </div>
 	                    </form>
                     </div>
@@ -989,9 +989,9 @@ Stesse proprieta' di BASKET_TEMPLATE.</em></p>
 	                    <form method="post" action="###FORM_URL###">
 	                        <div>
 	                            <label for="password"><strong>Codice: </strong></label>
-	                                <input type="password" size="40" name="update_code" id="password" value="###UPDATE_CODE###" />&nbsp;
-	                            <input type="submit" name="submit" value="Entra" />
-	                            <input type="hidden" name="tracking" value="###TRACKING_NUMBER###" />
+	                                <input type="password" size="40" name="update_code" id="password" value="###UPDATE_CODE###">&nbsp;
+	                            <input type="submit" name="submit" value="Entra">
+	                            <input type="hidden" name="tracking" value="###TRACKING_NUMBER###">
 	                        </div>
 	                    </form>
                     </div>
@@ -1006,15 +1006,15 @@ Stesse proprieta' di BASKET_TEMPLATE.</em></p>
 	            <fieldset>
                 	<legend>Preferenze E-Mail</legend>
 	                <input type="checkbox" name="orderRecord[email_notify]" id="orderRecord_email_notify" class="checkbox" value="1" ###FIELD_EMAIL_NOTIFY### />
-	                    <label for="orderRecord_email_notify" class="checkbox">Ricevi ad ogni cambiamento</label><br />
+	                    <label for="orderRecord_email_notify" class="checkbox">Ricevi ad ogni cambiamento</label><br>
 	                <label for="orderRecord_email">Email: </label>
-	                    <input type="text" size="40" name="orderRecord[email]" id="orderRecord_email" value="###FIELD_EMAIL###" /><br />
+	                    <input type="text" size="40" name="orderRecord[email]" id="orderRecord_email" value="###FIELD_EMAIL###"><br>
 	            </fieldset>
 
 	            <div class="form_control">
-	                <input type="submit" name="submit" value="Aggiorna" />
-	                <input type="hidden" name="tracking" value="###TRACKING_NUMBER###" />
-	                <input type="hidden" name="orderRecord[email_notify]" value="0" />
+	                <input type="submit" name="submit" value="Aggiorna">
+	                <input type="hidden" name="tracking" value="###TRACKING_NUMBER###">
+	                <input type="hidden" name="orderRecord[email_notify]" value="0">
 	            </div>
 	        </form>
         </div>
@@ -1030,14 +1030,14 @@ Stesse proprieta' di BASKET_TEMPLATE.</em></p>
 	                    <!-- NOTICE: The values/topics MUST correspond with those setup in the TypoScript of the shop! -->
 	                    <option value="51">Messaggio dal cliente al fornitore</option>
 	                    <option value="50">Richiesta di annullamento</option>
-	                </select><br />
+	                </select><br>
 	                <label for="orderRecord_status_comment">Commenti: </label>
 	                    <textarea cols="40" rows="5" name="orderRecord[status_comment]" id="orderRecord_status_comment"></textarea>
 	            </fieldset>
 
 	            <div class="form_control">
-	                <input type="submit" name="submit" value="Spedisci" />
-	                <input type="hidden" name="tracking" value="###TRACKING_NUMBER###" />
+	                <input type="submit" name="submit" value="Spedisci">
+	                <input type="hidden" name="tracking" value="###TRACKING_NUMBER###">
 	            </div>
 	        </form>
         </div>
@@ -1049,11 +1049,11 @@ Stesse proprieta' di BASKET_TEMPLATE.</em></p>
         </div>
     </div>
 <!-- ###TRACKING_DISPLAY_INFO### end -->
-<br /><br />
+<br><br>
 
 
 <h2>TRACKING_EMAILNOTIFY_TEMPLATE</h2>
-<p><em>Subpart per le email di notifica.<br />
+<p><em>Subpart per le email di notifica.<br>
 La prima linea e' l'oggetto della email.</em></p>
 <pre>
 <!-- ###TRACKING_EMAILNOTIFY_TEMPLATE### begin
@@ -1099,7 +1099,7 @@ My Shop
 ************************************************************************
 <!-- ###TRACKING_EMAILNOTIFY_TEMPLATE### end -->
 </pre>
-<br /><br />
+<br><br>
 
 
 <h2>EMAIL_NEWUSER_TEMPLATE</h2>
@@ -1139,11 +1139,11 @@ myshop.tld
 ************************************************************************
 <!-- ###EMAIL_NEWUSER_TEMPLATE### end -->
 </pre>
-<br /><br />
+<br><br>
 
 
 <h2>EMAIL_PLAINTEXT_TEMPLATE</h2>
-<p><em>Subpart utilizzata come template di notifica email.<br />
+<p><em>Subpart utilizzata come template di notifica email.<br>
 La prima linea e' l'oggetto della email.</em></p>
 <pre>
 <!-- ###EMAIL_PLAINTEXT_TEMPLATE### begin
@@ -1312,7 +1312,7 @@ My Shop
 ************************************************************************
 <!-- ###EMAIL_PLAINTEXT_TEMPLATE### end -->
 </pre>
-<br /><br />
+<br><br>
 
 
 <h2>MEMO_TEMPLATE</h2>
@@ -1352,11 +1352,11 @@ My Shop
                             <!-- ###ITEM_SINGLE### begin-->
                                 <form method="post" action="###FORM_URL###">
                                     <tr class="listitem">
-                                        <td headers="quantity" class="quantity"><input size="3" maxlength="4" type="text" name="###FIELD_NAME###" value="###FIELD_QTY###" /></td>
+                                        <td headers="quantity" class="quantity"><input size="3" maxlength="4" type="text" name="###FIELD_NAME###" value="###FIELD_QTY###"></td>
                                         <td headers="image" class="image">###PRODUCT_IMAGE###</td>
-                                        <td headers="product" class="product"><!--###LINK_ITEM###-->###PRODUCT_TITLE###<!--###LINK_ITEM###--><br />###PRODUCT_SUBTITLE###</td>
+                                        <td headers="product" class="product"><!--###LINK_ITEM###-->###PRODUCT_TITLE###<!--###LINK_ITEM###--><br>###PRODUCT_SUBTITLE###</td>
                                         <td headers="price" class="price">EUR ###PRICE_TAX###</td>
-                                        <td headers="put_in_basket" class="put_in_basket"><input type="submit" name="order" value="Inserisci nel carrello" /></td>
+                                        <td headers="put_in_basket" class="put_in_basket"><input type="submit" name="order" value="Inserisci nel carrello"></td>
                                         <td headers="remove_from_basket" class="remove_from_memo"><a href="###FORM_MEMO###&amp;tx_ttproducts_pi1[delmemo]=###PRODUCT_ID###">Elimina da memo</a></td>
                                     </tr>
                                 </form>
@@ -1375,7 +1375,7 @@ My Shop
 	    </div>
     </div>
 <!-- ###MEMO_TEMPLATE### end -->
-<br /><br />
+<br><br>
 
 
 <h2>MEMO_NOT_LOGGED_IN</h2>
@@ -1384,14 +1384,14 @@ My Shop
 	Subpart displayed when trying to view the memo without being logged in as frontend user.
 	-->
 	<p class="error">
-    	<strong>Non e' stato effettuato il login.</strong><br />
+    	<strong>Non e' stato effettuato il login.</strong><br>
 	</p>
 <!-- ###MEMO_NOT_LOGGED_IN### end -->
-<br /><br />
+<br><br>
 
 
 <h2>BILL_TEMPLATE</h2>
-<p><em>Visualizza la fattura di un cliente<br />
+<p><em>Visualizza la fattura di un cliente<br>
 IMPORTANTE: Questa subpart e' visualizzata "AS IS" il che significa che GLI HEADERS HTML DEVONO ESSERE PRESENTI!</em></p>
 <!-- ###BILL_TEMPLATE### begin
 	Display the bill of an order.
@@ -1401,27 +1401,27 @@ IMPORTANTE: Questa subpart e' visualizzata "AS IS" il che significa che GLI HEAD
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xml:lang="de-DE" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<title>myshop.tld Bill</title>
 </head>
 <body>
 <p style="text-align:center">
-	<strong>MyShopy</strong><br />
+	<strong>MyShopy</strong><br>
     www.myshop.tld
 </p>
 <hr />
 <h1>Fattura</h1>
 <p style="float:left"><strong>
-	###PERSON_SALUTATION###<br />
-	###PERSON_NAME###<br />
-    ###PERSON_ADDRESS_DISPLAY###<br />
-    ###PERSON_ZIP###&nbsp;###PERSON_CITY###<br />
+	###PERSON_SALUTATION###<br>
+	###PERSON_NAME###<br>
+    ###PERSON_ADDRESS_DISPLAY###<br>
+    ###PERSON_ZIP###&nbsp;###PERSON_CITY###<br>
     ###PERSON_COUNTRY###
 </strong></p>
 
 <p style="text-align:right">
-	Numero ordine: ###ORDER_UID###<br />
-    Data: ###ORDER_DATE###<br />
+	Numero ordine: ###ORDER_UID###<br>
+    Data: ###ORDER_DATE###<br>
     Codice cliente: ###FE_USER_UID###
 </p>
 
@@ -1493,18 +1493,18 @@ IMPORTANTE: Questa subpart e' visualizzata "AS IS" il che significa che GLI HEAD
 
 <hr />
 <p style="text-align:center">
-	My Shop, My Street, 12345 My City, My Country<br />
+	My Shop, My Street, 12345 My City, My Country<br>
 	Telefono: +xx xxx xxx-xxxx, Fax: +xx xxx xxx-xxxx, WWW: www.myshop.tld, Email: shop@myshop.tld
 </p>
 
 </body>
 </html>
 <!-- ###BILL_TEMPLATE### end -->
-<br /><br />
+<br><br>
 
 
 <h2>DELIVERY_TEMPLATE</h2>
-<p><em>Visualizza la spedizione.<br />
+<p><em>Visualizza la spedizione.<br>
 IMPORTANTE: Questa subpart e' visualizzata "AS IS" il che significa che GLI HEADERS HTML DEVONO ESSERE PRESENTI!</em></p>
 <!-- ###DELIVERY_TEMPLATE### begin
 	Display the delivery sheet.
@@ -1514,26 +1514,26 @@ IMPORTANTE: Questa subpart e' visualizzata "AS IS" il che significa che GLI HEAD
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xml:lang="de-DE" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<title>myshop.tld delivery sheet</title>
 </head>
 <body>
 <p style="text-align:center">
-	<strong>MyShopy</strong><br />
+	<strong>MyShopy</strong><br>
     www.myshop.tld
 </p>
 <hr />
 <h1>Spedizione</h1>
 <p style="float:left"><strong>
-	###DELIVERY_SALUTATION###<br />
-	###DELIVERY_NAME###<br />
-    ###DELIVERY_ADDRESS_DISPLAY###<br />
-    ###DELIVERY_ZIP###&nbsp;###PERSON_CITY###<br />
+	###DELIVERY_SALUTATION###<br>
+	###DELIVERY_NAME###<br>
+    ###DELIVERY_ADDRESS_DISPLAY###<br>
+    ###DELIVERY_ZIP###&nbsp;###PERSON_CITY###<br>
     ###DELIVERY_COUNTRY###
 </strong></p>
 
 <p style="text-align:right">
-	Numero ordine: ###ORDER_UID###<br />
+	Numero ordine: ###ORDER_UID###<br>
     Data: ###ORDER_DATE###
 </p>
 
@@ -1572,14 +1572,14 @@ IMPORTANTE: Questa subpart e' visualizzata "AS IS" il che significa che GLI HEAD
 
 <hr />
 <p style="text-align:center">
-	My Shop, My Street, 12345 My City, My Country<br />
+	My Shop, My Street, 12345 My City, My Country<br>
 	Telefono: +xx xxx xxx-xxxx, Fax: +xx xxx xxx-xxxx, WWW: www.myshop.tld, Email: shop@myshop.tld
 </p>
 
 </body>
 </html>
 <!-- ###DELIVERY_TEMPLATE### end -->
-<br /><br />
+<br><br>
 
 
 </body>

@@ -135,7 +135,6 @@ class tx_ttproducts_info_view {
 
 		tx_ttproducts_static_info::init();
 		$staticInfo = tx_ttproducts_static_info::getStaticInfo();
-
 		if ($this->conf['useStaticInfoCountry'] && $this->infoArray['billing']['country_code'] && is_object($staticInfo))	{
 			$this->infoArray['billing']['country'] = $staticInfo->getStaticInfoName('COUNTRIES', $this->infoArray['billing']['country_code'],'','');
 			if ($this->infoArray['delivery'][$checkField] && !$this->bDeliveryAddress)	{
@@ -206,7 +205,12 @@ class tx_ttproducts_info_view {
 			$this->overwriteMode = 1;
 		}
 
-		if ($bProductsPayment && !$_REQUEST['recs']['personinfo']['agb'])	{
+        if (
+            $bProductsPayment &&
+            isset($_REQUEST['recs']) &&
+            isset($_REQUEST['recs']['personinfo']) &&
+            !$_REQUEST['recs']['personinfo']['agb']
+        ) {
 			$this->infoArray['billing']['agb'] = FALSE;
 		}
 	} // init
@@ -425,10 +429,18 @@ class tx_ttproducts_info_view {
 			$bReady = FALSE;
 			$whereCountries = $this->getWhereAllowed();
 			$countryCodeArray = array();
-			$countryCodeArray['billing'] = ($this->infoArray['billing']['country_code'] ? $this->infoArray['billing']['country_code'] : $TSFE->fe_user->user['static_info_country']);
-			$countryCodeArray['delivery'] = ($this->infoArray['delivery']['country_code'] ? $this->infoArray['delivery']['country_code'] : $TSFE->fe_user->user['static_info_country']);
+			$countryCodeArray['billing'] = ($this->infoArray['billing']['country_code'] ? $this->infoArray['billing']['country_code'] : $TSFE->fe_user->user ? $TSFE->fe_user->user['static_info_country'] : FALSE);
+			$countryCodeArray['delivery'] = ($this->infoArray['delivery']['country_code'] ? $this->infoArray['delivery']['country_code'] : $TSFE->fe_user->user ? $TSFE->fe_user->user['static_info_country'] : FALSE);
 
-			if (t3lib_extMgm::isLoaded('static_info_tables')) {
+            if (
+                $countryCodeArray['billing'] === FALSE &&
+                $this->infoArray['billing']['country'] != ''
+            ) {
+                // nothing to do
+                $bReady = TRUE;
+            } else if (
+                t3lib_extMgm::isLoaded('static_info_tables')
+            ) {
 				$eInfo = tx_div2007_alpha5::getExtensionInfo_fh003('static_info_tables');
 				$sitVersion = $eInfo['version'];
 
@@ -438,6 +450,7 @@ class tx_ttproducts_info_view {
 					$countryArray = $staticInfo->initCountries('ALL','',FALSE,$whereCountries);
 					$markerArray['###PERSON_COUNTRY_FIRST###'] = current($countryArray);
 					$markerArray['###PERSON_COUNTRY_FIRST_HIDDEN###'] = '<input type="hidden" name="recs[personinfo][country_code]" size="3" value="'.current(array_keys($countryArray)).'">';
+					
 					$markerArray['###PERSON_COUNTRY###'] =
 						$staticInfo->getStaticInfoName('COUNTRIES', $countryCodeArray['billing'], '', '');
 					$markerArray['###DELIVERY_COUNTRY_CODE###'] =

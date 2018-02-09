@@ -80,10 +80,10 @@
   <div class="anzahl_LIST">
 	<!-- nur zwischengelagert für INPUT src="###IMAGE_BASKET_SRC###" -->
     ###GW1B### Anzahl: ###GW1E### <INPUT class="input_Anzahl" maxlength="6" type="text" name="###FIELD_NAME###" value="###FIELD_QTY###">
- <!--   <input type="image"  name="basket" class="inputimage_list" title="In den Warenkorb" alt="" /> -->
- <input type="submit" class="button3" name="basket" value="In den Warenkorb" />
+ <!--   <input type="image"  name="basket" class="inputimage_list" title="In den Warenkorb" alt=""> -->
+ <input type="submit" class="button3" name="basket" value="In den Warenkorb">
   </div>
-    <input type="button" class="button2_LIST" name="warenkorb" value="Warenkorb" onclick="self.location.href='index.php?id=###PID_BASKET###'" />
+    <input type="button" class="button2_LIST" name="warenkorb" value="Warenkorb" onclick="self.location.href='index.php?id=###PID_BASKET###';">
 
 </div>
 </div>
@@ -183,10 +183,10 @@
 	</div>
 	   <div class="PRODUCT_NOTE_SINGLE">
       ###GW1B###
-       Ident-Nr. ###ARTICLE_ITEMNUMBER### <br />
+       Ident-Nr. ###ARTICLE_ITEMNUMBER### <br>
       ###PRODUCT_NOTE###
       ###PRODUCT_NOTE_UID_1_title###
-     	###PRODUCT_NOTE_UID_1_1_TEXT_bodytext### <br />
+     	###PRODUCT_NOTE_UID_1_1_TEXT_bodytext### <br>
 	  Gewicht: ###PRODUCT_WEIGHT### kg
       ###GW1E###
     </div>
@@ -216,7 +216,7 @@
     </div>
   	<div class="anzahl_SINGLE">
       ###GW2B### Menge: ###GW2E###<INPUT size="3" maxlength="4" type="text" name="###FIELD_NAME###" value="###FIELD_QTY###">
-<input class="button3" type="submit" value="In den Warenkorb" name="basket"/>    </div>
+<input class="button3" type="submit" value="In den Warenkorb" name="basket">    </div>
     <div class="SHOPADMIN_EMAIL_SINGLE">
       <a href="mailto:###SHOPADMIN_EMAIL###?subject=Frage zum Artikel: ###PRODUCT_TITLE###&body=Ich habe folgenden Artikel gesehen: ###PRODUCT_TITLE### %0AMeine Fragen: "> Fragen zum Artikel </a>
     </div>
@@ -317,7 +317,7 @@ Sie sind eingeloggt!
     <input type="submit" name="order2" value="In den Warenkorb">
   </div>
   <div align="justify">
-    <input type="button" class="button3" name="warenkorb" value="zum Warenkorb" onclick="self.location.href='index.php?id=###PID_BASKET###'">
+    <input type="button" class="button3" name="warenkorb" value="zum Warenkorb" onclick="self.location.href='index.php?id=###PID_BASKET###';">
   </div>
 </form>
 
@@ -341,7 +341,7 @@ Sie sind eingeloggt!
 <!-- ###ITEM_LIST_RELATED_TEMPLATE### begin
 	This subpart is used to display the regular list of products. It's also used by search-results.
 -->
-<br />
+<br>
 <h3>&auml;hnliche Produkte oder zugeh&ouml;rige Artikel</h3>
 
 
@@ -363,8 +363,8 @@ Sie sind eingeloggt!
 	<!-- ###ITEM_CATEGORY_AND_ITEMS### begin -->
 		<!-- ###ITEM_CATEGORY### begin -->
 			<tr>
-				<td colspan=4><br />###GW1B###<font size=3><strong>###CATEGORY_TITLE###</strong></font> ###GW1E###
-				<br />
+				<td colspan=4><br>###GW1B###<font size=3><strong>###CATEGORY_TITLE###</strong></font> ###GW1E###
+				<br>
 				</td>
 			</tr>
 		<!-- ###ITEM_CATEGORY### end -->
@@ -384,20 +384,20 @@ Sie sind eingeloggt!
             <!--###LINK_ITEM###-->
             ###GW1B###<b>###PRODUCT_TITLE###</b>###GW1E###
             <!--###LINK_ITEM###-->
-            <br />
-            ###PRODUCT_IMAGE1### <br />
+            <br>
+            ###PRODUCT_IMAGE1### <br>
 		  <!-- ###display_variant2### -->
 		  ###GW2B### Size: ###GW2E### <SELECT style="font-size: 10px"
-		  name="###FIELD_SIZE_NAME###" rows="1">###PRODUCT_SIZE###</SELECT><br />
+		  name="###FIELD_SIZE_NAME###" rows="1">###PRODUCT_SIZE###</SELECT><br>
 		  <!-- ###display_variant2### -->
           ###ITEM_SINGLE_POST_HTML###
           <!-- ###ITEM_SINGLE### end -->
           <tr>
-            <td colspan="3" align="CENTER"> <input type="Submit" name="order2" value="In den Warenkorb"/></td>
+            <td colspan="3" align="CENTER"> <input type="Submit" name="order2" value="In den Warenkorb"></td>
           </tr>
           <tr>
             <td colspan="3" align="CENTER">
-            <input type="button" name="warenkorb" value="zum Warenkorb" onclick="self.location.href='index.php?id=###PID_BASKET###'"/></td>
+            <input type="button" name="warenkorb" value="zum Warenkorb" onclick="self.location.href='index.php?id=###PID_BASKET###';"></td>
           </tr>
         </table>
 			</form>
@@ -411,15 +411,15 @@ Sie sind eingeloggt!
 		<td>###GW2B###<div align="right"><b><!--###LINK_NEXT###-->n&auml;chste Seite<!--###LINK_NEXT###--></b></div>###GW2E###</td>
 	</tr>
 </table>
-###GW1B###In Ihrem Browser sollten Cookies zugelassen sein.<br />Sollte die Bef&uuml;llung des Warenkorbs nach mehreren Versuchen nicht funktionieren, bestellen Sie bitte ber den Link Kontakt/Bestellung per Email. Viel Spa&szlig; beim Einkaufen! ###GW1E###
+###GW1B###In Ihrem Browser sollten Cookies zugelassen sein.<br>Sollte die Bef&uuml;llung des Warenkorbs nach mehreren Versuchen nicht funktionieren, bestellen Sie bitte ber den Link Kontakt/Bestellung per Email. Viel Spa&szlig; beim Einkaufen! ###GW1E###
 
-<br />
+<br>
 <table width="163">
   <tr>
     <td>&nbsp;</td>
   </tr>
 </table>
-<br />
+<br>
 <!-- ###ITEM_LIST_RELATED_TEMPLATE### end -->
 <!-- ###ITEM_LIST_RELATED_ARTICLES_TEMPLATE### end -->
 <!----------------------------------------------------------------------------------->
@@ -834,7 +834,7 @@ Exact same features as BASKET_TEMPLATE
     <!--
       ###GW1B###<strong>Kreditkarte:</strong>###GW1E###
       ###PERSON_CARDS_CC_TYPE###
-      <input name="recs[creditcard][cc_number]" value="###PERSON_CARDS_CC_NUMBER###" />
+      <input name="recs[creditcard][cc_number]" value="###PERSON_CARDS_CC_NUMBER###">
     -->
 
   <div class="floatbox_BASKETINFO3">
@@ -930,18 +930,18 @@ Exact same features as BASKET_TEMPLATE
       ###GW1B### Sie best&auml;tigen hiermit, dass Sie
       die AGB des Testshop - Online Vertriebs gelesen haben und diese akzeptieren.
       ###GW1E###
-      <input type="checkbox" name="recs[personinfo][agb]" ###PERSON_AGB### />
+      <input type="checkbox" name="recs[personinfo][agb]" ###PERSON_AGB###>
        ###GW1B###<!--###LINK_AGB###-->Die Allgemeinen Gesch&auml;ftsbedingungen <!--###LINK_AGB###--> erkenne ich hiermit an.###GW1E###
     </div>
     <!--<div align="center">-->
-      <input type="submit" class="button5" name="products_update" value="zur&uuml;ck zum Warenkorb" />
+      <input type="submit" class="button5" name="products_update" value="zur&uuml;ck zum Warenkorb">
       <input type="submit" class="button4" name="products_payment" value="AGBs akzeptiert">
 ###HIDDENFIELDS###
   </div>
 
 </form>
 
-      <!--<input type="submit" class="button4" name="products_payment" value="ABGs ansehen" />-->
+      <!--<input type="submit" class="button4" name="products_payment" value="ABGs ansehen">-->
   <!-- ###BASKET_INFO_TEMPLATE### end -->
 
 
@@ -1186,16 +1186,20 @@ Exact same features as BASKET_TEMPLATE
 	(###VAT### ###P_CURRENCY### ###PRICE_TOTAL_ONLY_TAX###)
      (exkl. MwSt.: EUR ###PRICE_TOTAL_NO_TAX###) ###GW1E###
   </div>
-  <div class="SUBMIT_BASKET_PAYMENT_TEMPLATE7">
+  <div id="SUBMIT_BASKET_PAYMENT_TEMPLATE7">
 
   <form method="post" action="###FORM_URL###" name="###FORM_NAME###" class="paymentForm">
   <input type="submit" name="products_update" value="zur&uuml;ck zum Warenkorb">
-  <input type="hidden" name="products_cmd" value="cardno" />
-  <input type="submit" name="products_finalize" value="Zahlungspflichtig bestellen" onclick="document.forms[0].action='###FORM_URL_THANKS###'; document.forms[0].target='###FORM_URL_TARGET###';">###GW1B### <!--(auch PayPal)-->###GW1E###
+  <input type="hidden" name="products_cmd" value="cardno">
+  <input type="submit" name="products_finalize" value="Zahlungspflichtig bestellen" onclick="this.form.action='###FORM_URL_THANKS###'; this.form.action.target='###FORM_URL_TARGET###';">
+   ###HIDDENFIELDS###
+  </form>
  </div>
+   <div id="PAYMENT_SCRIPT_BASKET_PAYMENT_TEMPLATE7">
+    ###MESSAGE_PAYMENT_SCRIPT###
+   </div>
 </div>
-###HIDDENFIELDS###
-</form>
+
 
 <!-- ###BASKET_PAYMENT_TEMPLATE### end -->
 
@@ -1655,7 +1659,7 @@ Zu einer anderen Bestellung wechseln:
 Wenn Sie sich ber den Status Ihrer Bestellung informieren lassen wollen (###FIELD_EMAIL###) sobald sich der Status ge&&auml;n;dert hat, dann berprfen Sie bitte folgendes:
 <form method="post" action="###FORM_URL###" name="statusinform">
   <input type="hidden" name="orderRecord[email_notify]" value="0">
-  <input type="checkbox" name="orderRecord[email_notify]" value="###FIELD_EMAIL_NOTIFY###" />Nachricht ber Ablauf des Bestellvorgangs erhalten.
+  <input type="checkbox" name="orderRecord[email_notify]" value="###FIELD_EMAIL_NOTIFY###">Nachricht ber Ablauf des Bestellvorgangs erhalten.
   <input type="text" size="40" name="orderRecord[email]" value="###FIELD_EMAIL###">
   <input type="hidden" name="tracking" value="###TRACKING_NUMBER###">
   <input type="submit" name="submit" value="Aktualisieren">
