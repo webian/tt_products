@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2016 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2007-2018 Franz Holzinger <franz@ttproducts.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -158,7 +158,7 @@ class tx_ttproducts_main implements t3lib_Singleton {
 		$this->cObj->data['pi_flexform'] = t3lib_div::xml2array($this->cObj->data['pi_flexform']);
 
 		$config['code'] =
-			tx_div2007_alpha5::getSetupOrFFvalue_fh002(
+			tx_div2007_alpha5::getSetupOrFFvalue_fh004(
 				$this->cObj,
 	 			$conf['code'],
 	 			$conf['code.'],
