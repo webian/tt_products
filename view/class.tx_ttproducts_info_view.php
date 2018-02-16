@@ -400,13 +400,23 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 			$bReady = FALSE;
 			$whereCountries = $this->getWhereAllowedCountries();
 			$countryCodeArray = array();
-			$countryCodeArray['billing'] = ($this->infoArray['billing']['country_code'] ? $this->infoArray['billing']['country_code'] : $TSFE->fe_user->user['static_info_country']);
-			$countryCodeArray['delivery'] = ($this->infoArray['delivery']['country_code'] ? $this->infoArray['delivery']['country_code'] : $TSFE->fe_user->user['static_info_country']);
+
+			$countryCodeArray['billing'] = ($this->infoArray['billing']['country_code'] ? $this->infoArray['billing']['country_code'] : $TSFE->fe_user->user ? $TSFE->fe_user->user['static_info_country'] : FALSE);
+			$countryCodeArray['delivery'] = ($this->infoArray['delivery']['country_code'] ? $this->infoArray['delivery']['country_code'] : $TSFE->fe_user->user ? $TSFE->fe_user->user['static_info_country'] : FALSE);
+
 			$zoneCodeArray = array();
 			$zoneCodeArray['billing'] = ($this->infoArray['billing']['zone'] ? $this->infoArray['billing']['zone'] : $TSFE->fe_user->user['zone']);
 			$zoneCodeArray['delivery'] = ($this->infoArray['delivery']['zone'] ? $this->infoArray['delivery']['zone'] : $TSFE->fe_user->user['zone']);
 
-			if (t3lib_extMgm::isLoaded('static_info_tables')) {
+            if (
+                $countryCodeArray['billing'] === FALSE &&
+                $this->infoArray['billing']['country'] != ''
+            ) {
+                // nothing to do
+                $bReady = TRUE;
+            } else if (
+                t3lib_extMgm::isLoaded('static_info_tables')
+            ) {
 				$eInfo = tx_div2007_alpha5::getExtensionInfo_fh003('static_info_tables');
 				$sitVersion = $eInfo['version'];
 
