@@ -231,8 +231,16 @@ class tx_ttproducts_api {
 					$insertFields[$fieldname] = $fieldvalue;
 				}
 			}
-			if ($conf['useStaticInfoCountry']) {
-				$insertFields['static_info_country'] = $infoArray['billing']['country_code'];
+			if (
+				t3lib_extMgm::isLoaded('agency') ||
+				t3lib_extMgm::isLoaded('femanager') ||
+				t3lib_extMgm::isLoaded('sr_feuser_register')
+			) {
+				if ($conf['useStaticInfoCountry'] && isset($infoArray['billing']['country_code'])) {
+					$insertFields['static_info_country'] = $infoArray['billing']['country_code'];
+				} else {
+					$insertFields['static_info_country'] = '';
+				}
 			}
 
 			if(
