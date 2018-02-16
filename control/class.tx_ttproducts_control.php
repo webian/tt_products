@@ -166,6 +166,14 @@ class tx_ttproducts_control implements t3lib_Singleton {
 			$codeActivities['products_basket'] = FALSE;
 		}
 
+		$sortedCodeActivities = array();
+        foreach ($codeActivityArray as $activity) { // You must keep the order of activities.
+            if (isset($codeActivities[$activity])) {
+                $sortedCodeActivities[$activity] = $codeActivities[$activity];
+            }
+        }
+        $codeActivities = $sortedCodeActivities;
+
 		if (is_array($activities)) {
 			foreach ($activityArray as $k => $activity) {
 				if ($activities[$activity]) {
