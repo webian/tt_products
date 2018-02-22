@@ -48,8 +48,8 @@ class tx_ttproducts_field_note_view extends tx_ttproducts_field_base_view {
 		)	{
 			$value = $this->getModelObj()->getFieldValue($row, $fieldname);
 
-				// Extension CSS styled content
-			if (t3lib_extMgm::isLoaded('css_styled_content')) {
+				// Extension CSS styled content or fluid styled content
+			if (isset($GLOBALS['TSFE']->tmpl->setup['lib.']['parseFunc_RTE.'])) {
 				$value = tx_div2007_alpha5::RTEcssText($this->cObj, $value);
 			} else if (is_array($this->conf['parseFunc.']))	{
 				$value = $this->cObj->parseFunc($value,$this->conf['parseFunc.']);

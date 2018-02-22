@@ -150,7 +150,7 @@ plugin.tt_products {
   recursive = {$plugin.tt_products.recursive}
   domain = {$plugin.tt_products.domain}
 
-  parseFunc < styles.content.parseFunc
+  parseFunc < lib.parseFunc
   categoryHeader = TEXT
   categoryHeader.current = 1
 
