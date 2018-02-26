@@ -57,7 +57,7 @@ class tx_ttproducts_memo_view implements t3lib_Singleton {
 		global $TSFE, $TYPO3_DB;
 
 		$this->pibaseClass = $pibaseClass;
-		$pibaseObj = t3lib_div::getUserObj($pibaseClass);
+		$pibaseObj = t3lib_div::makeInstance($pibaseClass);
 		$this->cObj = $pibaseObj->cObj;
 		$this->conf = $conf;
 
@@ -84,7 +84,7 @@ class tx_ttproducts_memo_view implements t3lib_Singleton {
 	public function &printView ($theCode,&$templateCode, $pid, &$error_code)	{
 		global $TSFE;
 
-		$markerObj = t3lib_div::getUserObj('tx_ttproducts_marker');
+		$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
 		$content = '';
 
 		if (
@@ -150,7 +150,7 @@ class tx_ttproducts_memo_view implements t3lib_Singleton {
 		}
 
 		if (!$content && !count($error_code)) {
-			$templateObj = t3lib_div::getUserObj('tx_ttproducts_template');
+			$templateObj = t3lib_div::makeInstance('tx_ttproducts_template');
 			$error_code[0] = 'no_subtemplate';
 			$error_code[1] = '###' . $templateArea . $templateObj->getTemplateSuffix() . '###';
 			$error_code[2] = $templateObj->getTemplateFile();
@@ -166,7 +166,7 @@ class tx_ttproducts_memo_view implements t3lib_Singleton {
 		$tagArray,
 		&$bUseCheckBox
 	)	{
-		$pibaseObj = t3lib_div::getUserObj($this->pibaseClass);
+		$pibaseObj = t3lib_div::makeInstance($this->pibaseClass);
 		$fieldKey = 'FIELD_' . $markerKey . '_NAME';
 		if (isset($tagArray[$fieldKey]))	{
 			$markerArray['###' . $fieldKey . '###'] = $pibaseObj->prefixId  .'[memo][' . $row['uid'] . ']';
@@ -194,7 +194,7 @@ class tx_ttproducts_memo_view implements t3lib_Singleton {
 	)	{
 
 		if ($bUseCheckBox)	{
-			$pibaseObj = t3lib_div::getUserObj($this->pibaseClass);
+			$pibaseObj = t3lib_div::makeInstance($this->pibaseClass);
 			$markerArray['###HIDDENFIELDS###'] .= '<input type="hidden" name="' . $pibaseObj->prefixId . '[memo][uids]" value="' . implode(',' , $uidArray) . '" />';
 		}
 	}

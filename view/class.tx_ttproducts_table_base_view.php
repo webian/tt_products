@@ -123,13 +123,13 @@ abstract class tx_ttproducts_table_base_view	{
 		$classNameView = $className.'_view';
 		$path = $classArray['path'];
 
-		$fieldViewObj = t3lib_div::getUserObj($classNameView);	// fetch and store it as persistent object
+		$fieldViewObj = t3lib_div::makeInstance($classNameView);	// fetch and store it as persistent object
 		if (!is_object($fieldViewObj)) {
 			throw new RuntimeException('Error in tt_products: The class "' . $classNameView . '" is not found.', 50001);
 		}
 
 		if ($fieldViewObj->needsInit())	{
-			$fieldObj = t3lib_div::getUserObj($className);	// fetch and store it as persistent object
+			$fieldObj = t3lib_div::makeInstance($className);	// fetch and store it as persistent object
 			if (!is_object($fieldObj)) {
 				throw new RuntimeException('Error in tt_products: The class "' . $className . '" is not found.', 50002);
 			}
@@ -160,8 +160,8 @@ abstract class tx_ttproducts_table_base_view	{
 	)	{
 		global $TCA;
 
-		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
-		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$tableconf = $cnf->getTableConf($functablename, $theCode);
 
 		if (is_array($row))	{
@@ -359,7 +359,7 @@ abstract class tx_ttproducts_table_base_view	{
 			$markerPrefix = ($marker != '' ? $marker . '_' : '');
 			$rowMarkerArray['###' . $markerPrefix . 'ID###'] = $mainId;
 			$rowMarkerArray['###' . $markerPrefix . 'NAME###'] = $extTableName . '-' . $row['uid'];
-			$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
+			$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 			$tableconf = $cnf->getTableConf($functablename, $theCode);
 			$tabledesc = $cnf->getTableDesc($functablename);
 			$fieldMarkerArray = array();
@@ -430,7 +430,7 @@ abstract class tx_ttproducts_table_base_view	{
 				}
 			}
 		} else {
-			$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
+			$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 			$tablename = $this->getModelObj()->getTablename();
 			$tmpMarkerArray = array();
 			$tmpMarkerArray[] = $marker;
@@ -484,7 +484,7 @@ abstract class tx_ttproducts_table_base_view	{
 
 		if (is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT][$marker])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT][$marker] as $classRef) {
-				$hookObj = t3lib_div::getUserObj($classRef);
+				$hookObj = t3lib_div::makeInstance($classRef);
 
 				if (method_exists($hookObj, 'getRowMarkerArray')) {
 					$hookObj->getRowMarkerArray($pObj, $markerArray, $cObjectMarkerArray, $row, $imageNum, $imageRenderObj, $forminfoArray, $theCode, $id, $linkWrap);

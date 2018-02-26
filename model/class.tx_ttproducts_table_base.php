@@ -89,7 +89,7 @@ abstract class tx_ttproducts_table_base implements t3lib_Singleton	{
 		global $TCA;
 
 		$this->cObj = $cObj;
-		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
 		$this->tableObj = t3lib_div::makeInstance('tx_table_db');
@@ -472,7 +472,7 @@ abstract class tx_ttproducts_table_base implements t3lib_Singleton	{
 		if ($theCode == '' && $this->getCode() != '')	{
 			$rc = $this->tableConf;
 		} else {
-			$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
+			$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 			$rc = &$cnf->getTableConf($this->getFuncTablename(), $theCode);
 		}
 		$this->fixTableConf($rc);

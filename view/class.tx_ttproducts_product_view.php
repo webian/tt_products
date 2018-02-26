@@ -49,7 +49,7 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 
 	function init ($langObj, $modelObj)	{
 
-		$this->variant = t3lib_div::getUserObj('tx_ttproducts_variant_view');
+		$this->variant = t3lib_div::makeInstance('tx_ttproducts_variant_view');
 		parent::init($langObj, $modelObj);
 	}
 
@@ -154,7 +154,7 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 		global $TYPO3_DB;
 
 			// Returns a markerArray ready for substitution with information for the tt_producst record, $row
-		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 		$modelObj = $this->getModelObj();
 
 		parent::getModelMarkerArray(
@@ -231,7 +231,7 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 				$pageObj = $tablesObj->get('pages');
 
 				$notePageArray = $pageObj->getNotes ($row['uid']);
-				$confObj = t3lib_div::getUserObj('tx_ttproducts_config');
+				$confObj = t3lib_div::makeInstance('tx_ttproducts_config');
 				$contentConf = $confObj->getTableConf('tt_content', $code);
 
 				foreach($notePageArray as $k => $pid)	{

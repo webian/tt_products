@@ -59,7 +59,7 @@ class tx_ttproducts_billdelivery implements t3lib_Singleton {
 		global $TSFE;
 
 		$this->cObj = $cObj;
-		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
 	}
@@ -103,9 +103,9 @@ class tx_ttproducts_billdelivery implements t3lib_Singleton {
 
     public function generateBill ($templateCode, $mainMarkerArray, $type, $generationConf) {
 
-        $basketView = t3lib_div::getUserObj('tx_ttproducts_basket_view');
-        $basketObj = t3lib_div::getUserObj('tx_ttproducts_basket');
-        $infoViewObj = t3lib_div::getUserObj('tx_ttproducts_info_view');
+        $basketView = t3lib_div::makeInstance('tx_ttproducts_basket_view');
+        $basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
+        $infoViewObj = t3lib_div::makeInstance('tx_ttproducts_info_view');
 
         $typeCode = strtoupper($type);
         $generationType = strtolower($generationConf['type']);
@@ -115,7 +115,7 @@ class tx_ttproducts_billdelivery implements t3lib_Singleton {
             // Call all billing delivery hooks
         if (is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['billdelivery'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['billdelivery'] as $classRef) {
-                $hookObj= t3lib_div::getUserObj($classRef);
+                $hookObj= t3lib_div::makeInstance($classRef);
 
                 if (method_exists($hookObj, 'generateBill')) {
                     $billGeneratedFromHook = $hookObj->generateBill(
@@ -144,7 +144,7 @@ class tx_ttproducts_billdelivery implements t3lib_Singleton {
         if (!$billGeneratedFromHook) {
 
             if ($generationType == 'pdf') {
-                $pdfViewObj = t3lib_div::getUserObj('tx_ttproducts_pdf_view');
+                $pdfViewObj = t3lib_div::makeInstance('tx_ttproducts_pdf_view');
 
                 $subpart = $typeCode . '_PDF_HEADER_TEMPLATE';
                 $header = $basketView->getView(
@@ -229,13 +229,13 @@ class tx_ttproducts_billdelivery implements t3lib_Singleton {
 		*/
 		global $TSFE;
 
-		$priceObj = t3lib_div::getUserObj('tx_ttproducts_field_price');
-		$basketObj = t3lib_div::getUserObj('tx_ttproducts_basket');
-		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
-		$priceViewObj = t3lib_div::getUserObj('tx_ttproducts_field_price_view');
-		$subpartmarkerObj = t3lib_div::getUserObj('tx_ttproducts_subpartmarker');
-		$langObj = t3lib_div::getUserObj('tx_ttproducts_language');
-		$markerObj = t3lib_div::getUserObj('tx_ttproducts_marker');
+		$priceObj = t3lib_div::makeInstance('tx_ttproducts_field_price');
+		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$priceViewObj = t3lib_div::makeInstance('tx_ttproducts_field_price_view');
+		$subpartmarkerObj = t3lib_div::makeInstance('tx_ttproducts_subpartmarker');
+		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
+		$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
 		$globalMarkerArray = $markerObj->getGlobalMarkerArray();
 
 			// initialize order data.
@@ -295,7 +295,7 @@ class tx_ttproducts_billdelivery implements t3lib_Singleton {
 		$articleTable = $articleViewObj->getModelObj();
 		$viewTagArray = array();
 		$parentArray = array();
-		$markerObj = t3lib_div::getUserObj('tx_ttproducts_marker');
+		$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
 		$markerFieldArray = array('BULKILY_WARNING' => 'bulkily',
 			'PRODUCT_SPECIAL_PREP' => 'special_preparation',
 			'PRODUCT_ADDITIONAL_SINGLE' => 'additional',

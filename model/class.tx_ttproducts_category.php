@@ -52,7 +52,7 @@ class tx_ttproducts_category extends tx_ttproducts_category_base {
 		$tablename = ($tablename ? $tablename : $functablename);
 		parent::init($pibase, $functablename);
 
-		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$this->tableconf = $cnf->getTableConf($functablename);
 		$tableObj = $this->getTableObj();
 		$tableObj->addDefaultFieldArray(array('sorting' => 'sorting'));
@@ -65,7 +65,7 @@ class tx_ttproducts_category extends tx_ttproducts_category_base {
 			if (version_compare($extensionInfo['version'], '0.5.0', '>=')) {
 
 				$tableDesc = $cnf->getTableDesc($functablename);
-				$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
+				$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 				$functablenameArray = t3lib_div::trimExplode(',',$tableDesc['leafFuncTables']);
 				$prodfunctablename = $functablenameArray[0];
 				if (!$prodfunctablename)	{
@@ -411,7 +411,7 @@ class tx_ttproducts_category extends tx_ttproducts_category_base {
 
 	// returns the delivery email addresses from the basket`s item array with the category number as index
 	function getEmail (&$itemArray) {
-		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 		$emailArray = array();
 		$emailObj = $tablesObj->get('tt_products_emails');
 

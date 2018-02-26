@@ -88,7 +88,7 @@ class tx_ttproducts_voucher extends tx_ttproducts_table_base {
 		$amount = $this->getAmount();
 
 		if ($amountType == 1)	{
-			$basketObj = t3lib_div::getUserObj('tx_ttproducts_basket');
+			$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
 			$calculatedArray = $basketObj->getCalculatedArray();
 			$amount = $calculatedArray['priceTax']['goodstotal'] * ($amount / 100);
 		}

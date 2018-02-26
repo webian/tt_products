@@ -56,7 +56,7 @@ class tx_ttproducts_article extends tx_ttproducts_article_base {
 		global $TYPO3_DB,$TSFE,$TCA;
 
 		parent::init($cObj, $functablename);
-		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$tableConfig = array();
 		$tableConfig['orderBy'] = $cnf->conf['orderBy'];
 
@@ -125,7 +125,7 @@ class tx_ttproducts_article extends tx_ttproducts_article_base {
 
 	public function getRequiredFieldArray ($theCode='')	{
 		$tableConf = $this->getTableConf($theCode);
-		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$rc = array();
 		if ($tableConf['requiredFields'] != '')	{
 			$requiredFields = $tableConf['requiredFields'];

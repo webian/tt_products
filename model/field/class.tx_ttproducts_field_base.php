@@ -47,7 +47,7 @@ abstract class tx_ttproducts_field_base implements tx_ttproducts_field_int, t3li
 
 	function init ($cObj)	{
 		$this->cObj = $cObj;
-		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
 

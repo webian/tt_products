@@ -218,7 +218,7 @@ class tx_ttproducts_field_datafield_view extends tx_ttproducts_field_base_view {
 	) {
 		$imageConf['file'] = $dirname . '/' . $dataFile;
 // 		$iconImgCode = $this->cObj->IMAGE($imageConf);
-        $imageObj = t3lib_div::getUserObj('tx_ttproducts_field_image_view');
+        $imageObj = t3lib_div::makeInstance('tx_ttproducts_field_image_view');
         $iconImgCode =
             $imageObj->getImageCode(
                 $this->cObj,
@@ -252,7 +252,7 @@ class tx_ttproducts_field_datafield_view extends tx_ttproducts_field_base_view {
 
 		if (isset($imageRenderObj)) {
 
-            $imageObj = t3lib_div::getUserObj('tx_ttproducts_field_image_view');
+            $imageObj = t3lib_div::makeInstance('tx_ttproducts_field_image_view');
 			$imageConf = $this->conf[$imageRenderObj . '.'];
 
 			if (isset($tagArray[$marker]) && isset($this->conf['datasheetIcon.']))	{

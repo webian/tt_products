@@ -55,7 +55,7 @@ class tx_ttproducts_variant implements tx_ttproducts_variant_int, t3lib_Singleto
 	 * setting the local variables
 	 */
 	public function init ($itemTable, $tablename, $useArticles)  {
-		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 
 		$tmpArray = $cnf->getTableDesc($tablename);
 		$this->conf = (is_array($tmpArray) && is_array($tmpArray['variant.']) ? $tmpArray['variant.'] : array());

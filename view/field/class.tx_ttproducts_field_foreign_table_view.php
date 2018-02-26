@@ -44,7 +44,7 @@ class tx_ttproducts_field_foreign_table_view extends tx_ttproducts_field_base_vi
 	public function getItemSubpartArrays (&$templateCode, $functablename, &$row, $fieldname, &$subpartArray, &$wrappedSubpartArray, &$tagArray, $theCode='', $id='1')	{
 		global $TCA;
 
-		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 		$itemTableObj = $tablesObj->get($functablename, FALSE);
 		$tablename = $itemTableObj->getTablename();
 	}
@@ -53,7 +53,7 @@ class tx_ttproducts_field_foreign_table_view extends tx_ttproducts_field_base_vi
 	public function getRowMarkerArray ($functablename, $fieldname, &$row, $markerKey, &$markerArray, $tagArray, $theCode, $id, &$bSkip, $bHtml=TRUE, $charset='', $prefix='', $suffix='', $imageRenderObj='')	{
 		global $TCA;
 
-		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 		$itemTableObj = $tablesObj->get($functablename, FALSE);
 		$tablename = $itemTableObj->getTablename();
 		$foreigntablename = '';
@@ -74,7 +74,7 @@ class tx_ttproducts_field_foreign_table_view extends tx_ttproducts_field_base_vi
 
 		if ($foreigntablename != '' && $row[$fieldname] > 0)	{
 /*			$tableClass = $tablesObj->getTableClass ($foreigntablename, TRUE);
-			$foreignTableViewObj = t3lib_div::getUserObj($tableClass);*/
+			$foreignTableViewObj = t3lib_div::makeInstance($tableClass);*/
 
 			$foreignTableObj = $foreignTableViewObj->getModelObj();
 			if ($TCA[$tablename]['columns'][$fieldname]['config']['internal_type'] == 'db')	{

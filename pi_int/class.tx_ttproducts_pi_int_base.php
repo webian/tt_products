@@ -64,7 +64,7 @@ class tx_ttproducts_pi_int_base extends tslib_pibase implements t3lib_Singleton 
 		$$this->conf = $confMain;
 
 		$config = array();
-		$mainObj = t3lib_div::getUserObj('tx_ttproducts_main');	// fetch and store it as persistent object
+		$mainObj = t3lib_div::makeInstance('tx_ttproducts_main');	// fetch and store it as persistent object
 		$mainObj->bNoCachePossible = FALSE;
 		$errorCode = array();
 		$bDoProcessing = $mainObj->init($content, $this->conf, $config, get_class($this), $errorCode);

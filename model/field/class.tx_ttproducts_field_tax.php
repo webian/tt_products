@@ -49,7 +49,7 @@ class tx_ttproducts_field_tax extends tx_ttproducts_field_base {
 		parent::init($cObj);
 
 		if ($bUseStaticTaxes && $uidStore)	{
-			$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
+			$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 			$staticTaxObj = $tablesObj->get('static_taxes', FALSE);
 
 			$staticTaxObj->setStoreData($uidStore);
@@ -73,7 +73,7 @@ class tx_ttproducts_field_tax extends tx_ttproducts_field_base {
 
 		if ($this->getUseStaticTaxes())	{
 			$taxArray = array();
-			$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
+			$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 			$staticTaxObj = $tablesObj->get('static_taxes', FALSE);
 			$staticTaxObj->getStaticTax($row, $newTax, $taxArray);
 		}

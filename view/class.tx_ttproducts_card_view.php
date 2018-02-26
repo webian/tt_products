@@ -57,7 +57,7 @@ class tx_ttproducts_card_view extends tx_ttproducts_table_base_view {
 		global $TCA, $TSFE;
 
 		$modelObj = $this->getModelObj();
-		$langObj = t3lib_div::getUserObj('tx_ttproducts_language');
+		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
 		$ccNumberArray = array();
 		$ccTypeTextSelected = '';
 		$tablename = $modelObj->getTablename();

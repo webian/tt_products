@@ -54,7 +54,7 @@ class tx_ttproducts_url_view implements t3lib_Singleton {
 
 	public function init ($pibase)	{
  		$this->pibase = $pibase;
-		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 
  		$this->conf = &$cnf->conf;
  		$this->config = &$cnf->config;
@@ -176,7 +176,7 @@ class tx_ttproducts_url_view implements t3lib_Singleton {
 			// Call all addURLMarkers hooks at the end of this method
 		if (is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['addURLMarkers'])) {
 			foreach  ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['addURLMarkers'] as $classRef) {
-				$hookObj= t3lib_div::getUserObj($classRef);
+				$hookObj= t3lib_div::makeInstance($classRef);
 				if (method_exists($hookObj, 'addURLMarkers')) {
 					$hookObj->addURLMarkers($this->pibase, $pidNext, $urlMarkerArray, $addQueryString, $excludeList, $bUseBackPid, $bExcludeSingleVar);
 				}
@@ -269,7 +269,7 @@ class tx_ttproducts_url_view implements t3lib_Singleton {
 			// Call all getLinkParams hooks at the end of this method
 		if (is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['getLinkParams'])) {
 			foreach  ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['getLinkParams'] as $classRef) {
-				$hookObj= t3lib_div::getUserObj($classRef);
+				$hookObj= t3lib_div::makeInstance($classRef);
 				if (method_exists($hookObj, 'getLinkParams')) {
 					$hookObj->getLinkParams($this,$queryString,$excludeList,$addQueryString,$bUsePrefix,$bUseBackPid,$piVarCat);
 				}

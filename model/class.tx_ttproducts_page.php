@@ -53,7 +53,7 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 
 		parent::init($cObj, $tablename);
 
-		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$tablename = ($tablename ? $tablename : 'pages');
 		$this->tableconf = $cnf->getTableConf('pages');
 		$this->pageAsCategory = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['pageAsCategory'];
@@ -128,7 +128,7 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 
 
 	function getRootCat ()	{
-		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$rc = $cnf->config['rootPageID'];
 		return $rc;
 	}

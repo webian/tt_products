@@ -59,7 +59,7 @@ class tx_ttproducts_table_label implements t3lib_Singleton {
 			return '';
 		}
 
-		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 
 		// Init
 		$label = '';

@@ -165,7 +165,7 @@ class tx_ttproducts_email_div {
 			$hookVar = 'sendMail';
 			if ($hookVar && is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT][$hookVar])) {
 				foreach  ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT][$hookVar] as $classRef) {
-					$hookObj= t3lib_div::getUserObj($classRef);
+					$hookObj= t3lib_div::makeInstance($classRef);
 					if (method_exists($hookObj, 'init')) {
 						$hookObj->init($Typo3_htmlmail);
 					}
@@ -218,7 +218,7 @@ class tx_ttproducts_email_div {
 				$emailContent=trim($cObj->getSubpart($templateCode, '###' . $templateMarker . '###'));
 			}
 			if ($emailContent)  {		// If there is plain text content - which is required!!
-				$markerObj = t3lib_div::getUserObj('tx_ttproducts_marker');
+				$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
 				$globalMarkerArray = &$markerObj->getGlobalMarkerArray();
 
 				$markerArray = $globalMarkerArray;
@@ -262,7 +262,7 @@ class tx_ttproducts_email_div {
 		if (count($recipients)) {	// If any recipients, then compile and send the mail.
 			$emailContent=trim($cObj->getSubpart($templateCode, '###' . $templateMarker . '###'));
 			if ($emailContent)  {		// If there is plain text content - which is required!!
-				$markerObj = t3lib_div::getUserObj('tx_ttproducts_marker');
+				$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
 				$globalMarkerArray = &$markerObj->getGlobalMarkerArray();
 
 				$parts = explode(chr(10), $emailContent,2);	// First line is subject
@@ -282,7 +282,7 @@ class tx_ttproducts_email_div {
 				if ($bHtmlMail) {	// If htmlmail lib is included, then generate a nice HTML-email
 					$HTMLmailShell = $cObj->getSubpart($this->templateCode, '###EMAIL_HTML_SHELL###');
 					$HTMLmailContent = $cObj->substituteMarker($HTMLmailShell, '###HTML_BODY###', $emailContent);
-					$markerObj = t3lib_div::getUserObj('tx_ttproducts_marker');
+					$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
 					$HTMLmailContent=$cObj->substituteMarkerArray($HTMLmailContent, $markerObj->getGlobalMarkerArray());
 
 					self::send_mail($recipients,  $subject, $emailContent, $HTMLmailContent, $senderemail, $sendername, $conf['GiftAttachment']);

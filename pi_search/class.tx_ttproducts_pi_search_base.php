@@ -60,7 +60,7 @@ class tx_ttproducts_pi_search_base extends tslib_pibase implements t3lib_Singlet
 		$confMain = $TSFE->tmpl->setup['plugin.'][TT_PRODUCTS_EXT.'.'];
 		$this->conf = array_merge($confMain, $conf);
 		$config = array();
-		$mainObj = t3lib_div::getUserObj('tx_ttproducts_control_search');	// fetch and store it as persistent object
+		$mainObj = t3lib_div::makeInstance('tx_ttproducts_control_search');	// fetch and store it as persistent object
 		$errorCode = array();
 		$bDoProcessing = $mainObj->init($content, $this->conf, $config, get_class($this), $errorCode);
 

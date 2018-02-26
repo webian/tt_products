@@ -60,9 +60,9 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 
 	public function init ($pibaseClass, $uidArray, $extVars, $pid, $useArticles, $pid_list, $recursive) {
 		$this->pibaseClass = $pibaseClass;
-		$pibaseObj = t3lib_div::getUserObj($pibaseClass);
+		$pibaseObj = t3lib_div::makeInstance($pibaseClass);
 		$this->cObj = $pibaseObj->cObj;
-		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
 
@@ -83,8 +83,8 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 		$this->variants = $extVars;
 		$this->pid = $pid;
 		$this->useArticles = $useArticles;
-		$this->urlObj = t3lib_div::getUserObj('tx_ttproducts_url_view');
-		$this->pidListObj = t3lib_div::getUserObj('tx_ttproducts_pid_list');
+		$this->urlObj = t3lib_div::makeInstance('tx_ttproducts_url_view');
+		$this->pidListObj = t3lib_div::makeInstance('tx_ttproducts_pid_list');
 		$this->pidListObj->init($this->cObj);
 		$this->pidListObj->applyRecursive($recursive, $pid_list, TRUE);
 		$this->pidListObj->setPageArray();
@@ -97,12 +97,12 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 		global $TSFE, $TCA, $TYPO3_DB;
 
 
-		$pibaseObj = t3lib_div::getUserObj('tx_ttproducts_pi1_base');
-		$basketObj = t3lib_div::getUserObj('tx_ttproducts_basket');
-		$markerObj = t3lib_div::getUserObj('tx_ttproducts_marker');
-		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
-		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
-		$subpartmarkerObj = t3lib_div::getUserObj('tx_ttproducts_subpartmarker');
+		$pibaseObj = t3lib_div::makeInstance('tx_ttproducts_pi1_base');
+		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
+		$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$subpartmarkerObj = t3lib_div::makeInstance('tx_ttproducts_subpartmarker');
 		$theCode = 'SINGLE';
 
 		$viewControlConf = $cnf->getViewControlConf('SINGLE');
@@ -138,7 +138,7 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 		$itemTableConf = $rowArray;
 		$itemTableLangFields = $rowArray;
 		$content = '';
-		$javaScriptObj = t3lib_div::getUserObj('tx_ttproducts_javascript');
+		$javaScriptObj = t3lib_div::makeInstance('tx_ttproducts_javascript');
 
 		if ($this->config['displayCurrentRecord'] && $this->type == 'product' && !$this->useArticles)	{
 			$rowArray[$this->type] = $this->cObj->data;
@@ -231,7 +231,7 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 
 
 			if (!$itemFrameWork) {
-				$templateObj = t3lib_div::getUserObj('tx_ttproducts_template');
+				$templateObj = t3lib_div::makeInstance('tx_ttproducts_template');
 				$error_code[0] = 'no_subtemplate';
 				$error_code[1] = '###' . $subPartMarker . '###';
 				$error_code[2] = $templateObj->getTemplateFile();
@@ -550,7 +550,7 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 						'firstVariant'
 					);
 
-				$basketItemView = t3lib_div::getUserObj('tx_ttproducts_basketitem_view');
+				$basketItemView = t3lib_div::makeInstance('tx_ttproducts_basketitem_view');
 				$basketItemView->init($this->pibaseClass,$basketObj->basketExt,$basketObj->getItemObj());
 
 				$basketItemView->getItemMarkerArray(
@@ -764,7 +764,7 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 					!$itemTableArray[$this->type]->hasAdditional($row, 'noGiftService')
 				);
 			}
-			$relatedListView = t3lib_div::getUserObj('tx_ttproducts_relatedlist_view');
+			$relatedListView = t3lib_div::makeInstance('tx_ttproducts_relatedlist_view');
 			$relatedListView->init($this->cObj, $this->pidListObj->getPidlist(), $this->pidListObj->getRecursive());
 			$listMarkerArray = $relatedListView->getListMarkerArray('SINGLE', $this->pibaseClass,$templateCode, $markerArray, $viewTagArray, $itemTableArray[$this->type]->getFuncTablename(), $this->uid, $this->uidArray, $useArticles, $pageAsCategory, $this->pid, $error_code);
 			if ($listMarkerArray && is_array($listMarkerArray)) {

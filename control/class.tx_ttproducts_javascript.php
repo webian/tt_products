@@ -49,7 +49,7 @@ class tx_ttproducts_javascript implements t3lib_Singleton {
 
 	function init ($pibase, $ajax) {
 		$this->pibase = $pibase;
-		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
@@ -112,7 +112,7 @@ class tx_ttproducts_javascript implements t3lib_Singleton {
 		$bDirectHTML = FALSE;
 		$code = '';
 		$bError = FALSE;
-		$langObj = t3lib_div::getUserObj('tx_ttproducts_language');
+		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
 
 		$emailArr =  explode('|', $message = tx_div2007_alpha5::getLL_fh003($langObj, 'invalid_email'));
 
@@ -165,7 +165,7 @@ class tx_ttproducts_javascript implements t3lib_Singleton {
 			case 'selectcat':
 				if (is_array($params))	{
 					$funcs = count ($params);
-					$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
+					$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 
 					$ajaxConf = $cnf->getAJAXConf();
 					if (is_array($ajaxConf))	{

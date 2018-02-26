@@ -53,7 +53,7 @@ class tx_ttproducts_pi_search implements t3lib_Singleton {
 	 */
 	public function main($content, $conf)	{
 
-		$pibaseObj = t3lib_div::getUserObj('tx_ttproducts_pi_search_base');
+		$pibaseObj = t3lib_div::makeInstance('tx_ttproducts_pi_search_base');
 		$pibaseObj->cObj = $this->cObj;
 
 		if ($conf['templateFile'] != '')	{

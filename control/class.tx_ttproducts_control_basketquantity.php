@@ -58,9 +58,9 @@ class tx_ttproducts_control_basketquantity {
 		$rowArray,
 		&$markerArray
 	)	{
-		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 		$prodViewObj = $tablesObj->get('tt_products',TRUE);
-		$basketObj = t3lib_div::getUserObj('tx_ttproducts_basket');
+		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
 		$quantityArray = $basketObj->getQuantityArray($relatedIds, $rowArray);
 
 		foreach ($rowArray as $functablename => $functableRowArray)	{

@@ -60,11 +60,11 @@ class tx_ttproducts_marker implements t3lib_Singleton {
 	 */
 	public function init ($cObj, $piVars)	{
 		$this->cObj = $cObj;
-		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
 		$this->markerArray = array('CATEGORY', 'PRODUCT', 'ARTICLE');
-		$langObj = t3lib_div::getUserObj('tx_ttproducts_language');
+		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
 		$langObj->init1($this, $this->cObj, $this->conf['marks.'], 'marker/class.tx_ttproducts_marker.php');
 
 		$markerFile = $this->conf['markerFile'];
@@ -179,7 +179,7 @@ class tx_ttproducts_marker implements t3lib_Singleton {
 			// Call all addURLMarkers hooks at the end of this method
 		if (is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['addGlobalMarkers'])) {
 			foreach  ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['addGlobalMarkers'] as $classRef) {
-				$hookObj= t3lib_div::getUserObj($classRef);
+				$hookObj= t3lib_div::makeInstance($classRef);
 				if (method_exists($hookObj, 'addGlobalMarkers')) {
 					$hookObj->addGlobalMarkers($markerArray);
 				}

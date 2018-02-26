@@ -53,10 +53,10 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 
 	public function init ($cObj, $priceObj) {
 		$this->cObj = $cObj;
-		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
-		$this->basket = t3lib_div::getUserObj('tx_ttproducts_basket');
+		$this->basket = t3lib_div::makeInstance('tx_ttproducts_basket');
 		$this->priceObj = clone $priceObj;	// new independant price object
 		$voucher = t3lib_div::makeInstance('tx_ttproducts_voucher');
 		$this->setVoucher($voucher);
@@ -82,7 +82,7 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 			isset ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT][$hookVar][$pskey]) &&
 			is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT][$hookVar][$pskey])) {
 			foreach  ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT][$hookVar][$pskey] as $classRef) {
-				$hookObj= t3lib_div::getUserObj($classRef);
+				$hookObj= t3lib_div::makeInstance($classRef);
 				if (method_exists($hookObj, 'init')) {
 					$hookObj->init($this);
 				}
@@ -100,7 +100,7 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 	function setBasketExtras (&$basketRec) {
 		global $TSFE;
 
-		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 
 			// shipping
 		if ($this->conf['shipping.']) {
@@ -205,12 +205,12 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
         &$wrappedSubpartArray,
         $framework
     ) {
-		$markerObj = t3lib_div::getUserObj('tx_ttproducts_marker');
+		$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
 
         $handleLib = $basketExtra['payment.']['handleLib'];
 		if (strpos($handleLib, 'transactor') !== FALSE && t3lib_extMgm::isLoaded($handleLib)) {
 
-			$langObj = t3lib_div::getUserObj('tx_ttproducts_language');
+			$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
 				// Payment Transactor
 			tx_transactor_api::init($langObj, '', $conf);
 
@@ -332,8 +332,8 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 		$bUseXHTML = $TSFE->config['config']['xhtmlDoctype'] != '';
 		$selectedText = ($bUseXHTML ? 'selected="selected"' : 'selected');
 
-		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
-        $imageObj = t3lib_div::getUserObj('tx_ttproducts_field_image_view');
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+        $imageObj = t3lib_div::makeInstance('tx_ttproducts_field_image_view');
 		$active = $this->basket->basketExtra[$pskey];
 		$activeArray = is_array($active) ? $active : array($active);
 		$confArr = $this->cleanConfArr($this->conf[$pskey.'.']);
@@ -372,7 +372,7 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 							if (is_object($itemTable))	{
 								$markerFieldArray = array();
 								$parentArray = array();
-								$markerObj = t3lib_div::getUserObj('tx_ttproducts_marker');
+								$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
 								$fieldsArray = $markerObj->getMarkerFields(
 									$item['title'],
 									$itemTable->getTableObj()->tableFieldArray,
@@ -474,7 +474,7 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 		}
 
 		if (strstr($actTitle, '###'))	{
-			$markerObj = t3lib_div::getUserObj('tx_ttproducts_marker');
+			$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
 			$markerArray = array();
 			$viewTagArray = array();
 			$parentArray = array();
@@ -579,7 +579,7 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 					}
 				}
 			} else if ($confArr['type'] == 'objectMethod' && isset($confArr['class'])) {
-				$obj= t3lib_div::getUserObj($confArr['class']);
+				$obj= t3lib_div::makeInstance($confArr['class']);
 				if (method_exists($obj, 'getConfiguredPrice')){
 					$funcParams = $confArr['method.'];
 					$priceNew = $obj->getConfiguredPrice($row, $confArr, $countTotal, $priceTotalTax, $priceTax, $priceNoTax, $funcParams);
@@ -612,7 +612,7 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 			}
 
 			if(is_array($funcParams)){
-				$hookObj= t3lib_div::getUserObj($funcParams['class']);
+				$hookObj= t3lib_div::makeInstance($funcParams['class']);
 				if (method_exists($hookObj, 'init')) {
 					$hookObj->init($this);
 				}
@@ -909,7 +909,7 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 	public function getHandleLib ($request)	{ // getGatewayRequestExt
 
 		$rc = FALSE;
-		$basketObj = t3lib_div::getUserObj('tx_ttproducts_basket');
+		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
 		$payConf = $basketObj->basketExtra['payment.'];
 
 		if (is_array($payConf))	{

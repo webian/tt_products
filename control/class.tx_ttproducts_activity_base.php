@@ -47,7 +47,7 @@ class tx_ttproducts_activity_base {
 
 	public function init ($pibase)  {
 		$this->pibase = $pibase;
-		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
 

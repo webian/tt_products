@@ -49,13 +49,13 @@ class tx_ttproducts_currency_view implements t3lib_Singleton {
 
 	function init($pibase) {
 		$this->pibase = $pibase;
-		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 
 		$this->conf = &$cnf->conf;
 
 		$this->subpartmarkerObj = t3lib_div::makeInstance('tx_ttproducts_subpartmarker');
 		$this->subpartmarkerObj->init($pibase->cObj);
-		$this->urlObj = t3lib_div::getUserObj('tx_ttproducts_url_view');
+		$this->urlObj = t3lib_div::makeInstance('tx_ttproducts_url_view');
 	}
 
 

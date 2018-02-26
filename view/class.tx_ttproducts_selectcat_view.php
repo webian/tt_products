@@ -51,7 +51,7 @@ class tx_ttproducts_selectcat_view extends tx_ttproducts_catlist_view_base {
 		$out='';
 		$where='';
 
-		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 		$categoryTableView = $tablesObj->get($functablename,1);
 		$categoryTable = $categoryTableView->getModelObj();
 
@@ -164,7 +164,7 @@ class tx_ttproducts_selectcat_view extends tx_ttproducts_catlist_view_base {
 					$parentFieldArray = array('parent_category');
 				}
 				$piVar = $categoryTableView->piVar;
-				$javaScriptObj = t3lib_div::getUserObj('tx_ttproducts_javascript');
+				$javaScriptObj = t3lib_div::makeInstance('tx_ttproducts_javascript');
 				$javaScriptObj->set('selectcat', array($categoryArray), 1 + $count, $piVar, $parentFieldArray, array($catid), array(), 'clickShow');
 
 				for ($i = 2; $i <= 1 + $count; ++$i)	{

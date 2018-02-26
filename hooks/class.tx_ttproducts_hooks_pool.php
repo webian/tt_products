@@ -53,7 +53,7 @@ class tx_ttproducts_hooks_pool extends tx_pool_hooks_base {
 		if (t3lib_extMgm::isLoaded('searchbox')) {
 
 			include_once(t3lib_extMgm::extPath('searchbox').'view/class.tx_searchbox_view.php');
-			$searchBoxObj = t3lib_div::getUserObj('tx_searchbox_view');
+			$searchBoxObj = t3lib_div::makeInstance('tx_searchbox_view');
 
 			$content .= $searchBoxObj->getContent(
 				$GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['templateFile'],
@@ -66,7 +66,7 @@ class tx_ttproducts_hooks_pool extends tx_pool_hooks_base {
 		}
 		if (t3lib_extMgm::isLoaded('db_list')) {
 			include_once(t3lib_extMgm::extPath('db_list').'class.tx_dblist_script.php');
-			$dbListObj = t3lib_div::getUserObj('tx_dblist_script');
+			$dbListObj = t3lib_div::makeInstance('tx_dblist_script');
 			$dbListObj->init($this->vars,$dbListConf);
 
 			$dbListObj->clearCache();

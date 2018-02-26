@@ -60,7 +60,7 @@ class tx_ttproducts_discountprice extends tx_ttproducts_pricecalc_base {
 			return;
 		}
 
-		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$this->conf = $cnf->conf;
 		$additive = 0;
 		$countTotal = 0;

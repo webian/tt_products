@@ -41,7 +41,7 @@
 class tx_ttproducts_pricecalc extends tx_ttproducts_pricecalc_base {
 
 	function getCalculatedData(&$itemArray, &$conf, $type, &$priceReduction, $priceTotalTax, $bUseArticles) {
-		$sql = t3lib_div::getUserObj('tx_ttproducts_sql');
+		$sql = t3lib_div::makeInstance('tx_ttproducts_sql');
 
 		if (!$itemArray || !count($itemArray)) {
 			return;

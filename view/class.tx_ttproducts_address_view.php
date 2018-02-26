@@ -63,7 +63,7 @@ class tx_ttproducts_address_view extends tx_ttproducts_category_base_view {
 		$catTitle = '';
 		$titleField = $this->fieldArray['name'];
 		if (($row[$titleField]))	{
-			$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
+			$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 			$tableConfig = $cnf->getTableConf('address', $theCode);
 			$catTitle .= ($tableConfig['separator'].$row[$titleField]);
 		}

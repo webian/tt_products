@@ -138,7 +138,7 @@ class tx_ttproducts_model_control {
 
 	public static function getTableConfArrays ($functableArray,$theCode,&$tableConfArray,&$viewConfArray)	{
 
-		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 
 		foreach ($functableArray as $ft)	{
 			$tableObj = $tablesObj->get($ft,0);
@@ -213,7 +213,7 @@ class tx_ttproducts_model_control {
 	public static function getTableVars ($searchFunctablename, &$searchTablename, &$searchAlias, &$tableAliasArray, &$bUseSearchboxArray, &$enableFieldArray)	{
 
 		if ($searchFunctablename != '')	{
-			$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
+			$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 
 			$tableObj = $tablesObj->get($searchFunctablename, FALSE);
 			$searchTablename = $tableObj->getTablename();
@@ -249,8 +249,8 @@ class tx_ttproducts_model_control {
 	public static function getSearchInfo ($cObj, $searchVars, $functablename, $tablename, &$searchboxWhere, &$bUseSearchboxArray, &$sqlTableArray, &$sqlTableIndex, &$latest)	{
 		global $TCA,$TYPO3_DB;
 
-		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
-		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 
 		$paramsTableArray = self::getParamsTableArray();
 		$searchParamArray = array();
@@ -271,7 +271,7 @@ class tx_ttproducts_model_control {
 
 				$contentRow['pi_flexform'] = t3lib_div::xml2array($contentRow['pi_flexform']);
 				include_once (PATH_BE_ttproducts.'control/class.tx_ttproducts_control_search.php');
-				$searchObj = t3lib_div::getUserObj('tx_ttproducts_control_search');	// fetch and store it as persistent object
+				$searchObj = t3lib_div::makeInstance('tx_ttproducts_control_search');	// fetch and store it as persistent object
 				$controlConfig = $searchObj->getControlConfig($cObj, $cnf->conf, $contentRow);
 
 				self::getTableVars(
@@ -331,7 +331,7 @@ class tx_ttproducts_model_control {
 				if ($position == 'local' && isset($keyFieldArray[$searchFieldArray['local']]) && t3lib_extMgm::isLoaded('searchbox'))	{	// Todo
 
 					include_once (PATH_BE_searchbox.'model/class.tx_searchbox_model.php');
-					$modelObj = t3lib_div::getUserObj('tx_searchbox_model');
+					$modelObj = t3lib_div::makeInstance('tx_searchbox_model');
 
 					$fullKeyFieldArray = $modelObj->getKeyFieldArray($tablename, '', '-', $searchFieldArray['local'], '1', $tmpCount);
 				} else if (isset($fullKeyFieldArray)) {

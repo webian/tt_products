@@ -64,8 +64,8 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 		global $TYPO3_DB,$TSFE, $TCA;
 
 		$this->pibase = $pibase;
-		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
-		$paymentshippingObj = t3lib_div::getUserObj('tx_ttproducts_paymentshipping');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$paymentshippingObj = t3lib_div::makeInstance('tx_ttproducts_paymentshipping');
 
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
@@ -256,7 +256,7 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 			// Call info hooks
 		if (is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['info'])) {
 			foreach  ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['info'] as $classRef) {
-				$hookObj= t3lib_div::getUserObj($classRef);
+				$hookObj= t3lib_div::makeInstance($classRef);
 				if (method_exists($hookObj, 'mapPersonIntoDelivery')) {
 					$hookObj->mapPersonIntoDelivery($this);
 				}
@@ -270,7 +270,7 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 	 */
 	public function getRequiredInfoFields ($type)	{
 
-		$paymentshippingObj = t3lib_div::getUserObj('tx_ttproducts_paymentshipping');
+		$paymentshippingObj = t3lib_div::makeInstance('tx_ttproducts_paymentshipping');
 		$rc = '';
 		$requiredInfoFieldArray = $this->conf['requiredInfoFields.'];
 		if (isset($requiredInfoFieldArray) && is_array($requiredInfoFieldArray) && isset($requiredInfoFieldArray[$type]))	{
@@ -320,7 +320,7 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 		$staticInfo = tx_ttproducts_static_info::getStaticInfo();
 
 		if ($where && $this->conf['useStaticInfoCountry'] && is_object($staticInfo))	{
-			$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
+			$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 			$countryObj = $tablesObj->get('static_countries');
 			if (is_object($countryObj) && is_array($this->infoArray[$type]))	{
 				$row = $countryObj->isoGet($this->infoArray[$type]['country_code'], $where);
@@ -347,7 +347,7 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 		$staticInfo = tx_ttproducts_static_info::getStaticInfo();
 
 		if (is_object($staticInfo))	{
-			$paymentshippingObj = t3lib_div::getUserObj('tx_ttproducts_paymentshipping');
+			$paymentshippingObj = t3lib_div::makeInstance('tx_ttproducts_paymentshipping');
 			$where = $paymentshippingObj->getWhere('static_countries');
 		}
 		return $where;
@@ -369,13 +369,13 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 	public function getRowMarkerArray (&$markerArray, $bHtml, $bSelectSalutation)	{
 		global $TCA, $TSFE;
 
-		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
-		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 		$infoFields = t3lib_div::trimExplode(',',$this->feuserfields); // Fields...
 		$orderAddressViewObj = $tablesObj->get('fe_users', TRUE);
 		$orderAddressObj = $orderAddressViewObj->getModelObj();
 		$selectInfoFields = $orderAddressObj->getSelectInfoFields();
-		$langObj = t3lib_div::getUserObj('tx_ttproducts_language');
+		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
 		$staticInfo = tx_ttproducts_static_info::getStaticInfo();
 
 		foreach ($infoFields as $k => $fName) {

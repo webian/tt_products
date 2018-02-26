@@ -53,7 +53,7 @@ class tx_ttproducts_csv implements t3lib_Singleton {
 	function init ($pibase, &$itemArray, &$calculatedArray, $accountUid)	{
 		global $TYPO3_DB;
 		$this->pibase = $pibase;
-		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 
 		$this->conf = &$cnf->conf;
 		$this->calculatedArray = &$calculatedArray;
@@ -63,13 +63,13 @@ class tx_ttproducts_csv implements t3lib_Singleton {
 
 
 	function create ($functablename, &$address, $csvorderuid, &$csvfilepath, &$errorMessage) {
-		$basket = t3lib_div::getUserObj('tx_ttproducts_basket');
-		$priceViewObj = t3lib_div::getUserObj('tx_ttproducts_field_price_view');
-		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
+		$basket = t3lib_div::makeInstance('tx_ttproducts_basket');
+		$priceViewObj = t3lib_div::makeInstance('tx_ttproducts_field_price_view');
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 		$orderObj = $tablesObj->get('sys_products_orders');
 		$accountObj = $tablesObj->get('sys_products_accounts');
 		$itemTable = $tablesObj->get($functablename, FALSE);
-		$langObj = t3lib_div::getUserObj('tx_ttproducts_language');
+		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
 
 		$csvfilepath = trim($csvfilepath);
 

@@ -1,3 +1,6 @@
+2018-02-26 Franz Holzinger <franz@ttproducts.de>
+    * modification: replace the outdated t3lib_div::getUserObj by t3lib_div::makeInstance
+
 2018-02-22 Franz Holzinger <franz@ttproducts.de>
     * new feature: add support for the CKEditor and fluid_styled_content under TYPO3 8.6
 

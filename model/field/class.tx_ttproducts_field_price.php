@@ -190,7 +190,7 @@ class tx_ttproducts_field_price extends tx_ttproducts_field_base {
 		global $TSFE;
 
 		$rc = 0;
-		$taxObj = t3lib_div::getUserObj('tx_ttproducts_field_tax');
+		$taxObj = t3lib_div::makeInstance('tx_ttproducts_field_tax');
 
 		$bTax = ($tax == 1);
 
@@ -217,7 +217,7 @@ class tx_ttproducts_field_price extends tx_ttproducts_field_base {
 
 		$taxFactor = 1 + $taxpercentage / 100;
 
-		$paymentshippingObj = t3lib_div::getUserObj('tx_ttproducts_paymentshipping');
+		$paymentshippingObj = t3lib_div::makeInstance('tx_ttproducts_paymentshipping');
 		if (isset($paymentshippingObj) && is_object($paymentshippingObj))	{
 			$taxFromShipping = $paymentshippingObj->getReplaceTaxPercentage();	// if set then this has a tax which will override the tax of the products
 		}
@@ -284,7 +284,7 @@ class tx_ttproducts_field_price extends tx_ttproducts_field_base {
 
 		if ($fieldname == 'price')	{
 
-			$taxObj = t3lib_div::getUserObj('tx_ttproducts_field_tax');
+			$taxObj = t3lib_div::makeInstance('tx_ttproducts_field_tax');
 			$tax = $taxObj->getFieldValue($row, 'tax');
 			$priceArray['taxperc'] = $tax;
 			$discount = $TSFE->fe_user->user['tt_products_discount'];

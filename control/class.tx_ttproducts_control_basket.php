@@ -41,7 +41,7 @@
 class tx_ttproducts_control_basket {
 
 	static public function getRoundFormat ($type = '') {
-		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 
 		$result = $cnf->getBasketConf('round', $type); // check the basket rounding format
 

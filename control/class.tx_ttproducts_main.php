@@ -202,7 +202,7 @@ class tx_ttproducts_main implements t3lib_Singleton {
 			// initialise AJAX at the beginning because the AJAX functions can set piVars
 		if (!$bRunAjax && t3lib_extMgm::isLoaded('taxajax')) {
 			include_once(PATH_BE_ttproducts.'eid/class.tx_ttproducts_ajax.php');
-			$this->ajax = t3lib_div::makeInstance('tx_ttproducts_ajax');
+			$this->ajax = t3lib_div::getUserObj('tx_ttproducts_ajax');
 			$this->ajax->init();
 			$this->ajax->main($conf['ajaxDebug']);
 
@@ -214,7 +214,7 @@ class tx_ttproducts_main implements t3lib_Singleton {
 
 		if (!$bRunAjax) {
 			require_once(PATH_BE_ttproducts . 'eid/class.tx_ttproducts_db.php');
-			$db = t3lib_div::makeInstance('tx_ttproducts_db');
+			$db = t3lib_div::getUserObj('tx_ttproducts_db');
 			$db->init($conf, $config, $this->ajax, $pibaseObj);
 		}
 
@@ -372,7 +372,7 @@ class tx_ttproducts_main implements t3lib_Singleton {
 		}
 
 			// basket view
-		$this->control = t3lib_div::makeInstance('tx_ttproducts_control');
+		$this->control = t3lib_div::getUserObj('tx_ttproducts_control');
 
 			// This cObject may be used to call a function which manipulates the shopping basket based on settings in an external order system. The output is included in the top of the order (HTML) on the basket-page.
 		$this->externalCObject = tx_div2007_alpha5::getExternalCObject_fh003($pibaseObj, 'externalProcessing');
@@ -577,7 +577,7 @@ class tx_ttproducts_main implements t3lib_Singleton {
 						}
 
 							// category view
-						$categoryView = t3lib_div::makeInstance($categoryClass);
+						$categoryView = t3lib_div::getUserObj($categoryClass);
 						$categoryView->init($pibaseClass, $this->config['pid_list'], $this->pid);
 						$contentTmp = $categoryView->printView(
 							$functablename,
@@ -628,7 +628,7 @@ class tx_ttproducts_main implements t3lib_Singleton {
 					}
 
 					// memo view: has to be called always because it reads parameters from the list
-					$this->memoView = t3lib_div::makeInstance('tx_ttproducts_memo_view');
+					$this->memoView = t3lib_div::getUserObj('tx_ttproducts_memo_view');
 					$this->memoView->init(
 						$pibaseClass,
 						$theCode,
@@ -643,7 +643,7 @@ class tx_ttproducts_main implements t3lib_Singleton {
 						return '';
 					}
 						// currency view
-					$currencyView = t3lib_div::makeInstance('tx_ttproducts_currency_view');
+					$currencyView = t3lib_div::getUserObj('tx_ttproducts_currency_view');
 					$currencyView->init($pibaseObj);
 
 					$contentTmp = $currencyView->printView();
@@ -659,7 +659,7 @@ class tx_ttproducts_main implements t3lib_Singleton {
 				case 'SINGLECAT':
 				case 'SINGLEDAMCAT':
 				case 'SINGLEAD':
-					$catView = t3lib_div::makeInstance('tx_ttproducts_cat_view');
+					$catView = t3lib_div::getUserObj('tx_ttproducts_cat_view');
 					$catView->init(
 						$pibaseObj,
 						$this->pid,
@@ -862,7 +862,7 @@ class tx_ttproducts_main implements t3lib_Singleton {
 				$type = strtolower($theCode);
 				switch ($theCode) {
 					case 'TRACKING':
-				 		$tracking = t3lib_div::makeInstance('tx_ttproducts_tracking');
+				 		$tracking = t3lib_div::getUserObj('tx_ttproducts_tracking');
 				 		$tracking->init(
 				 			$this->cObj
 				 		);
@@ -1019,7 +1019,7 @@ class tx_ttproducts_main implements t3lib_Singleton {
 
 			if (!is_object($this->singleView)) {
 				// List single product:
-				$this->singleView = t3lib_div::makeInstance('tx_ttproducts_single_view');
+				$this->singleView = t3lib_div::getUserObj('tx_ttproducts_single_view');
 			}
 			$this->singleView->init(
 				$this->pibaseClass,
@@ -1043,7 +1043,7 @@ class tx_ttproducts_main implements t3lib_Singleton {
 			$pid = ($this->conf['PIDbasket'] && $this->conf['clickIntoBasket'] ? $this->conf['PIDbasket'] : $TSFE->id);
 
 			// List all products:
-			$listView = t3lib_div::makeInstance('tx_ttproducts_list_view');
+			$listView = t3lib_div::getUserObj('tx_ttproducts_list_view');
 			$listView->init (
 				$this->pibaseClass,
 				$pid,

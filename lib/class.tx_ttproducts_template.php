@@ -47,14 +47,14 @@ class tx_ttproducts_template implements t3lib_Singleton {
 	}
 
 	public function getTemplateSuffix ()	{
-		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$config = &$cnf->getConfig();
 		return $config['templateSuffix'];
 	}
 
 	public function &get ($theCode, $langObj, $cObj, &$templateFile, &$errorMessage) {
 		$templateCode = '';
-		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$conf = &$cnf->getConf();
 		$templateFile = $cnf->getTemplateFile($theCode);
 

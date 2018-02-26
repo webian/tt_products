@@ -123,7 +123,7 @@ abstract class tx_ttproducts_category_base extends tx_ttproducts_table_base {
 				// Call all addWhere hooks for categories at the end of this method
 			if ($hookVar && isset ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT][$hookVar]) && is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT][$hookVar])) {
 				foreach  ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT][$hookVar] as $classRef) {
-					$hookObj= t3lib_div::getUserObj($classRef);
+					$hookObj= t3lib_div::makeInstance($classRef);
 					if (method_exists($hookObj, 'init')) {
 						$hookObj->init($this->parentField);
 					}
@@ -142,7 +142,7 @@ abstract class tx_ttproducts_category_base extends tx_ttproducts_table_base {
 	}
 
 	public function getDepth ($theCode)	{
-		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$functablename = $this->getFuncTablename();
 		$conf = $this->getTableConf ($theCode);
 		$tableconf = $cnf->getTableConf($functablename, $theCode);
@@ -167,7 +167,7 @@ abstract class tx_ttproducts_category_base extends tx_ttproducts_table_base {
 			// Call all addWhere hooks for categories at the end of this method
 		if ($hookVar && is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT][$hookVar])) {
 			foreach  ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT][$hookVar] as $classRef) {
-				$hookObj= t3lib_div::getUserObj($classRef);
+				$hookObj= t3lib_div::makeInstance($classRef);
 				if (method_exists($hookObj, 'init')) {
 					$hookObj->init($this->parentField);
 				}
@@ -198,7 +198,7 @@ abstract class tx_ttproducts_category_base extends tx_ttproducts_table_base {
 			// Call all addWhere hooks for categories at the end of this method
 		if ($hookVar && is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT][$hookVar])) {
 			foreach  ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT][$hookVar] as $classRef) {
-				$hookObj= t3lib_div::getUserObj($classRef);
+				$hookObj= t3lib_div::makeInstance($classRef);
 				if (method_exists($hookObj, 'init')) {
 					$hookObj->init($this->parentField);
 				}

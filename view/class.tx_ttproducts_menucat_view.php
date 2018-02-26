@@ -76,11 +76,11 @@ class tx_ttproducts_menucat_view extends tx_ttproducts_catlist_view_base {
 		);
 
 		if (!count($error_code))	{
-			$markerObj = t3lib_div::getUserObj('tx_ttproducts_marker');
-			$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
+			$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
+			$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 			$categoryTableViewObj = $tablesObj->get($functablename, TRUE);
 			$categoryTable = $categoryTableViewObj->getModelObj();
-			$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
+			$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 
 			$content='';
 			$out='';
@@ -92,7 +92,7 @@ class tx_ttproducts_menucat_view extends tx_ttproducts_catlist_view_base {
 			$countArray[0] = 0;
 			$countArray[1] = 0;
 			$catConf = $categoryTable->getTableConf($theCode);
-			$cssObj = t3lib_div::getUserObj('tx_ttproducts_css');
+			$cssObj = t3lib_div::makeInstance('tx_ttproducts_css');
 			$cssConf = $cssObj->getConf($functablename, $theCode);
 			$menu = $categoryTableViewObj->getPivar() . $depth;
 			$fill = '';

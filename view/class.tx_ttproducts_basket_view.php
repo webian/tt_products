@@ -75,9 +75,9 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 		&$error_code
 	)	{
 		$this->pibaseClass = $pibaseClass;
-		$this->pibase = t3lib_div::getUserObj($pibaseClass);
+		$this->pibase = t3lib_div::makeInstance($pibaseClass);
 		$this->cObj = $this->pibase->cObj;
-		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
 		$this->templateCode = &$templateCode;
@@ -86,14 +86,14 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 
 		$this->subpartmarkerObj = t3lib_div::makeInstance('tx_ttproducts_subpartmarker');
 		$this->subpartmarkerObj->init($this->cObj);
-		$this->urlObj = t3lib_div::getUserObj('tx_ttproducts_url_view'); // a copy of it
+		$this->urlObj = t3lib_div::makeInstance('tx_ttproducts_url_view'); // a copy of it
 		$this->urlObj->setUrlArray($urlArray);
 	} // init
 
 
 	public function getMarkerArray ()	{
-		$basketObj = t3lib_div::getUserObj('tx_ttproducts_basket');
-		$priceViewObj = t3lib_div::getUserObj('tx_ttproducts_field_price_view');
+		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
+		$priceViewObj = t3lib_div::makeInstance('tx_ttproducts_field_price_view');
 
 		$markerArray = array();
 
@@ -171,13 +171,13 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 		global $TYPO3_DB;
 
 		$out = '';
-		$basketObj = t3lib_div::getUserObj('tx_ttproducts_basket');
-		$markerObj = t3lib_div::getUserObj('tx_ttproducts_marker');
-		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
-		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
-		$billdeliveryObj = t3lib_div::getUserObj('tx_ttproducts_billdelivery');
-		$creditpointsObj = t3lib_div::getUserObj('tx_ttproducts_field_creditpoints');
-		$langObj = t3lib_div::getUserObj('tx_ttproducts_language');
+		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
+		$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$billdeliveryObj = t3lib_div::makeInstance('tx_ttproducts_billdelivery');
+		$creditpointsObj = t3lib_div::makeInstance('tx_ttproducts_field_creditpoints');
+		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
 
 		$funcTablename = $basketObj->getFuncTablename();
 		$itemTableView = $tablesObj->get($funcTablename, TRUE);
@@ -192,8 +192,8 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 			$articleTable = $articleViewObj->getModelObj();
 		}
 			// basket
-		$paymentshippingObj = t3lib_div::getUserObj('tx_ttproducts_paymentshipping');
-		$priceViewObj = t3lib_div::getUserObj('tx_ttproducts_field_price_view');
+		$paymentshippingObj = t3lib_div::makeInstance('tx_ttproducts_paymentshipping');
+		$priceViewObj = t3lib_div::makeInstance('tx_ttproducts_field_price_view');
 
 		if ($templateCode == '')	{
 			$templateCode = &$this->templateCode;
@@ -223,7 +223,7 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 
 		$subpartEmptyArray = array('EMAIL_PLAINTEXT_TEMPLATE_SHOP', 'BASKET_ORDERCONFIRMATION_NOSAVE_TEMPLATE');
 		if (!$t['basketFrameWork'] && !in_array($subpartMarker, $subpartEmptyArray)) {
-			$templateObj = t3lib_div::getUserObj('tx_ttproducts_template');
+			$templateObj = t3lib_div::makeInstance('tx_ttproducts_template');
 			$this->error_code[0] = 'no_subtemplate';
 			$this->error_code[1] = '###' . $subpartMarker . $templateObj->getTemplateSuffix() . '###';
 			$this->error_code[2] = ($templateFilename ? $templateFilename : $templateObj->getTemplateFile());
@@ -235,7 +235,7 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 			if (!empty($checkExpression)) {
 				$wrongPounds = preg_match_all($checkExpression, $t['basketFrameWork'], $matches);
 				if ($wrongPounds) {
-					$templateObj = t3lib_div::getUserObj('tx_ttproducts_template');
+					$templateObj = t3lib_div::makeInstance('tx_ttproducts_template');
 					$this->error_code[0] = 'template_invalid_marker_border';
 					$this->error_code[1] = '###' . $subpartMarker . $templateObj->getTemplateSuffix() . '###';
 					$this->error_code[2] = htmlspecialchars(implode('|', $matches['0']));
@@ -398,7 +398,7 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 					$markerArray = $globalMarkerArray;
 
 					if (!is_object($basketItemView))	{
-						$basketItemView = t3lib_div::getUserObj('tx_ttproducts_basketitem_view');
+						$basketItemView = t3lib_div::makeInstance('tx_ttproducts_basketitem_view');
 						$basketItemView->init($this->pibaseClass,$basketObj->basketExt,$basketObj->getItemObj());
 					}
 
@@ -715,7 +715,7 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 			$basketUrl = htmlspecialchars(tx_div2007_alpha5::getTypoLink_URL_fh003($this->cObj, $pid, $this->urlObj->getLinkParams('', array(), TRUE, TRUE, ''), '',$linkConf));
 			$markerArray['###SHIPPING_SELECTOR###'] = $paymentshippingObj->generateRadioSelect($theCode, 'shipping', $basketObj->calculatedArray, $basketUrl);
 
-			$imageObj = t3lib_div::getUserObj('tx_ttproducts_field_image_view');
+			$imageObj = t3lib_div::makeInstance('tx_ttproducts_field_image_view');
             $imageCode =
                 $imageObj->getImageCode(
                     $this->cObj,
@@ -922,8 +922,8 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 				$subpartArray['###MESSAGE_MINQUANTITY###'] = '';
 				$tmpSubpart = $this->cObj->getSubpart($t['basketFrameWork'],'###MESSAGE_MINQUANTITY_ERROR###');
 					//	$minQuantityArray[] = array('rec' => $row, 'minQuantity' => $minQuantity, 'quantity' => $quantity);
-				$errorObj = t3lib_div::getUserObj('tx_ttproducts_model_error');
-				$langObj = t3lib_div::getUserObj('tx_ttproducts_language');
+				$errorObj = t3lib_div::makeInstance('tx_ttproducts_model_error');
+				$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
 				$error_code = array();
 				$error_code[0] = 'error_minquantity';
 				$error_code[1] = '';
@@ -1107,7 +1107,7 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 				// Call all getItemMarkerArrays hooks at the end of this method
 			if (is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['getBasketView'])) {
 				foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['getBasketView'] as $classRef) {
-					$hookObj= t3lib_div::getUserObj($classRef);
+					$hookObj= t3lib_div::makeInstance($classRef);
 					if (method_exists($hookObj, 'getMarkerArrays')) {
 						$hookObj->getMarkerArrays ($this, $templateCode, $theCode, $markerArray, $subpartArray, $wrappedSubpartArray, $mainMarkerArray, $count);
 					}
@@ -1115,7 +1115,7 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 			}
 
 			$pidListObj = $basketObj->getPidListObj();
-			$relatedListView = t3lib_div::getUserObj('tx_ttproducts_relatedlist_view');
+			$relatedListView = t3lib_div::makeInstance('tx_ttproducts_relatedlist_view');
 			$relatedListView->init($this->cObj, $pidListObj->getPidlist(), $pidListObj->getRecursive());
 			$relatedMarkerArray = $relatedListView->getListMarkerArray(
 				$theCode,

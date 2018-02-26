@@ -52,7 +52,7 @@ class tx_ttproducts_static_tax extends tx_ttproducts_table_base {
 		if ($this->isInstalled())	{
 			parent::init($cObj, $functablename);
 			$tablename = $this->getTablename();
-			$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
+			$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 			$tableconf = $cnf->getTableConf('static_taxes');
 			$this->getTableObj()->setDefaultFieldArray(array('uid' => 'uid', 'pid' => 'pid'));
 			$this->getTableObj()->setTCAFieldArray('static_taxes');
@@ -100,14 +100,14 @@ class tx_ttproducts_static_tax extends tx_ttproducts_table_base {
 		global $TYPO3_DB;
 
 		if ($this->isInstalled())	{
-			$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
+			$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 			$orderAdressObj = $tablesObj->get('address', FALSE);
 			$storeRow = $orderAdressObj->get($uidStore);
 			$theCountryCode = '';
 
 			if ($storeRow)	{
 				$staticInfoCountryField = $orderAdressObj->getField('static_info_country');
-				$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
+				$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 				$tableconf = $cnf->getTableConf('address');
 
 				if (
@@ -192,7 +192,7 @@ class tx_ttproducts_static_tax extends tx_ttproducts_table_base {
 	public function getStaticTax (&$row, &$tax, &$taxArray)	{
 
 		if ($this->getUidStore() && $this->isInstalled())	{
-			$basketObj = t3lib_div::getUserObj('tx_ttproducts_basket');
+			$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
 
 			if (isset($basketObj->recs) && is_array($basketObj->recs) && count($basketObj->recs))	{
 				$deliveryInfo = $basketObj->recs['delivery'];

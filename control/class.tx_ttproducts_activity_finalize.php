@@ -68,12 +68,12 @@ class tx_ttproducts_activity_finalize extends tx_ttproducts_activity_base implem
 		global $TSFE;
 		global $TYPO3_DB;
 
-		$basketView = t3lib_div::getUserObj('tx_ttproducts_basket_view');
-		$basketObj = t3lib_div::getUserObj('tx_ttproducts_basket');
-		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
-		$billdeliveryObj = t3lib_div::getUserObj('tx_ttproducts_billdelivery');
-		$markerObj = t3lib_div::getUserObj('tx_ttproducts_marker');
-		$langObj = t3lib_div::getUserObj('tx_ttproducts_language');
+		$basketView = t3lib_div::makeInstance('tx_ttproducts_basket_view');
+		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$billdeliveryObj = t3lib_div::makeInstance('tx_ttproducts_billdelivery');
+		$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
+		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
         $fileArray = array(); // bill or delivery
 
 		$instockTableArray='';
@@ -290,7 +290,7 @@ class tx_ttproducts_activity_finalize extends tx_ttproducts_activity_base implem
         }
 
 		$orderObj->setData($orderUid, $orderConfirmationHTML, 1);
-		$creditpointsObj = t3lib_div::getUserObj('tx_ttproducts_field_creditpoints');
+		$creditpointsObj = t3lib_div::makeInstance('tx_ttproducts_field_creditpoints');
 		$creditpointsObj->pay();
 
 		// any gift orders in the extended basket?
@@ -524,7 +524,7 @@ class tx_ttproducts_activity_finalize extends tx_ttproducts_activity_base implem
 			// Call all finalizeOrder hooks
 		if (is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['finalizeOrder'])) {
 			foreach  ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['finalizeOrder'] as $classRef) {
-				$hookObj= t3lib_div::getUserObj($classRef);
+				$hookObj= t3lib_div::makeInstance($classRef);
 				if (method_exists($hookObj, 'finalizeOrder')) {
 					$hookObj->finalizeOrder(
 						$this,

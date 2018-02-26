@@ -198,7 +198,7 @@ class tx_ttproducts_api {
 		global $TYPO3_DB;
 
 		$result = FALSE;
-		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 		$infoArray = $infoObj->infoArray;
 		$apostrophe = $conf['orderEmail_apostrophe'];
 

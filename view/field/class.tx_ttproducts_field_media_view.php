@@ -124,7 +124,7 @@ public function getImageCode ($cObj, $imageConf, $theCode) {
 		$markerArray['###'.$markerKey.'_PATH###'] = $dirname;
 
 		if (count($imageArray))	{
-			$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
+			$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 			$tableConf = $cnf->getTableConf($functablename, $theCode);
 
 			if (is_array($tableConf))	{
@@ -171,7 +171,7 @@ public function getImageCode ($cObj, $imageConf, $theCode) {
 					$bUseImage = TRUE;
 				}
 				if (t3lib_extMgm::isLoaded('dam') && $bUseImage && $bImages) {
-					$damObj = t3lib_div::getUserObj('tx_dam');
+					$damObj = t3lib_div::makeInstance('tx_dam');
 					if(method_exists($damObj,'meta_getDataForFile')) {
 						$fieldList = 'uid,pid,tstamp,crdate,active,media_type,title,category,index_type,file_mime_type,file_mime_subtype,
 							file_type,file_type_version,file_name,file_path,file_size,file_mtime,file_inode,file_ctime,file_hash,file_status,
@@ -231,9 +231,9 @@ public function getImageCode ($cObj, $imageConf, $theCode) {
 
 		$imageRow = $row;
 		$bImages = FALSE;
-		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$tableConf = $cnf->getTableConf($functablename, $theCode);
-		$tablesObj = t3lib_div::getUserObj('tx_ttproducts_tables');
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 
 			// Get image
 		$theImgDAM = array();
@@ -452,7 +452,7 @@ public function getImageCode ($cObj, $imageConf, $theCode) {
 			$bSkip = TRUE;
 
 			$mediaMarkerKeyArray = array();
-			$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
+			$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 			$tableConf = $cnf->getTableConf($functablename, $theCode);
 
 			foreach ($tagArray as $value => $k1)	{

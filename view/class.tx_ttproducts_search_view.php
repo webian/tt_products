@@ -49,7 +49,7 @@ class tx_ttproducts_search_view implements t3lib_Singleton {
 	public function init ($langOb)	{
 		$this->langObj = $langObj;
 		$this->cObj = $langObj->cObj;
-		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 
 		$this->conf = &$cnf->getConf();
 		$this->config = &$cnf->getConfig();
@@ -61,7 +61,7 @@ class tx_ttproducts_search_view implements t3lib_Singleton {
 	public function &printFirstletter ($pibaseObj, &$templateCode, $columns, &$error_code)	{
 		// local_table
 
-		$searboxViewObj = t3lib_div::getUserObj('tx_searchbox_view');
+		$searboxViewObj = t3lib_div::makeInstance('tx_searchbox_view');
 
 		$paramArray = array(
 			'local' => array('table' => $this->config['local_table'], 'param' => $this->config['local_param']),
@@ -76,7 +76,7 @@ class tx_ttproducts_search_view implements t3lib_Singleton {
 	 */
 	public function &printYear ($pibaseObj, &$templateCode, $columns, &$error_code)	{
 
-		$searboxViewObj = t3lib_div::getUserObj('tx_searchbox_view');
+		$searboxViewObj = t3lib_div::makeInstance('tx_searchbox_view');
 		$paramArray = array(
 			'local' => array('table' => $this->config['local_table'], 'param' => $this->config['local_param']),
 			'foreign' => array('table' => $this->config['foreign_table'], 'param' => $this->config['foreign_param']),
@@ -91,7 +91,7 @@ class tx_ttproducts_search_view implements t3lib_Singleton {
 	 */
 	public function &printKeyField ($pibaseObj, &$templateCode, $columns, $type, $formid, $keyfieldConf, &$error_code)	{
 
-		$searboxViewObj = t3lib_div::getUserObj('tx_searchbox_view');
+		$searboxViewObj = t3lib_div::makeInstance('tx_searchbox_view');
 		$paramArray = array(
 			'local' => array('table' => $this->config['local_table'], 'param' => $this->config['local_param']),
 			'foreign' => array('table' => $this->config['foreign_table'], 'param' => $this->config['foreign_param']),
@@ -107,7 +107,7 @@ class tx_ttproducts_search_view implements t3lib_Singleton {
 	 */
 	public function &printLastEntries ($pibaseObj, &$templateCode, $columns, &$error_code)	{
 
-		$searboxViewObj = t3lib_div::getUserObj('tx_searchbox_view');
+		$searboxViewObj = t3lib_div::makeInstance('tx_searchbox_view');
 		$paramArray = array(
 			'local' => array('table' => $this->config['local_table'], 'param' => $this->config['local_param']),
 			'foreign' => array('table' => $this->config['foreign_table'], 'param' => $this->config['foreign_param']),
@@ -122,7 +122,7 @@ class tx_ttproducts_search_view implements t3lib_Singleton {
 	 */
 	public function &printTextField ($pibaseObj, &$templateCode, $columns, $formid, $contentRow, &$error_code)	{
 
-		$searboxViewObj = t3lib_div::getUserObj('tx_searchbox_view');
+		$searboxViewObj = t3lib_div::makeInstance('tx_searchbox_view');
 		$paramArray = array(
 			'local' => array('table' => $this->config['local_table'], 'param' => $this->config['local_param']),
 			'foreign' => array('table' => $this->config['foreign_table'], 'param' => $this->config['foreign_param']),

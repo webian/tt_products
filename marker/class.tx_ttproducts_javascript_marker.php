@@ -47,7 +47,7 @@ class tx_ttproducts_javascript_marker implements t3lib_Singleton {
 
 	function init($pibase) {
 		$this->pibase = $pibase;
-		$cnf = t3lib_div::getUserObj('tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
@@ -70,7 +70,7 @@ class tx_ttproducts_javascript_marker implements t3lib_Singleton {
 	function getMarkerArray (&$markerArray, &$itemMarkerArray)	{
 
 		if (is_array($this->conf['javaScript.']))	{
-			$javaScriptObj = t3lib_div::getUserObj('tx_ttproducts_javascript');
+			$javaScriptObj = t3lib_div::makeInstance('tx_ttproducts_javascript');
 
 			$jsItemMarkerArray = array();
 			foreach ($itemMarkerArray as $marker => $value)	{
