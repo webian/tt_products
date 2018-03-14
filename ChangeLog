@@ -1,3 +1,6 @@
+2018-03-14 Franz Holzinger <franz@ttproducts.de>
+    * modification: do not use the class filename and the full path but only the class name with t3lib_div::makeInstance in file lib/class.tx_ttproducts_tables.php. The class name is unique and the autoloader must find it.
+
 2018-02-26 Franz Holzinger <franz@ttproducts.de>
     * modification: replace the outdated t3lib_div::getUserObj by t3lib_div::makeInstance
 

@@ -134,7 +134,7 @@ class tx_ttproducts_tables implements t3lib_Singleton {
 				$classFile = $path . $k . '/' . $classRef . '.php';
 				if (file_exists($classFile)) {
 					$classRef = $classFile . ':' . $className;
-					$tableObj[$k] = t3lib_div::makeInstance($classRef);	// fetch and store it as persistent object
+					$tableObj[$k] = t3lib_div::makeInstance($className);	// fetch and store it as persistent object
 				} else {
 					debug ($classFile, 'File not found: ' . $classFile . ' in file class.tx_ttproducts_tables.php'); // keep this
 				}
@@ -243,6 +243,5 @@ class tx_ttproducts_tables implements t3lib_Singleton {
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/lib/class.tx_ttproducts_tables.php']) {
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/lib/class.tx_ttproducts_tables.php']);
 }
-
 
 ?>
