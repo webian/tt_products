@@ -1,3 +1,6 @@
+2018-04-10 Franz Holzinger <franz@ttproducts.de>
+    * bugfix: The TYPO3 cache must not be used on a search plugin in the products list or single view. The search sword name is still used in many shop templates. Therefore this parameter must convert tt_products into a USER_INT object.
+
 2018-03-14 Franz Holzinger <franz@ttproducts.de>
     * modification: do not use the class filename and the full path but only the class name with t3lib_div::makeInstance in file lib/class.tx_ttproducts_tables.php. The class name is unique and the autoloader must find it.
 

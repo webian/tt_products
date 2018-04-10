@@ -503,14 +503,16 @@ plugin.tt_products {
 
 [globalVar = GP:ttp_basket != '']
 plugin.tt_products = USER_INT
-[global]
 
 [globalVar = GP:tt_products|sword != '']
 plugin.tt_products = USER_INT
-[global]
+
+[globalVar = GP:sword != '']
+plugin.tt_products = USER_INT
 
 [ext:static_info_tables_taxes:isLoaded = 1]
 plugin.tt_products.conf.tt_products.ALL.requiredFields = uid,pid,category,price,price2,directcost,graduated_price_uid,tax_id,inStock
+
 [global]
 
 ## This enables the record item to display product items
