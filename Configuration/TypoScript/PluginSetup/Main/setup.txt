@@ -504,10 +504,10 @@ plugin.tt_products {
 [globalVar = GP:ttp_basket != '']
 plugin.tt_products = USER_INT
 
-[globalVar = GP:tt_products|sword != '']
+[globalString = GP:tt_products|sword = /.+/]
 plugin.tt_products = USER_INT
 
-[globalVar = GP:sword != '']
+[globalString = GP:sword = /.+/]
 plugin.tt_products = USER_INT
 
 [ext:static_info_tables_taxes:isLoaded = 1]

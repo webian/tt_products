@@ -1,5 +1,6 @@
 
 2018-04-18 Franz Holzinger <franz@ttproducts.de>
+    * bugfix: Do not use the wrong TypoScript condition [globalVar = GP:tt_products|sword != '']. This never did work. Use the correct form [globalString = GP:tt_products|sword = /.+/] to compare for a not null string instead. The TYPO3 cache has wrongly been always on with the search plugin.
     * modification: Add the marker ###SWORD_NAME### for search forms and replace it by tt_products[search]. The standalone search parameter should not be used in the future.
 
 2018-04-10 Franz Holzinger <franz@ttproducts.de>
