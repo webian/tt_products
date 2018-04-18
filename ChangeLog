@@ -1,3 +1,7 @@
+
+2018-04-18 Franz Holzinger <franz@ttproducts.de>
+    * modification: Add the marker ###SWORD_NAME### for search forms and replace it by tt_products[search]. The standalone search parameter should not be used in the future.
+
 2018-04-10 Franz Holzinger <franz@ttproducts.de>
     * bugfix: The TYPO3 cache must not be used on a search plugin in the products list or single view. The search sword name is still used in many shop templates. Therefore this parameter must convert tt_products into a USER_INT object.
 

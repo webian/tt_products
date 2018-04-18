@@ -632,7 +632,7 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 				$markerArray = array_merge($markerArray, $globalMarkerArray);
 				$markerArray['###FORM_NAME###'] = $formName;
 				$markerArray['###SWORD###'] = $htmlSwords;
-				$markerArray['###SWORD_NAME###'] = 'sword';
+				$markerArray['###SWORD_NAME###'] = $pibaseObj->prefixId . '[sword]';
 				$markerArray['###SWORDS###'] = $htmlSwords; // for backwards compatibility
 
 				$out = $this->cObj->substituteMarkerArrayCached($out, $markerArray);
