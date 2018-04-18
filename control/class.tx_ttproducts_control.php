@@ -52,10 +52,10 @@ class tx_ttproducts_control implements t3lib_Singleton {
 	public $subpartmarkerObj; // subpart marker functions
 	public $urlObj; // url functions
 	public $urlArray; // overridden url destinations
-	public $useArtcles;
+	public $useArticles;
 
 
-	public function init ($pibaseClass, $funcTablename, $templateCode, $useArtcles, &$error_code)  {
+	public function init ($pibaseClass, $funcTablename, $templateCode, $useArticles, &$error_code)  {
 		global $TYPO3_DB,$TSFE,$TCA;
 
 		$this->pibaseClass = $pibaseClass;
@@ -67,7 +67,7 @@ class tx_ttproducts_control implements t3lib_Singleton {
 		$this->templateCode = &$templateCode;
 		$this->basket = t3lib_div::makeInstance('tx_ttproducts_basket');
 		$this->funcTablename = $funcTablename;
-		$this->useArtcles = $useArtcles;
+		$this->useArticles = $useArticles;
 		$this->error_code = &$error_code;
 
 		$this->subpartmarkerObj = t3lib_div::makeInstance('tx_ttproducts_subpartmarker');
@@ -508,7 +508,7 @@ class tx_ttproducts_control implements t3lib_Singleton {
 				if (t3lib_extMgm::isLoaded('sr_feuser_register')) {
 					$check = ($checkRequired ? $checkRequired : $checkAllowed);
 
-					$label = $TSFE->sL('LLL:EXT:sr_feuser_register/pi1/locallang.xml:missing_'.$check);
+					$label = $TSFE->sL('LLL:EXT:sr_feuser_register/Resources/Private/Language/locallang.xlf:missing_'.$check);
 					$editPID = $TSFE->tmpl->setup['plugin.']['tx_srfeuserregister_pi1.']['editPID'];
 
 					if ($TSFE->loginUser && $editPID) {
@@ -1043,7 +1043,7 @@ class tx_ttproducts_control implements t3lib_Singleton {
 		$basketView->init(
 			$this->pibaseClass,
 			$this->urlArray,
-			$this->useArtcles,
+			$this->useArticles,
 			$this->templateCode,
 			$this->error_code
 		);

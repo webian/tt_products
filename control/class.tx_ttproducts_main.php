@@ -1037,8 +1037,6 @@ class tx_ttproducts_main implements t3lib_Singleton {
 				$this->config['templateSuffix']
 			);
 		} else {
-// 			t3lib_div::requireOnce(PATH_BE_ttproducts . 'view/class.tx_ttproducts_list_view.php');
-
 	// page where to go usually
 			$pid = ($this->conf['PIDbasket'] && $this->conf['clickIntoBasket'] ? $this->conf['PIDbasket'] : $TSFE->id);
 
