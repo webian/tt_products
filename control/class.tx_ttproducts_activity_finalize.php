@@ -445,14 +445,27 @@ class tx_ttproducts_activity_finalize {
 						foreach ($instockArray as $instockTmp => $count)	{
 							$uidItemnrTitle = t3lib_div::trimExplode(',', $instockTmp);
 							if ($count <= $this->conf['warningInStockLimit'])	{
-								$messageArr =  explode('|', $message = tx_div2007_alpha5::getLL_fh003($langObj, 'instock_warning'));
-								$subject = $messageArr[0] . $tableDesc . ' "' . $uidItemnrTitle[2] . '"' . $messageArr[1] . $uidItemnrTitle[1] . $messageArr[2];
+                                $content =
+									sprintf(
+										tx_div2007_alpha5::getLL_fh003($langObj, 'instock_warning'),
+										$tableDesc . ' ' . $uidItemnrTitle[2] . '',
+										$uidItemnrTitle[1],
+										intval($count)
+									);
+
+                                $subject =
+									sprintf(
+										tx_div2007_alpha5::getLL_fh003($langObj, 'instock_warning_header'),
+										$uidItemnrTitle[2] . '',
+										intval($count)
+									);
+
 								foreach ($recipientsArray['shop'] as $key => $recipient) {
 									// $headers variable removed everywhere!
 									tx_ttproducts_email_div::send_mail(
 										$recipient,
-										$apostrophe.$subject.$apostrophe,
-										$subject,
+										$apostrophe . $subject . $apostrophe,
+										$content,
 										$tmp='',	// no HTML order confirmation email for shop admins
 										$fromArray['shop']['email'],
 										$fromArray['shop']['name']

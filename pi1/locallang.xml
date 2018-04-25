@@ -29,6 +29,7 @@
 			<label index="no_feusers">No Front End Users have been found.</label>
 			<label index="wrong_code">Wrong display mode or code '|'.</label>
 			<label index="wrong_type">Wrong display type '|'.</label>
+			<label index="instock_warning_header">Warning: %s : Only %d pieces left.</label>
 			<label index="instock_warning">Warning: %s no. %s runs out of stock. Only %d pieces left.</label>
 			<label index="product">product</label>
 			<label index="article">article</label>
@@ -39,6 +40,7 @@
 			<label index="missing_email">email address</label>
 			<label index="missing_zip">zip code</label>
 			<label index="missing_tt_products_vat">VAT number</label>
+            <label index="check_missing_iban">Check the IBAN!</label>
 			<label index="error_minquantity">Error in minimum quantity in the following products. | Buy more of them.</label>
 			<label index="error_maxquantity">Error in maximum quantity in the following products. | Buy less of them.</label>
 			<label index="error_reference_id">ERROR: reference ID could not be generated.</label>
@@ -99,6 +101,7 @@
 			<label index="no_feusers">Es sind keine Frontend Benutzer gefunden worden.</label>
 			<label index="wrong_code">Falscher Anzeigetyp oder CODE '|'.</label>
 			<label index="wrong_type">Falscher Anzeigetyp '|'.</label>
+			<label index="instock_warning_header">Warnung: %s : nur noch %d Stück</label>
 			<label index="instock_warning">Warnung: %s Nr. %s ist bald nicht mehr auf Lager. Nur noch %d Stück verfügbar.</label>
 			<label index="product">Produkt</label>
 			<label index="article">Artikel</label>
@@ -110,6 +113,7 @@
 			<label index="missing_telephone">die Telefonnummer</label>
 			<label index="missing_zip">die Postleitzahl</label>
 			<label index="missing_tt_products_vat">die USt-Id</label>
+            <label index="check_missing_iban">Prüfen Sie die IBAN!</label>
 			<label index="error_minquantity">Fehler in der Mindestbestellmenge in folgenden Produkten | Kaufen Sie mehr davon ein.</label>
 			<label index="error_maxquantity">Fehler in der Maximalbestellmenge in folgenden Produkten | Kaufen Sie weniger davon ein.</label>
 			<label index="error_reference_id">ERROR: Es konnte keine Referenz ID erzeugt werden.</label>

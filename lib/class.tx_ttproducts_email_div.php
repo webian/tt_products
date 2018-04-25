@@ -91,11 +91,12 @@ class tx_ttproducts_email_div {
 				}
 			}
 			$mailMessage = tx_div2007_core::newMailMessage();
-			$mailMessage->setTo($toEMail)
+			$mailMessage->setCharset($GLOBALS['TSFE']->renderCharset)
+                ->setTo($toEMail)
 				->setFrom(array($fromEMail => $fromName))
 				->setSubject($subject)
-				->setBody($html, 'text/html', $GLOBALS['TSFE']->renderCharset)
-				->addPart($message, 'text/plain', $GLOBALS['TSFE']->renderCharset);
+				->setBody($html, 'text/html')
+				->addPart($message, 'text/plain');
 
 			if (isset($attachment)) {
 				if (is_array($attachment)) {
