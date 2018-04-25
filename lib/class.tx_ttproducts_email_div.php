@@ -84,12 +84,13 @@ class tx_ttproducts_email_div {
 			}
 
 			$mailMessage = tx_div2007_core::newMailMessage();
-			$mailMessage->setTo($toEMail)
+			$mailMessage->setCharset('UTF-8')
+                ->setTo($toEMail)
 				->setFrom(array($fromEMail => $fromName))
 				->setReturnPath($returnPath)
 				->setSubject($subject)
-				->setBody($html, 'text/html', 'UTF-8')
-				->addPart($message, 'text/plain', 'UTF-8');
+				->setBody($html, 'text/html')
+				->addPart($message, 'text/plain');
 
 			if (isset($attachment)) {
 				if (is_array($attachment)) {

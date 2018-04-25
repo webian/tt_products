@@ -241,9 +241,6 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 		}
 
 			// Fix delivery address
-//		$address->mapPersonIntoDelivery();	// This maps the billing address into the blank fields of the delivery address
-//		$mainMarkerArray['###EXTERNAL_COBJECT###'] = $this->externalCObject.'';
-
 		if ($deliveryInfo['date_of_birth'])	{
 			$dateArray = t3lib_div::trimExplode ('-', $deliveryInfo['date_of_birth']);
 
@@ -258,6 +255,17 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 
 			// Saving order data
 		$fieldsArray=array();
+        $tablename = $this->getTablename();
+        $excludeArray = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['exclude.'];
+        $excludeFieldArray = array();
+        if (
+            isset($excludeArray) &&
+            is_array($excludeArray) &&
+            isset($excludeArray[$tablename])
+        ) {
+            $excludeFieldArray = t3lib_div::trimExplode(',', $excludeArray[$tablename]);
+        }
+
 		$fieldsArray['feusers_uid'] = $feusers_uid;
 		$fieldsArray['first_name'] = $deliveryInfo['first_name'];
 		$fieldsArray['last_name'] = $deliveryInfo['last_name'];
@@ -373,6 +381,13 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 	/* Added Els: update user from vouchercode with 5 credits */
 			tx_ttproducts_creditpoints_div::addCreditPoints($basketObj->recs['tt_products']['vouchercode'], $this->conf['voucher.']['price']);
 		}
+
+        foreach ($excludeFieldArray as $field) {
+            if (isset($fieldsArrayFeUsers[$field])) {
+                unset($fieldsArrayFeUsers[$field]);
+            }
+        }
+
 		if ($TSFE->fe_user->user['uid'] && count($fieldsArrayFeUsers))	{
 			$TYPO3_DB->exec_UPDATEquery('fe_users', 'uid=' . intval($TSFE->fe_user->user['uid']), $fieldsArrayFeUsers);
 		}
@@ -411,6 +426,12 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 			$fieldsArray['creditpoints_saved'] = t3lib_div::_GP('creditpoints_saved');
 			$fieldsArray['creditpoints_gifts'] = $cpArray['gift']['amount'];
 		}
+
+        foreach ($excludeFieldArray as $field) {
+            if (isset($fieldsArray[$field])) {
+                unset($fieldsArray[$field]);
+            }
+        }
 
 			// Saving the order record
 		$TYPO3_DB->exec_UPDATEquery(

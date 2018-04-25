@@ -22,20 +22,22 @@ where.category =
 hook.setPageTitle = 1
   # cat=basic/enable; type=string; label=tt_products exclude: exclude these fields from the table tt_products. For TYPO3 < 6.1: This requires the extension addons_em.
 exclude.tt_products =
-  # cat=basic/enable; type=string; label=tt_products_language exclude: exclude these fields from the table tt_products_language. For TYPO3 < 6.1: This requires the extension addons_em.
+  # cat=exclude/enable; type=string; label=tt_products_language exclude: exclude these fields from the table tt_products_language. For TYPO3 < 6.1: This requires the extension addons_em.
 exclude.tt_products_language = datasheet,www,image
-  # cat=basic/enable; type=string; label=tt_products_cat exclude: exclude these fields from the table tt_products_cat.
+  # cat=exclude/enable; type=string; label=tt_products_cat exclude: exclude these fields from the table tt_products_cat.
 exclude.tt_products_cat =
-  # cat=basic/enable; type=string; label=tt_products_cat_language exclude: exclude these fields from the table tt_products_cat_language. For TYPO3 < 6.1: This requires the extension addons_em.
+  # cat=exclude/enable; type=string; label=tt_products_cat_language exclude: exclude these fields from the table tt_products_cat_language. For TYPO3 < 6.1: This requires the extension addons_em.
 exclude.tt_products_cat_language
-  # cat=basic/enable; type=string; label=tt_products_articles exclude: exclude these fields from the table tt_products_articles. For TYPO3 < 6.1: This requires the extension addons_em.
+  # cat=exclude/enable; type=string; label=tt_products_articles exclude: exclude these fields from the table tt_products_articles. For TYPO3 < 6.1: This requires the extension addons_em.
 exclude.tt_products_articles =
-  # cat=basic/enable; type=string; label=tt_products_articles_language exclude: exclude these fields from the table tt_products_articles_language. For TYPO3 < 6.1: This requires the extension addons_em.
+  # cat=exclude/enable; type=string; label=tt_products_articles_language exclude: exclude these fields from the table tt_products_articles_language. For TYPO3 < 6.1: This requires the extension addons_em.
 exclude.tt_products_articles_language =
-  # cat=basic/enable; type=string; label=tt_products_texts exclude: exclude these fields from the table tt_products_texts. For TYPO3 < 6.1: This requires the extension addons_em.
+  # cat=exclude/enable; type=string; label=tt_products_texts exclude: exclude these fields from the table tt_products_texts. For TYPO3 < 6.1: This requires the extension addons_em.
 exclude.tt_products_texts =
-  # cat=basic/enable; type=string; label=tt_products_texts_language exclude: exclude these fields from the table tt_products_texts_language. For TYPO3 < 6.1: This requires the extension addons_em.
+  # cat=exclude/enable; type=string; label=tt_products_texts_language exclude: exclude these fields from the table tt_products_texts_language. For TYPO3 < 6.1: This requires the extension addons_em.
 exclude.tt_products_texts_language =
+  # cat=exclude/enable; type=string; label=sys_products_orders exclude: exclude these fields from the table sys_products_orders.
+exclude.sys_products_orders = client_ip,date_of_birth,telephone,fax,ac_uid,cc_uid
   # cat=cache/enable; type=boolean; label=Cache for Backend: Click here if you want to activate the backend cache for tt_products tables.
 cache.backend = 0
   # cat=cache/enable; type=string; label=Cache Options for Server: Enter the cache options for the server.

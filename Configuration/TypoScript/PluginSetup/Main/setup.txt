@@ -118,6 +118,8 @@ plugin.tt_products {
 
   PIDagb = {$plugin.tt_products.PIDagb}
   PIDrevocation = {$plugin.tt_products.PIDrevocation}
+  PIDprivacy = {$plugin.tt_products.PIDprivacy}
+
   PIDinfo = {$plugin.tt_products.PIDinfo}
   PIDfinalize = {$plugin.tt_products.PIDfinalize}
   PIDpayment = {$plugin.tt_products.PIDpayment}

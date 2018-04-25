@@ -829,7 +829,6 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 			$amountCreditpoints = $TSFE->fe_user->user['tt_products_creditpoints'] + intval($creditpointsGifts);
 			$markerArray['###AMOUNT_CREDITPOINTS###'] = htmlspecialchars($amountCreditpoints);
 
-// #### START
 			$pricefactor = doubleval($this->conf['creditpoints.']['priceprod']);
  			$autoCreditpointsTotal = $creditpointsObj->getBasketTotal();
  			$markerArray['###AUTOCREDITPOINTS_TOTAL###'] = number_format($autoCreditpointsTotal,'0');
@@ -837,11 +836,7 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 			$markerArray['###CREDITPOINTS_AVAILABLE###'] = number_format($TSFE->fe_user->user['tt_products_creditpoints'],'0');
  			$markerArray['###USERCREDITPOINTS_PRICE_TOTAL_TAX###'] = $priceViewObj->priceFormat(($autoCreditpointsTotal < $amountCreditpoints ? $autoCreditpointsTotal : $amountCreditpoints) * $pricefactor);
 
-			// maximum1 amount of creditpoint to change is amount on account minus amount already spended in the credit-shop
-
 			$creditpoints = $autoCreditpointsTotal + $sum_pricecreditpoints_total_totunits * tx_ttproducts_creditpoints_div::getCreditPoints($sum_pricecreditpoints_total_totunits, $this->conf['creditpoints.']);
-
-// #### ENDE
 
 			// maximum1 amount of creditpoint to change is amount on account minus amount already spended in the credit-shop
 			$max1_creditpoints = $TSFE->fe_user->user['tt_products_creditpoints'] + intval($creditpointsGifts);
@@ -963,6 +958,26 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 				'</a>'
 			);
 
+            $pidPrivacy = intval($conf['PIDprivacy']);
+            $tempUrl =
+                tx_div2007_alpha5::getPageLink_fh003(
+                    $this->cObj,
+                    $pidPrivacy,
+                    '',
+                    $this->urlObj->getLinkParams(
+                        $singleExcludeList,
+                        $addQueryString,
+                        true,
+                        $bUseBackPid,
+                        0,
+                        ''
+                    )
+                );
+            $wrappedSubpartArray['###LINK_PRIVACY###'] = array(
+                '<a href="' . htmlspecialchars($tempUrl) . '" target="' . $this->conf['AGBtarget'] . '">',
+                '</a>'
+            );
+
 			$pidRevocation = intval($this->conf['PIDrevocation']);
 			$wrappedSubpartArray['###LINK_REVOCATION###'] = array(
 				'<a href="' . htmlspecialchars(
@@ -980,7 +995,6 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 				) . '" target="' . $this->conf['AGBtarget'] . '">',
 				'</a>'
 			);
-
 
 				// Final substitution:
 			if (!$TSFE->loginUser)	{		// Remove section for FE_USERs only, if there are no fe_user

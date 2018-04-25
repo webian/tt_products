@@ -1131,8 +1131,10 @@ class tx_ttproducts_control implements t3lib_Singleton {
 					$codeActivityArray['products_overview']=TRUE;
                 } elseif ($code=='PAYMENT') {
                     if (
-                        !$activityArray['products_finalize']
+                        $activityArray['products_finalize']
                     ) {
+                        $codeActivityArray['products_finalize'] = TRUE;
+                    } else {
                         $codeActivityArray['products_payment'] = TRUE;
                     }
                     if ($activityArray['products_verify']) {

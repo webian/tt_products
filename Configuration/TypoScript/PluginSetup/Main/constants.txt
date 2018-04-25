@@ -303,6 +303,8 @@ plugin.tt_products {
   PIDrevocation = 0
     # cat=plugin.products//; type=eint+; label=PID of AGB page: PID of the page with the AGB
   PIDagb = 0
+    # cat=plugin.products//; type=eint+; label=PID of Privacy Policy page: PID of the page with the Privacy Policy
+  PIDprivacy = 0
     # cat=plugin.products//; type=small; label=Target of AGB page: Target for the AGB page
   AGBtarget = _blank
 

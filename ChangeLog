@@ -1,3 +1,11 @@
+2018-04-25 Franz Holzinger <franz@ttproducts.de>
+    * new feature: According to DSGVO / GDPR the fields of the order table may be prevented from storing them and from showing them in the TYPO3 backend in the Extension Manager. The ip address is not stored any more by default.
+    * new feature: PIDprivacy for the privacy policy agreement page.
+    * new feature: subpart ###LINK_PRIVACY### for the link to the privacy policy agreement page defined by PIDprivacy.
+    * bugfix: The payment and finalize have been shown as an empty page because the empty basket evaluation has been wrong. The payment and finalize activities must be treated correctly.
+    * modifications for the newer versions of agency and sr_feuser_register
+    * show the EM tt_products exclude fields in its own tab
+    * bugfix: The code PAYMENT must lead to the finalize activity if products_finalize has been given.
 
 2018-04-18 Franz Holzinger <franz@ttproducts.de>
     * bugfix: Do not use the wrong TypoScript condition [globalVar = GP:tt_products|sword != '']. This never did work. Use the correct form [globalString = GP:tt_products|sword = /.+/] to compare for a not null string instead. The TYPO3 cache has wrongly been always on with the search plugin.
