@@ -27,10 +27,10 @@
     "typo3/cms-core": ">=4.5.0,<8.9.99",
     "typo3-ter/div2007": ">=1.7.11",
     "typo3-ter/table": ">=0.3.0",
-    "typo3-ter/tsparser": ""
+    "typo3-ter/tsparser": ">=0.2.5"
   },
   "suggest": {
-    "typo3-ter/addons_em": ""
+    "typo3-ter/addons_em": ">=0.2.1"
   },
   "autoload": {
     "psr-4": {

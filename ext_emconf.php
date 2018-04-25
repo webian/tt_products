@@ -26,13 +26,13 @@ $EM_CONF[$_EXTKEY] = array(
 	'author_company' => 'jambage.com',
 	'CGLcompliance' => '',
 	'CGLcompliance_note' => '',
-	'version' => '2.8.21',
+	'version' => '2.8.22',
 	'constraints' => array(
 		'depends' => array(
 			'div2007' => '1.7.11-0.0.0',
 			'php' => '5.2.0-7.99.99',
 			'table' => '0.3.0-0.0.0',
-			'tsparser' => '',
+			'tsparser' => '0.2.5-0.0.0',
 			'typo3' => '4.5.0-8.99.99',
 		),
 		'conflicts' => array(
@@ -46,7 +46,7 @@ $EM_CONF[$_EXTKEY] = array(
 		),
 		'suggests' => array(
 			'func_wizards' => '',
-			'addons_em' => '',
+			'addons_em' => '0.2.1-0.0.0',
 		),
 	),
     'autoload' => array(
