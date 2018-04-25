@@ -958,7 +958,7 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 				'</a>'
 			);
 
-            $pidPrivacy = intval($conf['PIDprivacy']);
+            $pidPrivacy = intval($this->conf['PIDprivacy']);
             $tempUrl =
                 tx_div2007_alpha5::getPageLink_fh003(
                     $this->cObj,
