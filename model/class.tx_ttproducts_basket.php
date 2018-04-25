@@ -471,13 +471,14 @@ class tx_ttproducts_basket {
 		}
 
 		$cnfObj = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$pidListObj = $this->getPidListObj();
 
 		$funcTablename = $this->getFuncTablename();
 		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
 		$cnfObj = t3lib_div::getUserObj('&tx_ttproducts_config');
 		$itemTableConf = $cnfObj->getTableConf($funcTablename, 'BASKET');
 		$viewTableObj = $tablesObj->get($funcTablename);
-		$where = 'uid IN ('.implode(',', $uidArr) . ') AND pid IN (' . $this->pidListObj->getPidlist() . ')' . $viewTableObj->getTableObj()->enableFields();
+		$where = 'uid IN ('.implode(',', $uidArr) . ') AND pid IN (' . $pidListObj->getPidlist() . ')' . $viewTableObj->getTableObj()->enableFields();
 		$orderBy = $viewTableObj->getTableObj()->transformOrderby($itemTableConf['orderBy']);
 
 		$rcArray = $viewTableObj->getWhere($where, 'BASKET', $orderBy);
@@ -557,6 +558,7 @@ class tx_ttproducts_basket {
 		$this->calculatedArray = array(); // this array is usede for all calculated things
 		$priceObj = t3lib_div::getUserObj('&tx_ttproducts_field_price');
 		$maxTax = 0;
+
 		foreach ($productsArray as $k1 => $row)	{
 			$uid = $row['uid'];
 			$tax = $row['tax'];

@@ -879,6 +879,24 @@ class tx_ttproducts_basket_view {
 				'</a>'
 			);
 
+			$pidPrivacy = intval($this->conf['PIDprivacy']);
+			$wrappedSubpartArray['###LINK_PRIVACY###'] = array(
+				'<a href="' . htmlspecialchars(
+					$this->pibase->pi_getPageLink(
+						$pidPrivacy,
+						'',
+						$this->urlObj->getLinkParams(
+							$singleExcludeList,
+							$addQueryString,
+							TRUE,
+							TRUE,
+							''
+						)
+					)
+				) . '" target="' . $this->conf['AGBtarget'] . '">',
+				'</a>'
+			);
+
 			$pidRevocation = intval($this->conf['PIDrevocation']);
 			$wrappedSubpartArray['###LINK_REVOCATION###'] = array(
 				'<a href="' . htmlspecialchars(

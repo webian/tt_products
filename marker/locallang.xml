@@ -47,6 +47,7 @@
 			<label index="basket_phone">Telephone</label>
 			<label index="basket_email">E-mail</label>
 			<label index="basket_zip_city">Postcode/city</label>
+			<label index="basket_zone">Zone</label>
 			<label index="basket_street">Street</label>
 			<label index="basket_fe_username">User name</label>
 			<label index="basket_fe_user_id">User ID </label>
@@ -94,6 +95,12 @@
 			<label index="basket_terms_ack">Please confirm that you have read and accepted the general terms and conditions.</label>
 			<label index="basket_terms_read">and I accept them..</label>
 
+			<label index="basket_privacy_policy">Privacy Policy</label>
+			<label index="basket_privacy_policy_agree_1">I have read and agree to the privacy policy.</label>
+			<label index="basket_privacy_policy_agree_2">I agree for any data I transmit through this site, that you can use them in accordance with the Privacy Policy.</label>
+			<label index="basket_privacy_policy_hint">Hint</label>
+			<label index="basket_privacy_policy_hint_1">You have the right to renounce the agreement to the usage of your personal data at any time via email.</label>
+
 			<label index="basket_required_message_error">Error in the entry</label>
 			<label index="basket_required_message_missing">You have not completed all the required fields for your address or you have not accepted the general terms and conditions!</label>
 			<label index="basket_required_message_fix">Please correct your entries!</label>
@@ -127,6 +134,8 @@
 			<label index="plus">Plus</label>
 			<label index="shipping">shipping</label>
 
+			<label index="p_old_price">Old price</label>
+			<label index="p_discount">Discount</label>
 			<label index="p_unit_price">Unit price</label>
 			<label index="p_acccessory">Accessories</label>
 			<label index="p_category">Category</label>
@@ -181,6 +190,8 @@
 			<label index="p_delivery_available_short">Delivery within 48 hours (2 business days) after payment</label>
 			<label index="p_order_date">Order date</label>
 			<label index="p_acccessory">Accessories</label>
+            <label index="p_checkbox1">Checkbox 1 Text</label>
+            <label index="p_checkbox1_value">Checkbox 1 Value</label>
 
 			<label index="list_buy_now">Into the shopping cart.</label>
 			<label index="list_detail">Item details</label>

@@ -51,7 +51,7 @@ class tx_ttproducts_control {
 	var $subpartmarkerObj; // subpart marker functions
 	var $urlObj; // url functions
 	var $urlArray; // overridden url destinations
-	var $bUseArtcles;
+	var $useArticles;
 
 
 	/**
@@ -60,11 +60,11 @@ class tx_ttproducts_control {
 	 * @param	object		$$pibase: object derived from tslib_pibase
 	 * @param	string		$funcTablename: functional table name
 	 * @param	string		$$templateCode: HTML template
-	 * @param	integer		$bUseArtcles: useArticles configuration
+	 * @param	integer		$useArticles: useArticles configuration
 	 * @param	array		out: $$error_code: contains error indices
 	 * @return	void
 	 */
-	function init ($pibase, $funcTablename, $templateCode, $bUseArtcles, &$error_code)  {
+	function init ($pibase, $funcTablename, $templateCode, $useArticles, &$error_code)  {
 		global $TYPO3_DB,$TSFE,$TCA;
 
 		$this->pibase = $pibase;
@@ -75,7 +75,7 @@ class tx_ttproducts_control {
 		$this->templateCode = &$templateCode;
 		$this->basket = t3lib_div::getUserObj('&tx_ttproducts_basket');
 		$this->funcTablename = $funcTablename;
-		$this->bUseArtcles = $bUseArtcles;
+		$this->useArticles = $useArticles;
 		$this->error_code = &$error_code;
 
 		$this->subpartmarkerObj = t3lib_div::makeInstance('tx_ttproducts_subpartmarker');
@@ -303,7 +303,7 @@ class tx_ttproducts_control {
 		$content = '';
 		$empty = '';
 		$activityArray = array();
-        $bBasketEmpty = (count($this->basket->basketExt) == 0);
+        $bBasketEmpty = (count($this->basket->getItemArray()) == 0);
 
 		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
 		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
@@ -311,7 +311,7 @@ class tx_ttproducts_control {
 		$basketView->init (
 			$this->pibase,
 			$this->urlArray,
-			$this->bUseArtcles,
+			$this->useArticles,
 			$this->templateCode,
 			$this->error_code
 		);
@@ -373,6 +373,7 @@ class tx_ttproducts_control {
 
 		$codeActivityArray=array();
 		$bBasketCode = FALSE;
+
 		if (is_array($codes)) {
 			foreach ($codes as $k => $code) {
 				if ($code=='BASKET')	{
@@ -387,8 +388,10 @@ class tx_ttproducts_control {
 					$codeActivityArray['products_overview']=TRUE;
                 } elseif ($code=='PAYMENT') {
                     if (
-                        !$activityArray['products_finalize']
+                        $activityArray['products_finalize']
                     ) {
+                        $codeActivityArray['products_finalize'] = TRUE;
+                    } else {
                         $codeActivityArray['products_payment'] = TRUE;
                     }
                     if ($activityArray['products_verify']) {
@@ -430,7 +433,7 @@ class tx_ttproducts_control {
 		$mainMarkerArray = $markerObj->getGlobalMarkerArray();
 		$mainMarkerArray['###ERROR_DETAILS###'] = '';
 
-		if (count($this->basket->itemArray) && count($this->activityArray))	{	// If there is content in the shopping basket, we are going display some basket code
+		if (!$bBasketEmpty && count($this->activityArray))	{
 				// prepare action
 			$basket_tmpl = '';
 			if (count($this->activityArray)) {
@@ -453,7 +456,6 @@ class tx_ttproducts_control {
 				}
 
 				foreach ($this->activityArray as $activity => $value) {
-
 					if ($value) {
 						$currentPaymentActivity = array_search($activity, $activityVarsArray);
 
@@ -621,7 +623,7 @@ class tx_ttproducts_control {
 									} else {
 										if (t3lib_extMgm::isLoaded('sr_feuser_register')) {
 											$check = ($checkRequired ? $checkRequired: $checkAllowed);
-											$label = $TSFE->sL('LLL:EXT:sr_feuser_register/pi1/locallang.php:missing_'.$check);
+											$label = $TSFE->sL('LLL:EXT:sr_feuser_register/Resources/Private/Language/locallang.xlf:missing_'.$check);
 											$editPID = $TSFE->tmpl->setup['plugin.']['tx_srfeuserregister_pi1.']['editPID'];
 
 											if ($TSFE->loginUser && $editPID) {
@@ -661,7 +663,6 @@ class tx_ttproducts_control {
 									$markerArray['###ERROR_DETAILS###'] = $mainMarkerArray['###ERROR_DETAILS###'] = $label;
 									$markerArray = array_merge($markerArray, $overwriteMarkerArray);
 									$content = $this->cObj->substituteMarkerArray($content, $markerArray);
-
 								}
 							break;
 							// a special step after payment and before finalization needed for some payment systems
@@ -905,12 +906,12 @@ class tx_ttproducts_control {
 		if ($bBasketEmpty)	{
 			if ($this->activityArray['products_overview']) {
 				tx_div2007_alpha5::load_noLinkExtCobj_fh002($this->pibase);	//
-				$content .= $this->cObj->getSubpart(
+				$content = $this->cObj->getSubpart(
 					$this->templateCode,
 					$this->subpartmarkerObj->spMarker('###BASKET_OVERVIEW_EMPTY###')
 				);
 			} else if ($this->activityArray['products_basket'] || $this->activityArray['products_info'] || $this->activityArray['products_payment']) {
-				$content .= $this->cObj->getSubpart(
+				$content = $this->cObj->getSubpart(
 					$this->templateCode,
 					$this->subpartmarkerObj->spMarker('###BASKET_TEMPLATE_EMPTY###')
 				);

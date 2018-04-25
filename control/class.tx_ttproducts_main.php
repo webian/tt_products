@@ -186,7 +186,6 @@ class tx_ttproducts_main {
 
 			// initialise AJAX at the beginning because the AJAX functions can set piVars
 		if (!$bRunAjax && t3lib_extMgm::isLoaded('taxajax')) {
-// 			include_once(PATH_BE_ttproducts.'eid/class.tx_ttproducts_ajax.php');
 			$this->ajax = t3lib_div::makeInstance('tx_ttproducts_ajax');
 			$this->ajax->init();
 			$this->ajax->main($conf['ajaxDebug']);
@@ -261,7 +260,6 @@ class tx_ttproducts_main {
 		}
 
 		$tmp = $this->cObj->stdWrap($this->conf['pid_list'],$this->conf['pid_list.']);
-// ($this->piVars['pid_list'] ? $this->piVars['pid_list']
 		$pid_list = ($this->cObj->data['pages'] ? $this->cObj->data['pages'] : ($this->conf['pid_list.'] ? trim($tmp) : ''));
 		$pid_list = ($pid_list ? $pid_list : $this->conf['pid_list']);
 		$config['pid_list'] = (isset($pid_list) ? $pid_list : $config['storeRootPid']);
@@ -325,7 +323,6 @@ class tx_ttproducts_main {
 		}
 
 		if ($this->conf['templateStyle'] == 'css-styled')	{
-// 			include_once(PATH_BE_ttproducts . 'lib/class.tx_ttproducts_css.php');
 			$this->css = t3lib_div::makeInstance('tx_ttproducts_css');
 			$this->css->init(
 				$this->pibase

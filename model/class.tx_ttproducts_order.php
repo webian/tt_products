@@ -256,6 +256,7 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 		if (!$feusers_uid && isset($TSFE->fe_user->user) && is_array($TSFE->fe_user->user) && $TSFE->fe_user->user['uid'])	{
 			$feusers_uid = $TSFE->fe_user->user['uid'];
 		}
+        $tablename = $this->getTablename();
 
 			// Fix delivery address
 
@@ -270,6 +271,17 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 				$dateBirth = mktime(0,0,0,$dateArray[1],$dateArray[0],$dateArray[2]);
 			}
 		}
+
+        $excludeArray = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['exclude.'];
+        $excludeFieldArray = array();
+
+        if (
+            isset($excludeArray) &&
+            is_array($excludeArray) &&
+            isset($excludeArray[$tablename])
+        ) {
+            $excludeFieldArray = t3lib_div::trimExplode(',', $excludeArray[$tablename]);
+        }
 
 			// Saving order data
 		$fieldsArray=array();
@@ -347,10 +359,6 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 		}
 
 		if ($status == 1 && $this->conf['creditpoints.'] && $usedCreditpoints) {
-
-/* Added Els: update fe_user with amount of creditpoints (= exisitng amount - used_creditpoints - spended_creditpoints + saved_creditpoints */
-//			$fieldsArrayFeUsers['tt_products_creditpoints'] = $TSFE->fe_user->user['tt_products_creditpoints'] + ($creditpoints * $this->calculatedArray['priceTax']['total']) - $this->basket->recs['tt_products']['creditpoints'];
-
 			$fieldsArrayFeUsers['tt_products_creditpoints'] =
 				floatval($TSFE->fe_user->user['tt_products_creditpoints'] -
 					$usedCreditpoints
@@ -360,7 +368,6 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 				$fieldsArrayFeUsers['tt_products_creditpoints'] = 0;
 			}
 		}
-
 
 /* Added Els: update fe_user with vouchercode */
 		if ($status == 1 && $this->basket->recs['tt_products']['vouchercode'] != '') {
@@ -380,6 +387,12 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 	/* Added Els: update user from vouchercode with 5 credits */
 			tx_ttproducts_creditpoints_div::addCreditPoints($this->basket->recs['tt_products']['vouchercode'], $this->conf['voucher.']['price']);
 		}
+
+        foreach ($excludeFieldArray as $field) {
+            if (isset($fieldsArrayFeUsers[$field])) {
+                unset($fieldsArrayFeUsers[$field]);
+            }
+        }
 
 		if ($TSFE->fe_user->user['uid'] && count($fieldsArrayFeUsers))	{
 			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('fe_users', 'uid='.intval($TSFE->fe_user->user['uid']), $fieldsArrayFeUsers);
@@ -420,7 +433,13 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 			$fieldsArray['creditpoints_gifts'] = $cpArray['gift']['amount'];
 		}
 
-			// Saving the order record
+        foreach ($excludeFieldArray as $field) {
+            if (isset($fieldsArray[$field])) {
+                unset($fieldsArray[$field]);
+            }
+        }
+
+		// Saving the order record
 		$TYPO3_DB->exec_UPDATEquery(
 			'sys_products_orders',
 			'uid='.intval($orderUid),

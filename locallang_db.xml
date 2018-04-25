@@ -15,18 +15,20 @@
 			<label index="tt_products">Products</label>
 			<label index="tt_products.accessory_uid">Accessory products</label>
 			<label index="tt_products.prod_uid">Template Products</label>
-			<label index="tt_products.related_uid">Related products</label>
+			<label index="tt_products.related_uid">Related Products</label>
+            <label index="tt_products.directcost">Direct Cost:</label>
+            <label index="tt_products.regular_price">Regular Price:</label>
 			<label index="tt_products.price">Price:</label>
 			<label index="tt_products.price2">Price (2):</label>
 			<label index="tt_products.discount">Possible Discount:</label>
 			<label index="tt_products.discount_disable">Disable Discounts:</label>
-			<label index="tt_products.unit">Unit of measure</label>
-			<label index="tt_products.unit_factor">Unit factor</label>
+			<label index="tt_products.unit">Unit of Measure</label>
+			<label index="tt_products.unit_factor">Unit Factor</label>
 			<label index="tt_products.graduated_price_enable">Enable Graduated Prices:</label>
 			<label index="tt_products.graduated_price_round">Round format for Graduated Prices:</label>
 			<label index="tt_products.graduated_price_uid">Graduated Prices:</label>
 			<label index="tt_products.article_uid">Articles:</label>
-			<label index="tt_products.note_uid">Describing pages:</label>
+			<label index="tt_products.note_uid">Describing Pages:</label>
 			<label index="tt_products.note">Description</label>
 			<label index="tt_products.note2">Commentary</label>
 			<label index="tt_products.text_uid">Additional texts:</label>
@@ -38,6 +40,7 @@
 			<label index="tt_products.basketmaxquantity">Maximum quantity in basket:</label>
 			<label index="tt_products.datasheet">Datasheet</label>
 			<label index="tt_products.www">WWW URL</label>
+            <label index="tt_products.tax_free">Tax-free:</label>
 			<label index="tt_products.tax">Tax:</label>
 			<label index="tt_products.deposit">Deposit:</label>
 			<label index="tt_products.weight">Weight (kg):</label>
@@ -46,7 +49,6 @@
 			<label index="tt_products.offer">Offer:</label>
 			<label index="tt_products.highlight">Highlight:</label>
 			<label index="tt_products.bargain">Bargain:</label>
-			<label index="tt_products.directcost">Direct Cost:</label>
 			<label index="tt_products.color">Colour (Variant 1):</label>
 			<label index="tt_products.color2">2nd Colour (Variant 6):</label>
 			<label index="tt_products.color3">3rd Colour (Variant 7):</label>
@@ -75,6 +77,7 @@
             <label index="tt_products.boundary">Boundary (Variant 26):</label>
             <label index="tt_products.costs">Costs (Variant 27):</label>
             <label index="tt_products.additionaltab">Addition</label>
+            <label index="tt_products.additional_type">internal additional type:</label>
 			<label index="tt_products.additional">Additional (Variant 5):</label>
 			<label index="tt_products.additional.isSingle">Buy only once:</label>
 			<label index="tt_products.additional.isImage">Is an image:</label>
@@ -104,6 +107,7 @@
 			<label index="tt_products.delivery.availableShort">soon available</label>
 			<label index="tt_products.delivery.availableDemand">only on demand</label>
 			<label index="tt_products.categorydiv">Categories </label>
+            <label index="tt_products.download_type">internal download type:</label>
 			<label index="tt_products.download_uid">Downloads</label>
 			<label index="tt_products.download_info">Information required from the download</label>
 			<label index="tt_products.download_info.limitedToDomain">limited to a domain</label>
@@ -115,7 +119,7 @@
 			<label index="tt_products_language.sys_language_uid">Language</label>
 			<label index="tt_products_language.text_uid">Additional texts:</label>
 			<label index="tt_products_language.datasheet">Datasheet</label>
-			<label index="tt_products_cat">Product category</label>
+			<label index="tt_products_cat">Product categories</label>
 			<label index="tt_products_cat.catid">Category Identifier</label>
 			<label index="tt_products_cat.email_uid">Confirmation email</label>
 			<label index="tt_products_cat.discount">Possible Discount:</label>
@@ -128,8 +132,10 @@
 			<label index="tt_products_cat_language.cat_uid">Product category record</label>
 			<label index="tt_products_articles">Product articles</label>
 			<label index="tt_products_articles.uid_product">Product</label>
+            <label index="tt_products_articles.config_type">internal config type:</label>
 			<label index="tt_products_articles.config">Configuration:</label>
 			<label index="tt_products_articles.config.isaddedprice">price is added</label>
+            <label index="tt_products_articles.graduated_config_type">internal graduated config type:</label>
 			<label index="tt_products_articles.graduated_config">Graduated Price Configuration:</label>
 			<label index="tt_products_articles.graduated_config.addParentProductCount">Add the product counts of the parent product</label>
 			<label index="tt_products_articles_language">Product articles (alternative language)</label>
@@ -283,6 +289,7 @@
 			<label index="sys_products_orders_mm_gained_voucher_codes">Relations Order to Voucher Code</label>
 			<label index="sys_products_orders_mm_gained_voucher_codes.uid_local">Order</label>
 			<label index="sys_products_orders_mm_gained_voucher_codes.uid_foreign">Voucher</label>
+			<label index="fe_groups.tt_products_discount">Discount</label>
 			<label index="fe_users.tt_products_memoItems">Memo Items</label>
 			<label index="fe_users.tt_products_memodam">Memo DAM</label>
 			<label index="fe_users.tt_products_discount">Discount</label>
@@ -375,6 +382,7 @@
 			<label index="tt_content.pi_flexform.display_mode.44">Products: list all users mostly visited</label>
 			<label index="tt_content.pi_flexform.display_mode.45">Products: list affordable items</label>
 			<label index="tt_content.pi_flexform.display_mode.46">Orders: downloads</label>
+			<label index="tt_content.pi_flexform.display_mode.unused">Unused</label>
 			<label index="tt_content.pi_flexform.product_selection">Product selection</label>
 			<label index="tt_content.pi_flexform.category_selection">Category selection</label>
 			<label index="tt_content.pi_flexform.required_pivars">Required parameters</label>
@@ -400,6 +408,8 @@
 			<label index="tt_products.prod_uid">Template Produkte</label>
 			<label index="tt_products.accessory_uid">Zubehör</label>
 			<label index="tt_products.related_uid">verwandte Produkte</label>
+            <label index="tt_products.directcost">Einkaufspreis:</label>
+            <label index="tt_products.regular_price">Regulärer Preis:</label>
 			<label index="tt_products.price">Preis:</label>
 			<label index="tt_products.price2">Preis (2):</label>
 			<label index="tt_products.discount">Möglicher Rabatt:</label>
@@ -429,7 +439,6 @@
 			<label index="tt_products.offer">Aktion:</label>
 			<label index="tt_products.highlight">Besonderheit:</label>
 			<label index="tt_products.bargain">Schnäppchen:</label>
-			<label index="tt_products.directcost">Einkaufspreis:</label>
 			<label index="tt_products.color">Farbe (Variante 1):</label>
 			<label index="tt_products.color2">2. Farbe (Variante 6):</label>
 			<label index="tt_products.color3">3. Farbe (Variante 7):</label>

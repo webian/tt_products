@@ -119,6 +119,8 @@ plugin.tt_products {
 
   PIDagb = {$plugin.tt_products.PIDagb}
   PIDrevocation = {$plugin.tt_products.PIDrevocation}
+  PIDprivacy = {$plugin.tt_products.PIDprivacy}
+
   PIDinfo = {$plugin.tt_products.PIDinfo}
   PIDfinalize = {$plugin.tt_products.PIDfinalize}
   PIDpayment = {$plugin.tt_products.PIDpayment}
@@ -451,7 +453,11 @@ plugin.tt_products {
 plugin.tt_products = USER_INT
 [global]
 
-[globalVar = GP:tt_products|sword != '']
+[globalString = GP:tt_products|sword = /.+/]
+plugin.tt_products = USER_INT
+[global]
+
+[globalString = GP:sword = /.+/]
 plugin.tt_products = USER_INT
 [global]
 
