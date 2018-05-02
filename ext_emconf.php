@@ -30,6 +30,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'constraints' => array(
 		'depends' => array(
 			'div2007' => '1.7.11-0.0.0',
+            'migration_core' => '0.0.0-0.99.99',
 			'php' => '5.2.0-7.99.99',
 			'table' => '0.3.0-0.0.0',
 			'tsparser' => '0.2.5-0.0.0',
