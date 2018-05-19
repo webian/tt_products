@@ -399,14 +399,14 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 		if ($this->conf['useStaticInfoCountry'] && is_object($staticInfo))	{
 			$bReady = FALSE;
 			$whereCountries = $this->getWhereAllowedCountries();
-			$countryCodeArray = array();
 
-			$countryCodeArray['billing'] = ($this->infoArray['billing']['country_code'] ? $this->infoArray['billing']['country_code'] : $TSFE->fe_user->user ? $TSFE->fe_user->user['static_info_country'] : FALSE);
-			$countryCodeArray['delivery'] = ($this->infoArray['delivery']['country_code'] ? $this->infoArray['delivery']['country_code'] : $TSFE->fe_user->user ? $TSFE->fe_user->user['static_info_country'] : FALSE);
+            $countryCodeArray = array();
+            $countryCodeArray['billing'] = ($this->infoArray['billing']['country_code'] != '' ? $this->infoArray['billing']['country_code'] : ($GLOBALS['TSFE']->fe_user->user['static_info_country'] != '' ? $GLOBALS['TSFE']->fe_user->user['static_info_country'] : false));
+            $countryCodeArray['delivery'] = ($this->infoArray['delivery']['country_code'] != '' ? $this->infoArray['delivery']['country_code'] : ($GLOBALS['TSFE']->fe_user->user['static_info_country'] != '' ? $GLOBALS['TSFE']->fe_user->user['static_info_country'] : false));
 
-			$zoneCodeArray = array();
-			$zoneCodeArray['billing'] = ($this->infoArray['billing']['zone'] ? $this->infoArray['billing']['zone'] : $TSFE->fe_user->user['zone']);
-			$zoneCodeArray['delivery'] = ($this->infoArray['delivery']['zone'] ? $this->infoArray['delivery']['zone'] : $TSFE->fe_user->user['zone']);
+            $zoneCodeArray = array();
+            $zoneCodeArray['billing'] = ($this->infoArray['billing']['zone'] != '' ? $this->infoArray['billing']['zone'] : ($GLOBALS['TSFE']->fe_user->user['zone'] != '' ? $GLOBALS['TSFE']->fe_user->user['zone'] : false));
+            $zoneCodeArray['delivery'] = ($this->infoArray['delivery']['zone'] != '' ? $this->infoArray['delivery']['zone'] : ($GLOBALS['TSFE']->fe_user->user['zone'] != '' ? $GLOBALS['TSFE']->fe_user->user['zone'] : false));
 
             if (
                 $countryCodeArray['billing'] === FALSE &&

@@ -1,3 +1,7 @@
+2018-05-19 Franz Holzinger <franz@ttproducts.de>
+    * bugfix country determination: A boolean check about a value in the country_code field does not give the correct result.
+    * bugfix: pi_search and pi_int must not result in an USER object but in a USER_INT object.
+
 2018-05-03 Franz Holzinger <franz@ttproducts.de>
     * add dependency from extension migration_core. This is only needed for TYPO3 >= 7.x. However TYPO3 has no possibility to describe this. So the users under TYPO3 7.x and higher are supported in the better way. The class mapper has been removed from extension div2007 since version 1.10.0.
 
