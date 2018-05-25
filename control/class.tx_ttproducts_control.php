@@ -656,6 +656,7 @@ class tx_ttproducts_control implements t3lib_Singleton {
 					case 'products_clear_basket':
 						// Empties the shopping basket!
 						$this->basket->clearBasket(TRUE);
+                        $bBasketEmpty = (count($this->basket->getItemArray()) == 0);
 					break;
 					case 'products_basket':
 						if (count($this->activityArray) == 1) {
