@@ -142,7 +142,9 @@ class tx_ttproducts_model_control {
 
 		foreach ($functableArray as $ft)	{
 			$tableObj = $tablesObj->get($ft,0);
-			$tableConfArray[$ft] = $tableObj->getTableConf($theCode);
+			if (!isset($tableConfArray[$ft])) {
+                $tableConfArray[$ft] = $tableObj->getTableConf($theCode);
+			}
 			if (isset($tableConfArray[$ft]['view.']))	{
 				$viewConfArray[$ft] = $tableConfArray[$ft]['view.'];
 			}

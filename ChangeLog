@@ -1,3 +1,6 @@
+2018-06-28 Franz Holzinger <franz@ttproducts.de>
+    * bugfix issue #33 in product list view: Do not overwrite the already read in table configuration arrays in method getTableConfArrays, because their values might have been modified already.
+
 2018-05-19 Franz Holzinger <franz@ttproducts.de>
     * bugfix country determination: A boolean check about a value in the country_code field does not give the correct result.
     * bugfix: pi_search and pi_int must not result in an USER object but in a USER_INT object.
