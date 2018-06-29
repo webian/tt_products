@@ -505,10 +505,27 @@ class tx_ttproducts_control implements t3lib_Singleton {
 			$addQueryString = array();
 			$overwriteMarkerArray = array();
 			if ($checkRequired || $checkAllowed) {
-				if (t3lib_extMgm::isLoaded('sr_feuser_register')) {
-					$check = ($checkRequired ? $checkRequired : $checkAllowed);
+                $check = ($checkRequired ? $checkRequired : $checkAllowed);
+                $languageKey = '';
+                
+                if (
+                    $checkAllowed == 'email'
+                ) {
+                    if (
+                        t3lib_extMgm::isLoaded('sr_feuser_register') ||
+                        t3lib_extMgm::isLoaded('agency')
+                    ) {
+                        $languageKey = 'evalErrors_email_email';
+                    } else {
+                        $languageKey = 'invalid_email';
+                    }
+                }
 
-					$label = $TSFE->sL('LLL:EXT:sr_feuser_register/Resources/Private/Language/locallang.xlf:missing_'.$check);
+                if (t3lib_extMgm::isLoaded('sr_feuser_register')) {
+                    if (!$languageKey) {
+                        $languageKey = 'missing_' . $check;
+                    }
+					$label = $TSFE->sL('LLL:EXT:sr_feuser_register/Resources/Private/Language/locallang.xlf:' . $languageKey);
 					$editPID = $TSFE->tmpl->setup['plugin.']['tx_srfeuserregister_pi1.']['editPID'];
 
 					if ($TSFE->loginUser && $editPID) {
@@ -520,8 +537,10 @@ class tx_ttproducts_control implements t3lib_Singleton {
 						$markerArray['###FORM_URL_INFO###'] = $this->pibase->pi_getPageLink($editPID, '', $addParams);
 					}
 				} else if (t3lib_extMgm::isLoaded('agency')) {
-					$check = ($checkRequired ? $checkRequired: $checkAllowed);
-					$label = $TSFE->sL('LLL:EXT:agency/pi/locallang.xml:missing_' . $check);
+                    if (!$languageKey) {
+                        $languageKey = 'missing_' . $check;
+                    }
+					$label = $TSFE->sL('LLL:EXT:agency/pi/locallang.xml:' . $languageKey);
 					$editPID = $TSFE->tmpl->setup['plugin.']['tx_agency.']['editPID'];
 
 					if ($TSFE->loginUser && $editPID) {
@@ -535,12 +554,17 @@ class tx_ttproducts_control implements t3lib_Singleton {
 				}
 
 				if (!$label) {
-					$tmpArray = t3lib_div::trimExplode('|', tx_div2007_alpha5::getLL_fh003($langObj, 'missing'));
-					$label = tx_div2007_alpha5::getLL_fh003($langObj, 'missing_' . $checkRequired);
-					if ($label)	{
-						$label = $tmpArray[0] .' '. $label . ' '. $tmpArray[1];
-					} else {
-						$label = 'field: '.$checkRequired;
+                    if ($languageKey) {
+                        $label = tx_div2007_alpha5::getLL_fh003($langObj, $languageKey);
+                    } else {
+                        $tmpArray = t3lib_div::trimExplode('|', tx_div2007_alpha5::getLL_fh003($langObj, 'missing'));
+                        $languageKey = 'missing_' . $check;
+                        $label = tx_div2007_alpha5::getLL_fh003($langObj, $languageKey);
+                        if ($label)	{
+                            $label = $tmpArray[0] .' '. $label . ' '. $tmpArray[1];
+                        } else {
+                            $label = 'field: ' . $check;
+                        }
 					}
 				}
 			} else if ($pidagb && !$_REQUEST['recs']['personinfo']['agb'] && !t3lib_div::_GET('products_payment') && !$infoViewObj->infoArray['billing']['agb']) {
