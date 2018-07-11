@@ -133,7 +133,15 @@ class tx_ttproducts_db {
 			$this->cObj,
 			$cnf->conf
 		);
-		$discount = $TSFE->fe_user->user['tt_products_discount'];
+		$discount = 0;
+        if (
+            isset($GLOBALS['TSFE']->fe_user) &&
+            isset($GLOBALS['TSFE']->fe_user->user) &&
+            is_array($GLOBALS['TSFE']->fe_user->user) &&
+            $GLOBALS['TSFE']->fe_user->user['username'] != ''
+        ) {
+            $discount = $TSFE->fe_user->user['tt_products_discount'];
+        }
 
         // We put our incomming data to the regular piVars
 

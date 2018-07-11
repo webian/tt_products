@@ -40,8 +40,8 @@ class tx_ttproducts_marker {
 	var $config;
 	var $markerArray;
 	var $globalMarkerArray;
-	var $urlArray;
 
+	private $specialArray = array('eq', 'ne', 'lt', 'le', 'gt', 'ge', 'id');
 
 	/**
 	 * Initialized the marker object
@@ -51,7 +51,7 @@ class tx_ttproducts_marker {
 	 * @param	array		array urls which should be overridden with marker key as index
 	 * @return	void
 	 */
-	function init ($cObj, $urlArray=array())	{
+	function init ($cObj)	{
 		$this->cObj = $cObj;
 		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
 
@@ -153,7 +153,6 @@ class tx_ttproducts_marker {
 		return $result;
 	}
 
-
 	public function getAllMarkers ($templateCode)	{
 		$treffer = array();
 		preg_match_all('/###([\w:]+)###/', $templateCode, $treffer);
@@ -170,46 +169,68 @@ class tx_ttproducts_marker {
 	 * finds all the markers for a product
 	 * This helps to reduce the data transfer from the database
 	 *
-	 * @param	[type]		$$templateCode: ...
-	 * @param	[type]		$tableFieldArray: ...
-	 * @param	[type]		$requiredFieldArray: ...
-	 * @param	[type]		$addCheckArray: ...
-	 * @param	[type]		$prefixParam: ...
-	 * @param	[type]		$tagArray: ...
-	 * @param	[type]		$parentArray: ...
-	 * @return	[type]		...
 	 * @access private
 	 */
-	function &getMarkerFields (&$templateCode, &$tableFieldArray, &$requiredFieldArray, &$addCheckArray, $prefixParam, &$tagArray, &$parentArray)	{
-		$retArray = $requiredFieldArray;
+	public function &getMarkerFields (&$templateCode, &$tableFieldArray, &$requiredFieldArray, &$addCheckArray, $prefixParam, &$tagArray, &$parentArray)	{
+
+		$retArray = (count($requiredFieldArray) ? $requiredFieldArray : array());
 		// obligatory fields uid and pid
 
 		$prefix = $prefixParam.'_';
 		$prefixLen = strlen($prefix);
-		// $tagArray = explode ('###', $templateCode);
-		$treffer = array();
 
-		preg_match_all('/###([\w:]+)###/', $templateCode, $treffer);
-		$tagArray = $treffer[1];
-		$bFieldaddedArray = array();
+		$tagArray = $this->getAllMarkers($templateCode);
 
 		if (is_array($tagArray))	{
-			$tagArray = array_flip($tagArray);
 			$retTagArray = $tagArray;
-			foreach ($tagArray as $tag => $k1)	{
+			foreach ($tagArray as $tag => $v1)	{
 				$prefixFound = strstr($tag, $prefix);
-				if ($prefixFound)	{
-					$field = substr ($prefixFound, $prefixLen);
-					$field = strtolower($field);
+
+				if ($prefixFound != '')	{
+					$fieldTmp = substr($prefixFound, $prefixLen);
+					$fieldTmp = strtolower($fieldTmp);
+
+					$fieldPartArray = t3lib_div::trimExplode('_', $fieldTmp);
+					$fieldTmp = $fieldPartArray[0];
+					$subFieldPartArray = t3lib_div::trimExplode(':', $fieldTmp);
+					$colon = (count($subFieldPartArray) > 1);
+					$field = $subFieldPartArray[0];
 					if (strstr($field,'image'))	{	// IMAGE markers can contain following number
 						$field = 'image';
+					} else {
+						$newFieldPartArray = array();
+						foreach ($fieldPartArray as $k => $v)	{
+							if (
+                                in_array($v, $this->specialArray)
+                            )	{
+								break;
+							} else {
+								$newFieldPartArray[] = $v;
+							}
+						}
+						$field = implode('_', $newFieldPartArray);
 					}
-					if (is_array ($tableFieldArray[$field]))	{
+
+					if (
+						!$colon &&
+						!is_array($tableFieldArray[$field])
+					)	{	// find similar field names with letters in other cases
+						$upperField = strtoupper($field);
+						foreach ($tableFieldArray as $k => $v)	{
+							if (strtoupper($k) == $upperField)	{
+								$field = $k;
+								break;
+							}
+						}
+					}
+					$field = strtolower($field);
+
+					if (is_array($tableFieldArray[$field]))	{
 						$retArray[] = $field;
 						$bFieldaddedArray[$field] = TRUE;
 					}
 					$parentFound = strpos($tag, 'PARENT');
-					if	($parentFound !== FALSE)	{
+					if ($parentFound !== FALSE)	{
 						$parentEnd = strpos($tag, '_');
 						$parentLen = strlen('PARENT');
 						$temp = substr($tag, $parentLen, ($parentEnd - $parentFound) - $parentLen);
@@ -217,6 +238,7 @@ class tx_ttproducts_marker {
 					}
 				} else {
 					// unset the tags of different tables
+
 					foreach ($this->markerArray as $k => $marker)	{
 						if ($marker != $prefixParam) 	{
 							$bMarkerFound = strpos($tag, $marker);
@@ -231,6 +253,7 @@ class tx_ttproducts_marker {
 		}
 		$parentArray = array_unique($parentArray);
 		sort($parentArray);
+
 		if (is_array($addCheckArray))	{
 			foreach ($addCheckArray as $marker => $field)	{
 				if (!$bFieldaddedArray[$field] && isset($tableFieldArray[$field]))	{ 	// TODO: check also if the marker is in the $tagArray
@@ -238,7 +261,6 @@ class tx_ttproducts_marker {
 				}
 			}
 		}
-
 		if (is_array($retArray))	{
 			$retArray = array_unique($retArray);
 		}

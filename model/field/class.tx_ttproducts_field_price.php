@@ -284,7 +284,15 @@ class tx_ttproducts_field_price implements tx_ttproducts_field_int {
 
 		if ($fieldname == 'price')	{
 
-			$discount = $TSFE->fe_user->user['tt_products_discount'];
+            $discount = 0;
+            if (
+                isset($GLOBALS['TSFE']->fe_user) &&
+                isset($GLOBALS['TSFE']->fe_user->user) &&
+                is_array($GLOBALS['TSFE']->fe_user->user) &&
+                $GLOBALS['TSFE']->fe_user->user['username'] != ''
+            ) {
+                $discount = $GLOBALS['TSFE']->fe_user->user['tt_products_discount'];
+            }
 			$internalRow['price'] = $this->getDiscountPrice($row['price'], $discount);
 			$priceArray['tax'] = $this->getResellerPrice($internalRow,1);
 			$priceArray['notax'] = $this->getResellerPrice($internalRow,0);

@@ -429,8 +429,8 @@ class tx_ttproducts_info_view {
 			$bReady = FALSE;
 			$whereCountries = $this->getWhereAllowed();
 			$countryCodeArray = array();
-			$countryCodeArray['billing'] = ($this->infoArray['billing']['country_code'] ? $this->infoArray['billing']['country_code'] : $TSFE->fe_user->user ? $TSFE->fe_user->user['static_info_country'] : FALSE);
-			$countryCodeArray['delivery'] = ($this->infoArray['delivery']['country_code'] ? $this->infoArray['delivery']['country_code'] : $TSFE->fe_user->user ? $TSFE->fe_user->user['static_info_country'] : FALSE);
+			$countryCodeArray['billing'] = ($this->infoArray['billing']['country_code'] != '' ? $this->infoArray['billing']['country_code'] : ($GLOBALS['TSFE']->fe_user->user['static_info_country'] != '' ? $GLOBALS['TSFE']->fe_user->user['static_info_country'] : false));
+            $countryCodeArray['delivery'] = ($this->infoArray['delivery']['country_code'] != '' ? $this->infoArray['delivery']['country_code'] : ($GLOBALS['TSFE']->fe_user->user['static_info_country'] != '' ? $GLOBALS['TSFE']->fe_user->user['static_info_country'] : false));
 
             if (
                 $countryCodeArray['billing'] === FALSE &&

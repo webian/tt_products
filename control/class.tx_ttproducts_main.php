@@ -758,6 +758,7 @@ class tx_ttproducts_main {
 		if (!$this->conf['defaultSetup'])	{
 			$rc .= '<h>Error: The default tt_products setup is missing.</h>';
 		}
+
 		return $rc;
 	}
 

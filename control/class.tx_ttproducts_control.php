@@ -650,10 +650,22 @@ class tx_ttproducts_control {
 										}
 
 										if (!$label) {
-											$tmpArray = t3lib_div::trimExplode('|', tx_div2007_alpha5::getLL_fh003($langObj, 'missing'));
-											$label = tx_div2007_alpha5::getLL_fh003($langObj, 'missing_' . $checkRequired);
+                                            $languageKey = 'missing_' . $checkRequired;
+                                            $tmpArray = '';
+                                            if (
+                                                $checkAllowed == 'email'
+                                            ) {
+                                                $languageKey = 'invalid_email';
+                                            } else {
+                                                $tmpArray = t3lib_div::trimExplode('|', tx_div2007_alpha5::getLL_fh003($langObj, 'missing'));
+                                                $languageKey = 'missing_' . $checkRequired;
+                                            }
+                                            $label = tx_div2007_alpha5::getLL_fh003($langObj, $languageKey);
+                                                
 											if ($label) {
-												$label = $tmpArray[0] . ' ' . $label . ' ' . $tmpArray[1];
+                                                if ($tmpArray) {
+                                                    $label = $tmpArray[0] . ' ' . $label . ' ' . $tmpArray[1];
+                                                }
 											} else {
 												$label = 'field: '.$checkRequired;
 											}

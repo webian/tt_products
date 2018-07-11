@@ -231,7 +231,13 @@ class tx_ttproducts_control_memo {
 		$tableArray = self::getMemoTableFieldArray();
 		$feuserField = self::getMemoField($functablename, TRUE);
 
-		if ($GLOBALS['TSFE']->fe_user->user[$feuserField]) {
+		if (
+            isset($GLOBALS['TSFE']->fe_user) &&
+            isset($GLOBALS['TSFE']->fe_user->user) &&
+            is_array($GLOBALS['TSFE']->fe_user->user) &&
+            $GLOBALS['TSFE']->fe_user->user['username'] != '' &&
+            $GLOBALS['TSFE']->fe_user->user[$feuserField] != ''
+        ) {
 			$result = explode(',', $GLOBALS['TSFE']->fe_user->user[$feuserField]);
 		}
 

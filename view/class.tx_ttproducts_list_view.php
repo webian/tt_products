@@ -535,10 +535,8 @@ class tx_ttproducts_list_view {
 			break;
 		}
 
-// neu Anfang
 		$limit = isset($tableConfArray[$functablename]['limit']) ? $tableConfArray[$functablename]['limit'] : $this->config['limit'];
 		$limit = intval($limit);
-// neu Ende
 
 		if ($calllevel == 0)	{
 			$begin_at = $this->pibase->piVars['begin_at'];
@@ -1292,7 +1290,7 @@ class tx_ttproducts_list_view {
 					$markerArray['###FORM_MEMO###'] =
 						htmlspecialchars(
 							tx_div2007_alpha5::getPageLink_fh003(
-								$this->cObj,
+								$this->pibase->cObj,
 								$pid,
 								'',
 								$this->urlObj->getLinkParams(

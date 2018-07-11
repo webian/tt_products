@@ -851,12 +851,20 @@ class tx_ttproducts_basket {
 	}
 
 
-	public function &getItem ($row, $fetchMode, $funcTablename='') {
+	public function getItem ($row, $fetchMode, $funcTablename='') {
 		global $TSFE;
 
 		$item = array();
 		$priceObj = t3lib_div::getUserObj('&tx_ttproducts_field_price');
-		$discount = $TSFE->fe_user->user['tt_products_discount'];
+		$discount = 0;
+        if (
+            isset($GLOBALS['TSFE']->fe_user) &&
+            isset($GLOBALS['TSFE']->fe_user->user) &&
+            is_array($GLOBALS['TSFE']->fe_user->user) &&
+            $GLOBALS['TSFE']->fe_user->user['username'] != ''
+        ) {
+            $discount = $GLOBALS['TSFE']->fe_user->user['tt_products_discount'];
+        }
 
 		if (!$funcTablename)	{
 			$funcTablename = $this->getFuncTablename();

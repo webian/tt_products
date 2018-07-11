@@ -34,17 +34,18 @@ $EM_CONF[$_EXTKEY] = array(
 		'depends' => array(
 			'php' => '5.1.2-7.99.99',
 			'typo3' => '4.5.0-7.99.99',
-			'div2007' => '1.7.7-0.0.0',
+			'div2007' => '1.10.7-0.0.0',
+            'migration_core' => '0.0.0-0.99.99',
 			'table' => '0.3.0-0.0.0',
-			'tsparser' => '',
+			'tsparser' => '0.2.5-0.0.0'
 		),
 		'conflicts' => array(
 			'ast_rteproducts' => '',
 			'onet_ttproducts_rte' => '',
-			'c3bi_cookie_at_login' => '',
+			'c3bi_cookie_at_login' => ''
 		),
 		'suggests' => array(
-			'addons_em' => '',
+			'addons_em' => '0.2.1-0.0.0',
 		),
 	),
 );
