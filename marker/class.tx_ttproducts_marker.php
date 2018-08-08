@@ -298,6 +298,7 @@ class tx_ttproducts_marker implements t3lib_Singleton {
 					$fieldPartArray = t3lib_div::trimExplode('_', $fieldTmp);
 					$fieldTmp = $fieldPartArray[0];
 					$subFieldPartArray = t3lib_div::trimExplode(':', $fieldTmp);
+					$colon = (count($subFieldPartArray) > 1);
 					$field = $subFieldPartArray[0];
 
 					if (strstr($field,'image'))	{	// IMAGE markers can contain following number
@@ -314,7 +315,10 @@ class tx_ttproducts_marker implements t3lib_Singleton {
 						$field = implode('_', $newFieldPartArray);
 					}
 
-					if (!is_array($tableFieldArray[$field]))	{	// find similar field names with letters in other cases
+					if (
+						!$colon &&
+						!is_array($tableFieldArray[$field])
+					)	{	// find similar field names with letters in other cases
 						$upperField = strtoupper($field);
 						foreach ($tableFieldArray as $k => $v)	{
 							if (strtoupper($k) == $upperField)	{

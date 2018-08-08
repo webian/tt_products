@@ -1,3 +1,6 @@
+2018-08-08 Franz Holzinger <franz@ttproducts.de>
+    * bugfix: marker detection with IMAGE markers which contain colons
+
 2018-06-29 Franz Holzinger <franz@ttproducts.de>
     * bugfix issue #34: If no agency extension is installed then the email and other validity checks must give an appropriate error message
 

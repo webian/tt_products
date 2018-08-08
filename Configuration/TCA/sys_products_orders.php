@@ -314,7 +314,13 @@ $result = array (
 					array ('LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:sys_products_orders.pay_mode.I.8', '8'),
 					array ('LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:sys_products_orders.pay_mode.I.9', '9'),
 					array ('LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:sys_products_orders.pay_mode.I.10', '10'),
-					array ('LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:sys_products_orders.pay_mode.I.11', '11')
+					array ('LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:sys_products_orders.pay_mode.I.11', '11'),
+                    array ('LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:sys_products_orders.pay_mode.I.12', '12'),
+                    array ('LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:sys_products_orders.pay_mode.I.13', '13'),
+                    array ('LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:sys_products_orders.pay_mode.I.14', '14'),
+                    array ('LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:sys_products_orders.pay_mode.I.15', '15'),
+                    array ('LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:sys_products_orders.pay_mode.I.16', '16'),
+                    array ('LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:sys_products_orders.pay_mode.I.17', '17')
 				),
 				'default' => '0'
 			)

@@ -119,6 +119,7 @@ class tx_ttproducts_basket implements t3lib_Singleton {
             t3lib_div::_POST('products_payment') ||
             t3lib_div::_POST('products_payment_x') ||
             isset($gpVars['activity']) &&
+            is_array($gpVars['activity']) &&
             $gpVars['activity']['payment'];
 
         if (    // use AGB checkbox if coming from INFO

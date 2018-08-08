@@ -229,7 +229,10 @@ class tx_ttproducts_control_memo {
 		$result = '';
 		$feuserField = self::getMemoField($functablename, TRUE);
 
-		if ($GLOBALS['TSFE']->fe_user->user[$feuserField]) {
+		if (
+            $GLOBALS['TSFE']->loginUser &&
+            isset($GLOBALS['TSFE']->fe_user->user[$feuserField])
+        ) {
 			$result = explode(',', $GLOBALS['TSFE']->fe_user->user[$feuserField]);
 		}
 
