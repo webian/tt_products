@@ -46,6 +46,7 @@ abstract class tx_ttproducts_table_base_view	{
 	public $modelObj;
 	public $langObj;
 	public $marker;		// can be overridden
+	public $tablesWithoutView = array('tt_products_emails');
 
 
 	public function init ($langObj, $modelObj)	{
@@ -440,7 +441,10 @@ abstract class tx_ttproducts_table_base_view	{
 
 					if ($confArray['config']['type'] == 'group')	{
 						$foreigntablename = $confArray['config']['foreign_table'];
-						if ($foreigntablename != '')	{
+						if (
+                            $foreigntablename != '' &&
+                            !in_array($foreigntablename, $this->tablesWithoutView)
+                        )	{
 							$foreignTableViewObj = $tablesObj->get($foreigntablename, TRUE);
 							if (is_object($foreignTableViewObj))	{
 								$foreignMarker = $foreignTableViewObj->getMarker();
