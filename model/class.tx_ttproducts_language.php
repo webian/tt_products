@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008-2008 Franz Holzinger <contact@fholzinger.com>
+*  (c) 2008-2008 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,10 +29,8 @@
  *
  * language object
  *
- * $Id$
- *
- * @author	Franz Holzinger <contact@fholzinger.com>
- * @maintainer	Franz Holzinger <contact@fholzinger.com>
+ * @author	Franz Holzinger <franz@ttproducts.de>
+ * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products
  *
@@ -40,15 +38,14 @@
  */
 
 
-require_once(PATH_BE_div2007.'class.tx_div2007_alpha_language_base.php');
 
 
-class tx_ttproducts_language extends tx_div2007_alpha_language_base {
-	public function init (&$pObj, &$cObj, &$conf, $scriptRelPath)	{
+class tx_ttproducts_language extends tx_div2007_alpha_language_base implements t3lib_Singleton {
+	public function init1 ($pObj, $cObj, &$conf, $scriptRelPath) {
 
 		parent::init(
 			$cObj,
-			TT_PRODUCTS_EXTkey,
+			TT_PRODUCTS_EXT,
 			$conf,
 			$scriptRelPath
 		);
@@ -74,6 +71,7 @@ class tx_ttproducts_language extends tx_div2007_alpha_language_base {
 		}
 		return $rc;
 	}
+
 }
 
 

@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2007-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,8 +29,6 @@
  *
  * basket price calculation functions using the price tables
  *
- * $Id$
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -41,13 +39,10 @@
 
 
 
-require_once (PATH_BE_ttproducts.'lib/class.tx_ttproducts_pricecalc_base.php');
 
 class tx_ttproducts_pricetablescalc extends tx_ttproducts_pricecalc_base {
-//	var $conftablename = 'tt_products_graduated_price';
 
-
-	function init (&$pibase)	{
+	function init ($pibase)	{
 	// nothing
 	}
 
@@ -59,18 +54,18 @@ class tx_ttproducts_pricetablescalc extends tx_ttproducts_pricecalc_base {
 		&$discountArray,
 		$priceTotalTax,
 		$bUseArticles,
-		$bMergeArticles=TRUE
+		$bMergeArticles = TRUE
 	) {
 		if (!$itemArray || !count($itemArray)) {
 			return;
 		}
 
-		$graduatedPriceObj = &t3lib_div::getUserObj('&tx_ttproducts_graduated_price');
-		$cnf = &t3lib_div::getUserObj('&tx_ttproducts_config');
+		$graduatedPriceObj = t3lib_div::makeInstance('tx_ttproducts_graduated_price');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$useArticles = $cnf->getUseArticles();
 		if ($bUseArticles && ($useArticles == 1 || $useArticles == 3)) {
-			$tablesObj = &t3lib_div::getUserObj('&tx_ttproducts_tables');
-			$articleTable = &$tablesObj->get('tt_products_articles', FALSE);
+			$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+			$articleTable = $tablesObj->get('tt_products_articles', FALSE);
 		}
 
 		$prodArray = array();
@@ -92,10 +87,9 @@ class tx_ttproducts_pricetablescalc extends tx_ttproducts_pricecalc_base {
 			if ($row1['graduated_price_uid'])	{
 				$count = 0;
 				$priceProduct = $row1['price'];
-
 				foreach($actItemArray as $actItem)	{
 					$count += floatval($actItem['count']);
-					$priceProduct += floatval($actItem['rec']['price']);
+// 					$priceProduct += floatval($actItem['rec']['price']);
 				}
 				$priceFormulaArray = $graduatedPriceObj->getFormulasByProduct($uid);
 
@@ -107,9 +101,7 @@ class tx_ttproducts_pricetablescalc extends tx_ttproducts_pricecalc_base {
 						$lastChar = substr($formula,-1,1);
 
 						if (
-							class_exists('t3lib_utility_Math') ?
-							!t3lib_utility_Math::canBeInterpretedAsInteger($lastChar) :
-							!t3lib_div::testInt($lastChar)
+							tx_div2007_core::testInt($lastChar)
 						) {
 							$formula = substr($formula,0,strlen($formula)-1);
 							switch ($lastChar)	{
@@ -132,15 +124,14 @@ class tx_ttproducts_pricetablescalc extends tx_ttproducts_pricecalc_base {
 					$count = floatval($actItem['count']);
 					$sort = $actItem['sort'];
 					$k2 = $actItem['k2'];
+					$actPrice = $priceProduct;
 
 					if (isset($articleTable) && is_object($articleTable))	{
 						$extArray = $row['ext'];
 						$articleUid = $extArray['tt_products_articles']['0']['uid'];
 
 						if (
-							class_exists('t3lib_utility_Math') ?
-							t3lib_utility_Math::canBeInterpretedAsInteger($articleUid) :
-							t3lib_div::testInt($articleUid)
+							tx_div2007_core::testInt($articleUid)
 						) {
 							$articleRow = $articleTable->get($articleUid);
 							$bIsAddedPrice = $cnf->hasConfig($articleRow, 'isAddedPrice');
@@ -148,12 +139,9 @@ class tx_ttproducts_pricetablescalc extends tx_ttproducts_pricecalc_base {
 								$actPrice = $priceProduct + $articleRow['price'];
 							}
 						}
-					} else {
-						$actPrice = $priceProduct;
 					}
-					if ($actPrice > $itemArray[$sort][$k2][$type])	{
-						$itemArray[$sort][$k2][$type] = $actPrice;
-					}
+
+					$itemArray[$sort][$k2]['rec'][$type] = $itemArray[$sort][$k2][$type] = $actPrice;
 				}
 				$priceReduction[$uid] = 1;
 			}

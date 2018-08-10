@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2006-2010 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2006-2012 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,8 +29,6 @@
  *
  * JavaScript functions
  *
- * $Id:$
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products
@@ -39,7 +37,7 @@
  */
 
 
-class tx_ttproducts_javascript {
+class tx_ttproducts_javascript implements t3lib_Singleton {
 	var $pibase; // reference to object of pibase
 	var $conf;
 	var $config;
@@ -47,15 +45,16 @@ class tx_ttproducts_javascript {
 	var $bAjaxAdded;
 	var $bCopyrightShown;
 	var $copyright;
+	public $fixInternetExplorer;
 
 
-	function init(&$pibase, &$ajax) {
-		$this->pibase = &$pibase;
-		$cnf = &t3lib_div::getUserObj('&tx_ttproducts_config');
+	function init($pibase, $ajax) {
+		$this->pibase = $pibase;
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
-		$this->ajax = &$ajax;
+		$this->ajax = $ajax;
 		$this->bAjaxAdded = FALSE;
 		$this->bCopyrightShown = FALSE;
 		$this->copyright = '
@@ -66,7 +65,7 @@ class tx_ttproducts_javascript {
 *
 *  Copyright notice
 *
-*  (c) 2006-2010 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2006-2018 Franz Holzinger <franz@ttproducts.de>
 *  All rights reserved
 *
 *  Released under GNU/GPL (http://typo3.com/License.1625.0.html)
@@ -78,17 +77,66 @@ class tx_ttproducts_javascript {
 *  This copyright notice MUST APPEAR in all copies of the script
 ***************************************************************/
 ';
+		$this->fixInternetExplorer = '
+if (!Array.prototype.indexOf) { // published by developer.mozilla.org
+	Array.prototype.indexOf = function (searchElement /*, fromIndex */ ) {
+		"use strict";
+		if (this == null) {
+			throw new TypeError();
+		}
+		var t = Object(this);
+		var len = t.length >>> 0;
+		if (len === 0) {
+			return -1;
+		}
+		var n = 0;
+		if (arguments.length > 1) {
+			n = Number(arguments[1]);
+			if (n != n) { // shortcut for verifying if it\'s NaN
+				n = 0;
+			} else if (n != 0 && n != Infinity && n != -Infinity) {
+				n = (n > 0 || -1) * Math.floor(Math.abs(n));
+			}
+		}
+		if (n >= len) {
+			return -1;
+		}
+		var k = n >= 0 ? n : Math.max(len - Math.abs(n), 0);
+		for (; k < len; k++) {
+			if (k in t && t[k] === searchElement) {
+				return k;
+			}
+		}
+		return -1;
+	}
+}
+	';
 
 	}
 
 
-	/*
-	 * Escapes strings to be included in javascript
-	 */
-	function jsspecialchars($s) {
-	   return preg_replace('/([\x09-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e])/e',
-	       "'\\x'.(ord('\\1')<16? '0': '').dechex(ord('\\1'))",$s);
+	static public function convertHex ($params) {
+		$result = '\\x' . (ord($params[1]) < 16 ? '0' : '') . dechex(ord($params[1]));
+		return $result;
 	}
+
+
+ /*
+ * Escapes strings to be included in javascript
+ *
+ * @param	[type]		$s: ...
+ * @return	[type]		...
+ */
+	public function jsspecialchars ($s) {
+		$result = preg_replace_callback(
+			'/([\x09-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e])/',
+			'tx_ttproducts_javascript::convertHex',
+			$s
+		);
+
+		return $result;
+	}
+
 
 		/**
 		 * Sets JavaScript code in the additionalJavaScript array
@@ -99,19 +147,21 @@ class tx_ttproducts_javascript {
 		 * @return	  	void
 		 * @see
 		 */
-	function set($fieldname, $params='', $count=0, $catid='cat', $parentFieldArray=array(), $piVarArray=array(), $fieldArray=array(), $method='clickShow') {
+	function set ($fieldname, $params='', $currentRecord='', $count=0, $catid='cat', $parentFieldArray=array(), $piVarArray=array(), $fieldArray=array(), $method='clickShow') {
 		global $TSFE;
 
 		$bDirectHTML = FALSE;
 		$code = '';
 		$bError = FALSE;
-		$langObj = &t3lib_div::getUserObj('&tx_ttproducts_language');
+		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
 
-		$emailArr =  explode('|', $message = tx_div2007_alpha5::getLL_fh002($langObj, 'invalid_email'));
+		$message = tx_div2007_alpha5::getLL_fh003($langObj, 'invalid_email');
+		$emailArr =  explode('|', $message);
 
 		if (!$this->bCopyrightShown && $fieldname != 'xajax')	{
 			$code = $this->copyright;
 			$this->bCopyrightShown = TRUE;
+			$code .= $this->fixInternetExplorer;
 		}
 		if (!is_object($this->ajax) && in_array($fieldname, array('fetchdata')))	{
 			$fieldname = 'error';
@@ -156,14 +206,17 @@ class tx_ttproducts_javascript {
 	';
 				break;
 			case 'selectcat':
+				$name = 'tt_products[' . $fieldname . ']';
+
 				if (is_array($params))	{
 					$funcs = count ($params);
-					$cnf = &t3lib_div::getUserObj('&tx_ttproducts_config');
+					$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 
 					$ajaxConf = $cnf->getAJAXConf();
 					if (is_array($ajaxConf))	{
 						// TODO: make it possible that AJAX gets all the necessary configuration
-						$code .= 'var conf = new Array();
+						$code .= '		var conf = new Array();';
+						$code .= '
 		';
 						foreach ($ajaxConf as $k => $actConf)	{
 							$pVar = t3lib_div::_GP($k);
@@ -182,11 +235,13 @@ class tx_ttproducts_javascript {
 		var inAction = false; // is the script still running?
 		var maxFunc = '.$funcs.';
 		';
+
 					foreach ($piVarArray as $fnr => $pivar)	{
 						$code .= 'pi['.$fnr.'] = "'.$pivar.'";';
 					}
 					$code .= '
 		';
+
 					foreach ($params as $fnr => $catArray)	{
 						$code .= 'c['.$fnr.'] = new Array('.count($catArray).');';
 						foreach ($catArray as $k => $row)	{
@@ -211,27 +266,38 @@ class tx_ttproducts_javascript {
 						}
 					}
 				}
+
 				$code .=
 		'
 		' .
-	'function fillSelect (select,id,showSubCategories) {
+	'function fillSelect (select,id,contentId,showSubCategories) {
 		var sb;
 		var sbt;
 		var index;
-		var selOption;
 		var subcategories;
 		var bShowArticle = 0;
 		var len;
 		var idel;
 		var category;
+		var selectBoxes;
+		var categoryArray = new Array();
 
-		if (inAction == true)	{
+		if (inAction == true) {
 			return false;
 		}
 		inAction = true;
-		index = select.selectedIndex;
-		selOption = select.options[index];
-		category = selOption.value;
+
+		selectBoxes = document.getElementsByName("' . $name . '");
+		for(var i = 0; i < selectBoxes.length; i++)
+		{
+			var obj = selectBoxes.item(i);
+
+			category = obj.value;
+			if (category != "0" && categoryArray.indexOf(category) == -1) {
+				categoryArray.push(category);
+			}
+		}
+		category = categoryArray.join(",");
 
 		if (id > 0) {
 			var func;
@@ -239,7 +305,7 @@ class tx_ttproducts_javascript {
 
 			sb = document.getElementById("'.$catid.'"+1);
 			func = sb.selectedIndex - 1;
-			if (maxFunc == 1 || func < 0 || func > maxFunc)	{
+			if (maxFunc == 1 || func < 0 || func > maxFunc) {
 				func = 0;
 				bRootFunctions = false;
 			}
@@ -291,9 +357,20 @@ class tx_ttproducts_javascript {
 		data["'.$this->pibase->extKey.'"] = new Array();
 		data["'.$this->pibase->extKey.'"]["'.$catid.'"] = category;
 		';
-			if ($method == 'clickShow')	{
-				$code .= $this->pibase->extKey.'_showArticle(data);';
-			}
+				if ($currentRecord != '') {
+					$currentParts = explode(':', $currentRecord);
+					$code .= '
+		data["tt_content"] = new Array();
+		data["tt_content"]["uid"] = contentId;
+		';
+				}
+
+				$code .= '
+				';
+
+				if ($method == 'clickShow')	{
+					$code .= $this->pibase->extKey.'_showArticle(data);';
+				}
 				$code .= '
 		} else {
 			/* nothing */
@@ -404,9 +481,10 @@ class tx_ttproducts_javascript {
 				break;
 
 			case 'xajax':
+
 				// XAJAX part
 				if (!$this->bAjaxAdded && is_object($this->ajax) && is_object($this->ajax->taxajax))	{
-					$code = $this->ajax->taxajax->getJavascript(t3lib_extMgm::siteRelPath(TAXAJAX_EXTkey));
+					$code = $this->ajax->taxajax->getJavascript(t3lib_extMgm::siteRelPath(TAXAJAX_EXT));
 					$this->bXajaxAdded = TRUE;
 				}
 				$bDirectHTML = TRUE;
@@ -416,6 +494,7 @@ class tx_ttproducts_javascript {
 				$bError = TRUE;
 				break;
 		} // switch
+
 
 		if (!$bError)	{
 			if ($code)	{
@@ -428,7 +507,6 @@ class tx_ttproducts_javascript {
 			}
 		}
 	} // setJS
-
 }
 
 

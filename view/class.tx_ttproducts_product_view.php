@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2005-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2010 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,8 +29,6 @@
  *
  * functions for the product
  *
- * $Id$
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -39,7 +37,6 @@
  *
  */
 
-require_once (PATH_BE_ttproducts.'view/class.tx_ttproducts_article_base_view.php');
 
 
 class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
@@ -51,11 +48,9 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 	public $datafield;
 
 
-	function init (&$langObj, &$modelObj)	{
+	function init ($langObj, $modelObj)	{
 
-		include_once (PATH_BE_ttproducts.'view/class.tx_ttproducts_variant_view.php');
-
-		$this->variant = &t3lib_div::getUserObj('&tx_ttproducts_variant_view');
+		$this->variant = t3lib_div::makeInstance('tx_ttproducts_variant_view');
 		parent::init($langObj, $modelObj);
 	}
 
@@ -69,9 +64,9 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 		&$wrappedSubpartArray,
 		&$tagArray,
 		$theCode='',
+		$basketExtra=array(),
 		$iCount=''
 	)	{
-
 		parent::getItemMarkerSubpartArrays(
 			$templateCode,
 			$functablename,
@@ -81,9 +76,13 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 			$wrappedSubpartArray,
 			$tagArray,
 			$theCode,
+			$basketExtra,
 			$iCount
 		);
-		$extArray = $row['ext'];
+		$extArray = array();
+		if (isset($row['ext'])) {
+			$extArray = $row['ext'];
+		}
 
 		if (is_array($extArray) && is_array($extArray['tt_products']))	{
 			$variant = $extArray['tt_products'][0]['vars'];
@@ -119,7 +118,8 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 				$subpartArray,
 				$wrappedSubpartArray,
 				$tagArray,
-				$theCode
+				$theCode,
+				$basketExtra
 			);
 		}
 	}
@@ -147,6 +147,7 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 		&$tagArray,
 		$forminfoArray=array(),
 		$theCode='',
+		$basketExtra=array(),
 		$id='',
 		$prefix='',
 		$suffix='',
@@ -157,8 +158,8 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 		global $TYPO3_DB;
 
 			// Returns a markerArray ready for substitution with information for the tt_producst record, $row
-		$tablesObj = &t3lib_div::getUserObj('&tx_ttproducts_tables');
-		$modelObj = &$this->getModelObj ();
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$modelObj = $this->getModelObj ();
 
 		parent::getModelMarkerArray(
 			$row,
@@ -170,6 +171,7 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 			$tagArray,
 			$forminfoArray,
 			$theCode,
+			$basketExtra,
 			$id,
 			$prefix,
 			$suffix,
@@ -177,7 +179,7 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 			$bHtml,
 			$charset
 		);
-// Todo: das hier löschen
+// Todo: das mit datasheet hier löschen
 
 		$datafieldViewObj = $this->getFieldObj('datasheet');
 		if (isset($datafieldViewObj) && is_object($datafieldViewObj))	{
@@ -190,6 +192,7 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 				$tagArray,
 				$theCode,
 				$id,
+				$basketExtra,
 				$tmp,
 				FALSE,
 				'',
@@ -207,27 +210,24 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 
 //		$markerArray["###FIELD_NAME###"]="recs[tt_products][".$row["uid"]."]";
 
-//		$markerArray['###FIELD_ID###'] = TT_PRODUCTS_EXTkey.'_'.strtolower($theCode).'_id_'.$id;
+//		$markerArray['###FIELD_ID###'] = TT_PRODUCTS_EXT.'_'.strtolower($theCode).'_id_'.$id;
 		$markerArray['###BULKILY_WARNING###'] = $row['bulkily'] ? $this->conf['bulkilyWarning'] : '';
 
 		if ($this->conf['itemMarkerArrayFunc'])	{
-			$markerArray = tx_div2007_alpha::userProcess_fh001($this, $this->conf, 'itemMarkerArrayFunc', $markerArray);
+			$markerArray = tx_div2007_alpha5::userProcess_fh002($this, $this->conf, 'itemMarkerArrayFunc', $markerArray);
 		}
 
 		if ($theCode == 'SINGLE')	{
 			$addressUid = intval($row['address']);
 			$addressRow = array();
-			$addressViewObj = &$tablesObj->get('address',TRUE);
+			$addressViewObj = $tablesObj->get('address',TRUE);
 
 			if (($this->conf['table.']['address'] != 'tt_address' || t3lib_extMgm::isLoaded(TT_ADDRESS_EXTkey)) && $addressUid && $modelObj->fieldArray['address'])	{
-				$addressObj = &$addressViewObj->getModelObj();
+				$addressObj = $addressViewObj->getModelObj();
 				$addressRow = $addressObj->get($addressUid);
 			}
 			$adressMarkerArray = array();
 			$addressViewObj->getRowMarkerArray($addressRow, '', $adressMarkerArray, $tmp='', $tmp='', $tagArray, $theCode, $bHtml, $charset, $imageNum, $imageRenderObj, $id, $prefix, $suffix,$linkWrap);
-
-
-
 			if (is_array($adressMarkerArray))	{
 				$markerArray = array_merge($markerArray, $adressMarkerArray);
 			}
@@ -238,10 +238,10 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 // 			}
 
 			if ($row['note_uid']) {
-				$pageObj = &$tablesObj->get('pages');
+				$pageObj = $tablesObj->get('pages');
 
 				$notePageArray = $pageObj->getNotes ($row['uid']);
-				$confObj = &t3lib_div::getUserObj('&tx_ttproducts_config');
+				$confObj = t3lib_div::makeInstance('tx_ttproducts_config');
 				$contentConf = $confObj->getTableConf('tt_content', $code);
 
 				foreach($notePageArray as $k => $pid)	{
@@ -253,6 +253,7 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 						$cType = $contentEl['CType'];
 						$countArray[$cType] = intval($countArray[$cType]) + 1;
 						$markerKey = $pageMarkerKey.'_'.$countArray[$cType].'_'.strtoupper($cType);
+
 						foreach($tagArray as $index => $v)	{
 							$pageFoundPos = strpos($index, $pageMarkerKey);
 							if ($pageFoundPos == 0 && $pageFoundPos !== FALSE)	{
@@ -271,7 +272,7 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 									// Extension CSS styled content
 								if (t3lib_extMgm::isLoaded('css_styled_content')) {
 									$markerArray['###'.$index.'###'] =
-										$this->pibase->pi_RTEcssText($contentEl[$fieldName]);
+									tx_div2007_alpha5::RTEcssText($this->cObj, $contentEl[$fieldName]);
 								} else if (is_array($this->conf['parseFunc.']))	{
 									$markerArray['###'.$index.'###'] =
 										$this->cObj->parseFunc($contentEl[$fieldName],$this->conf['parseFunc.']);
@@ -301,21 +302,21 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 				$extKey = '';
 			}
 
-			if ($extKey != '' && t3lib_extMgm::isLoaded($extKey) && $api != '')	{
+			if ($extKey != '' && t3lib_extMgm::isLoaded($extKey) && $api != '' && class_exists($api)) {
 				require_once(t3lib_extMgm::extPath($extKey, 'class.' . $api . '.php'));
 
 				$apiObj = t3lib_div::makeInstance($api);
 				if (method_exists($apiObj, 'getDefaultConfig'))	{
 					$ratingConf = $apiObj->getDefaultConfig();
 					if (isset($ratingConf) && is_array($ratingConf))	{
-						$ratingConf = t3lib_div::array_merge_recursive_overrule($ratingConf,$conf1);
+						tx_div2007_core::mergeRecursiveWithOverrule($ratingConf, $conf);
 					} else {
 						$ratingConf = $conf1;
 					}
 				} else {
 					$ratingConf = $conf1;
 				}
-				$ratingConf['ref'] = TT_PRODUCTS_EXTkey . '_' . $row['uid'];
+				$ratingConf['ref'] = TT_PRODUCTS_EXT . '_' . $row['uid'];
 
 				$cObj = t3lib_div::makeInstance('tslib_cObj');
 				/* @var $cObj tslib_cObj */
@@ -345,24 +346,31 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 				$extKey = '';
 			}
 
-			if ($extKey != '' && t3lib_extMgm::isLoaded($extKey) && $api != '')	{
-				require_once(t3lib_extMgm::extPath($extKey, 'class.' . $api . '.php'));
+			if ($extKey != '' && t3lib_extMgm::isLoaded($extKey) && $api != '' && class_exists($api)) {
+// 				require_once(t3lib_extMgm::extPath($extKey, 'api/class.' . $api . '.php'));
 
 				$apiObj = t3lib_div::makeInstance($api);
 				if (method_exists($apiObj, 'getDefaultConfig'))	{
 					$commentConf = $apiObj->getDefaultConfig($param);
 					if (isset($commentConf) && is_array($commentConf))	{
-						$commentConf = t3lib_div::array_merge_recursive_overrule($commentConf,$conf1);
+						tx_div2007_core::mergeRecursiveWithOverrule($commentConf, $conf);
 					} else {
 						$commentConf = $conf1;
 					}
 				} else {
 					$commentConf = $conf1;
 				}
-				$commentConf['ref'] = TT_PRODUCTS_EXTkey . '_' . $row['uid'];
-				$urlObj = t3lib_div::getUserObj('&tx_ttproducts_url_view');
-				$linkParams = $urlObj->getLinkParams('',array('product' => $row['uid']),TRUE,FALSE,
-				'');
+				$commentConf['ref'] = TT_PRODUCTS_EXT . '_' . $row['uid'];
+				$urlObj = t3lib_div::makeInstance('tx_ttproducts_url_view');
+				$linkParams = $urlObj->getLinkParams(
+					'',
+					array(
+						'product' => $row['uid']
+					),
+					TRUE,
+					FALSE,
+					''
+				);
 				$commentConf['linkParams'] = $linkParams;
 
 				$cObj = t3lib_div::makeInstance('tslib_cObj');

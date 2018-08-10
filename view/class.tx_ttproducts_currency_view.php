@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2006-2007 Milosz Klosowicz <typo3@miklobit.com>
+*  (c) 2006-2007 Milosz Klosowicz (typo3@miklobit.com)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,10 +29,8 @@
  *
  * currency functions
  *
- * $Id$
- *
  * @author  Milosz Klosowicz <typo3@miklobit.com>
- * @maintainer	Franz Holzinger <kontakt@fholzinger.com> 
+ * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products
  *
@@ -40,26 +38,22 @@
  */
 
 
-require_once (PATH_BE_ttproducts.'marker/class.tx_ttproducts_subpartmarker.php');
-require_once (PATH_BE_ttproducts.'view/class.tx_ttproducts_url_view.php');
-
-
-class tx_ttproducts_currency_view {
+class tx_ttproducts_currency_view implements t3lib_Singleton {
 
 	var $pibase; // reference to object of pibase
 	var $conf;
 	var $subpartMarkerObj; // marker functions
 	var $urlObj;
 
-	function init(&$pibase) {
-		$this->pibase = &$pibase;
-		$cnf = &t3lib_div::getUserObj('&tx_ttproducts_config');
+	function init($pibase) {
+		$this->pibase = $pibase;
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 
 		$this->conf = &$cnf->conf;
 
 		$this->subpartmarkerObj = t3lib_div::makeInstance('tx_ttproducts_subpartmarker');
 		$this->subpartmarkerObj->init($pibase->cObj);
-		$this->urlObj = &t3lib_div::getUserObj('&tx_ttproducts_url_view');
+		$this->urlObj = t3lib_div::makeInstance('tx_ttproducts_url_view');
 	}
 
 

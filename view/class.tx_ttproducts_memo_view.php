@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010-2010 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2010-2010 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,8 +29,6 @@
  *
  * memo functions
  *
- * $Id:$
- *
  * @author  Klaus Zierer <zierer@pz-systeme.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -39,118 +37,42 @@
  */
 
 
-class tx_ttproducts_memo_view {
+
+class tx_ttproducts_memo_view implements t3lib_Singleton {
 	var $cObj;
 	var $pid_list;
 	var $pid; // pid where to go
 	var $useArticles;
 	var $memoItems;
 	var $pibaseClass;
-
+	var $conf;
 
 	public function init (
 			$pibaseClass,
 			$theCode,
 			&$pid_list,
+			$conf,
 			$useArticles
 		) {
 		global $TSFE, $TYPO3_DB;
 
 		$this->pibaseClass = $pibaseClass;
-		$pibaseObj = &t3lib_div::getUserObj('&'.$pibaseClass);
-		$this->cObj = &$pibaseObj->cObj;
+		$pibaseObj = t3lib_div::makeInstance(''.$pibaseClass);
+		$this->cObj = $pibaseObj->cObj;
+		$this->conf = $conf;
 
 		$this->pid_list = $pid_list;
 		$this->useArticles = $useArticles;
-		$fe_user_uid = $TSFE->fe_user->user['uid'];
-		$this->memoItems = array();
 
-		if ($fe_user_uid)	{
-			$bMemoChanged = FALSE;
-			if (strpos($theCode,'DAM') !== FALSE) {
-				$feuserField = 'tt_products_memodam';
-			} else {
-				$feuserField = 'tt_products_memoItems';
+		if (
+			tx_ttproducts_control_memo::bUseFeuser($conf) ||
+			tx_ttproducts_control_memo::bUseSession($conf)
+		) {
+			$functablename = 'tt_products';
+			if (strpos($theCode, 'DAM') !== FALSE) {
+				$functablename = 'tx_dam';
 			}
-
-			if ($TSFE->fe_user->user[$feuserField] != '')	{
-				$this->memoItems = explode(',', $TSFE->fe_user->user[$feuserField]);
-			}
-
-			if (strpos($theCode,'OVERVIEW')===FALSE)	{
-				if ($pibaseObj->piVars['addmemo'])	{
-					$addMemo = explode(',', $pibaseObj->piVars['addmemo']);
-				}
-
-				if ($pibaseObj->piVars['delmemo'])	{
-					$delMemo = explode(',', $pibaseObj->piVars['delmemo']);
-				}
-
-				if (isset($pibaseObj->piVars['memo']) && is_array($pibaseObj->piVars['memo']))	{
-					if (!isset($addMemo))	{
-						$addMemo = array();
-					}
-					if (!isset($delMemo))	{
-						$delMemo = array();
-					}
-
-					foreach ($pibaseObj->piVars['memo'] as $k => $v)	{
-						if (
-							(
-								class_exists('t3lib_utility_Math') ?
-								t3lib_utility_Math::canBeInterpretedAsInteger($k) :
-								t3lib_div::testInt($k)
-							) && $k!='' && $v
-						) {
-							$addMemo[] = intval($k);
-						} else if ($k == 'uids')	{
-							$uidArray = explode(',', $v);
-							foreach ($uidArray as $uid)	{
-								if (
-									$uid != '' &&
-									in_array($uid, $this->memoItems) &&
-									(
-										class_exists('t3lib_utility_Math') ?
-										t3lib_utility_Math::canBeInterpretedAsInteger($uid) :
-										t3lib_div::testInt($uid)
-									)
-								) {
-									$delMemo[] = $uid;
-								}
-							}
-						}
-					}
-				}
-
-				if (isset($addMemo) && is_array($addMemo))	{
-					foreach ($addMemo as $addMemoSingle)	{
-						if (!in_array($addMemoSingle, $this->memoItems))	{
-							$uid = intval($addMemoSingle);
-							if ($uid)	{
-								$this->memoItems[] = $uid;
-								$bMemoChanged = TRUE;
-							}
-						}
-					}
-				}
-
-				if ($delMemo)	{
-					foreach ($delMemo as $delMemoSingle)	{
-						$val = intval($delMemoSingle);
-						if (in_array($val, $this->memoItems))	{
-							unset($this->memoItems[array_search($val, $this->memoItems)]);
-							$bMemoChanged = TRUE;
-						}
-					}
-				}
-
-				if ($bMemoChanged)	{
-
-					$fieldsArray = array();
-					$fieldsArray[$feuserField]=implode(',', $this->memoItems);
-					$TYPO3_DB->exec_UPDATEquery('fe_users', 'uid='.$fe_user_uid, $fieldsArray);
-				}
-			}
+			$this->memoItems = tx_ttproducts_control_memo::getMemoItems($functablename);
 		}
 	}
 
@@ -158,15 +80,16 @@ class tx_ttproducts_memo_view {
 	/**
 	 * Displays the memo
 	 */
-	public function &printView ($theCode,&$templateCode, $pid, &$error_code)	{
+	public function &printView ($theCode, &$templateCode, $pid, &$error_code)	{
 		global $TSFE;
 
-		$markerObj = &t3lib_div::getUserObj('&tx_ttproducts_marker');
+		$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
 		$content = '';
-		$fe_user_uid = $TSFE->fe_user->user['uid'];
 
-		if ($fe_user_uid)	{
-
+		if (
+			tx_ttproducts_control_memo::bUseFeuser($this->conf) ||
+			tx_ttproducts_control_memo::bUseSession($this->conf)
+		) {
 			if ($this->memoItems)	{
 				include_once (PATH_BE_ttproducts.'view/class.tx_ttproducts_list_view.php');
 
@@ -201,7 +124,7 @@ class tx_ttproducts_memo_view {
 					FALSE,
 					$error_code,
 					$templateArea,
-					$GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXTkey]['pageAsCategory'],
+					$GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['pageAsCategory'],
 					array()
 				);
 			} else {
@@ -216,7 +139,7 @@ class tx_ttproducts_memo_view {
 				$content = $this->cObj->getSubpart($templateCode,$subpartmarkerObj->spMarker('###'.$templateArea.'###'));
 				$content = $markerObj->replaceGlobalMarkers($content);
 			}
-		} else {
+		} else if (tx_ttproducts_control_memo::bIsAllowed('fe_users', $this->conf)) {
 			include_once (PATH_BE_ttproducts.'marker/class.tx_ttproducts_subpartmarker.php');
 
 			$subpartmarkerObj = t3lib_div::makeInstance('tx_ttproducts_subpartmarker');
@@ -231,7 +154,7 @@ class tx_ttproducts_memo_view {
 		}
 
 		if (!$content && !count($error_code)) {
-			$templateObj = &t3lib_div::getUserObj('&tx_ttproducts_template');
+			$templateObj = t3lib_div::makeInstance('tx_ttproducts_template');
 			$error_code[0] = 'no_subtemplate';
 			$error_code[1] = '###' . $templateArea . $templateObj->getTemplateSuffix() . '###';
 			$error_code[2] = $templateObj->getTemplateFile();
@@ -248,7 +171,7 @@ class tx_ttproducts_memo_view {
 		$tagArray,
 		&$bUseCheckBox
 	)	{
-		$pibaseObj = &t3lib_div::getUserObj('&'.$this->pibaseClass);
+		$pibaseObj = t3lib_div::makeInstance(''.$this->pibaseClass);
 		$fieldKey = 'FIELD_'.$markerKey.'_NAME';
 		if (isset($tagArray[$fieldKey]))	{
 			$markerArray['###'.$fieldKey.'###'] = $pibaseObj->prefixId.'[memo]['.$row['uid'].']';
@@ -277,7 +200,7 @@ class tx_ttproducts_memo_view {
 	)	{
 
 		if ($bUseCheckBox)	{
-			$pibaseObj = &t3lib_div::getUserObj('&'.$this->pibaseClass);
+			$pibaseObj = t3lib_div::makeInstance(''.$this->pibaseClass);
 			$markerArray['###HIDDENFIELDS###'] .= '<input type="hidden" name="' . $pibaseObj->prefixId . '[memo][uids]" value="' . implode(',',$uidArray) . '" />';
 		}
 	}

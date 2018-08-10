@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2006-2007 Franz Holzinger <kontakt@fholzinger.com>
+*  (c) 2006-2007 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,16 +29,13 @@
  *
  * functions for the images
  *
- * $Id$
- *
- * @author  Franz Holzinger <kontakt@fholzinger.com>
- * @maintainer	Franz Holzinger <kontakt@fholzinger.com>
+ * @author  Franz Holzinger <franz@ttproducts.de>
+ * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products
  *
  */
 
-require_once (PATH_BE_ttproducts.'view/field/class.tx_ttproducts_field_media_view.php');
 
 
 class tx_ttproducts_field_image_view extends tx_ttproducts_field_media_view {
@@ -46,7 +43,7 @@ class tx_ttproducts_field_image_view extends tx_ttproducts_field_media_view {
 	/**
 	 *
 	 */
-	public function init(&$langObj, &$modelObj)	{
+	public function init($langObj, $modelObj)	{
 		parent::init($langObj, $modelObj);
 
 		if ($this->conf['noImageAvailable'] == '{$plugin.tt_products.file.noImageAvailable}')	{
@@ -55,7 +52,7 @@ class tx_ttproducts_field_image_view extends tx_ttproducts_field_media_view {
 	} // init
 
 	public function getSingleImageMarkerArray ($markerKey, &$markerArray, &$imageConf, $theCode)	{
-		$tmpImgCode = $this->getImageCode($imageConf, $theCode);
+		$tmpImgCode = $this->getImageCode($this->cObj, $imageConf, $theCode); // neu +++
 		$markerArray['###'.$markerKey.'###'] = $tmpImgCode;
 	}
 
@@ -92,13 +89,24 @@ class tx_ttproducts_field_image_view extends tx_ttproducts_field_media_view {
 		$linkWrap = ''
 	)	{
 		global $TYPO3_DB;
-// TODO: replace this function
+
+// hack start
+		$mediaNum =
+			$this->getMediaNum(
+				$functablename,
+				'image',
+				$theCode
+			);
+		if ($mediaNum > 0) {
+			$imageNum = $mediaNum;
+		}
+// hack end
 
 		$imageRow = $row;
 		$bImages = false;
-		$cnf = &t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$tableConf = $cnf->getTableConf($functablename, $theCode);
-		$tablesObj = &t3lib_div::getUserObj('&tx_ttproducts_tables');
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 
 			// Get image
 		$theImgDAM = array();
@@ -236,7 +244,6 @@ class tx_ttproducts_field_image_view extends tx_ttproducts_field_media_view {
 			$dirname = $this->getModelObj()->getDirname($imageRow);
 		}
 
-//		$markerArray['###'.$marker.'_IMAGE_PATH###'] = $dirname;
 		$theImgCode = $this->getCodeMarkerArray($functablename, 'PRODUCT_IMAGE', $theCode, $imageRow, $imgs, $dirname, $imageNum, $imageRenderObj, $linkWrap, $markerArray, $theImgDAM, $specialConf);
 
 		reset ($theImgCode);
@@ -320,9 +327,9 @@ class tx_ttproducts_field_image_view extends tx_ttproducts_field_media_view {
 		}
 	}
 
-	public function getRowMarkerArray ($functablename, $fieldname, $row, $markerKey, &$markerArray, $tagArray, $theCode, $id, &$bSkip, $bHtml=TRUE, $charset='', $prefix='', $suffix='', $imageRenderObj='image')	{
+	public function getRowMarkerArray ($functablename, $fieldname, $row, $markerKey, &$markerArray, $tagArray, $theCode, $id, $basketExtra, &$bSkip, $bHtml=TRUE, $charset='', $prefix='', $suffix='', $imageRenderObj='image')	{
 
-		parent::getRowMarkerArray($functablename, $fieldname, $row, $markerKey, $markerArray, $tagArray, $theCode, $id, $bSkip, $bHtml, $charset, $prefix, $suffix='', $imageRenderObj);
+		parent::getRowMarkerArray($functablename, $fieldname, $row, $markerKey, $markerArray, $tagArray, $theCode, $id, $basketExtra, $bSkip, $bHtml, $charset, $prefix, $suffix='', $imageRenderObj);
 	}
 }
 

@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2009-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2009-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,8 +29,6 @@
  *
  * hook functions for TYPO3 FE extensions
  *
- * $Id:$
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -39,18 +37,24 @@
  *
  */
 
-require_once(PATH_BE_div2007.'hooks/class.tx_div2007_hooks_cms.php');
+class tx_ttproducts_hooks_fe implements t3lib_Singleton {
 
-class tx_ttproducts_hooks_fe {
+	public function login_confirmed ($params, $pObj) {
 
-	public function resetAdresses (&$params, &$pObj)	{
-		global $TSFE;
+		$conf = $GLOBALS['TSFE']->tmpl->setup['plugin.'][TT_PRODUCTS_EXT . '.'];
 
-		$recs = $TSFE->fe_user->getKey('ses','recs');
+		tx_ttproducts_control_memo::copySession2Feuser($params, $pObj, $conf);
+		$this->resetAdresses($params, $pObj);
+	}
+
+	public function resetAdresses (&$params, $pObj)	{
+
+		$recs = tx_ttproducts_control_basket::getStoredRecs();
+
 		if (isset($recs) && is_array($recs))	{
 			unset($recs['personinfo']);
 			unset($recs['delivery']);
-			$TSFE->fe_user->setKey('ses','recs',$recs);
+			tx_ttproducts_control_basket::setStoredRecs($recs);
 		}
 	}
 }

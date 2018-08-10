@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008-2010 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2008-2008 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,8 +29,6 @@
  *
  * functions for the date and time field view
  *
- * $Id $
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -41,13 +39,14 @@
 
 class tx_ttproducts_field_datetime_view extends tx_ttproducts_field_base_view {
 
-	function getRowMarkerArray ($functablename, $fieldname, $row, $markerKey, &$markerArray, $tagArray, $theCode, $id, &$bSkip, $bHtml=true, $charset='', $prefix='', $suffix='', $imageRenderObj='')	{
+	function getRowMarkerArray ($functablename, $fieldname, $row, $markerKey, &$markerArray, $tagArray, $theCode, $id, $basketExtra, &$bSkip, $bHtml=true, $charset='', $prefix='', $suffix='', $imageRenderObj='')	{
 
 		$stdWrap = 'date_stdWrap.';
 		if ($fieldname == 'usebydate' && $functablename == 'tt_products')	{
 			$stdWrap = 'usebyDate_stdWrap.';
 		}
 		$value = $this->cObj->stdWrap($row[$fieldname],$this->conf[$stdWrap]);
+
 		return $value;
 	}
 }

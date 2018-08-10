@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2007-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,8 +29,6 @@
  *
  * functions for additional texts
  *
- * $Id$
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -48,39 +46,6 @@ class tx_ttproducts_text extends tx_ttproducts_table_base {
 	var $tt_products_texts; // element of class tx_table_db
 
 
-	/**
-	 * text elements
-	 */
-	function init (&$pibase, $functablename)  {
-		parent::init($pibase, $functablename);
-		$tablename = $this->getTablename();
-		$this->getTableObj()->addDefaultFieldArray(array('sorting' => 'sorting'));
-		$this->getTableObj()->setTCAFieldArray($tablename);
-		$cnf = &t3lib_div::getUserObj('&tx_ttproducts_config');
-		$this->tableconf = $cnf->getTableConf($functablename);
-		$this->tabledesc = $cnf->getTableDesc($functablename);
-		$requiredFields = 'uid,pid,title,marker,note,parentid,parenttable';
-		if ($this->tableconf['requiredFields'])	{
-			$tmp = $this->tableconf['requiredFields'];
-			$requiredFields = ($tmp ? $tmp : $requiredFields);
-		}
-		$requiredListArray = t3lib_div::trimExplode(',', $requiredFields);
-		$this->getTableObj()->setRequiredFieldArray($requiredListArray);
-	} // init
-
-	function get ($uid=0,$pid=0,$bStore=true,$where_clause='',$limit='',$fields='',$bCount=FALSE) {
-		global $TYPO3_DB;
-		$rc = $this->dataArray[$uid];
-		if (!$rc) {
-			$this->getTableObj()->enableFields();
-			$res = $this->getTableObj()->exec_SELECTquery('*','uid = '.intval($uid));
-			$row = $TYPO3_DB->sql_fetch_assoc($res);
-			$TYPO3_DB->sql_free_result($res);
-			$rc = $this->dataArray[$uid] = $row;
-		}
-		return $rc;
-	}
-
 	function &getTagMarkerArray (&$tagArray, $parentMarker)	{
 		$rcArray = array();
 		$search = $parentMarker.'_'.$this->marker.'_';
@@ -94,8 +59,14 @@ class tx_ttproducts_text extends tx_ttproducts_table_base {
 		return $rcArray;
 	}
 
-	function getChildUidArray ($uid, $tagMarkerArray, $parenttable='tt_products')	{
+	function getChildUidArray ($theCode, $uid, $tagMarkerArray, $parenttable='tt_products')	{
 		global $TYPO3_DB;
+
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$functablename = $this->getFuncTablename();
+		$fallback = FALSE;
+		$tableConf = $cnf->getTableConf($functablename, $theCode);
+		$fallback = $cnf->getFallback($tableConf);
 
 		$rcArray = array();
 		$tagWhere = '';
@@ -104,13 +75,31 @@ class tx_ttproducts_text extends tx_ttproducts_table_base {
 			$tags = implode(',',$tagMarkerArray);
 			$tagWhere = ' AND marker IN ('.$tags.')';
 		}
-		$where = 'parentid = '.intval($uid).' AND parenttable='.$TYPO3_DB->fullQuoteStr($parenttable, $this->getTableObj()->name).$tagWhere.$this->getTableObj()->enableFields();
-		$res = $this->getTableObj()->exec_SELECTquery('*', $where);
+		$where_clause = 'parentid = ' . intval($uid) . ' AND parenttable=' . $TYPO3_DB->fullQuoteStr($parenttable, $this->getTableObj()->name) . $tagWhere;
+
+		$resultArray =
+			$this->get(
+				'',
+				'',
+				FALSE,
+				$where_clause,
+				'',
+				'',
+				'',
+				'',
+				FALSE,
+				'',
+				$fallback
+			);
+
+
+/*		$res = $this->getTableObj()->exec_SELECTquery('*', $where);
 
 		while($row = $TYPO3_DB->sql_fetch_assoc($res))	{
 			$rcArray[] = $row;
-		}
-		return $rcArray;
+		}*/
+
+		return $resultArray;
 	}
 }
 

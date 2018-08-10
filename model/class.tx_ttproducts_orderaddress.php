@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2006-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2006-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,8 +29,6 @@
  *
  * functions for the order addresses
  *
- * $Id: class.tx_ttproducts_feuser.php 3741 2006-09-19 08:31:50Z franzholz $
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -40,8 +38,6 @@
  */
 
 
-
-require_once (PATH_BE_table.'lib/class.tx_table_db.php');
 
 
 class tx_ttproducts_orderaddress extends tx_ttproducts_table_base {
@@ -59,11 +55,11 @@ class tx_ttproducts_orderaddress extends tx_ttproducts_table_base {
 	/**
 	 * Getting all tt_products_cat categories into internal array
 	 */
-	public function init (&$cObj, $functablename)  {
+	public function init ($cObj, $functablename)  {
 		global $TYPO3_DB,$TSFE,$TCA;
 
 		parent::init($cObj, $functablename);
-		$cnf = &t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 
 		$this->tableconf = $cnf->getTableConf($functablename);
 		$tablename = $this->getTablename ();
@@ -84,6 +80,22 @@ class tx_ttproducts_orderaddress extends tx_ttproducts_table_base {
 	} // init
 
 
+	public function getSelectInfoFields() {
+		$result = array('salutation', 'tt_products_business_partner', 'tt_products_organisation_form');
+
+		return $result;
+	}
+
+
+	public function getTCATableFromField ($field) {
+		$result = 'fe_users';
+		if ($field == 'salutation') {
+			$result = 'sys_products_orders';
+		}
+		return $result;
+	}
+
+/*
 	public function get ($uid) {
 		global $TYPO3_DB;
 
@@ -97,7 +109,7 @@ class tx_ttproducts_orderaddress extends tx_ttproducts_table_base {
 		}
 		return $rc;
 	}
-
+*/
 
 	public function getFieldName ($field)	{
 		$rc = $field;
@@ -125,13 +137,16 @@ class tx_ttproducts_orderaddress extends tx_ttproducts_table_base {
 
 		if (isset($this->conf['conf.'][$funcTablename.'.']['ALL.']['fe_users.']['date_of_birth.']['period.']['y']))	{
 			$year = $this->conf['conf.'][$funcTablename.'.']['ALL.']['fe_users.']['date_of_birth.']['period.']['y'];
-			$infoObj = &t3lib_div::getUserObj('&tx_ttproducts_info_view');
+			$infoObj = t3lib_div::makeInstance('tx_ttproducts_info_view');
 
 			if ($infoObj->infoArray['billing']['date_of_birth'])	{
 				$timeTemp = $infoObj->infoArray['billing']['date_of_birth'];
 				$bAge = TRUE;
-			} else if ($TSFE->fe_user->user)	{
-				$timeTemp = date('d-m-Y', ($TSFE->fe_user->user['date_of_birth']));
+			} else if (
+                $GLOBALS['TSFE']->loginUser &&
+                is_array($GLOBALS['TSFE']->fe_user->user)
+            )	{
+				$timeTemp = date('d-m-Y', ($GLOBALS['TSFE']->fe_user->user['date_of_birth']));
 				$bAge = TRUE;
 			} else {
 				$bAge = FALSE;

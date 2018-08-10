@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 1999-2010 Kasper Skårhøj <kasperYYYY@typo3.com>
+*  (c) 2011 Kasper Skårhøj <kasperYYYY@typo3.com>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,8 +29,6 @@
  *
  * basket functions for a basket object
  *
- * $Id$
- *
  * @author	Kasper Skårhøj <kasperYYYY@typo3.com>
  * @author	René Fritz <r.fritz@colorcube.de>
  * @author	Franz Holzinger <franz@ttproducts.de>
@@ -42,16 +40,9 @@
  *
  */
 
-require_once(PATH_t3lib.'class.t3lib_div.php');
-require_once(PATH_BE_ttproducts.'lib/class.tx_ttproducts_pricecalc.php');
-require_once(PATH_BE_ttproducts.'lib/class.tx_ttproducts_pricetablescalc.php');
-require_once(PATH_BE_ttproducts.'model/field/class.tx_ttproducts_field_graduated_price.php');
-require_once(PATH_BE_ttproducts.'model/class.tx_ttproducts_pid_list.php');
-require_once(PATH_BE_ttproducts.'model/class.tx_ttproducts_basketitem.php');
-require_once(PATH_BE_ttproducts.'model/class.tx_ttproducts_basket_calculate.php');
 
 
-class tx_ttproducts_basket {
+class tx_ttproducts_basket implements t3lib_Singleton {
 	public $conf;
 	public $config;
 
@@ -66,13 +57,13 @@ class tx_ttproducts_basket {
 	public $itemArray = array();		// the items in the basket; database row, how many (quantity, count) and the price; this has replaced the former $calculatedBasket
 
 	public $funcTablename;			// tt_products or tt_products_articles
-	public $checkMinPrice;			// if the minimum price needs to be checked
 	protected $pidListObj;
 	public $formulaArray;
 	public $giftServiceRow;
 	protected $itemObj;
 	protected $maxTax;
-
+	protected $categoryQuantity = array();
+	protected $categoryArray = array();
 
 	public function init (
 		$pibaseClass,
@@ -83,28 +74,44 @@ class tx_ttproducts_basket {
 		global $TSFE;
 
 		$formerBasket = tx_ttproducts_control_basket::getRecs();
-		$pibaseObj = &t3lib_div::getUserObj('&' . $pibaseClass);
-		$cnfObj = &t3lib_div::getUserObj('&tx_ttproducts_config');
+		$pibaseObj = t3lib_div::makeInstance('' . $pibaseClass);
+		$cnfObj = t3lib_div::makeInstance('tx_ttproducts_config');
 		$this->conf = &$cnfObj->conf;
 		$this->config = &$cnfObj->config;
 		$this->recs = $formerBasket;	// Sets it internally
-		$this->itemObj = &t3lib_div::getUserObj('&tx_ttproducts_basketitem');
+		$this->itemObj = t3lib_div::makeInstance('tx_ttproducts_basketitem');
 
 		if (isset($pibaseObj->piVars) && is_array($pibaseObj->piVars) && isset($pibaseObj->piVars['type']) && is_array($pibaseObj->piVars['type']))	{
 			$typeArray = $pibaseObj->piVars['type'];
 		}
 
-		if (t3lib_div::_POST('products_payment'))	{	// use AGB checkbox if coming from INFO page. It could have been unchecked again.
-			$bAgbSet = $this->recs['personinfo']['agb'];
-			$this->recs['personinfo']['agb'] = (boolean) $_REQUEST['recs']['personinfo']['agb'];
-			if ($bAgbSet != $this->recs['personinfo']['agb'])	{
-				$TSFE->fe_user->setKey('ses','recs',$this->recs);	// store this change
-			}
-		}
+        // neu Anfang
+        $gpVars = t3lib_div::_GP(TT_PRODUCTS_EXT);
+        $payment =
+            t3lib_div::_POST('products_payment') ||
+            t3lib_div::_POST('products_payment_x') ||
+            isset($gpVars['activity']) &&
+            is_array($gpVars['activity']) &&
+            $gpVars['activity']['payment'];
+
+        if (    // use AGB checkbox if coming from INFO
+            $payment &&
+            isset($_REQUEST['recs']) &&
+            is_array($_REQUEST['recs']) &&
+            isset($_REQUEST['recs']['personinfo']) &&
+            is_array($_REQUEST['recs']['personinfo'])
+        ) {
+            $bAgbSet = $this->recs['personinfo']['agb'];
+            $this->recs['personinfo']['agb'] = (boolean) $_REQUEST['recs']['personinfo']['agb'];
+            if ($bAgbSet != $this->recs['personinfo']['agb'])   {
+                $TSFE->fe_user->setKey('ses', 'recs', $this->recs); // store this change
+            }
+        }
+
 		$this->basket = array();
 		$this->itemArray = array();
-		$paymentshippingObj = &t3lib_div::getUserObj('&tx_ttproducts_paymentshipping');
-		$this->pidListObj = &t3lib_div::getUserObj('tx_ttproducts_pid_list');
+		$paymentshippingObj = t3lib_div::makeInstance('tx_ttproducts_paymentshipping');
+		$this->pidListObj = t3lib_div::makeInstance('tx_ttproducts_pid_list');
 		$this->pidListObj->init($pibaseObj->cObj);
 		$this->pidListObj->applyRecursive(99, $pid_list, TRUE);
 		$this->pidListObj->setPageArray();
@@ -114,15 +121,15 @@ class tx_ttproducts_basket {
 		} else {
 			$funcTablename = 'tt_products';
 		}
+
 		$this->setFuncTablename($funcTablename);
-		$tablesObj = &t3lib_div::getUserObj('&tx_ttproducts_tables');
-		$viewTableObj = &$tablesObj->get($funcTablename);
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$viewTableObj = $tablesObj->get($funcTablename);
 		$tmpBasketExt = $TSFE->fe_user->getKey('ses','basketExt');
 
-		$this->order = $TSFE->fe_user->getKey('ses','order');
-
+		$order = $TSFE->fe_user->getKey('ses','order');
+		$this->setOrder($order);
 		$basketExtRaw = t3lib_div::_GP('ttp_basket');
-
 		$basketInputConf = &$cnfObj->getBasketConf('view','input');
 
 		if (isset($basketInputConf) && is_array($basketInputConf))	{
@@ -152,23 +159,6 @@ class tx_ttproducts_basket {
 			$this->basketExt = array();
 		}
 
-/*		$radioboxArray = $cnfObj->getRadiobox();
-		if (isset($radioboxArray) && is_array($radioboxArray))	{
-			foreach ($radioboxArray as $radiobox => $idList)	{
-				$idArray = t3lib_div::trimExplode(',',$idList);
-				$radioUid = t3lib_div::_GP($radiobox);
-				if ($radioUid)	{
-					foreach ($idArray as $uid)	{
-						if ($uid == $radioUid)	{
-							$basketExtRaw[$uid]['quantity'] = 1;
-						} else {
-							unset($tmpBasketExt[$uid]);
-						}
-					}
-				}
-			}
-		}*/
-
 		$this->giftnumber = count($this->basketExt['gift']) + 1;
 		$newGiftData = t3lib_div::_GP('ttp_gift');
 		$extVars = $pibaseObj->piVars['variants'];
@@ -186,9 +176,9 @@ class tx_ttproducts_basket {
 		}
 
 			// Call all changeBasket hooks
-		if (is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXTkey]['changeBasket'])) {
-			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXTkey]['changeBasket'] as $classRef) {
-				$hookObj= &t3lib_div::getUserObj($classRef);
+		if (is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['changeBasket'])) {
+			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['changeBasket'] as $classRef) {
+				$hookObj= t3lib_div::makeInstance($classRef);
 				if (method_exists($hookObj, 'changeBasket')) {
 					$hookObj->changeBasket($this, $basketExtRaw, $extVars, $paramProduct, $uid, $sameGiftData, $identGiftnumber);
 				}
@@ -243,23 +233,21 @@ class tx_ttproducts_basket {
 
 			foreach ($basketExtRaw as $uid => $basketItem)	{
 				if (
-					class_exists('t3lib_utility_Math') ?
-						t3lib_utility_Math::canBeInterpretedAsInteger($uid) :
-						t3lib_div::testInt($uid)
+					tx_div2007_core::testInt($uid)
 				) {
 					if (isset($typeArray) && is_array($typeArray) && $typeArray[0] == 'product' && $typeArray[1] != '' || $basketExtRaw['dam'])	{
+
 						foreach ($basketItem as $damUid => $damBasketItem)	{
-							$this->addItem($viewTableObj, $uid, $damUid, $damBasketItem, $updateMode, $bStoreBasket);
+							$this->addItem($viewTableObj, $uid, $damUid, $damBasketItem, $updateMode, $bStoreBasket,$newGiftData,$identGiftnumber,$sameGiftData);
 						}
 					} else {
-						$this->addItem($viewTableObj, $uid, $damUid, $basketItem, $updateMode, $bStoreBasket);
+						$this->addItem($viewTableObj, $uid, $damUid, $basketItem, $updateMode, $bStoreBasket,$newGiftData,$identGiftnumber,$sameGiftData);
 					}
 				}
 			}
 			// I did not find another possibility to delete elements completely from a multidimensional array
 			// than to recreate the array
 			$basketExtNew = array();
-
 			foreach($this->basketExt as $tmpUid => $tmpSubArr) {
 				if (is_array($tmpSubArr) && count($tmpSubArr))	{
 					foreach($tmpSubArr as $tmpExtVar => $tmpCount) {
@@ -268,11 +256,7 @@ class tx_ttproducts_basket {
 							$tmpCount > 0 &&
 							(
 								$this->conf['quantityIsFloat'] ||
-								(
-									class_exists('t3lib_utility_Math') ?
-									t3lib_utility_Math::canBeInterpretedAsInteger($tmpCount) :
-									t3lib_div::testInt($tmpCount)
-								)
+								tx_div2007_core::testInt($tmpCount)
 							)
 						) {
 							$basketExtNew[$tmpUid][$tmpExtVar] = $this->basketExt[$tmpUid][$tmpExtVar];
@@ -301,43 +285,77 @@ class tx_ttproducts_basket {
 				$TSFE->fe_user->storeSessionData(); // The basket shall not get lost when coming back from external scripts
 			}
 		}
-		$paymentshippingObj->setBasketExtras($formerBasket);
+
+		$basketExtra = $paymentshippingObj->getBasketExtras($formerBasket);
+		$this->basketExtra = $basketExtra;
 	} // init
+
+
+	public function setOrder ($order)	{
+		$this->order = $order;
+	}
+
+
+	public function setCategoryQuantity ($categoryQuantity)	{
+		$this->categoryQuantity = $categoryQuantity;
+	}
+
+
+	public function getCategoryQuantity ()	{
+		return $this->categoryQuantity;
+	}
+
+
+	public function setCategoryArray ($categoryArray)	{
+		$this->categoryArray = $categoryArray;
+	}
+
+
+	public function getCategoryArray ()	{
+		return $this->categoryArray;
+	}
 
 
 	public function getRadioInputArray (
 		$row
-	)	{
-		$cnfObj = &t3lib_div::getUserObj('&tx_ttproducts_config');
-		$basketConf = &$cnfObj->getBasketConf('view','input');
-		$rc = '';
-		if (count($basketConf))	{
-			foreach ($basketConf as $lineNo => $inputConf)	{
-				if (strpos($lineNo,'.') !== FALSE)	{
+	) {
+		$cnfObj = t3lib_div::makeInstance('tx_ttproducts_config');
+		$basketConf = $cnfObj->getBasketConf('view', 'input');
+		$result = FALSE;
+		if (count($basketConf)) {
+			foreach ($basketConf as $lineNo => $inputConf) {
+				if (strpos($lineNo, '.') !== FALSE)	{
 					$bIsValid = tx_ttproducts_sql::isValid($row, $inputConf['where']);
-					if ($bIsValid && $inputConf['type'] == 'radio')	{
-						$rc = $inputConf;
+					if ($bIsValid && $inputConf['type'] == 'radio') {
+						$result = $inputConf;
 					}
 				}
 			}
 		}
-		return $rc;
+		return $result;
 	}
 
 
-	public function &getItemObj ()	{
+	public function getItemObj ()	{
 		return $this->itemObj;
 	}
 
+
+	public function setItemArray ($itemArray) {
+		$this->itemArray = $itemArray;
+	}
 
 	public function &getItemArray ()	{
 		return $this->itemArray;
 	}
 
 
-	public function addItem ($viewTableObj, $uid, $damUid, $item, $updateMode, $bStoreBasket)	{
+	public function addItem ($viewTableObj, $uid, $damUid, $item, $updateMode, $bStoreBasket, $newGiftData = '', $identGiftnumber = 0, $sameGiftData = FALSE) {
 
-		$priceObj = &t3lib_div::getUserObj('&tx_ttproducts_field_price');
+		if ($this->conf['errorLog'] && isset($item['quantity']) && $item['quantity'] != '') {
+			error_log('addItem $item = ' . print_r($item, TRUE) . chr(13), 3, $this->conf['errorLog']);
+		}
+		$priceObj = t3lib_div::makeInstance('tx_ttproducts_field_price');
 
 		// quantities for single values are stored in an array. This is necessary because a HTML checkbox does not send any values if it has been unchecked
 		if (isset($item['quantity']) && is_array($item['quantity']))	{
@@ -367,8 +385,7 @@ class tx_ttproducts_basket {
 					if ($sameGiftData) {
 						$giftnumber = $identGiftnumber;
 						$oldcount -= $this->basketExt['gift'][$giftnumber]['item'][$uid][$variant];
-					}
-					else {
+					} else {
 						$giftnumber = $this->giftnumber;
 					}
 					$newcount += $oldcount;
@@ -449,7 +466,7 @@ class tx_ttproducts_basket {
 	}
 
 
-	public function &getPidListObj ()	{
+	public function getPidListObj ()	{
 		return $this->pidListObj;
 	}
 
@@ -489,22 +506,22 @@ class tx_ttproducts_basket {
 		$count = 0;
 
 		if ($this->conf['basketMaxQuantity'] == 'inStock' && !$this->conf['alwaysInStock'] && !empty($uid)) {
-			$tablesObj = &t3lib_div::getUserObj('&tx_ttproducts_tables');
-			$viewTableObj = &$tablesObj->get('tt_products');
+			$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+			$viewTableObj = $tablesObj->get('tt_products');
 			$row = $viewTableObj->get($uid);
 			$count =
 				(
 					class_exists('t3lib_utility_Math') ?
 						t3lib_utility_Math::forceIntegerInRange($quantity, 0, $row['inStock'], 0) :
-						t3lib_div::intInRange($quantity, 0, $row['inStock'], 0)
+						tx_div2007_core::intInRange($quantity, 0, $row['inStock'], 0)
 				);
 		} elseif ($this->conf['basketMaxQuantity'] == 'creditpoint' && !empty($uid)) {
 			include_once (PATH_BE_ttproducts.'model/field/class.tx_ttproducts_field_creditpoints.php');
-			$tablesObj = &t3lib_div::getUserObj('&tx_ttproducts_tables');
-			$viewTableObj = &$tablesObj->get('tt_products');
+			$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+			$viewTableObj = $tablesObj->get('tt_products');
 			$row = $viewTableObj->get($uid);
 
-			$creditpointsObj = &t3lib_div::getUserObj('&tx_ttproducts_field_creditpoints');
+			$creditpointsObj = t3lib_div::makeInstance('tx_ttproducts_field_creditpoints');
 			$missingCreditpoints = 0;
 			$creditpointsObj->getBasketMissingCreditpoints($row['creditpoints'] * $quantity, $missingCreditpoints, $tmp);
 
@@ -534,7 +551,7 @@ class tx_ttproducts_basket {
 				(
 					class_exists('t3lib_utility_Math') ?
 						t3lib_utility_Math::forceIntegerInRange($quantity, 0, $this->conf['basketMaxQuantity'], 0) :
-						t3lib_div::intInRange($quantity, 0, $this->conf['basketMaxQuantity'], 0)
+						tx_div2007_core::intInRange($quantity, 0, $this->conf['basketMaxQuantity'], 0)
 				);
 		}
 		return $count;
@@ -565,25 +582,20 @@ class tx_ttproducts_basket {
 
 			// TODO: delete only records from relevant pages
 				// Empties the shopping basket!
-			$this->store('recs',$this->getClearBasketRecord());
-			$this->store('basketExt',array());
-			$this->store('order',array());
+			$basketRecord = $this->getClearBasketRecord();
+			tx_ttproducts_control_basket::setRecs($basketRecord);
+			tx_ttproducts_control_basket::store('recs', $basketRecord);
+			tx_ttproducts_control_basket::store('basketExt',array());
+			tx_ttproducts_control_basket::store('order',array());
 			unset($this->itemArray);
 			unset($this->basketExt);
 			unset($this->order);
 		}
-		$this->store('ac',array());
-		$this->store('cc',array());
-		$this->store('cp',array());
-		$this->store('vo',array());
+		tx_ttproducts_control_basket::store('ac',array());
+		tx_ttproducts_control_basket::store('cc',array());
+		tx_ttproducts_control_basket::store('cp',array());
+		tx_ttproducts_control_basket::store('vo',array());
 	} // clearBasket
-
-
-	public function store ($type,$valArray)	{
-		global $TSFE;
-
-		$TSFE->fe_user->setKey('ses',$type,$valArray);
-	}
 
 
 	public function isInBasket ($prod_uid)	{
@@ -609,7 +621,7 @@ class tx_ttproducts_basket {
 
 	// get gradutated prices for all products in a list view or a single product in a single view
 	public function getGraduatedPrices ($uid)	{
-		$graduatedPriceObj = &t3lib_div::getUserObj('&tx_ttproducts_graduated_price');
+		$graduatedPriceObj = t3lib_div::makeInstance('tx_ttproducts_graduated_price');
 		$this->formulaArray = $graduatedPriceObj->getFormulasByProduct($uid);
 	}
 
@@ -647,6 +659,30 @@ class tx_ttproducts_basket {
 	}
 
 
+	public function getBasketExtra () {
+		return $this->basketExtra;
+	}
+
+
+	public function getAddressArray ()	{
+		$rc = array();
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$addressObj = $tablesObj->get('address',FALSE);
+
+		foreach ($this->itemArray as $sort => $actItemArray) {
+			foreach ($actItemArray as $k1 => $actItem) {
+				$row = &$actItem['rec'];
+				$addressUid = $row['address'];
+				if ($addressUid)	{
+					$addressRow = $addressObj->get($addressUid);
+					$rc[$addressUid] = $addressRow;
+				}
+			}
+		}
+		return $rc;
+	}
+
+
 	public function getQuantityArray ($uidArray, &$rowArray)	{
 		$rc = array();
 
@@ -681,120 +717,106 @@ class tx_ttproducts_basket {
 	}
 
 
-	public function &getItem ($row, $fetchMode, $funcTablename='') {
-		$priceObj = &t3lib_div::getUserObj('&tx_ttproducts_field_price');
+	public function &getItem ($basketExtra, $row, $fetchMode, $funcTablename='') {
+
+		$item = array();
+		$priceObj = t3lib_div::makeInstance('tx_ttproducts_field_price');
 		$priceRow = $row;
+		$maxDiscount = 0;
 
 		if (!$funcTablename)	{
 			$funcTablename = $this->getFuncTablename();
 		}
 
-		$tablesObj = &t3lib_div::getUserObj('&tx_ttproducts_tables');
-		$viewTableObj = &$tablesObj->get($funcTablename);
-		$cnfObj = &t3lib_div::getUserObj('&tx_ttproducts_config');
-		$count = 0;
+		if ($funcTablename == 'tt_products') {
+			$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+			$viewTableObj = $tablesObj->get($funcTablename);
+			$cnfObj = t3lib_div::makeInstance('tx_ttproducts_config');
+			$count = 0;
+			$variant = '';
 
-		if ($fetchMode == 'useExt')	{
-			$variant = $viewTableObj->variant->getVariantFromRow($row);
-			$priceRow = $viewTableObj->getRowFromExt($funcTablename, $row, $cnfObj->getUseArticles());
-		} else if ($fetchMode == 'rawRow') {
-			$variant = $viewTableObj->variant->getVariantFromRawRow($row);
-		} else if ($fetchMode == 'firstVariant') {
-			$variant = $viewTableObj->variant->getVariantFromProductRow($row, 0);
+			if ($fetchMode == 'useExt')	{
+				$variant = $viewTableObj->variant->getVariantFromRow($row);
+				$priceRow = $viewTableObj->getRowFromExt($funcTablename, $row, $cnfObj->getUseArticles());
+			} else if ($fetchMode == 'rawRow') {
+				$variant = $viewTableObj->variant->getVariantFromRawRow($row);
+			} else if ($fetchMode == 'firstVariant') {
+				$variant = $viewTableObj->variant->getVariantFromProductRow($row, 0);
+			}
+
+			$totalDiscountField = $viewTableObj->getTotalDiscountField();
+			$viewTableObj->getTotalDiscount($row, $this->getPidListObj()->getPidlist());
+			$priceRow[$totalDiscountField] = $row[$totalDiscountField];
+			$priceTaxArray = $priceObj->getPriceTaxArray($this->conf['discountPriceMode'],$basketExtra, 'price', tx_ttproducts_control_basket::getRoundFormat(), tx_ttproducts_control_basket::getRoundFormat('discount'), $priceRow, $totalDiscountField);
+
+			$price2TaxArray = $priceObj->getPriceTaxArray($this->conf['discountPriceMode'],$basketExtra, 'price2', tx_ttproducts_control_basket::getRoundFormat(), tx_ttproducts_control_basket::getRoundFormat('discount'), $priceRow, $totalDiscountField);
+			$priceTaxArray = array_merge($priceTaxArray, $price2TaxArray);
+
+			$tax = $priceTaxArray['taxperc'];
+			$oldPriceTaxArray = $priceObj->convertOldPriceArray($priceTaxArray);
+			$extArray = $row['ext'];
+
+			if (is_array($extArray['tx_dam']))	{
+				reset($extArray['tx_dam']);
+				$firstDam = current($extArray['tx_dam']);
+				$extUid = $firstDam['uid'];
+				$tableVariant = $viewTableObj->variant->getTableUid('tx_dam', $extUid);
+				$variant .= $tableVariant;
+			}
+
+			if (isset($this->basketExt[$row['uid']]) && is_array($this->basketExt[$row['uid']]) && isset($this->basketExt[$row['uid']][$variant]))	{
+				$count = $this->basketExt[$row['uid']][$variant];
+			}
+			if (!$count && is_array($this->giftServiceRow) && $row['uid'] == $this->giftServiceRow['uid'])	{
+				$count = 1;
+			}
+			if ($count > $priceRow['inStock'] && !$this->conf['alwaysInStock'])	{
+				$count = $priceRow['inStock'];
+			}
+			if (!$this->conf['quantityIsFloat'])	{
+				$count = intval($count);
+			}
+
+			$item = array (
+				'count' => $count,
+				'weight' => $priceRow['weight'],
+				'totalTax' => 0,
+				'totalNoTax' => 0,
+				'tax' => $tax,
+				'rec' => $row,
+			);
+
+			$item = array_merge($item, $oldPriceTaxArray);	// Todo: remove this line
 		}
-		$priceTaxArray = $priceObj->getPriceTaxArray('price', $priceRow);
-		$price2TaxArray = $priceObj->getPriceTaxArray('price2', $priceRow);
-		$priceTaxArray = array_merge($priceTaxArray, $price2TaxArray);
-
-		$tax = $priceTaxArray['tax_perc'];
-		$oldPriceTaxArray = $priceObj->convertOldPriceArray($priceTaxArray);
-		$extArray = $row['ext'];
-
-		if (is_array($extArray['tx_dam']))	{
-			reset($extArray['tx_dam']);
-			$firstDam = current($extArray['tx_dam']);
-			$extUid = $firstDam['uid'];
-			$tableVariant = $viewTableObj->variant->getTableUid('tx_dam', $extUid);
-			$variant .= $tableVariant;
-		}
-
-		if (isset($this->basketExt[$row['uid']]) && is_array($this->basketExt[$row['uid']]) && isset($this->basketExt[$row['uid']][$variant]))	{
-			$count = $this->basketExt[$row['uid']][$variant];
-		}
-		if (!$count && is_array($this->giftServiceRow) && $row['uid'] == $this->giftServiceRow['uid'])	{
-			$count = 1;
-		}
-		if ($count > $priceRow['inStock'] && !$this->conf['alwaysInStock'])	{
-			$count = $priceRow['inStock'];
-		}
-		if (!$this->conf['quantityIsFloat'])	{
-			$count = intval($count);
-		}
-
-// 		$priceTax = $priceObj->getResellerPrice($priceRow,1);
-// 		$priceNoTax = $priceObj->getResellerPrice($priceRow,0);
-// 		$price0Tax = $priceObj->getResellerPrice($priceRow,1,0);
-// 		$price0NoTax = $priceObj->getResellerPrice($priceRow,0,0);
-// 		$priceUnitNoTax = $priceObj->getPrice(($priceRow['unit_factor'] > 0 ? ($priceNoTax / $priceRow['unit_factor']) : 0),FALSE,$priceRow['tax'],FALSE);
-// 		$priceUnitTax = $priceObj->getPrice($priceUnitNoTax,TRUE,$row['tax'],FALSE);
-// 		$priceWeightNoTax = $priceObj->getPrice(($priceRow['weight'] > 0 ? ($priceNoTax / $priceRow['weight']) : 0),FALSE,$priceRow['tax'],FALSE);
-// 		$priceWeightTax = $priceObj->getPrice($priceWeightNoTax,TRUE,$priceRow['tax'],FALSE);
-// 		$item = array (
-// 			'calcprice' => 0,
-// 			'count' => $count,
-// 			'priceTax' => $priceTax,
-// 			'priceNoTax' => $priceNoTax,
-// 			'priceUnitTax' => $priceUnitTax,
-// 			'priceUnitNoTax' => $priceUnitNoTax,
-// 			'priceWeightUnitNoTax' => $priceWeightNoTax,
-// 			'priceWeightUnitTax' => $priceWeightTax,
-// 			'price0Tax' => $price0Tax,
-// 			'price0NoTax' => $price0NoTax,
-// 			'totalTax' => 0,
-// 			'totalNoTax' => 0,
-// 			'tax' => $tax,
-// 			'rec' => $row,
-// 		);
-//
-//
-// 		if ($this->conf['TAXmode'] == '2')	{
-// 			$taxFieldArray = array('priceTax', 'priceNoTax', 'price0Tax', 'price0NoTax', 'price2Tax', 'price2NoTax');
-// 			foreach ($taxFieldArray as $k => $field)	{
-// 				$item[$field] = round ($item[$field], 2);
-// 			}
-// 		}
-
-		$item = array (
-			'count' => $count,
-			'weight' => $priceRow['weight'],
-			'totalTax' => 0,
-			'totalNoTax' => 0,
-			'tax' => $tax,
-			'rec' => $row,
-		);
-
-		$item = array_merge($item, $oldPriceTaxArray);	// Todo: remove this line
 
 		if (
-			isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXTkey]['changeBasketItem']) &&
-			is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXTkey]['changeBasketItem'])
+			isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['changeBasketItem']) &&
+			is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['changeBasketItem'])
 		) {
-			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXTkey]['changeBasketItem'] as $classRef) {
-				$hookObj= &t3lib_div::getUserObj($classRef);
+			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['changeBasketItem'] as $classRef) {
+				$hookObj= t3lib_div::makeInstance($classRef);
 				if (method_exists($hookObj, 'changeBasketItem')) {
 					$hookObj->changeBasketItem($row, $fetchMode, $funcTablename, $item);
 				}
 			}
 		}
+
 		return $item;
 	} // getItem
 
 
-	public function create ($useArticles, $funcTablename)	{
-		$cnfObj = &t3lib_div::getUserObj('&tx_ttproducts_config');
+	public function create ($basketExtra, $useArticles, $funcTablename)	{
+
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$cnfObj = t3lib_div::makeInstance('tx_ttproducts_config');
 		$conf = &$cnfObj->conf;
+		$theCode = 'BASKET';
+		$itemTableConf = $cnfObj->getTableConf($funcTablename, $theCode);
+		$viewTableObj = $tablesObj->get($funcTablename, FALSE);
+		$orderBy = $viewTableObj->getTableObj()->transformOrderby($itemTableConf['orderBy']);
 
 		$uidArr = array();
+
 		foreach($this->basketExt as $uidTmp => $v)	{
 
 			if ($uidTmp != 'gift' && !in_array($uidTmp, $uidArr))	{
@@ -804,25 +826,24 @@ class tx_ttproducts_basket {
 		if (count($uidArr) == 0) {
 			return;
 		}
-		$tablesObj = &t3lib_div::getUserObj('&tx_ttproducts_tables');
-		$viewTableObj = &$tablesObj->get($funcTablename);
-		$pidListObj = &$this->pidListObj;
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$viewTableObj = $tablesObj->get($funcTablename);
+		$pidListObj = $this->pidListObj;
 		$pid_list = $pidListObj->getPidlist();
-
 		$where = 'uid IN (' . implode(',',$uidArr) . ')' . ($pid_list != '' ? ' AND pid IN ('. $pid_list . ')' : '') . $viewTableObj->getTableObj()->enableFields();
 
-		$rcArray = $viewTableObj->getWhere($where);
-
+		$rcArray = $viewTableObj->getWhere($where, $theCode, $orderBy);
 		$productsArray = array();
 		$prodCount = 0;
 		$bAddGiftService = FALSE;
 
 		foreach ($rcArray as $uid => $row)	{
 
-			$viewTableObj->getTableObj()->transformRow($row, TT_PRODUCTS_EXTkey);
+			$viewTableObj->getTableObj()->transformRow($row, TT_PRODUCTS_EXT);
 			$pid = $row['pid'];
 			$uid = $row['uid'];
 			$isValidPage = $pidListObj->getPageArray($pid);
+
 			// only the basket items for the pages belonging to this shop shall be used here
 			if ($isValidPage)	{
 
@@ -839,6 +860,7 @@ class tx_ttproducts_basket {
 					$bextVarArray = t3lib_div::trimExplode('|', $bextVarLine);
 					$bextVars = $bextVarArray[0];
 					$currRow = $row;
+
 					if ($useArticles != 3)	{
 						$viewTableObj->variant->modifyRowFromVariant($currRow, $bextVars);
 					}
@@ -851,7 +873,7 @@ class tx_ttproducts_basket {
 
 						$extTable = $bextVarArray[1];
 						$extUid = intval($bextVarArray[2]);
-						$damObj = &$tablesObj->get('tx_dam');
+						$damObj = $tablesObj->get('tx_dam');
 						$damObj->modifyItemRow($currRow, $extUid);
 						$currRow['ext'][$extTable][] = array('uid' => $extUid);
 					}
@@ -861,7 +883,10 @@ class tx_ttproducts_basket {
 						// get the article uid with these colors, sizes and gradings
 						$articleRowArray = array();
 						if ($useArticles == 1)	 {
-							$articleRowArray[] = $viewTableObj->getArticleRow($currRow, 'BASKET',FALSE);
+							$articleRow = $viewTableObj->getArticleRow($currRow, 'BASKET', FALSE);
+							if ($articleRow) {
+								$articleRowArray[] = $articleRow;
+							}
 						} else if ($useArticles == 3) {
 							$articleRowArray = $viewTableObj->getArticleRowsFromVariant($currRow, 'BASKET', $bextVars);
 						}
@@ -906,21 +931,23 @@ class tx_ttproducts_basket {
 		}
 		$this->itemArray = array(); // array of the items in the basket
 		$maxTax = 0;
-		$taxObj = &t3lib_div::getUserObj('&tx_ttproducts_field_tax');
+		$taxObj = t3lib_div::makeInstance('tx_ttproducts_field_tax');
 		$uidArray = array();
-		$calculObj = &t3lib_div::getUserObj('&tx_ttproducts_basket_calculate');
+		$calculObj = t3lib_div::makeInstance('tx_ttproducts_basket_calculate');
 		$calculArray = array();
+		$categoryQuantity = array();
+		$categoryArray = array();
 
 		foreach ($productsArray as $k1 => $row)	{
 
 			$uid = $row['uid'];
-			$tax = $taxObj->getFieldValue($row, 'tax');
+			$tax = $taxObj->getFieldValue($basketExtra, $row, 'tax');
 			if ($tax > $maxTax)	{
 				$maxTax = $tax;
 			}
 
 			// $variant = $viewTableObj->variant->getVariantFromRow($row);
-			$newItem = $this->getItem($row, 'useExt');
+			$newItem = $this->getItem($basketExtra, $row, 'useExt');
 			$count = $newItem['count'];
 
 			if($count > 0)	{
@@ -928,10 +955,17 @@ class tx_ttproducts_basket {
 				$this->itemArray[$row[$viewTableObj->fieldArray['itemnumber']]][] = $newItem;
 				$calculArray['count']	+= $count;
 				$calculArray['weight']	+= $weight * $count;
+
+				$currentCategory = $row['category'];
+				$categoryArray[$currentCategory] = 1;
+				$categoryQuantity[$currentCategory] += $count;
 			}
 			// if reseller is logged in then take 'price2', default is 'price'
 			$uidArray[] = $uid;
 		}
+
+		$this->setCategoryQuantity($categoryQuantity);
+		$this->setCategoryArray($categoryArray);
 		$this->maxTax = $maxTax;
 		$this->setUidArray($uidArray);
 		$calculObj->setCalculatedArray($calculArray);
@@ -939,12 +973,13 @@ class tx_ttproducts_basket {
 
 
 	public function calculate ()	{
-		$cnfObj = &t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnfObj = t3lib_div::makeInstance('tx_ttproducts_config');
 		$useArticles = $cnfObj->getUseArticles();
-		$calculObj = &t3lib_div::getUserObj('&tx_ttproducts_basket_calculate');
 
+		$calculObj = t3lib_div::makeInstance('tx_ttproducts_basket_calculate');
 		$calculObj->calculate(
 			$this->basketExt,
+			$this->basketExtra,
 			$this->getFuncTablename(),
 			$useArticles,
 			$this->maxTax,
@@ -953,20 +988,27 @@ class tx_ttproducts_basket {
 	}
 
 
-	public function getCalculatedSums () {
-		$calculObj = &t3lib_div::getUserObj('&tx_ttproducts_basket_calculate');
+	public function calculateSums () {
+		$calculObj = t3lib_div::makeInstance('tx_ttproducts_basket_calculate');
 		$calculObj->calculateSums($this->recs);
 	}
 
 
+	public function getCalculatedSums () {
+		$calculObj = t3lib_div::makeInstance('tx_ttproducts_basket_calculate');
+		$calculatedArray = $calculObj->getCalculatedArray();
+		return $calculatedArray;
+	}
+
+
 	public function addVoucherSums () {
-		$calculObj = &t3lib_div::getUserObj('&tx_ttproducts_basket_calculate');
+		$calculObj = t3lib_div::makeInstance('tx_ttproducts_basket_calculate');
 		$calculObj->addVoucherSums();
 	}
 
 
 	public function getCalculatedArray ()	{
-		$calculObj = t3lib_div::getUserObj('&tx_ttproducts_basket_calculate');
+		$calculObj = t3lib_div::makeInstance('tx_ttproducts_basket_calculate');
 		$rc = $calculObj->getCalculatedArray();
 		return $rc;
 	}

@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008-2008 Franz Holzinger <contact@fholzinger.com>
+*  (c) 2008-2008 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,10 +29,8 @@
  *
  * class for control initialization
  *
- * $Id$
- *
- * @author  Franz Holzinger <contact@fholzinger.com>
- * @maintainer	Franz Holzinger <contact@fholzinger.com>
+ * @author  Franz Holzinger <franz@ttproducts.de>
+ * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products
  *
@@ -40,46 +38,45 @@
  */
 
 
-require_once (PATH_BE_ttproducts.'lib/class.tx_ttproducts_config.php');
-require_once (PATH_BE_ttproducts.'lib/class.tx_ttproducts_tables.php');
+class tx_ttproducts_control_creator implements t3lib_Singleton {
 
-require_once (PATH_BE_ttproducts.'control/class.tx_ttproducts_control_product.php');
-require_once (PATH_BE_ttproducts.'model/class.tx_ttproducts_language.php');
+	public function init (&$conf, &$config, $pObj, $cObj)  {
 
+		if ($conf['errorLog'] == '{$plugin.tt_products.file.errorLog}') {
+			$conf['errorLog'] = '';
+		} else if ($conf['errorLog']) {
+			$conf['errorLog'] = t3lib_div::resolveBackPath(PATH_typo3conf . '../' . $conf['errorLog']);
+		}
 
-class tx_ttproducts_control_creator {
-
-	public function init (&$conf, &$config, &$pObj, $cObj)  {
-
-		$cnf = &t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$cnf->init(
 			$conf,
 			$config
 		);
 
-		$langObj = &t3lib_div::getUserObj('&tx_ttproducts_language');
+		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
 		if (is_object($pObj))	{
 			$pLangObj = &$pObj;
 		} else {
 			$pLangObj = &$this;
 		}
-		$langObj->init($pLangObj, $cObj, $conf, 'pi1/class.tx_ttproducts_pi1.php');
+		$langObj->init1($pLangObj, $cObj, $conf, 'pi1/class.tx_ttproducts_pi1.php');
 
-		tx_div2007_alpha5::loadLL_fh002($langObj, 'EXT:' . TT_PRODUCTS_EXTkey . '/locallang_db.xml');
-		tx_div2007_alpha5::loadLL_fh002($langObj, 'EXT:' . TT_PRODUCTS_EXTkey . '/pi_search/locallang_db.xml');
-		tx_div2007_alpha5::loadLL_fh002($langObj, 'EXT:' . TT_PRODUCTS_EXTkey . '/pi1/locallang.xml');
+		tx_div2007_alpha5::loadLL_fh002($langObj, 'EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml');
+		tx_div2007_alpha5::loadLL_fh002($langObj, 'EXT:' . TT_PRODUCTS_EXT . '/pi_search/locallang_db.xml');
+		tx_div2007_alpha5::loadLL_fh002($langObj, 'EXT:' . TT_PRODUCTS_EXT . '/pi1/locallang.xml');
 
-		$tablesObj = &t3lib_div::getUserObj('&tx_ttproducts_tables');
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 		$tablesObj->init($langObj);
 			// Call all init hooks
 		if (
-			isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXTkey]['init']) &&
-			is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXTkey]['init'])
+			isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['init']) &&
+			is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['init'])
 		) {
 			$tableClassArray = $tablesObj->getTableClassArray();
 
-			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXTkey]['init'] as $classRef) {
-				$hookObj= &t3lib_div::getUserObj($classRef);
+			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['init'] as $classRef) {
+				$hookObj= t3lib_div::makeInstance($classRef);
 				if (method_exists($hookObj, 'init')) {
 					$hookObj->init($langObj, $tableClassArray);
 				}

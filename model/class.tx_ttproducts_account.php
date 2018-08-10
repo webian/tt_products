@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2005-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2005-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,8 +29,6 @@
  *
  * account functions
  *
- * $Id$
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -45,22 +43,22 @@ class tx_ttproducts_account extends tx_ttproducts_table_base {
 	public $pibase; // reference to object of pibase
 	public $conf;
 	public $acArray;	// credit card data
-	public $bIsAllowed = array(); // allowed uids of bank ACCOUNTS
+	public $bIsAllowed = FALSE; // enable of bank ACCOUNTS
 	public $fieldArray = array('owner_name', 'ac_number', 'bic');
 	public $tablename = 'sys_products_accounts';
 	public $asterisk = '********';
-	public $useAsterisk = TRUE;
+	public $useAsterisk = FALSE;
 
 
-	function init (&$pibase, $functablename) {
-		$basketObj = &t3lib_div::getUserObj('&tx_ttproducts_basket');
+	public function init ($cObj, $functablename)	{
+		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
 		$formerBasket = $basketObj->recs;
 		$bIsAllowed = $basketObj->basketExtra['payment.']['accounts'];
 		if (isset($basketObj->basketExtra['payment.']['useAsterisk']))	{
 			$this->useAsterisk = $basketObj->basketExtra['payment.']['useAsterisk'];
 		}
 
-		parent::init($pibase, 'sys_products_accounts');
+		parent::init($cObj, 'sys_products_accounts');
 		$this->acArray = array();
 		$this->acArray = $formerBasket['account'];
 		if (isset($bIsAllowed))	{
@@ -89,6 +87,11 @@ class tx_ttproducts_account extends tx_ttproducts_table_base {
 	}
 
 
+	function getIsAllowed ()	{
+		return $this->bIsAllowed;
+	}
+
+
 	// **************************
 	// ORDER related functions
 	// **************************
@@ -105,7 +108,7 @@ class tx_ttproducts_account extends tx_ttproducts_table_base {
 		$pid = intval($this->conf['PID_sys_products_orders']);
 		if (!$pid)	$pid = intval($TSFE->id);
 
-		if ($acArray['ac_number'] && $TSFE->sys_page->getPage_noCheck ($pid))	{
+		if ($acArray['owner_name'] != '' && $acArray[$accountField] && $TSFE->sys_page->getPage_noCheck($pid)) {
 			$time = time();
 			$newFields = array (
 				'pid' => intval($pid),
@@ -130,15 +133,19 @@ class tx_ttproducts_account extends tx_ttproducts_table_base {
 	} // create
 
 
-	function getUid ()	{
+	function getUid () {
 		global $TSFE;
 
-		$acArray = $TSFE->fe_user->getKey('ses','ac');
-		return $acArray['ac_uid'];
+		$result = 0;
+		$acArray = $TSFE->fe_user->getKey('ses', 'ac');
+		if (isset($acArray['ac_uid'])) {
+			$result = $acArray['ac_uid'];
+		}
+		return $result;
 	}
 
 
-	function get ($uid, $bFieldArrayAll=false) {
+	function getRow ($uid, $bFieldArrayAll=false) {
 		global $TYPO3_DB;
 		$rcArray = array();
 		if ($bFieldArrayAll)	{
@@ -154,7 +161,11 @@ class tx_ttproducts_account extends tx_ttproducts_table_base {
 			if ($bFieldArrayAll)	{
 				$fields = implode(',',$this->fieldArray);
 			}
-			$res = $TYPO3_DB->exec_SELECTquery($fields, $this->tablename, $where);
+			$tablename = $this->getTablename();
+			if ($tablename == '')	{
+				$tablename = 'sys_products_accounts';
+			}
+			$res = $TYPO3_DB->exec_SELECTquery($fields, $tablename, $where);
 			$row = $TYPO3_DB->sql_fetch_assoc($res);
 			$TYPO3_DB->sql_free_result($res);
 			if ($row)	{
@@ -166,11 +177,22 @@ class tx_ttproducts_account extends tx_ttproducts_table_base {
 
 
 	/**
+	 * Returns the label of the record, Usage in the following format:
+	 *
+	 * @param	array		$row: current record
+	 * @return	string		Label of the record
+	 */
+	public function getLabel ($row) {
+		return $row['owner_name'] . ':' . $row['ac_number'] . ':' . $row['bic'];
+	}
+
+
+	/**
 	 * Checks if required fields for bank accounts are filled in
 	 */
 	function checkRequired ()	{
 		$rc = '';
-		$tablesObj = &t3lib_div::getUserObj('&tx_ttproducts_tables');
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 		if (t3lib_extMgm::isLoaded('static_info_tables_banks_de')) {
 			$bankObj = $tablesObj->get('static_banks_de');
 		}

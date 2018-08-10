@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2006-2007 Franz Holzinger <kontakt@fholzinger.com>
+*  (c) 2006-2007 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,17 +29,15 @@
  *
  * base class with functions for the different activities of the ordering process
  *
- * $Id: class.tx_ttproducts_activity_base.php 3672 2006-09-06 19:55:15Z franzholz $
- *
- * @author  Franz Holzinger <kontakt@fholzinger.com>
- * @maintainer	Franz Holzinger <kontakt@fholzinger.com>
+ * @author  Franz Holzinger <franz@ttproducts.de>
+ * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products
  *
  */
 
 
-class tx_ttproducts_activity_base {
+class tx_ttproducts_activity_base implements t3lib_Singleton {
 	public $cnf;
 	public $pibase;
 	public $conf;
@@ -47,9 +45,9 @@ class tx_ttproducts_activity_base {
 	public $alwaysInStock;
 	public $useArticles;
 
-	public function init (&$pibase)  {
-		$this->pibase = &$pibase;
-		$cnf = &t3lib_div::getUserObj('&tx_ttproducts_config');
+	public function init ($pibase)  {
+		$this->pibase = $pibase;
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
 

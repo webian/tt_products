@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2010 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2007-2011 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,8 +29,6 @@
  *
  * base class for all database table classes
  *
- * $Id$
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -38,10 +36,9 @@
  *
  */
 
-require_once (PATH_BE_ttproducts.'view/field/class.tx_ttproducts_field_base_view.php');
 
 
-abstract class tx_ttproducts_table_base_view	{
+abstract class tx_ttproducts_table_base_view  implements t3lib_Singleton {
 	private $bHasBeenInitialised = FALSE;
 	public $cObj;
 	public $conf;
@@ -50,12 +47,13 @@ abstract class tx_ttproducts_table_base_view	{
 	public $modelObj;
 	public $langObj;
 	public $marker;		// can be overridden
+	public $tablesWithoutView = array('tt_products_emails');
 
 
-	public function init (&$langObj, &$modelObj)	{
-		$this->langObj = &$langObj;
-		$this->modelObj = &$modelObj;
-		$this->cObj = &$langObj->cObj;
+	public function init ($langObj, $modelObj)	{
+		$this->langObj = $langObj;
+		$this->modelObj = $modelObj;
+		$this->cObj = $langObj->cObj;
 		$this->conf = &$modelObj->conf;
 		$this->config = &$modelObj->config;
 
@@ -73,8 +71,17 @@ abstract class tx_ttproducts_table_base_view	{
 	}
 
 
-	public function &getConf ()	{
+	public function setConf ($conf)	{
+		$this->conf = $conf;
+	}
+
+
+	public function getConf ()	{
 		return $this->conf;
+	}
+
+	public function setCObj ($cObj)	{
+		$this->cObj = $cObj;
 	}
 
 	public function getCObj ()	{
@@ -128,16 +135,23 @@ abstract class tx_ttproducts_table_base_view	{
 	}
 
 
-	public function &getObj ($classArray)	{
+	public function getObj ($classArray)	{
 		$className = $classArray['class'];
 		$classNameView = $className.'_view';
 		$path = $classArray['path'];
 
-		include_once ($path.'view/field/class.'.$classNameView.'.php');
-		$fieldViewObj = &t3lib_div::getUserObj('&'.$classNameView);	// fetch and store it as persistent object
+// 		include_once ($path.'view/field/class.'.$classNameView.'.php');
+		$fieldViewObj = t3lib_div::makeInstance(''.$classNameView);	// fetch and store it as persistent object
+		if (!is_object($fieldViewObj)) {
+			throw new RuntimeException('Error in tt_products: The class "' . $classNameView . '" is not found.', 50001);
+		}
+
 		if ($fieldViewObj->needsInit())	{
-			include_once ($path.'model/field/class.'.$className.'.php');
-			$fieldObj = &t3lib_div::getUserObj('&'.$className);	// fetch and store it as persistent object
+// 			include_once ($path.'model/field/class.'.$className.'.php');
+			$fieldObj = t3lib_div::makeInstance(''.$className);	// fetch and store it as persistent object
+			if (!is_object($fieldObj)) {
+				throw new RuntimeException('Error in tt_products: The class "' . $className . '" is not found.', 50002);
+			}
 			if ($fieldObj->needsInit())	{
 				$fieldObj->init($this->cObj);
 			}
@@ -161,152 +175,180 @@ abstract class tx_ttproducts_table_base_view	{
 		&$wrappedSubpartArray,
 		&$tagArray,
 		$theCode='',
+		$basketExtra=array(),
 		$id=''
 	)	{
 		global $TCA;
 
-		$tablesObj = &t3lib_div::getUserObj('&tx_ttproducts_tables');
-		$cnf = &t3lib_div::getUserObj('&tx_ttproducts_config');
-		$tableconf = $cnf->getTableConf($functablename,$theCode);
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$tableconf = $cnf->getTableConf($functablename, $theCode);
 
-		if (is_array($row))	{
-			if (count($row))	{	// check for artificial rows by some fields
+		if (
+			isset($row) &&
+			is_array($row) &&
+			!empty($row)
+		) {
+			$newRow = $row;
+			$addedFieldArray = array();
+			foreach ($row as $field => $value)	{
 
-				$newRow = $row;
-				$addedFieldArray = array();
-				foreach ($row as $field => $value)	{
-
-					$classAndPath = $this->getFieldClassAndPath($field);
-					if ($classAndPath['class'])	{
-						$fieldViewObj = $this->getObj($classAndPath);
-						if (method_exists($fieldViewObj, 'modifyItemSubpartRow'))	{
-							$newRow = $fieldViewObj->modifyItemSubpartRow($field, $newRow, $addedFieldArray);
-						}
+				$classAndPath = $this->getFieldClassAndPath($field);
+				if ($classAndPath['class'])	{
+					$fieldViewObj = $this->getObj($classAndPath);
+					if (method_exists($fieldViewObj, 'modifyItemSubpartRow'))	{
+						$newRow = $fieldViewObj->modifyItemSubpartRow($field, $newRow, $addedFieldArray);
 					}
 				}
-				$row = $newRow;
-				$comparatorArray = array('EQ' => '==', 'NE' => '!=', 'LT' => '<', 'LE' => '<=', 'GT' => '>', 'GE' => '>=');
-				$operatorArray = array('AND', 'OR');
+			}
+			$row = $newRow;
+			$comparatorArray = array('EQ' => '==', 'NE' => '!=', 'LT' => '<', 'LE' => '<=', 'GT' => '>', 'GE' => '>=');
+			$operatorArray = array('AND', 'OR');
+			$functionArray = array('EMPTY' => 'empty');
+			$binaryArray = array('NOT' => '!');
 
-				// $markerKey = $this->marker.'_'.$upperField.'_';
-				if (is_array($tagArray))	{
-					foreach ($tagArray as $tag => $v1)	{
-						if (strpos($tag, $this->marker) === 0)	{
+			if (is_array($tagArray))	{
+				foreach ($tagArray as $tag => $v1)	{
+					if (strpos($tag, $this->marker) === 0)	{
 
-							$tagPartArray = explode('_', $tag);
-							$tagCount = count($tagPartArray);
-							if ($tagCount > 2 && isset($comparatorArray[$tagPartArray[$tagCount - 2]]))	{
-								$comparator = $tagPartArray[$tagCount - 2];
-								$comparand = $tagPartArray[$tagCount - 1];
-								$fieldname = strtolower($tagPartArray[1]);
-								if ($tagCount > 4)	{
-									for ($i = 2; $i <= $tagCount - 3; ++$i)	{
-										$fieldname .= '_' . strtolower($tagPartArray[$i]);
-									}
+						$bCondition = FALSE;
+						$tagPartArray = explode('_', $tag);
+						$tagCount = count($tagPartArray);
+						$bTagProcessing = FALSE;
+						$fnKey = array_search('FN', $tagPartArray);
+
+						if ($tagCount > 2 && $fnKey !== FALSE) {
+							$bTagProcessing = TRUE;
+							$tagPartKey = $fnKey + 1;
+							$fieldNameArray = array();
+							for ($i = 1; $i < $fnKey; ++$i) {
+								$fieldNameArray[] = $tagPartArray[$i];
+							}
+							$fieldname = strtolower(implode('_', $fieldNameArray));
+
+							$binaryOperator = '';
+							$v2 = $binaryArray[$tagPartArray[$tagPartKey]];
+							if ($v2 != '') {
+								$binaryOperator = $v2;
+								$tagPartKey++;
+							}
+							$v3 = $functionArray[$tagPartArray[$tagPartKey]];
+							if ($v3 != '') {
+								$functionname = $v3;
+								$value = $row[$fieldname];
+								$evalString = 'return ' . $binaryOperator . $functionname . '($value);';
+								$bCondition = eval($evalString);
+							}
+						} else if ($tagCount > 2 && isset($comparatorArray[$tagPartArray[$tagCount - 2]]))	{
+							$bTagProcessing = TRUE;
+							$comparator = $tagPartArray[$tagCount - 2];
+							$comparand = $tagPartArray[$tagCount - 1];
+							$fieldname = strtolower($tagPartArray[1]);
+							if ($tagCount > 4)	{
+								for ($i = 2; $i <= $tagCount - 3; ++$i)	{
+									$fieldname .= '_' . strtolower($tagPartArray[$i]);
 								}
-								if (!isset($row[$fieldname]))	{
-									$upperFieldname = strtoupper($fieldname);
-									$foundDifferentCase = FALSE;
-									foreach ($row as $field => $v2)	{
-										if (strtoupper($field) == $upperFieldname)	{
-											$foundDifferentCase = TRUE;
-											$fieldname = $field;
-											break;
-										}
-									}
-									if (!$foundDifferentCase)	{
-										continue;
-									}
-								}
-/*								foreach ($row as $field => $v1)	{
-									if (strtoupper($field) == $tagPartArray[1])	{
+							}
+							if (!isset($row[$fieldname]))	{
+								$upperFieldname = strtoupper($fieldname);
+								$foundDifferentCase = FALSE;
+								foreach ($row as $field => $v2)	{
+									if (strtoupper($field) == $upperFieldname)	{
+										$foundDifferentCase = TRUE;
+										$fieldname = $field;
 										break;
 									}
-								}*/
-								$fieldArray = array($fieldname => array($comparator, intval($comparand)));
-								$bCondition = FALSE;
-
-								foreach ($fieldArray as $field => $fieldCondition)	{
-									$comparator = $comparatorArray[$fieldCondition[0]];
-
-									if (isset($row[$field]) && $comparator != '')	{
-										$evalString = "return $row[$field]$comparator$fieldCondition[1];";
-
-										$bCondition = eval($evalString);
-										// eval("return ".$row[$field].$comparator.$fieldArray[1].";");
-									}
 								}
-								if ($bCondition == TRUE)	{
-									$wrappedSubpartArray['###' . $tag . '###'] = '';
-								} else {
-									$subpartArray['###' . $tag . '###'] = '';
+								if (!$foundDifferentCase)	{
+									continue;
 								}
+							}
+
+							$fieldArray = array($fieldname => array($comparator, intval($comparand)));
+
+							foreach ($fieldArray as $field => $fieldCondition)	{
+								$comparator = $comparatorArray[$fieldCondition[0]];
+
+								if (isset($row[$field]) && $comparator != '')	{
+									$evalString = "return $row[$field]$comparator$fieldCondition[1];";
+
+									$bCondition = eval($evalString);
+									// eval("return ".$row[$field].$comparator.$fieldArray[1].";");
+								}
+							}
+						}
+
+						if ($bTagProcessing) {
+							if ($bCondition == TRUE)	{
+								$wrappedSubpartArray['###' . $tag . '###'] = '';
+							} else {
+								$subpartArray['###' . $tag . '###'] = '';
 							}
 						}
 					}
 				}
-				$itemTableObj = &$tablesObj->get($functablename, FALSE);
-				$tablename = $itemTableObj->getTablename();
+			}
+			$itemTableObj = $tablesObj->get($functablename, FALSE);
+			$tablename = $itemTableObj->getTablename();
 
-				foreach ($row as $field => $value)	{
-					$upperField = strtoupper($field);
+			foreach ($row as $field => $value)	{
+				$upperField = strtoupper($field);
 
-					if (isset ($TCA[$tablename]['columns'][$field]) && is_array($TCA[$tablename]['columns'][$field]) &&
-					$TCA[$tablename]['columns'][$field]['config']['type'] == 'group')	{
-						$markerKey = $this->marker.'_HAS_'.$upperField;
-						$valueArray = t3lib_div::trimExplode(',', $value);
-						foreach ($valueArray as $k => $partValue)	{
-							$partMarkerKey = $markerKey.($k+1);
-							if (isset($tagArray[$partMarkerKey]))	{
-								if ($partValue)	{
-									$wrappedSubpartArray['###' . $partMarkerKey . '###'] = array('','');
-								} else {
-									$subpartArray['###' . $partMarkerKey . '###'] = '';
-								}
-							}
-						}
-						for ($i=count($valueArray); $i<100; ++$i)	{
-							$partMarkerKey = $markerKey.($i);
-							if (isset($tagArray[$partMarkerKey]) && !isset($wrappedSubpartArray['###' . $partMarkerKey . '###']))	{
+				if (isset ($TCA[$tablename]['columns'][$field]) && is_array($TCA[$tablename]['columns'][$field]) &&
+				$TCA[$tablename]['columns'][$field]['config']['type'] == 'group')	{
+					$markerKey = $this->marker.'_HAS_'.$upperField;
+					$valueArray = t3lib_div::trimExplode(',', $value);
+					foreach ($valueArray as $k => $partValue)	{
+						$partMarkerKey = $markerKey.($k+1);
+						if (isset($tagArray[$partMarkerKey]))	{
+							if ($partValue)	{
+								$wrappedSubpartArray['###' . $partMarkerKey . '###'] = array('','');
+							} else {
 								$subpartArray['###' . $partMarkerKey . '###'] = '';
 							}
 						}
 					}
-
-					$classAndPath = $this->getFieldClassAndPath($field);
-					if ($classAndPath['class'])	{
-						$fieldViewObj = $this->getObj($classAndPath);
-						if (method_exists($fieldViewObj, 'getItemSubpartArrays'))	{
-							$itemSubpartArray = array();
-							$fieldViewObj->getItemSubpartArrays(
-								$templateCode,
-								$this->marker,
-								$functablename,
-								$row,
-								$field,
-								$tableconf,
-								$itemSubpartArray,
-								$wrappedSubpartArray,
-								$tagArray,
-								$theCode,
-								$id
-							);
-							$subpartArray = array_merge($subpartArray, $itemSubpartArray);
+					for ($i=count($valueArray); $i<100; ++$i)	{
+						$partMarkerKey = $markerKey.($i);
+						if (isset($tagArray[$partMarkerKey]) && !isset($wrappedSubpartArray['###' . $partMarkerKey . '###']))	{
+							$subpartArray['###' . $partMarkerKey . '###'] = '';
 						}
 					}
 				}
 
-				$markerKey = $this->marker.'_NOT_EMPTY';
-				if (isset($tagArray[$markerKey]))	{
-					$wrappedSubpartArray['###' . $markerKey . '###'] = '';
+				$classAndPath = $this->getFieldClassAndPath($field);
+				if ($classAndPath['class'])	{
+					$fieldViewObj = $this->getObj($classAndPath);
+					if (method_exists($fieldViewObj, 'getItemSubpartArrays'))	{
+						$itemSubpartArray = array();
+						$fieldViewObj->getItemSubpartArrays(
+							$templateCode,
+							$this->marker,
+							$functablename,
+							$row,
+							$field,
+							$tableconf,
+							$itemSubpartArray,
+							$wrappedSubpartArray,
+							$tagArray,
+							$theCode,
+							$basketExtra,
+							$id
+						);
+						$subpartArray = array_merge($subpartArray, $itemSubpartArray);
+					}
 				}
-			} else { // if count($row)
-				$itemTableObj = &$tablesObj->get($functablename, FALSE);
-				$tablename = $itemTableObj->getTablename();
-				$markerKey = $this->marker . '_NOT_EMPTY';
-				if (isset($tagArray[$markerKey]))	{
-					$subpartArray['###' . $markerKey . '###'] = '';
-				}
+			}
+			$markerKey = $this->marker.'_NOT_EMPTY';
+			if (isset($tagArray[$markerKey]))	{
+				$wrappedSubpartArray['###' . $markerKey . '###'] = '';
+			}
+		} else { // if !empty($row)
+			$itemTableObj = $tablesObj->get($functablename, FALSE);
+			$tablename = $itemTableObj->getTablename();
+			$markerKey = $this->marker . '_NOT_EMPTY';
+			if (isset($tagArray[$markerKey]))	{
+				$subpartArray['###' . $markerKey . '###'] = '';
 			}
 		}
 	}
@@ -348,6 +390,7 @@ abstract class tx_ttproducts_table_base_view	{
 		&$variantMarkerArray,
 		&$tagArray,
 		$theCode,
+		$basketExtra,
 		$bHtml=TRUE,
 		$charset='',
 		$imageNum=0,
@@ -360,13 +403,13 @@ abstract class tx_ttproducts_table_base_view	{
 		global $TSFE,$TCA;
 
 		$rowMarkerArray = array();
-
 		if ($prefix === FALSE)	{
 			$marker = '';
 		} else {
 			$markerKey = $this->getMarkerKey($markerKey);
 			$marker = $prefix.$markerKey;
 		}
+
 
 		if (is_array($row) && $row['uid'])	{
 
@@ -389,17 +432,20 @@ abstract class tx_ttproducts_table_base_view	{
 			$mainId = $this->getId($row, $id, $theCode);
 			$markerPrefix = ($marker != '' ? $marker.'_' : '');
 			$rowMarkerArray['###' . $markerPrefix . 'ID###'] = $mainId;
-			$rowMarkerArray['###' . $markerPrefix . 'NAME###'] = $extTableName . '-' . $row['uid'];
-			$cnf = &t3lib_div::getUserObj('&tx_ttproducts_config');
-			$tableconf = $cnf->getTableConf($functablename,$theCode);
 
+			$rowMarkerArray['###' . $markerPrefix . 'NAME###'] = $extTableName . '-' . $row['uid'];
+			$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+			$tableconf = $cnf->getTableConf($functablename,$theCode);
 			$tabledesc = $cnf->getTableDesc($functablename);
+
 			$fieldMarkerArray = array();
+
 			foreach ($row as $field => $value)	{
 				$viewField = $field;
 				$markerKey = $markerPrefix . strtoupper($viewField . $suffix);
 				$fieldMarkerArray['###' . $markerKey . '###'] = $value;
 			}
+
 			foreach ($row as $field => $value)	{
 				if (in_array($field, $addedFieldArray))	{
 					continue; // do not handle the added fields here. They must be handled with the original field.
@@ -409,9 +455,10 @@ abstract class tx_ttproducts_table_base_view	{
 				$theMarkerArray = &$rowMarkerArray;
 				$fieldId = $mainId . '-' . $viewField;
 				$markerKey = $markerPrefix . strtoupper($viewField . $suffix);
-				if (isset($tagArray[$markerKey]))	{
+				if (isset($tagArray[$markerKey . '_ID']))	{
 					$rowMarkerArray['###' . $markerKey . '_ID###'] = $fieldId;
 				}
+
 				if (is_array($variantFieldArray) && is_array($variantMarkerArray) && in_array($field, $variantFieldArray))	{
 					$className = 'tx_ttproducts_field_text';
 					$theMarkerArray = &$variantMarkerArray;
@@ -419,8 +466,8 @@ abstract class tx_ttproducts_table_base_view	{
 				} else {
 					$classAndPath = $this->getFieldClassAndPath($field);
 				}
-
 				$modifiedRow = array($field => $value);
+
 				if ($classAndPath['class'])	{
 
 					$fieldViewObj = $this->getObj($classAndPath);
@@ -434,6 +481,7 @@ abstract class tx_ttproducts_table_base_view	{
 							$tagArray,
 							$theCode,
 							$fieldId,
+							$basketExtra,
 							$bSkip,
 							$bHtml,
 							$charset,
@@ -447,9 +495,6 @@ abstract class tx_ttproducts_table_base_view	{
 					} else if (!isset($modifiedRow))	{ // restore former default value
 						$modifiedRow = array($field => $value);
 					}
-// 					if (isset($modifiedRow) && is_array($modifiedRow))	{
-// 						$value = $modifiedValue;
-// 					}
 				} else {
 					switch ($field)	{
 						case 'ext':
@@ -465,23 +510,31 @@ abstract class tx_ttproducts_table_base_view	{
 					$tableName = $this->conf['table.'][$functablename];
 
 					foreach ($modifiedRow as $modField => $modValue)	{
-						$untouchedValue = $row[$modField];
 						if (is_array($tableconf['field.'][$modField . '.']))	{
-							$tableconf['field.'][$modField . '.']['value'] = $untouchedValue;
+							if ($tableconf['field.'][$modField . '.']['untouched']) {
+								$modValue = $row[$modField];
+							}
+							$tableconf['field.'][$modField . '.']['value'] = $modValue;
+
 							$fieldContent = $this->cObj->cObjGetSingle(
 								$tableconf['field.'][$modField],
 								$tableconf['field.'][$modField . '.'],
-								TT_PRODUCTS_EXTkey
+								TT_PRODUCTS_EXT
 							);
 							$modValue = $this->cObj->substituteMarkerArray($fieldContent,$fieldMarkerArray);
 						}
 						$markerKey = $markerPrefix . strtoupper($modField . $suffix);
-						$theMarkerArray['###' . $markerKey . '###'] = $modValue;
+
+
+						if (!isset($markerArray['###' . $markerKey . '###'])) {
+
+							$theMarkerArray['###' . $markerKey . '###'] = $modValue;
+						}
 					}
 				}
 			}
 		} else {
-			$tablesObj = &t3lib_div::getUserObj('&tx_ttproducts_tables');
+			$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 			$tablename = $this->getModelObj()->getTablename();
 			$tmpMarkerArray = array();
 			$tmpMarkerArray[] = $marker;
@@ -491,8 +544,11 @@ abstract class tx_ttproducts_table_base_view	{
 
 					if ($confArray['config']['type'] == 'group')	{
 						$foreigntablename = $confArray['config']['foreign_table'];
-						if ($foreigntablename != '')	{
-							$foreignTableViewObj = &$tablesObj->get($foreigntablename,TRUE);
+                        if (
+                            $foreigntablename != '' &&
+                            !in_array($foreigntablename, $this->tablesWithoutView)
+                        ) {
+							$foreignTableViewObj = $tablesObj->get($foreigntablename, TRUE);
 							if (is_object($foreignTableViewObj))	{
 								$foreignMarker = $foreignTableViewObj->getMarker();
 								$tmpMarkerArray[] = $foreignMarker;
@@ -508,12 +564,10 @@ abstract class tx_ttproducts_table_base_view	{
 							$rowMarkerArray['###' . $theTag . '###'] = '';
 						}
 					}
-					if (!isset($rowMarkerArray['###' . $theTag . '###']) && strpos($theTag,$markerKey) === 0)	{
-// Todo
-					}
 				}
 			}
 		}
+
 		$this->getRowMarkerArrayHooks(
 			$this,
 			$rowMarkerArray,
@@ -523,6 +577,7 @@ abstract class tx_ttproducts_table_base_view	{
 			$imageRenderObj,
 			$forminfoArray,
 			$theCode,
+			$basketExtra,
 			$mainId,
 			$linkWrap
 		);
@@ -530,17 +585,17 @@ abstract class tx_ttproducts_table_base_view	{
 	}
 
 
-	protected function getRowMarkerArrayHooks ($pObj, &$markerArray, &$cObjectMarkerArray, $row, $imageNum, &$imageRenderObj, &$forminfoArray, $theCode, $id, &$linkWrap)	{
+	protected function getRowMarkerArrayHooks ($pObj, &$markerArray, &$cObjectMarkerArray, $row, $imageNum, $imageRenderObj, &$forminfoArray, $theCode, $basketExtra, $id, &$linkWrap)	{
 
 			// Call all getRowMarkerArray hooks at the end of this method
 		$marker = $this->getMarker();
 
-		if (is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXTkey][$marker])) {
-			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXTkey][$marker] as $classRef) {
-				$hookObj = &t3lib_div::getUserObj($classRef);
+		if (is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT][$marker])) {
+			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT][$marker] as $classRef) {
+				$hookObj = t3lib_div::makeInstance($classRef);
 
 				if (method_exists($hookObj, 'getRowMarkerArray')) {
-					$hookObj->getRowMarkerArray($pObj, $markerArray, $cObjectMarkerArray, $row, $imageNum, $imageRenderObj, $forminfoArray, $theCode, $id, $linkWrap);
+					$hookObj->getRowMarkerArray($pObj, $markerArray, $cObjectMarkerArray, $row, $imageNum, $imageRenderObj, $forminfoArray, $theCode, $basketExtra, $id, $linkWrap);
 				}
 			}
 		}

@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2008 Franz Holzinger <contact@fholzinger.com>
+*  (c) 2007-2008 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,26 +29,23 @@
  *
  * functions for the DAM images
  *
- * $Id$
- *
- * @author  Franz Holzinger <contact@fholzinger.com>
- * @maintainer	Franz Holzinger <contact@fholzinger.com>
+ * @author  Franz Holzinger <franz@ttproducts.de>
+ * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products
  *
  */
 
-require_once (PATH_BE_ttproducts.'view/class.tx_ttproducts_article_base_view.php');
 
 
 class tx_ttproducts_dam_view extends tx_ttproducts_article_base_view {
 	public $marker = 'DAM';
 	public $piVar = 'dam';
 
-	function init(&$langObj, &$modelObj)	{
+	function init($langObj, $modelObj)	{
 		include_once (PATH_BE_ttproducts.'view/class.tx_ttproducts_variant_dummy_view.php');
 
-		$this->variant = &t3lib_div::getUserObj('&tx_ttproducts_variant_dummy_view');
+		$this->variant = t3lib_div::makeInstance('tx_ttproducts_variant_dummy_view');
 		parent::init($langObj, $modelObj);
 	}
 
@@ -73,6 +70,7 @@ class tx_ttproducts_dam_view extends tx_ttproducts_article_base_view {
 		&$variantMarkerArray,
 		&$tagArray,
 		$theCode,
+		$basketExtra,
 		$bHtml=TRUE,
 		$charset='',
 		$imageNum=0,
@@ -92,6 +90,7 @@ class tx_ttproducts_dam_view extends tx_ttproducts_article_base_view {
 			$variantMarkerArray,
 			$tagArray,
 			$theCode,
+			$basketExtra,
 			$bHtml,
 			$charset,
 			$imageNum,
@@ -101,7 +100,7 @@ class tx_ttproducts_dam_view extends tx_ttproducts_article_base_view {
 			$suffix,
 			$linkWrap
 		);
-		$imageObj = &t3lib_div::getUserObj('&tx_ttproducts_field_image_view');
+		$imageObj = t3lib_div::makeInstance('tx_ttproducts_field_image_view');
 		$markerKey = $this->getMarkerKey($markerKey);
 
 			// Get image
@@ -120,12 +119,6 @@ class tx_ttproducts_dam_view extends tx_ttproducts_article_base_view {
 			$suffix,
 			$linkWrap
 		);
-
-/*		foreach ($row as $field => $value)	{
-			if (!is_array($row[$field]))	{
-				$markerArray['###'.$this->marker.'_'.strtoupper($field).'###'] = htmlentities($row[$field],ENT_QUOTES,$TSFE->renderCharset);
-			}
-		}*/
 	}
 
 

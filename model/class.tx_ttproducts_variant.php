@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2006-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2006-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -15,7 +15,7 @@
 *  http://www.gnu.org/copyleft/gpl.html.
 *  A copy is found in the textfile GPL.txt and important notices to the license
 *  from the author is found in LICENSE.txt distributed with these scripts.
-*
+// *
 *
 *  This script is distributed in the hope that it will be useful,
 *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -29,8 +29,6 @@
  *
  * article functions without object instance
  *
- * $Id: class.tx_ttproducts_variant.php 3665 2006-09-06 18:52:11Z franzholz $
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -39,10 +37,8 @@
  */
 
 
-require_once (PATH_BE_ttproducts.'model/interface.tx_ttproducts_variant_int.php');
 
-
-class tx_ttproducts_variant implements tx_ttproducts_variant_int {
+class tx_ttproducts_variant implements tx_ttproducts_variant_int, t3lib_Singleton {
 	public $conf;	// reduced local conf
 	var $itemTable;
 	private $useArticles;
@@ -57,12 +53,12 @@ class tx_ttproducts_variant implements tx_ttproducts_variant_int {
 	/**
 	 * setting the local variables
 	 */
-	public function init (&$itemTable, $tablename, $useArticles)  {
-		$cnf = &t3lib_div::getUserObj('&tx_ttproducts_config');
+	public function init ($itemTable, $tablename, $useArticles)  {
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 
 		$tmpArray = $cnf->getTableDesc($tablename);
 		$this->conf = (is_array($tmpArray) && is_array($tmpArray['variant.']) ? $tmpArray['variant.'] : array());
-		$this->itemTable = &$itemTable;
+		$this->itemTable = $itemTable;
 		$this->useArticles = $useArticles;
 		$this->selectableArray = array();
 		$firstVariantArray = array();
@@ -191,6 +187,7 @@ class tx_ttproducts_variant implements tx_ttproducts_variant_int {
 				}
 			}
 		}
+
 		$variant = implode (';', $variantArray);
 		return $variant;
 	}
@@ -205,6 +202,7 @@ class tx_ttproducts_variant implements tx_ttproducts_variant_int {
 	 * @see modifyRowFromVariant
 	 */
 	public function getVariantFromRawRow (&$row) {
+
 		$variantArray = array();
 		$useArticles = $this->getUseArticles();
 
@@ -214,7 +212,9 @@ class tx_ttproducts_variant implements tx_ttproducts_variant_int {
 
 			foreach ($fieldArray as $key => $field)	{
 				if ($this->selectableArray[$key])	{
+
 					$variantValue = $row[$field];
+
 					if (isset($variantValue))	{
 						$variantArray[] = $variantValue;
 					} else {
@@ -227,38 +227,20 @@ class tx_ttproducts_variant implements tx_ttproducts_variant_int {
 		$variant = implode (';', $variantArray);
 		return $variant;
 	}
-/*
-	public function getFirstVariantRow($row='')	{
-		$rc = '';
-		if (is_array($row))	{
-			$fieldArray = $this->getFieldArray();
-			$firstRow = $row;
-			foreach ($fieldArray as $field)	{
-				$variants = $row[$field];
-				$variantArray = t3lib_div::trimExplode (';', $variants);
-				$firstRow[$field] = $variantArray[0];
-			}
-			$rc = $firstRow;
-		} else {
-			$rc = $this->firstVariantRow;
-		}
-		return $rc;
-	}*/
 
-
-	public function getVariantRow ($row='',$varianArray=array())	{
+	public function getVariantRow ($row='',$variantArray=array())	{
 		$rc = '';
 
 		if (isset($row) && is_array($row))	{
-			if (!isset($varianArray))	{
-				$varianArray = array();
+			if (!isset($variantArray))	{
+				$variantArray = array();
 			}
 			$fieldArray = $this->getFieldArray();
 			$rcRow = $row;
 			foreach ($fieldArray as $field)	{
 				$variants = $row[$field];
 				$tmpArray = t3lib_div::trimExplode (';', $variants);
-				$index = (isset($varianArray[$field]) ? $varianArray[$field] : 0);
+				$index = (isset($variantArray[$field]) ? $variantArray[$field] : 0);
 				$rcRow[$field] = $tmpArray[$index];
 			}
 			$rc = $rcRow;
@@ -280,15 +262,18 @@ class tx_ttproducts_variant implements tx_ttproducts_variant_int {
 	}
 
 
-	public function getVariantValuesByArticle ($articleRowArray,$row='')	{
-		$rc = array();
+	public function getVariantValuesByArticle ($articleRowArray, $productRow, $withSemicolon = FALSE) {
+		$result = array();
 
 		$selectableFieldArray = $this->getSelectableFieldArray();
 
 		foreach ($selectableFieldArray as $field)	{
 
-			if (!$row || isset($row[$field]))	{
+			if (
+				isset($productRow[$field])
+			) {
 				$valueArray = array();
+				$productValueArray = t3lib_div::trimExplode(';', $productRow[$field]);
 
 				foreach ($articleRowArray as $articleRow)	{
 					$articleValueArray = t3lib_div::trimExplode(';',$articleRow[$field]);
@@ -298,22 +283,36 @@ class tx_ttproducts_variant implements tx_ttproducts_variant_int {
 					}
 				}
 				$valueArray = array_values(array_unique($valueArray));
+				if (!empty($productValueArray)) {
+					$sortedValueArray = array();
+					foreach ($productValueArray as $value) {
+						if (in_array($value, $valueArray)) {
+							$sortedValueArray[] = $value;
+						}
+					}
+					$valueArray = $sortedValueArray;
+				}
 
-				if ($row)	{
-					$rc[$field] = implode(';',$valueArray);
+				if ($withSemicolon) {
+					$result[$field] = implode(';',$valueArray);
 				} else {
-					$rc[$field] = $valueArray;
+					$result[$field] = $valueArray;
 				}
 			}
 		}
-		return $rc;
+		return $result;
 	}
 
 
 	// the article rows must be in the correct order already
-	public function filterArticleRowsByVariant ($articleRowArray, $variant, $bCombined=FALSE) {
+	public function filterArticleRowsByVariant ($row, $variant, $articleRowArray, $bCombined=FALSE) {
 
-		$variantRowArray = $this->getVariantValuesByArticle($articleRowArray);
+		$variantRowArray = $this->getVariantValuesByArticle($articleRowArray, $row, FALSE);
+		foreach ($variantRowArray as $field => $valueArray) {
+			if ($row[$field] != '') {
+				$variantRowArray[$field] = t3lib_div::trimExplode(';', $row[$field]);
+			}
+		}
 		$variantArray = explode(';', $variant);
 		$selectableFieldArray = $this->getSelectableFieldArray();
 		$possibleArticleArray = array();
@@ -321,6 +320,7 @@ class tx_ttproducts_variant implements tx_ttproducts_variant_int {
 		foreach ($articleRowArray as $articleRow)	{
 			$bMatches = TRUE;
 			$vCount = 0;
+
 			foreach ($this->selectableArray as $k => $v)	{
 
 				$variantIndex = $variantArray[$vCount]; // $k-1
@@ -350,61 +350,6 @@ class tx_ttproducts_variant implements tx_ttproducts_variant_int {
 
 		return $rc;
 	}
-
-// 	// the article rows must be in the correct order already
-// 	public function filterArticleRowsByVariant($articleRowArray, $variant, $bCombined=FALSE) {
-//
-// 		$variantRow = $this->getVariantValuesByArticle($articleRowArray);
-//
-// 		$variantArray = explode(';', $variant);
-// 		$fieldArray = $this->getFieldArray();
-// 		$combinedArticleArray = array();
-// 		$possibleArticleArray = array_keys ($articleRowArray);
-// 		foreach ($this->bSelectableArray as $k => $v)	{
-// 			if ($v && $variantArray[$k-1] != '')	{
-// 				$field = $fieldArray[$k];
-// 				$valueArray = array();
-// 				$tmpArticleArray = array();
-//
-// 				foreach ($possibleArticleArray as $v2)	{
-// 					$articleRow = $articleRowArray[$v2];
-// 					$value = $articleRow[$field];
-// 					if ($value != '')	{
-// 						$tmpArray = t3lib_div::trimExplode (';', $value);
-// 						foreach ($tmpArray as $v3)	{
-//
-// 							if (!isset($tmpArticleArray[$v3]))	{
-// 								$tmpArticleArray[$v3] = array($v2);
-// 							} else {
-// 								$tmpArticleArray[$v3][] = $v2;
-// 							}
-// 						}
-// 						$valueArray = array_merge ($valueArray, $tmpArray);
-// 					}
-// 				}
-//
-// 				$valueArray = array_unique ($valueArray);
-// 				$variantIndex = $variantArray[$k-1];
-// 				if (isset($valueArray[$variantIndex]))	{
-// 					if ($bCombined)	{
-// 						$combinedArticleArray[] = array_merge($combinedArticleArray, $tmpArticleArray[$valueArray[$variantIndex]]);
-// 					} else {
-// 						$possibleArticleArray = array_intersect ($possibleArticleArray, $tmpArticleArray[$valueArray[$variantIndex]]);
-// 					}
-// 				}
-// 			}
-// 		}
-// 		$rc = array();
-// 		if ($bCombined)	{
-// 			$possibleArticleArray = $combinedArticleArray;
-// 		}
-// 		foreach ($possibleArticleArray as $key)	{
-// 			$rc[] = $articleRowArray[$key];
-// 		}
-//
-// // filterArticleRowsByVariant
-// 		return $rc;
-// 	}
 
 
 	public function getFieldArray ()	{

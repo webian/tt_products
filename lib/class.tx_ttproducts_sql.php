@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2010 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2011 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,8 +29,6 @@
  *
  * functions for creating sql queries on arrays
  *
- * $Id$
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -41,16 +39,23 @@
 
 
 
-class tx_ttproducts_sql {
+class tx_ttproducts_sql implements t3lib_Singleton {
 
-	public static function isValid (&$row, $where)	{
+	public static function isValid ($row, $where)	{
 		$whereArray = t3lib_div::trimExplode ('AND', $where);
 		$isValid = TRUE;
+
 		foreach($whereArray as $k3 => $condition) {
+
 			if (strpos($condition, '=') !== FALSE)	{
-				$args = t3lib_div::trimExplode ('=', $condition);
-				if ($row[$args[0]] != $args[1]) {
-					$isValid = FALSE;
+				if ($condition == '1=1' || $condition == '1 = 1') {
+					// nothing: $isValid = TRUE;
+				} else {
+					$args = t3lib_div::trimExplode ('=', $condition);
+
+					if ($row[$args[0]] != $args[1]) {
+						$isValid = FALSE;
+					}
 				}
 			} else if (strpos($condition, 'IN') !== FALSE)	{
 				$split = 'IN';

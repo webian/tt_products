@@ -29,8 +29,6 @@
  *
  * function for the TYPO3 caching framework needed from TYPO3 4.3 to 4.5
  *
- * $Id$
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -40,56 +38,101 @@
 
 
 class tx_ttproducts_cache {
+	public $typo3CacheManager;
 
-    /**
-     * @var t3lib_cache_frontend_AbstractFrontend
-     */
-    protected $cacheInstance;
-
-
-    /**
-     * Constructor
-     */
-    public function __construct () {
-        $this->initializeCache();
-    }
+	/**
+		* @var t3lib_cache_frontend_AbstractFrontend
+		*/
+	protected $cacheInstance;
 
 
-    /**
-     * Initialize cache instance to be ready to use
-     *
-     * @return void
-     */
-    protected function initializeCache () {
-        t3lib_cache::initializeCachingFramework();
-        try {
-            $this->cacheInstance = $GLOBALS['typo3CacheManager']->getCache('tt_products_cache');
-        }
-        catch (t3lib_cache_exception_NoSuchCache $e) {
-            $this->cacheInstance = $GLOBALS['typo3CacheFactory']->create(
-                'tt_products_cache',
-                $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tt_products_cache']['frontend'],
-                $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tt_products_cache']['backend'],
-                $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tt_products_cache']['options']
-            );
-        }
-    }
+	/**
+		* Constructor
+		*/
+	public function __construct () {
+		$this->initializeCache();
+	}
+
+
+	/**
+		* Initialize cache instance to be ready to use
+		*
+		* @return void
+		*/
+	protected function initializeCache () {
+		if (version_compare(TYPO3_version, '7.0.0', '<')) {
+			tx_div2007_core::initializeCachingFramework();
+			$typo3CacheManager = '';
+
+			try {
+				$typo3CacheClass = 'TYPO3\\CMS\\Core\\Cache\\CacheManager';
+
+				if (
+					isset($GLOBALS['typo3CacheManager']) &&
+					is_object($GLOBALS['typo3CacheManager'])
+				) {
+					$typo3CacheManager = $GLOBALS['typo3CacheManager'];
+				} elseif (
+					class_exists($typo3CacheClass) &&
+					method_exists($typo3CacheClass, 'getCache')
+				) {
+					$typo3CacheManager = t3lib_div::makeInstance($typo3CacheClass);
+				}
+
+				if (isset($typo3CacheManager) && is_object($typo3CacheManager)) {
+					$this->cacheInstance = $typo3CacheManager->getCache('tt_products_cache');
+				}
+				$this->typo3CacheManager = $typo3CacheManager;
+			}
+
+			catch (t3lib_cache_exception_NoSuchCache $e) {
+				$typo3CacheFactory = '';
+				$typo3CacheClass = 'TYPO3\\CMS\\Core\\Cache\\CacheFactory';
+
+				if (
+					isset($GLOBALS['typo3CacheFactory']) &&
+					is_object($GLOBALS['typo3CacheFactory'])
+				) {
+					$typo3CacheFactory = $GLOBALS['typo3CacheFactory'];
+				} elseif (
+					class_exists($typo3CacheClass) &&
+					method_exists($typo3CacheClass, 'create')
+				) {
+					$typo3CacheFactory = t3lib_div::makeInstance($typo3CacheClass);
+				}
+
+				if (
+					isset($typo3CacheFactory) &&
+					is_object($typo3CacheFactory)
+				) {
+					$this->cacheInstance = $typo3CacheFactory->create(
+						'tt_products_cache',
+						$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tt_products_cache']['frontend'],
+						$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tt_products_cache']['backend'],
+						$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tt_products_cache']['options']
+					);
+				}
+			}
+		}
+	}
 
 
 	// Todo. See http://wiki.typo3.org/Caching_framework
     protected function getCachedMagic () {
-        $cacheIdentifier = $this->calculateCacheIdentifier();
+		if (version_compare(TYPO3_version, '7.0.0', '<')) {
+			$cacheIdentifier = $this->calculateCacheIdentifier();
 
-        // If $entry is null, it hasn't been cached. Calculate the value and store it in the cache:
-        if (is_null($entry = $GLOBALS['typo3CacheManager']->getCache('myCache')->get($cacheIdentifier))) {
-            $entry = $this->calculateMagic();
+			// If $entry is null, it hasn't been cached. Calculate the value and store it in the cache:
+			if (is_null($entry = $this->typo3CacheManager->getCache('tt_products_cache')->get($cacheIdentifier))) {
+					$entry = $this->calculateMagic();
 
-            // [calculate lifetime and assigned tags]
+					// [calculate lifetime and assigned tags]
 
-            // Save value in cache
-            $GLOBALS['typo3CacheManager']->getCache('myCache')->set($cacheIdentifier, $entry, $tags, $lifetime);
-        }
-        return $entry;
+					// Save value in cache
+					$this->typo3CacheManager->getCache('tt_products_cache')->set($cacheIdentifier, $entry, $tags, $lifetime);
+				}
+			return $entry;
+		}
 	}
 }
 
@@ -97,6 +140,5 @@ class tx_ttproducts_cache {
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/cache/class.tx_ttproducts_cache.php']) {
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/cache/class.tx_ttproducts_cache.php']);
 }
-
 
 ?>

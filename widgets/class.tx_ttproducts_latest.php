@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008 Tim Lochmueller <webmaster@fruit-lab.de>
+*  (c) 2008 Tim Lochmueller (webmaster@fruit-lab.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,8 +29,6 @@
  *
  * dashboard functions
  *
- * $Id: class.tx_ttproducts_latest.php 9057 2008-05-01 20:00:10Z franzholz $
- *
  * @author	Tim Lochmueller <webmaster@fruit-lab.de>
  * @package TYPO3
  * @subpackage tt_products
@@ -38,16 +36,16 @@
  *
  */
 
+
 require_once(t3lib_extMgm::extPath('mydashboard', 'templates/class.tx_mydashboard_template.php'));
 require_once(t3lib_extMgm::extPath('mydashboard', 'templates/interface.tx_mydashboard_widgetinterface.php'));
 
 class tx_ttproducts_latest extends tx_mydashboard_template implements tx_mydashboard_widgetinterface {
 
-
 	/*
 	 * initial  the Widget
 	 */
-	function init(){
+	public function init () {
 
 		// Init Parent
 		parent::init();
@@ -61,24 +59,24 @@ class tx_ttproducts_latest extends tx_mydashboard_template implements tx_mydashb
 		);
 
 		// Add Language File
-		$this->addLanguageFile(t3lib_div::getFileAbsFileName('EXT:tt_products/widgets/labels.xml'));
+		$this->addLanguageFile(t3lib_div::getFileAbsFileName('EXT:tt_products/widgets/locallang.xml'));
 
 		// Set the Default config
 		$this->setDefaultConfig($config);
 
 		// Set title & icon
 		$this->setTitle('Shop System Lists');
-		$this->setIcon(PATH_BE_ttproducts_rel.'ext_icon.gif');
+		$this->setIcon(PATH_BE_TTPRODUCTS_REL . 'ext_icon.gif');
 
 		// required
-		return true;
-	} # function - init
+		return TRUE;
+	} // function - init
 
 
 	/*
 	 * Print the Content
 	 */
-	public function getContent(){
+	public function getContent () {
 
 		// Build the Option Menu
 		$options = array(
@@ -99,7 +97,7 @@ class tx_ttproducts_latest extends tx_mydashboard_template implements tx_mydashb
 
 				// Show Database List
 				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','sys_products_orders','deleted=0','','uid DESC',$limit);
-		
+
 				// Render List
 				$c .= $this->showDatabaseList('Orders:',$res,'uid,name,amount,crdate,note');
 			break;
@@ -107,33 +105,33 @@ class tx_ttproducts_latest extends tx_mydashboard_template implements tx_mydashb
 			case 'products':
 
 				// Show Database List
-				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tt_products','deleted=0 AND hidden=0','','crdate DESC',$limit);
-		
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tt_products', 'deleted=0 AND hidden=0', '', 'crdate DESC', $limit);
+
 				// Render List
-				$c .= $this->showDatabaseList('Products:',$res,'uid,itemnumber,title,price');
+				$c .= $this->showDatabaseList('Products:', $res, 'uid,itemnumber,title,price,deposit');
 			break;
 
 			case 'outstock':
 
 				// Show Database List
-				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tt_products','deleted=0 AND hidden=0 AND inStock<=0','','inStock',$limit);
-		
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tt_products', 'deleted=0 AND hidden=0 AND inStock<=0', '', 'inStock', $limit);
+
 				// Render List
-				$c .= $this->showDatabaseList('Products:',$res,'uid,itemnumber,title,inStock');
+				$c .= $this->showDatabaseList('Products:', $res, 'uid,itemnumber,title,inStock');
 			break;
 
 			case 'fewstock':
 
 				// Show Database List
-				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tt_products','deleted=0 AND hidden=0 AND inStock>0','','inStock',$limit);
-		
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tt_products', 'deleted=0 AND hidden=0 AND inStock>0', '', 'inStock', $limit);
+
 				// Render List
-				$c .= $this->showDatabaseList('Products:',$res,'uid,itemnumber,title,inStock');
+				$c .= $this->showDatabaseList('Products:', $res, 'uid,itemnumber,title,inStock');
 			break;
 		}
 
 		return $c;
-	} # function - getContent
+	} // function - getContent
 
 
 } # class - tx_ttproducts_latest
@@ -141,4 +139,3 @@ class tx_ttproducts_latest extends tx_mydashboard_template implements tx_mydashb
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/tt_products/widgets/class.tx_ttproducts_latest.php']) {
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/tt_products/widgets/class.tx_ttproducts_latest.php']);
 } # if
-?>

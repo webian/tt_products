@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2009-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2009-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,8 +29,6 @@
  *
  * functions for the control of views
  *
- * $Id$
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -40,7 +38,7 @@
  */
 
 
-class tx_ttproducts_control_view {
+class tx_ttproducts_control_view implements t3lib_Singleton {
 
 	/**
 	 * Template marker substitution
@@ -55,7 +53,7 @@ class tx_ttproducts_control_view {
 		global $TSFE;
 
 		if (isset($tableConfArray) && is_array($tableConfArray))	{
-			$langObj = &t3lib_div::getUserObj('&tx_ttproducts_language');
+			$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
 			$allValueArray = array();
 			$controlArray = tx_ttproducts_model_control::getControlArray();
 
@@ -79,6 +77,7 @@ class tx_ttproducts_control_view {
 			}
 
 			if (isset($allValueArray) && is_array($allValueArray))	{
+
 				foreach ($allValueArray as $key => $xValueArray)	{
 					$keyArray = t3lib_div::trimExplode(';',$key);
 					$type = $keyArray[0];

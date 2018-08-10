@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2006-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2006-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,8 +29,6 @@
  *
  * functions for the product
  *
- * $Id$
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -39,8 +37,6 @@
  *
  */
 
-
-require_once (PATH_BE_ttproducts.'model/class.tx_ttproducts_article_base.php');
 
 
 class tx_ttproducts_article extends tx_ttproducts_article_base {
@@ -55,11 +51,11 @@ class tx_ttproducts_article extends tx_ttproducts_article_base {
 	/**
 	 * Getting all tt_products_cat categories into internal array
 	 */
-	function init (&$cObj, $functablename)  {
+	function init ($cObj, $functablename)  {
 		global $TYPO3_DB,$TSFE,$TCA;
 
 		parent::init($cObj, $functablename);
-		$cnf = &t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$tableConfig = array();
 		$tableConfig['orderBy'] = $cnf->conf['orderBy'];
 
@@ -67,61 +63,13 @@ class tx_ttproducts_article extends tx_ttproducts_article_base {
 			 $tableConfig['orderBy'] = $this->getOrderBy ();
 		}
 
-		$tableObj = &$this->getTableObj();
+		$tableObj = $this->getTableObj();
 		$tableObj->setConfig($tableConfig);
 		$tableObj->addDefaultFieldArray(array('sorting' => 'sorting'));
+
+		$this->relatedArray['accessories'] = array();
 	} // init
 
-/*
-	function get ($uid=0,$pid=0,$bStore=TRUE,$where_clause='',$limit='',$fields='',$bCount=FALSE) {
-		global $TYPO3_DB;
-
-		$rc = $this->dataArray[$uid];
-		if (!$rc && $uid) {
-			$where = '1=1 '.$this->getTableObj()->enableFields().' AND uid = '.intval($uid);
-			if ($where_clause)	{
-				$where .= ' '.$where_clause;
-			}
-			// Fetching the articles
-			$res = $this->getTableObj()->exec_SELECTquery('*', $where);
-			$row = $TYPO3_DB->sql_fetch_assoc($res);
-			$TYPO3_DB->sql_free_result($res);
-			$variantFieldArray = $this->variant->getFieldArray();
-			$this->getTableObj()->substituteMarkerArray($row, $variantFieldArray);
-			$rc = $this->dataArray[$uid] = $row;
-		}
-		return $rc;
-	}*/
-
-/*
-	public function getUidArray ($prodUid, $articleRowArray)	{
-		global $TYPO3_DB;
-
-		$tablesObj = &t3lib_div::getUserObj('&tx_ttproducts_tables');
-// Todo:		$mmObj = &$tablesObj->getMM('tt_products_products_mm_articles');
-		$uidArray = array();
-		foreach ($articleRowArray as $row)	{
-			$uidArray[] = $row['uid'];
-		}
-		$mmArray = $TYPO3_DB->exec_SELECTquery('*', 'tt_products_products_mm_articles', 'deleted=0');
-		return $rc;
-	}*/
-
-// 	function sortArticleRowsByUidArray ($articleRowArray,$uidArray)	{
-// 		$uidArray = array();
-// 		$rcArray = array();
-// 		if (isset($articleRowArray) && is_array($articleRowArray))	{
-// 			// sort by uid, because the index relies on this
-// 			foreach ($articleRowArray as $articleRow)	{
-// 				$uidArray[$articleRow['uid']] = $articleRow;
-// 			}
-// 			ksort($uidArray);
-// 			foreach ($uidArray as $uid => $articleRow)	{
-// 				$rcArray[] = $articleRow;
-// 			}
-// 		}
-// 		return $rcArray;
-// 	}
 
 	function &getWhereArray ($prodUid, $where) {
 		global $TYPO3_DB;
@@ -130,25 +78,27 @@ class tx_ttproducts_article extends tx_ttproducts_article_base {
 		$enableWhere = $this->getTableObj()->enableFields();
 		$where = ($where ? $where . ' ' . $enableWhere : '1=1 ' . $enableWhere);
 		$alias = $this->getAlias();
+		$fromJoin = '';
 
-		if (in_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXTkey]['articleMode'], array(1,2)))	{
+		if (in_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['articleMode'], array(1,2)))	{
 
 			$finalWhere = 'tt_products_products_mm_articles.uid_local=' . intval($prodUid) . ' AND tt_products_products_mm_articles.deleted=0 AND tt_products_products_mm_articles.hidden=0' . ($where!='' ? ' AND '.$where : '');
+
 			$mmTable = 'tt_products_products_mm_articles';
 			$uidForeignArticle = 'uid_foreign';
 			$fromJoin = 'tt_products_articles ' . $alias . ' JOIN ' . $mmTable . ' ON ' . $alias . '.uid=' . $mmTable . '.' . $uidForeignArticle;
-			$finalOrderBy = $mmTable . '.sorting';
+			$finalOrderBy = $mmTable . '.sorting DESC';
 		} else {
 		//	$fromJoin = 'tt_products_articles ' . $alias;
 			$finalWhere = $alias . '.uid_product=' . intval($prodUid) . ($where ? ' AND ' . $where : '');
 			$finalOrderBy = '';
 		}
+
 		$res = $this->getTableObj()->exec_SELECTquery('*',$finalWhere,'',$finalOrderBy,'',$fromJoin);
-		$variantFieldArray = $this->variant->getFieldArray();
 
 		while($row = $TYPO3_DB->sql_fetch_assoc($res))	{
+
 			$uid = intval($row['uid']);
-			$this->getTableObj()->substituteMarkerArray($row, $variantFieldArray);
 			$this->dataArray[$uid] = $row;	// remember for later queries
 			$uidArray[] = $uid;
 			$rowArray[] = $row;
@@ -178,7 +128,7 @@ class tx_ttproducts_article extends tx_ttproducts_article_base {
 
 	public function getRequiredFieldArray ($theCode='')	{
 		$tableConf = $this->getTableConf($theCode);
-		$cnf = &t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$rc = array();
 		if ($tableConf['requiredFields']!='')	{
 			$requiredFields = $tableConf['requiredFields'];
@@ -192,6 +142,14 @@ class tx_ttproducts_article extends tx_ttproducts_article_base {
 
 		$rc = $requiredFields;
 		return $rc;
+	}
+
+
+	public function getRelatedArrays (&$allowedRelatedTypeArray, &$mmTable) {
+		$allowedRelatedTypeArray = array('accessories');
+		$mmTable = array(
+			'accessories' => array('table' =>  'tt_products_accessory_articles_articles_mm')
+		);
 	}
 }
 

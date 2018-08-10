@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2008 Franz Holzinger <contact@fholzinger.com>
+*  (c) 2007-2008 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the Typo3 project. The Typo3 project is
@@ -26,9 +26,7 @@
 /**
  * Class for updating the db
  *
- * $Id$
- *
- * @author	 Franz Holzinger <contact@fholzinger.com>
+ * @author	 Franz Holzinger <franz@ttproducts.de>
  */
 class ext_update  {
 
@@ -45,10 +43,10 @@ class ext_update  {
 		$content.= '<br /><b>Create a backup of your TYPO3 database before you execute this script!</b>';
 
 		if(t3lib_div::_GP('integrate')) {
-			require_once(t3lib_extMgm::extPath(TT_PRODUCTS_EXTkey).'lib/class.tx_ttproducts_integrate.php');
+			require_once(t3lib_extMgm::extPath(TT_PRODUCTS_EXT).'lib/class.tx_ttproducts_integrate.php');
 			$count = tx_ttproducts_integrate::generateArticleMM();
 
-			$content .= '<p>You have integrated '.$count.' articles into the table tt_products_products_mm_articles</p>';
+			$content .= '<p>You have integrated ' . $count . ' articles into the table tt_products_products_mm_articles</p>';
 			$content .= '<p>Done</p>';
 		} else {
 			$linkScript = t3lib_div::slashJS(t3lib_div::linkThisScript());
@@ -75,8 +73,8 @@ class ext_update  {
 }
 
 // Include extension?
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/static_info_tables/class.ext_update.php'])	{
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/static_info_tables/class.ext_update.php']);
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/class.ext_update.php'])	{
+	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/class.ext_update.php']);
 }
 
 

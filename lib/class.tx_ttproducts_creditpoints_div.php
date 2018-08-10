@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,8 +29,6 @@
  *
  * creditpoints functions
  *
- * $Id: class.tx_ttproducts_creditpoints_div.php 3625 2006-08-26 20:19:47Z franzholz $
- *
  * @author  Els Verberne <verberne@bendoo.nl>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -46,7 +44,7 @@ class tx_ttproducts_creditpoints_div {
 	/**
 	 * Returns the number of creditpoints for the frontend user
 	 */
-	function getCreditPoints ($amount, $creditpointsConf)	{
+	static public function getCreditPoints ($amount, $creditpointsConf)	{
 		$type = '';
 		$creditpoints = 0;
 		if (is_array($creditpointsConf))	{
@@ -86,7 +84,7 @@ class tx_ttproducts_creditpoints_div {
 	/**
 	 * adds the number of creditpoints for the frontend user
 	 */
-	function addCreditPoints ($username, $creditpoints)  {
+	static public function addCreditPoints ($username, $creditpoints)  {
 		global $TYPO3_DB;
 
 		if ($username) {
@@ -111,6 +109,5 @@ class tx_ttproducts_creditpoints_div {
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/lib/class.tx_ttproducts_creditpoints_div.php'])	{
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/lib/class.tx_ttproducts_creditpoints_div.php']);
 }
-
 
 ?>

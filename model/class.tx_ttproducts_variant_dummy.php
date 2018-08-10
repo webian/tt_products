@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2007-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,8 +29,6 @@
  *
  * article functions without object instance
  *
- * $Id$
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -38,17 +36,15 @@
  *
  */
 
-require_once (PATH_BE_ttproducts.'model/interface.tx_ttproducts_variant_int.php');
 
-
-class tx_ttproducts_variant_dummy implements tx_ttproducts_variant_int {
+class tx_ttproducts_variant_dummy  implements t3lib_Singleton, tx_ttproducts_variant_int {
 	private $selectableArray = array();
 	public $conf;	// reduced local conf
 
 	/**
 	 * setting the local variables
 	 */
-	public function init (&$itemTable, $tablename, $useArticles)  {
+	public function init ($itemTable, $tablename, $useArticles)  {
 
 	} // init
 
@@ -107,10 +103,10 @@ class tx_ttproducts_variant_dummy implements tx_ttproducts_variant_int {
 		return $this->selectableArray;
 	}
 
-	public function getVariantValuesByArticle ($articleRowArray)	{
+	public function getVariantValuesByArticle ($articleRowArray,$productRow,$withSemicolon = FALSE) {
 	}
 
-	public function filterArticleRowsByVariant ($articleRows, $variant) {
+	public function filterArticleRowsByVariant($row, $variant, $articleRows, $bCombined=FALSE) {
 	}
 
 	public function getFieldArray ()	{

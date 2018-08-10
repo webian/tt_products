@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2007-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,8 +29,6 @@
  *
  * base class for all database table fields classes
  *
- * $Id$
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -39,19 +37,16 @@
  */
 
 
-require_once (PATH_BE_ttproducts.'model/field/interface.tx_ttproducts_field_int.php');
-
-
-abstract class tx_ttproducts_field_base implements tx_ttproducts_field_int {
+abstract class tx_ttproducts_field_base implements tx_ttproducts_field_int, t3lib_Singleton {
 	private $bHasBeenInitialised = false;
 	var $cObj;
 	var $conf;		// original configuration
 	var $config;		// modified configuration
 	var $viewObj;		// view object
 
-	function init (&$cObj)	{
-		$this->cObj = &$cObj;
-		$cnf = &t3lib_div::getUserObj('&tx_ttproducts_config');
+	function init ($cObj)	{
+		$this->cObj = $cObj;
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
 
@@ -62,7 +57,7 @@ abstract class tx_ttproducts_field_base implements tx_ttproducts_field_int {
 		return !$this->bHasBeenInitialised;
 	}
 
-	function getFieldValue ($row, $fieldname)	{
+	function getFieldValue ($basketExtra, $row, $fieldname)	{
 		return $row[$fieldname];
 	}
 }

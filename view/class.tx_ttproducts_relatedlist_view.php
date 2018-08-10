@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2008-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,8 +29,6 @@
  *
  * related product list view functions
  *
- * $Id$
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -39,24 +37,23 @@
  *
  */
 
-require_once (PATH_BE_ttproducts.'model/class.tx_ttproducts_pid_list.php');
 
 
-class tx_ttproducts_relatedlist_view {
+class tx_ttproducts_relatedlist_view implements t3lib_Singleton {
 	public $conf;
 	public $config;
 	public $pidListObj;
 	public $cObj;
 
 
-	public function init (&$cObj, $pid_list, $recursive)	{
-		$this->cObj = &$cObj;
+	public function init ($cObj, $pid_list, $recursive)	{
+		$this->cObj = $cObj;
 
-		$cnf = &t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
 
-		$this->pidListObj = &t3lib_div::getUserObj('tx_ttproducts_pid_list');
+		$this->pidListObj = t3lib_div::makeInstance('tx_ttproducts_pid_list');
 		$this->pidListObj->init($cObj);
 		$this->pidListObj->applyRecursive($recursive, $pid_list, TRUE);
 		$this->pidListObj->setPageArray();
@@ -72,8 +69,6 @@ class tx_ttproducts_relatedlist_view {
 		&$markerArray,
 		$viewTagArray
 	) {
-		require_once (PATH_BE_ttproducts.'control/class.tx_ttproducts_control_basketquantity.php');
-
 		$addListArray = $this->getAddListArray (
 			$theCode,
 			$functablename,
@@ -81,8 +76,8 @@ class tx_ttproducts_relatedlist_view {
 			'',
 			$this->useArticles
 		);
-		$tablesObj = &t3lib_div::getUserObj('&tx_ttproducts_tables');
-		$itemObj = &$tablesObj->get($functablename);
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$itemObj = $tablesObj->get($functablename);
 
 		$rowArray = array();
 		$rowArray[$functablename] = $itemArray;
@@ -117,7 +112,7 @@ class tx_ttproducts_relatedlist_view {
 
 		switch ($functablename)	{
 			case 'tt_products':
-				$rc =
+				$result =
 					array(
 						'articles' => array(
 							'marker' => 'PRODUCT_RELATED_ARTICLES',
@@ -152,6 +147,22 @@ class tx_ttproducts_relatedlist_view {
 					);
 				break;
 
+			case 'tt_products_articles':
+				$result =
+					array(
+						'accessories' => array(
+							'marker' => 'ARTICLE_ACCESSORY_UID',
+							'template' => 'ITEM_LIST_ACCESSORY_TEMPLATE',
+							'require' => TRUE,
+							'code' => 'LISTACCESSORY',
+							'additionalPages' => $this->conf['pidsRelatedAccessories'],
+							'mergeRow' => array(),
+							'functablename' => 'tt_products_articles',
+							'callFunctableArray' => array()
+						)
+					);
+				break;
+
 			case 'tx_dam':
 				if (t3lib_extMgm::isLoaded('dam'))	{
 					if ($uid > 0)	{
@@ -164,7 +175,7 @@ class tx_ttproducts_relatedlist_view {
 					} else {
 						$extArray = array();
 					}
-					$rc =
+					$result =
 						array(
 							'products' => array(
 								'marker' => 'DAM_PRODUCTS',
@@ -180,7 +191,7 @@ class tx_ttproducts_relatedlist_view {
 				}
 				break;
 		}
-		return $rc;
+		return $result;
 	}
 
 
@@ -199,12 +210,13 @@ class tx_ttproducts_relatedlist_view {
 		&$error_code
 	)	{
 		$result = FALSE;
-		$tablesObj = &t3lib_div::getUserObj('&tx_ttproducts_tables');
-		$itemViewObj = &$tablesObj->get($functablename, TRUE);
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$itemViewObj = $tablesObj->get($functablename, TRUE);
 		$addListArray = $this->getAddListArray($theCode, $functablename, $itemViewObj->getMarker(), $uid, $useArticles);
+
 		if (is_array($addListArray))	{
 			$listView = '';
-			$itemObj = &$itemViewObj->getModelObj();
+			$itemObj = $itemViewObj->getModelObj();
 
 			foreach ($addListArray as $subtype => $funcArray)	{
 
@@ -234,6 +246,10 @@ class tx_ttproducts_relatedlist_view {
 							$listPids = $this->pidListObj->getPidlist();
 						}
 
+						$parentDataArray = array(
+							'functablename' => $functablename,
+							'uid' => $uid
+						);
 						$tmpContent = $listView->printView (
 							$templateCode,
 							$funcArray['code'],
@@ -245,7 +261,8 @@ class tx_ttproducts_relatedlist_view {
 							$pageAsCategory,
 							array(),
 							1,
-							$callFunctableArray
+							$callFunctableArray,
+							$parentDataArray
 						);
 
 						$result['###' . $funcArray['marker'] . '###'] = $tmpContent;
@@ -253,10 +270,13 @@ class tx_ttproducts_relatedlist_view {
 						$result['###' . $funcArray['marker'] . '###'] = '';
 					}
 				} else {
-					$result['###' . $funcArray['marker'] . '###'] = '';
+					if (isset($viewTagArray[$funcArray['marker']])) {
+						$result['###' . $funcArray['marker'] . '###'] = '';
+					}
 				}
 			}
 		}
+
 		return $result;
 	}
 }

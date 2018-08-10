@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2009-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2009-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,8 +29,6 @@
  *
  * control function for the basket quantity. Todo: only this should be USER_INT
  *
- * $Id$
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -39,7 +37,7 @@
  */
 
 
-class tx_ttproducts_control_basketquantity {
+class tx_ttproducts_control_basketquantity implements t3lib_Singleton {
 
 	public function getQuantityMarker (
 		$marker,
@@ -60,16 +58,16 @@ class tx_ttproducts_control_basketquantity {
 		&$rowArray,
 		&$markerArray
 	)	{
-		$tablesObj = &t3lib_div::getUserObj('&tx_ttproducts_tables');
-		$prodViewObj = &$tablesObj->get('tt_products',TRUE);
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$prodViewObj = $tablesObj->get('tt_products',TRUE);
 
-		$basketObj = &t3lib_div::getUserObj('&tx_ttproducts_basket');
+		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
 		$quantityArray = $basketObj->getQuantityArray($relatedIds,$rowArray);
 
 		foreach ($rowArray as $functablename => $functableRowArray)	{
 
-			$viewObj = &$tablesObj->get($functablename,TRUE);
-			$modelObj = &$viewObj->getModelObj();
+			$viewObj = $tablesObj->get($functablename,TRUE);
+			$modelObj = $viewObj->getModelObj();
 			$marker = $viewObj->getMarker();
 
 			foreach ($relatedIds as $uid)	{

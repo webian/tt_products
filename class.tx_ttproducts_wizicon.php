@@ -1,67 +1,44 @@
 <?php
-/***************************************************************
-*  Copyright notice
-*
-*  (c) 1999-2011 Kasper Skårhøj (kasperYYYY@typo3.com)
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*  A copy is found in the textfile GPL.txt and important notices to the license
-*  from the author is found in LICENSE.txt distributed with these scripts.
-*
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
 /**
- * $Id: class.tx_ttproducts_wizicon.php,v 1.15 2006/05/31 12:02:05 franzholz Exp $
+ * This file is part of the TYPO3 CMS project.
  *
- * @author	Kasper Skårhøj <kasperYYYY@typo3.com>
- * @author	Franz Holzinger <kontakt@fholzinger.com>
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ * The TYPO3 project - inspiring people to share!
+ */
+
+/**
+ * Class that adds the wizard icon.
+ *
+ * @author  Kasper Skårhøj <kasperYYYY@typo3.com>
+ * @author  Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products
  */
-
-
 class tx_ttproducts_wizicon {
-	function proc($wizardItems)	{
-		global $LANG;
 
-		$LL = $this->includeLocalLang();
-		$params = '&defVals[tt_content][CType]=list&defVals[tt_content][list_type]=5&defVals[tt_content][select_key]=HELP';
-		$wizardItems['plugins_tx_ttproducts_pi1'] = array(
-			'icon'=>PATH_BE_ttproducts_rel.'res/icons/be/ce_wiz.gif',
-			'title'=>$LANG->getLLL('plugins_title',$LL),
-			'description'=>$LANG->getLLL('plugins_description',$LL),
-			'params'=> $params);
+    /**
+     * Processing the wizard items array
+     *
+     * @param array $wizardItems The wizard items
+     * @return array Modified array with wizard items
+     */
+    public function proc($wizardItems) {
+        $params = '&defVals[tt_content][CType]=list&defVals[tt_content][list_type]=5&defVals[tt_content][select_key]=HELP';
+        $wizardItems['plugins_tx_ttproducts_pi1'] = array(
+            'icon' => PATH_BE_TTPRODUCTS_REL . 'Resources/Public/Images/PluginWizard.png',
+            'title' => $GLOBALS['LANG']->sL('LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang.xml:plugins_title'),
+            'description' => $GLOBALS['LANG']->sL('LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang.xml:plugins_description'),
+            'params' => $params
+        );
 
-		return $wizardItems;
-	}
-
-	/**
-	 * Includes the locallang.xml and returns the $LOCAL_LANG array found in that file.
-	 */
-	function includeLocalLang()	{
-
-		$LOCAL_LANG = $GLOBALS['LANG']->includeLLFile(PATH_BE_ttproducts.'locallang.xml',FALSE);
-
-		return $LOCAL_LANG;
-	}
+        return $wizardItems;
+    }
 }
 
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/class.tx_ttproducts_wizicon.php'])	{
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/class.tx_ttproducts_wizicon.php']);
-}
 
-?>

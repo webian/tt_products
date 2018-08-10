@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2006-2008 Franz Holzinger <contact@fholzinger.com>
+*  (c) 2006-2008 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,18 +29,14 @@
  *
  * functions for the static_info_countries table
  *
- * $Id$
- *
- * @author	Franz Holzinger <contact@fholzinger.com>
- * @maintainer	Franz Holzinger <contact@fholzinger.com> 
+ * @author	Franz Holzinger <franz@ttproducts.de>
+ * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products
  *
  *
  */
 
-
-require_once(PATH_BE_table.'lib/class.tx_table_db.php');
 
 
 class tx_ttproducts_country extends tx_ttproducts_table_base {
@@ -53,10 +49,10 @@ class tx_ttproducts_country extends tx_ttproducts_table_base {
 	/**
 	 * Getting all tt_products_cat categories into internal array
 	 */
-	function init (&$pibase, $functablename)	{
-		parent::init($pibase, $functablename);
+	function init ($cObj, $functablename)	{
+		parent::init($cObj, $functablename);
 		$tablename = $this->getTablename();
-		$cnf = &t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$this->tableconf = $cnf->getTableConf('static_countries');
 		$this->getTableObj()->setDefaultFieldArray(array('uid'=>'uid', 'pid'=>'pid'));
 		$this->getTableObj()->setTCAFieldArray('static_countries');
@@ -88,7 +84,7 @@ class tx_ttproducts_country extends tx_ttproducts_table_base {
 
 		if (!$fields)	{
 			$rc = $this->dataArray[$country_code];
-		}	
+		}
 		if (!$rc || $where) {
 			if ($country_code)	{
 				$whereString = 'cn_iso_3 = '.$TYPO3_DB->fullQuoteStr($country_code, $this->getTableObj()->name);
@@ -119,26 +115,6 @@ class tx_ttproducts_country extends tx_ttproducts_table_base {
 		}
 		return $rc;
 	}
-
-
-	/**
-	 * Template marker substitution
-	 * Fills in the markerArray with data for a country
-	 *
-	 * @param	array		reference to an item array with all the data of the item
-	 * @param	array		marker array
-	 * @return	array
-	 * @access private
-	 */
-// 	function getItemMarkerArray (&$row, &$markerArray, &$fieldsArray)	{
-// 		global $TSFE;
-// 
-// 		$markerTable = implode('',t3lib_div::trimExplode('_',$this->getTableObj()->name));
-// 
-// 		foreach ($fieldsArray as $k => $field)	{
-// 			$markerArray['###'.strtoupper($markerTable.'_'.$field).'###'] = htmlentities($row [$field],ENT_QUOTES,$TSFE->renderCharset);
-// 		}
-// 	}
 
 }
 

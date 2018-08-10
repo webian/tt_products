@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2010 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2007-2011 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,8 +29,6 @@
  *
  * view functions for a basket item object
  *
- * $Id: class.tx_ttproducts_basketitem_view.php 3670 2006-09-06 19:52:48Z franzholz $
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -39,10 +37,10 @@
  */
 
 
-class tx_ttproducts_basketitem_view {
+class tx_ttproducts_basketitem_view implements t3lib_Singleton {
 	private $conf;
 	private $config;
-	var $basketExt; 	// basket
+	public $basketExt; 	// basket
 	public $basketVar = 'ttp_basket';
 	public $pibaseClass;
 	protected $itemObj;
@@ -55,13 +53,13 @@ class tx_ttproducts_basketitem_view {
 	 * @param		string		  $fieldname is the field in the table you want to create a JavaScript for
 	 * @return	  void
 	 */
-	function init ($pibaseClass, &$basketExt, $itemObj)	{
+	public function init ($pibaseClass, &$basketExt, $itemObj)	{
 		$this->pibaseClass = $pibaseClass;
-		$cnf = &t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
 		$this->basketExt = &$basketExt;
-		$this->itemObj = &$itemObj;
+		$this->itemObj = $itemObj;
 	} // init
 
 
@@ -69,15 +67,16 @@ class tx_ttproducts_basketitem_view {
 		$uid,
 		$callFunctableArray
 	)	{
-		$tablesObj = &t3lib_div::getUserObj('&tx_ttproducts_tables');
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 
 		$funcQuantityMarker = '';
 		foreach ($callFunctableArray as $callFunctablename)	{
-			$funcMarker = &$tablesObj->get($callFunctablename,TRUE)->getMarker();
+			$funcMarker = $tablesObj->get($callFunctablename,TRUE)->getMarker();
 			$funcQuantityMarker .= '[###'.$funcMarker.'_UID###]';
 		}
 
 		$basketQuantityName = $this->basketVar . '[' . $uid . ']' . $funcQuantityMarker . '[quantity]';
+
 		return $basketQuantityName;
 	}
 
@@ -108,22 +107,25 @@ class tx_ttproducts_basketitem_view {
 	)	{
 		global $TCA, $TSFE;
 
-		$pibaseObj = &t3lib_div::getUserObj('&'.$this->pibaseClass);
-		$basketObj = &t3lib_div::getUserObj('&tx_ttproducts_basket');
-		$tablesObj = &t3lib_div::getUserObj('&tx_ttproducts_tables');
-		$langObj = &t3lib_div::getUserObj('&tx_ttproducts_language');
-		$cnf = &t3lib_div::getUserObj('&tx_ttproducts_config');
-		$viewTable = &$tablesObj->get($functablename);
+		$pibaseObj = t3lib_div::makeInstance(''.$this->pibaseClass);
+		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$viewTable = $tablesObj->get($functablename);
 		$fieldArray = $viewTable->variant->getFieldArray();
 		$keyAdditional = $viewTable->variant->getAdditionalKey();
 		$selectableArray = $viewTable->variant->getSelectableArray();
 		$bUseXHTML = $TSFE->config['config']['xhtmlDoctype'] != '';
+        $imageObj = t3lib_div::makeInstance('tx_ttproducts_field_image_view');
 
 		$row = &$item['rec'];
 		$uid = $row['uid'];
-		$presetVarianArray = tx_ttproducts_control_product::getPresetVariantArray($uid);
-		if ($theCode=='SINGLE' && !count($presetVarianArray) && $bSelect && $functablename=='tt_products')	{
+		$presetVariantArray = tx_ttproducts_control_product::getPresetVariantArray($uid);
+
+		if ($theCode=='SINGLE' && !count($presetVariantArray) && $bSelect && $functablename=='tt_products')	{
 			$articleNo = tx_ttproducts_control_product::getActiveArticleNo();
+
 			if ($articleNo !== FALSE)	{
 				$articleObj = $tablesObj->get('tt_products_articles');
 				$articleRow = $articleObj->get($articleNo);
@@ -137,8 +139,9 @@ class tx_ttproducts_basketitem_view {
 
 						if ($variantRow && $prodTmpRow[0])	{
 							$key = array_search(trim($articleRow[$field]), $prodTmpRow, TRUE);
+
 							if ($key !== FALSE)	{
-								$presetVarianArray[$field] = $key;
+								$presetVariantArray[$field] = $key;
 							}
 						}
 					}
@@ -160,7 +163,7 @@ class tx_ttproducts_basketitem_view {
 		$showAmount = ($theCode == 'BASKET' ? 'basket' : $cnf->getBasketConf('view','showAmount'));
 		$quantity = $this->itemObj->getQuantity($item, $showAmount);
 		$radioInputArray = $basketObj->getRadioInputArray($row);
-		$bUseRadioBox = count($radioInputArray) > 0 && $radioInputArray['name'] != '';
+		$bUseRadioBox = is_array($radioInputArray) && count($radioInputArray) > 0 && $radioInputArray['name'] != '';
 
 		if (isset($callFunctableArray) && is_array($callFunctableArray) && count($callFunctableArray))	{
 			require_once (PATH_BE_ttproducts.'control/class.tx_ttproducts_control_basketquantity.php');
@@ -178,13 +181,13 @@ class tx_ttproducts_basketitem_view {
 		$markerArray['###FIELD_NAME###'] = ($bUseRadioBox && $radioInputArray['name'] != '' ? $radioInputArray['name'] : $basketQuantityName);
 		$markerArray['###FIELD_QTY###'] = $quantityMarker;
 		$markerArray['###FIELD_ID###'] = $jsTableName . '-' . strtolower($theCode) . '-id-' . $id;
-
 		$markerArray['###BASKET_ID###'] = $id;
-		$markerArray['###BASKET_INTO_ID###'] = 'basket-into-id-' . $row['uid'];
+		$basketIntoPrefix = tx_ttproducts_model_control::getBasketIntoIdPrefix();
+		$markerArray['###BASKET_INTO_ID###'] = $basketIntoPrefix . '-' . $row['uid'];
 		$markerArray['###BASKET_INPUT###'] = '';
 		$markerArray['###DISABLED###'] = ($row['inStock'] > 0 ? '' : 'disabled');
 		$markerArray['###IN_STOCK_ID###'] = 'in-stock-id-' . $row['uid'];
-		$markerArray['###BASKET_IN_STOCK###'] = tx_div2007_alpha5::getLL_fh002($langObj, ($row['inStock'] > 0 ? 'in_stock' : 'not_in_stock'));
+		$markerArray['###BASKET_IN_STOCK###'] = tx_div2007_alpha5::getLL_fh003($langObj, ($row['inStock'] > 0 ? 'in_stock' : 'not_in_stock'));
 		$basketFile = $TSFE->tmpl->getFileName($this->conf['basketPic']);
 		$markerArray['###IMAGE_BASKET_SRC###'] = $basketFile;
 		$fileresource = $pibaseObj->cObj->fileResource($this->conf['basketPic']);
@@ -205,7 +208,7 @@ class tx_ttproducts_basketitem_view {
 					$imageFileArray = '';
 
 					if ($bSelect && $variantRow && $prodTmpRow[0])	{
-						include_once (PATH_BE_ttproducts.'lib/class.tx_ttproducts_form_div.php');
+// 						include_once (PATH_BE_ttproducts.'lib/class.tx_ttproducts_form_div.php');
 						$selectConfKey = $viewTable->variant->getSelectConfKey($field);
 
 						if (is_array($formConf) && is_array($formConf[$selectConfKey . '.']))	{
@@ -235,7 +238,13 @@ class tx_ttproducts_basketitem_view {
 
 											if ($imageFile != '')	{
 												$imageConf['file'] = $imagePath . $imageFile;
-												$tmpImgCode = $pibaseObj->cObj->IMAGE($imageConf);
+                                                $tmpImgCode =
+                                                    $imageObj->getImageCode(
+                                                        $pibaseObj->cObj,
+                                                        $imageConf,
+                                                        $theCode
+                                                    ); // neu
+// 												$tmpImgCode = $pibaseObj->cObj->IMAGE($imageConf);
 											}
 										}
 									}
@@ -248,6 +257,7 @@ class tx_ttproducts_basketitem_view {
 						$prodTranslatedRow = $prodTmpRow;
 						$type='';
 						$selectedKey='0';
+
 						switch($selectableArray[$k])	{
 							case 1:
 								$type='select';
@@ -263,8 +273,9 @@ class tx_ttproducts_basketitem_view {
 								}
 								break;
 						}
-						if (isset($presetVarianArray[$field]))	{
-							$selectedKey=$presetVarianArray[$field];
+
+						if (isset($presetVariantArray[$field]))	{
+							$selectedKey=$presetVariantArray[$field];
 						}
 						$viewTable->getTableObj()->substituteMarkerArray($prodTranslatedRow);
 						$dataArray = array();
@@ -277,19 +288,24 @@ class tx_ttproducts_basketitem_view {
 								$dataArray = $theFormConf['dataArray.'];
 							}
 						}
-						$text = tx_ttproducts_form_div::createSelect(
-							$pibaseObj,
-							$prodTranslatedRow,
-							$this->basketVar . '[' . $row['uid'] . '][' . $field . ']',
-							$selectedKey,
-							FALSE,
-							FALSE,
-							array(),
-							$type,
-							$dataArray,
-							$layout,
-							$imageFileArray
-						);
+
+						if ($type != '') {
+							$text = tx_ttproducts_form_div::createSelect(
+								$langObj,
+								$prodTranslatedRow,
+								$this->basketVar . '[' . $row['uid'] . '][' . $field . ']',
+								$selectedKey,
+								FALSE,
+								FALSE,
+								array(),
+								$type,
+								$dataArray,
+								$layout,
+								$imageFileArray
+							);
+						} else {
+							$text = $variantRow;
+						}
 					} else {
 						$prodTmpRow = $row;
 						$viewTable->variant->modifyRowFromVariant($prodTmpRow, $variant);
@@ -297,6 +313,7 @@ class tx_ttproducts_basketitem_view {
 					}
 
 					$markerArray['###FIELD_' . $fieldMarker . '_NAME###'] = $this->basketVar . '[' . $row['uid'] . '][' . $field . ']';
+
 					$markerArray['###FIELD_' . $fieldMarker . '_VALUE###'] = $row[$field];
 					$markerArray['###FIELD_' . $fieldMarker . '_ONCHANGE'] = ''; // TODO:  use $forminfoArray['###FORM_NAME###' in something like onChange="Go(this.form.Auswahl.options[this.form.Auswahl.options.selectedIndex].value)"
 
@@ -324,7 +341,7 @@ class tx_ttproducts_basketitem_view {
 		if ($keyAdditional !== FALSE) {
 			$isSingleProduct = $viewTable->hasAdditional($row,'isSingle');
 			if ($isSingleProduct)	{
-				$message = tx_div2007_alpha5::getLL_fh002($langObj, 'additional_single');
+				$message = tx_div2007_alpha5::getLL_fh003($langObj, 'additional_single');
 				$prodAdditionalText['single'] = $message . '<input type="checkbox" name="' . $basketQuantityName . '" ' . ($quantity ? 'checked="checked"':'') . 'onchange = "this.form[this.name+\'[1]\'].value=(this.checked ? 1 : 0);"' . ' value="1">';
 				$hiddenText .= '<input type="hidden" name="'.$basketQuantityName.'[1]" value="'.($quantity ? '1' : '0') . '">';
 			}
@@ -349,8 +366,7 @@ class tx_ttproducts_basketitem_view {
 			$basketAdditionalName = $this->basketVar . '[' . $row['uid'] . '][additional][' . md5($variant) . ']';
 			$bGiftService = $this->basketExt[$row['uid']][$variant . '.']['additional']['giftservice'];
 			$giftServicePostfix = '[giftservice]';
-			$message = tx_div2007_alpha5::getLL_fh002($langObj, 'additional_gift_service');
-
+			$message = tx_div2007_alpha5::getLL_fh003($langObj, 'additional_gift_service');
 			$value = ($bGiftService ? '1' : '0');
 			$prodAdditionalText['giftService'] = $message . '<input type="checkbox" name="' . $basketAdditionalName . $giftServicePostfix . '" ' . ($value ? 'checked="checked"':'') . 'onchange = "this.form[this.name+\'[1]\'].value=(this.checked ? 1 : 0);"' . ' value="' . $value . '">';
 			$hiddenText .= '<input type="hidden" name="' . $basketAdditionalName . $giftServicePostfix . '[1]" value="' . $value . '">';
@@ -359,15 +375,13 @@ class tx_ttproducts_basketitem_view {
 		}
 
 		$markerArray['###FIELD_NAME_BASKET###'] = $this->basketVar . '[' . $row['uid'] . '][' . md5($variant) . ']';
-
 		$markerArray['###PRODUCT_ADDITIONAL_SINGLE###'] = $prodAdditionalText['single'];
 		$markerArray['###PRODUCT_ADDITIONAL_GIFT_SERVICE###'] = $prodAdditionalText['giftService'];
 		$markerArray['###PRODUCT_ADDITIONAL_GIFT_SERVICE_DISPLAY###'] = ($value ? '1' : '');
-		if ($tagArray['PRODUCT_HIDDEN_TEXT'])	{
+		if (isset($tagArray['PRODUCT_HIDDEN_TEXT'])) {
 			$markerArray['###PRODUCT_HIDDEN_TEXT###'] = $hiddenText;
 			$hiddenText = '';
 		}
-
 	} // getItemMarkerArray
 }
 

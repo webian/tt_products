@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2005-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2005-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,8 +29,6 @@
  *
  * functions for the content
  *
- * $Id: class.tx_ttproducts_content.php 3741 2006-09-19 08:31:50Z franzholz $
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -39,9 +37,6 @@
  *
  */
 
-
-require_once(PATH_BE_table.'lib/class.tx_table_db.php');
-require_once(PATH_BE_table.'lib/class.tx_table_db_access.php');
 
 
 class tx_ttproducts_content extends tx_ttproducts_table_base {
@@ -52,7 +47,7 @@ class tx_ttproducts_content extends tx_ttproducts_table_base {
 	/**
 	 * Getting all tt_products_cat categories into internal array
 	 */
-	public function init (&$cObj, $functablename)	{
+	public function init ($cObj, $functablename)	{
 		parent::init($cObj, $functablename);
 
 		$this->getTableObj()->setDefaultFieldArray(array('uid'=>'uid', 'pid'=>'pid', 't3ver_oid'=>'t3ver_oid', 't3ver_id' => 't3ver_id', 't3ver_label' => 't3ver_label', 'tstamp'=>'tstamp', 'sorting'=> 'sorting',
@@ -60,26 +55,11 @@ class tx_ttproducts_content extends tx_ttproducts_table_base {
 		$this->getTableObj()->setTCAFieldArray('tt_content');
 	} // init
 
-// 	function get ($uid=0,$pid=0,$bStore=true,$where_clause='',$limit='',$fields='',$bCount=FALSE) {
-// 		global $TYPO3_DB;
-// 		$rc = $this->dataArray[$uid];
-// 		if (!$rc) {
-// 			$sql = t3lib_div::makeInstance('tx_table_db_access');
-// 			$sql->prepareFields($this->getTableObj(), 'select', '*');
-// 			$sql->prepareWhereFields($this->getTableObj(), 'uid', '=', intval($uid));
-// 			$this->getTableObj()->enableFields();
-// 			// Fetching the category
-// 			$res = $sql->exec_SELECTquery();
-// 			$row = $TYPO3_DB->sql_fetch_assoc($res);
-// 			$TYPO3_DB->sql_free_result($res);
-// 			$rc = $this->dataArray[$row['uid']] = $row;
-// 		}
-// 		return $rc;
-// 	}
 
 	public function getFromPid ($pid) {
 		global $TYPO3_DB, $TSFE;
 		$rcArray = $this->dataPageArray[$pid];
+
 		if (!is_array($rcArray)) {
 			$sql = t3lib_div::makeInstance('tx_table_db_access');
 			$sql->prepareFields($this->getTableObj(), 'select', '*');

@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2008-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,24 +29,18 @@
  *
  * variable content plugins for the shop system.
  *
- *
- * $Id$
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products
- * @see file tt_products/static/old_style/constants.txt
+ * @see file tt_products/Configuration/TypoScript/PluginSetup/Main/constants.txt
  * @see TSref
  *
  */
 
-require_once (PATH_BE_div2007.'class.tx_div2007_alpha.php');
-require_once(PATH_BE_div2007 . 'class.tx_div2007_alpha5.php');
-require_once (PATH_BE_ttproducts.'pi_int/class.tx_ttproducts_pi_int_base.php');
 
 
-class tx_ttproducts_pi_int {
+class tx_ttproducts_pi_int implements t3lib_Singleton {
 	/**
 	 * The backReference to the mother cObj object set at call time
 	 *
@@ -57,24 +51,24 @@ class tx_ttproducts_pi_int {
 	/**
 	 * Main method. Call this from TypoScript by a USER cObject.
 	 */
-	public function main ($content, &$conf)	{
+	public function main ($content, $conf)	{
 
-		$pibaseObj = &t3lib_div::getUserObj('&tx_ttproducts_pi_int_base');
+		$pibaseObj = t3lib_div::makeInstance('tx_ttproducts_pi_int_base');
 		$pibaseObj->cObj = $this->cObj;
-
 		$confMain = $GLOBALS['TSFE']->tmpl->setup['plugin.'][TT_PRODUCTS_EXT . '.'];
-		$conf = t3lib_div::array_merge_recursive_overrule($confMain, $conf);
+		tx_div2007_core::mergeRecursiveWithOverrule($confMain, $conf);
+		$conf = $confMain;
 
 		if ($conf['templateFile'] != '')	{
 
 			$content = $pibaseObj->main($content,$conf);
 		} else {
-			tx_div2007_alpha5::loadLL_fh002($pibaseObj, 'EXT:' . TT_PRODUCTS_EXTkey . '/pi_int/locallang.xml');
+			tx_div2007_alpha5::loadLL_fh002($pibaseObj, 'EXT:' . TT_PRODUCTS_EXT . '/pi_int/locallang.xml');
 
 			if (count($conf) > 2)	{
-				$content = tx_div2007_alpha5::getLL_fh002($pibaseObj, 'no_template').' plugin.tx_ttproducts_pi_int.templateFile';
+				$content = tx_div2007_alpha5::getLL_fh003($pibaseObj, 'no_template') . ' plugin.tx_ttproducts_pi_int.templateFile';
 			} else {
-				$content = tx_div2007_alpha5::getLL_fh002($pibaseObj, 'no_setup');
+				$content = tx_div2007_alpha5::getLL_fh003($pibaseObj, 'no_setup');
 			}
 		}
 

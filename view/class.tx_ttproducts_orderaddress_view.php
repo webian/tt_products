@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2006-2008 Franz Holzinger <contact@fholzinger.com>
+*  (c) 2006-2008 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,10 +29,8 @@
  *
  * functions for the order addresses
  *
- * $Id: class.tx_ttproducts_feuser.php 3741 2006-09-19 08:31:50Z franzholz $
- *
- * @author  Franz Holzinger <contact@fholzinger.com>
- * @maintainer	Franz Holzinger <contact@fholzinger.com>
+ * @author  Franz Holzinger <franz@ttproducts.de>
+ * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products
  *
@@ -51,25 +49,66 @@ class tx_ttproducts_orderaddress_view extends tx_ttproducts_table_base_view {
 	var $image;
 
 
-	function getWrappedSubpartArray(&$subpartArray, &$wrappedSubpartArray, $funcTablename)	{
-		global $TSFE;
+	public function getWrappedSubpartArray(
+		$viewTagArray,
+		$bUseBackPid,
+		&$subpartArray,
+		&$wrappedSubpartArray
+	) {
+		$marker = 'FE_GROUP';
+		$markerLogin = 'LOGIN';
+		$markerNologin = 'NOLOGIN';
+		foreach ($viewTagArray as $tag => $value) {
+			if (strpos($tag, $marker . '_') === 0) {
+				$tagPart1 = substr($tag, strlen($marker . '_'));
+				$offset = strpos($tagPart1, '_TEMPLATE');
+				if ($offset > 0) {
+					$groupNumber = substr($tagPart1, 0, $offset);
 
-		if ($TSFE->fe_user->user)	{
-			$wrappedSubpartArray['###FE_GROUP_1_TEMPLATE###'] = array('','');
-			$subpartArray['###FE_GROUP_0_TEMPLATE###'] = '';
-		} else {
-			$wrappedSubpartArray['###FE_GROUP_0_TEMPLATE###'] = array('','');
-			$subpartArray['###FE_GROUP_1_TEMPLATE###'] = '';
+					if (tx_div2007_core::testInt($groupNumber)) {
+						if (t3lib_div::inList($GLOBALS['TSFE']->gr_list, $groupNumber)) {
+							$wrappedSubpartArray['###FE_GROUP_' . $groupNumber . '_TEMPLATE###'] = array('', '');
+						} else {
+							$subpartArray['###FE_GROUP_' . $groupNumber . '_TEMPLATE###'] = '';
+						}
+					}
+				}
+			} else if (strpos($tag, $markerLogin . '_') === 0) {
+                if (
+                    $GLOBALS['TSFE']->loginUser &&
+                    isset($GLOBALS['TSFE']->fe_user->user) &&
+                    is_array($GLOBALS['TSFE']->fe_user->user) &&
+                    isset($GLOBALS['TSFE']->fe_user->user['uid'])
+                ) {
+					$wrappedSubpartArray['###LOGIN_TEMPLATE###'] = array('', '');
+				} else {
+					$subpartArray['###LOGIN_TEMPLATE###'] = '';
+				}
+			} else if (strpos($tag, $markerNologin . '_') === 0) {
+                if (
+                    isset($GLOBALS['TSFE']->fe_user->user) &&
+                    is_array($GLOBALS['TSFE']->fe_user->user) &&
+                    isset($GLOBALS['TSFE']->fe_user->user['uid'])
+                ) {
+					$subpartArray['###NOLOGIN_TEMPLATE###'] = '';
+				} else {
+					$wrappedSubpartArray['###NOLOGIN_TEMPLATE###'] = array('', '');
+				}
+			}
 		}
 
-		if ($this->getModelObj()->getCondition() || !$this->getModelObj()->getConditionRecord())	{
-			$wrappedSubpartArray['###FE_CONDITION1_TRUE_TEMPLATE###'] = array('','');
-			$subpartArray['###FE_CONDITION1_FALSE_TEMPLATE###'] = '';
-		} else {
-			$wrappedSubpartArray['###FE_CONDITION1_FALSE_TEMPLATE###'] = array('','');
-			$subpartArray['###FE_CONDITION1_TRUE_TEMPLATE###'] = '';
+		if (
+			isset($viewTagArray['FE_CONDITION1_TRUE_TEMPLATE']) ||
+			isset($viewTagArray['FE_CONDITION1_FALSE_TEMPLATE'])
+		) {
+			if ($this->getModelObj()->getCondition() || !$this->getModelObj()->getConditionRecord()) {
+				$wrappedSubpartArray['###FE_CONDITION1_TRUE_TEMPLATE###'] = array('', '');
+				$subpartArray['###FE_CONDITION1_FALSE_TEMPLATE###'] = '';
+			} else {
+				$wrappedSubpartArray['###FE_CONDITION1_FALSE_TEMPLATE###'] = array('', '');
+				$subpartArray['###FE_CONDITION1_TRUE_TEMPLATE###'] = '';
+			}
 		}
-		return;
 	}
 
 
@@ -85,32 +124,60 @@ class tx_ttproducts_orderaddress_view extends tx_ttproducts_table_base_view {
 	 * @return	array
 	 * @access private
 	 */
-	function getRowMarkerArray ($row, &$markerArray, $bSelect, $type)	{
+	function getAddressMarkerArray ($row, &$markerArray, $bSelect, $type)	{
 		global $TCA;
 
+		$fieldOutputArray = array();
+		$modelObj = $this->getModelObj();
+		$selectInfoFields = $modelObj->getSelectInfoFields();
+
 		if ($bSelect)	{
-			include_once (PATH_BE_ttproducts.'lib/class.tx_ttproducts_form_div.php');
-			$typeSalutationText =
-				tx_ttproducts_form_div::createSelect(
-					$this->langObj,
-					$TCA['sys_products_orders']['columns']['salutation']['config']['items'],
-					'recs['.$type.'][salutation]',
-					(is_array($row) ? $row['salutation'] : ''),
-					TRUE,
-					TRUE,
-					array(),
-					'select',
-					array('id' => 'field_' . $type . '_salutation') /* Add ID for field to be able to use labels. */
-				);
-		} else if (is_numeric($row['salutation'])) {
-			$salutation = $TCA['sys_products_orders']['columns']['salutation']['config']['items'][$row['salutation']];
-			$tmp = tx_div2007_alpha::sL_fh001($salutation[0]);
-			$typeSalutationText = htmlspecialchars(tx_div2007_alpha5::getLL_fh002($this->langObj, $tmp));
+			t3lib_div::requireOnce (PATH_BE_ttproducts . 'lib/class.tx_ttproducts_form_div.php');
+			foreach ($selectInfoFields as $field) {
+				$tablename = $modelObj->getTCATableFromField($field);
+
+				$fieldOutputArray[$field] =
+
+					tx_ttproducts_form_div::createSelect(
+						$this->langObj,
+						$TCA[$tablename]['columns'][$field]['config']['items'],
+						'recs['.$type.'][' . $field . ']',
+						(is_array($row) ? $row[$field] : ''),
+						TRUE,
+						TRUE,
+						array(),
+						'select',
+						array('id' => 'field_' . $type . '_' . $field) /* Add ID for field to be able to use labels. */
+					);
+			}
 		} else {
-			$typeSalutationText = '';
+			foreach ($selectInfoFields as $field) {
+				$tablename = $modelObj->getTCATableFromField($field);
+				$itemConfig = $TCA[$tablename]['columns'][$field]['config']['items'];
+
+				if ($row[$field] != '' && isset($itemConfig) && is_array($itemConfig)) {
+
+					$tcaValue = '';
+					foreach ($itemConfig as $subItemConfig) {
+						if (isset($subItemConfig) && is_array($subItemConfig) && $subItemConfig['1'] == $row[$field]) {
+							$tcaValue = $subItemConfig['0'];
+							break;
+						}
+					}
+
+					$tmp = tx_div2007_alpha5::sL_fh002($tcaValue);
+					$fieldOutputArray[$field] = htmlspecialchars(tx_div2007_alpha5::getLL_fh003($this->langObj, $tmp));
+				} else {
+					$fieldOutputArray[$field] = '';
+				}
+			}
 		}
-		$markerArray['###'.($type=='personinfo' ? 'PERSON' : 'DELIVERY').'_SALUTATION###'] = $typeSalutationText;
-	} // getMarkerArray
+
+		foreach ($selectInfoFields as $field) {
+			$markerkey = '###' . ($type == 'personinfo' ? 'PERSON' : 'DELIVERY') . '_'. strtoupper($field) . '###';
+			$markerArray[$markerkey] = $fieldOutputArray[$field];
+		}
+	} // getRowMarkerArray
 }
 
 

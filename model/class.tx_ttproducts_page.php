@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2005-2007 Franz Holzinger <kontakt@fholzinger.com>
+*  (c) 2005-2007 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,19 +29,12 @@
  *
  * functions for the page
  *
- * $Id$
- *
- * @author	Franz Holzinger <kontakt@fholzinger.com>
- * @maintainer	Franz Holzinger <kontakt@fholzinger.com>
+ * @author	Franz Holzinger <franz@ttproducts.de>
+ * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products
  *
  */
-
-
-require_once(PATH_BE_table.'lib/class.tx_table_db.php');
-require_once(PATH_BE_table.'lib/class.tx_table_db_access.php');
-require_once(PATH_BE_ttproducts.'model/class.tx_ttproducts_category_base.php');
 
 
 class tx_ttproducts_page extends tx_ttproducts_category_base {
@@ -54,15 +47,15 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 	/**
 	 * Getting all tt_products_cat categories into internal array
 	 */
-	function init (&$pibase, $tablename)	{
+	function init ($cObj, $tablename)	{
 		global $TYPO3_DB;
 
-		parent::init($pibase, $tablename);
+		parent::init($cObj, $tablename);
 
-		$cnf = &t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$tablename = ($tablename ? $tablename : 'pages');
 		$this->tableconf = $cnf->getTableConf('pages');
-		$this->pageAsCategory = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXTkey]['pageAsCategory'];
+		$this->pageAsCategory = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['pageAsCategory'];
 
 //		$this->table->setDefaultFieldArray(array('uid'=>'uid', 'pid'=>'pid', 't3ver_oid'=>'t3ver_oid', 't3ver_id' => 't3ver_id', 't3ver_label' => 't3ver_label', 'tstamp'=>'tstamp', 'hidden'=>'hidden', 'sorting'=> 'sorting',
 // 			'deleted' => 'deleted', 'hidden'=>'hidden', 'starttime' => 'starttime', 'endtime' => 'endtime'));
@@ -113,25 +106,7 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 		}
 	}
 
-//	function get ($uid,$pid=0) {
-//		global $TYPO3_DB, $TSFE;
-//		$bMultple = (strstr($uid, ',') ? true : false);
-//
-//		$rc = $this->dataArray[$uid];
-//		if (!$rc && !$bMultple && isset($uid)) {
-//			$sql = t3lib_div::makeInstance('tx_table_db_access');
-//			$sql->prepareFields($this->getTableObj(), 'select', implode(',', $this->getTableObj()->requiredFieldArray));
-//			$sql->prepareWhereFields ($this->getTableObj(), 'uid', '=', intval($uid));
-//			$this->getTableObj()->enableFields();
-//			// Fetching the category
-//		 	$res = $sql->exec_SELECTquery();
-//		 	$row = $TYPO3_DB->sql_fetch_assoc($res);
-//		 	$rc = $this->dataArray[$row['uid']] = $row;
-//		}
-//		return $rc;
-//	}
-
-
+/*
 	function get ($uid=0,$pid=0,$bStore=true,$where_clause='',$limit='',$fields='',$bCount=FALSE) {
 		global $TYPO3_DB;
 
@@ -148,11 +123,11 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 			$rc = $this->dataArray[$uid] = $row;
 		}
 		return $rc;
-	}
+	}*/
 
 
 	function getRootCat ()	{
-		$cnf = &t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$rc = $cnf->config['rootPageID'];
 		return $rc;
 	}
@@ -195,9 +170,8 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 	}
 
 
-	function getParamDefault ($theCode, $piVars)	{
+	function getParamDefault ($theCode, $pid)	{
 //		$pid = $this->pibase->piVars[$this->piVar];
-		$pid = $piVars[$this->piVar];
 		$pid = ($pid ? $pid : $this->conf['defaultPageID']);
 		if ($pid)	{
 			$pid = implode(',',t3lib_div::intExplode(',', $pid));
@@ -206,23 +180,7 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 	}
 
 
-//	function &getRootpathArray (&$relationArray, $rootCat, $currentCat) {
-//		$rootpathArray = array();
-//		$uid = $currentCat;
-////		if (isset($uid))	{
-////			$count = 0;
-////			do	{
-////				$count++;
-////				$row = $this->get ($uid);
-////				$rootpathArray[] = $row;
-////				$lastUid = $uid;
-////				$uid = $row['pid'];
-////			} while ($lastUid != $rootCat && $count < 100);
-////		}
-//		return $rootpathArray;
-//	}
-
-	function &getRelationArray ($excludeCats='',$rootUids='',$allowedCats='') {
+	function getRelationArray ($dataArray, $excludeCats='',$rootUids='',$allowedCats='') {
 
 		$relationArray = array();
 		$pageArray = t3lib_div::trimExplode (',', $pid_list);
@@ -320,7 +278,8 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 					break;  //ready with the foreach loop
 				}
 			}
-		} else {
+		}
+		if (!$rc) {
 			if ($conf) {
 				$rc = $conf;
 			} else {
@@ -330,27 +289,10 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 				$rc = intval($rc);
 			}
 		}
+
 		return $rc;
 	} // getPID
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2006-2007 Franz Holzinger <kontakt@fholzinger.com>
+*  (c) 2006-2007 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,10 +29,8 @@
  *
  * functions for digital medias
  *
- * $Id$
- *
- * @author  Franz Holzinger <kontakt@fholzinger.com>
- * @maintainer	Franz Holzinger <kontakt@fholzinger.com>
+ * @author  Franz Holzinger <franz@ttproducts.de>
+ * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products
  *
@@ -46,7 +44,7 @@ class tx_ttproducts_field_media extends tx_ttproducts_field_base {
 	/**
 	 *
 	 */
-	function init(&$cObj)	{
+	function init($cObj)	{
 		global $TYPO3_DB,$TSFE,$TCA;
 
  		parent::init($cObj);
@@ -59,14 +57,15 @@ class tx_ttproducts_field_media extends tx_ttproducts_field_base {
 
 
 	function getDirname(&$imageRow)	{
+
 		if($imageRow['file_mime_type'] == 'image' && isset($imageRow['file_path']))	{
 			$dirname = $imageRow['file_path'];
 		} else {
-			$dirname = ($this->conf['defaultImageDir'] ? $this->conf['defaultImageDir'] : ( $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXTkey]['imageFolder'] ? $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXTkey]['imageFolder'] . '/' : 'uploads/pics/'));
+			$dirname = ($this->conf['defaultImageDir'] ? $this->conf['defaultImageDir'] : ( $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['imageFolder'] ? $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['imageFolder'] . '/' : 'uploads/pics/'));
 		}
+
 		return $dirname;
 	}
-
 }
 
 

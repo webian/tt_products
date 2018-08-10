@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2006-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2006-2010 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,8 +29,6 @@
  *
  * order functions
  *
- * $Id$
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -40,48 +38,67 @@
  */
 
 
-require_once (PATH_BE_ttproducts.'marker/class.tx_ttproducts_subpartmarker.php');
-require_once (PATH_BE_ttproducts.'model/class.tx_ttproducts_order.php');
-
 
 class tx_ttproducts_order_view extends tx_ttproducts_table_base_view {
 	public $marker='ORDER';
 
 	/** add the markers for uid, date and the tracking number which is stored in the basket recs */
-	public function getBasketRecsMarkerArray (&$markerArray)	{
+	public function getBasketRecsMarkerArray (&$markerArray, $orderArray)	{
 			// order
-		$orderObj = $this->getModelObj();
-		$basketObj = &t3lib_div::getUserObj('&tx_ttproducts_basket');
+		if (
+			isset($orderArray) &&
+			is_array($orderArray) &&
+			isset($orderArray['orderUid']) &&
+			isset($orderArray['orderDate']) &&
+			isset($orderArray['orderTrackingNo'])
+		) {
+			$orderObj = $this->getModelObj();
 
-			// Order:	NOTE: Data exist only if the order->getBlankUid() has been called. Therefore this field in the template should be used only when an order has been established
-		$markerArray['###ORDER_UID###'] = $orderObj->getNumber($basketObj->order['orderUid']);
-		$markerArray['###ORDER_DATE###'] = $this->cObj->stdWrap($basketObj->order['orderDate'],$this->conf['orderDate_stdWrap.']);
-		$markerArray['###ORDER_TRACKING_NO###'] = $basketObj->order['orderTrackingNo'];
+				// Order:	NOTE: Data exist only if the order->getBlankUid() has been called. Therefore this field in the template should be used only when an order has been established
+			$markerArray['###ORDER_UID###'] = $orderObj->getNumber($orderArray['orderUid']);
+			$markerArray['###ORDER_DATE###'] = $this->cObj->stdWrap($orderArray['orderDate'],$this->conf['orderDate_stdWrap.']);
+			$markerArray['###ORDER_TRACKING_NO###'] = $orderArray['orderTrackingNo'];
+		} else {
+			$markerArray['###ORDER_UID###'] = '';
+			$markerArray['###ORDER_DATE###'] = '';
+			$markerArray['###ORDER_TRACKING_NO###'] = '';
+		}
 	}
 
 	public function &printView(&$templateCode, &$error_code)	 {
 		global $TSFE, $TYPO3_DB;
 
 		$feusers_uid = $TSFE->fe_user->user['uid'];
-		$priceViewObj = &t3lib_div::getUserObj('&tx_ttproducts_field_price_view');
-		$tablesObj = &t3lib_div::getUserObj('&tx_ttproducts_tables');
-		$subpartmarkerObj = &t3lib_div::getUserObj('&tx_ttproducts_subpartmarker');
-		$markerObj = &t3lib_div::getUserObj('&tx_ttproducts_marker');
+		$priceViewObj = t3lib_div::makeInstance('tx_ttproducts_field_price_view');
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$subpartmarkerObj = t3lib_div::makeInstance('tx_ttproducts_subpartmarker');
+		$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
 		$globalMarkerArray = $markerObj->getGlobalMarkerArray();
+		$functablename = 'sys_products_orders';
+		$orderObj = $tablesObj->get($functablename); // order
 
 			// order
-		$orderObj = &$tablesObj->get('sys_products_orders');
-// Todo: error message if subpart is missing
+		$orderObj = $tablesObj->get('sys_products_orders');
 		if (!$feusers_uid)	{
 			$frameWork = $this->cObj->getSubpart($templateCode,$subpartmarkerObj->spMarker('###MEMO_NOT_LOGGED_IN###'));
 			$content = $this->cObj->substituteMarkerArray($frameWork, $globalMarkerArray);
 			return $content;
 		}
 
-		$where = 'feusers_uid='.intval($feusers_uid).' AND NOT deleted ORDER BY crdate';
+		$where = 'feusers_uid = ' . intval($feusers_uid) . $orderObj->getTableObj()->enableFields() . ' ORDER BY crdate';
 		$res = $TYPO3_DB->exec_SELECTquery('*', 'sys_products_orders', $where);
+		$templateArea = 'ORDERS_LIST_TEMPLATE';
 
-		$frameWork = $this->cObj->getSubpart($templateCode,$subpartmarkerObj->spMarker('###ORDERS_LIST_TEMPLATE###'));
+		$frameWork = $this->cObj->getSubpart($templateCode,$subpartmarkerObj->spMarker('###' . $templateArea . '###'));
+
+		if (!$frameWork) {
+			$templateObj = t3lib_div::makeInstance('tx_ttproducts_template');
+			$error_code[0] = 'no_subtemplate';
+			$error_code[1] = '###'.$templateArea.'###';
+			$error_code[2] = $templateObj->getTemplateFile();
+			return '';
+		}
+
 		$content = $this->cObj->substituteMarkerArray($frameWork, $globalMarkerArray);
 		$orderitem = $this->cObj->getSubpart($content,'###ORDER_ITEM###');
 		$count = $TYPO3_DB->sql_num_rows($res);

@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2007-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,8 +29,6 @@
  *
  * graduated price view functions
  *
- * $Id$
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -40,7 +38,6 @@
  */
 
 
-require_once (PATH_BE_table.'lib/class.tx_table_db.php');
 
 class tx_ttproducts_field_graduated_price_view extends tx_ttproducts_field_base_view {
 
@@ -55,19 +52,20 @@ class tx_ttproducts_field_graduated_price_view extends tx_ttproducts_field_base_
 		&$wrappedSubpartArray,
 		&$tagArray,
 		$theCode = '',
+		$basketExtra = array(),
 		$id = '1'
 	) {
 		global $TCA;
 
-		$priceTablesViewObj = &t3lib_div::getUserObj('&tx_ttproducts_graduated_price_view');
-		$priceTablesViewObj->getItemSubpartArrays ($templateCode, $functablename, $row, $fieldname, $subpartArray, $wrappedSubpartArray, $tagArray, $theCode, $id);
+		$priceTablesViewObj = t3lib_div::makeInstance('tx_ttproducts_graduated_price_view');
+		$priceTablesViewObj->getPriceSubpartArrays($templateCode, $row, $fieldname, $subpartArray, $wrappedSubpartArray, $tagArray, $theCode, $basketExtra, $id);
 	}
 
 
-	public function getRowMarkerArray ($functablename, $fieldname, $row, $markerKey, &$markerArray, $tagArray, $theCode, $id, &$bSkip, $bHtml=true, $charset='', $prefix='', $suffix='', $imageRenderObj='')	{
+	public function getRowMarkerArray ($functablename, $fieldname, $row, $markerKey, &$markerArray, $tagArray, $theCode, $id, $basketExtra, &$bSkip, $bHtml=true, $charset='', $prefix='', $suffix='', $imageRenderObj='')	{
 
-		$priceTablesViewObj = &t3lib_div::getUserObj('&tx_ttproducts_graduated_price_view');
-		$priceTablesViewObj->getRowMarkerArray($row, $markerArray, $tagArray);
+		$priceTablesViewObj = t3lib_div::makeInstance('tx_ttproducts_graduated_price_view');
+		$priceTablesViewObj->getPriceMarkerArray($row, $basketExtra, $markerArray, $tagArray);
 	}
 }
 

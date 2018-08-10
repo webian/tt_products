@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2008-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,8 +29,6 @@
  *
  * main loop for search
  *
- * $Id$
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -38,20 +36,10 @@
  *
  */
 
-require_once (PATH_BE_div2007.'class.tx_div2007_ff.php');
-require_once (PATH_BE_div2007.'class.tx_div2007_alpha5.php');
-
-require_once (PATH_BE_searchbox.'view/class.tx_searchbox_view.php');
-
-require_once (PATH_BE_ttproducts.'model/class.tx_ttproducts_language.php');
-require_once (PATH_BE_ttproducts.'model/class.tx_ttproducts_model_control.php');
-
-require_once (PATH_BE_ttproducts.'lib/class.tx_ttproducts_config.php');
-require_once (PATH_BE_ttproducts.'view/class.tx_ttproducts_search_view.php');
-require_once (PATH_BE_ttproducts.'marker/class.tx_ttproducts_subpartmarker.php');
 
 
-class tx_ttproducts_control_search {
+
+class tx_ttproducts_control_search implements t3lib_Singleton {
 	public $cObj;
 	public $conf;
 	public $config;
@@ -64,14 +52,14 @@ class tx_ttproducts_control_search {
 	public function init (&$content, &$conf, &$config, $pibaseClass, &$error_code) {
 		global $TSFE, $TCA;
 
-		$pibaseObj = &t3lib_div::getUserObj('&'.$pibaseClass);
-		$this->cObj = &$pibaseObj->cObj;
+		$pibaseObj = t3lib_div::makeInstance(''.$pibaseClass);
+		$this->cObj = $pibaseObj->cObj;
 
 		$flexformArray = t3lib_div::xml2array($this->cObj->data['pi_flexform']);
 		$flexformTyposcript = tx_div2007_ff::get($flexformArray, 'myTS');
 		if($flexformTyposcript) {
-			require_once(PATH_t3lib.'class.t3lib_tsparser.php');
-			$tsparser = t3lib_div::makeInstance('t3lib_tsparser');
+			$tsparser = tx_div2007_core::newTsParser();
+
 			// Copy conf into existing setup
 			$tsparser->setup = $conf;
 			// Parse the new Typoscript
@@ -84,18 +72,18 @@ class tx_ttproducts_control_search {
 		$this->piVars = &$pibaseObj->piVars;
 		$this->pibaseClass = $pibaseClass;
 
-		$cnf = &t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$cnf->init(
 			$conf,
 			$config
 		);
 
-		tx_div2007_alpha5::loadLL_fh002($pibaseObj, 'EXT:' . TT_PRODUCTS_EXTkey . '/pi_search/locallang.xml');
-		$allText = tx_div2007_alpha5::getLL_fh002($pibaseObj, 'all');
+		tx_div2007_alpha5::loadLL_fh002($pibaseObj, 'EXT:' . TT_PRODUCTS_EXT . '/pi_search/locallang.xml');
+		$allText = tx_div2007_alpha5::getLL_fh003($pibaseObj, 'all');
 
 			// get all extending TCAs
-		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXTkey]['extendingTCA']))	{
-			tx_div2007_alpha::loadTcaAdditions_fh001($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXTkey]['extendingTCA']);
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['extendingTCA']))	{
+			tx_div2007_alpha5::loadTcaAdditions_fh002($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['extendingTCA']);
 		}
 		// $pibaseObj->pi_initPIflexForm();
 		$this->cObj->data['pi_flexform'] = t3lib_div::xml2array($this->cObj->data['pi_flexform']);
@@ -104,21 +92,21 @@ class tx_ttproducts_control_search {
 		$this->codeArray = t3lib_div::trimExplode(',', $config['code'],1);
 		$config['LLkey'] = $pibaseObj->LLkey;
 		$config['templateSuffix'] = strtoupper($this->conf['templateSuffix']);
-		$templateSuffix = $pibaseObj->pi_getFFvalue($this->cObj->data['pi_flexform'], 'template_suffix');
+		$templateSuffix = tx_div2007_ff::get($flexformArray, 'template_suffix');
 		$templateSuffix = strtoupper($templateSuffix);
 		$config['templateSuffix'] = ($templateSuffix ? $templateSuffix : $config['templateSuffix']);
 		$config['templateSuffix'] = ($config['templateSuffix'] ? '_'.$config['templateSuffix'] : '');
 
-		$langObj = &t3lib_div::getUserObj('&tx_ttproducts_language');
-		$langObj->init($pibaseObj, $pibaseObj->cObj, $conf, 'control/class.tx_ttproducts_control_search.php');
+		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
+		$langObj->init1($pibaseObj, $pibaseObj->cObj, $conf, 'control/class.tx_ttproducts_control_search.php');
 
-		$markerObj = &t3lib_div::getUserObj('&tx_ttproducts_marker');
+		$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
 		$markerObj->init(
 			$this->cObj,
 			$pibaseObj->piVars
 		);
 
-		$searchViewObj = &t3lib_div::getUserObj('&tx_ttproducts_search_view');
+		$searchViewObj = t3lib_div::makeInstance('tx_ttproducts_search_view');
 		$searchViewObj->init(
 			$this->cObj
 		);
@@ -128,7 +116,7 @@ class tx_ttproducts_control_search {
 
 
 	public function &getControlConfig ($cObj, &$conf, &$row)	{
-		$cnf = &t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$ctrlArray = tx_ttproducts_model_control::getParamsTableArray();
 
 		$config = array();
@@ -140,7 +128,7 @@ class tx_ttproducts_control_search {
 				$conf['defaultCode'],
 				$row['pi_flexform'],
 				'display_mode',
-				$GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXTkey]['useFlexforms']
+				$GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['useFlexforms']
 			);
 
 		$flexformConfigArray = array(
@@ -166,7 +154,7 @@ class tx_ttproducts_control_search {
 			$urlArray = t3lib_div::trimExplode('=',$url);
 			if ($urlArray['0'] == 'id' && intval($urlArray['1']))	{
 				$id = $urlArray['1'];
-				$url = tx_div2007_alpha::getPageLink_fh002($cObj,$id);
+				$url = tx_div2007_alpha5::getPageLink_fh003($cObj,$id);
 				$config['url'] = $url;
 			}
 		}
@@ -177,12 +165,12 @@ class tx_ttproducts_control_search {
 	public function &run ($pibaseClass,&$errorCode,$content='')	{
 		global $TSFE;
 
-		$cnf = &t3lib_div::getUserObj('&tx_ttproducts_config');
-		$templateObj = &t3lib_div::getUserObj('&tx_ttproducts_template');
-		$langObj = &t3lib_div::getUserObj('&tx_ttproducts_language');
-		$pibaseObj = &t3lib_div::getUserObj('&' . $pibaseClass);
-		$subpartmarkerObj = &t3lib_div::getUserObj('&tx_ttproducts_subpartmarker');
-		$searchViewObj = &t3lib_div::getUserObj('&tx_ttproducts_search_view');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$templateObj = t3lib_div::makeInstance('tx_ttproducts_template');
+		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
+		$pibaseObj = t3lib_div::makeInstance('' . $pibaseClass);
+		$subpartmarkerObj = t3lib_div::makeInstance('tx_ttproducts_subpartmarker');
+		$searchViewObj = t3lib_div::makeInstance('tx_ttproducts_search_view');
 		$error_code = array();
 		$errorMessage = '';
 
@@ -270,21 +258,21 @@ class tx_ttproducts_control_search {
 			}
 
 			if ($contentTmp == 'error') {
-				$fileName = 'EXT:'.TT_PRODUCTS_EXTkey.'/template/products_help.tmpl';
+				$fileName = 'EXT:'.TT_PRODUCTS_EXT.'/template/products_help.tmpl';
 				$helpTemplate = $this->cObj->fileResource($fileName);
 				$content .=
-					tx_div2007_alpha::displayHelpPage_fh002(
+					tx_div2007_alpha5::displayHelpPage_fh003(
 						$langObj,
 						$this->cObj,
 						$helpTemplate,
-						TT_PRODUCTS_EXTkey,
+						TT_PRODUCTS_EXT,
 						$errorMessage,
 						$theCode
 					);
 				unset($errorMessage);
 				break; // while
 			} else {
-				$content .= tx_div2007_alpha::wrapContentCode_fh002($contentTmp,$theCode,$pibaseObj->prefixId,$this->cObj->data['uid']);
+				$content .= tx_div2007_alpha5::wrapContentCode_fh004($contentTmp,$theCode,$pibaseObj->prefixId,$this->cObj->data['uid']);
 			}
 		}
 

@@ -29,8 +29,6 @@
  *
  * subpart marker functions
  *
- * $Id:$
- *
  * @author	Kasper Skårhøj <kasperYYYY@typo3.com>
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
@@ -41,10 +39,8 @@
  */
 
 
-require_once (PATH_t3lib.'class.t3lib_parsehtml.php');
 
-
-class tx_ttproducts_subpartmarker {
+class tx_ttproducts_subpartmarker implements t3lib_Singleton {
 	var $cObj; // reference to object
 	var $conf;
 
@@ -57,9 +53,9 @@ class tx_ttproducts_subpartmarker {
 	* @param	array		array urls which should be overridden with marker key as index
 	 * @return	  void
  	 */
-	function init (&$cObj)	{
- 		$this->cObj = &$cObj;
-		$cnf = &t3lib_div::getUserObj('&tx_ttproducts_config');
+	function init ($cObj)	{
+ 		$this->cObj = $cObj;
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 
  		$this->conf = &$cnf->conf;
 	}
@@ -68,12 +64,16 @@ class tx_ttproducts_subpartmarker {
 	/**
 	 * Returning template subpart marker
 	 */
-	function spMarker ($subpartMarker)	{
-		$sPBody = substr($subpartMarker,3,-3);
+	function spMarker ($subpartMarker) {
 		$altSPM = '';
-		if (isset($this->conf['altMainMarkers.']))	{
-			$altSPM = trim($this->cObj->stdWrap($this->conf['altMainMarkers.'][$sPBody],$this->conf['altMainMarkers.'][$sPBody.'.']));
-			$GLOBALS['TT']->setTSlogMessage('Using alternative subpart marker for "' . $subpartMarker . '": ' . $altSPM, 1);
+		if (isset($this->conf['altMainMarkers.'])) {
+            $sPBody = substr($subpartMarker, 3, -3);
+			$altSPM = trim($this->cObj->stdWrap($this->conf['altMainMarkers.'][$sPBody], $this->conf['altMainMarkers.'][$sPBody.'.']));
+            if (
+                version_compare(TYPO3_version, '8.5.0', '<')
+            ) {
+                $GLOBALS['TT']->setTSlogMessage('Using alternative subpart marker for "' . $subpartMarker . '": ' . $altSPM, 1);
+            }
 		}
 		$rc = $altSPM ? $altSPM : $subpartMarker;
 		return $rc;
@@ -112,14 +112,14 @@ class tx_ttproducts_subpartmarker {
 	 * @see substituteSubpart(), t3lib_parsehtml::getSubpart()
 	 */
 	public function getSubpart ($content, $marker, &$error_code) {
-		$rc = t3lib_parsehtml::getSubpart($content, $marker);
-		if (!$rc)	{
-			$templateObj = &t3lib_div::getUserObj('&tx_ttproducts_template');
+        $result = tx_div2007_core::getSubpart($content, $marker);
+		if (!$result)	{
+			$templateObj = t3lib_div::makeInstance('tx_ttproducts_template');
 			$error_code[0] = 'no_subtemplate';
 			$error_code[1] = $marker;
 			$error_code[2] = $templateObj->getTemplateFile();
 		}
-		return $rc;
+		return $result;
 	}
 }
 

@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2006-2010 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2006-2010 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,8 +29,6 @@
  *
  * functions for the product
  *
- * $Id$
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -39,10 +37,6 @@
  *
  */
 
-
-require_once (PATH_BE_table.'lib/class.tx_table_db.php');
-require_once (PATH_BE_ttproducts.'view/class.tx_ttproducts_variant_view.php');
-require_once (PATH_BE_ttproducts.'view/class.tx_ttproducts_variant_dummy_view.php');
 
 
 abstract class tx_ttproducts_article_base_view extends tx_ttproducts_table_base_view {
@@ -57,7 +51,7 @@ abstract class tx_ttproducts_article_base_view extends tx_ttproducts_table_base_
 	protected $mm_table = ''; // only set if a mm table is used
 
 
-	public function init (&$langObj, &$modelObj)	{
+	public function init ($langObj, $modelObj)	{
 		parent::init($langObj, $modelObj);
 
 		$this->variant->init($langObj, $modelObj->variant);
@@ -73,16 +67,17 @@ abstract class tx_ttproducts_article_base_view extends tx_ttproducts_table_base_
 		&$wrappedSubpartArray,
 		&$tagArray,
 		$theCode='',
+		$basketExtra=array(),
 		$iCount=''
 	)	{
-		$this->getItemSubpartArrays($templateCode, $functablename, $row, $subpartArray, $wrappedSubpartArray, $tagArray, $theCode, $iCount);
+		$this->getItemSubpartArrays($templateCode, $functablename, $row, $subpartArray, $wrappedSubpartArray, $tagArray, $theCode, $basketExtra, $iCount);
 	}
 
 
-	public function getItemSubpartArrays ($templateCode, $functablename, &$row, &$subpartArray, &$wrappedSubpartArray, &$tagArray, $theCode='', $id='1')	{
+	public function getItemSubpartArrays (&$templateCode, $functablename, $row, &$subpartArray, &$wrappedSubpartArray, &$tagArray, $theCode='', $basketExtra=array(), $id='') {
 		global $TCA;
 
-		parent::getItemSubpartArrays($templateCode, $functablename, $row, $subpartArray, $wrappedSubpartArray, $tagArray, $theCode, $id);
+		parent::getItemSubpartArrays($templateCode, $functablename, $row, $subpartArray, $wrappedSubpartArray, $tagArray, $theCode, $basketExtra, $id);
 	}
 
 
@@ -93,17 +88,9 @@ abstract class tx_ttproducts_article_base_view extends tx_ttproducts_table_base_
 		$mergedName,
 		$mergedRow,
 		$id,
-		$theCode
+		$theCode,
+		$basketExtra
 	)	{
-// 		if (is_array($mergedRow))	{
-// 			$row = $mergedRow;
-// 			if (is_array($originalRow) && count($originalRow))	{
-// 				$id .= 'from-'.str_replace('_','-',$mergedName);
-// 				$row['uid'] = $originalRow['uid'];
-// 			}
-// 		} else {
-// 			$row = $originalRow;
-// 		}
 
 		if (is_array($mergedRow))	{
 			$row = $mergedRow;
@@ -121,23 +108,22 @@ abstract class tx_ttproducts_article_base_view extends tx_ttproducts_table_base_
 		} else {
 			$row = $originalRow;
 		}
-
-		$this->getPriceMarkerArray($markerArray, $row, '', $id, $theCode);
+		$this->getPriceMarkerArray($basketExtra, $markerArray, $row, '', $id, $theCode);
 	}
 
 
-	public function getPriceMarkerArray (&$markerArray, $row, $markerKey, $id, $theCode)	{
+	public function getPriceMarkerArray ($basketExtra, &$markerArray, $row, $markerKey, $id, $theCode)	{
 		global $TCA;
 
 		$modelObj = $this->getModelObj();
-		$priceViewObj = &t3lib_div::getUserObj('&tx_ttproducts_field_price_view');
+		$priceViewObj = t3lib_div::makeInstance('tx_ttproducts_field_price_view');
 
 		$functablename = $modelObj->getFuncTablename();
 		$mainId = $this->getId($row, $id, $theCode);
 
 		foreach ($TCA[$functablename]['columns'] as $field => $fieldTCA)	{
 			if (strpos($field, 'price') === 0)	{
-				$priceViewObj->getModelMarkerArray($field, $row, $markerArray, $markerKey, $mainId);
+				$priceViewObj->getModelMarkerArray($functablename, $basketExtra, $field, $row, $markerArray, $markerKey, $mainId);
 			}
 		}
 	}
@@ -166,6 +152,7 @@ abstract class tx_ttproducts_article_base_view extends tx_ttproducts_table_base_
 		&$tagArray,
 		$forminfoArray=array(),
 		$theCode='',
+		$basketExtra=array(),
 		$id='',
 		$prefix='',
 		$suffix='',
@@ -175,13 +162,13 @@ abstract class tx_ttproducts_article_base_view extends tx_ttproducts_table_base_
 	)	{
 		global $TSFE, $TCA;
 
-		$modelObj = &$this->getModelObj();
-		$imageObj = &t3lib_div::getUserObj('&tx_ttproducts_field_image_view');
+		$modelObj = $this->getModelObj();
+		$imageObj = t3lib_div::makeInstance('tx_ttproducts_field_image_view');
 
 		if ($markerKey)	{
 			$marker = $markerKey;
 		} else {
-			$marker = $this->marker;
+			$marker = $this->getMarker();
 		}
 
 		if (!$marker)	{
@@ -192,12 +179,13 @@ abstract class tx_ttproducts_article_base_view extends tx_ttproducts_table_base_
 
 		$this->getRowMarkerArray (
 			$row,
-			$markerKey,
+			$marker,
 			$markerArray,
 			$variantFieldArray,
 			$variantMarkerArray,
 			$tagArray,
 			$theCode,
+			$basketExtra,
 			$bHtml,
 			$charset,
 			$imageNum,
@@ -208,14 +196,13 @@ abstract class tx_ttproducts_article_base_view extends tx_ttproducts_table_base_
 			$linkWrap
 		);
 
-		$this->getPriceMarkerArray($markerArray, $row, $markerKey, $id, $theCode);
+		$this->getPriceMarkerArray($basketExtra, $markerArray, $row, $markerKey, $id, $theCode);
 
 		if (isset($row['delivery']))	{
 			$imageObj->getSingleImageMarkerArray ($marker.'_DELIVERY', $markerArray, $this->conf['delivery.'][$row['delivery'].'.']['image.'], $theCode);
 		} else {
 			$markerArray['###'.$marker.'_DELIVERY###'] = '';
 		}
-
 	}
 }
 

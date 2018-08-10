@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2007-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,8 +29,6 @@
  *
  * base class for all price calculation functions
  *
- * $Id$
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -41,7 +39,7 @@
 
 
 
-class tx_ttproducts_pricecalc_base {
+class tx_ttproducts_pricecalc_base implements t3lib_Singleton {
 
 	function getPrice (&$conf, $offset, $num='1')	{
 		$rc = 0;
@@ -60,7 +58,7 @@ class tx_ttproducts_pricecalc_base {
 		&$discountArray,
 		$priceTotalTax,
 		$bUseArticles,
-		$bMergeArticles=TRUE
+		$bMergeArticles = TRUE
 	) {
 	} // getCalculatedData
 

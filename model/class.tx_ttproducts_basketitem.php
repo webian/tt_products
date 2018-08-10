@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2007-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,8 +29,6 @@
  *
  * model functions for a basket item object
  *
- * $Id$
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -39,7 +37,7 @@
  */
 
 
-class tx_ttproducts_basketitem {
+class tx_ttproducts_basketitem implements t3lib_Singleton {
 
 	/**
 	 * gets the quantity of an item
@@ -58,11 +56,7 @@ class tx_ttproducts_basketitem {
 		$rc = $item['count'];
 		if (
 			$overwriteAmount != 'basket' &&
-			(
-				class_exists('t3lib_utility_Math') ?
-				t3lib_utility_Math::canBeInterpretedAsInteger($overwriteAmount) :
-				t3lib_div::testInt($overwriteAmount)
-			)
+			tx_div2007_core::testInt($overwriteAmount)
 		) {
 			$rc = intval($overwriteAmount);
 		}
@@ -85,21 +79,15 @@ class tx_ttproducts_basketitem {
 
 		$row = $item['rec'];
 		$rc = $row['basketminquantity'];
-		$tablesObj = &t3lib_div::getUserObj('&tx_ttproducts_tables');
-		$prodTable = &$tablesObj->get('tt_products', FALSE);
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$prodTable = $tablesObj->get('tt_products', FALSE);
 		$articleRow = $prodTable->getArticleRowFromExt($row);
 
-// 		$extArray = $row['ext'];
-//
-// 		if (is_array($extArray) && is_array($extArray['tt_products_articles']) && is_array($extArray['tt_products_articles']['0']))	{
-// 			$articleUid = $extArray['tt_products_articles']['0']['uid'];
-// 			$articleTable = &$tablesObj->get('tt_products_articles', FALSE);
-// 			$articleRow = $articleTable->get($articleUid);
-// 			$rc = ($articleRow['basketminquantity'] != '' ? $articleRow['basketminquantity'] : $rc);
-// 		}
 		if (is_array($articleRow) && count($articleRow))	{
-			$rc = ($articleRow['basketminquantity'] != '' ? $articleRow['basketminquantity'] : $rc);
+
+			$rc = ($articleRow['basketminquantity'] != '0.00' ? $articleRow['basketminquantity'] : $rc);
 		}
+
 		return $rc;
 	}
 }

@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2007 Franz Holzinger <kontakt@fholzinger.com>
+*  (c) 2007-2010 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,10 +29,8 @@
  *
  * credit card functions
  *
- * $Id$
- *
- * @author	Franz Holzinger <kontakt@fholzinger.com>
- * @maintainer	Franz Holzinger <kontakt@fholzinger.com>
+ * @author	Franz Holzinger <franz@ttproducts.de>
+ * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products
  *
@@ -47,15 +45,18 @@ class tx_ttproducts_card extends tx_ttproducts_table_base {
 	var $sizeArray = array('cc_type' => 4, 'cc_number_1' => 4,'cc_number_2' => 4,'cc_number_3' => 4, 'cc_number_4' => 4, 'owner_name' => 0, 'cvv2' => 4, 'endtime_mm' => 2, 'endtime_yy'  => 2);
 	var $asteriskArray = array(2 => '**', 4 => '****');
 
-	function init (&$pibase, $functablename) {
-		$basketObj = &t3lib_div::getUserObj('&tx_ttproducts_basket');
+
+	public function init ($cObj, $functablename)	{
+
+		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
 		$formerBasket = $basketObj->recs;
 		$allowedUids = $basketObj->basketExtra['payment.']['creditcards'];
 
-		parent::init($pibase, $functablename);
+		parent::init($cObj, $functablename);
 
 		$this->ccArray = array();
 		$this->ccArray = $formerBasket['creditcard'];
+
 		if (isset($allowedUids))	{
 			$this->allowedArray = t3lib_div::trimExplode(',',$allowedUids);
 		}
@@ -74,6 +75,7 @@ class tx_ttproducts_card extends tx_ttproducts_table_base {
 			global $TSFE;
 
 			$ccArray = $TSFE->fe_user->getKey('ses','cc');
+
 			if (!$ccArray)	{
 				$ccArray = array();
 			}
@@ -122,6 +124,7 @@ class tx_ttproducts_card extends tx_ttproducts_table_base {
 		$newId = 0;
 		$tablename = $this->getTablename();
 		$pid = intval($this->conf['PID_sys_products_orders']);
+
 		if (!$pid)	$pid = intval($TSFE->id);
 
 		if ($ccArray['cc_number_1'] && $TSFE->sys_page->getPage_noCheck ($pid))	{
@@ -188,7 +191,7 @@ class tx_ttproducts_card extends tx_ttproducts_table_base {
 						'day' => 28, // day
 						'year' => intval($ccArray['endtime_yy']) // year
 					);
-				$endtime = mktime ($timeArray['hour'], $timeArray['minute'], $timeArray['second'], $timeArray['month'], $timeArray['day'], $timeArray['year']);
+				$endtime = mktime($timeArray['hour'], $timeArray['minute'], $timeArray['second'], $timeArray['month'], $timeArray['day'], $timeArray['year']);
 				$newFields['endtime'] = $endtime;
 
 				$TYPO3_DB->exec_UPDATEquery($tablename,$where_clause,$newFields);
@@ -202,20 +205,30 @@ class tx_ttproducts_card extends tx_ttproducts_table_base {
 	} // create
 
 
-	function getUid ()	{
+	function getUid () {
 		global $TSFE;
 
-		$ccArray = $TSFE->fe_user->getKey('ses','cc');
-		return $ccArray['cc_uid'];
+		$result = 0;
+		$ccArray = $TSFE->fe_user->getKey('ses', 'cc');
+		if (isset($ccArray['cc_uid'])) {
+			$result = $ccArray['cc_uid'];
+		}
+		return $result;
 	}
 
 
-	function get ($uid, $bFieldArrayAll=false) {
+	public function getAllowedArray ()	{
+		return $this->allowedArray;
+	}
+
+
+	function getRow ($uid, $bFieldArrayAll=false) {
 		global $TYPO3_DB;
+
 		$rcArray = array();
 		if ($bFieldArrayAll)	{
 			foreach ($this->inputFieldArray as $k => $field)	{
-				$rcArray [$field] = '';
+				$rcArray[$field] = '';
 			}
 		}
 
@@ -227,6 +240,9 @@ class tx_ttproducts_card extends tx_ttproducts_table_base {
 				$fields = implode(',',$this->inputFieldArray);
 			}
 			$tablename = $this->getTablename();
+			if ($tablename == '')	{
+				$tablename = 'sys_products_cards';
+			}
 			$res = $TYPO3_DB->exec_SELECTquery($fields, $tablename, $where);
 			$row = $TYPO3_DB->sql_fetch_assoc($res);
 			$TYPO3_DB->sql_free_result($res);
@@ -243,15 +259,17 @@ class tx_ttproducts_card extends tx_ttproducts_table_base {
 	 */
 	function checkRequired ()	{
 		$rc = '';
+		$allowedArray = $this->getAllowedArray();
 
 		foreach ($this->inputFieldArray as $k => $field)	{
+			if ($field == 'cc_type' && !count($allowedArray)) {
+				continue;
+			}
+
 			$testVal = $this->ccArray[$field];
 			if (
-				(
-					class_exists('t3lib_utility_Math') ?
-					!t3lib_utility_Math::canBeInterpretedAsInteger($testVal) :
-					!t3lib_div::testInt($testVal)
-				) && !$testVal
+				tx_div2007_core::testInt($testVal) &&
+				!$testVal
 			) {
 				$rc = $field;
 				break;

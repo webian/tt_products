@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 1999-2008 Kasper Skårhøj (kasperYYYY@typo3.com)
+*  (c) 1999-2010 Kasper Skårhøj (kasperYYYY@typo3.com)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -32,13 +32,15 @@
  *
  * This script is used as a "handleScript" with the default lib/class.tx_ttproducts_basket_view.php of the Shop System.
  *
+ * deprecated: Use the extensions transactor and transactor_dibs instead of this PHP script
+ *
  * DIBS:	http://www.dibs.dk
  *
- * $Id: payment_DIBS.php 4269 2006-12-08 21:22:21Z franzholz $
+ * $Id: payment_DIBS.php 6 2011-03-09 11:29:28Z svn $
  *
  * @author  Kasper Skårhøj <kasperYYYY@typo3.com>
- * @author  Franz Holzinger <contact@fholzinger.com>
- * @maintainer	Franz Holzinger <contact@fholzinger.com>
+ * @author  Franz Holzinger <franz@ttproducts.de>
+ * @maintainer	Franz Holzinger <franz@ttproducts.de>
  *
  */
 
@@ -54,15 +56,15 @@ $lConf = $confScript;
 $localTemplateCode = $this->cObj->fileResource($lConf['templateFile'] ? $lConf['templateFile'] : 'EXT:tt_products/template/payment_DIBS_template.tmpl');		// Fetches the DIBS template file
 if (!is_object($basketView))	{
 	$error_code = '';
-	$basketView = &t3lib_div::getUserObj('tx_ttproducts_basket_view',1);
+	$basketView = t3lib_div::makeInstance('tx_ttproducts_basket_view',1);
 	$basketView->init ($pibase, array(), FALSE, $this->templateCode, $error_code);
 }
-$markerObj = &t3lib_div::getUserObj('&tx_ttproducts_marker');
+$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
 $localTemplateCode = $this->cObj->substituteMarkerArrayCached($localTemplateCode, $markerObj->getGlobalMarkerArray());
 $calculatedArray = $this->basket->getCalculatedArray();
 
-$tablesObj = &t3lib_div::getUserObj('&tx_ttproducts_tables');
-$order = &$tablesObj->get('sys_products_orders');
+$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+$order = $tablesObj->get('sys_products_orders');
 
 $orderUid = $order->getBlankUid();	// Gets an order number, creates a new order if no order is associated with the current session
 
@@ -80,7 +82,16 @@ switch($products_cmd)	{
 	case 'cardno':
 		$tSubpart = $lConf['soloe'] ? 'DIBS_SOLOE_TEMPLATE' : 'DIBS_CARDNO_TEMPLATE';		// If solo-e is selected, use different subpart from template
 		$tSubpart = $lConf['direct'] ? 'DIBS_DIRECT_TEMPLATE' : $tSubpart;		// If direct is selected, use different subpart from template
-		$content=$basketView->getView($localTemplateCode,'PAYMENT', $infoViewObj, FALSE, FALSE, TRUE, $tSubpart);		// This not only gets the output but also calculates the basket total, so it's NECESSARY!
+		$content=$basketView->getView(
+			$localTemplateCode,
+			'PAYMENT',
+			$infoViewObj,
+			FALSE,
+			FALSE,
+			$this->basket->getCalculatedArray(),
+			TRUE,
+			$tSubpart
+		);		// This not only gets the output but also calculates the basket total, so it's NECESSARY!
 		$markerArray=array();
 		$markerArray['###HIDDENFIELDS###'] =
 ' <input type="hidden" name="merchant"
@@ -165,7 +176,7 @@ doPopup(this);" target="Betaling"'; // if this is empty then no popup window wil
 <input type="hidden" name="ordline1-4" value="Pris">
 ';
 			$cc=1;
-			$priceViewObj = &t3lib_div::getUserObj('&tx_ttproducts_field_price_view');
+			$priceViewObj = t3lib_div::makeInstance('tx_ttproducts_field_price_view');
 			// loop over all items in the basket indexed by a sorting text
 			foreach ($this->basket->itemArray as $sort=>$actItemArray) {
 				foreach ($actItemArray as $k1=>$actItem) {
@@ -194,13 +205,45 @@ value="'.$priceViewObj->priceFormat($calculatedArray['priceTax']['total'] - $cal
 	case 'decline':
 		$markerArray=array();
 		$markerArray['###REASON_CODE###'] = t3lib_div::_GP('reason');
-		$content=$basketView->getView($localTemplateCode, 'PAYMENT', $infoViewObj, FALSE, FALSE, TRUE, 'DIBS_DECLINE_TEMPLATE',$markerArray);	  // This not only gets the output but also calculates the basket total, so it's NECESSARY!
+		$content =
+			$basketView->getView(
+				$localTemplateCode,
+				'PAYMENT',
+				$infoViewObj,
+				FALSE,
+				FALSE,
+				$this->basket->getCalculatedArray(),
+				TRUE,
+				'DIBS_DECLINE_TEMPLATE',
+				$markerArray
+			);	  // This not only gets the output but also calculates the basket total, so it's NECESSARY!
 	break;
 	case 'cancel':
-		$content=$basketView->getView($localTemplateCode, 'PAYMENT',$infoViewObj, FALSE, FALSE, TRUE, 'DIBS_SOLOE_CANCEL_TEMPLATE',$markerArray);	 // This not only gets the output but also calculates the basket total, so it's NECESSARY!
+		$content =
+			$basketView->getView(
+				$localTemplateCode,
+				'PAYMENT',
+				$infoViewObj,
+				FALSE,
+				FALSE,
+				$this->basket->getCalculatedArray(),
+				TRUE,
+				'DIBS_SOLOE_CANCEL_TEMPLATE',
+				$markerArray
+			);	 // This not only gets the output but also calculates the basket total, so it's NECESSARY!
 	break;
 	case 'accept':
-		$content=$basketView->getView($localTemplateCode, 'PAYMENT',$infoViewObj, FALSE, FALSE, TRUE, 'DIBS_ACCEPT_TEMPLATE');
+		$content =
+			$basketView->getView(
+				$localTemplateCode,
+				'PAYMENT',
+				$infoViewObj,
+				FALSE,
+				FALSE,
+				$this->basket->getCalculatedArray(),
+				TRUE,
+				'DIBS_ACCEPT_TEMPLATE'
+			);
 	// This is just done to calculate stuff
 
 			// DIBS md5 keys
@@ -214,14 +257,44 @@ value="'.$priceViewObj->priceFormat($calculatedArray['priceTax']['total'] - $cal
 		$md5key= md5($k2.md5($k1.'transact='.$transact.'&amount='.$amount.'&currency='.$currency));
 		$authkey=t3lib_div::_GP('authkey');
 		if ($md5key != $authkey)	{
-			$content=$basketView->getView($localTemplateCode, 'PAYMENT', $infoViewObj, FALSE, FALSE, TRUE, 'DIBS_DECLINE_MD5_TEMPLATE');		// This not only gets the output but also calculates the basket total, so it's NECESSARY!
+			$content =
+				$basketView->getView(
+					$localTemplateCode,
+					'PAYMENT',
+					$infoViewObj,
+					FALSE,
+					FALSE,
+					$this->basket->getCalculatedArray(),
+					TRUE,
+					'DIBS_DECLINE_MD5_TEMPLATE'
+				);		// This not only gets the output but also calculates the basket total, so it's NECESSARY!
 		} elseif (t3lib_div::_GP('orderid')!=$order->getNumber($orderUid)) {
-			$content=$basketView->getView($localTemplateCode, 'PAYMENT',$infoViewObj, FALSE, FALSE, TRUE, 'DIBS_DECLINE_ORDERID_TEMPLATE');		// This not only gets the output but also calculates the basket total, so it's NECESSARY!
+			$content =
+				$basketView->getView(
+					$localTemplateCode,
+					'PAYMENT',
+					$infoViewObj,
+					FALSE,
+					FALSE,
+					TRUE,
+					'DIBS_DECLINE_ORDERID_TEMPLATE'
+				);		// This not only gets the output but also calculates the basket total, so it's NECESSARY!
 		} else {
 			$markerArray=array();
 			$markerArray['###TRANSACT_CODE###'] = t3lib_div::_GP('transact');
 
-			$content=$basketView->getView($tmp='', 'PAYMENT', $infoViewObj, FALSE, FALSE, TRUE, 'BASKET_ORDERCONFIRMATION_TEMPLATE',$markerArray);
+			$content =
+				$basketView->getView(
+					$tmp='',
+					'PAYMENT',
+					$infoViewObj,
+					FALSE,
+					FALSE,
+					$this->basket->getCalculatedArray(),
+					TRUE,
+					'BASKET_ORDERCONFIRMATION_TEMPLATE',
+					$markerArray
+				);
 			$error=''; // TODO
 			$this->order->finalize($basketView->templateCode, $basketView, $this->basket->tt_products /* TODO */,$this->basket->tt_products_cat, $this->basket->price, $orderUid,$content,$error);  // Important: $oder->finalize MUST come after the call of prodObj->getBasket, because this function, getBasket, calculates the order! And that information is used in the finalize-function
 		}
@@ -230,7 +303,18 @@ value="'.$priceViewObj->priceFormat($calculatedArray['priceTax']['total'] - $cal
 		if ($lConf['relayURL']) {
 			$markerArray=array();
 			$markerArray['###REDIRECT_URL###'] = 'https://payment.architrade.com/cgi-ssl/relay.cgi/'.$lConf['relayURL'].'&products_cmd=cardno&products_finalize=1'.$param;
-			$content=$basketView->getView($localTemplateCode, 'PAYMENT', $infoViewObj, FALSE, FALSE, TRUE, 'DIBS_REDIRECT_TEMPLATE',$markerArray);
+			$content =
+				$basketView->getView(
+					$localTemplateCode,
+					'PAYMENT',
+					$infoViewObj,
+					FALSE,
+					FALSE,
+					$this->basket->getCalculatedArray(),
+					TRUE,
+					'DIBS_REDIRECT_TEMPLATE',
+					$markerArray
+				);
 		} else {
 			$content = 'NO .relayURL given!!';
 		}

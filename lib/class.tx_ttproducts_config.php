@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2006-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2006-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,8 +29,6 @@
  *
  * configuration
  *
- * $Id$
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -39,7 +37,7 @@
  */
 
 
-class tx_ttproducts_config {
+class tx_ttproducts_config implements t3lib_Singleton {
 	public $conf;
 	public $config;
 	private $bHasBeenInitialised = FALSE;
@@ -115,9 +113,9 @@ class tx_ttproducts_config {
 				if ($theCode &&
 					is_array($this->conf[$type.'.'][$tablename.'.'][$theCode.'.']))	{
 					$tempConf = $this->conf[$type.'.'][$tablename.'.'][$theCode.'.'];
-					$specialConf = t3lib_div::array_merge_recursive_overrule($specialConf, $tempConf);
+					tx_div2007_core::mergeRecursiveWithOverrule($specialConf, $tempConf);
 				}
-				if ($specialConf['orderBy'] == '{$plugin.'.TT_PRODUCTS_EXTkey.'.orderBy}')	{
+				if ($specialConf['orderBy'] == '{$plugin.'.TT_PRODUCTS_EXT.'.orderBy}')	{
 					$specialConf['orderBy'] = '';
 				}
 			} else {
@@ -127,7 +125,7 @@ class tx_ttproducts_config {
 				if ($theCode &&
 					is_array($this->conf[$type.'.'][$theCode.'.']))	{
 					$tempConf = $this->conf[$type.'.'][$theCode.'.'];
-					$specialConf = t3lib_div::array_merge_recursive_overrule($specialConf, $tempConf);
+					tx_div2007_core::mergeRecursiveWithOverrule($specialConf, $tempConf);
 				}
 			}
 		}
@@ -162,27 +160,61 @@ class tx_ttproducts_config {
 	}
 
 
-	public function getBasketConf ($feature, $detail='')	{
+	public function getTypeConf ($type, $feature, $detail='') {
 
 		$rc = array();
-		if (is_array($this->conf['basket.']))	{
-			if ($detail != '')	{
-				if (isset($this->conf['basket.'][$feature . '.']) && is_array($this->conf['basket.'][$feature . '.']))	{
-					if (isset($this->conf['basket.'][$feature . '.'][$detail]))	{
-						$rc = $this->conf['basket.'][$feature . '.'][$detail];
-					} else if (isset($this->conf['basket.'][$feature . '.'][$detail . '.']))	{
-						$rc = $this->conf['basket.'][$feature . '.'][$detail . '.'];
+
+		if (is_array($this->conf[$type . '.'])) {
+			if ($detail != '') {
+				if (isset($this->conf[$type . '.'][$feature . '.']) && is_array($this->conf[$type . '.'][$feature . '.'])) {
+					if (isset($this->conf[$type . '.'][$feature . '.'][$detail])) {
+						$rc = $this->conf[$type . '.'][$feature . '.'][$detail];
+					} else if (isset($this->conf[$type . '.'][$feature . '.'][$detail . '.'])) {
+						$rc = $this->conf[$type . '.'][$feature . '.'][$detail . '.'];
 					}
 				}
 			} else {
-				if (isset($this->conf['basket.'][$feature . '.'])) {
-					$rc = $this->conf['basket.'][$feature . '.'];
-				} else {
-					$rc = $this->conf['basket.'][$feature];
+				if (
+					isset($this->conf[$type . '.'][$feature]) &&
+					$this->conf[$type . '.'][$feature] != ''
+				) {
+					$rc = $this->conf[$type . '.'][$feature];
+				} else if (isset($this->conf[$type . '.'][$feature . '.'])) {
+					$rc = $this->conf[$type . '.'][$feature . '.'];
 				}
 			}
 		}
 		return $rc;
+	}
+
+
+	public function getBasketConf ($feature, $detail='')	{
+		$rc = $this->getTypeConf('basket', $feature, $detail);
+		return $rc;
+	}
+
+
+	public function getFinalizeConf ($feature, $detail='')	{
+		$rc = $this->getTypeConf('finalize', $feature, $detail);
+		return $rc;
+	}
+
+
+	public function getFallback ($tableConf) {
+		global $TSFE;
+
+		$result = FALSE;
+		if (
+			isset($tableConf) &&
+			is_array($tableConf) &&
+			isset($tableConf['language.']) &&
+			$tableConf['language.']['type'] == 'table' &&
+			$tableConf['language.']['mode'] == 'fallback'
+		) {
+			$result = TRUE;
+		}
+
+		return $result;
 	}
 
 
@@ -234,6 +266,28 @@ class tx_ttproducts_config {
 	}
 
 
+	public function getColumnFields ($tableConf) {
+		$retArray = array();
+
+		$generateArray = array('generateColumn');
+		foreach ($generateArray as $k => $generate) {
+			if (is_array($tableConf) && is_array($tableConf[$generate . '.'])) {
+				$genPartArray = $tableConf[$generate . '.'];
+				if ($genPartArray['type'] == 'tablefields') {
+					$fieldArray = $genPartArray['field.'];
+
+					if (is_array($fieldArray)) {
+						foreach ($fieldArray as $field => $value) {
+							$retArray[$field] = $value;
+						}
+					}
+				}
+			}
+		}
+		return $retArray;
+	}
+
+
 	public function getAJAXConf ()	{
 		$rc = array();
 		if (isset($this->conf['ajax.']) && is_array($this->conf['ajax.']['conf.']))	{
@@ -257,23 +311,6 @@ class tx_ttproducts_config {
 
 	public function mergeAJAX ($ajaxconf)	{
 		global $TYPO3_DB;
-
-//		if (is_array($ajaxconf) && isset($this->conf['ajax.']) && is_array($this->conf['ajax.']['conf.']))	{
-//			foreach ($ajaxconf as $k => $v){
-//				$newVal = $this->conf['ajax.']['conf.'][$k];
-//				if (isset($newVal))	{
-//					if (is_array($newVal))	{
-//						if ($k == 'TSFE.')	{
-//							$TSFE->config['config'] = array_merge ($TSFE->config['config'], $newVal);
-//						} else {
-//							$this->conf[$k] = array_merge($this->conf[$k], $newVal);
-//						}
-//					} else {
-//						$this->conf[$k] = $newVal;
-//					}
-//				}
-//			}
-//		}
 	}
 }
 

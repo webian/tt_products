@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2011 Franz Holzinger <contact@fholzinger.com>
+*  (c) 2007-2008 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,10 +29,8 @@
  *
  * functions for the page id list
  *
- * $Id$
- *
- * @author	Franz Holzinger <contact@fholzinger.com>
- * @maintainer	Franz Holzinger <contact@fholzinger.com>
+ * @author	Franz Holzinger <franz@ttproducts.de>
+ * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products
  *
@@ -49,8 +47,8 @@ class tx_ttproducts_pid_list {
 	/**
 	 * Getting all tt_products_cat categories into internal array
 	 */
-	function init (&$cObj)	{
-		$this->cObj = &$cObj;
+	function init ($cObj)	{
+		$this->cObj = $cObj;
 	} // init
 
 
@@ -104,39 +102,43 @@ class tx_ttproducts_pid_list {
 		return $rc;
 	}
 
+	public function applyRecursive ($recursive, &$pids, $bStore = FALSE) {
+		$cObj = t3lib_div::makeInstance('tx_div2007_cobj');
 
-	/**
-	 * Extends the internal pid_list by the levels given by $recursive
-	 */
-	function applyRecursive ($recursive, &$pids, $bStore=FALSE)	{
-		global $TSFE;
-
-		if ($pids)	{
-			if ($bStore)	{
-				$this->pid_list = $pids;
-				$pid_list = &$this->pid_list;
-			} else {
-				$pid_list = &$pids;
-			}
+		if ($pids != '') {
+			$pid_list = &$pids;
 		} else {
-			$pid_list = &$this->pid_list;
+			$pid_list = $this->pid_list;
 		}
+
 		if (!$pid_list) {
-			$pid_list = $TSFE->id;
+			$pid_list = $GLOBALS['TSFE']->id;
 		}
-		if ($recursive)	{		// get pid-list if recursivity is enabled
+
+		if ($recursive) {		// get pid-list if recursivity is enabled
 			$recursive = intval($recursive);
 			$this->recursive = $recursive;
-			$pid_list_arr = explode(',',$pid_list);
-			$pid_list = '';
-			reset($pid_list_arr);
-			while(list(,$val) = each($pid_list_arr))	{
-				$pid_list .= $val.','.$this->cObj->getTreeList($val,$recursive);
+			$pidSubArray = array();
+
+			$pid_list_arr = explode(',', $pid_list);
+			foreach ($pid_list_arr as $val) {
+				$pidSub = $cObj->getTreeList($val, $recursive);
+				if ($pidSub != '') {
+					$pidSubArray[] = $pidSub;
+				}
 			}
-			$pid_list = preg_replace('/,$/','',$pid_list);
-			$pid_list_arr = explode(',',$pid_list);
-			$pid_list_arr = array_unique ($pid_list_arr);
+
+			$pid_list .= ',' . implode(',', $pidSubArray);
+			$pid_list_arr = explode(',', $pid_list);
+			$flippedArray = array_flip($pid_list_arr);
+			$pid_list_arr = array_keys($flippedArray);
+			sort($pid_list_arr, SORT_NUMERIC);
 			$pid_list = implode(',', $pid_list_arr);
+			$pid_list = preg_replace('/^,/', '', $pid_list);
+		}
+
+		if ($bStore) {
+			$this->pid_list = $pid_list;
 		}
 	}
 }

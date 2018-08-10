@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2006-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2006-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,8 +29,6 @@
  *
  * article functions without object instance
  *
- * $Id: class.tx_ttproducts_variant.php 3665 2006-09-06 18:52:11Z franzholz $
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -39,19 +37,19 @@
  *
  */
 
-require_once (PATH_BE_ttproducts.'view/interface.tx_ttproducts_variant_view_int.php');
 
 
-class tx_ttproducts_variant_view implements tx_ttproducts_variant_view_int {
+
+class tx_ttproducts_variant_view implements tx_ttproducts_variant_view_int, t3lib_Singleton {
 	public $modelObj;
 	public $cObj;
 	public $langObj;
 
 
-	public function init(&$langObj, &$modelObj)	{
-		$this->langObj = &$langObj;
-		$this->cObj = &$langObj->cObj;
-		$this->modelObj = &$modelObj;
+	public function init($langObj, $modelObj)	{
+		$this->langObj = $langObj;
+		$this->cObj = $langObj->cObj;
+		$this->modelObj = $modelObj;
 	}
 
 	public function getVariantSubpartMarkerArray (&$markerArray, &$subpartArray, &$wrappedSubpartArray, &$row, &$tempContent, $bUseSelects, &$conf, $bHasAdditional, $bGiftService)  {
@@ -93,15 +91,23 @@ class tx_ttproducts_variant_view implements tx_ttproducts_variant_view_int {
 		$remMarkerArray = array();
 		$variantConf = &$this->modelObj->conf;
 
+        $maxKey = 0;
 		if (is_array($variantConf))	{
 			foreach ($variantConf as $key => $field)	{
 				if ($field != 'additional')	{	// no additional here
-					if (trim($row[$field]) == '' || !$conf['select'.ucfirst($field)])	{
+					if (
+						!isset($row[$field]) ||
+						trim($row[$field]) == '' ||
+						!$conf['select' . ucfirst($field)]
+					) {
 						$remSubpartArray[] = 'display_variant'.$key;
 					} else {
 						$remMarkerArray[] = 'display_variant'.$key;
 					}
 				}
+                if ($key > $maxKey) {
+                    $maxKey = $key;
+                }
 			}
 		}
 
@@ -122,7 +128,11 @@ class tx_ttproducts_variant_view implements tx_ttproducts_variant_view_int {
 			$remMarkerArray[] = 'display_variant5_NoGiftService';
 		}
 
-		foreach ($remSubpartArray as $k => $subpart) {
+        for ($i = $maxKey + 1; $i <= 32; ++$i) { // remove more variants from the future
+            $remSubpartArray[] = 'display_variant' . $i;
+        }
+
+        foreach ($remSubpartArray as $k => $subpart) {
 			$subpartArray['###'.$subpart.'###'] = '';
 		}
 

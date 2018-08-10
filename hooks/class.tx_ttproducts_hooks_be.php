@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010-2010 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2010-2010 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,8 +29,6 @@
  *
  * hook functions for TYPO3 FE extensions
  *
- * $Id:$
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -40,14 +38,52 @@
  */
 
 
-class tx_ttproducts_hooks_be {
+class tx_ttproducts_hooks_be implements t3lib_Singleton {
 
-	function displayCategoryTree($PA, $fobj)    {
+	public function displayCategoryTree ($PA, $fobj) {
+		$result = FALSE;
 
 		if (t3lib_extMgm::isLoaded('mbi_products_categories')) {
-			$treeObj = &t3lib_div::getUserObj('&tx_mbiproductscategories_treeview');
-			return $treeObj->displayCategoryTree($PA, $fobj);
+			$treeObj = FALSE;
+
+			if (class_exists('JambageCom\\MbiProductsCategories\\View\\TreeSelector')) {
+				$treeObj = t3lib_div::makeInstance('JambageCom\\MbiProductsCategories\\View\\TreeSelector');
+			} else if (class_exists('tx_mbiproductscategories_treeview')) {
+				$treeObj = t3lib_div::makeInstance('tx_mbiproductscategories_treeview');
+			}
+
+			if (is_object($treeObj)) {
+				$result = $treeObj->displayCategoryTree($PA, $fobj);
+			}
 		}
+
+		return $result;
+	}
+
+
+	public function displayOrderHtml ($PA, $fobj) {
+		$result = 'ERROR';
+
+		$table = $PA['table'];
+		$field = $PA['field'];
+		$row   = $PA['row'];
+
+			// Field configuration from TCA:
+		$config = $PA['fieldConf']['config'];
+		$orderData = unserialize($row['orderData']);
+
+		if (
+			is_array($orderData) &&
+			isset($orderData['html_output']) &&
+			isset($config['parameters']) &&
+			is_array($config['parameters']) &&
+			isset($config['parameters']['format']) &&
+			$config['parameters']['format'] == 'html'
+		) {
+			$result = $orderData['html_output'];
+		}
+
+		return $result;
 	}
 }
 

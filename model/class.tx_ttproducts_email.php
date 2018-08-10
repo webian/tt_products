@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2005-2007 Franz Holzinger <kontakt@fholzinger.com>
+*  (c) 2005-2007 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,10 +29,8 @@
  *
  * functions for the category
  *
- * $Id$
- *
- * @author  Franz Holzinger <kontakt@fholzinger.com>
- * @maintainer	Franz Holzinger <kontakt@fholzinger.com> 
+ * @author  Franz Holzinger <franz@ttproducts.de>
+ * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products
  *
@@ -46,8 +44,8 @@ class tx_ttproducts_email extends tx_ttproducts_table_base {
 	/**
 	 * Getting all tt_products_cat categories into internal array
 	 */
-	function init(&$pibase, $functablename)  {
-		parent::init($pibase, $functablename);
+	function init($cObj, $functablename)  {
+		parent::init($cObj, $functablename);
 		$tablename = $this->getTablename();
 		$this->getTableObj()->addDefaultFieldArray(array('sorting' => 'sorting'));
 		$this->getTableObj()->setTCAFieldArray('tt_products_emails');

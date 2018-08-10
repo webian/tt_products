@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2008 Franz Holzinger <contact@fholzinger.com>
+*  (c) 2007-2008 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,10 +29,8 @@
  *
  * basket price calculation functions using the price tables
  *
- * $Id$
- *
- * @author	Franz Holzinger <contact@fholzinger.com>
- * @maintainer	Franz Holzinger <contact@fholzinger.com>
+ * @author	Franz Holzinger <franz@ttproducts.de>
+ * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products
  *
@@ -40,7 +38,7 @@
  */
 
 
-class tx_ttproducts_graduated_price {
+class tx_ttproducts_graduated_price implements t3lib_Singleton {
 	public $mmArray = array();
 	public $dataArray = array(); // array of read in products
 	public $tableObj;	// object of the type tx_table_db
@@ -57,7 +55,7 @@ class tx_ttproducts_graduated_price {
 	function init ($tablename, $mmtablename)  {
 		global $TYPO3_DB,$TSFE,$TCA;
 
-		$cnf = &t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
 
@@ -92,9 +90,7 @@ class tx_ttproducts_graduated_price {
 				if (is_array($uid))	{
 					foreach ($uid as $v)	{
 						if (
-							class_exists('t3lib_utility_Math') ?
-							!t3lib_utility_Math::canBeInterpretedAsInteger($v) :
-							!t3lib_div::testInt($v)
+							!tx_div2007_core::testInt($v)
 						) {
 							return 'ERROR: not integer '.$v;
 						}

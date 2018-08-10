@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2009-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2009-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,8 +29,6 @@
  *
  * functions for the creditpoints field view
  *
- * $Id $
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -45,7 +43,7 @@ class tx_ttproducts_field_creditpoints_view extends tx_ttproducts_field_base_vie
 
 
 	public function modifyItemSubpartRow ($fieldname, $row, &$addedFieldArray)	{
-		$modelObj = &$this->getModelObj();
+		$modelObj = $this->getModelObj();
 		$rc = $row;
 		$creditpointsMissing = 0;
 		$creditpointsRemaining = 0;
@@ -57,13 +55,13 @@ class tx_ttproducts_field_creditpoints_view extends tx_ttproducts_field_base_vie
 	}
 
 
- 	public function getRowMarkerArray ($functablename, $fieldname, $row, $markerKey, &$markerArray, $tagArray, $theCode, $id, &$bSkip, $bHtml=true, $charset='', $prefix='', $suffix='', $imageRenderObj='')	{
+ 	public function getRowMarkerArray ($functablename, $fieldname, $row, $markerKey, &$markerArray, $tagArray, $theCode, $id, $basketExtra, &$bSkip, $bHtml=true, $charset='', $prefix='', $suffix='', $imageRenderObj='')	{
 		$modifiedRow = array();
-		$value = $this->getModelObj()->getFieldValue($row, $fieldname);
+		$value = $this->getModelObj()->getFieldValue($basketExtra, $row, $fieldname);
 		$value = number_format($value,'0');
 		$modifiedRow[$fieldname] = $value;
 		foreach ($this->addedFieldArray as $addedField)	{
-			$value = $this->getModelObj()->getFieldValue($row, $addedField);
+			$value = $this->getModelObj()->getFieldValue($basketExtra, $row, $addedField);
 			$modifiedRow[$addedField] = number_format($value,'0');
 		}
 		return $modifiedRow;

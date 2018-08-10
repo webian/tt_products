@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008-2008 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2008-2008 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,8 +29,6 @@
  *
  * foreign table view functions
  *
- * $Id$
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -40,7 +38,6 @@
  */
 
 
-require_once (PATH_BE_table.'lib/class.tx_table_db.php');
 
 class tx_ttproducts_field_foreign_table_view extends tx_ttproducts_field_base_view {
 
@@ -55,28 +52,28 @@ class tx_ttproducts_field_foreign_table_view extends tx_ttproducts_field_base_vi
 		&$wrappedSubpartArray,
 		&$tagArray,
 		$theCode = '',
+		$basketExtra = array(),
 		$id = '1'
 	) {
-
 		global $TCA;
 
-		$tablesObj = &t3lib_div::getUserObj('&tx_ttproducts_tables');
-		$itemTableObj = &$tablesObj->get($functablename, FALSE);
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$itemTableObj = $tablesObj->get($functablename, FALSE);
 		$tablename = $itemTableObj->getTablename();
 	}
 
 
-	public function getRowMarkerArray ($functablename, $fieldname, $row, $markerKey, &$markerArray, $tagArray, $theCode, $id, &$bSkip, $bHtml=true, $charset='', $prefix='', $suffix='', $imageRenderObj='')	{
+	public function getRowMarkerArray ($functablename, $fieldname, $row, $markerKey, &$markerArray, $tagArray, $theCode, $id, $basketExtra, &$bSkip, $bHtml=true, $charset='', $prefix='', $suffix='', $imageRenderObj='')	{
 		global $TCA;
 
-		$tablesObj = &t3lib_div::getUserObj('&tx_ttproducts_tables');
-		$itemTableObj = &$tablesObj->get($functablename, FALSE);
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$itemTableObj = $tablesObj->get($functablename, FALSE);
 		$tablename = $itemTableObj->getTablename();
 		$foreigntablename = '';
 		$rowMarkerArray = array();
 		if ($TCA[$tablename]['columns'][$fieldname]['config']['type'] == 'group')	{
 			$foreigntablename = $TCA[$tablename]['columns'][$fieldname]['config']['allowed'];
-			$foreignTableViewObj = &$tablesObj->get($foreigntablename,TRUE);
+			$foreignTableViewObj = $tablesObj->get($foreigntablename,TRUE);
 			if (!$row[$fieldname])	{
 				$foreignMarker = $foreignTableViewObj->getMarker();
 
@@ -90,7 +87,7 @@ class tx_ttproducts_field_foreign_table_view extends tx_ttproducts_field_base_vi
 
 		if ($foreigntablename != '' && $row[$fieldname] > 0)	{
 /*			$tableClass = $tablesObj->getTableClass ($foreigntablename, TRUE);
-			$foreignTableViewObj = &t3lib_div::getUserObj('&'.$tableClass);*/
+			$foreignTableViewObj = t3lib_div::makeInstance(''.$tableClass);*/
 			$foreignTableObj = $foreignTableViewObj->getModelObj();
 			if ($TCA[$tablename]['columns'][$fieldname]['config']['internal_type'] == 'db')	{
 				$foreignRow = $foreignTableObj->get($row[$fieldname]);
@@ -102,6 +99,7 @@ class tx_ttproducts_field_foreign_table_view extends tx_ttproducts_field_base_vi
 					$tmp=array(),
 					$tagArray,
 					$theCode,
+					$basketExtra,
 					$bHtml,
 					$charset,
 					0,

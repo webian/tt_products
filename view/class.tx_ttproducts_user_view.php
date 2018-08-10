@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2009-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2009-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,8 +29,6 @@
  *
  * functions for user defined output (use the hooks or XCLASS this by your extensions)
  *
- * $Id$
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -39,20 +37,20 @@
  */
 
 
-class tx_ttproducts_user_view  {
+class tx_ttproducts_user_view implements t3lib_Singleton  {
 
 	public function &printView (
 		$pibaseClass,
 		&$templateCode,
 		$theCode
 	)	{
-		$cnf = &t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$conf = &$cnf->getConf();
 		$content = '';
 		$num = $theCode{4};
 
-		$pibaseObj = &t3lib_div::getUserObj('&' . $pibaseClass);
-		$cObj = &$pibaseObj->cObj;
+		$pibaseObj = t3lib_div::makeInstance('' . $pibaseClass);
+		$cObj = $pibaseObj->cObj;
 
 		if (isset($conf['USEROBJ' . $num . '.']) && is_array($conf['USEROBJ' . $num . '.']))	{
 			$content = $cObj->cObjGetSingle($conf['USEROBJ' . $num], $conf['USEROBJ' . $num . '.']);

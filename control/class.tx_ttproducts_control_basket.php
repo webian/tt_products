@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010-2010 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2011 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,17 +29,12 @@
  *
  * control function for the basket.
  *
- * $Id$
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products
  *
  */
-
-require_once(PATH_BE_ttproducts . 'model/class.tx_ttproducts_pid_list.php');
-require_once(PATH_BE_ttproducts . 'lib/class.tx_ttproducts_paymentshipping.php');
 
 
 class tx_ttproducts_control_basket {
@@ -48,8 +43,8 @@ class tx_ttproducts_control_basket {
 	private static $bHasBeenInitialised = FALSE;
 
 
-	public static function init ()	{
-		if (!self::$bHasBeenInitialised)	{
+	static public function init () {
+		if (!self::$bHasBeenInitialised) {
 			self::$recs = self::getStoredRecs();
 			self::$basketExt = self::getStoredBasketExt();
 			self::$bHasBeenInitialised = TRUE;
@@ -57,17 +52,17 @@ class tx_ttproducts_control_basket {
 	}
 
 
-	public static function getRecs ()	{
+	static public function getRecs () {
 		return self::$recs;
 	}
 
 
-	public static function setRecs ($recs) {
+	static public function setRecs ($recs) {
 		self::$recs = $recs;
 	}
 
 
-	public static function getStoredRecs ()	{
+	static public function getStoredRecs () {
 		global $TSFE;
 
 		$rc = $TSFE->fe_user->getKey('ses','recs');
@@ -75,12 +70,27 @@ class tx_ttproducts_control_basket {
 	}
 
 
-	public static function getBasketExt ()	{
+	static public function setStoredRecs ($valArray) {
+		global $TSFE;
+
+		self::store('recs', $valArray);
+	}
+
+
+	static public function store ($type, $valArray) {
+		global $TSFE;
+
+		$TSFE->fe_user->setKey('ses', $type, $valArray);
+		$TSFE->fe_user->storeSessionData(); // The basket shall not get lost when coming back from external scripts
+	}
+
+
+	static public function getBasketExt () {
 		return self::$basketExt;
 	}
 
 
-	public static function getStoredBasketExt ()	{
+	static public function getStoredBasketExt () {
 		global $TSFE;
 
 		$rc = $TSFE->fe_user->getKey('ses','basketExt');
@@ -88,26 +98,26 @@ class tx_ttproducts_control_basket {
 	}
 
 
-	public static function getInfoArray ()	{
+	static public function getInfoArray () {
 		$formerBasket = self::getRecs();
 
 		$infoArray = array();
 
-		if (isset($formerBasket) && is_array($formerBasket))	{
+		if (isset($formerBasket) && is_array($formerBasket)) {
 			$infoArray['billing'] = $formerBasket['personinfo'];
 			$infoArray['delivery'] = $formerBasket['delivery'];
 		}
-		if (!$infoArray['billing'])	{
+		if (!$infoArray['billing']) {
 			$infoArray['billing'] = array();
 		}
-		if (!$infoArray['delivery'])	{
+		if (!$infoArray['delivery']) {
 			$infoArray['delivery'] = array();
 		}
 		return $infoArray;
 	}
 
 
-	public static function fixCountries (&$infoArray)	{
+	static public function fixCountries (&$infoArray) {
 		$rc = FALSE;
 
 		if (
@@ -116,7 +126,7 @@ class tx_ttproducts_control_basket {
 				$infoArray['delivery']['zip'] == '' ||
 				($infoArray['delivery']['zip'] != '' && $infoArray['delivery']['zip'] == $infoArray['billing']['zip'])
 			)
-		)	{
+		) {
 			// a country change in the select box shall be copied
 			$infoArray['delivery']['country_code'] = $infoArray['billing']['country_code'];
 			$rc = TRUE;
@@ -125,8 +135,21 @@ class tx_ttproducts_control_basket {
 	}
 
 
-	public static function destruct () {
+	static public function destruct () {
 		self::$bHasBeenInitialised = FALSE;
+	}
+
+
+	static public function getRoundFormat ($type = '') {
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+
+		$result = $cnf->getBasketConf('round', $type); // check the basket rounding format
+// 		$roundDiscount = $cnf->getBasketConf('round', 'discount');
+
+		if (isset($result) && is_array($result)) {
+			$result = '';
+		}
+		return $result;
 	}
 }
 

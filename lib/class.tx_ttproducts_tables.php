@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2007-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,8 +29,6 @@
  *
  * table class for creation of database table classes and table view classes
  *
- * $Id$
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -39,10 +37,7 @@
  */
 
 
-require_once (PATH_BE_ttproducts.'model/class.tx_ttproducts_table_base.php');
-require_once (PATH_BE_ttproducts.'view/class.tx_ttproducts_table_base_view.php');
-
-class tx_ttproducts_tables	{
+class tx_ttproducts_tables implements t3lib_Singleton	{
 	protected $tableClassArray = array(
 		'address' => 'tx_ttproducts_address',
 		'fe_users' => 'tx_ttproducts_orderaddress',
@@ -76,10 +71,10 @@ class tx_ttproducts_tables	{
 	protected $usedObjectArray = array();
 
 
-	public function init (&$langObj)	{
+	public function init ($langObj)	{
 
-		$this->langObj = &$langObj;
-		$cnf = &t3lib_div::getUserObj('&tx_ttproducts_config');
+		$this->langObj = $langObj;
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 
 		$this->cnf = &$cnf;
 		$this->conf = &$cnf->conf;
@@ -109,7 +104,7 @@ class tx_ttproducts_tables	{
 	}
 
 	/* set the $bView to TRUE if you want to get the view class */
-	public function &get ($functablename, $bView=FALSE)	{
+	public function get ($functablename, $bView = FALSE, $bInit = TRUE)	{
 		$classNameArray = array();
 		$tableObjArray = array();
 
@@ -117,51 +112,44 @@ class tx_ttproducts_tables	{
 		if ($bView)	{
 			$classNameArray['view'] = $this->getTableClass($functablename, TRUE);
 		}
-
 		if (!$classNameArray['model'] || $bView && !$classNameArray['view'])	{
-			debug('Error in '.TT_PRODUCTS_EXTkey.'. No class found after calling function tx_ttproducts_tables::get with parameters "'.$functablename.'", '.$bView.'.','internal error', __LINE__, __FILE__);
+			debug('Error in '.TT_PRODUCTS_EXT.'. No class found after calling function tx_ttproducts_tables::get with parameters "'.$functablename.'", '.$bView.'.','internal error', __LINE__, __FILE__); // keep this
 			return 'ERROR';
 		}
 
 		foreach ($classNameArray as $k => $className)	{
 			if ($className != 'skip')	{
-				// include_once (PATH_BE_ttproducts.$k.'/class.'.$className.'.php');
-				if (strpos($className,':') === FALSE)	{
-					$path = PATH_BE_ttproducts;
-				} else {
+				if (strpos($className, ':') !== FALSE) {
 					list($extKey,$className) = t3lib_div::trimExplode(':',$className,TRUE);
 
 					if (!t3lib_extMgm::isLoaded($extKey))	{
-						debug('Error in '.TT_PRODUCTS_EXTkey.'. No extension "'.$extKey.'" has been loaded to use class class.'.$className.'.','internal error', __LINE__, __FILE__);
+						debug('Error in '.TT_PRODUCTS_EXT.'. No extension "'.$extKey.'" has been loaded to use class class.'.$className.'.','internal error', __LINE__, __FILE__); // keep this
 						continue;
 					}
-					$path = t3lib_extMgm::extPath($extKey);
 				}
-				$classRef = 'class.'.$className;
-				$classFile = $path . $k . '/' . $classRef . '.php';
-				if (file_exists($classFile)) {
-					$classRef = $classFile . ':&' . $className;
-					$tableObj[$k] = &t3lib_div::getUserObj($classRef);	// fetch and store it as persistent object
-					$this->usedObjectArray[$classRef] = TRUE;
+
+				if (class_exists($className)) {
+					$tableObj[$k] = t3lib_div::makeInstance($className);	// fetch and store it as persistent object
+					$this->usedObjectArray[$className] = TRUE;
 				} else {
-					debug ($classFile, 'File not found: ' . $classFile . ' in file class.tx_ttproducts_tables.php');
+					debug ($className, 'Class not found: ' . $className . ' in file class.tx_ttproducts_tables.php'); // keep this
 				}
 			}
 		}
 
 		if (isset($tableObj['model']) && is_object($tableObj['model']))	{
-			if ($tableObj['model']->needsInit())	{
+			if ($bInit && $tableObj['model']->needsInit())	{
 				$tableObj['model']->init(
 					$this->langObj->cObj,
 					$functablename
 				);
 			}
 		} else {
-			debug ('Object for \''.$functablename.'\' has not been found.','internal error in '.TT_PRODUCTS_EXTkey, __LINE__, __FILE__);
+			debug ('Object for \''.$functablename.'\' has not been found.','internal error in '.TT_PRODUCTS_EXT, __LINE__, __FILE__); // keep this
 		}
 
 		if (isset($tableObj['view']) && is_object($tableObj['view']) && isset($tableObj['model']) && is_object($tableObj['model']))	{
-			if ($tableObj['view']->needsInit())	{
+			if ($bInit && $tableObj['view']->needsInit())	{
 				$tableObj['view']->init(
 					$this->langObj,
 					$tableObj['model']
@@ -175,8 +163,7 @@ class tx_ttproducts_tables	{
 
 	public function &getMM ($functablename)	{
 
-include_once (PATH_BE_ttproducts.'model/class.tx_ttproducts_mm_table.php');
-		$tableObj = &t3lib_div::getUserObj('&tx_ttproducts_mm_table');
+		$tableObj = t3lib_div::makeInstance('tx_ttproducts_mm_table');
 
 		if (isset($tableObj) && is_object($tableObj))	{
 			if ($tableObj->needsInit() || $tableObj->getFuncTablename() != $functablename)	{
@@ -186,7 +173,7 @@ include_once (PATH_BE_ttproducts.'model/class.tx_ttproducts_mm_table.php');
 				);
 			}
 		} else {
-			debug ('Object for \''.$functablename.'\' has not been found.','internal error in '.TT_PRODUCTS_EXTkey, __LINE__, __FILE__);
+			debug ('Object for \''.$functablename.'\' has not been found.','internal error in '.TT_PRODUCTS_EXT, __LINE__, __FILE__); // keep this
 		}
 		return $tableObj;
 	}
@@ -213,9 +200,9 @@ include_once (PATH_BE_ttproducts.'model/class.tx_ttproducts_mm_table.php');
 
 		$rc = array();
 		if ($fieldname != '')	{
-			$tableObj = &$this->get($functablename,FALSE);
+			$tableObj = $this->get($functablename,FALSE);
 			$tablename = $tableObj->getTableName ($functablename);
-			$rc = tx_div2007_alpha::getForeignTableInfo_fh002 ($tablename,$fieldname);
+			$rc = tx_div2007_alpha5::getForeignTableInfo_fh003 ($tablename,$fieldname);
 		}
 		return $rc;
 	}
@@ -248,9 +235,9 @@ include_once (PATH_BE_ttproducts.'model/class.tx_ttproducts_mm_table.php');
 
 
 	public function destruct() {
-		foreach ($this->usedObjectArray as $classRef => $bFreeMemory) {
+		foreach ($this->usedObjectArray as $className => $bFreeMemory) {
 			if ($bFreeMemory) {
-				$object = &t3lib_div::getUserObj($classRef);
+				$object = t3lib_div::makeInstance($className);
 				$object->destruct();
 			}
 		}

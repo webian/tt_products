@@ -29,8 +29,6 @@
  *
  * functions for the control of the single view
  *
- * $Id$
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -40,7 +38,7 @@
  */
 
 
-class tx_ttproducts_control_user_int {
+class tx_ttproducts_control_user_int implements t3lib_Singleton {
 
 	/**
 	 * Main method for the control object for the single view
@@ -48,12 +46,11 @@ class tx_ttproducts_control_user_int {
 	public function singleCtrl ($content,$conf)	{
 
 		include_once(PATH_BE_ttproducts . 'control/class.tx_ttproducts_control_single.php');
-		$ctrlSingleObj = &t3lib_div::getUserObj('&tx_ttproducts_control_single');
+		$ctrlSingleObj = t3lib_div::makeInstance('tx_ttproducts_control_single');
 		$ctrlSingleObj->triggerEvents($conf);
 
 		return $content;
 	}
-
 }
 
 

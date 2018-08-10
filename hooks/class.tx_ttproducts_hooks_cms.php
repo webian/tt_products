@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2008 Franz Holzinger <contact@fholzinger.com>
+*  (c) 2007-2008 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,20 +29,17 @@
  *
  * hook functions for the TYPO3 cms
  *
- * $Id:$
- *
- * @author	Franz Holzinger <contact@fholzinger.com>
- * @maintainer	Franz Holzinger <contact@fholzinger.com> 
+ * @author	Franz Holzinger <franz@ttproducts.de>
+ * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products
  *
  *
  */
 
-require_once(PATH_BE_div2007.'hooks/class.tx_div2007_hooks_cms.php');
 
 class tx_ttproducts_hooks_cms extends tx_div2007_hooks_cms {
-	public $extKey=TT_PRODUCTS_EXTkey;
+	public $extKey=TT_PRODUCTS_EXT;
 
 }
 

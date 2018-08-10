@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2007-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,8 +29,6 @@
  *
  * eID compatible AJAX functions
  *
- * $Id:$
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -40,38 +38,38 @@
  */
 
 
-require_once (PATH_BE_ttproducts.'control/class.tx_ttproducts_javascript.php');
 
-
-class tx_ttproducts_ajax {
+class tx_ttproducts_ajax implements t3lib_Singleton {
 	var $taxajax;	// xajax object
 	var $conf; 	// conf coming from JavaScript via Ajax
 
-	function init()	{
+	public function init()	{
 		global $TSFE;
 
-		include_once(PATH_BE_taxajax.'class.tx_taxajax.php');
-		$this->taxajax = &t3lib_div::makeInstance('tx_taxajax');
-//		$charset = $TSFE->renderCharset;
+		$this->taxajax = t3lib_div::makeInstance('tx_taxajax');
 
 			// Encoding of the response to FE charset
-//		$this->taxajax->setCharEncoding($charset);
-		$this->taxajax->setCharEncoding('utf-8');
+		$this->taxajax->setCharEncoding('UTF-8');
 	}
 
 
-	function setConf(&$conf)	{
+	public function setConf(&$conf)	{
 		$this->conf = $conf;
 	}
 
 
-	function &getConf()	{
+	public function &getConf()	{
 		return $this->conf;
 	}
 
 
-	function main ($debug)	{
-
+	public function main (
+		$cObj,
+		$urlObj,
+		$debug,
+		$piVarSingle = 'product',
+		$piVarCat = 'cat'
+	) {
 			// Encoding of the response to utf-8.
 		// $this->taxajax->setCharEncoding('utf-8');
 			// Do you want messages in the status bar?
@@ -81,21 +79,51 @@ class tx_ttproducts_ajax {
 		// $this->taxajax->decodeUTF8InputOn();
 
 			// Turn only on during testing
-		if ($debug)	{
+		if ($debug) {
 			$this->taxajax->debugOn();
 		} else	{
 			$this->taxajax->debugOff();
 		}
 		$this->taxajax->setWrapperPrefix('');
-		$reqURI = t3lib_div::getIndpEnv('TYPO3_REQUEST_URL');
-		$origUrlArray = explode('?', $reqURI);
-		$urlArray = t3lib_div::explodeUrl2Array($origUrlArray['1'],TRUE);
-		unset($urlArray['cHash']);
-		$urlArray['no_cache'] = 1;
-		$urlArray['eID'] = TT_PRODUCTS_EXTkey;
-		$reqURI = t3lib_div::implodeArrayForUrl('',$urlArray);
-		$reqURI{0} = '?';
-		$reqURI = $origUrlArray['0'] . $reqURI;
+
+
+// 		$reqURI = t3lib_div::getIndpEnv('TYPO3_REQUEST_URL');
+// 		$origUrlArray = explode('?', $reqURI);
+// 		$urlArray = t3lib_div::explodeUrl2Array($origUrlArray['1'],TRUE);
+// 		unset($urlArray['cHash']);
+// 		$urlArray['no_cache'] = 1;
+// 		$urlArray['eID'] = TT_PRODUCTS_EXT;
+// 		$reqURI = t3lib_div::implodeArrayForUrl('',$urlArray);
+// 		$reqURI{0} = '?';
+// 		$reqURI = $origUrlArray['0'] . $reqURI;
+
+
+		$addQueryString = array(
+			'no_cache' => 1,
+			'eID' => TT_PRODUCTS_EXT
+		);
+
+
+		$excludeList = 'cHash';
+		$queryString = $urlObj->getLinkParams(
+			$excludeList,
+			$addQueryString,
+			FALSE,
+			FALSE,
+			$piVarSingle,
+			$piVarCat
+		);
+
+		$linkConf = array('useCacheHash' => 0);
+		$target = '';
+		$reqURI = tx_div2007_alpha5::getTypoLink_URL_fh003(
+			$cObj,
+			$GLOBALS['TSFE']->id,
+			$queryString,
+			$target,
+			$linkConf
+		);
+
 		$this->taxajax->setRequestURI($reqURI);
 	}
 }

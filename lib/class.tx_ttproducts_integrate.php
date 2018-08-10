@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2007-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -25,15 +25,13 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 /**
- * $Id$
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products
  */
 
 
-class tx_ttproducts_integrate {
+class tx_ttproducts_integrate implements t3lib_Singleton {
 
 	/**
 	 * Includes the locallang.xml and returns the $LOCAL_LANG array found in that file.
@@ -59,7 +57,7 @@ class tx_ttproducts_integrate {
 				$insertFields['uid_local'] = $prodUid;
 				$insertFields['uid_foreign'] = intval($rowArticle['uid']);
 
-				if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXTkey]['articleMode'] == '2')	{
+				if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['articleMode'] == '2')	{
 					$insertFields['crdate'] = $insertFields['tstamp'] = time();
 					$insertFields['pid'] = $rowArticle['pid'];
 					$insertFields['sorting'] = 1;

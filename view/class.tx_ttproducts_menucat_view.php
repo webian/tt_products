@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2006-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2006-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,8 +29,6 @@
  *
  * category list view functions
  *
- * $Id$
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -40,7 +38,6 @@
  */
 
 
-require_once (PATH_BE_ttproducts.'view/class.tx_ttproducts_catlist_view_base.php');
 
 class tx_ttproducts_menucat_view extends tx_ttproducts_catlist_view_base {
 	var $htmlTagMain = 'ul';	// main HTML tag
@@ -60,7 +57,9 @@ class tx_ttproducts_menucat_view extends tx_ttproducts_catlist_view_base {
 
 		$t = array();
 		$ctrlArray = array();
-		parent::printView(
+		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
+
+		parent::getPrintViewArrays(
 			$functablename,
 			$templateCode,
 			$t,
@@ -79,11 +78,11 @@ class tx_ttproducts_menucat_view extends tx_ttproducts_catlist_view_base {
 		);
 
 		if (!count($error_code))	{
-			$markerObj = &t3lib_div::getUserObj('&tx_ttproducts_marker');
-			$tablesObj = &t3lib_div::getUserObj('&tx_ttproducts_tables');
-			$categoryTableViewObj = &$tablesObj->get($functablename,TRUE);
-			$categoryTable = &$categoryTableViewObj->getModelObj();
-			$cnf = &t3lib_div::getUserObj('&tx_ttproducts_config');
+			$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
+			$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+			$categoryTableViewObj = $tablesObj->get($functablename,TRUE);
+			$categoryTable = $categoryTableViewObj->getModelObj();
+			$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 
 			$content='';
 			$out='';
@@ -94,12 +93,12 @@ class tx_ttproducts_menucat_view extends tx_ttproducts_catlist_view_base {
 			$countArray = array();
 			$countArray[0] = 0;
 			$countArray[1] = 0;
-			$catConf = $categoryTable->getTableConf();
-			$cssObj = &t3lib_div::getUserObj('&tx_ttproducts_css');
+			$catConf = $categoryTable->getTableConf($theCode);
+			$cssObj = t3lib_div::makeInstance('tx_ttproducts_css');
 			$cssConf = $cssObj->getConf($functablename, $theCode);
 			$menu = $categoryTableViewObj->getPivar() . $depth;
 			$fill = '';
-			$out = '<'.$this->htmlTagMain.' id="' . $menu . '"' . $fill . '>';
+			$out = '<'.$this->htmlTagMain.' id="' . $menu . '" ' . $fill . '>';
 			$out = str_replace($this->htmlPartsMarkers[0], $out, $htmlParts[0]);
 			$parentArray = array();
 			$viewCatTagArray = array();
@@ -124,13 +123,13 @@ class tx_ttproducts_menucat_view extends tx_ttproducts_catlist_view_base {
 					$subCategories = $row['child_category'];
 					$countArray[$depth]++;
 					$css = ($actCategory == $currentCat ? 'class="act"' : $css);
-					$preOut = '<' . $this->htmlTagElement . ($css ? ' '.$css : '') . ' value="' . $actCategory . '">';
+					$preOut = '<' . $this->htmlTagElement . ($css ? ' ' . $css : '') . ' value="' . $actCategory . '">';
 					$out .= str_replace($this->htmlPartsMarkers[0], $preOut, $htmlParts[0]);
 
 					if ($pageAsCategory > 0)	{
 						$pid = $row['pid'];
 					} else {
-						$pageObj = &$tablesObj->get('pages');
+						$pageObj = $tablesObj->get('pages');
 						$pid = $pageObj->getPID(
 							$this->conf['PIDlistDisplay'],
 							$this->conf['PIDlistDisplay.'],
@@ -139,8 +138,8 @@ class tx_ttproducts_menucat_view extends tx_ttproducts_catlist_view_base {
 					}
 					$addQueryString = array($categoryTableViewObj->getPivar() => $actCategory);
 					$tempUrl = $this->pibase->pi_linkTP_keepPIvars_url($addQueryString, 1, 1, $pid);
-					$linkOutArray = array('<a href="' . $tempUrl . '"' . $css . '>','</a>');
-					$linkOut = $linkOutArray[0] . htmlentities($row['title'],ENT_QUOTES,$TSFE->renderCharset).$linkOutArray[1];
+					$linkOutArray = array('<a href="' . htmlspecialchars($tempUrl) . '" ' . $css . '>','</a>');
+					$linkOut = $linkOutArray[0] . htmlentities($row['title'],ENT_QUOTES,'UTF-8').$linkOutArray[1];
 					$markerArray = array();
 					$categoryTableViewObj->getMarkerArray (
 						$markerArray,
@@ -153,6 +152,7 @@ class tx_ttproducts_menucat_view extends tx_ttproducts_catlist_view_base {
 						array(),
 						$pageAsCategory,
 						$theCode,
+						$basketObj->getBasketExtra(),
 						'',
 						'',
 						''

@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2008-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,8 +29,6 @@
  *
  * functions for the taxes
  *
- * $Id$
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -45,17 +43,17 @@ class tx_ttproducts_field_tax extends tx_ttproducts_field_base {
 	/**
 	 *
 	 */
-	public function init(&$cObj, $bUseStaticTaxes, $uidStore)	{
+	public function preInit ($cObj, $bUseStaticTaxes, $uidStore) {
 		global $TYPO3_DB,$TSFE,$TCA;
 
 		parent::init($cObj);
 
 		if ($bUseStaticTaxes && $uidStore)	{
-			$tablesObj = &t3lib_div::getUserObj('&tx_ttproducts_tables');
-			$staticTabObj = &$tablesObj->get('static_taxes', FALSE);
+			$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+			$staticTaxObj = $tablesObj->get('static_taxes', FALSE);
 /*			$dummyRow = array('tax_id' => '1');*/
-			$staticTabObj->setStoreData($uidStore);
-			if ($staticTabObj->isValid())	{
+			$staticTaxObj->setStoreData($uidStore);
+			if ($staticTaxObj->isValid())	{
 				$this->bUseStaticTaxes = TRUE;
 			}
 		}
@@ -65,26 +63,42 @@ class tx_ttproducts_field_tax extends tx_ttproducts_field_base {
 		return $this->bUseStaticTaxes;
 	}
 
-	public function getTax (&$row)	{
-		$rc = $this->getFieldValue ($row, 'tax');
+	public function getTax ($basketExtra, &$row) {
+		$rc = $this->getFieldValue ($basketExtra, $row, 'tax');
 		return $rc;
 	}
 
-	public function getFieldValue ($row, $fieldname)	{
+	public function getFieldValue ($basketExtra, $row, $fieldname)	{
 		$newTax = '';
+		$fieldValue = '';
+		$taxFromShipping = '';
 
 		if ($this->getUseStaticTaxes())	{
 			$taxArray = array();
-			$tablesObj = &t3lib_div::getUserObj('&tx_ttproducts_tables');
-			$staticTabObj = &$tablesObj->get('static_taxes', FALSE);
-			$staticTabObj->getStaticTax($row, $newTax, $taxArray);
+			$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+			$staticTaxObj = $tablesObj->get('static_taxes', FALSE);
+			$staticTaxObj->getStaticTax($row, $newTax, $taxArray);
 		}
 
-		if (is_float($newTax))	{
+		if (is_numeric($newTax)) {
 			$fieldValue = $newTax;
 		} else {
-			$fieldValue = parent::getFieldValue($row, $fieldname);
-			if (!floatval($fieldValue))	{
+			$fieldValue = parent::getFieldValue($basketExtra, $row, $fieldname);
+			$paymentshippingObj = t3lib_div::makeInstance('tx_ttproducts_paymentshipping');
+			if (isset($paymentshippingObj) && is_object($paymentshippingObj)) {
+				$taxFromShipping =
+					$paymentshippingObj->getReplaceTaxPercentage(
+						$basketExtra,
+						'shipping',
+						$row['tax']
+					);	// if set then this has a tax which will override the tax of the products
+
+				if (is_numeric($taxFromShipping)) {
+					$fieldValue = $taxFromShipping;
+				}
+			}
+
+			if (!is_numeric($taxFromShipping) && $fieldValue == 0)	{
 				if ($this->conf['TAXpercentage'])	{
 					$fieldValue = floatval($this->conf['TAXpercentage']);
 				} else {

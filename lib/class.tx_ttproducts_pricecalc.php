@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2005-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2005-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,8 +29,6 @@
  *
  * basket price calculation functions
  *
- * $Id$
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -39,10 +37,7 @@
  *
  */
 
-
-require_once (PATH_BE_ttproducts.'lib/class.tx_ttproducts_pricecalc_base.php');
-
-
+ 
 class tx_ttproducts_pricecalc extends tx_ttproducts_pricecalc_base {
 
 	function getCalculatedData (
@@ -55,6 +50,7 @@ class tx_ttproducts_pricecalc extends tx_ttproducts_pricecalc_base {
 		$bUseArticles,
 		$bMergeArticles=TRUE
 	) {
+		$sql = t3lib_div::makeInstance('tx_ttproducts_sql');
 
 		if (!$itemArray || !count($itemArray)) {
 			return;
@@ -75,6 +71,12 @@ class tx_ttproducts_pricecalc extends tx_ttproducts_pricecalc_base {
 				foreach ($actItemArray as $k2=>$actItem) {
 
 					$row = $actItem['rec'];
+
+					if (is_array($priceCalcTemp['sql.']))    {
+						if (!($bIsValid = $sql->isValid($row, $priceCalcTemp['sql.']['where'])))    {
+							continue;
+						}
+					}
 
 					// has a price reduction already been calculated before ?
 					if ($priceReduction[$row['uid']] == 1) {
