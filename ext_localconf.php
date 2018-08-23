@@ -144,8 +144,8 @@ if (!defined ('DAM_EXTkey')) {
 	define('DAM_EXTkey','dam');
 }
 
-if (!defined ('STATIC_INFO_TABLES_TAXES_EXTkey')) {
-	define('STATIC_INFO_TABLES_TAXES_EXTkey','static_info_tables_taxes');
+if (!defined ('STATIC_INFO_TABLES_TAXES_EXT')) {
+	define('STATIC_INFO_TABLES_TAXES_EXT', 'static_info_tables_taxes');
 }
 
 if (call_user_func($emClass . '::isLoaded', TAXAJAX_EXT)) {
