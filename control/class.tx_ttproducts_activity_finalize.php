@@ -39,13 +39,27 @@
 
 
 
-class tx_ttproducts_activity_finalize extends tx_ttproducts_activity_base {
+class tx_ttproducts_activity_finalize {
 	public $pibase; // reference to object of pibase
 	public $cnf;
 	public $conf;
 	public $config;
 	public $alwaysInStock;
 	public $useArticles;
+
+	public function init ($pibase)  {
+		$this->pibase = $pibase;
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$this->conf = &$cnf->conf;
+		$this->config = &$cnf->config;
+
+		if (intval($this->conf['alwaysInStock'])) {
+			$this->alwaysInStock = 1;
+		} else {
+			$this->alwaysInStock = 0;
+		}
+		$this->useArticles = $this->conf['useArticles'];
+	} // init
 
 
 	public function splitSubjectAndText(
