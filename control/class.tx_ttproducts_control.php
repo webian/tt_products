@@ -86,7 +86,7 @@ class tx_ttproducts_control implements t3lib_Singleton {
 	protected function getOrderUid () {
 		global $TSFE;
 
-		$result = FALSE;
+		$result = false;
 		$orderUid = 0;
 		$orderArray = $TSFE->fe_user->getKey('ses','order');
 
@@ -146,35 +146,21 @@ class tx_ttproducts_control implements t3lib_Singleton {
 			'products_clear_basket'
 		);
 
-/*		if ($activities['products_basket']) {
-			$basketActivityArray = array(
-				'1' =>
-					'products_info',
-					'products_payment',
-					'products_finalize'
-				);
-			// if 'products_basket' has been set, then the user should always return to the basket page
-			foreach ($basketActivityArray as $k => $activity) {
-				if ($activities[$activity]) {
-					unset($activities[$activity]);
-				}
-			}
-		}*/
 		if (is_array($activities)) {
 			foreach ($codeActivityArray as $k => $activity) {
 				if ($activities[$activity]) {
-					$codeActivities[$activity] = TRUE;
+					$codeActivities[$activity] = true;
 				}
 			}
 		}
 
 		if ($codeActivities['products_info']) {
 			if($codeActivities['products_payment']) {
-				$codeActivities['products_payment'] = FALSE;
+				$codeActivities['products_payment'] = false;
 			}
 		}
 		if ($codeActivities['products_basket'] && count($codeActivities)>1) {
-			$codeActivities['products_basket'] = FALSE;
+			$codeActivities['products_basket'] = false;
 		}
 
 		$sortedCodeActivities = array();
@@ -188,7 +174,7 @@ class tx_ttproducts_control implements t3lib_Singleton {
 		if (is_array($activities)) {
 			foreach ($activityArray as $k => $activity) {
 				if ($activities[$activity]) {
-					$retActivities[$activity] = TRUE;
+					$retActivities[$activity] = true;
 				}
 			}
 			$retActivities = array_merge($retActivities, $codeActivities);
@@ -197,7 +183,7 @@ class tx_ttproducts_control implements t3lib_Singleton {
 	}
 
 
-	protected function &processPayment (
+	protected function processPayment (
 		$orderUid,
 		$orderNumber,
 		$cardRow,
@@ -221,7 +207,7 @@ class tx_ttproducts_control implements t3lib_Singleton {
 		if ($handleScript)	{
 			$paymentshippingObj = t3lib_div::makeInstance('tx_ttproducts_paymentshipping');
 			$content = $paymentshippingObj->includeHandleScript($handleScript, $basketExtra['payment.']['handleScript.'], $this->conf['paymentActivity'], $bFinalize, $this->pibase, $infoViewObj);
-		} else if (strpos($handleLib,'transactor') !== FALSE && t3lib_extMgm::isLoaded($handleLib))	{
+		} else if (strpos($handleLib,'transactor') !== false && t3lib_extMgm::isLoaded($handleLib))	{
 				// Payment Transactor
             $transactorConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$handleLib]);
             $useNewTransactor = false;
@@ -235,7 +221,7 @@ class tx_ttproducts_control implements t3lib_Singleton {
             // Get references to the concerning baskets
 			$addQueryString = array();
 			$excludeList = '';
-			$linkParams = $this->urlObj->getLinkParams($excludeList,$addQueryString,TRUE,FALSE);
+			$linkParams = $this->urlObj->getLinkParams($excludeList,$addQueryString,true,false);
 
 			$markerArray = array();
             if ($useNewTransactor) {
@@ -308,16 +294,16 @@ class tx_ttproducts_control implements t3lib_Singleton {
 					$localTemplateCode,
 					'PAYMENT',
 					$infoViewObj,
-					FALSE,
-					FALSE,
+					false,
+					false,
 					$calculatedArray,
-					TRUE,
+					true,
 					'TRANSACTOR_FORM_TEMPLATE',
 					$markerArray,
 					$templateFilename
 				);
 			}
-		} else if (strpos($handleLib,'paymentlib') !== FALSE && t3lib_extMgm::isLoaded($handleLib)) {
+		} else if (strpos($handleLib,'paymentlib') !== false && t3lib_extMgm::isLoaded($handleLib)) {
 			$eInfo = tx_div2007_alpha5::getExtensionInfo_fh003($handleLib);
 
 			$paymentlibVersion = $eInfo['version'];
@@ -405,10 +391,10 @@ class tx_ttproducts_control implements t3lib_Singleton {
 
 				if ($TSFE->loginUser && $editPID) {
 					$addParams = array ('products_payment' => 1);
-					$addParams = $this->urlObj->getLinkParams('',$addParams,TRUE);
+					$addParams = $this->urlObj->getLinkParams('',$addParams,true);
 					$srfeuserBackUrl = $this->pibase->pi_getPageLink($TSFE->id,'',$addParams);
 					$srfeuserParams = array('tx_srfeuserregister_pi1[backURL]' => $srfeuserBackUrl);
-					$addParams = $this->urlObj->getLinkParams('',$srfeuserParams,TRUE);
+					$addParams = $this->urlObj->getLinkParams('',$srfeuserParams,true);
 					$markerArray['###FORM_URL_INFO###'] = $this->pibase->pi_getPageLink($editPID,'',$addParams);
 				}
 			} else if (t3lib_extMgm::isLoaded('agency')) {
@@ -420,10 +406,10 @@ class tx_ttproducts_control implements t3lib_Singleton {
 
 				if ($TSFE->loginUser && $editPID) {
 					$addParams = array ('products_payment' => 1);
-					$addParams = $this->urlObj->getLinkParams('', $addParams, TRUE);
+					$addParams = $this->urlObj->getLinkParams('', $addParams, true);
 					$agencyBackUrl = $this->pibase->pi_getPageLink($TSFE->id, '', $addParams);
 					$agencyParams = array('agency[backURL]' => $agencyBackUrl);
-					$addParams = $this->urlObj->getLinkParams('', $agencyParams, TRUE);
+					$addParams = $this->urlObj->getLinkParams('', $agencyParams, true);
 					$markerArray['###FORM_URL_INFO###'] = $this->pibase->pi_getPageLink($editPID, '', $addParams);
 				}
 			}
@@ -477,7 +463,7 @@ class tx_ttproducts_control implements t3lib_Singleton {
 		$pidArray,
 		$infoArray,
 		$checkBasket,
-		$bBasketEmpty,
+		$basketEmpty,
 		$checkRequired,
 		$checkAllowed,
 		$cardRequired,
@@ -503,7 +489,7 @@ class tx_ttproducts_control implements t3lib_Singleton {
 		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$content = '';
 
-		if ($checkBasket && !$bBasketEmpty)	{
+		if ($checkBasket && !$basketEmpty)	{
 			$basketConf = $cnf->getBasketConf('minPrice'); // check the basket limits
 
 			foreach ($activityArray as $activity => $valid) {
@@ -519,14 +505,14 @@ class tx_ttproducts_control implements t3lib_Singleton {
 				$value = $calculatedArray['priceTax'][$basketConf['collect']];
 				if (isset($value) && isset($basketConf['collect']) && $value < doubleval($basketConf['value']))	{
 					$basket_tmpl = 'BASKET_TEMPLATE_MINPRICE_ERROR';
-					$bFinalize = FALSE;
+					$bFinalize = false;
 				}
 			}
 		}
 
 		$basketMarkerArray = array();
 
-		if ($checkBasket && $bBasketEmpty)	{
+		if ($checkBasket && $basketEmpty)	{
 			$contentEmpty = '';
 			if ($this->activityArray['products_overview']) {
 				tx_div2007_alpha5::load_noLinkExtCobj_fh002($this->pibase);	//
@@ -563,7 +549,7 @@ class tx_ttproducts_control implements t3lib_Singleton {
 			if ($contentEmpty != '')	{
 
 				$contentEmpty = $markerObj->replaceGlobalMarkers($contentEmpty);
-				$bFinalize = FALSE;
+				$bFinalize = false;
 			}
 			$content .= $contentEmpty;
 			$calculatedArray = $basketObj->getCalculatedArray();
@@ -574,7 +560,7 @@ class tx_ttproducts_control implements t3lib_Singleton {
 			$_REQUEST['recs']['personinfo']['agb'] || ($bPayment && t3lib_div::_GET('products_payment')) || $infoArray['billing']['agb'])) {
 
             if (
-                !$bBasketEmpty &&
+                !$basketEmpty &&
                 $bPayment &&
                 (
                     $this->conf['paymentActivity'] == 'payment' ||
@@ -610,9 +596,9 @@ class tx_ttproducts_control implements t3lib_Singleton {
 					$theCode,
 					$infoViewObj,
 					$this->activityArray['products_info'],
-					FALSE,
+					false,
 					$calculatedArray,
-					TRUE,
+					true,
 					$basket_tmpl,
 					$mainMarkerArray
 				);
@@ -676,7 +662,7 @@ class tx_ttproducts_control implements t3lib_Singleton {
 		$basket_tmpl = '';
 		$empty = '';
 		$content = '';
-        $bBasketEmpty = (count($this->basket->getItemArray()) == 0);
+        $basketEmpty = (count($this->basket->getItemArray()) == 0);
 
 		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$basketView = t3lib_div::makeInstance('tx_ttproducts_basket_view');
@@ -698,18 +684,18 @@ class tx_ttproducts_control implements t3lib_Singleton {
 		}
 
 		$mainMarkerArray = array();
-		$bFinalize = FALSE; // no finalization must be called.
+		$bFinalize = false; // no finalization must be called.
 
 		if ($activityArray['products_info'] || $activityArray['products_payment'] || $activityArray['products_customized_payment'] || $activityArray['products_verify'] || $activityArray['products_finalize'])	{
 			// get credit card info
-			$cardViewObj = $tablesObj->get('sys_products_cards',TRUE);
+			$cardViewObj = $tablesObj->get('sys_products_cards',true);
 			$cardObj = $cardViewObj->getModelObj();
 			$cardUid = $cardObj->getUid();
 			$cardRow = $cardObj->getRow($cardUid);
 			$cardViewObj->getMarkerArray($cardRow, $mainMarkerArray, $cardObj->getAllowedArray(), $cardObj->getTablename());
 
 			// get bank account info
-			$accountViewObj = $tablesObj->get('sys_products_accounts', TRUE);
+			$accountViewObj = $tablesObj->get('sys_products_accounts', true);
 			$accountObj = $accountViewObj->getModelObj();
 			$accountViewObj->getMarkerArray($accountObj->acArray, $mainMarkerArray, $accountObj->getIsAllowed());
 		}
@@ -743,7 +729,7 @@ class tx_ttproducts_control implements t3lib_Singleton {
 								$pidagb = intval($this->conf['PIDagb']);
 								break;
 							case 'basket':
-								$checkBasket = TRUE;
+								$checkBasket = true;
 								break;
 							case 'card':
 								if ($paymentshippingObj->useCreditcard($basketExtra))	{
@@ -758,11 +744,11 @@ class tx_ttproducts_control implements t3lib_Singleton {
 				switch($activity)	{
 					case 'products_clear_basket':
 						// Empties the shopping basket!
-						$this->basket->clearBasket(TRUE);
+						$this->basket->clearBasket(true);
 						$calculatedArray = array();
 						$calculObj = t3lib_div::makeInstance('tx_ttproducts_basket_calculate');
 						$calculObj->setCalculatedArray($calculatedArray);
-                        $bBasketEmpty = (count($this->basket->getItemArray()) == 0);
+                        $basketEmpty = (count($this->basket->getItemArray()) == 0);
 					break;
 					case 'products_basket':
 						if (count($activityArray) == 1) {
@@ -781,7 +767,7 @@ class tx_ttproducts_control implements t3lib_Singleton {
 						if (trim($TSFE->fe_user->user['username']) == '') {
 							$basket_tmpl = 'BASKET_TEMPLATE_NOT_LOGGED_IN';
 						} else {
-							$uniqueId = t3lib_div::trimExplode ('-', $this->basket->recs['tt_products']['giftcode'], TRUE);
+							$uniqueId = t3lib_div::trimExplode ('-', $this->basket->recs['tt_products']['giftcode'], true);
 							$query='uid=\''.intval($uniqueId[0]).'\' AND crdate=\''.intval($uniqueId[1]).'\''.' AND NOT deleted' ;
 							$giftRes = $TYPO3_DB->exec_SELECTquery('*', 'tt_products_gifts', $query);
 							$row = $TYPO3_DB->sql_fetch_assoc($giftRes);
@@ -809,7 +795,7 @@ class tx_ttproducts_control implements t3lib_Singleton {
 						// }
 					break;
 					case 'products_payment':
-						$bPayment = TRUE;
+						$bPayment = true;
 						$orderUid = $this->getOrderUid();
 						$orderNumber = $this->getOrdernumber($orderUid);
 
@@ -831,7 +817,7 @@ class tx_ttproducts_control implements t3lib_Singleton {
 
 						if ($this->conf['paymentActivity'] == 'payment' || $this->conf['paymentActivity'] == 'verify')	{
 							$handleLib = $paymentshippingObj->getHandleLib('request', $basketExtra);
-							if (strpos($handleLib,'transactor') !== FALSE)	{
+							if (strpos($handleLib,'transactor') !== false)	{
 								// Payment Transactor
 								tx_transactor_api::init($this->pibase, $this->cObj, $this->conf);
 								$referenceId = tx_transactor_api::getReferenceUid(
@@ -842,7 +828,7 @@ class tx_ttproducts_control implements t3lib_Singleton {
 								);
 								$addQueryString = array();
 								$excludeList = '';
-								$linkParams = $this->urlObj->getLinkParams($excludeList,$addQueryString,TRUE);
+								$linkParams = $this->urlObj->getLinkParams($excludeList,$addQueryString,true);
                                 $useNewTransactor = false;
                                 if (
                                     isset($transactorConf['compatibility']) &&
@@ -894,7 +880,7 @@ class tx_ttproducts_control implements t3lib_Singleton {
                                         $cardRow
                                     );
                                 }
-							} else if (strpos($handleLib,'paymentlib') !== FALSE)	{
+							} else if (strpos($handleLib,'paymentlib') !== false)	{
 								require_once (PATH_BE_ttproducts.'lib/class.tx_ttproducts_paymentlib.php');
 								$paymentlib = t3lib_div::makeInstance('tx_ttproducts_paymentlib');
 								$paymentlib->init($this->pibase, $basketView, $this->urlObj);
@@ -914,10 +900,10 @@ class tx_ttproducts_control implements t3lib_Singleton {
 					// a special step after payment and before finalization needed for some payment methods
 					case 'products_customized_payment': // deprecated
 					case 'products_verify':
-						$bPayment = TRUE;
+						$bPayment = true;
 
                         if (
-                            !$bBasketEmpty &&
+                            !$basketEmpty &&
                             (
                                 $this->conf['paymentActivity']=='verify' ||
                                 $this->conf['paymentActivity']=='customized' /* deprecated */
@@ -951,7 +937,7 @@ class tx_ttproducts_control implements t3lib_Singleton {
 						}
 					break;
 					case 'products_finalize':
-						$bPayment = TRUE;
+						$bPayment = true;
 						$paymentshippingObj = t3lib_div::makeInstance('tx_ttproducts_paymentshipping');
 
 						$handleLib = $paymentshippingObj->getHandleLib('request', $basketExtra);
@@ -960,7 +946,7 @@ class tx_ttproducts_control implements t3lib_Singleton {
 						}
 
 						if (
-                            !$bBasketEmpty &&
+                            !$basketEmpty &&
                             $handleLib != ''
                         ) {
 							$orderUid = $this->getOrderUid();
@@ -978,7 +964,7 @@ class tx_ttproducts_control implements t3lib_Singleton {
 							);
 							$paymentErrorMsg = $errorMessage;
 
-							if($bFinalize == FALSE && $errorMessage != ''){
+							if($bFinalize == false && $errorMessage != ''){
 								$label = $paymentErrorMsg;
 								$markerArray['###ERROR_DETAILS###'] = $label;
 								$basket_tmpl = 'BASKET_TEMPLATE'; // step back to the basket page
@@ -986,7 +972,7 @@ class tx_ttproducts_control implements t3lib_Singleton {
 								$content = ''; // do not show the content of payment again
 							}
 						} else {
-							$bFinalize = TRUE;
+							$bFinalize = true;
 						}
 						if ($codeActivityArray[$activity] && $bFinalize)	{
 							$theCode = 'FINALIZE';
@@ -1014,7 +1000,7 @@ class tx_ttproducts_control implements t3lib_Singleton {
 					$pidArray,
 					$infoViewObj->infoArray,
 					$checkBasket,
-					$bBasketEmpty,
+					$basketEmpty,
 					$checkRequired,
 					$checkAllowed,
 					$cardRequired,
@@ -1053,7 +1039,7 @@ class tx_ttproducts_control implements t3lib_Singleton {
 				$orderNumber = $this->getOrdernumber($orderUid);
 
                 if (
-                    !$bBasketEmpty &&
+                    !$basketEmpty &&
                     trim($this->conf['paymentActivity']) == 'finalize'
                 ) {
 					$mainMarkerArray['###MESSAGE_PAYMENT_SCRIPT###'] =
@@ -1098,10 +1084,10 @@ class tx_ttproducts_control implements t3lib_Singleton {
 						$empty,
 						'BASKET',
 						$infoViewObj,
-						FALSE,
-						FALSE,
+						false,
+						false,
 						$calculatedArray,
-						TRUE,
+						true,
 						$tmpl,
 						$mainMarkerArray
 					);
@@ -1117,10 +1103,10 @@ class tx_ttproducts_control implements t3lib_Singleton {
 					$empty,
 					'BASKET',
 					$infoViewObj,
-					FALSE,
-					FALSE,
+					false,
+					false,
 					$calculatedArray,
-					TRUE,
+					true,
 					'BASKET_ORDERCONFIRMATION_NOSAVE_TEMPLATE',
 					$mainMarkerArray
 				);
@@ -1230,39 +1216,39 @@ class tx_ttproducts_control implements t3lib_Singleton {
 
 			// use '_x' for coordinates from Internet Explorer if button images are used
 		if (t3lib_div::_GP('products_redeem_gift') || t3lib_div::_GP('products_redeem_gift_x'))    {
-		 	$activityArray['products_redeem_gift'] = TRUE;
+		 	$activityArray['products_redeem_gift'] = true;
 		}
 
 		if (t3lib_div::_GP('products_clear_basket') || t3lib_div::_GP('products_clear_basket_x'))    {
-			$activityArray['products_clear_basket'] = TRUE;
+			$activityArray['products_clear_basket'] = true;
 		}
 		if (t3lib_div::_GP('products_overview') || t3lib_div::_GP('products_overview_x'))    {
-			$activityArray['products_overview'] = TRUE;
+			$activityArray['products_overview'] = true;
 		}
 		if (!$update) {
 			if (t3lib_div::_GP('products_payment') || t3lib_div::_GP('products_payment_x'))    {
-				$activityArray['products_payment'] = TRUE;
+				$activityArray['products_payment'] = true;
 			} else if (t3lib_div::_GP('products_info') || t3lib_div::_GP('products_info_x'))    {
-				$activityArray['products_info'] = TRUE;
+				$activityArray['products_info'] = true;
 			}
 		}
 		if (t3lib_div::_GP('products_customized_payment') || t3lib_div::_GP('products_customized_payment_x'))    {
-			$activityArray['products_customized_payment'] = TRUE;
+			$activityArray['products_customized_payment'] = true;
 		}
 		if (t3lib_div::_GP('products_verify') || t3lib_div::_GP('products_verify_x'))    {
-			$activityArray['products_verify'] = TRUE;
+			$activityArray['products_verify'] = true;
 		}
 		if (t3lib_div::_GP('products_finalize') || t3lib_div::_GP('products_finalize_x'))    {
-			$activityArray['products_finalize'] = TRUE;
+			$activityArray['products_finalize'] = true;
 		}
 
 		$codeActivityArray=array();
-		$bBasketCode = FALSE;
+		$bBasketCode = false;
 		if (is_array($codes)) {
 			foreach ($codes as $k => $code) {
 				if ($code=='BASKET')	{
-					$codeActivityArray['products_basket']=TRUE;
-					$bBasketCode = TRUE;
+					$codeActivityArray['products_basket']=true;
+					$bBasketCode = true;
 				} elseif ($code=='INFO') {
                     if (
                         !(
@@ -1270,26 +1256,26 @@ class tx_ttproducts_control implements t3lib_Singleton {
                             $activityArray['products_verify'] || $activityArray['products_finalize']
                         )
                     ) {
-                        $codeActivityArray['products_info']=TRUE;
+                        $codeActivityArray['products_info']=true;
                     }
-					$bBasketCode = TRUE;
+					$bBasketCode = true;
 				} elseif ($code=='OVERVIEW') {
-					$codeActivityArray['products_overview']=TRUE;
+					$codeActivityArray['products_overview']=true;
                 } elseif ($code=='PAYMENT') {
                     if (
                         $activityArray['products_finalize']
                     ) {
-                        $codeActivityArray['products_finalize'] = TRUE;
+                        $codeActivityArray['products_finalize'] = true;
                     } else {
-                        $codeActivityArray['products_payment'] = TRUE;
+                        $codeActivityArray['products_payment'] = true;
                     }
                     if ($activityArray['products_verify']) {
-                        $bBasketCode = TRUE;
+                        $bBasketCode = true;
                     }
                 } elseif ($code == 'FINALIZE')  {
-                    $codeActivityArray['products_finalize'] = TRUE;
+                    $codeActivityArray['products_finalize'] = true;
                     if ($activityArray['products_verify']) {
-                        $bBasketCode = TRUE;
+                        $bBasketCode = true;
                     }
                 }
 			}
@@ -1338,4 +1324,3 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/control/class.tx_ttproducts_control.php']);
 }
 
-?>

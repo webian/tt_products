@@ -88,7 +88,7 @@ class tx_ttproducts_tables implements t3lib_Singleton	{
 		$this->tableClassArray = $tableClassArray;
 	}
 
-	public function getTableClass ($functablename, $bView=FALSE)	{
+	public function getTableClass ($functablename, $bView=false)	{
 
 		$rc = '';
 		if ($functablename)	{
@@ -103,14 +103,14 @@ class tx_ttproducts_tables implements t3lib_Singleton	{
 		return $rc;
 	}
 
-	/* set the $bView to TRUE if you want to get the view class */
-	public function get ($functablename, $bView = FALSE, $bInit = TRUE)	{
+	/* set the $bView to true if you want to get the view class */
+	public function get ($functablename, $bView = false, $bInit = true)	{
 		$classNameArray = array();
 		$tableObjArray = array();
 
-		$classNameArray['model'] = $this->getTableClass($functablename, FALSE);
+		$classNameArray['model'] = $this->getTableClass($functablename, false);
 		if ($bView)	{
-			$classNameArray['view'] = $this->getTableClass($functablename, TRUE);
+			$classNameArray['view'] = $this->getTableClass($functablename, true);
 		}
 		if (!$classNameArray['model'] || $bView && !$classNameArray['view'])	{
 			debug('Error in '.TT_PRODUCTS_EXT.'. No class found after calling function tx_ttproducts_tables::get with parameters "'.$functablename.'", '.$bView.'.','internal error', __LINE__, __FILE__); // keep this
@@ -119,8 +119,8 @@ class tx_ttproducts_tables implements t3lib_Singleton	{
 
 		foreach ($classNameArray as $k => $className)	{
 			if ($className != 'skip')	{
-				if (strpos($className, ':') !== FALSE) {
-					list($extKey,$className) = t3lib_div::trimExplode(':',$className,TRUE);
+				if (strpos($className, ':') !== false) {
+					list($extKey,$className) = t3lib_div::trimExplode(':',$className,true);
 
 					if (!t3lib_extMgm::isLoaded($extKey))	{
 						debug('Error in '.TT_PRODUCTS_EXT.'. No extension "'.$extKey.'" has been loaded to use class class.'.$className.'.','internal error', __LINE__, __FILE__); // keep this
@@ -130,7 +130,7 @@ class tx_ttproducts_tables implements t3lib_Singleton	{
 
 				if (class_exists($className)) {
 					$tableObj[$k] = t3lib_div::makeInstance($className);	// fetch and store it as persistent object
-					$this->usedObjectArray[$className] = TRUE;
+					$this->usedObjectArray[$className] = true;
 				} else {
 					debug ($className, 'Class not found: ' . $className . ' in file class.tx_ttproducts_tables.php'); // keep this
 				}
@@ -200,7 +200,7 @@ class tx_ttproducts_tables implements t3lib_Singleton	{
 
 		$rc = array();
 		if ($fieldname != '')	{
-			$tableObj = $this->get($functablename,FALSE);
+			$tableObj = $this->get($functablename,false);
 			$tablename = $tableObj->getTableName ($functablename);
 			$rc = tx_div2007_alpha5::getForeignTableInfo_fh003 ($tablename,$fieldname);
 		}
@@ -249,5 +249,3 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/lib/class.tx_ttproducts_tables.php']);
 }
 
-
-?>

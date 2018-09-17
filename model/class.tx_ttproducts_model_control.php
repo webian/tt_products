@@ -421,10 +421,12 @@ class tx_ttproducts_model_control {
 					$searchKey = $k;
 					$searchValue = $v;
 					if (is_array($v))	{
-						list($tmpK,$tmpArray) = each($v);
+						$tmpK = key($v);
+						$tmpArray = current($v);
 						$searchKey .= '|' . $tmpK;
 						if (is_array($tmpArray))	{
-							list($tmpK,$tmpArray) = each($tmpArray);
+							$tmpK = key($tmpArray);
+							$tmpArray = current($tmpArray);
 							$searchKey .= '|' . $tmpK;
 						}
 						$searchValue = $tmpArray;
@@ -451,7 +453,8 @@ class tx_ttproducts_model_control {
 
 				if (isset($searchVars[$position]) && isset($positionSearchVars) && is_array($positionSearchVars) && count($positionSearchVars) && $searchVars[$foundKey] != 'all')	{
 
-					list($positionSearchKey, $positionSearchValue) = each($positionSearchVars);
+					$positionSearchKey = key($positionSearchVars);
+					$positionSearchValue = current($positionSearchVars);
  					$partArray = t3lib_div::trimExplode('|',$positionSearchKey);
  					$delimiter = ($partArray[2] ? $partArray[2] : '');
 					$searchTablename = '';

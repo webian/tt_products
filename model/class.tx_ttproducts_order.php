@@ -94,7 +94,6 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 			if (
 				!$newId &&
 				(
-					version_compare(TYPO3_version, '6.0.0', '<') ||
 					get_class($GLOBALS['TYPO3_DB']->getDatabaseHandle()) == 'mysqli'
 				)
 			) {

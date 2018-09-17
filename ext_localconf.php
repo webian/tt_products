@@ -18,12 +18,7 @@ if (
 
 // these constants shall be used in the future:
 if (!defined ('TT_PRODUCTS_EXT')) {
-	define('TT_PRODUCTS_EXT', $_EXTKEY);
-}
-
-
-if (!defined ('TT_PRODUCTS_EXT')) {
-	define('TT_PRODUCTS_EXT', $_EXTKEY);
+	define('TT_PRODUCTS_EXT', 'tt_products');
 }
 
 if (!defined ('PATH_BE_TTPRODUCTS')) {
@@ -79,10 +74,6 @@ if (!defined ('TT_PRODUCTS_EXTkey')) {
 
 if (!defined ('PATH_BE_ttproducts')) {
 	define('PATH_BE_ttproducts', call_user_func($emClass . '::extPath', TT_PRODUCTS_EXT));
-}
-
-if (!defined ('PATH_FE_ttproducts_rel')) {
-	define('PATH_FE_ttproducts_rel', call_user_func($emClass . '::siteRelPath', TT_PRODUCTS_EXT));
 }
 
 if (!defined ('TABLE_EXTkey')) {
@@ -145,7 +136,7 @@ if (!defined ('DAM_EXTkey')) {
 }
 
 if (!defined ('STATIC_INFO_TABLES_TAXES_EXT')) {
-	define('STATIC_INFO_TABLES_TAXES_EXT', 'static_info_tables_taxes');
+	define('STATIC_INFO_TABLES_TAXES_EXT','static_info_tables_taxes');
 }
 
 if (call_user_func($emClass . '::isLoaded', TAXAJAX_EXT)) {
@@ -180,85 +171,6 @@ if (!isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['useFlexforms
 	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['useFlexforms'] = '1';
 }
 
-if (!defined($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cms']['db_layout']['addTables']['tt_products']['MENU'])) {
-	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cms']['db_layout']['addTables']['tt_products'] = array (
-		'default' => array(
-			'MENU' => 'LLL:EXT:tt_products/locallang.xml:m_default',
-			'fList' =>  'title,image,itemnumber,ean,price,price2,directcost',
-			'icon' => TRUE
-		),
-		'ext' => array (
-			'MENU' => 'LLL:EXT:tt_products/locallang.xml:m_ext',
-			'fList' =>  'title,price2,category;inStock;weight;tax',
-			'icon' => TRUE
-		),
-		'variants' => array(
-			'MENU' => 'LLL:EXT:tt_products/locallang.xml:m_variants',
-			'fList' =>  'title,color;size;gradings,description',
-			'icon' => TRUE
-		)
-	);
-
-	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cms']['db_layout']['addTables']['tt_products_language'] = array (
-		'default' => array(
-			'MENU' => 'LLL:EXT:tt_products/locallang.xml:m_default',
-			'fList' => 'sys_language_uid,prod_uid,title,subtitle,datasheet,www',
-			'icon' => TRUE
-		),
-		'ext' => array (
-			'MENU' => 'LLL:EXT:tt_products/locallang.xml:m_ext',
-			'fList' => 'sys_language_uid,prod_uid,note,note2',
-			'icon' => TRUE
-		),
-	);
-
-	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cms']['db_layout']['addTables']['tt_products_articles'] = array (
-		'default' => array(
-			'MENU' => 'LLL:EXT:tt_products/locallang.xml:m_default',
-			'fList' =>  'title,itemnumber,price,inStock,image',
-			'icon' => TRUE
-		),
-		'ext' => array(
-			'MENU' => 'LLL:EXT:tt_products/locallang.xml:m_ext',
-			'fList' =>  'title;price2,color;size;gradings',
-			'icon' => TRUE
-		)
-	);
-
-	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cms']['db_layout']['addTables']['tt_products_cat'] = array (
-		'default' => array(
-			'MENU' => 'LLL:EXT:tt_products/locallang.xml:m_default',
-			'fList' =>  'title,image',
-			'icon' => TRUE
-		)
-	);
-
-	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cms']['db_layout']['addTables']['tt_products_cat_language'] = array (
-		'default' => array(
-			'MENU' => 'LLL:EXT:tt_products/locallang.xml:m_default',
-			'fList' => 'sys_language_uid,title,subtitle,cat_uid',
-			'icon' => TRUE
-		),
-		'ext' => array(
-			'MENU' => 'LLL:EXT:tt_products/locallang.xml:m_ext',
-			'fList' => 'sys_language_uid,title,note',
-			'icon' => TRUE
-		)
-	);
-
-	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cms']['db_layout']['addTables']['sys_products_orders'] = array (
-		'default' => array(
-			'MENU' => 'LLL:EXT:tt_products/locallang.xml:m_default',
-			'fList' => 'name,zip,city,country,sys_language_uid,tracking_code,amount,tax_mode,pay_mode,date_of_payment,date_of_delivery,bill_no',
-			'icon' => TRUE
-		),
-		'ext' => array(
-			'MENU' => 'LLL:EXT:tt_products/locallang.xml:m_ext',
-			'fList' => 'name,first_name,last_name,feusers_uid,address,telephone,email,date_of_birth,status,note',
-			'icon' => TRUE
-		)
-	);
-}
 
 if (isset($_EXTCONF) && is_array($_EXTCONF)) {
 	if (isset($_EXTCONF['where.']) && is_array($_EXTCONF['where.'])) {
@@ -308,9 +220,7 @@ if (TYPO3_MODE == 'FE') { // hooks for FE extensions
 
     if (
         isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['hook.']) &&
-        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['hook.']['setPageTitle'] &&
-        version_compare(TYPO3_version, '6.1.0', '>') &&
-        version_compare(PHP_VERSION, '5.5.0', '>=')
+        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['hook.']['setPageTitle']
     ) {
         // TYPO3 page title
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-output'][] = 'JambageCom\\TtProducts\\Hooks\\ContentPostProcessor->setPageTitle';
@@ -426,44 +336,18 @@ if (
 }
 
 
-if (version_compare(TYPO3_version, '4.6.0', '<')) {
-
-	call_user_func($emClass . '::addPItoST43', $_EXTKEY, 'pi1/class.tx_ttproducts_pi1.php', '_pi1', 'list_type', 1);
-
-	// Define database backend as backend for 4.5 and below (default in 4.6)
-	if (!isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tt_products_cache']['backend'])) {
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tt_products_cache']['backend'] = 't3lib_cache_backend_DbBackend';
-    }
-	// Define data and tags table for 4.5 and below (obsolete in 4.6)
-	if (!isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tt_products_cache']['options'])) {
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tt_products_cache']['options'] = array();
-    }
-	if (!isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tt_products_cache']['options']['cacheTable'])) {
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tt_products_cache']['options']['cacheTable'] = 'tt_products_cache';
-    }
-	if (!isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tt_products_cache']['options']['tagsTable'])) {
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tt_products_cache']['options']['tagsTable'] = 'tt_products_cache_tags';
-    }
-
-	t3lib_cache::initializeCachingFramework();
-} else {
-	// add missing setup for the tt_content "list_type = 5" which is used by tt_products
-	$addLine = 'tt_content.list.20.5 = < plugin.tt_products';
-	call_user_func($emClass . '::addTypoScript', TT_PRODUCTS_EXT, 'setup', '
-	# Setting ' . TT_PRODUCTS_EXT . ' plugin TypoScript
-	' . $addLine . '
-	', 43);
-}
+// add missing setup for the tt_content "list_type = 5" which is used by tt_products
+$addLine = 'tt_content.list.20.5 = < plugin.tt_products';
+call_user_func($emClass . '::addTypoScript', TT_PRODUCTS_EXT, 'setup', '
+# Setting ' . TT_PRODUCTS_EXT . ' plugin TypoScript
+' . $addLine . '
+', 43);
 
 
 if (
 	version_compare(TYPO3_version, '7.0.0', '<') &&
 	isset($GLOBALS['typo3CacheFactory']) &&
-	is_object($GLOBALS['typo3CacheFactory']) &&
-	(
-		version_compare(TYPO3_version, '4.6.0', '>=') ||
-		TYPO3_UseCachingFramework
-	)
+	is_object($GLOBALS['typo3CacheFactory'])
 ) {
     // register the cache in BE so it will be cleared with "clear all caches"
     try {

@@ -19,6 +19,7 @@ if (
 }
 
 if (
+    defined('STATIC_INFO_TABLES_TAXES_EXT') &&
 	\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded(STATIC_INFO_TABLES_TAXES_EXT)
 ) {
 	$eInfo = tx_div2007_alpha5::getExtensionInfo_fh003(STATIC_INFO_TABLES_TAXES_EXT);

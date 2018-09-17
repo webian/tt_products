@@ -27,7 +27,7 @@ exclude.tt_products_language = datasheet,www,image
   # cat=exclude/enable; type=string; label=tt_products_cat exclude: exclude these fields from the table tt_products_cat. addons_em must be installed.
 exclude.tt_products_cat =
   # cat=exclude/enable; type=string; label=tt_products_cat_language exclude: exclude these fields from the table tt_products_cat_language. addons_em must be installed.
-exclude.tt_products_cat_language
+exclude.tt_products_cat_language =
   # cat=exclude/enable; type=string; label=tt_products_articles exclude: exclude these fields from the table tt_products_articles. addons_em must be installed.
 exclude.tt_products_articles =
   # cat=exclude/enable; type=string; label=tt_products_articles_language exclude: exclude these fields from the table tt_products_articles_language. addons_em must be installed.

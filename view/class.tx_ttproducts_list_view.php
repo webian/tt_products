@@ -1506,7 +1506,7 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 			}
 			$basketObj->getGraduatedPrices($uidArray);
 
-			if (count($itemArray))	{	// $itemArray must have numbered indexes to work, because the next item must be determined
+			if (!empty($itemArray))	{	// $itemArray must have numbered indexes to work, because the next item must be determined
 
 				if ($itemTable->getType() == 'dam')	{ //
 					$productDAMMarkerArray = $relatedListView->getListMarkerArray(
@@ -2399,7 +2399,7 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 		}	// if ($theCode != 'SEARCH' || ($theCode == 'SEARCH' && $sword))	{
 		$contentEmpty = '';
 
-		if (count($itemArray))	{
+		if (!empty($itemArray))	{
 
 			// next / prev:
 			// $url = $this->getLinkUrl('','begin_at');
@@ -2415,7 +2415,7 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 			if ($sword) 	{
 				$addQueryString['sword'] = $sword;
 			}
-			$bUseCache = $bUseCache && (count($basketObj->itemArray)==0);
+			$bUseCache = $bUseCache && (empty($basketObj->itemArray));
 
 			$this->getBrowserMarkers(
 				$t,

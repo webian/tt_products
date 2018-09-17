@@ -263,14 +263,6 @@ class tx_ttproducts_db implements t3lib_Singleton {
 					continue;
 				}
 				if (($field == 'title') || ($field == 'subtitle') || ($field == 'note') || ($field == 'note2'))	{
-					if (
-						version_compare(TYPO3_version, '6.0.0', '<') &&
-						$GLOBALS['TSFE']->renderCharset != '' &&
-						$v != ''
-					) {
-						$v = $csConvObj->conv($v, $GLOBALS['TSFE']->renderCharset, $this->ajax->taxajax->getCharEncoding());
-					}
-
 					if (($field == 'note') || ($field == 'note2'))	{
 						$noteObj = t3lib_div::makeInstance('tx_ttproducts_field_note_view');
 						$classAndPath = $itemTable->getFieldClassAndPath($field);
@@ -296,22 +288,10 @@ class tx_ttproducts_db implements t3lib_Singleton {
 									'',
 									''
 								);
-
-							if (
-								version_compare(TYPO3_version, '6.0.0', '<') &&
-								$GLOBALS['TSFE']->renderCharset != '' &&
-								$modifiedValue != ''
-							) {
-								$v = $csConvObj->conv(
-									$modifiedValue,
-									$GLOBALS['TSFE']->renderCharset,
-									$this->ajax->taxajax->getCharEncoding()
-								);
-							}
 						}
 					}
 				}
-//
+
 				if (!in_array($field, $variantArray))	{
 					$tagId = $jsTableNamesId.'-'.$view.'-'.$uid.'-'.$field;
 					switch ($field)	{
@@ -368,14 +348,6 @@ class tx_ttproducts_db implements t3lib_Singleton {
 					}
 					if (in_array($field, $priceFieldArray))	{
 						$v = $priceViewObj->priceFormat($v);
-
-						if (
-							version_compare(TYPO3_version, '6.0.0', '<') &&
-							$GLOBALS['TSFE']->renderCharset != '' &&
-							$v != ''
-						) {
-							$v = $csConvObj->conv($v, $GLOBALS['TSFE']->renderCharset, $this->ajax->taxajax->getCharEncoding());
-						}
 					}
 
 					if (is_array($v))	{

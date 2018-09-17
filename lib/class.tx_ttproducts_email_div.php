@@ -126,7 +126,8 @@ class tx_ttproducts_email_div {
 		} else {
 			$fromName = tx_div2007_alpha5::slashName($fromName);
 			if (is_array($toEMail)) {
-				list($email, $name) = each($toEMail);
+				$email = key($toEMail);
+				$name = current($toEMail);
 				$toEMail = tx_div2007_alpha5::slashName($name) . ' <' . $email . '>';
 			}
 

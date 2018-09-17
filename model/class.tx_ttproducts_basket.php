@@ -113,7 +113,7 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 		$paymentshippingObj = t3lib_div::makeInstance('tx_ttproducts_paymentshipping');
 		$this->pidListObj = t3lib_div::makeInstance('tx_ttproducts_pid_list');
 		$this->pidListObj->init($pibaseObj->cObj);
-		$this->pidListObj->applyRecursive(99, $pid_list, TRUE);
+		$this->pidListObj->applyRecursive(99, $pid_list, true);
 		$this->pidListObj->setPageArray();
 
 		if ($cnfObj->getUseArticles() == 2)	{
@@ -134,10 +134,10 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 
 		if (isset($basketInputConf) && is_array($basketInputConf))	{
 			foreach ($basketInputConf as $lineNo => $inputConf)	{
-				if (strpos($lineNo,'.') !== FALSE && $inputConf['type'] == 'radio' && $inputConf['where'] && $inputConf['name'] != '')	{
+				if (strpos($lineNo,'.') !== false && $inputConf['type'] == 'radio' && $inputConf['where'] && $inputConf['name'] != '')	{
 					$radioUid = t3lib_div::_GP($inputConf['name']);
 					if ($radioUid)	{
-						$rowArray = $viewTableObj->get('',0,FALSE,$inputConf['where']);
+						$rowArray = $viewTableObj->get('',0,false,$inputConf['where']);
 
 						if (count($rowArray))	{
 							foreach($rowArray as $uid => $row)	{
@@ -159,14 +159,16 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 			$this->basketExt = array();
 		}
 
-		$this->giftnumber = count($this->basketExt['gift']) + 1;
+        if (isset($this->basketExt['gift'])) {
+            $this->giftnumber = count($this->basketExt['gift']) + 1;
+        }
 		$newGiftData = t3lib_div::_GP('ttp_gift');
 		$extVars = $pibaseObj->piVars['variants'];
 		$extVars = ($extVars ? $extVars : t3lib_div::_GP('ttp_extvars'));
 		$paramProduct = strtolower($viewTableObj->marker);
 		$uid = $pibaseObj->piVars[$paramProduct];
 		$uid = ($uid ? $uid : t3lib_div::_GP('tt_products'));
-		$sameGiftData = TRUE;
+		$sameGiftData = true;
 		$identGiftnumber = 0;
 
 		$addMemo = $pibaseObj->piVars['addmemo'];
@@ -202,11 +204,11 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 			} else {
 				if (is_array($this->basketExt['gift'])) {
 					foreach ($this->basketExt['gift'] as $prevgiftnumber => $rec) {
-						$sameGiftData = TRUE;
+						$sameGiftData = true;
 						foreach ($rec as $field => $value) {
 							// only the 'field' field can be different
 							if ($field != 'item' && $field != 'note' && $value != $newGiftData[$field]) {
-								$sameGiftData = FALSE;
+								$sameGiftData = false;
 								break;
 							}
 						}
@@ -218,7 +220,7 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 						}
 					}
 				} else {
-					$sameGiftData = FALSE;
+					$sameGiftData = false;
 				}
 				if (!$sameGiftData) {
 					$this->basketExt['gift'][$this->giftnumber] = $newGiftData;
@@ -275,9 +277,14 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 			}
 			$this->basketExt = $basketExtNew;
 
+
+
 			if ($bStoreBasket)	{
 
-				if (is_array($this->basketExt) && count($this->basketExt))	{
+				if (
+                    is_array($this->basketExt) &&
+                    count($this->basketExt)
+                ) {
 					$TSFE->fe_user->setKey('ses','basketExt',$this->basketExt);
 				} else {
 					$TSFE->fe_user->setKey('ses','basketExt',array());
@@ -321,10 +328,10 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 	) {
 		$cnfObj = t3lib_div::makeInstance('tx_ttproducts_config');
 		$basketConf = $cnfObj->getBasketConf('view', 'input');
-		$result = FALSE;
+		$result = false;
 		if (count($basketConf)) {
 			foreach ($basketConf as $lineNo => $inputConf) {
-				if (strpos($lineNo, '.') !== FALSE)	{
+				if (strpos($lineNo, '.') !== false)	{
 					$bIsValid = tx_ttproducts_sql::isValid($row, $inputConf['where']);
 					if ($bIsValid && $inputConf['type'] == 'radio') {
 						$result = $inputConf;
@@ -345,15 +352,15 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 		$this->itemArray = $itemArray;
 	}
 
-	public function &getItemArray ()	{
+	public function getItemArray ()	{
 		return $this->itemArray;
 	}
 
 
-	public function addItem ($viewTableObj, $uid, $damUid, $item, $updateMode, $bStoreBasket, $newGiftData = '', $identGiftnumber = 0, $sameGiftData = FALSE) {
+	public function addItem ($viewTableObj, $uid, $damUid, $item, $updateMode, $bStoreBasket, $newGiftData = '', $identGiftnumber = 0, $sameGiftData = false) {
 
 		if ($this->conf['errorLog'] && isset($item['quantity']) && $item['quantity'] != '') {
-			error_log('addItem $item = ' . print_r($item, TRUE) . chr(13), 3, $this->conf['errorLog']);
+			error_log('addItem $item = ' . print_r($item, true) . chr(13), 3, $this->conf['errorLog']);
 		}
 		$priceObj = t3lib_div::makeInstance('tx_ttproducts_field_price');
 
@@ -575,7 +582,7 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 	/**
 	 * Empties the shopping basket!
 	 */
-	public function clearBasket ($bForce=FALSE)	{
+	public function clearBasket ($bForce=false)	{
 		global $TSFE;
 
 		if ($this->conf['debug'] != '1' || $bForce)	{
@@ -599,18 +606,18 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 
 
 	public function isInBasket ($prod_uid)	{
-		$rc = FALSE;
+		$rc = false;
 		if (count($this->itemArray))	{
 			// loop over all items in the basket indexed by a sort string
 			foreach ($this->itemArray as $sort => $actItemArray) {
 				foreach ($actItemArray as $k1 => $actItem) {
 					$row = &$actItem['rec'];
 					if ($prod_uid == $row['uid'])	{
-						$rc = TRUE;
+						$rc = true;
 						break;
 					}
 				}
-				if ($rc == TRUE)	{
+				if ($rc == true)	{
 					break;
 				}
 			}
@@ -667,7 +674,7 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 	public function getAddressArray ()	{
 		$rc = array();
 		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
-		$addressObj = $tablesObj->get('address',FALSE);
+		$addressObj = $tablesObj->get('address',false);
 
 		foreach ($this->itemArray as $sort => $actItemArray) {
 			foreach ($actItemArray as $k1 => $actItem) {
@@ -812,7 +819,7 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 		$conf = &$cnfObj->conf;
 		$theCode = 'BASKET';
 		$itemTableConf = $cnfObj->getTableConf($funcTablename, $theCode);
-		$viewTableObj = $tablesObj->get($funcTablename, FALSE);
+		$viewTableObj = $tablesObj->get($funcTablename, false);
 		$orderBy = $viewTableObj->getTableObj()->transformOrderby($itemTableConf['orderBy']);
 
 		$uidArr = array();
@@ -835,7 +842,7 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 		$rcArray = $viewTableObj->getWhere($where, $theCode, $orderBy);
 		$productsArray = array();
 		$prodCount = 0;
-		$bAddGiftService = FALSE;
+		$bAddGiftService = false;
 
 		foreach ($rcArray as $uid => $row)	{
 
@@ -852,7 +859,7 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 					if (substr($bextVarLine,-1) == '.')	{
 						// this is an additional array which is no basket item
 						if ($conf['whereGiftService'])	{
-							$bAddGiftService = TRUE;
+							$bAddGiftService = true;
 						}
 						continue;
 					}
@@ -883,7 +890,7 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 						// get the article uid with these colors, sizes and gradings
 						$articleRowArray = array();
 						if ($useArticles == 1)	 {
-							$articleRow = $viewTableObj->getArticleRow($currRow, 'BASKET', FALSE);
+							$articleRow = $viewTableObj->getArticleRow($currRow, 'BASKET', false);
 							if ($articleRow) {
 								$articleRowArray[] = $articleRow;
 							}
@@ -895,20 +902,20 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 							foreach ($articleRowArray as $articleRow)	{
 
 									// use the fields of the article instead of the product
-								// $viewTableObj->mergeAttributeFields($currRow, $articleRow, FALSE, TRUE); Preis wird sonst doppelt addiert!
+								// $viewTableObj->mergeAttributeFields($currRow, $articleRow, false, true); Preis wird sonst doppelt addiert!
 								$currRow['ext']['tt_products_articles'][] = array('uid' => $articleRow['uid']);
 							}
 						}
 					} else if ($useArticles == 2)	{
 						$productRow = $viewTableObj->getProductRow($currRow);
-						$viewTableObj->mergeAttributeFields($currRow, $productRow, TRUE);
+						$viewTableObj->mergeAttributeFields($currRow, $productRow, true);
 					}
 
 					if (isset($articleRowArray) && is_array($articleRowArray))	{
 						$currRowTmp = $currRow; // this has turned out to be necessary!
 						$currRow['ext']['mergeArticles'] = $currRowTmp;
 						foreach ($articleRowArray as $articleRow)	{
-							$viewTableObj->mergeAttributeFields($currRow['ext']['mergeArticles'], $articleRow, FALSE, TRUE);
+							$viewTableObj->mergeAttributeFields($currRow['ext']['mergeArticles'], $articleRow, false, true);
 						}
 						unset($currRow['ext']['mergeArticles']['ext']);
 					}
@@ -1019,5 +1026,3 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/model/class.tx_ttproducts_basket.php']);
 }
 
-
-?>

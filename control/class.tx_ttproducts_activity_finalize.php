@@ -180,7 +180,7 @@ class tx_ttproducts_activity_finalize {
 
 		$templateSubpart = 'EMAIL_HTML_TEMPLATE';
 
-		if (strpos($templateCode, '###' . $templateSubpart . '###') === FALSE) {
+		if (strpos($templateCode, '###' . $templateSubpart . '###') === false) {
 			$templateSubpart = 'BASKET_ORDERCONFIRMATION_TEMPLATE';
 		}
 		$emailControlArray['customer']['none']['htmltemplate'] = $templateSubpart;
@@ -189,7 +189,7 @@ class tx_ttproducts_activity_finalize {
 		$emailControlArray['shop']['none']['recipient'][] = $this->conf['orderEmail_to'];
 
 		if ($this->conf['errorLog']) {
-			error_log('finalize Pos 1 $emailControlArray = ' . print_r($emailControlArray, TRUE) . chr(13), 3, $this->conf['errorLog']);
+			error_log('finalize Pos 1 $emailControlArray = ' . print_r($emailControlArray, true) . chr(13), 3, $this->conf['errorLog']);
 		}
 
 		$markerArray['###CUSTOMER_RECIPIENTS_EMAIL###'] = implode(',', $emailControlArray['customer']['none']['recipient']);
@@ -199,10 +199,10 @@ class tx_ttproducts_activity_finalize {
 				$empty,
 				'BASKET',
 				$infoViewObj,
-				FALSE,
-				FALSE,
+				false,
+				false,
 				$basketObj->getCalculatedArray(),
-				TRUE,
+				true,
 				'BASKET_ORDERCONFIRMATION_TEMPLATE',
 				$mainMarkerArray
 			);
@@ -219,10 +219,10 @@ class tx_ttproducts_activity_finalize {
 				$empty,
 				'EMAIL',
 				$infoViewObj,
-				FALSE,
-				FALSE,
+				false,
+				false,
 				$basketObj->getCalculatedArray(),
-				TRUE,
+				true,
 				$emailControlArray['customer']['none']['htmltemplate'],
 				$markerArray
 			);
@@ -404,10 +404,10 @@ class tx_ttproducts_activity_finalize {
 						if (
 							$suffix == 'shop'
 						) {
-							if (strpos($templateCode, $templateSubpart) === FALSE) {
+							if (strpos($templateCode, $templateSubpart) === false) {
 								$templateSubpart = $emailControlArray['customer']['none']['template'];
 							}
-							if (strpos($templateCode, $htmlTemplateSubpart) === FALSE) {
+							if (strpos($templateCode, $htmlTemplateSubpart) === false) {
 								$htmlTemplateSubpart = $emailControlArray['customer']['none']['htmltemplate'];
 							}
 						}
@@ -469,7 +469,7 @@ class tx_ttproducts_activity_finalize {
 		$HTMLmailContent = '';
 		$posEmailPlaintext = strpos($templateCode, $emailControlArray['customer']['none']['template']);
 
-		if ($posEmailPlaintext !== FALSE || $this->conf['orderEmail_htmlmail']) {
+		if ($posEmailPlaintext !== false || $this->conf['orderEmail_htmlmail']) {
 
 			if ($this->conf['orderEmail_htmlmail']) {	// If htmlmail lib is included, then generate a nice HTML-email
 				$HTMLmailShell = $this->pibase->cObj->getSubpart($templateCode, '###EMAIL_HTML_SHELL###');
@@ -591,10 +591,10 @@ class tx_ttproducts_activity_finalize {
 									$empty,
 									'EMAIL',
 									$infoViewObj,
-									FALSE,
-									TRUE,
+									false,
+									true,
 									$calculatedArray,
-									FALSE,
+									false,
 									$suffixControlArray['template'],
 									$mainMarkerArray,
 									'',
@@ -606,10 +606,10 @@ class tx_ttproducts_activity_finalize {
 									$empty,
 									'EMAIL',
 									$infoViewObj,
-									FALSE,
-									TRUE,
+									false,
+									true,
 									$calculatedArray,
-									TRUE,
+									true,
 									$suffixControlArray['htmltemplate'],
 									$mainMarkerArray,
 									'',
@@ -702,8 +702,8 @@ class tx_ttproducts_activity_finalize {
 									$empty,
 									'EMAIL',
 									$infoViewObj,
-									FALSE,
-									TRUE,
+									false,
+									true,
 									$calculatedArray,
 									$this->conf['orderEmail_htmlmail'],
 									$emailControlArray[$emailKey]['none']['template'],
@@ -730,10 +730,10 @@ class tx_ttproducts_activity_finalize {
 										$empty,
 										'EMAIL',
 										$infoViewObj,
-										FALSE,
-										TRUE,
+										false,
+										true,
 										$calculatedArray,
-										TRUE,
+										true,
 										$emailControlArray[$emailKey]['none']['htmltemplate'],
 										$mainMarkerArray,
 										'',
@@ -878,5 +878,3 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/control/class.tx_ttproducts_activity_finalize.php']);
 }
 
-
-?>

@@ -62,7 +62,7 @@ class tx_ttproducts_main implements t3lib_Singleton {
 	 * @var tslib_cObj
 	 */
 	public $cObj;
-	protected $bSingleFromList = FALSE;	// if the single view shall be shown instead of a list view
+	protected $bSingleFromList = false;	// if the single view shall be shown instead of a list view
 	public $pibaseClass;			// class of the pibase object
 	/**
 	 * The list of codes that must run uncached. Note that if you combine any
@@ -97,13 +97,13 @@ class tx_ttproducts_main implements t3lib_Singleton {
 	 * @param	string		content string
 	 * @param	string		configuration array
 	 * @param	string		modified configuration array
-	 * @return	  bool		if TRUE processing should be done
+	 * @return	  bool		if true processing should be done
 	 */
-	public function init (&$content, &$conf, &$config, $pibaseClass, &$error_code, $bRunAjax = FALSE) {
+	public function init (&$content, &$conf, &$config, $pibaseClass, &$error_code, $bRunAjax = false) {
 		global $TSFE, $TCA;
 
-		$rc = TRUE;
-		$this->setSingleFromList(FALSE);
+		$rc = true;
+		$this->setSingleFromList(false);
 		$cacheObj = t3lib_div::makeInstance('tx_ttproducts_cache');
 		$this->tt_product_single = array();
 
@@ -154,7 +154,7 @@ class tx_ttproducts_main implements t3lib_Singleton {
 		$required_pivars = tx_div2007_ff::get($flexformArray, 'required_pivars');
 
 		$requiredArray = t3lib_div::trimExplode(',', $required_pivars);
-		$bDoProcessing = TRUE;
+		$bDoProcessing = true;
 		if (count($requiredArray))	{
 			foreach ($requiredArray as $k => $pivar)	{
 				if ($pivar && $pivar != 'empty')	   {
@@ -163,7 +163,7 @@ class tx_ttproducts_main implements t3lib_Singleton {
 						!isset($this->piVars[$pivar]) &&
 						!isset($gpVar)
 					)	{
-						$bDoProcessing = FALSE;
+						$bDoProcessing = false;
 						break;
 					}
 				}
@@ -174,12 +174,12 @@ class tx_ttproducts_main implements t3lib_Singleton {
 			$intersection = array_intersect(self::$uncachedCodes, $this->codeArray);
 			if (count($intersection)) {
 				if ($this->convertToUserInt()) {
-                    $bDoProcessing = FALSE;
+                    $bDoProcessing = false;
 				}
 			}
 		}
 		if (!$bDoProcessing)	{
-			return FALSE;
+			return false;
 		}
 		$urlObj = t3lib_div::makeInstance('tx_ttproducts_url_view');
 		$urlObj->init($pibaseObj, $conf);
@@ -276,9 +276,9 @@ class tx_ttproducts_main implements t3lib_Singleton {
 
 		$rc &= $res;
 
-		if ($res == FALSE)	{
+		if ($res == false)	{
 			$error_code = $markerObj->getErrorCode();
-			return FALSE;
+			return false;
 		}
 
 			// If the current record should be displayed.
@@ -308,18 +308,9 @@ class tx_ttproducts_main implements t3lib_Singleton {
 			if ($error_detail != '')	{
 				$error_code[0] = 'wrong_' . $error_detail;
 				$error_code[1] = $paramVal;
-				return FALSE;
+				return false;
 			}
 		}
-
-// 		$controlCreatorObj = t3lib_div::makeInstance('tx_ttproducts_control_creator');
-// 		$controlCreatorObj->init($conf, $config, $this->cObj);
-
-// 		$modelCreatorObj = t3lib_div::makeInstance('tx_ttproducts_model_creator');
-// 		$modelCreatorObj->init($conf, $config, $this->cObj);
-
-/*		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
-		$langObj->init1($pibaseObj, $pibaseObj->cObj, $conf, 'pi1/class.tx_ttproducts_pi1.php');*/
 
 			// image
 		$imageObj = t3lib_div::makeInstance('tx_ttproducts_field_image');
@@ -328,10 +319,6 @@ class tx_ttproducts_main implements t3lib_Singleton {
 			// image view
 		$imageViewObj = t3lib_div::makeInstance('tx_ttproducts_field_image_view');
 		$imageViewObj->init($pibaseObj, $imageObj);
-
-// 		tx_div2007_alpha5::loadLL_fh002($langObj,'EXT:'.TT_PRODUCTS_EXT.'/locallang_db.xml');
-// 		tx_div2007_alpha5::loadLL_fh002($langObj,'EXT:'.TT_PRODUCTS_EXT.'/pi_search/locallang_db.xml');
-// 		tx_div2007_alpha5::loadLL_fh002($langObj,'EXT:'.TT_PRODUCTS_EXT.'/pi1/locallang.xml');
 
 			// get all extending TCAs
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['extendingTCA']))	{
@@ -393,8 +380,7 @@ class tx_ttproducts_main implements t3lib_Singleton {
 	}
 
 
-
-	public function &run ($pibaseClass, &$error_code, $content = '', $bRunAjax = FALSE) {
+	public function &run ($pibaseClass, &$error_code, $content = '', $bRunAjax = false) {
 		global $TSFE;
 
 		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
@@ -405,9 +391,9 @@ class tx_ttproducts_main implements t3lib_Singleton {
 			// Compatibility with previous versions where users could set
 			// 'no_cache' TS option. This option does not exist anymore and we
 			// simply convert the plugin to USER_INT if that old option is set.
-			return FALSE;
+			return false;
 		}
-		$bStoreBasket = TRUE;
+		$bStoreBasket = true;
 		$errorMessage = '';
 		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
@@ -444,7 +430,7 @@ class tx_ttproducts_main implements t3lib_Singleton {
 			isset($conf['basket.']['activity.']['overview.']) &&
 			$conf['basket.']['activity.']['overview.']['store'] == '0'
 		) {
-			$bStoreBasket = FALSE;
+			$bStoreBasket = false;
 		}
 
 		$basketObj->init(
@@ -453,7 +439,6 @@ class tx_ttproducts_main implements t3lib_Singleton {
 			$this->config['pid_list'],
 			$bStoreBasket
 		);
-
 
 		// *************************************
 		// *** Listing items:
@@ -501,7 +486,7 @@ class tx_ttproducts_main implements t3lib_Singleton {
 			);
 		}
 
-		$bErrorFound = FALSE;
+		$bErrorFound = false;
 		$contentBasket = $content;
 		$content = '';
 
@@ -517,7 +502,7 @@ class tx_ttproducts_main implements t3lib_Singleton {
 				break;
 			}
 
-			$bHidePlugin = FALSE;
+			$bHidePlugin = false;
 
 			foreach($tableArray as $functablename) {
 				$tableConf = $cnf->getTableConf($functablename, $theCode);
@@ -534,7 +519,7 @@ class tx_ttproducts_main implements t3lib_Singleton {
 							$currentArray = t3lib_div::trimExplode(',', $piVars[$piVar]);
 							$hideCurrentArray = array_diff($currentArray, $hideIdArray);
 							if (count($hideCurrentArray) < count($currentArray)) {
-								$bHidePlugin = TRUE;
+								$bHidePlugin = true;
 							}
 						}
 					}
@@ -590,7 +575,7 @@ class tx_ttproducts_main implements t3lib_Singleton {
 				case 'SELECTCAT':
 				case 'SELECTDAMCAT':
 				case 'SELECTAD':
-					if (strpos($theCode,'DAM') !== FALSE && !t3lib_extMgm::isLoaded('dam'))	{
+					if (strpos($theCode,'DAM') !== false && !t3lib_extMgm::isLoaded('dam'))	{
 						continue;
 					}
 
@@ -721,7 +706,7 @@ class tx_ttproducts_main implements t3lib_Singleton {
 					}
 
 						// order view
-					$orderView = $tablesObj->get('sys_products_orders', TRUE);
+					$orderView = $tablesObj->get('sys_products_orders', true);
 					$contentTmp = $orderView->printView($templateCode, $error_code);
 				break;
 				case 'SINGLECAT':
@@ -793,8 +778,8 @@ class tx_ttproducts_main implements t3lib_Singleton {
 							$urlObj->getLinkParams(
 								'product,article,dam',
 								'',
-								TRUE,
-								FALSE
+								true,
+								false
 							),
 							'',
 							array()
@@ -828,7 +813,7 @@ class tx_ttproducts_main implements t3lib_Singleton {
 						$errorMessage,
 						$theCode
 					);
-				$bErrorFound = TRUE;
+				$bErrorFound = true;
 				unset($errorMessage);
 			}
 
@@ -873,18 +858,18 @@ class tx_ttproducts_main implements t3lib_Singleton {
 	/**
 	 * Converts the plugin to USER_INT if it is not USER_INT already. After
 	 * calling this function the plugin should return if the function returns
-	 * TRUE. The content will be ignored and the plugin will be called again
+	 * true. The content will be ignored and the plugin will be called again
 	 * later as USER_INT.
 	 *
-	 * @return boolean TRUE if the plugin should return immediately
+	 * @return boolean true if the plugin should return immediately
 	 */
 	protected function convertToUserInt() {
-		$result = FALSE;
+		$result = false;
 		if (method_exists($this->cObj, 'getUserObjectType') && $this->cObj->getUserObjectType() == tslib_cObj::OBJECTTYPE_USER) {
 			$this->cObj->convertToUserIntObject();
 			$this->cObj->data['pi_flexform'] = $this->cObj->data['_original_pi_flexform'];
 			unset($this->cObj->data['_original_pi_flexform']);
-			$result = TRUE;
+			$result = true;
 		}
 		return $result;
 	}
@@ -995,7 +980,7 @@ class tx_ttproducts_main implements t3lib_Singleton {
 		}
 
 		$markerArray = $globalMarkerArray;
-		$markerArray['###FORM_URL###'] = $pibaseObj->pi_getPageLink($TSFE->id,'',$urlObj->getLinkParams('',array(),TRUE)) ;
+		$markerArray['###FORM_URL###'] = $pibaseObj->pi_getPageLink($TSFE->id,'',$urlObj->getLinkParams('',array(),true)) ;
 		$content = $this->cObj->substituteMarkerArray($content, $markerArray);
 		return $content;
 	}  // products_tracking
@@ -1022,19 +1007,19 @@ class tx_ttproducts_main implements t3lib_Singleton {
 		$conf = $cnf->getConf();
 		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
 
-		$bSingleFromList = FALSE;
+		$bSingleFromList = false;
 
 		if (
 			(
 				(
-					($theCode=='SEARCH') && $this->conf['listViewOnSearch'] == '1' || (strpos($theCode,'LIST') !== FALSE)
+					($theCode=='SEARCH') && $this->conf['listViewOnSearch'] == '1' || (strpos($theCode,'LIST') !== false)
 				) &&
 				$theCode != 'LISTARTICLES' && count($this->tt_product_single) && !$this->conf['NoSingleViewOnList'] &&
 			!$this->getSingleFromList()
 			)
 		) {
-			$this->setSingleFromList(TRUE);
-			$bSingleFromList = TRUE;
+			$this->setSingleFromList(true);
+			$bSingleFromList = true;
 		}
 
 		if (($theCode=='SINGLE') || $bSingleFromList) {
@@ -1082,8 +1067,6 @@ class tx_ttproducts_main implements t3lib_Singleton {
 			$ctrlContent = $this->cObj->cObjGetSingle($conf['SINGLECTRL'], $conf['SINGLECTRL.']);
 			$content .= $ctrlContent;
 		} else {
-// 			t3lib_div::requireOnce(PATH_BE_ttproducts . 'view/class.tx_ttproducts_list_view.php');
-
 	// page where to go usually
 			$pid = ($conf['PIDbasket'] && $conf['clickIntoBasket'] ? $conf['PIDbasket'] : $TSFE->id);
 
@@ -1114,7 +1097,7 @@ class tx_ttproducts_main implements t3lib_Singleton {
 
 			$allowedItems = tx_div2007_ff::get($this->cObj->data['pi_flexform'], 'productSelection');
 
-			$bAllPages = FALSE;
+			$bAllPages = false;
 			$templateArea = $templateArea . $this->config['templateSuffix'];
 			$content = $listView->printView(
 				$templateCode,
@@ -1138,5 +1121,3 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/control/class.tx_ttproducts_main.php']);
 }
 
-
-?>
