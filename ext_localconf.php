@@ -229,13 +229,7 @@ if (TYPO3_MODE == 'FE') { // hooks for FE extensions
     }
 }
 
-if (TYPO3_MODE == 'BE') {
-		// class for displaying the category tree in BE forms.
-	include_once(PATH_BE_ttproducts . 'hooks/class.tx_ttproducts_hooks_be.php');
-}
-
-
-$listType = TT_PRODUCTS_EXT.'_pi_int';
+$listType = TT_PRODUCTS_EXT . '_pi_int';
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms/layout/class.tx_cms_layout.php']['list_type_Info'][$listType][] = 'EXT:' . TT_PRODUCTS_EXT . '/hooks/class.tx_ttproducts_hooks_cms.php:&tx_ttproducts_hooks_cms->pmDrawItem';
 
 

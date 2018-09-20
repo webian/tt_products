@@ -1,3 +1,6 @@
+2018-09-20 Franz Holzinger <franz@ttproducts.de>
+    * remove outdated include
+
 2018-09-17 Franz Holzinger <franz@ttproducts.de>
     * bugfix: An empty basket has been wrongly detected.
     * remove support for TYPO3 4.5 - 6.1 and PHP < 5.6
