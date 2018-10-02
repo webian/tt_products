@@ -1,6 +1,7 @@
 2018-10-02 Franz Holzinger <franz@ttproducts.de>
     * bugfix for PHP 7.2
     * Do not rely on the variable $_EXTKEY. This will be deprecated in TYPO3 9.
+    * remove apostrophe at the beginning of file Configuration/TCA/tt_products_cat.php
 
 2018-09-20 Franz Holzinger <franz@ttproducts.de>
     * remove outdated include
