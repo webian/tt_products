@@ -284,7 +284,7 @@ class tx_ttproducts_marker implements t3lib_Singleton {
 	 */
 	public function getMarkerFields (&$templateCode, &$tableFieldArray, &$requiredFieldArray, &$addCheckArray, $prefixParam, &$tagArray, &$parentArray)	{
 
-		$retArray = (count($requiredFieldArray) ? $requiredFieldArray : array());
+		$retArray = (!empty($requiredFieldArray) ? $requiredFieldArray : array());
 		// obligatory fields uid and pid
 
 		$prefix = $prefixParam.'_';
@@ -293,7 +293,6 @@ class tx_ttproducts_marker implements t3lib_Singleton {
 		$tagArray = $this->getAllMarkers($templateCode);
 
 		if (is_array($tagArray))	{
-// 			$tagArray = array_flip($tagArray);
 			$retTagArray = $tagArray;
 			foreach ($tagArray as $tag => $v1)	{
 				$prefixFound = strstr($tag, $prefix);

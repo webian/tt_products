@@ -22,17 +22,17 @@ if (!defined ('TT_PRODUCTS_EXT')) {
 }
 
 if (!defined ('PATH_BE_TTPRODUCTS')) {
-	define('PATH_BE_TTPRODUCTS', call_user_func($emClass . '::extPath', $_EXTKEY));
+	define('PATH_BE_TTPRODUCTS', call_user_func($emClass . '::extPath', TT_PRODUCTS_EXT));
 }
 
 
 if (version_compare(TYPO3_version, '7.0.0', '>=')) {
     if (!defined ('PATH_TTPRODUCTS_ICON_TABLE_REL')) {
-        define('PATH_TTPRODUCTS_ICON_TABLE_REL', 'EXT:' . $_EXTKEY . '/res/icons/table/');
+        define('PATH_TTPRODUCTS_ICON_TABLE_REL', 'EXT:' . TT_PRODUCTS_EXT . '/res/icons/table/');
     }
 } else {
     if (!defined ('PATH_BE_TTPRODUCTS_REL')) {
-        define('PATH_BE_TTPRODUCTS_REL', call_user_func($emClass . '::extRelPath', $_EXTKEY));
+        define('PATH_BE_TTPRODUCTS_REL', call_user_func($emClass . '::extRelPath', TT_PRODUCTS_EXT));
     }
 
     if (!defined ('PATH_TTPRODUCTS_ICON_TABLE_REL')) {
@@ -41,7 +41,7 @@ if (version_compare(TYPO3_version, '7.0.0', '>=')) {
 }
 
 if (!defined ('PATH_FE_TTPRODUCTS_REL')) {
-	define('PATH_FE_TTPRODUCTS_REL', call_user_func($emClass . '::siteRelPath', $_EXTKEY));
+	define('PATH_FE_TTPRODUCTS_REL', call_user_func($emClass . '::siteRelPath', TT_PRODUCTS_EXT));
 }
 
 
@@ -68,7 +68,7 @@ if (!defined ('POOL_EXT')) {
 
 // deprecated constants
 if (!defined ('TT_PRODUCTS_EXTkey')) {
-	define('TT_PRODUCTS_EXTkey', $_EXTKEY);
+	define('TT_PRODUCTS_EXTkey', TT_PRODUCTS_EXT);
 }
 
 
@@ -234,7 +234,7 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms/layout/class.tx_cms_layout.php'][
 
 
   // Extending TypoScript from static template uid=43 to set up userdefined tag:
-call_user_func($emClass . '::addTypoScript', $_EXTKEY,'editorcfg','tt_content.CSS_editor.ch.tt_products = < plugin.tt_products.CSS_editor ',43);
+call_user_func($emClass . '::addTypoScript', TT_PRODUCTS_EXT,'editorcfg','tt_content.CSS_editor.ch.tt_products = < plugin.tt_products.CSS_editor ',43);
 
 
 $GLOBALS ['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/mydashboard/class.tx_mydashboard_widgetmgm.php']['addWidget']['tt_products_latest'] = 'EXT:' . TT_PRODUCTS_EXT . '/widgets/class.tx_ttproducts_latest.php:tx_ttproducts_latest';
@@ -260,10 +260,10 @@ if (isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['livesearch']) && is_array($GLOBALS
 
 
 if (call_user_func($emClass . '::isLoaded', 'searchbox')) {
-	call_user_func($emClass . '::addPItoST43', $_EXTKEY, 'pi_search/class.tx_ttproducts_pi_search.php', '_pi_search', 'list_type', 0 );
+	call_user_func($emClass . '::addPItoST43', TT_PRODUCTS_EXT, 'pi_search/class.tx_ttproducts_pi_search.php', '_pi_search', 'list_type', 0 );
 }
 
-call_user_func($emClass . '::addPItoST43', $_EXTKEY, 'pi_int/class.tx_ttproducts_pi_int.php', '_pi_int', 'list_type', 0 );
+call_user_func($emClass . '::addPItoST43', TT_PRODUCTS_EXT, 'pi_int/class.tx_ttproducts_pi_int.php', '_pi_int', 'list_type', 0 );
 
 
 
@@ -373,7 +373,7 @@ if (
         $iconRegistry->registerIcon(
             $identifier,
             $iconRegistry->detectIconProvider($filename),
-            array('source' => 'EXT:' . $_EXTKEY . '/Resources/Public/Icons/apps/' . $filename)
+            array('source' => 'EXT:' . TT_PRODUCTS_EXT . '/Resources/Public/Icons/apps/' . $filename)
         );
     }
 }

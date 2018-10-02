@@ -159,7 +159,7 @@ doPopup(this);" target="Betaling"'; // if this is empty then no popup window wil
 				// Delivery info
 			reset($this->address->infoArray['delivery']);
 			$cc=0;
-			while(list($field,$value)=each($this->address->infoArray['delivery']))		{
+			foreach($this->address->infoArray['delivery'] as $field => $value)		{
 				$value = trim($value);
 				if ($value) {
 					$cc++;
