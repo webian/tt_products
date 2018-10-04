@@ -76,4 +76,4 @@ $SOBE->main();
 $SOBE->printContent();
 $SOBE->destruct();
 
-?>
+

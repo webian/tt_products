@@ -94,4 +94,4 @@ class tx_ttproducts_static_info implements t3lib_Singleton {
 }
 
 
-?>
+

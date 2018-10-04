@@ -43,4 +43,3 @@ interface tx_ttproducts_field_int	{
 }
 
 
-?>

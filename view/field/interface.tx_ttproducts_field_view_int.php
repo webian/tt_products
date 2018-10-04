@@ -45,4 +45,3 @@ interface tx_ttproducts_field_view_int	{
 }
 
 
-?>

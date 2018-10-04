@@ -301,4 +301,4 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 // }
 
 
-?>
+

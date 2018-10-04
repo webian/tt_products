@@ -179,4 +179,3 @@ return array(
 	'tx_ttproducts_field_view_int' => $extensionPath . 'view/field/interface.tx_ttproducts_field_view_int.php',
 	'tx_ttproducts_latest' => $extensionPath . 'widgets/class.tx_ttproducts_latest.php',
 );
-?>

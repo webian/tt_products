@@ -247,4 +247,4 @@ class tx_ttproducts_pdf extends FPDF implements t3lib_Singleton {
 }
 
 
-?>
+

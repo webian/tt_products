@@ -320,4 +320,4 @@ value="'.$priceViewObj->priceFormat($calculatedArray['priceTax']['total'] - $cal
 		}
 	break;
 }
-?>
+

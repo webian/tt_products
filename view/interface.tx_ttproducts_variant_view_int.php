@@ -47,4 +47,3 @@ interface tx_ttproducts_variant_view_int {
 
 
 
-?>

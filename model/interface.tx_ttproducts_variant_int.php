@@ -56,4 +56,3 @@ interface tx_ttproducts_variant_int {
 	public function getAdditionalKey();
 }
 
-?>

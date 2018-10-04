@@ -337,4 +337,4 @@ class tx_ttproducts_email_div {
 }
 
 
-?>
+

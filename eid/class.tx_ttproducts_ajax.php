@@ -129,4 +129,4 @@ class tx_ttproducts_ajax implements t3lib_Singleton {
 }
 
 
-?>
+
