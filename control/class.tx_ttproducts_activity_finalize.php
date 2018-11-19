@@ -466,18 +466,18 @@ class tx_ttproducts_activity_finalize {
 			$emailControlArray['customer']['none']['recipient'] = array_merge($emailControlArray['customer']['none']['recipient'], $emailControlArray['shop']['none']['recipient']);
 			$emailControlArray['customer']['none']['recipient'] = array_unique($emailControlArray['customer']['none']['recipient']);
 		}
-		$HTMLmailContent = '';
+		$customerHTMLmailContent = '';
 		$posEmailPlaintext = strpos($templateCode, $emailControlArray['customer']['none']['template']);
 
 		if ($posEmailPlaintext !== false || $this->conf['orderEmail_htmlmail']) {
 
 			if ($this->conf['orderEmail_htmlmail']) {	// If htmlmail lib is included, then generate a nice HTML-email
 				$HTMLmailShell = $this->pibase->cObj->getSubpart($templateCode, '###EMAIL_HTML_SHELL###');
-				$HTMLmailContent = $this->pibase->cObj->substituteMarker($HTMLmailShell, '###HTML_BODY###', $customerEmailHTML);
+				$customerHTMLmailContent = $this->pibase->cObj->substituteMarker($HTMLmailShell, '###HTML_BODY###', $customerEmailHTML);
 
-				$HTMLmailContent =
+				$customerHTMLmailContent =
 					$this->pibase->cObj->substituteMarkerArray(
-						$HTMLmailContent,
+						$customerHTMLmailContent,
 						$markerArray
 					);
 
@@ -485,7 +485,7 @@ class tx_ttproducts_activity_finalize {
 				if ($this->conf['orderEmail_htmlmail.']['removeImagesWithPrefix']) {
 
 					$parser = tx_div2007_core::newHtmlParser();
-					$htmlMailParts = $parser->splitTags('img', $HTMLmailContent);
+					$htmlMailParts = $parser->splitTags('img', $customerHTMLmailContent);
 
 					foreach($htmlMailParts as $kkk => $vvv) {
 						if ($kkk%2) {
@@ -495,7 +495,7 @@ class tx_ttproducts_activity_finalize {
 							}
 						}
 					}
-					$HTMLmailContent = implode('', $htmlMailParts);
+					$customerHTMLmailContent = implode('', $htmlMailParts);
 				}
 			} else {	// ... else just plain text...
 				// nothing to initialize
@@ -583,6 +583,8 @@ class tx_ttproducts_activity_finalize {
 						} else {
 							$basketItemArray = '';
 						}
+                        $basketText = '';
+                        $basketHtml = '';
 
 						if (isset($basketItemArray) && is_array($basketItemArray)) {
 
@@ -601,25 +603,24 @@ class tx_ttproducts_activity_finalize {
 									$basketItemArray
 								);
 							$basketText = trim($basketText);
-							$basketHtml =
-								$basketView->getView(
-									$empty,
-									'EMAIL',
-									$infoViewObj,
-									false,
-									true,
-									$calculatedArray,
-									true,
-									$suffixControlArray['htmltemplate'],
-									$mainMarkerArray,
-									'',
-									$basketItemArray
-								);
-
-						} else {
-							$basketText = '';
-							$basketHtml = '';
-						}
+                            if ($this->conf['orderEmail_htmlmail']) {
+                                $basketHtml =
+                                    $basketView->getView(
+                                        $empty,
+                                        'EMAIL',
+                                        $infoViewObj,
+                                        false,
+                                        true,
+                                        $calculatedArray,
+                                        true,
+                                        $suffixControlArray['htmltemplate'],
+                                        $mainMarkerArray,
+                                        '',
+                                        $basketItemArray
+                                    );
+                            }
+                            $basketHtml = trim($basketHtml);
+                        }
 
 						if ($basketText != '') {
 							$this->splitSubjectAndText(
@@ -628,14 +629,18 @@ class tx_ttproducts_activity_finalize {
 								$textContent
 							);
 							$subject = ($suffixControlArray['subject'] != '' ? $suffixControlArray['subject'] : $subject);
+							$HTMLmailContent = '';
 
-							$HTMLmailContent = $this->pibase->cObj->substituteMarker($HTMLmailShell, '###HTML_BODY###', $basketHtml);
+                            if ($basketHtml != '') {
+                                $HTMLmailContent = $this->pibase->cObj->substituteMarker($HTMLmailShell, '###HTML_BODY###', $basketHtml);
 
-							$HTMLmailContent =
-								$this->pibase->cObj->substituteMarkerArray(
-									$HTMLmailContent,
-									$markerArray
-								);
+                                $HTMLmailContent =
+                                    $this->pibase->cObj->substituteMarkerArray(
+                                        $HTMLmailContent,
+                                        $markerArray
+                                    );
+                            }
+
 							$fromArray = array();
 
 							if (
@@ -723,6 +728,7 @@ class tx_ttproducts_activity_finalize {
 								$markerArray
 							);
 
+                        $HTMLmailContent = $customerHTMLmailContent;
 						if ($this->conf['orderEmail_htmlmail']) {
 							$reducedBasketHtml =
 								trim (
@@ -741,21 +747,23 @@ class tx_ttproducts_activity_finalize {
 									)
 								);
 
-							$HTMLmailContent =
-								$this->pibase->cObj->substituteMarker(
-									$HTMLmailShell,
-									'###HTML_BODY###',
-									$reducedBasketHtml
-								);
+                            if ($reducedBasketHtml != '') {
+                                $HTMLmailContent =
+                                    $this->pibase->cObj->substituteMarker(
+                                        $HTMLmailShell,
+                                        '###HTML_BODY###',
+                                        $reducedBasketHtml
+                                    );
 
-							$HTMLmailContent =
-								$this->pibase->cObj->substituteMarkerArray(
-									$HTMLmailContent,
-									$markerArray
-								);
-						} else {
-							$HTMLmailContent = '';
-						}
+                                $HTMLmailContent =
+                                    $this->pibase->cObj->substituteMarkerArray(
+                                        $HTMLmailContent,
+                                        $markerArray
+                                    );
+                            }
+                        } else {
+                            $HTMLmailContent = '';
+                        }
 
 						tx_ttproducts_email_div::send_mail(
 							$conf['email'],
@@ -779,7 +787,7 @@ class tx_ttproducts_activity_finalize {
 						$recipient,
 						$apostrophe . $emailControlArray['radio1']['none']['subject'] . $apostrophe,
 						$emailControlArray['radio1']['none']['plaintext'],
-						$HTMLmailContent,
+						$customerHTMLmailContent,
 						$emailControlArray['shop']['none']['from']['email'],
 						$emailControlArray['shop']['none']['from']['name'],
 						$emailControlArray['radio1']['none']['attachmentFile'],
