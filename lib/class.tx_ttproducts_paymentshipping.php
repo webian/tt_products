@@ -933,10 +933,10 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
             }
 
             if (
-                isset($confArr['noCostsVoucher']) &&
+                isset($confArray['noCostsVoucher']) &&
                 is_object($voucher = $this->getVoucher()) &&
                 $voucher->getValid() &&
-                t3lib_div::inList($confArr['noCostsVoucher'], $voucher->getCode())
+                t3lib_div::inList($confArray['noCostsVoucher'], $voucher->getCode())
             ) {
                 $priceNew = 0;
                 $priceTax = $priceNoTax = 0;
@@ -1446,4 +1446,5 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/lib/class.tx_ttproducts_paymentshipping.php']) {
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/lib/class.tx_ttproducts_paymentshipping.php']);
 }
+
 
