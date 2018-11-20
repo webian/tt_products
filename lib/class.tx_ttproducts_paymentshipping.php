@@ -922,7 +922,7 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 				$priceNew = $minPrice;
 			}
             if (
-                isset($confArr['noCostsVoucher'])
+                isset($confArray['noCostsAmount'])
             ) {
                 // the total products price as from the payment/shipping is free
                 $noCostsAmount = (double) $confArray['noCostsAmount'];
@@ -1446,5 +1446,4 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/lib/class.tx_ttproducts_paymentshipping.php']) {
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/lib/class.tx_ttproducts_paymentshipping.php']);
 }
-
 
