@@ -1,3 +1,7 @@
+2018-11-21 Franz Holzinger <franz@ttproducts.de>
+    * remove feature: remove marker ###PRICE_TOTUNITS_DISCOUNT###
+    * bugfix: tx_ttproducts_basket_view::init will not be called in all cases
+
 2018-11-19 Franz Holzinger <franz@ttproducts.de>
     * bugfix: Only send a HTML email if orderEmail_htmlmail is set to 1 and if a HTML subpart is available with contents
 

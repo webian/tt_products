@@ -213,11 +213,13 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 		$paymentshippingObj = t3lib_div::makeInstance('tx_ttproducts_paymentshipping');
 		$priceViewObj = t3lib_div::makeInstance('tx_ttproducts_field_price_view');
 
+		$this->urlObj = t3lib_div::makeInstance('tx_ttproducts_url_view'); // a copy of it
+
 		if ($templateCode == '')	{
 			$templateCode = &$this->templateCode;
 		}
 			// Getting subparts from the template code.
-		$t=array();
+		$t = array();
 		$feuserSubpartArray = array();
 		$feuserWrappedSubpartArray = array();
 		$tempContent = $this->cObj->getSubpart($templateCode, $this->subpartmarkerObj->spMarker('###'.$subpartMarker.$this->config['templateSuffix'].'###'));
@@ -602,8 +604,6 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 					} else if (doubleval($row['price']) && doubleval($row['price2'])) {
 						$pricecredits_total_totunits_no_tax = 0;
 						$pricecredits_total_totunits_tax = 0;
-						$unitdiscount = ($row['price'] - $row['price2']) * $row['unit_factor'] * $actItem['count'];
-						$sum_pricediscount_total_totunits += $unitdiscount;
 					}
 					$markerArray['###PRICE_TOTAL_TOTUNITS_NO_TAX###'] = $priceViewObj->priceFormat($pricecredits_total_totunits_no_tax);
 					$markerArray['###PRICE_TOTAL_TOTUNITS_TAX###'] = $priceViewObj->priceFormat($pricecredits_total_totunits_tax);
@@ -795,8 +795,6 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 			$markerArray['###CUR_SYM###'] = ' '.$this->conf['currencySymbol'];
 			$markerArray['###PRICE_TAX_DISCOUNT###'] = $markerArray['###PRICE_DISCOUNT_TAX###'] = $priceViewObj->priceFormat($calculatedArray['price0Tax']['goodstotal']-$calculatedArray['priceTax']['goodstotal']);
 			$markerArray['###PRICE_VAT###'] = $priceViewObj->priceFormat($calculatedArray['priceTax']['goodstotal']-$calculatedArray['priceNoTax']['goodstotal']);
-	/* Added els4: discount based on total units (without articles in kurkenshop), necessary in winkelwagen.tmpl */
-			$markerArray['###PRICE_TOTUNITS_DISCOUNT###'] = $priceViewObj->priceFormat($sum_pricediscount_total_totunits);
 
 			$orderViewObj = $tablesObj->get('sys_products_orders', TRUE);
 			$orderViewObj->getBasketRecsMarkerArray($markerArray, $orderArray);
