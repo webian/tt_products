@@ -154,8 +154,8 @@ class tx_ttproducts_marker implements t3lib_Singleton {
 		$markerArray['###PATH_FE_REL###'] = PATH_FE_TTPRODUCTS_REL;
 		$markerArray['###PATH_FE_ICONS###'] =  PATH_FE_TTPRODUCTS_REL . 'res/icons/fe/';;
 		if (t3lib_extMgm::isLoaded(ADDONS_EXTkey)) {
-			$markerArray['###PATH_FE_REL###'] = PATH_FE_ADDONS_REL;
-			$markerArray['###PATH_FE_ICONS###'] = PATH_FE_ADDONS_ICON_REL;
+			$markerArray['###PATH_FE_REL###'] = PATH_FE_ADDONS_TT_PRODUCTS_REL;
+			$markerArray['###PATH_FE_ICONS###'] = PATH_FE_ADDONS_TT_PRODUCTS_ICON_REL;
 		}
 		$pidMarkerArray = array('agb','basket','info','finalize','payment',
 			'thanks','itemDisplay','listDisplay','revocation','search','storeRoot',

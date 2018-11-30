@@ -7,8 +7,6 @@
 includeLibs.tt_products = EXT:tt_products/pi1/class.tx_ttproducts_pi1.php
 includeLibs.tt_products_user_int =  EXT:tt_products/control/class.tx_ttproducts_control_user_int.php
 
-## <INCLUDE_TYPOSCRIPT: source="FILE: EXT:tt_products/static/share/setup.txt">: TODO
-
 ## This enables the tt_content.list item to display the product plugins:
 plugin.tt_products >
 plugin.tt_products = USER
@@ -526,18 +524,18 @@ plugin.tt_products {
 
   RATING = USER_INT
   RATING {
-	extkey = ratings
-	api = tx_ratings_api
-	includeLibs = EXT:ratings/pi1/class.tx_ratings_pi1.php
+    extkey = ratings
+    api = Netcreators\Ratings\Api\Api
+    userFunc = Netcreators\Ratings\Controller\RegisterPluginController->main
   }
 
   COMMENT = USER_INT
   COMMENT {
-	extkey = tt_board
-	api = tx_ttboard_api
-	includeLibs = EXT:tt_board/class.tx_ttboard_api.php
-	code = FORUM,POSTFORM
-	param = list
+    extkey = tt_board
+    api = JambageCom\TtBoard\Api\Api
+    userFunc = JambageCom\TtBoard\Controller\ListPluginController->main
+    code = FORUM,POSTFORM
+    param = list
   }
 
   general_stdWrap.editPanel = 1

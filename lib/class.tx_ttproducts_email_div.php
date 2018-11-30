@@ -62,155 +62,53 @@ class tx_ttproducts_email_div {
 			return FALSE;
 		}
 
-		$typoVersion = tx_div2007_core::getTypoVersion();
 		$result = TRUE;
 
-		if (
-			$typoVersion >= 4007000 ||
-			(
-				isset($TYPO3_CONF_VARS['SC_OPTIONS']['t3lib/utility/class.t3lib_utility_mail.php']) &&
-				is_array($TYPO3_CONF_VARS['SC_OPTIONS']['t3lib/utility/class.t3lib_utility_mail.php']) &&
-				isset($TYPO3_CONF_VARS['SC_OPTIONS']['t3lib/utility/class.t3lib_utility_mail.php']['substituteMailDelivery']) &&
-				is_array($TYPO3_CONF_VARS['SC_OPTIONS']['t3lib/utility/class.t3lib_utility_mail.php']['substituteMailDelivery']) &&
-				(
-					array_search('t3lib_mail_SwiftMailerAdapter', $TYPO3_CONF_VARS['SC_OPTIONS']['t3lib/utility/class.t3lib_utility_mail.php']['substituteMailDelivery']) !== FALSE ||
-					array_search('TYPO3\CMS\Core\Mail\SwiftMailerAdapter', $TYPO3_CONF_VARS['SC_OPTIONS']['t3lib/utility/class.t3lib_utility_mail.php']['substituteMailDelivery']) !== FALSE
-				)
-			)
-		) {
-			if (!is_array($toEMail)) {
-				$emailArray = t3lib_div::trimExplode(',', $toEMail);
+        if (!is_array($toEMail)) {
+            $emailArray = t3lib_div::trimExplode(',', $toEMail);
 
-				$toEMail = array();
-				foreach ($emailArray as $email) {
-					$toEMail[] = $email;
-				}
-			}
+            $toEMail = array();
+            foreach ($emailArray as $email) {
+                $toEMail[] = $email;
+            }
+        }
 
-			$fromName = str_replace('"', '\'', $fromName);
+        $fromName = str_replace('"', '\'', $fromName);
 
-			$mailMessage = tx_div2007_core::newMailMessage();
-			$mailMessage->setCharset('UTF-8')
-                ->setTo($toEMail)
-				->setFrom(array($fromEMail => $fromName))
-				->setReturnPath($returnPath)
-				->setSubject($subject)
-				->setBody($html, 'text/html')
-				->addPart($message, 'text/plain');
+        $mailMessage = tx_div2007_core::newMailMessage();
+        $mailMessage->setCharset('UTF-8')
+            ->setTo($toEMail)
+            ->setFrom(array($fromEMail => $fromName))
+            ->setReturnPath($returnPath)
+            ->setSubject($subject)
+            ->setBody($html, 'text/html')
+            ->addPart($message, 'text/plain');
 
-			$type = $mailMessage->getHeaders()->get('Content-Type');
-			$type->setParameter('charset', 'UTF-8');
+        $type = $mailMessage->getHeaders()->get('Content-Type');
+        $type->setParameter('charset', 'UTF-8');
 
-			if (isset($attachment)) {
-				if (is_array($attachment)) {
-					$attachmentArray = $attachment;
-				} else {
-					$attachmentArray = array($attachment);
-				}
-				foreach ($attachmentArray as $theAttachment) {
-					if (file_exists($theAttachment)) {
-						$mailMessage->attach(Swift_Attachment::fromPath($theAttachment));
-					}
-				}
-			}
+        if (isset($attachment)) {
+            if (is_array($attachment)) {
+                $attachmentArray = $attachment;
+            } else {
+                $attachmentArray = array($attachment);
+            }
+            foreach ($attachmentArray as $theAttachment) {
+                if (file_exists($theAttachment)) {
+                    $mailMessage->attach(Swift_Attachment::fromPath($theAttachment));
+                }
+            }
+        }
 
-			if ($bcc != '') {
-				$mailMessage->addBcc($bcc);
-			}
-			$mailMessage->send();
-			$result = $mailMessage->isSent();
-			if ($conf['errorLog'] && count($mailMessage->getFailedRecipients())) {
-				error_log('send_mail Pos 2 undelivered emails: ' . implode(',', $mailMessage->getFailedRecipients()) . chr(13), 3, $conf['errorLog']);
-			}
-			return $result;
-		} else {
-			$fromName = tx_div2007_alpha5::slashName($fromName);
-			if (is_array($toEMail)) {
-				$email = key($toEMail);
-				$name = current($toEMail);
-				$toEMail = tx_div2007_alpha5::slashName($name) . ' <' . $email . '>';
-			}
-
-			$Typo3_htmlmail = t3lib_div::makeInstance('t3lib_htmlmail');
-			$Typo3_htmlmail->start();
-			$Typo3_htmlmail->mailer = 'TYPO3 HTMLMail';
-
-			$message = html_entity_decode($message);
-			if ($Typo3_htmlmail->linebreak == chr(10)) {
-				$message =
-					str_replace(
-						chr(13) . chr(10),
-						$Typo3_htmlmail->linebreak,
-						$message
-					);
-			}
-
-			$Typo3_htmlmail->subject = $subject;
-			$Typo3_htmlmail->from_email = $fromEMail;
-			$Typo3_htmlmail->returnPath = $fromEMail;
-			$Typo3_htmlmail->from_name = $fromName;
-			$Typo3_htmlmail->replyto_email = $Typo3_htmlmail->from_email;
-			$Typo3_htmlmail->replyto_name = $Typo3_htmlmail->from_name;
-			$Typo3_htmlmail->organisation = '';
-
-			if (isset($attachment)) {
-				if (is_array($attachment)) {
-					$attachmentArray = $attachment;
-				} else {
-					$attachmentArray = array($attachment);
-				}
-				foreach ($attachmentArray as $theAttachment) {
-					if (file_exists($theAttachment))	{
-						$Typo3_htmlmail->addAttachment($theAttachment);
-					}
-				}
-			}
-
-			if ($html)  {
-				$Typo3_htmlmail->theParts['html']['content'] = $html;
-				$Typo3_htmlmail->theParts['html']['path'] = t3lib_div::getIndpEnv('TYPO3_REQUEST_HOST') . '/';
-				$Typo3_htmlmail->extractMediaLinks();
-				$Typo3_htmlmail->extractHyperLinks();
-				$Typo3_htmlmail->fetchHTMLMedia();
-				$Typo3_htmlmail->substMediaNamesInHTML(0);	// 0 = relative
-				$Typo3_htmlmail->substHREFsInHTML();
-				$Typo3_htmlmail->setHTML($Typo3_htmlmail->encodeMsg($Typo3_htmlmail->theParts['html']['content']));
-			}
-			if ($message)	{
-				$Typo3_htmlmail->addPlain($message);
-			}
-			$Typo3_htmlmail->setHeaders();
-			if ($bcc != '')	{
-				$Typo3_htmlmail->add_header('Bcc: '.$bcc);
-			}
-			if (isset($attachment) && is_array($attachment) && count($attachment))	{
-				if (isset($Typo3_htmlmail->theParts) && is_array($Typo3_htmlmail->theParts) && isset($Typo3_htmlmail->theParts['attach']) && is_array($Typo3_htmlmail->theParts['attach'])) {
-					foreach ($Typo3_htmlmail->theParts['attach'] as $k => $media)	{
-						$Typo3_htmlmail->theParts['attach'][$k]['filename'] = basename($media['filename']);
-					}
-				}
-			}
-			$Typo3_htmlmail->setContent();
-			$Typo3_htmlmail->setRecipient(explode(',', $toEMail));
-
-			$hookVar = 'sendMail';
-			if ($hookVar && is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT][$hookVar])) {
-				foreach  ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT][$hookVar] as $classRef) {
-					$hookObj= t3lib_div::makeInstance($classRef);
-					if (method_exists($hookObj, 'init')) {
-						$hookObj->init($Typo3_htmlmail);
-					}
-					if (method_exists($hookObj, 'sendMail')) {
-						$result = $hookObj->sendMail($Typo3_htmlmail,$toEMail,$subject,$message,$html,$fromEMail,$fromName,$attachment,$bcc);
-					}
-				}
-			}
-
-			if ($result !== FALSE)	{
-				$Typo3_htmlmail->sendTheMail();
-			}
-		}
-		return $result;
+        if ($bcc != '') {
+            $mailMessage->addBcc($bcc);
+        }
+        $mailMessage->send();
+        $result = $mailMessage->isSent();
+        if ($conf['errorLog'] && count($mailMessage->getFailedRecipients())) {
+            error_log('send_mail Pos 2 undelivered emails: ' . implode(',', $mailMessage->getFailedRecipients()) . chr(13), 3, $conf['errorLog']);
+        }
+        return $result;
 	}
 
 

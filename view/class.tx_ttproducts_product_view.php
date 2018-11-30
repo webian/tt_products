@@ -303,13 +303,13 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 			}
 
 			if ($extKey != '' && t3lib_extMgm::isLoaded($extKey) && $api != '' && class_exists($api)) {
-				require_once(t3lib_extMgm::extPath($extKey, 'class.' . $api . '.php'));
-
 				$apiObj = t3lib_div::makeInstance($api);
 				if (method_exists($apiObj, 'getDefaultConfig'))	{
 					$ratingConf = $apiObj->getDefaultConfig();
 					if (isset($ratingConf) && is_array($ratingConf))	{
-						tx_div2007_core::mergeRecursiveWithOverrule($ratingConf, $conf);
+                        $tmpConf = $conf1;
+						tx_div2007_core::mergeRecursiveWithOverrule($tmpConf, $ratingConf);
+						$ratingConf = $tmpConf;
 					} else {
 						$ratingConf = $conf1;
 					}
@@ -347,13 +347,14 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 			}
 
 			if ($extKey != '' && t3lib_extMgm::isLoaded($extKey) && $api != '' && class_exists($api)) {
-// 				require_once(t3lib_extMgm::extPath($extKey, 'api/class.' . $api . '.php'));
 
 				$apiObj = t3lib_div::makeInstance($api);
 				if (method_exists($apiObj, 'getDefaultConfig'))	{
 					$commentConf = $apiObj->getDefaultConfig($param);
 					if (isset($commentConf) && is_array($commentConf))	{
-						tx_div2007_core::mergeRecursiveWithOverrule($commentConf, $conf);
+                        $tmpConf = $conf1;
+						tx_div2007_core::mergeRecursiveWithOverrule($tmpConf, $commentConf);
+						$commentConf = $tmpConf;
 					} else {
 						$commentConf = $conf1;
 					}

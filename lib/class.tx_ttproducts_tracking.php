@@ -395,6 +395,7 @@ class tx_ttproducts_tracking implements t3lib_Singleton {
 			$wrappedSubpartArray['###ADMIN_CONTROL_DENY###']='';
 			$wrappedSubpartArray['###ADMIN_CONTROL###']='';
 		}
+		$markerFieldArray = array();
 		$orderView = $tablesObj->get('sys_products_orders', TRUE);
 		$orderObj = $orderView->getModelObj();
 		$orderMarkerArray = $globalMarkerArray;

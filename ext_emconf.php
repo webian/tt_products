@@ -30,8 +30,7 @@ $EM_CONF[$_EXTKEY] = array(
 		'suggests' => array(
 			'func_wizards' => '',
 			'addons_em' => '0.2.1-0.0.0',
-		),
-	),
+		)
+	)
 );
-
 

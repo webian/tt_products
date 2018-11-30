@@ -1,3 +1,6 @@
+2018-11-30 Franz Holzinger <franz@ttproducts.de>
+    * update to TYPO3 7 and 8: make ratings and commenting by tt_board possible again
+
 2018-11-21 Franz Holzinger <franz@ttproducts.de>
     * remove feature: remove marker ###PRICE_TOTUNITS_DISCOUNT###
     * bugfix: tx_ttproducts_basket_view::init will not be called in all cases
