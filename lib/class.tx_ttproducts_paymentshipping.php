@@ -1431,7 +1431,7 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 		}
 
 		if (
-			(strpos($handleLib,'transactor') !== FALSE || strpos($handleLib,'paymentlib') !== FALSE) &&
+			(strpos($handleLib,'transactor') !== FALSE) &&
 			is_array($payConf['handleLib.']) &&
 			$payConf['handleLib.']['gatewaymode'] == $request &&
 			t3lib_extMgm::isLoaded($handleLib)

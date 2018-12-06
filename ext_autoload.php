@@ -51,7 +51,6 @@ return array(
 	'tx_ttproducts_form_div' => $extensionPath . 'lib/class.tx_ttproducts_form_div.php',
 	'tx_ttproducts_gifts_div' => $extensionPath . 'lib/class.tx_ttproducts_gifts_div.php',
 	'tx_ttproducts_integrate' => $extensionPath . 'lib/class.tx_ttproducts_integrate.php',
-	'tx_ttproducts_paymentlib' => $extensionPath . 'lib/class.tx_ttproducts_paymentlib.php',
 	'tx_ttproducts_paymentshipping' => $extensionPath . 'lib/class.tx_ttproducts_paymentshipping.php',
 	'tx_ttproducts_pricecalc' => $extensionPath . 'lib/class.tx_ttproducts_pricecalc.php',
 	'tx_ttproducts_pricecalc_base' => $extensionPath . 'lib/class.tx_ttproducts_pricecalc_base.php',

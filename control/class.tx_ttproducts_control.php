@@ -838,16 +838,6 @@ class tx_ttproducts_control implements t3lib_Singleton {
                                         $cardRow
                                     );
                                 }
-							} else if (strpos($handleLib,'paymentlib') !== false)	{
-								require_once (PATH_BE_ttproducts.'lib/class.tx_ttproducts_paymentlib.php');
-								$paymentlib = t3lib_div::makeInstance('tx_ttproducts_paymentlib');
-								$paymentlib->init($this->pibase, $basketView, $this->urlObj);
-								$referenceId = $paymentlib->getReferenceUid();
-								$paymentErrorMsg = $paymentlib->checkRequired(
-									$referenceId,
-									$this->basket->basketExtra['payment.']['handleLib'],
-									$this->basket->basketExtra['payment.']['handleLib.']
-								);
 							}
 						}
 						if ($codeActivityArray[$activity])	{
