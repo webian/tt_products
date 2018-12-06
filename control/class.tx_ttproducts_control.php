@@ -303,48 +303,6 @@ class tx_ttproducts_control implements t3lib_Singleton {
 					$templateFilename
 				);
 			}
-		} else if (strpos($handleLib,'paymentlib') !== false && t3lib_extMgm::isLoaded($handleLib)) {
-			$eInfo = tx_div2007_alpha5::getExtensionInfo_fh003($handleLib);
-
-			$paymentlibVersion = $eInfo['version'];
-			$phpVersion = phpversion();
-			if (isset($basketExtra['payment.']['handleLib.']) && is_array($basketExtra['payment.']['handleLib.']))	{
-				$gatewayExtName = $basketExtra['payment.']['handleLib.']['extName'];
-			}
-
-			if (version_compare($paymentlibVersion, '0.2.1', '>=') && version_compare($paymentlibVersion, '0.4.0', '<') && version_compare($phpVersion, '5.0.0', '>='))	{
-
-				if ($gatewayExtName != '' && t3lib_extMgm::isLoaded($gatewayExtName))	{
-
-					// Payment Library
-					require_once (PATH_BE_ttproducts.'lib/class.tx_ttproducts_paymentlib.php');
-
-					$paymentObj = t3lib_div::makeInstance('tx_ttproducts_paymentlib');
-					$paymentObj->init(
-						$this->pibase,
-						$basketView,
-						$this->urlObj
-					);
-
-					$content = $paymentObj->includeHandleLib(
-						$handleLib,
-						$basketExtra,
-						$calculatedArray,
-						$basketExtra['payment.']['handleLib.'],
-						$bFinalize,
-						$errorMessage
-					);
-				} else {
-					$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
-					if ($gatewayExtName == '')	{
-						$errorMessage = tx_div2007_alpha5::getLL_fh003($langObj, 'extension_payment_missing');
-					} else {
-						$message = tx_div2007_alpha5::getLL_fh003($langObj, 'extension_missing');
-						$messageArr =  explode('|', $message);
-						$errorMessage = $messageArr[0] . $gatewayExtName . $messageArr[1];
-					}
-				}
-			}
 		}
 
 		return $content;
@@ -1242,26 +1200,26 @@ class tx_ttproducts_control implements t3lib_Singleton {
 			$activityArray['products_finalize'] = true;
 		}
 
-		$codeActivityArray=array();
+		$codeActivityArray = array();
 		$bBasketCode = false;
 		if (is_array($codes)) {
 			foreach ($codes as $k => $code) {
-				if ($code=='BASKET')	{
-					$codeActivityArray['products_basket']=true;
+				if ($code == 'BASKET')	{
+					$codeActivityArray['products_basket'] = true;
 					$bBasketCode = true;
-				} elseif ($code=='INFO') {
+				} elseif ($code == 'INFO') {
                     if (
                         !(
                             $activityArray['products_payment'] ||
                             $activityArray['products_verify'] || $activityArray['products_finalize']
                         )
                     ) {
-                        $codeActivityArray['products_info']=true;
+                        $codeActivityArray['products_info'] = true;
                     }
 					$bBasketCode = true;
-				} elseif ($code=='OVERVIEW') {
-					$codeActivityArray['products_overview']=true;
-                } elseif ($code=='PAYMENT') {
+				} elseif ($code == 'OVERVIEW') {
+					$codeActivityArray['products_overview'] = true;
+                } elseif ($code == 'PAYMENT') {
                     if (
                         $activityArray['products_finalize']
                     ) {
