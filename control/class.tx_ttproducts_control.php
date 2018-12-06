@@ -207,7 +207,7 @@ class tx_ttproducts_control implements t3lib_Singleton {
 		if ($handleScript)	{
 			$paymentshippingObj = t3lib_div::makeInstance('tx_ttproducts_paymentshipping');
 			$content = $paymentshippingObj->includeHandleScript($handleScript, $basketExtra['payment.']['handleScript.'], $this->conf['paymentActivity'], $bFinalize, $this->pibase, $infoViewObj);
-		} else if (strpos($handleLib,'transactor') !== false && t3lib_extMgm::isLoaded($handleLib))	{
+		} else if (strpos($handleLib, 'transactor') !== false && t3lib_extMgm::isLoaded($handleLib))	{
 				// Payment Transactor
             $transactorConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$handleLib]);
             $useNewTransactor = false;
@@ -221,7 +221,7 @@ class tx_ttproducts_control implements t3lib_Singleton {
             // Get references to the concerning baskets
 			$addQueryString = array();
 			$excludeList = '';
-			$linkParams = $this->urlObj->getLinkParams($excludeList,$addQueryString,true,false);
+			$linkParams = $this->urlObj->getLinkParams($excludeList, $addQueryString, true, false);
 
 			$markerArray = array();
             if ($useNewTransactor) {
