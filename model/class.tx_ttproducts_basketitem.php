@@ -29,8 +29,6 @@
  *
  * model functions for a basket item object
  *
- * $Id$
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -39,7 +37,7 @@
  */
 
 
-class tx_ttproducts_basketitem {
+class tx_ttproducts_basketitem implements t3lib_Singleton {
 
 	/**
 	 * gets the quantity of an item
@@ -80,18 +78,10 @@ class tx_ttproducts_basketitem {
 
 		$row = $item['rec'];
 		$rc = $row['basketminquantity'];
-		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 		$prodTable = $tablesObj->get('tt_products', FALSE);
 		$articleRow = $prodTable->getArticleRowFromExt($row);
 
-// 		$extArray = $row['ext'];
-//
-// 		if (is_array($extArray) && is_array($extArray['tt_products_articles']) && is_array($extArray['tt_products_articles']['0']))	{
-// 			$articleUid = $extArray['tt_products_articles']['0']['uid'];
-// 			$articleTable = $tablesObj->get('tt_products_articles', FALSE);
-// 			$articleRow = $articleTable->get($articleUid);
-// 			$rc = ($articleRow['basketminquantity'] != '' ? $articleRow['basketminquantity'] : $rc);
-// 		}
 		if (is_array($articleRow) && count($articleRow))	{
 			$rc = ($articleRow['basketminquantity'] != '0.00' ? $articleRow['basketminquantity'] : $rc);
 		}

@@ -29,8 +29,6 @@
  *
  * API functions
  *
- * $Id$
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -200,7 +198,7 @@ class tx_ttproducts_api {
 		global $TYPO3_DB;
 
 		$result = FALSE;
-		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 		$infoArray = $infoObj->infoArray;
 		$apostrophe = $conf['orderEmail_apostrophe'];
 
@@ -233,8 +231,16 @@ class tx_ttproducts_api {
 					$insertFields[$fieldname] = $fieldvalue;
 				}
 			}
-			if ($conf['useStaticInfoCountry']) {
-				$insertFields['static_info_country'] = $infoArray['billing']['country_code'];
+			if (
+				t3lib_extMgm::isLoaded('agency') ||
+				t3lib_extMgm::isLoaded('femanager') ||
+				t3lib_extMgm::isLoaded('sr_feuser_register')
+			) {
+				if ($conf['useStaticInfoCountry'] && isset($infoArray['billing']['country_code'])) {
+					$insertFields['static_info_country'] = $infoArray['billing']['country_code'];
+				} else {
+					$insertFields['static_info_country'] = '';
+				}
 			}
 
 			if(
@@ -259,7 +265,7 @@ class tx_ttproducts_api {
 						$calculatedArray,
 						FALSE,
 						'EMAIL_NEWUSER_TEMPLATE',
-						$mainMarkerArray
+						array()
 					)
 				);
 
@@ -267,7 +273,7 @@ class tx_ttproducts_api {
 					$parts = explode(chr(10), $emailContent, 2);
 					$subject=trim($parts[0]);
 					$plain_message = trim($parts[1]);
-					tx_ttproducts_email_div::send_mail(
+					tx_div2007_email::sendMail(
 						$infoArray['billing']['email'],
 						$apostrophe.$subject.$apostrophe,
 						$plain_message,

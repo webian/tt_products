@@ -29,8 +29,6 @@
  *
  * functions for the static_taxes table
  *
- * $Id$
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -38,9 +36,6 @@
  *
  *
  */
-
-
-// require_once(PATH_BE_table.'lib/class.tx_table_db.php');
 
 
 class tx_ttproducts_static_tax extends tx_ttproducts_table_base {
@@ -53,11 +48,11 @@ class tx_ttproducts_static_tax extends tx_ttproducts_table_base {
 	/**
 	 * Getting all tt_products_cat categories into internal array
 	 */
-	function init (&$pibase, $functablename)	{
+	function init ($cObj, $functablename)	{
 		if ($this->isInstalled())	{
-			parent::init($pibase, $functablename);
+			parent::init($cObj, $functablename);
 			$tablename = $this->getTablename();
-			$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+			$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 			$tableconf = $cnf->getTableConf('static_taxes');
 			$this->getTableObj()->setDefaultFieldArray(array('uid' => 'uid', 'pid' => 'pid'));
 			$this->getTableObj()->setTCAFieldArray('static_taxes');
@@ -105,14 +100,14 @@ class tx_ttproducts_static_tax extends tx_ttproducts_table_base {
 		global $TYPO3_DB;
 
 		if ($this->isInstalled())	{
-			$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+			$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 			$orderAdressObj = $tablesObj->get('address', FALSE);
 			$storeRow = $orderAdressObj->get($uidStore);
 			$theCountryCode = '';
 
 			if ($storeRow)	{
 				$staticInfoCountryField = $orderAdressObj->getField('static_info_country');
-				$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+				$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 				$tableconf = $cnf->getTableConf('address');
 
 				if (
@@ -197,7 +192,7 @@ class tx_ttproducts_static_tax extends tx_ttproducts_table_base {
 	public function getStaticTax (&$row, &$tax, &$taxArray)	{
 
 		if ($this->getUidStore() && $this->isInstalled())	{
-			$basketObj = t3lib_div::getUserObj('&tx_ttproducts_basket');
+			$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
 
 			if (isset($basketObj->recs) && is_array($basketObj->recs) && count($basketObj->recs))	{
 				$deliveryInfo = $basketObj->recs['delivery'];

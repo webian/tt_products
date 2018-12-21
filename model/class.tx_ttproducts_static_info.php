@@ -29,8 +29,6 @@
  *
  * functions for the tables of static_info_tables
  *
- * $Id$
- *
  * @author Franz Holzinger <franz@ttproducts.de>
  * @maintainer Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -69,7 +67,7 @@ class tx_ttproducts_static_info {
 
 				if (version_compare($sitVersion, '2.0.0', '>=')) {
 					// Initialise static info library
-					self::$staticInfo = t3lib_div::getUserObj('&' . $class);
+					self::$staticInfo = t3lib_div::makeInstance($class);
 					if (
 						!method_exists(self::$staticInfo, 'needsInit') ||
 						self::$staticInfo->needsInit()

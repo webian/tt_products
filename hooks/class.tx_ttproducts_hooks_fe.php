@@ -29,8 +29,6 @@
  *
  * hook functions for TYPO3 FE extensions
  *
- * $Id$
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -39,9 +37,8 @@
  *
  */
 
-// require_once(PATH_BE_div2007.'hooks/class.tx_div2007_hooks_cms.php');
-
-class tx_ttproducts_hooks_fe {
+ 
+class tx_ttproducts_hooks_fe implements t3lib_Singleton {
 
 	public function login_confirmed ($params, $pObj) {
 

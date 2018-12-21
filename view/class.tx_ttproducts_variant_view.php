@@ -29,8 +29,6 @@
  *
  * article functions without object instance
  *
- * $Id$
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -39,10 +37,8 @@
  *
  */
 
-// require_once (PATH_BE_ttproducts.'view/interface.tx_ttproducts_variant_view_int.php');
 
-
-class tx_ttproducts_variant_view implements tx_ttproducts_variant_view_int {
+class tx_ttproducts_variant_view implements tx_ttproducts_variant_view_int, t3lib_Singleton {
 	public $modelObj;
 	public $cObj;
 	public $langObj;
@@ -93,15 +89,23 @@ class tx_ttproducts_variant_view implements tx_ttproducts_variant_view_int {
 		$remMarkerArray = array();
 		$variantConf = &$this->modelObj->conf;
 
+        $maxKey = 0;
 		if (is_array($variantConf))	{
 			foreach ($variantConf as $key => $field)	{
 				if ($field != 'additional')	{	// no additional here
-					if (trim($row[$field]) == '' || !$conf['select' . ucfirst($field)])	{
+					if (
+						!isset($row[$field]) ||
+						trim($row[$field]) == '' ||
+						!$conf['select' . ucfirst($field)]
+					) {
 						$remSubpartArray[] = 'display_variant' . $key;
 					} else {
 						$remMarkerArray[] = 'display_variant' . $key;
 					}
 				}
+                if ($key > $maxKey) {
+                    $maxKey = $key;
+                }
 			}
 		}
 
@@ -121,6 +125,10 @@ class tx_ttproducts_variant_view implements tx_ttproducts_variant_view_int {
 			$remSubpartArray[] = 'display_variant5_giftService';
 			$remMarkerArray[] = 'display_variant5_NoGiftService';
 		}
+
+        for ($i = $maxKey + 1; $i <= 32; ++$i) { // remove more variants from the future
+            $remSubpartArray[] = 'display_variant' . $i;
+        }
 
 		foreach ($remSubpartArray as $k => $subpart) {
 			$subpartArray['###'.$subpart.'###'] = '';

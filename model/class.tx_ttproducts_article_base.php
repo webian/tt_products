@@ -29,8 +29,6 @@
  *
  * functions for the product
  *
- * $Id$
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -38,10 +36,6 @@
  *
  *
  */
-
-/*
-require_once (PATH_BE_table.'lib/class.tx_table_db.php');
-require_once (PATH_BE_ttproducts.'view/field/class.tx_ttproducts_field_datafield_view.php');*/
 
 
 abstract class tx_ttproducts_article_base extends tx_ttproducts_table_base {
@@ -59,21 +53,21 @@ abstract class tx_ttproducts_article_base extends tx_ttproducts_table_base {
 	/**
 	 * Getting all tt_products_cat categories into internal array
 	 */
-	public function init (&$cObj, $functablename)	{
+	public function init ($cObj, $functablename)	{
 		parent::init($cObj, $functablename);
 		$tablename = $this->getTablename();
 		$useArticles = $this->conf['useArticles'];
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 
 		if ($this->type == 'product')	{
 			include_once (PATH_BE_ttproducts.'model/class.tx_ttproducts_variant.php');
 
-			$this->variant = t3lib_div::getUserObj('&tx_ttproducts_variant');
+			$this->variant = t3lib_div::makeInstance('tx_ttproducts_variant');
 			$this->variant->init($this, $tablename, $useArticles);
 		} else {
 			include_once (PATH_BE_ttproducts.'model/class.tx_ttproducts_variant_dummy.php');
 
-			$this->variant = t3lib_div::getUserObj('&tx_ttproducts_variant_dummy');
+			$this->variant = t3lib_div::makeInstance('tx_ttproducts_variant_dummy');
 		}
 		$tableDesc = $this->getTableDesc();
 
@@ -163,7 +157,7 @@ abstract class tx_ttproducts_article_base extends tx_ttproducts_table_base {
 	public function getWhere ($where, $theCode = '', $orderBy = '') {
 		global $TYPO3_DB;
 
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$tableconf = $cnf->getTableConf($this->getFuncTablename(), $theCode);
 		$rc = array();
 		$where = ($where ? $where : '1=1 ') . $this->getTableObj()->enableFields();
@@ -193,12 +187,21 @@ abstract class tx_ttproducts_article_base extends tx_ttproducts_table_base {
 		$tableConf = $this->getTableConf($theCode);
 
 		$bUseLanguageTable = $this->bUseLanguageTable($tableConf);
-		if ($bUseLanguageTable) {
-			$where = $this->getTableObj()->searchWhere($sw, $searchFieldList);
-		} else {
-			$searchTable = $this->getTableObj()->getAlias();
-			$where = $this->cObj->searchWhere($sw, $searchFieldList, $searchTable);
-		}
+        if ($bUseLanguageTable) {
+            $where =
+                $this->getTableObj()->searchWhere(
+                    $sw,
+                    $searchFieldList,
+                    TRUE
+                );
+        } else {
+            $where =
+                $this->getTableObj()->searchWhere(
+                    $sw,
+                    $searchFieldList,
+                    FALSE
+                );
+        }
 
 		return $where;
 	} // searchWhere
@@ -206,7 +209,7 @@ abstract class tx_ttproducts_article_base extends tx_ttproducts_table_base {
 
 	public function getNeededUrlParams ($functablename, $theCode)	{
 		$rc = '';
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$tableconf = $cnf->getTableConf($functablename, $theCode);
 		if (is_array($tableconf) && $tableconf['urlparams'])	{
 			$rc = $tableconf['urlparams'];
@@ -223,7 +226,7 @@ abstract class tx_ttproducts_article_base extends tx_ttproducts_table_base {
 		$fieldArray['number'] = array('weight', 'inStock');
 		$fieldArray['price'] = array('price', 'price2', 'directcost');
 		$bIsAddedPrice = FALSE;
-		$cnfObj = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnfObj = t3lib_div::makeInstance('tx_ttproducts_config');
 		$tableDesc = $this->getTableDesc();
 
 		if (isset($tableDesc['conf.']) && is_array($tableDesc['conf.']) && isset($tableDesc['conf.']['mergeAppendFields']))	{
@@ -287,7 +290,11 @@ abstract class tx_ttproducts_article_base extends tx_ttproducts_table_base {
 						} else { // $bKeepNotEmpty == FALSE
 							if (
 								$type == 'number' &&
-								(!round($targetRow[$field], 16) || round($value, 16))
+								(
+									!round($targetRow[$field], 16) ||
+									round($value, 16) ||
+									($field == 'inStock')
+								)
 									||
 								$type != 'number' &&
 								(empty($targetRow[$field]) || !empty($value))

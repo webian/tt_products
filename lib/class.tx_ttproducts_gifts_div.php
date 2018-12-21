@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2005-2007 Franz Holzinger <kontakt@fholzinger.com>
+*  (c) 2005-2007 Franz Holzinger <franz@ttproducts.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,10 +29,8 @@
  *
  * view functions
  *
- * $Id$
- *
- * @author  Franz Holzinger <kontakt@fholzinger.com>
- * @maintainer	Franz Holzinger <kontakt@fholzinger.com>
+ * @author  Franz Holzinger <franz@ttproducts.de>
+ * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products
  *
@@ -50,7 +48,7 @@ class tx_ttproducts_gifts_div {
 	 * @return  array	all gift numbers for this product
 	 */
 	static public function getGiftNumbers($uid, $variant)	{
-		$basket = t3lib_div::getUserObj('&tx_ttproducts_basket');
+		$basket = t3lib_div::makeInstance('tx_ttproducts_basket');
 		$giftArray = array();
 
 		if ($basket->basketExt['gift']) {
@@ -70,7 +68,7 @@ class tx_ttproducts_gifts_div {
 	 */
 	static public function addGiftMarkers($markerArray, $giftnumber, $code = 'LISTGIFTS', $id = '1')	{
 
-		$basket = t3lib_div::getUserObj('&tx_ttproducts_basket');
+		$basket = t3lib_div::makeInstance('tx_ttproducts_basket');
 		$markerArray['###GIFTNO###'] = $giftnumber;
 		$markerArray['###GIFT_PERSON_NAME###'] = $basket->basketExt['gift'][$giftnumber]['personname'];
 		$markerArray['###GIFT_PERSON_EMAIL###'] = $basket->basketExt['gift'][$giftnumber]['personemail'];
@@ -100,7 +98,7 @@ class tx_ttproducts_gifts_div {
 		global $TYPO3_DB;
 		$rc = '';
 
-		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 		$productObj = $tablesObj->get('tt_products');
 		foreach ($giftBasket as $giftnumber => $rec) {
 			$amount = 0;

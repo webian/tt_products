@@ -31,26 +31,19 @@
  * Also controls basket, searching and payment.
  *
  *
- * $Id$
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products
- * @see file tt_products/static/old_style/constants.txt
+ * @see file tt_products/Configuration/TypoScript/PluginSetup/Main/constants.txt
  * @see TSref
  *
  *
  */
 
-/*
-require_once (PATH_BE_ttproducts.'control/class.tx_ttproducts_main.php');
-require_once (PATH_BE_ttproducts.'model/class.tx_ttproducts_model_control.php');*/
 
 
-tx_div2007_core::activateCompatibility6();
-
-class tx_ttproducts_pi1_base extends tslib_pibase {
+class tx_ttproducts_pi1_base extends tslib_pibase implements t3lib_Singleton {
 	public $prefixId = TT_PRODUCTS_EXT;
 	public $scriptRelPath = 'pi1/class.tx_ttproducts_pi1_base.php';	// Path to this script relative to the extension dir.
 	public $extKey = TT_PRODUCTS_EXT;	// The extension key.
@@ -67,7 +60,7 @@ class tx_ttproducts_pi1_base extends tslib_pibase {
 		$this->pi_setPiVarDefaults();
 		$this->conf = &$conf;
 		$config = array();
-		$mainObj = t3lib_div::getUserObj('&tx_ttproducts_main');	// fetch and store it as persistent object
+		$mainObj = t3lib_div::makeInstance('tx_ttproducts_main');	// fetch and store it as persistent object
 		$errorCode = array();
 		$bDoProcessing = $mainObj->init($content, $conf, $config, get_class($this), $errorCode);
 

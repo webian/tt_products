@@ -29,8 +29,6 @@
  *
  * payment shipping and basket extra functions
  *
- * $Id$
- *
  * @author  Kasper Skårhøj <kasperYYYY@typo3.com>
  * @author  René Fritz <r.fritz@colorcube.de>
  * @author  Franz Holzinger <franz@ttproducts.de>
@@ -43,7 +41,7 @@
  */
 
 
-class tx_ttproducts_paymentshipping {
+class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 	var $cObj;
 	var $conf;
 	var $config;
@@ -51,17 +49,17 @@ class tx_ttproducts_paymentshipping {
 	var $basketView;
 	var $priceObj;	// price functions
 	var $typeArray = array('shipping', 'payment');
+    protected $voucher;
 
-
-	function init (&$cObj)	{
-		global $TSFE;
-
-		$this->cObj = &$cObj;
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+	public function init ($cObj, $priceObj) {
+		$this->cObj = $cObj;
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
-		$this->basket = t3lib_div::getUserObj('&tx_ttproducts_basket');
-		$this->priceObj = t3lib_div::getUserObj('tx_ttproducts_field_price');	// new independant price object
+		$this->basket = t3lib_div::makeInstance('tx_ttproducts_basket');
+		$this->priceObj = clone $priceObj;	// new independant price object
+		$voucher = t3lib_div::makeInstance('tx_ttproducts_voucher');
+		$this->setVoucher($voucher);
 	}
 
 
@@ -69,6 +67,13 @@ class tx_ttproducts_paymentshipping {
 		return $this->typeArray;
 	}
 
+	public function setVoucher ($voucher) {
+        $this->voucher = $voucher;
+	}
+
+    public function getVoucher () {
+        return $this->voucher;
+    }
 
 	function getScriptPrices ($pskey='shipping', &$calculatedArray, &$itemArray)	{
 		$hookVar = 'scriptPrices';
@@ -77,7 +82,7 @@ class tx_ttproducts_paymentshipping {
 			isset ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT][$hookVar][$pskey]) &&
 			is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT][$hookVar][$pskey])) {
 			foreach  ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT][$hookVar][$pskey] as $classRef) {
-				$hookObj= t3lib_div::getUserObj($classRef);
+				$hookObj= t3lib_div::makeInstance($classRef);
 				if (method_exists($hookObj, 'init')) {
 					$hookObj->init($this);
 				}
@@ -95,7 +100,7 @@ class tx_ttproducts_paymentshipping {
 	function setBasketExtras (&$basketRec) {
 		global $TSFE;
 
-		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 
 			// shipping
 		if ($this->conf['shipping.']) {
@@ -193,13 +198,19 @@ class tx_ttproducts_paymentshipping {
 	 * @param	array		reference to an item array with all the data of the item
 	 * @access private
 	 */
-	function getSubpartArrays ($markerArray, &$subpartArray, &$wrappedSubpartArray, $framework)	{
+    public function getSubpartArrays (
+        $basketExtra,
+        $markerArray,
+        &$subpartArray,
+        &$wrappedSubpartArray,
+        $framework
+    ) {
+		$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
 
-		$markerObj = t3lib_div::getUserObj('&tx_ttproducts_marker');
-
+        $handleLib = $basketExtra['payment.']['handleLib'];
 		if (strpos($handleLib, 'transactor') !== FALSE && t3lib_extMgm::isLoaded($handleLib)) {
 
-			$langObj = t3lib_div::getUserObj('&tx_ttproducts_language');
+			$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
 				// Payment Transactor
 			tx_transactor_api::init($langObj, '', $conf);
 
@@ -321,7 +332,8 @@ class tx_ttproducts_paymentshipping {
 		$bUseXHTML = $TSFE->config['config']['xhtmlDoctype'] != '';
 		$selectedText = ($bUseXHTML ? 'selected="selected"' : 'selected');
 
-		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+        $imageObj = t3lib_div::makeInstance('tx_ttproducts_field_image_view');
 		$active = $this->basket->basketExtra[$pskey];
 		$activeArray = is_array($active) ? $active : array($active);
 		$confArr = $this->cleanConfArr($this->conf[$pskey.'.']);
@@ -360,7 +372,7 @@ class tx_ttproducts_paymentshipping {
 							if (is_object($itemTable))	{
 								$markerFieldArray = array();
 								$parentArray = array();
-								$markerObj = t3lib_div::getUserObj('&tx_ttproducts_marker');
+								$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
 								$fieldsArray = $markerObj->getMarkerFields(
 									$item['title'],
 									$itemTable->getTableObj()->tableFieldArray,
@@ -375,7 +387,7 @@ class tx_ttproducts_paymentshipping {
 								if (isset($addItems) && is_array($addItems))	{
 									foreach ($addItems as $k1 => $row)	{
 										foreach ($row as $field => $v)	{
-											$addItems[$k1][$field] = $TSFE->csConv($v, $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['static_info_tables']['charset']);
+											$addItems[$k1][$field] = tx_div2007_core::csConv($v, $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['static_info_tables']['charset']);
 										}
 									}
 								}
@@ -396,7 +408,7 @@ class tx_ttproducts_paymentshipping {
 									$markerArray = array();
 									$itemTableView->getRowMarkerArray($row, $markerArray, $fieldsArray);
 									$title = $this->cObj->substituteMarkerArrayCached($t['title'], $markerArray);
-									$title = htmlentities($title,ENT_QUOTES,$TSFE->renderCharset);
+									$title = htmlentities($title, ENT_QUOTES, 'UTF-8');
 									$value = $key . '-' . $row['uid'];
 									if ($value == implode('-',$activeArray))	{
 										$actTitle = $item['title'];
@@ -414,10 +426,17 @@ class tx_ttproducts_paymentshipping {
 								$markerArray = array();
 								$imageCode = '';
 								if ($image != '') {
-									$imageCode = $this->cObj->IMAGE($image);
-									if ($theCode == 'EMAIL') {
-										tx_div2007_alpha5::fixImageCodeAbsRefPrefix($imageCode);
-									}
+                                    $imageCode =
+                                        $imageObj->getImageCode(
+                                            $this->cOb,
+                                            $image,
+                                            $theCode
+                                        ); // neu
+
+// 									$imageCode = $this->cObj->IMAGE($image);
+// 									if ($theCode == 'EMAIL') {
+// 									    tx_div2007_alpha5::fixImageCodeAbsRefPrefix($imageCode);
+// 									}
 								}
 
 								$this->getModelMarkerArray(
@@ -437,7 +456,7 @@ class tx_ttproducts_paymentshipping {
 									$markerArray = array();
 									$itemTableView->getRowMarkerArray ($row, $markerArray, $fieldsArray);
 									$title = $this->cObj->substituteMarkerArrayCached($t['title'], $markerArray);
-									$title = htmlentities($title,ENT_QUOTES,$TSFE->renderCharset);
+									$title = htmlentities($title, ENT_QUOTES, 'UTF-8');
 									$value = $key . '-' . $row['uid'];
 									if ($value == implode('-', $activeArray))	{
 										$actTitle = $item['title'];
@@ -455,7 +474,7 @@ class tx_ttproducts_paymentshipping {
 		}
 
 		if (strstr($actTitle, '###'))	{
-			$markerObj = t3lib_div::getUserObj('&tx_ttproducts_marker');
+			$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
 			$markerArray = array();
 			$viewTagArray = array();
 			$parentArray = array();
@@ -560,7 +579,7 @@ class tx_ttproducts_paymentshipping {
 					}
 				}
 			} else if ($confArr['type'] == 'objectMethod' && isset($confArr['class'])) {
-				$obj= t3lib_div::getUserObj($confArr['class']);
+				$obj= t3lib_div::makeInstance($confArr['class']);
 				if (method_exists($obj, 'getConfiguredPrice')){
 					$funcParams = $confArr['method.'];
 					$priceNew = $obj->getConfiguredPrice($row, $confArr, $countTotal, $priceTotalTax, $priceTax, $priceNoTax, $funcParams);
@@ -579,7 +598,6 @@ class tx_ttproducts_paymentshipping {
 						$shippingcalc[$k] = $v;
 					}
 				}
-				include_once (PATH_BE_ttproducts.'lib/class.tx_ttproducts_discountprice.php');
 				$discountPriceObj = t3lib_div::makeInstance('tx_ttproducts_discountprice');
 				$priceReduction = array();
 				$discountPriceObj->getCalculatedData(
@@ -593,7 +611,7 @@ class tx_ttproducts_paymentshipping {
 			}
 
 			if(is_array($funcParams)){
-				$hookObj= t3lib_div::getUserObj($funcParams['class']);
+				$hookObj= t3lib_div::makeInstance($funcParams['class']);
 				if (method_exists($hookObj, 'init')) {
 					$hookObj->init($this);
 				}
@@ -606,13 +624,28 @@ class tx_ttproducts_paymentshipping {
 			if ($minPrice > $priceNew) {
 				$priceNew = $minPrice;
 			}
-			// the total products price as from the payment/shipping is free
-			$noCostsAmount = (double) $confArr['noCostsAmount'];
-			if ($noCostsAmount && ($priceTotalTax >= $noCostsAmount)) {
-				$priceNew = 0;
-				$priceTax = $priceNoTax = 0;
-			}
-			$taxIncluded = $this->priceObj->getTaxIncluded();
+
+			if (
+                isset($confArr['noCostsAmount'])
+            ) {
+                // the total products price as from the payment/shipping is free
+                $noCostsAmount = (double) $confArr['noCostsAmount'];
+                if ($noCostsAmount && ($priceTotalTax >= $noCostsAmount)) {
+                    $priceNew = 0;
+                    $priceTax = $priceNoTax = 0;
+                }
+            }
+            if (
+                isset($confArr['noCostsVoucher']) &&
+                is_object($voucher = $this->getVoucher()) &&
+                $voucher->getValid() &&
+                t3lib_div::inList($confArr['noCostsVoucher'], $voucher->getCode())
+            ) {
+                $priceNew = 0;
+                $priceTax = $priceNoTax = 0;
+            }
+
+            $taxIncluded = $this->priceObj->getTaxIncluded();
 			$priceTax += $this->priceObj->getPrice($priceNew, 1, $row, $taxIncluded, TRUE);
 			$priceNoTax += $this->priceObj->getPrice($priceNew, 0, $row, $taxIncluded, TRUE);
 		}
@@ -751,7 +784,6 @@ class tx_ttproducts_paymentshipping {
 	 */
 	function includeHandleScript ($handleScript, &$confScript, $activity, &$bFinalize, $pibase, $infoViewObj)	{
 		$content = '';
-		$infoViewObj = t3lib_div::getUserObj('&tx_ttproducts_info_view');
 
 		include($handleScript);
 		return $content;
@@ -876,7 +908,7 @@ class tx_ttproducts_paymentshipping {
 	public function getHandleLib ($request)	{ // getGatewayRequestExt
 
 		$rc = FALSE;
-		$basketObj = t3lib_div::getUserObj('&tx_ttproducts_basket');
+		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
 		$payConf = $basketObj->basketExtra['payment.'];
 
 		if (is_array($payConf))	{
@@ -901,4 +933,3 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/lib/class.tx_ttproducts_paymentshipping.php']);
 }
 
-?>

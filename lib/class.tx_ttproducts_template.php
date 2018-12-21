@@ -29,8 +29,6 @@
  *
  * functions for the template file
  *
- * $Id$
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -41,7 +39,7 @@
 
 
 
-class tx_ttproducts_template {
+class tx_ttproducts_template implements t3lib_Singleton {
 	private $templateFile;
 
 	public function getTemplateFile ()	{
@@ -49,14 +47,14 @@ class tx_ttproducts_template {
 	}
 
 	public function getTemplateSuffix ()	{
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$config = &$cnf->getConfig();
 		return $config['templateSuffix'];
 	}
 
 	public function &get ($theCode, $langObj, $cObj, &$templateFile, &$errorMessage) {
 		$templateCode = '';
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$conf = &$cnf->getConf();
 		$templateFile = $cnf->getTemplateFile($theCode);
 
@@ -71,7 +69,7 @@ class tx_ttproducts_template {
 				$tmplText = $theCode.'.';
 			}
 			$tmplText .= 'templateFile';
-			$errorMessage .= tx_div2007_alpha5::getLL_fh002($langObj, 'no_template') . ' plugin.' . TT_PRODUCTS_EXT . '.' . $tmplText.' = ';
+			$errorMessage .= tx_div2007_alpha5::getLL_fh003($langObj, 'no_template') . ' plugin.' . TT_PRODUCTS_EXT . '.' . $tmplText.' = ';
 			$errorMessage .= ($conf['templateFile'] ? "'" . $conf['templateFile'] . "'" : '""');
 		}
 

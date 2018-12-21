@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2008 Franz Holzinger <contact@fholzinger.com>
+*  (c) 2007-2008 Franz Holzinger <franz@ttproducts.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,10 +29,8 @@
  *
  * functions for the note field view
  *
- * $Id$
- *
- * @author	Franz Holzinger <contact@fholzinger.com>
- * @maintainer	Franz Holzinger <contact@fholzinger.com>
+ * @author	Franz Holzinger <franz@ttproducts.de>
+ * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products
  *
@@ -50,8 +48,8 @@ class tx_ttproducts_field_note_view extends tx_ttproducts_field_base_view {
 		)	{
 			$value = $this->getModelObj()->getFieldValue($row, $fieldname);
 
-				// Extension CSS styled content
-			if (t3lib_extMgm::isLoaded('css_styled_content')) {
+				// Extension CSS styled content or fluid styled content
+			if (isset($GLOBALS['TSFE']->tmpl->setup['lib.']['parseFunc_RTE.'])) {
 				$value = tx_div2007_alpha5::RTEcssText($this->cObj, $value);
 			} else if (is_array($this->conf['parseFunc.']))	{
 				$value = $this->cObj->parseFunc($value,$this->conf['parseFunc.']);

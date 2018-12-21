@@ -26,8 +26,6 @@
 
 
 /**
- * $Id$
- *
  * Module extension (addition to function menu) 'Move Items' for the 'tt_products' extension.
  *
  * @author	Franz Holzinger <franz@ttproducts.de>

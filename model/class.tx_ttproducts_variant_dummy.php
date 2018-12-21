@@ -29,8 +29,6 @@
  *
  * article functions without object instance
  *
- * $Id$
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -38,10 +36,9 @@
  *
  */
 
-// require_once (PATH_BE_ttproducts.'model/interface.tx_ttproducts_variant_int.php');
 
 
-class tx_ttproducts_variant_dummy implements tx_ttproducts_variant_int {
+class tx_ttproducts_variant_dummy implements tx_ttproducts_variant_int, t3lib_Singleton {
 	private $selectableArray = array();
 	public $conf;	// reduced local conf
 
@@ -107,10 +104,10 @@ class tx_ttproducts_variant_dummy implements tx_ttproducts_variant_int {
 		return $this->selectableArray;
 	}
 
-	public function getVariantValuesByArticle ($articleRowArray)	{
+	public function getVariantValuesByArticle ($articleRowArray,$productRow,$withSemicolon=FALSE) {
 	}
 
-	public function filterArticleRowsByVariant ($articleRows, $variant) {
+	public function filterArticleRowsByVariant($row, $variant, $articleRows, $bCombined=FALSE) {
 	}
 
 	public function getFieldArray ()	{

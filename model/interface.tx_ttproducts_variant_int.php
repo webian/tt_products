@@ -29,8 +29,6 @@
  *
  * interface for the variant classes
  *
- * $Id$
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -51,8 +49,8 @@ interface tx_ttproducts_variant_int {
 	public function getVariantRow($row = '', $varianArray = array());
 	public function getTableUid ($table, $uid);
 	public function getSelectableArray();
-	public function getVariantValuesByArticle($articleRowArray);
-	public function filterArticleRowsByVariant($articleRows, $variant);
+	public function getVariantValuesByArticle($articleRowArray,$productRow,$withSemicolon=FALSE);
+	public function filterArticleRowsByVariant($row, $variant, $articleRows, $bCombined=FALSE);
 	public function getFieldArray();
 	public function getSelectableFieldArray();
 	public function getAdditionalKey();

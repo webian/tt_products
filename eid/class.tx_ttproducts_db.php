@@ -30,8 +30,6 @@
  * main class for eID AJAX function to change the values of records for the
  * variant select box
  *
- * $Id$
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -39,26 +37,9 @@
  *
  */
 
-/*
-require_once (PATH_t3lib.'class.t3lib_stdgraphic.php');
-require_once (PATH_tslib.'class.tslib_content.php');
-require_once (PATH_tslib.'class.tslib_gifbuilder.php');
-
-require_once (PATH_BE_div2007.'class.tx_div2007_alpha.php');
-require_once (PATH_BE_div2007.'class.tx_div2007_alpha5.php');
-
-require_once (PATH_BE_ttproducts.'control/class.tx_ttproducts_control_creator.php');
-require_once (PATH_BE_ttproducts.'model/class.tx_ttproducts_model_creator.php');
-require_once (PATH_BE_ttproducts.'lib/class.tx_ttproducts_paymentshipping.php');
-require_once (PATH_BE_ttproducts.'model/field/class.tx_ttproducts_field_image.php');
-require_once (PATH_BE_ttproducts.'model/field/class.tx_ttproducts_field_price.php');
-require_once (PATH_BE_ttproducts.'view/field/class.tx_ttproducts_field_image_view.php');
-require_once (PATH_BE_ttproducts.'view/field/class.tx_ttproducts_field_price_view.php');
-require_once (PATH_BE_ttproducts.'view/field/class.tx_ttproducts_field_note_view.php');
-*/
 
 
-class tx_ttproducts_db {
+class tx_ttproducts_db implements t3lib_Singleton {
 	protected $extKey = TT_PRODUCTS_EXT;	// The extension key.
 	protected $conf;			// configuration from template
 	protected $config;
@@ -86,10 +67,10 @@ class tx_ttproducts_db {
 		    $this->cObj->start(array());
 		}
 
-		$controlCreatorObj = t3lib_div::getUserObj('&tx_ttproducts_control_creator');
+		$controlCreatorObj = t3lib_div::makeInstance('tx_ttproducts_control_creator');
 		$controlCreatorObj->init($conf, $config, $pObj, $this->cObj);
 
-		$modelCreatorObj = t3lib_div::getUserObj('&tx_ttproducts_model_creator');
+		$modelCreatorObj = t3lib_div::makeInstance('tx_ttproducts_model_creator');
 		$modelCreatorObj->init($conf, $config, $this->cObj);
 	}
 
@@ -110,17 +91,17 @@ class tx_ttproducts_db {
 		$rowArray = array();
 		$variantArray = array();
 		$theCode = 'ALL';
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
-		$langObj = t3lib_div::getUserObj('&tx_ttproducts_language');
-		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 
 			// price
-		$priceObj = t3lib_div::getUserObj('&tx_ttproducts_field_price');
+		$priceObj = t3lib_div::makeInstance('tx_ttproducts_field_price');
 		$priceObj->init(
 			$this->cObj,
 			$this->conf
 		);
-		$priceViewObj = t3lib_div::getUserObj('&tx_ttproducts_field_price_view');
+		$priceViewObj = t3lib_div::makeInstance('tx_ttproducts_field_price_view');
 		$priceViewObj->init(
 			$langObj,
 			$this->cObj,
@@ -182,7 +163,6 @@ class tx_ttproducts_db {
 							}
 
 							$priceTaxArray = $priceObj->getPriceTaxArray('price', tx_ttproducts_control_basket::getRoundFormat(), $tmpRow);
-							$csConvObj = $TSFE->csConvObj;
 							$field = 'price';
 							foreach ($priceTaxArray as $priceKey => $priceValue) {
 								$displayTax = $priceViewObj->convertKey($priceKey, $field);
@@ -229,23 +209,20 @@ class tx_ttproducts_db {
 
 		$csConvObj = $TSFE->csConvObj;
 
-//    error_log ('generateResponse ======================================= ');
-		$typoVersion = tx_div2007_core::getTypoVersion();
-
 		$theCode = strtoupper($view);
-		$langObj = t3lib_div::getUserObj('&tx_ttproducts_language');
-		$imageObj = t3lib_div::getUserObj('&tx_ttproducts_field_image');
-		$imageViewObj = t3lib_div::getUserObj('&tx_ttproducts_field_image_view');
+		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
+		$imageObj = t3lib_div::makeInstance('tx_ttproducts_field_image');
+		$imageViewObj = t3lib_div::makeInstance('tx_ttproducts_field_image_view');
 		$imageObj->init($this->cObj);
 		$imageViewObj->init($langObj, $imageObj);
 
-		$priceObj = t3lib_div::getUserObj('&tx_ttproducts_field_price');
+		$priceObj = t3lib_div::makeInstance('tx_ttproducts_field_price');
 			// price
-		$priceViewObj = t3lib_div::getUserObj('&tx_ttproducts_field_price_view');
+		$priceViewObj = t3lib_div::makeInstance('tx_ttproducts_field_price_view');
 
 		$priceFieldArray = $priceObj->getPriceFieldArray();
 		$tableObjArray = array();
-		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 
 		// Instantiate the tx_xajax_response object
 		$objResponse = new tx_taxajax_response($this->ajax->taxajax->getCharEncoding(), TRUE);
@@ -268,12 +245,15 @@ class tx_ttproducts_db {
 					continue;
 				}
 				if (($field == 'title') || ($field == 'subtitle') || ($field == 'note') || ($field == 'note2'))	{
-					if ($typoVersion < '6000000') {
-						$v = $csConvObj->conv($v, $TSFE->renderCharset, $this->ajax->taxajax->getCharEncoding());
+					if (
+						version_compare(TYPO3_version, '6.0.0', '<') &&
+						$GLOBALS['TSFE']->renderCharset != ''
+					) {
+						$v = $csConvObj->conv($v, $GLOBALS['TSFE']->renderCharset, $this->ajax->taxajax->getCharEncoding());
 					}
 
 					if (($field == 'note') || ($field == 'note2'))	{
-						$noteObj = t3lib_div::getUserObj('&tx_ttproducts_field_note_view');
+						$noteObj = t3lib_div::makeInstance('tx_ttproducts_field_note_view');
 						$classAndPath = $itemTable->getFieldClassAndPath($field);
 
 						if ($classAndPath['class'])	{
@@ -297,9 +277,12 @@ class tx_ttproducts_db {
 									''
 								);
 
-							if ($typoVersion < '6000000') {
+							if (
+                                version_compare(TYPO3_version, '6.0.0', '<') &&
+                                $GLOBALS['TSFE']->renderCharset != ''
+                            ) {
 								if ($modifiedValue)	{
-									$v = $csConvObj->conv($modifiedValue, $TSFE->renderCharset, $this->ajax->taxajax->getCharEncoding());
+									$v = $csConvObj->conv($modifiedValue, $GLOBALS['TSFE']->renderCharset, $this->ajax->taxajax->getCharEncoding());
 								}
 							}
 						}
@@ -342,7 +325,7 @@ class tx_ttproducts_db {
 							} else {
 								$objResponse->addAssign('basket-into-id-' . $uid, 'disabled', 'disabled');
 							}
-							$objResponse->addAssign('in-stock-id-' . $uid, 'innerHTML', tx_div2007_alpha5::getLL_fh002($langObj, ($v > 0 ? 'in_stock' : 'not_in_stock')));
+							$objResponse->addAssign('in-stock-id-' . $uid, 'innerHTML', tx_div2007_alpha5::getLL_fh003($langObj, ($v > 0 ? 'in_stock' : 'not_in_stock')));
 
 							break;
 
@@ -352,8 +335,11 @@ class tx_ttproducts_db {
 					}
 					if (in_array($field, $priceFieldArray))	{
 						$v = $priceViewObj->priceFormat($v);
-						if ($typoVersion < '6000000') {
-							$v = $csConvObj->conv($v, $TSFE->renderCharset, $this->ajax->taxajax->getCharEncoding());
+						if (
+                            version_compare(TYPO3_version, '6.0.0', '<') &&
+                            $GLOBALS['TSFE']->renderCharset != ''
+                        ) {
+							$v = $csConvObj->conv($v, $GLOBALS['TSFE']->renderCharset, $this->ajax->taxajax->getCharEncoding());
 						}
 					}
 					if (is_array($v))	{
@@ -385,7 +371,7 @@ class tx_ttproducts_db {
 				$hookVar = 'ajaxCommands';
 				if ($hookVar && is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT][$hookVar])) {
 					foreach  ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT][$hookVar] as $classRef) {
-						$hookObj= t3lib_div::getUserObj($classRef);
+						$hookObj= t3lib_div::makeInstance($classRef);
 						if (method_exists($hookObj, 'init')) {
 							$hookObj->init($this);
 						}

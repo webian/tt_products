@@ -1,3 +1,275 @@
+2018-12-21 Franz Holzinger <franz@ttproducts.de>
+    * add status provider for TYPO3 reports module
+    * compatibility: use tx_ttproducts_email_div::sendMail
+    * compatibility: Check in the front end and back end if $GLOBALS['TYPO3_CONF_VARS']['FE']['enableRecordRegistration'] has been set.
+    * compatibility for PHP 7.2
+
+2018-11-21 Franz Holzinger <franz@ttproducts.de>
+    * remove feature: remove marker ###PRICE_TOTUNITS_DISCOUNT###
+
+2018-08-09 Franz Holzinger <franz@ttproducts.de>
+    * bugfix #35: Do not try to generate the missing view class for the table tt_products_emails.
+
+2018-08-08 Franz Holzinger <franz@ttproducts.de>
+    * bugfix: marker detection with IMAGE markers which contain colons
+
+2018-06-29 Franz Holzinger <franz@ttproducts.de>
+    * bugfix issue #34: If no agency extension is installed then the email and other validity checks must give an appropriate error message
+
+2018-06-28 Franz Holzinger <franz@ttproducts.de>
+    * bugfix issue #33 in product list view: Do not overwrite the already read in table configuration arrays in method getTableConfArrays, because their values might have been modified already.
+
+2018-05-19 Franz Holzinger <franz@ttproducts.de>
+    * bugfix country determination: A boolean check about a value in the country_code field does not give the correct result.
+    * bugfix: pi_search and pi_int must not result in an USER object but in a USER_INT object.
+
+2018-05-03 Franz Holzinger <franz@ttproducts.de>
+    * add dependency from extension migration_core. This is only needed for TYPO3 >= 7.x. However TYPO3 has no possibility to describe this. So the users under TYPO3 7.x and higher are supported in the better way. The class mapper has been removed from extension div2007 since version 1.10.0.
+
+2018-04-25 Franz Holzinger <franz@ttproducts.de>
+    * new feature: According to DSGVO / GDPR the fields of the order table may be prevented from storing them and from showing them in the TYPO3 backend in the Extension Manager. The ip address is not stored any more by default.
+    * new feature: PIDprivacy for the privacy policy agreement page.
+    * new feature: subpart ###LINK_PRIVACY### for the link to the privacy policy agreement page defined by PIDprivacy.
+    * bugfix: The payment and finalize have been shown as an empty page because the empty basket evaluation has been wrong. The payment and finalize activities must be treated correctly.
+    * modifications for the newer versions of agency and sr_feuser_register
+    * show the EM tt_products exclude fields in its own tab
+    * bugfix: The code PAYMENT must lead to the finalize activity if products_finalize has been given.
+
+2018-04-18 Franz Holzinger <franz@ttproducts.de>
+    * bugfix: Do not use the wrong TypoScript condition [globalVar = GP:tt_products|sword != '']. This never did work. Use the correct form [globalString = GP:tt_products|sword = /.+/] to compare for a not null string instead. The TYPO3 cache has wrongly been always on with the search plugin.
+    * modification: Add the marker ###SWORD_NAME### for search forms and replace it by tt_products[search]. The standalone search parameter should not be used in the future.
+
+2018-04-10 Franz Holzinger <franz@ttproducts.de>
+    * bugfix: The TYPO3 cache must not be used on a search plugin in the products list or single view. The search sword name is still used in many shop templates. Therefore this parameter must convert tt_products into a USER_INT object.
+
+2018-03-14 Franz Holzinger <franz@ttproducts.de>
+    * modification: do not use the class filename and the full path but only the class name with t3lib_div::makeInstance in file lib/class.tx_ttproducts_tables.php. The class name is unique and the autoloader must find it.
+
+2018-02-26 Franz Holzinger <franz@ttproducts.de>
+    * modification: replace the outdated t3lib_div::getUserObj by t3lib_div::makeInstance
+
+2018-02-22 Franz Holzinger <franz@ttproducts.de>
+    * new feature: add support for the CKEditor and fluid_styled_content under TYPO3 8.6
+
+2017-12-30 Franz Holzinger <franz@ttproducts.de>
+    * bugfix: do not start any payment transactor extension when there is no product in the basket
+
+2017-19-12 Franz Holzinger <franz@ttproducts.de>
+    * new feature: noCostsVoucher: voucher codes which result in no shipping costs
+    * new feature: The row with the used voucher code must be deleted at the finalization of the order if a voucher code is not reusable.
+
+2017-11-17 Franz Holzinger <franz@ttproducts.de>
+    * new feature: Add support for the subpart marker ###MESSAGE_PAYMENT_TRANSACTOR_NO### .
+    * html cleanup away from the xhtml input format
+
+2017-11-15 Franz Holzinger <franz@ttproducts.de>
+    * new feature: Make the hooks ContentPostProcessor and ContentPostProcessor configurable in the Extension Manager, which are used for the setting of the page title.
+
+2017-11-13 Franz Holzinger <franz@ttproducts.de>
+    * bugfix issue #24: add correct $queryString to get the parameters for the ###LINK_ITEM### link to the single view
+
+2017-11-09 Franz Holzinger <franz@ttproducts.de>
+    * new feature: support for the new transactor 0.6.1 extension API
+
+2017-09-02 Franz Holzinger <franz@ttproducts.de>
+    * bugfix: pid_list = 0 must be possible like before. In this case the products from the current page and all subpages are used and listed.
+
+2017-08-31 Franz Holzinger <franz@ttproducts.de>
+    * bugfix for TYPO3 8.7.1: show product assigned to an article for article mode 0
+
+2017-07-15 Franz Holzinger <franz@ttproducts.de>
+    * bugfix: voucher where clause
+    * bugfix: use the product title in the product single view as the page title
+    * bugfix: support of tt_products page folder icon for TYPO3 7 and 8
+
+2017-07-07 Franz Holzinger <franz@ttproducts.de>
+    * fix issue #19: warning messages in the basket view under PHP 7.1 because some variables have not been initialized
+
+2017-07-04 Franz Holzinger <franz@ttproducts.de>
+    * bugfix: The ###FORM_URL### marker should always point to the current page or the result of a controlled calculation. The basket pid should not be used by default.
+
+2017-05-31 Franz Holzinger <franz@ttproducts.de>
+    * new feature: support for PDF bill using extension tcpdfbill_tt_products .
+
+2017-05-26 Franz Holzinger <franz@ttproducts.de>
+    * bugfix: voucher setup should use the table configuration of the voucher table
+    * new default constant as an unused email domain for My TYPO3 Shop
+
+2017-05-05 Franz Holzinger <franz@ttproducts.de>
+    * bugfix: replace getLL_fh002 by getLL_fh003
+
+2017-04-27 Franz Holzinger <franz@ttproducts.de>
+    * bugfix: the TCA renderType inputDateTime is only available since TYPO3 8.7.0
+
+2017-04-21 Franz Holzinger <franz@ttproducts.de>
+    * bugfix: TCA override for tt_products field article_uid must not be used if articleMode is unset.
+    * bugfix for TYPO3 8.7.1: remove max from TCA of renderType inputDateTime
+
+2017-04-19 Franz Holzinger <franz@ttproducts.de>
+    * bugfix: TAXmode must be set to 1 if unset
+    * bugfix: only stop processing after convertToUserInt if a conversion has been executed
+
+2017-04-18 Franz Holzinger <franz@ttproducts.de>
+    * bugfix: Javascript shall use lower case for boolean true and false
+    * bugfix for TYPO3 8.x: searchWhere from the extension "table library" and a new getSubpart
+
+2017-04-06 Franz Holzinger <franz@ttproducts.de>
+    * bugfix to composer.json file
+    * bugfix in the shop template products_css_variants_de.html
+
+2017-04-01 Franz Holzinger <franz@ttproducts.de>
+    * remove call to tx_div2007_core::activateCompatibility6. div2007/Migrations/ already does the class mapping between TYPO3 6.2 and 4.5 .
+
+2017-03-29 Franz Holzinger <franz@ttproducts.de>
+    * compatibility to TYPO3 8.6.1
+    * add a composer.json file
+
+2017-02-16 Franz Holzinger <franz@ttproducts.de>
+    * ready for tt_products 2.8.14 in TER
+
+2016-12-10 Franz Holzinger <franz@ttproducts.de>
+	* workaround for TYPO3 bug #78944: remove transOrigPointerField and transOrigPointerTable from all language overlay tables
+	* bugfix: tax not taken from TAXpercentage because an is_numeric must be used instead of floatval
+
+2016-11-17 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: add the TYPO3 standard fields uid, pid, tstamp, crdate, deleted, hidden and the PRIMARY KEY (uid) to all mm tables except for DAM
+
+2016-11-04 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: index error in loop getMatchingArticleRows which calls mergeAttributeFields for additional article rows. Only array rows must be used in the call of mergeAttributeFields.
+	* bugfix: category single view fix method call to getMarkerArray instead of getModelMarkerArray
+	* bugfix: apply the global markers
+
+2016-10-24 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: A MYSQL REGEXP with [[.semicolon.]] leads to:
+		POSIX collating elements are not supported at offset 46 from regexp
+
+2016-10-20 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: remove suffix from TCA of table tt_products_emails
+
+2016-10-15 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: remove checkbox from TCA config which is deprecated since TYPO3 4.5
+
+2016-10-13 Franz Holzinger <franz@ttproducts.de>
+	* new feature: add a subpart warning if missing for the TRACKING
+	* bugfix: feusersObj fe_users uses the renamed function getAddressMarkerArray instead of getItemMarkerArray
+	* bugfix: avoid a call to sys_products_orders with uid = 0
+	* bugfix: remove eval = null from TCA for fields in order to remove the checkbox from the field and when a space character should be the default.
+
+2016-10-11 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: Fatal error: Call to a member function getAlias() on a non-object in /path/typo3conf/ext/tt_products/model/class.tx_ttproducts_table_base.php on line 351
+	  Fix the table_label function. It must not call the get method of the uninitialized table model object
+
+2016-10-10 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: new feature: support for the COLLATE clause to the SQL statement in the product list view in order to have a better support for the search
+
+2016-10-06 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: the shipping tax uses the global TAXincluded setup by default
+	* new feature: make control.ALL.links.FORM_MEMO.useCacheHash configurable
+
+2016-10-05 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: marker and subpart marker names with underscores have not been supported
+
+2016-10-01 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: The tax field in a row must always be a valid floating point value. This is needed for the extension static_info_tables_taxes.
+
+2016-09-27 Franz Holzinger <franz@ttproducts.de>
+	* bugfix issue#13: cHash missing with pi_base class. Add the parameter useCacheHash at the div2007 method getPageLink_fh003 for the marker ###FORM_MEMO###.
+
+2016-09-20 Franz Holzinger <franz@ttproducts.de>
+	* bugfix issue#13: cHash missing with pi_base class. Replace pi_base method pi_getPageLink in the basket view ###LINK_ITEM### link generation by the extension div2007 method getPageLink_fh003.
+	* new feature: Set the default value to the title field to a single space character instead of NULL. This has the purpose that the TYPO3 backend does not shadow this important field.
+
+2016-09-13 Franz Holzinger <franz@ttproducts.de>
+	* bugfix for PHP 7.x: Declaration of ... init should be compatible with tx_ttproducts_table_base::init($cObj, $functablename)
+
+2016-09-12 Franz Holzinger <franz@ttproducts.de>
+	* bugfix for PHP 7.x: Declaration of ... printView should be compatible with tx_ttproducts_catlist_view_base::printView
+	* add new texts to the locallang files
+	* use isset with $acArray['ac_uid'] and $ccArray['cc_uid']
+
+2016-08-30 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: text and blob must have a default null value by TCA and not by SQL
+
+2016-08-27 Franz Holzinger <franz@ttproducts.de>
+	* bugfix issue#9: Remove PHP 7 warnings
+	* fix wrong markers in file products_css_variants_de.html
+
+2016-08-25 Franz Holzinger <franz@ttproducts.de>
+	* bugfix issue#9: Remove PHP 7 warnings
+	* bugfix: Support STRICT mysql mode STRICT_ALL_TABLES and STRICT_TRANS_TABLES.
+
+2016-08-01 Franz Holzinger <franz@ttproducts.de>
+	* bugfix for TYPO3 7.6.10: At least one "types" array must be defined for table tt_products_products_mm_articles, preferred "0" UnexpectedValueException thrown in file /var/www/html/typo3_src-7.6.10/typo3/sysext/backend/Classes/Form/FormDataProvider/DatabaseRecordTypeValue.php in line 43
+
+2016-07-09 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: PHP illegal string offset warnings
+
+2016-07-08 Franz Holzinger <franz@ttproducts.de>
+	* bugfix for TYPO3 7.x: Move the TCA to remove the excluded fields into the folder Overrides. Use the div2007 method TcaUtility::removeField instead of tx_addonsem_tca_div::removeFieldsFromTCA
+
+2016-07-02 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: Remove the iban field from TCA. IBAN is only supported sice tt_products 2.11.0
+
+2016-06-29 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: The inStock value of the product must be overwritten by the inStock value coming from the assigned article even when it is zero
+
+2016-06-28 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: Use only the first variant values of a product in the single view and the associated article. Otherwise the inStock value will not match the value from the article.
+
+2016-06-23 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: Initialize the row array before filling it with values in the model table base class. Otherwise values from the former record have been read in.
+
+2016-06-22 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: The SQL query to fetch a selected article for a product must not search the article table for the combination of a variant value but for each single possible variant value
+
+2016-06-13 Franz Holzinger <franz@ttproducts.de>
+	* bugfix for PHP 7.x: The method init of tx_ttproducts_language cannot overload init of tx_div2007_alpha_language_base. init1 must be used instead.
+	* bugfix: Perform the correct array check for $cpArray['gift']
+	* bugfix: Skip the result of $viewTableObj->getArticleRow internally when it is no array.
+
+2016-05-13 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: missing $conf variable in main run method
+	* bugfix: error in the parameters for the call of the memoView init and printView methods
+
+2016-05-10 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: The variants coming from the product are considered in the basket. The products variants must also be considered if the variants are read in from many articles. Otherwise the basket stored variant index would refer to the wrong variant.
+
+2016-05-03 Franz Holzinger <franz@ttproducts.de>
+	* new feature: Add the constants keepProductData to determine for the basket views if the product data like the item number should be kept when it has been filled in. Otherwise the assigned article item number will overwrite the product number.
+
+2016-03-12 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: Add missing field t3ver_label to tt_products and orderHtml to sys_products_orders
+	* bugfix: add the missing flexform file flexform_v4_pi1.xml for TYPO3 4.x
+
+2016-03-01 Franz Holzinger <franz@ttproducts.de>
+	* bugfix #73736: Remove unused fields from the TCA Configuration files.
+	* And if orderByItemNumberSg is used then use the fieldArray instead of the wrong fields array of the table model
+	* make the regular expression for the template check (pound # detection) configurable
+	* bugfix: CSSListCurrent must be a class and not an id
+
+2016-02-20 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: show the correct error message with label template_invalid_marker_border
+
+2016-02-20 Franz Holzinger <franz@ttproducts.de>
+	* bugfix: Do not use the global tx_ttproducts_language with markers. Generate only markers from the texts beneath the marker folder. Otherwise the markers of general texts would be replaced too early by not completed texts which also have variables.
+	* bugfix: the product single view must always be reinitalized
+	* Set the default overview activity store value to 1, because TYPO3 does not execute the Typoscript in an ordered manner
+	* Workaround for TYPO3 6.2.17 pitfall bug #73240: Show a warning message if a marker without '###' has been found.
+	* bugfix for TYPO3 7.6: copy the TCA into the Configuration folder
+
+2016-01-27 Franz Holzinger <franz@ttproducts.de>
+	* bugfix for TYPO3 7.6.2: no call to t3lib_extMgm in the files ext_tables.php and ext_localconf.php
+	* bugfix: the product variants in the single view must come from the product record
+
+2016-01-23 Franz Holzinger <franz@ttproducts.de>
+	* consider Microsoft Windows limitation to the year 2038 for the PHP date function
+	* remove extension compatibility6 from the requirements
+	* fallback for tt_products_texts
+	* bugfix: do not add duplicate enable fields
+	* Add a dummy hook for the transactor extension. Then the listener will be able to determine the extension key of tt_products.
+	* add renderType selectSingle to the TCA, needed for TYPO3 7
+	* new feature shipping type nocopy
+
 2015-12-03 Franz Holzinger <franz@ttproducts.de>
 	* new version 2.8.1 with many new features and improvements
 	* useArticles=3 and articleMode>0 to assign multiple articles to a product with additional prices

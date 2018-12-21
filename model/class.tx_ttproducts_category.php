@@ -29,8 +29,6 @@
  *
  * functions for the category
  *
- * $Id$
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -38,10 +36,6 @@
  *
  *
  */
-
-/*
-require_once(PATH_BE_table.'lib/class.tx_table_db.php');
-require_once(PATH_BE_ttproducts.'model/class.tx_ttproducts_category_base.php');*/
 
 
 class tx_ttproducts_category extends tx_ttproducts_category_base {
@@ -58,7 +52,7 @@ class tx_ttproducts_category extends tx_ttproducts_category_base {
 		$tablename = ($tablename ? $tablename : $functablename);
 		parent::init($pibase, $functablename);
 
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$this->tableconf = $cnf->getTableConf($functablename);
 		$tableObj = $this->getTableObj();
 		$tableObj->addDefaultFieldArray(array('sorting' => 'sorting'));
@@ -71,7 +65,7 @@ class tx_ttproducts_category extends tx_ttproducts_category_base {
 			if (version_compare($extensionInfo['version'], '0.5.0', '>=')) {
 
 				$tableDesc = $cnf->getTableDesc($functablename);
-				$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+				$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 				$functablenameArray = t3lib_div::trimExplode(',',$tableDesc['leafFuncTables']);
 				$prodfunctablename = $functablenameArray[0];
 				if (!$prodfunctablename)	{
@@ -101,10 +95,6 @@ class tx_ttproducts_category extends tx_ttproducts_category_base {
 		if (t3lib_extMgm::isLoaded('mbi_products_categories')) {
 			$this->parentField = $parentField;
 		}
-
-//		if ($TSFE->config['config']['sys_language_uid'] &&
-//				(!$this->catconf['language.'] ||
-//				!$this->catconf['language.']['type'])) {
 
 		if ($this->bUseLanguageTable($this->tableconf) && ($functablename == 'tt_products_cat'))	{
 			$this->getTableObj()->setLanguage ($this->config['LLkey']);
@@ -194,7 +184,7 @@ class tx_ttproducts_category extends tx_ttproducts_category_base {
 				}
 			}
 		}
-		if (!$bRootfound)	{
+		if (!$bRootfound || !is_array($rc))	{
 			$rc = array();
 		}
 		return $rc;
@@ -417,7 +407,7 @@ class tx_ttproducts_category extends tx_ttproducts_category_base {
 
 	// returns the delivery email addresses from the basket`s item array with the category number as index
 	function getEmail (&$itemArray) {
-		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 		$emailArray = array();
 		$emailObj = $tablesObj->get('tt_products_emails');
 
@@ -443,4 +433,3 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 }
 
 
-?>

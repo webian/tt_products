@@ -29,8 +29,6 @@
  *
  * basket price calculation functions
  *
- * $Id$
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -39,12 +37,9 @@
  *
  */
 
-/*
-require_once (PATH_BE_ttproducts.'model/field/interface.tx_ttproducts_field_int.php');
-require_once (PATH_BE_ttproducts.'lib/class.tx_ttproducts_paymentshipping.php');*/
 
 
-class tx_ttproducts_field_price implements tx_ttproducts_field_int {
+class tx_ttproducts_field_price extends tx_ttproducts_field_base {
 	private $bHasBeenInitialised = FALSE;
 	private $bTaxIncluded;	// if tax is already included in the price
 	private $taxMode;
@@ -79,7 +74,9 @@ class tx_ttproducts_field_price implements tx_ttproducts_field_int {
 	 * Getting all tt_products_cat categories into internal array
 	 * Here $conf needs not be a member of $cnf in order to have local settings e.g. with shipping
 	 */
-	public function init ($cObj, &$priceConf)	{
+	public function preInit ($cObj, &$priceConf) {
+		parent::init($cObj);
+
 		$this->priceConf = &$priceConf;
 		if (!isset($this->priceConf['TAXincluded']))	{
 			$this->priceConf['TAXincluded'] = '1';	// default '1' for TAXincluded
@@ -193,7 +190,7 @@ class tx_ttproducts_field_price implements tx_ttproducts_field_int {
 		global $TSFE;
 
 		$rc = 0;
-		$taxObj = t3lib_div::getUserObj('&tx_ttproducts_field_tax');
+		$taxObj = t3lib_div::makeInstance('tx_ttproducts_field_tax');
 
 		$bTax = ($tax == 1);
 
@@ -213,19 +210,14 @@ class tx_ttproducts_field_price implements tx_ttproducts_field_int {
 			$taxpercentage = doubleval($this->priceConf['TAXpercentage']);
 		}
 
-// 		} else {
-// 			$taxpercentage = 0;
-// 		}
-
 //		Buch 'Der TYPO3 Webshop'
 // 		if (doubleval($taxpercentage) == -1)  {
 // 			$taxpercentage = 0;
 // 		}
 
 		$taxFactor = 1 + $taxpercentage / 100;
-		// $bTaxIncluded = ($bTaxIncluded ? $bTaxIncluded : $this->conf['TAXincluded']);
 
-		$paymentshippingObj = t3lib_div::getUserObj('&tx_ttproducts_paymentshipping');
+		$paymentshippingObj = t3lib_div::makeInstance('tx_ttproducts_paymentshipping');
 		if (isset($paymentshippingObj) && is_object($paymentshippingObj))	{
 			$taxFromShipping = $paymentshippingObj->getReplaceTaxPercentage();	// if set then this has a tax which will override the tax of the products
 		}
@@ -292,7 +284,7 @@ class tx_ttproducts_field_price implements tx_ttproducts_field_int {
 
 		if ($fieldname == 'price')	{
 
-			$taxObj = t3lib_div::getUserObj('&tx_ttproducts_field_tax');
+			$taxObj = t3lib_div::makeInstance('tx_ttproducts_field_tax');
 			$tax = $taxObj->getFieldValue($row, 'tax');
 			$priceArray['taxperc'] = $tax;
 			$discount = $TSFE->fe_user->user['tt_products_discount'];
@@ -360,14 +352,6 @@ class tx_ttproducts_field_price implements tx_ttproducts_field_int {
 				$priceArray[$field] = round($priceArray[$field], 2);
 			}
 		}
-
-
-// ToDo:
-// 		$markerArray['###USER_DISCOUNT_PERCENT###'] = $TSFE->fe_user->user['tt_products_discount'];
-// 		$markerArray['###USER_DISCOUNT_NO_TAX###'] = $priceViewObj->printPrice($priceViewObj->priceFormat($item['priceNoTax']-$oldPriceNoTax, $taxInclExcl));
-// 		$markerArray['###USER_DISCOUNT_TAX###'] = $priceViewObj->printPrice($priceViewObj->priceFormat($item['priceTax']-$oldPriceTax, $taxInclExcl));
-// 		$markerArray['###USER_DISCOUNT2_NO_TAX###'] = $priceViewObj->printPrice($priceViewObj->priceFormat($price2-$oldPriceNoTax, $taxInclExcl));
-// 		$markerArray['###USER_DISCOUNT2_TAX###'] = $priceViewObj->printPrice($priceViewObj->priceFormat($price2NoTax-$oldPriceTax, $taxInclExcl));
 
 		return $priceArray;
 	}

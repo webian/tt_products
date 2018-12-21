@@ -29,8 +29,6 @@
  *
  * functions for the category
  *
- * $Id$
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -54,7 +52,7 @@ abstract class tx_ttproducts_category_base_view extends tx_ttproducts_table_base
 
 		$this->cObj->setCurrentVal($catTitle);
 		$title = $this->cObj->cObjGetSingle($this->conf['categoryHeader'], $this->conf['categoryHeader.'], 'categoryHeader');
-		$markerArray['###' . $prefix . $this->marker . '_TITLE###'] = htmlentities($title, ENT_QUOTES, $TSFE->renderCharset);
+		$markerArray['###' . $prefix . $this->marker . '_TITLE###'] = htmlentities($title, ENT_QUOTES, 'UTF-8');
 	}
 
 
@@ -130,7 +128,7 @@ abstract class tx_ttproducts_category_base_view extends tx_ttproducts_table_base
 	public function getRowMarkerArray (&$row, $markerKey, &$markerArray, &$variantFieldArray, &$variantMarkerArray, &$tagArray, $theCode, $bHtml=TRUE, $charset='', $imageNum=0, $imageRenderObj='image', $id='',$prefix='', $suffix='', $linkWrap='')	{
 
 		$functablename = $this->getModelObj()->getFuncTablename();
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$cssConf = $cnf->getCSSConf($functablename, $theCode);
 		parent::getRowMarkerArray($row, $markerKey, $markerArray, $variantFieldArray, $variantMarkerArray, $tagArray, $theCode, $bHtml, $charset, $imageNum, $imageRenderObj, $id,$prefix, $suffix, $linkWrap);
 	}

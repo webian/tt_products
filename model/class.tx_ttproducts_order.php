@@ -29,8 +29,6 @@
  *
  * order functions
  *
- * $Id$
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -130,24 +128,34 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 		global $TSFE, $TYPO3_DB;;
 
 	// an new orderUid has been created always because also payment systems can be used which do not accept a duplicate order id
-		$basketObj = t3lib_div::getUserObj('&tx_ttproducts_basket');
-		$orderUid = intval($basketObj->order['orderUid']);
-		$res = $TYPO3_DB->exec_SELECTquery('uid', 'sys_products_orders', 'uid='.intval($orderUid).' AND hidden AND NOT status');	// Checks if record exists, is marked hidden (all blank orders are hidden by default) and is not finished.
-		if (!$TYPO3_DB->sql_num_rows($res) || $this->conf['alwaysAdvanceOrderNumber'])	{
+		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
+		$orderUid = 0;
+		if (isset($basketObj->order['orderUid'])) {
+			$orderUid = intval($basketObj->order['orderUid']);
+		}
+
+		if ($orderUid) {
+			$res = $TYPO3_DB->exec_SELECTquery('uid', 'sys_products_orders', 'uid='.intval($orderUid).' AND hidden AND NOT status');	// Checks if record exists, is marked hidden (all blank orders are hidden by default) and is not finished.
+		}
+
+		if (!$orderUid || !$TYPO3_DB->sql_num_rows($res) || $this->conf['alwaysAdvanceOrderNumber'])	{
 			$orderUid = $this->create();
 			$basketObj->order['orderUid'] = $orderUid;
 			$basketObj->order['orderDate'] = time();
 			$basketObj->order['orderTrackingNo'] = $this->getNumber($orderUid) . '-' . strtolower(substr(md5(uniqid(time())), 0, 6));
 			$TSFE->fe_user->setKey('ses', 'order', $basketObj->order);
 		}
-		$TYPO3_DB->sql_free_result($res);
+
+		if ($res) {
+			$TYPO3_DB->sql_free_result($res);
+		}
 
 		return $orderUid;
 	} // getBlankUid
 
 
 	public function getUid ()	{
-		$basketObj = t3lib_div::getUserObj('&tx_ttproducts_basket');
+		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
 		$rc = $basketObj->order['orderUid'];
 		return $rc;
 	}
@@ -167,6 +175,14 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 	 */
 	public function getRecord ($orderUid, $tracking = '')	{
 		global $TYPO3_DB;
+
+		if (
+			empty($tracking) &&
+			!$orderUid
+		) {
+			return FALSE;
+		}
+
 		$res = $TYPO3_DB->exec_SELECTquery('*', 'sys_products_orders' , ($tracking ? 'tracking_code=' . $TYPO3_DB->fullQuoteStr($tracking, 'sys_products_orders') : 'uid=' . intval($orderUid)) . ' AND NOT deleted');
 		$rc = $TYPO3_DB->sql_fetch_assoc($res);
 		$TYPO3_DB->sql_free_result($res);
@@ -180,12 +196,13 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 	 */
 	public function getNumber ($orderUid)	{
 		$orderNumberPrefix = substr($this->conf['orderNumberPrefix'], 0, 30);
-		if ($orderNumberPrefix[0] == '%')	{
-			$orderNumberPrefix = date(substr($orderNumberPrefix, 1));
+		if (($position = strpos($orderNumberPrefix, '%')) !== FALSE)	{
+			$orderDate = date(substr($orderNumberPrefix, $position + 1));
+			$orderNumberPrefix = substr($orderNumberPrefix, 0, $position) . $orderDate;
 		}
 
-		$rc = $orderNumberPrefix . $orderUid;
-		return $rc;
+		$result = $orderNumberPrefix . $orderUid;
+		return $result;
 	} // getNumber
 
 
@@ -208,7 +225,7 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 		global $TYPO3_DB;
 		global $TSFE;
 
-		$basketObj = t3lib_div::getUserObj('&tx_ttproducts_basket');
+		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
 
 
 		$billingInfo = $address->infoArray['billing'];
@@ -224,9 +241,6 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 		}
 
 			// Fix delivery address
-//		$address->mapPersonIntoDelivery();	// This maps the billing address into the blank fields of the delivery address
-//		$mainMarkerArray['###EXTERNAL_COBJECT###'] = $this->externalCObject.'';
-
 		if ($deliveryInfo['date_of_birth'])	{
 			$dateArray = t3lib_div::trimExplode ('-', $deliveryInfo['date_of_birth']);
 
@@ -241,6 +255,17 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 
 			// Saving order data
 		$fieldsArray=array();
+        $tablename = $this->getTablename();
+        $excludeArray = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['exclude.'];
+        $excludeFieldArray = array();
+        if (
+            isset($excludeArray) &&
+            is_array($excludeArray) &&
+            isset($excludeArray[$tablename])
+        ) {
+            $excludeFieldArray = t3lib_div::trimExplode(',', $excludeArray[$tablename]);
+        }
+
 		$fieldsArray['feusers_uid'] = $feusers_uid;
 		$fieldsArray['first_name'] = $deliveryInfo['first_name'];
 		$fieldsArray['last_name'] = $deliveryInfo['last_name'];
@@ -306,7 +331,7 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 		if ($address->infoArray['billing']['tt_products_vat'] != '')	{
 			$fieldsArray['vat_id'] = $address->infoArray['billing']['tt_products_vat'];
 
-			$paymentshippingObj = t3lib_div::getUserObj('&tx_ttproducts_paymentshipping');
+			$paymentshippingObj = t3lib_div::makeInstance('tx_ttproducts_paymentshipping');
 			$taxPercentage = $paymentshippingObj->getReplaceTaxPercentage();
 			if (doubleval($taxPercentage) == 0)	{
 				$fieldsArray['tax_mode'] = 1;
@@ -356,6 +381,13 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 	/* Added Els: update user from vouchercode with 5 credits */
 			tx_ttproducts_creditpoints_div::addCreditPoints($basketObj->recs['tt_products']['vouchercode'], $this->conf['voucher.']['price']);
 		}
+
+        foreach ($excludeFieldArray as $field) {
+            if (isset($fieldsArrayFeUsers[$field])) {
+                unset($fieldsArrayFeUsers[$field]);
+            }
+        }
+
 		if ($TSFE->fe_user->user['uid'] && count($fieldsArrayFeUsers))	{
 			$TYPO3_DB->exec_UPDATEquery('fe_users', 'uid=' . intval($TSFE->fe_user->user['uid']), $fieldsArrayFeUsers);
 		}
@@ -395,6 +427,12 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 			$fieldsArray['creditpoints_gifts'] = $cpArray['gift']['amount'];
 		}
 
+        foreach ($excludeFieldArray as $field) {
+            if (isset($fieldsArray[$field])) {
+                unset($fieldsArray[$field]);
+            }
+        }
+
 			// Saving the order record
 		$TYPO3_DB->exec_UPDATEquery(
 			'sys_products_orders',
@@ -413,8 +451,8 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 	public function createMM ($orderUid, &$itemArray)	{
 		global $TYPO3_DB;
 
-		$basketObj = t3lib_div::getUserObj('&tx_ttproducts_basket');
-		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 		if ($this->conf['useArticles'] != 2) {
 			$productTable = $tablesObj->get('tt_products', FALSE);
 			$productTablename = $productTable->getTablename();
@@ -473,8 +511,8 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 	 */
 	function setData ($orderUid, &$orderHTML, $status) {
 
-		$basketObj = t3lib_div::getUserObj('&tx_ttproducts_basket');
-		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 
 		$voucherObj = $tablesObj->get('voucher');
 		if ($status == 1)	{
@@ -489,10 +527,7 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 		$account = $tablesObj->get('sys_products_accounts');
 		$accountUid = $account->getUid();
 
-		// get bank account info
-		$account = $tablesObj->get('sys_products_accounts');
-		$accountUid = $account->getUid();
-		$address = t3lib_div::getUserObj('&tx_ttproducts_info_view');
+		$address = t3lib_div::makeInstance('tx_ttproducts_info_view');
 		if ($address->needsInit())	{
 			echo 'internal error in tt_products (setData)';
 			return;

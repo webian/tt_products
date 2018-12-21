@@ -29,8 +29,6 @@
  *
  * functions for the creation of CSV files
  *
- * $Id$
- *
  * @author	Klaus Zierer <zierer@pz-systeme.de>
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
@@ -41,7 +39,7 @@
  */
 
 
-class tx_ttproducts_csv {
+class tx_ttproducts_csv implements t3lib_Singleton {
 	var $pibase; // reference to object of pibase
 	var $conf;
 	var $calculatedArray; // reference to calculated basket array
@@ -55,7 +53,7 @@ class tx_ttproducts_csv {
 	function init ($pibase, &$itemArray, &$calculatedArray, $accountUid)	{
 		global $TYPO3_DB;
 		$this->pibase = $pibase;
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 
 		$this->conf = &$cnf->conf;
 		$this->calculatedArray = &$calculatedArray;
@@ -65,13 +63,13 @@ class tx_ttproducts_csv {
 
 
 	function create ($functablename, &$address, $csvorderuid, &$csvfilepath, &$errorMessage) {
-		$basket = t3lib_div::getUserObj('&tx_ttproducts_basket');
-		$priceViewObj = t3lib_div::getUserObj('&tx_ttproducts_field_price_view');
-		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+		$basket = t3lib_div::makeInstance('tx_ttproducts_basket');
+		$priceViewObj = t3lib_div::makeInstance('tx_ttproducts_field_price_view');
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 		$orderObj = $tablesObj->get('sys_products_orders');
 		$accountObj = $tablesObj->get('sys_products_accounts');
 		$itemTable = $tablesObj->get($functablename, FALSE);
-		$langObj = t3lib_div::getUserObj('&tx_ttproducts_language');
+		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
 
 		$csvfilepath = trim($csvfilepath);
 
@@ -105,7 +103,7 @@ class tx_ttproducts_csv {
 
 			$accountRow = array();
 			if ($this->accountUid)	{
-				$accountRow = $accountObj->get($this->accountUid, 0, TRUE);
+				$accountRow = $accountObj->getRow($this->accountUid, 0, TRUE);
 				if (is_array($accountRow) && count($accountRow))	{
 					$csvlineAccount = '"' . implode('";"', $accountRow) . '"';
 					$accountdescr = '"' . implode('";"', array_keys($accountRow)) . '"';
@@ -201,7 +199,7 @@ class tx_ttproducts_csv {
 			}
 			fclose($csvfile);
 		} else {
-			$message = tx_div2007_alpha5::getLL_fh002($langObj, 'no_csv_creation');
+			$message = tx_div2007_alpha5::getLL_fh003($langObj, 'no_csv_creation');
 			$messageArr =  explode('|', $message);
 			$errorMessage = $messageArr[0] . $csvfilepath . $messageArr[1];
 		}

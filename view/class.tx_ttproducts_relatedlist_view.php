@@ -29,8 +29,6 @@
  *
  * related product list view functions
  *
- * $Id$
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -39,10 +37,8 @@
  *
  */
 
-// require_once (PATH_BE_ttproducts.'model/class.tx_ttproducts_pid_list.php');
 
-
-class tx_ttproducts_relatedlist_view {
+class tx_ttproducts_relatedlist_view implements t3lib_Singleton {
 	public $conf;
 	public $config;
 	public $pidListObj;
@@ -52,11 +48,11 @@ class tx_ttproducts_relatedlist_view {
 	public function init ($cObj, $pid_list, $recursive)	{
 		$this->cObj = $cObj;
 
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
 
-		$this->pidListObj = t3lib_div::getUserObj('tx_ttproducts_pid_list');
+		$this->pidListObj = t3lib_div::makeInstance('tx_ttproducts_pid_list');
 		$this->pidListObj->init($cObj);
 		$this->pidListObj->applyRecursive($recursive, $pid_list, TRUE);
 		$this->pidListObj->setPageArray();
@@ -81,7 +77,7 @@ class tx_ttproducts_relatedlist_view {
 			'',
 			$this->useArticles
 		);
-		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 		$itemObj = $tablesObj->get($functablename);
 
 		$rowArray = array();
@@ -200,7 +196,7 @@ class tx_ttproducts_relatedlist_view {
 		&$error_code
 	)	{
 		$result = FALSE;
-		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 		$itemViewObj = $tablesObj->get($functablename, TRUE);
 		$addListArray = $this->getAddListArray($theCode, $functablename, $itemViewObj->getMarker(), $uid, $useArticles);
 

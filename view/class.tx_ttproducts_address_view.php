@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2008 Franz Holzinger <contact@fholzinger.com>
+*  (c) 2007-2008 Franz Holzinger <franz@ttproducts.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,10 +29,8 @@
  *
  * functions for the frontend users
  *
- * $Id$
- *
- * @author  Franz Holzinger <contact@fholzinger.com>
- * @maintainer	Franz Holzinger <contact@fholzinger.com>
+ * @author  Franz Holzinger <franz@ttproducts.de>
+ * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products
  *
@@ -40,9 +38,6 @@
  */
 
 
-
-// require_once(PATH_BE_table.'lib/class.tx_table_db.php');
-// require_once(PATH_BE_ttproducts.'view/class.tx_ttproducts_category_base_view.php');
 
 class tx_ttproducts_address_view extends tx_ttproducts_category_base_view {
 	var $piVar = 'a';
@@ -68,7 +63,7 @@ class tx_ttproducts_address_view extends tx_ttproducts_category_base_view {
 		$catTitle = '';
 		$titleField = $this->fieldArray['name'];
 		if (($row[$titleField]))	{
-			$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+			$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 			$tableConfig = $cnf->getTableConf('address', $theCode);
 			$catTitle .= ($tableConfig['separator'].$row[$titleField]);
 		}

@@ -29,8 +29,6 @@
  *
  * dummy variant class for tables which do not have any variants
  *
- * $Id$
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -40,10 +38,8 @@
 
 
 
-// require_once (PATH_BE_ttproducts.'view/interface.tx_ttproducts_variant_view_int.php');
 
-
-class tx_ttproducts_variant_dummy_view implements tx_ttproducts_variant_view_int {
+class tx_ttproducts_variant_dummy_view implements tx_ttproducts_variant_view_int, t3lib_Singleton {
 	public $modelObj;
 	public $cObj;
 	public $langObj;

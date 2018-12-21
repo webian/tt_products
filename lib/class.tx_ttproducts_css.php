@@ -29,8 +29,6 @@
  *
  * functions for CSS matters
  *
- * $Id$
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -39,7 +37,7 @@
  */
 
 
-class tx_ttproducts_css {
+class tx_ttproducts_css implements t3lib_Singleton {
 	var $pibase; // reference to object of pibase
 	public $conf;
 	protected $isCssStyled;
@@ -50,7 +48,7 @@ class tx_ttproducts_css {
 	public function init ($pibase)	{
 		global $TYPO3_DB;
 		$this->pibase = $pibase;
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$this->isCssStyled = ($cnf->conf['templateStyle'] == 'css-styled');
 		$this->conf = &$cnf->conf['CSS.']['ALL.'];
 	} // init
@@ -66,7 +64,7 @@ class tx_ttproducts_css {
 
 	public function &getConf ($tablename = '', $theCode = 'ALL')	{
 
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$cssConf = $cnf->getSpecialConf('CSS', $tablename, $theCode);
 		return $cssConf;
 	}

@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2008 Franz Holzinger <contact@fholzinger.com>
+*  (c) 2007-2008 Franz Holzinger <franz@ttproducts.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,19 +29,16 @@
  *
  * base class for all database table fields view classes
  *
- * $Id$
- *
- * @author  Franz Holzinger <contact@fholzinger.com>
- * @maintainer	Franz Holzinger <contact@fholzinger.com>
+ * @author  Franz Holzinger <franz@ttproducts.de>
+ * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products
  *
  */
 
-// require_once (PATH_BE_ttproducts.'view/field/interface.tx_ttproducts_field_view_int.php');
 
 
-abstract class tx_ttproducts_field_base_view implements tx_ttproducts_field_view_int	{
+abstract class tx_ttproducts_field_base_view implements tx_ttproducts_field_view_int, t3lib_Singleton {
 	private $bHasBeenInitialised = FALSE;
 	public $modelObj;
 	public $cObj;
@@ -75,7 +72,6 @@ abstract class tx_ttproducts_field_base_view implements tx_ttproducts_field_view
 		$fieldname,
 		$key,
 		$value,
-		$fieldname,
 		$tableConf,
 		$tagArray
 	) {
@@ -115,7 +111,7 @@ abstract class tx_ttproducts_field_base_view implements tx_ttproducts_field_view
 	)	{
 		$result = FALSE;
 		$newContent = '';
-		$markerObj = t3lib_div::getUserObj('&tx_ttproducts_marker');
+		$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
 		$upperField = strtoupper($fieldname);
 		$templateAreaList = $markerKey . '_' . $upperField . '_LIST';
 		$t = array();
@@ -166,7 +162,6 @@ abstract class tx_ttproducts_field_base_view implements tx_ttproducts_field_view
 						$fieldname,
 						$key,
 						$value,
-						$fieldname,
 						$tableConf,
 						$tagArray
 					);

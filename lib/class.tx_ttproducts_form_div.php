@@ -29,8 +29,6 @@
  *
  * functions for the display of forms
  *
- * $Id$
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -75,7 +73,7 @@ class tx_ttproducts_form_div {
 
 				if ($bTranslateText)	{
 					$tmp = tx_div2007_alpha5::sL_fh002($selectValue);
-					$text = tx_div2007_alpha5::getLL_fh002($langObj, $tmp);
+					$text = tx_div2007_alpha5::getLL_fh003($langObj, $tmp);
 				} else {
 					$text = '';
 				}

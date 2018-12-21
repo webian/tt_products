@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2008 Franz Holzinger <contact@fholzinger.com>
+*  (c) 2007-2008 Franz Holzinger <franz@ttproducts.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,10 +29,8 @@
  *
  * credit card functions
  *
- * $Id$
- *
- * @author	Franz Holzinger <contact@fholzinger.com>
- * @maintainer	Franz Holzinger <contact@fholzinger.com>
+ * @author	Franz Holzinger <franz@ttproducts.de>
+ * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products
  *
@@ -59,7 +57,7 @@ class tx_ttproducts_card_view extends tx_ttproducts_table_base_view {
 		global $TCA, $TSFE;
 
 		$modelObj = $this->getModelObj();
-		$langObj = t3lib_div::getUserObj('&tx_ttproducts_language');
+		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
 		$ccNumberArray = array();
 		$ccTypeTextSelected = '';
 		$tablename = $modelObj->getTablename();
@@ -86,13 +84,13 @@ class tx_ttproducts_card_view extends tx_ttproducts_table_base_view {
 			$ccOwnerName = '';
 		}
 
-		$markerArray['###PERSON_CARDS_OWNER_NAME###'] = htmlentities($ccOwnerName,ENT_QUOTES,$TSFE->renderCharset);
+		$markerArray['###PERSON_CARDS_OWNER_NAME###'] = htmlentities($ccOwnerName, ENT_QUOTES, 'UTF-8');
 		$markerArray['###PERSON_CARDS_CC_TYPE###'] = $ccTypeText;
 		$markerArray['###PERSON_CARDS_CC_TYPE_SELECTED###'] = $modelObj->ccArray['cc_type'];
 		if (isset($modelObj->ccArray['cc_type']))	{ //
 			$tmp = $TCA[$tablename]['columns']['cc_type']['config']['items'][$modelObj->ccArray['cc_type']]['0'];
 			$tmp = tx_div2007_alpha5::sL_fh002($tmp);
-			$ccTypeTextSelected = tx_div2007_alpha5::getLL_fh002($langObj, $tmp);
+			$ccTypeTextSelected = tx_div2007_alpha5::getLL_fh003($langObj, $tmp);
 		}
 		$markerArray['###PERSON_CARDS_CC_TYPE_SELECTED###'] = $ccTypeTextSelected;
 		for ($i = 1; $i <= 4; ++$i)	{

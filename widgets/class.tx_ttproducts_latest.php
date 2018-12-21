@@ -29,14 +29,13 @@
  *
  * dashboard functions
  *
- * $Id$
- *
  * @author	Tim Lochmueller <webmaster@fruit-lab.de>
  * @package TYPO3
  * @subpackage tt_products
  *
  *
  */
+
 
 require_once(t3lib_extMgm::extPath('mydashboard', 'templates/class.tx_mydashboard_template.php'));
 require_once(t3lib_extMgm::extPath('mydashboard', 'templates/interface.tx_mydashboard_widgetinterface.php'));
@@ -68,7 +67,7 @@ class tx_ttproducts_latest extends tx_mydashboard_template implements tx_mydashb
 
 		// Set title & icon
 		$this->setTitle('Shop System Lists');
-		$this->setIcon(PATH_BE_ttproducts_rel.'ext_icon.gif');
+		$this->setIcon(PATH_BE_TTPRODUCTS_REL . 'ext_icon.gif');
 
 		// required
 		return TRUE;

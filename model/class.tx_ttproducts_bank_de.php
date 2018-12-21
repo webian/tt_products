@@ -29,8 +29,6 @@
  *
  * functions for the static_banks_de table
  *
- * $Id$
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -39,8 +37,6 @@
  *
  */
 
-
-// require_once(PATH_BE_table.'lib/class.tx_table_db.php');
 
 
 class tx_ttproducts_bank_de extends tx_ttproducts_table_base {

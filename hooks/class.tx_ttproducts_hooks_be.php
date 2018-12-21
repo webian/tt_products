@@ -29,8 +29,6 @@
  *
  * hook functions for TYPO3 FE extensions
  *
- * $Id$
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -40,7 +38,7 @@
  */
 
 
-class tx_ttproducts_hooks_be {
+class tx_ttproducts_hooks_be implements t3lib_Singleton {
 
 	public function displayCategoryTree ($PA, $fobj) {
 		$result = FALSE;
@@ -49,9 +47,9 @@ class tx_ttproducts_hooks_be {
 			$treeObj = FALSE;
 
 			if (class_exists('JambageCom\\MbiProductsCategories\\View\\TreeSelector')) {
-				$treeObj = t3lib_div::getUserObj('&JambageCom\\MbiProductsCategories\\View\\TreeSelector');
+				$treeObj = t3lib_div::makeInstance('JambageCom\\MbiProductsCategories\\View\\TreeSelector');
 			} else if (class_exists('tx_mbiproductscategories_treeview')) {
-				$treeObj = t3lib_div::getUserObj('&tx_mbiproductscategories_treeview');
+				$treeObj = t3lib_div::makeInstance('tx_mbiproductscategories_treeview');
 			}
 
 			if (is_object($treeObj)) {

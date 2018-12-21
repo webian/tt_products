@@ -29,8 +29,6 @@
  *
  * functions for the title field
  *
- * $Id $
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -45,7 +43,7 @@ class tx_ttproducts_field_creditpoints {
 
 	public function getBasketTotal ()	{
 		$rc = 0;
-		$basketObj = t3lib_div::getUserObj('&tx_ttproducts_basket');
+		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
 		$itemArray = &$basketObj->getItemArray();
 
 		if (count($itemArray))	{

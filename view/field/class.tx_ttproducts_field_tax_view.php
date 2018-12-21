@@ -29,8 +29,6 @@
  *
  * functions for the title field
  *
- * $Id $
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -56,7 +54,7 @@ class tx_ttproducts_field_tax_view extends tx_ttproducts_field_base_view {
 	) {
 		global $TCA;
 
-		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 		$staticTaxViewObj = $tablesObj->get('static_taxes', TRUE);
 		$staticTaxViewObj->getItemSubpartArrays ($templateCode, $functablename, $row, $subpartArray, $wrappedSubpartArray, $tagArray, $theCode, $id);
 	}

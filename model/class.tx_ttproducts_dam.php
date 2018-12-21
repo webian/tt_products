@@ -29,8 +29,6 @@
  *
  * functions for the DAM images
  *
- * $Id$
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -38,8 +36,6 @@
  *
  */
 
-
-// require_once (PATH_BE_ttproducts.'model/class.tx_ttproducts_article_base.php');
 
 
 class tx_ttproducts_dam extends tx_ttproducts_article_base {
@@ -66,7 +62,7 @@ class tx_ttproducts_dam extends tx_ttproducts_article_base {
 		$tableObj = $this->getTableObj();
 		$tableObj->addDefaultFieldArray(array('sorting' => 'sorting'));
 
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$tablename = $cnf->getTableName($functablename);
 		$tableObj->setTCAFieldArray($tablename, 'dam');
 	} // init
@@ -76,7 +72,7 @@ class tx_ttproducts_dam extends tx_ttproducts_article_base {
 
 		$rcArray = array();
 		if ($type == 'products')	{
-			$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+			$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 			$productTable = $tablesObj->get('tt_products', FALSE);
 			$additional = $productTable->getFlexQuery('isImage', 1);
 			$rowArray = $productTable->getWhere('additional REGEXP ' . $TYPO3_DB->fullQuoteStr($additional, $productTable->getTablename)); // quotemeta
@@ -138,7 +134,7 @@ class tx_ttproducts_dam extends tx_ttproducts_article_base {
 			// Call all addWhere hooks for categories at the end of this method
 		if (is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['DAMCategory'])) {
 			foreach  ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['DAMCategory'] as $classRef) {
-				$hookObj= t3lib_div::getUserObj($classRef);
+				$hookObj= t3lib_div::makeInstance($classRef);
 				if (method_exists($hookObj, 'addWhereCat')) {
 					$whereNew = $hookObj->addWhereCat($this, $catObject, $cat, $where, $operator, $pid_list, $catObject->getDepth($theCode));
 					if ($bLeadingOperator)	{
@@ -165,7 +161,7 @@ class tx_ttproducts_dam extends tx_ttproducts_article_base {
 			// Call all addWhere hooks for categories at the end of this method
 		if (is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['DAMCategory'])) {
 			foreach  ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['DAMCategory'] as $classRef) {
-				$hookObj= t3lib_div::getUserObj($classRef);
+				$hookObj= t3lib_div::makeInstance($classRef);
 				if (method_exists($hookObj, 'addConfCatProduct')) {
 					$newTablenames = $hookObj->addConfCatProduct($this, $catObject, $selectConf, $aliasArray);
 
@@ -185,7 +181,7 @@ class tx_ttproducts_dam extends tx_ttproducts_article_base {
 			// Call all addWhere hooks for categories at the end of this method
 		if (is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['DAMCategory'])) {
 			foreach  ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['DAMCategory'] as $classRef) {
-				$hookObj= t3lib_div::getUserObj($classRef);
+				$hookObj= t3lib_div::makeInstance($classRef);
 				if (method_exists($hookObj, 'addselectConfCat')) {
 					$newTablenames = $hookObj->addselectConfCat($this, $catObject, $cat, $selectConf,$catObject->getDepth());
 					if ($newTablenames != '')	{
@@ -203,7 +199,7 @@ class tx_ttproducts_dam extends tx_ttproducts_article_base {
 			// Call all addWhere hooks for categories at the end of this method
 		if (is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['DAMCategory'])) {
 			foreach  ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['DAMCategory'] as $classRef) {
-				$hookObj= t3lib_div::getUserObj($classRef);
+				$hookObj= t3lib_div::makeInstance($classRef);
 				if (method_exists($hookObj, 'getPageUidsCat')) {
 					$hookObj->getPageUidsCat($this, $cat, $uidArray);
 				}
@@ -215,7 +211,7 @@ class tx_ttproducts_dam extends tx_ttproducts_article_base {
 
 	public function getRequiredFields ($theCode = '')	{
 		$tableConf = $this->getTableConf($theCode);
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 
 		if ($tableConf['requiredFields'])	{
 			$requiredFields = $tableConf['requiredFields'];

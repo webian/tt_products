@@ -1,0 +1,68 @@
+{
+  "name": "jambagecom/tt-products",
+  "type": "typo3-cms-extension",
+  "description": "Shop system extension for TYPO3 CMS",
+  "keywords": [
+    "TYPO3",
+    "extension",
+    "shop",
+    "basket",
+    "cart"
+  ],
+  "support": {
+    "issues": "http://jambage.com/kontakt/forum.html"
+  },
+  "homepage": "https://jambage.com",
+  "authors": [
+    {
+      "name": "Franz Holzinger",
+      "role": "Developer",
+      "homepage": "http://ttproducts.de"
+    }
+  ],
+  "license": [
+    "GPL-2.0+"
+  ],
+  "require": {
+    "typo3/cms-core": ">=4.5.0,<8.99.99",
+    "typo3-ter/div2007": ">=1.7.11",
+    "typo3-ter/table": ">=0.3.0",
+    "typo3-ter/tsparser": ">=0.2.5",
+    "typo3-ter/migration-core": ">=0.0.0"
+  },
+  "suggest": {
+    "typo3-ter/addons-em": ">=0.2.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "JambageCom\\TtProducts\\": "Classes"
+    },
+    "classmap": [
+      "api",
+      "cache",
+      "Classes",
+      "control",
+      "eid",
+      "hooks",
+      "lib",
+      "marker",
+      "model",
+      "modfunc1",
+      "modfunc2",
+      "pi1",
+      "pi_int",
+      "pi_search",
+      "view",
+      "widgets"
+    ]
+  },
+  "replace": {
+    "tt_products": "self.version",
+    "typo3-ter/tt-products": "self.version"
+  },
+  "extra": {
+    "typo3/cms": {
+      "extension-key": "tt_products"
+    }
+  }
+}

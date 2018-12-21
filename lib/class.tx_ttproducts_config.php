@@ -29,8 +29,6 @@
  *
  * configuration
  *
- * $Id$
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -39,7 +37,7 @@
  */
 
 
-class tx_ttproducts_config {
+class tx_ttproducts_config implements t3lib_Singleton {
 	public $conf;
 	public $config;
 	private $bHasBeenInitialised = FALSE;
@@ -153,6 +151,11 @@ class tx_ttproducts_config {
 	}
 
 
+	public function getViewControlConf ($theCode) {
+		$viewConf = $this->getSpecialConf('control', '', $theCode);
+
+		return $viewConf;
+	}
 
 
 	public function getBasketConf ($feature, $detail = '')	{
@@ -176,6 +179,24 @@ class tx_ttproducts_config {
 			}
 		}
 		return $rc;
+	}
+
+
+	public function getFallback ($tableConf) {
+		global $TSFE;
+
+		$result = FALSE;
+		if (
+			isset($tableConf) &&
+			is_array($tableConf) &&
+			isset($tableConf['language.']) &&
+			$tableConf['language.']['type'] == 'table' &&
+			$tableConf['language.']['mode'] == 'fallback'
+		) {
+			$result = TRUE;
+		}
+
+		return $result;
 	}
 
 

@@ -17,6 +17,7 @@
 			<label index="no_template">The shop template file has not been found. Check your template setup about</label>
 			<label index="empty_template">The shop template file | is empty.</label>
 			<label index="no_subtemplate">The subpart part marker | or the template file | has not been found.</label>
+			<label index="template_invalid_marker_border">The following invalid marker borders have been found inside of the subpart | of your template file: |.</label>
 			<label index="accept_AGB">You have to accept the general trading conditions to proceed.</label>
 			<label index="additional_single">buy this product</label>
 			<label index="additional_gift_service">wrap product by gift service</label>
@@ -27,6 +28,8 @@
 			<label index="no_csv_creation">Warning: Cannot create CSV file '|' for this order!</label>
 			<label index="no_feusers">No Front End Users have been found.</label>
 			<label index="wrong_code">Wrong display mode or code '|'.</label>
+			<label index="wrong_type">Wrong display type '|'.</label>
+			<label index="instock_warning_header">Warning: %s : Only %d pieces left.</label>
 			<label index="instock_warning">Warning: %s no. %s runs out of stock. Only %d pieces left.</label>
 			<label index="product">product</label>
 			<label index="article">article</label>
@@ -37,6 +40,7 @@
 			<label index="missing_email">email address</label>
 			<label index="missing_zip">zip code</label>
 			<label index="missing_tt_products_vat">VAT number</label>
+            <label index="check_missing_iban">Check the IBAN!</label>
 			<label index="error_minquantity">Error in minimum quantity in the following products. | Buy more of them.</label>
 			<label index="error_maxquantity">Error in maximum quantity in the following products. | Buy less of them.</label>
 			<label index="error_reference_id">ERROR: reference ID could not be generated.</label>
@@ -73,6 +77,8 @@
 			<label index="unregistered">unregistered</label>
 			<label index="first_order">first order</label>
 			<label index="download">Download</label>
+            <label index="download_requires_felogin">You must be logged in the Front End in order to download.</label>
+            <label index="error_download">Download Error</label>
 		</languageKey>
 		<languageKey index="dk" type="array">
 		</languageKey>
@@ -83,6 +89,7 @@
 			<label index="no_template">Die Shop-Template Datei wurde nicht gefunden. Überprüfen Sie im Template Setup: |</label>
 			<label index="empty_template">Die Shop-Template Datei | ist leer.</label>
 			<label index="no_subtemplate">Der Bereich | wurde in der Template Datei | nicht gefunden.</label>
+			<label index="template_invalid_marker_border">In der Shop Template Datei sind innerhalb des Subparts | folgende ungültige Markerbegrenzungen gefunden worden: |.</label>
 			<label index="accept_AGB">Sie haben unsere AGB nicht akzeptiert.</label>
 			<label index="additional_single">Produkt kaufen</label>
 			<label index="additional_gift_service">Verpacke Produkt mit Geschenk Service</label>
@@ -93,6 +100,8 @@
 			<label index="no_csv_creation">Warnung: Für diese Bestellung kann keine CSV Datei '|' erzeugt werden!</label>
 			<label index="no_feusers">Es sind keine Frontend Benutzer gefunden worden.</label>
 			<label index="wrong_code">Falscher Anzeigetyp oder CODE '|'.</label>
+			<label index="wrong_type">Falscher Anzeigetyp '|'.</label>
+			<label index="instock_warning_header">Warnung: %s : nur noch %d Stück</label>
 			<label index="instock_warning">Warnung: %s Nr. %s ist bald nicht mehr auf Lager. Nur noch %d Stück verfügbar.</label>
 			<label index="product">Produkt</label>
 			<label index="article">Artikel</label>
@@ -104,6 +113,7 @@
 			<label index="missing_telephone">die Telefonnummer</label>
 			<label index="missing_zip">die Postleitzahl</label>
 			<label index="missing_tt_products_vat">die USt-Id</label>
+            <label index="check_missing_iban">Prüfen Sie die IBAN!</label>
 			<label index="error_minquantity">Fehler in der Mindestbestellmenge in folgenden Produkten | Kaufen Sie mehr davon ein.</label>
 			<label index="error_maxquantity">Fehler in der Maximalbestellmenge in folgenden Produkten | Kaufen Sie weniger davon ein.</label>
 			<label index="error_reference_id">ERROR: Es konnte keine Referenz ID erzeugt werden.</label>
@@ -141,6 +151,7 @@
 			<label index="first_order">1. Bestellung</label>
 			<label index="undeclared">nicht angegeben</label>
 			<label index="download_requires_felogin">Sie müssen im Frontend eingeloggt sein, um eine Datei herunterladen zu können</label>
+            <label index="error_download">Download Fehler</label>
 		</languageKey>
 		<languageKey index="no" type="array">
 			<label index="open_bill">Klikk her for å åpne kvitteringen</label>

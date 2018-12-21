@@ -29,8 +29,6 @@
  *
  * url marker functions
  *
- * $Id$
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -39,7 +37,7 @@
  */
 
 
-class tx_ttproducts_url_view {
+class tx_ttproducts_url_view implements t3lib_Singleton {
 	var $pibase; // reference to object of pibase
 	var $conf;
 	var $config;
@@ -56,7 +54,7 @@ class tx_ttproducts_url_view {
 
 	public function init ($pibase)	{
  		$this->pibase = $pibase;
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 
  		$this->conf = &$cnf->conf;
  		$this->config = &$cnf->config;
@@ -101,7 +99,7 @@ class tx_ttproducts_url_view {
 	public function addURLMarkers ($pidNext, $markerArray, $addQueryString = array(), $excludeList = '', $bUseBackPid = TRUE, $bExcludeSingleVar = TRUE)	{
 		global $TSFE;
 
-		$charset = $TSFE->renderCharset;
+		$charset = 'UTF-8';
 		$urlMarkerArray = array();
 		$conf = array('useCacheHash' => TRUE);
 		$target = '';
@@ -110,7 +108,7 @@ class tx_ttproducts_url_view {
 		// $addQueryString['no_cache'] = 1;
 			// Add's URL-markers to the $markerArray and returns it
 		$pidBasket = ($this->conf['PIDbasket'] ? $this->conf['PIDbasket'] : $TSFE->id);
-		$pidFormUrl = ($pidNext ? $pidNext : $pidBasket);
+		$pidFormUrl = ($pidNext ? $pidNext : $TSFE->id); // formerly $pidBasket
 		if ($pidFormUrl != $TSFE->id && $bExcludeSingleVar)	{
 			$newExcludeListArray =
 				array(
@@ -178,7 +176,7 @@ class tx_ttproducts_url_view {
 			// Call all addURLMarkers hooks at the end of this method
 		if (is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['addURLMarkers'])) {
 			foreach  ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['addURLMarkers'] as $classRef) {
-				$hookObj= t3lib_div::getUserObj($classRef);
+				$hookObj= t3lib_div::makeInstance($classRef);
 				if (method_exists($hookObj, 'addURLMarkers')) {
 					$hookObj->addURLMarkers($this->pibase, $pidNext, $urlMarkerArray, $addQueryString, $excludeList, $bUseBackPid, $bExcludeSingleVar);
 				}
@@ -271,7 +269,7 @@ class tx_ttproducts_url_view {
 			// Call all getLinkParams hooks at the end of this method
 		if (is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['getLinkParams'])) {
 			foreach  ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['getLinkParams'] as $classRef) {
-				$hookObj= t3lib_div::getUserObj($classRef);
+				$hookObj= t3lib_div::makeInstance($classRef);
 				if (method_exists($hookObj, 'getLinkParams')) {
 					$hookObj->getLinkParams($this,$queryString,$excludeList,$addQueryString,$bUsePrefix,$bUseBackPid,$piVarCat);
 				}

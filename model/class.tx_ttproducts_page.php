@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2005-2007 Franz Holzinger <kontakt@fholzinger.com>
+*  (c) 2005-2007 Franz Holzinger <franz@ttproducts.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,19 +29,13 @@
  *
  * functions for the page
  *
- * $Id$
- *
- * @author	Franz Holzinger <kontakt@fholzinger.com>
- * @maintainer	Franz Holzinger <kontakt@fholzinger.com>
+ * @author	Franz Holzinger <franz@ttproducts.de>
+ * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products
  *
  */
 
-/*
-require_once(PATH_BE_table.'lib/class.tx_table_db.php');
-require_once(PATH_BE_table.'lib/class.tx_table_db_access.php');
-require_once(PATH_BE_ttproducts.'model/class.tx_ttproducts_category_base.php');*/
 
 
 class tx_ttproducts_page extends tx_ttproducts_category_base {
@@ -54,12 +48,12 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 	/**
 	 * Getting all tt_products_cat categories into internal array
 	 */
-	function init (&$pibase, $tablename)	{
+	function init ($cObj, $tablename)	{
 		global $TYPO3_DB;
 
-		parent::init($pibase, $tablename);
+		parent::init($cObj, $tablename);
 
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$tablename = ($tablename ? $tablename : 'pages');
 		$this->tableconf = $cnf->getTableConf('pages');
 		$this->pageAsCategory = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['pageAsCategory'];
@@ -113,7 +107,7 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 		}
 	}
 
-
+/*
 	function get ($uid = 0, $pid = 0, $bStore = TRUE, $where_clause = '', $limit = '', $fields = '', $bCount = FALSE) {
 		global $TYPO3_DB;
 
@@ -130,11 +124,11 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 			$rc = $this->dataArray[$uid] = $row;
 		}
 		return $rc;
-	}
+	}*/
 
 
 	function getRootCat ()	{
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$rc = $cnf->config['rootPageID'];
 		return $rc;
 	}

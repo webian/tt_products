@@ -29,8 +29,6 @@
  *
  * article functions without object instance
  *
- * $Id$
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -39,10 +37,9 @@
  */
 
 
-// require_once (PATH_BE_ttproducts.'model/interface.tx_ttproducts_variant_int.php');
 
 
-class tx_ttproducts_variant implements tx_ttproducts_variant_int {
+class tx_ttproducts_variant implements tx_ttproducts_variant_int, t3lib_Singleton {
 	public $conf;	// reduced local conf
 	var $itemTable;
 	private $useArticles;
@@ -58,7 +55,7 @@ class tx_ttproducts_variant implements tx_ttproducts_variant_int {
 	 * setting the local variables
 	 */
 	public function init ($itemTable, $tablename, $useArticles)  {
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 
 		$tmpArray = $cnf->getTableDesc($tablename);
 		$this->conf = (is_array($tmpArray) && is_array($tmpArray['variant.']) ? $tmpArray['variant.'] : array());
@@ -279,15 +276,16 @@ class tx_ttproducts_variant implements tx_ttproducts_variant_int {
 	}
 
 
-	public function getVariantValuesByArticle ($articleRowArray,$row='')	{
+	public function getVariantValuesByArticle ($articleRowArray, $productRow, $withSemicolon = FALSE) {
 		$rc = array();
 
 		$selectableFieldArray = $this->getSelectableFieldArray();
 
 		foreach ($selectableFieldArray as $field)	{
 
-			if (!$row || isset($row[$field]))	{
+			if (isset($productRow[$field]))	{
 				$valueArray = array();
+				$productValueArray = t3lib_div::trimExplode(';', $productRow[$field]);
 
 				foreach ($articleRowArray as $articleRow)	{
 					$articleValueArray = t3lib_div::trimExplode(';', $articleRow[$field]);
@@ -297,8 +295,17 @@ class tx_ttproducts_variant implements tx_ttproducts_variant_int {
 					}
 				}
 				$valueArray = array_values(array_unique($valueArray));
+				if (!empty($productValueArray)) {
+					$sortedValueArray = array();
+					foreach ($productValueArray as $value) {
+						if (in_array($value, $valueArray)) {
+							$sortedValueArray[] = $value;
+						}
+					}
+					$valueArray = $sortedValueArray;
+				}
 
-				if ($row)	{
+				if ($withSemicolon)	{
 					$rc[$field] = implode(';', $valueArray);
 				} else {
 					$rc[$field] = $valueArray;
@@ -310,9 +317,9 @@ class tx_ttproducts_variant implements tx_ttproducts_variant_int {
 
 
 	// the article rows must be in the correct order already
-	public function filterArticleRowsByVariant ($articleRowArray, $variant, $bCombined = FALSE) {
+	public function filterArticleRowsByVariant ($row, $variant, $articleRowArray, $bCombined = FALSE) {
 
-		$variantRowArray = $this->getVariantValuesByArticle($articleRowArray);
+		$variantRowArray = $this->getVariantValuesByArticle($articleRowArray, $row, FALSE);
 		$variantArray = explode(';', $variant);
 		$selectableFieldArray = $this->getSelectableFieldArray();
 		$possibleArticleArray = array();

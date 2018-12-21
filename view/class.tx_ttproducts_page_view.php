@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2005-2007 Franz Holzinger <kontakt@fholzinger.com>
+*  (c) 2005-2007 Franz Holzinger <franz@ttproducts.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,17 +29,13 @@
  *
  * functions for the page
  *
- * $Id$
- *
- * @author	Franz Holzinger <kontakt@fholzinger.com>
- * @maintainer	Franz Holzinger <kontakt@fholzinger.com>
+ * @author	Franz Holzinger <franz@ttproducts.de>
+ * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products
  *
  */
 
-
-// require_once(PATH_BE_ttproducts.'view/class.tx_ttproducts_category_base_view.php');
 
 
 class tx_ttproducts_page_view extends tx_ttproducts_category_base_view {
@@ -63,14 +59,14 @@ class tx_ttproducts_page_view extends tx_ttproducts_category_base_view {
 		global $TSFE;
 
 		$row = $this->modelObj->get($pid);
-		$imageObj = t3lib_div::getUserObj('&tx_ttproducts_field_image_view');
+		$imageObj = t3lib_div::makeInstance('tx_ttproducts_field_image_view');
 
 			// Get image
 		$imageObj->getRowMarkerArrayEnhanced ($this->modelObj->getFuncTablename(), $row, $this->marker, $markerArray, $pid, $imageNum, $imageRenderObj, $viewCatTagArray, $theCode, $id, $prefix, '', $linkWrap);
 
-		$pageCatTitle = htmlentities($row['title'], ENT_QUOTES, $TSFE->renderCharset);
+		$pageCatTitle = htmlentities($row['title'], ENT_QUOTES, 'UTF-8');
 		$this->setMarkerArrayCatTitle ($markerArray, $pageCatTitle, $prefix);
-		$markerArray['###'.$prefix.$this->marker.'_SUBTITLE###'] = htmlentities($row['subtitle'], ENT_QUOTES, $TSFE->renderCharset);
+		$markerArray['###'.$prefix.$this->marker.'_SUBTITLE###'] = htmlentities($row['subtitle'], ENT_QUOTES, 'UTF-8');
 
 		parent::getRowMarkerArray($row, $markerKey, $markerArray, $variantFieldArray, $variantMarkerArray, $viewCatTagArray, $theCode, TRUE, '', $imageNum, $imageRenderObj, $id, $prefix);
 	}

@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008-2008 Franz Holzinger <contact@fholzinger.com>
+*  (c) 2008-2008 Franz Holzinger <franz@ttproducts.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,26 +29,16 @@
  *
  * class for data collection
  *
- * $Id$
- *
- * @author  Franz Holzinger <contact@fholzinger.com>
- * @maintainer	Franz Holzinger <contact@fholzinger.com>
+ * @author  Franz Holzinger <franz@ttproducts.de>
+ * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products
  *
  *
  */
 
-/*
-require_once (PATH_BE_ttproducts.'model/field/class.tx_ttproducts_field_base.php');
-require_once (PATH_BE_ttproducts.'model/field/class.tx_ttproducts_field_tax.php');
-require_once (PATH_BE_ttproducts.'model/field/class.tx_ttproducts_field_price.php');
-require_once (PATH_BE_ttproducts.'model/class.tx_ttproducts_basket.php');*/
 
-
-require_once (PATH_BE_ttproducts.'model/class.tx_ttproducts_static_info.php');
-
-class tx_ttproducts_model_creator {
+class tx_ttproducts_model_creator implements t3lib_Singleton {
 
 	public function init (&$conf, &$config, $cObj)  {
 
@@ -61,24 +51,25 @@ class tx_ttproducts_model_creator {
 			$UIDstore = $tmpArray['0'];
 		}
 
-		$taxObj = t3lib_div::getUserObj('&tx_ttproducts_field_tax');
-		$taxObj->init(
+		$taxObj = t3lib_div::makeInstance('tx_ttproducts_field_tax');
+		$taxObj->preInit(
 			$cObj,
 			$bUseStaticTaxes,
 			$UIDstore
 		);
 
 			// price
-		$priceObj = t3lib_div::getUserObj('&tx_ttproducts_field_price');
-		$priceObj->init(
+		$priceObj = t3lib_div::makeInstance('tx_ttproducts_field_price');
+		$priceObj->preInit(
 			$cObj,
 			$conf
 		);
 
 			// paymentshipping
-		$paymentshippingObj = t3lib_div::getUserObj('&tx_ttproducts_paymentshipping');
+		$paymentshippingObj = t3lib_div::makeInstance('tx_ttproducts_paymentshipping');
 		$paymentshippingObj->init(
-			$cObj
+			$cObj,
+			$priceObj
 		);
 
 	}

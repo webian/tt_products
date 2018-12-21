@@ -29,10 +29,8 @@
  *
  * creditpoints functions
  *
- * $Id$
- *
  * @author  Els Verberne <verberne@bendoo.nl>
- * @maintainer	Franz Holzinger <kontakt@fholzinger.com>
+ * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products
  *
@@ -41,7 +39,7 @@
 
 
 
-class tx_ttproducts_creditpoints_div {
+class tx_ttproducts_creditpoints_div implements t3lib_Singleton {
 
 	/**
 	 * Returns the number of creditpoints for the frontend user

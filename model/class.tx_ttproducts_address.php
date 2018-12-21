@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2008 Franz Holzinger <contact@fholzinger.com>
+*  (c) 2007-2008 Franz Holzinger <franz@ttproducts.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,19 +29,13 @@
  *
  * functions for the frontend users
  *
- * $Id$
- *
- * @author  Franz Holzinger <contact@fholzinger.com>
- * @maintainer	Franz Holzinger <contact@fholzinger.com>
+ * @author  Franz Holzinger <franz@ttproducts.de>
+ * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products
  *
  *
  */
-
-/*
-require_once(PATH_BE_table.'lib/class.tx_table_db.php');
-require_once(PATH_BE_ttproducts.'model/class.tx_ttproducts_category_base.php');*/
 
 
 class tx_ttproducts_address extends tx_ttproducts_category_base {
@@ -57,11 +51,11 @@ class tx_ttproducts_address extends tx_ttproducts_category_base {
 	/**
 	 * Getting all address values into internal array
 	 */
-	function init(&$pibase, $functablename)	{
+	function init($cObj, $functablename)	{
 		global $TYPO3_DB,$TSFE,$TCA;
 
-		parent::init($pibase, $functablename);
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		parent::init($cObj, $functablename);
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 
 		$tableconf = $cnf->getTableConf('address');
 		$tabledesc = $cnf->getTableDesc('address');

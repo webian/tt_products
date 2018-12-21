@@ -29,8 +29,6 @@
  *
  * control function for the basket.
  *
- * $Id$
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -43,7 +41,7 @@
 class tx_ttproducts_control_basket {
 
 	static public function getRoundFormat ($type = '') {
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 
 		$result = $cnf->getBasketConf('round', $type); // check the basket rounding format
 

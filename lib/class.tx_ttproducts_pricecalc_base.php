@@ -29,8 +29,6 @@
  *
  * base class for all price calculation functions
  *
- * $Id$
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -41,7 +39,7 @@
 
 
 
-class tx_ttproducts_pricecalc_base {
+class tx_ttproducts_pricecalc_base implements t3lib_Singleton {
 
 	function getPrice (&$conf, $offset, $num='1')	{
 		$rc = 0;

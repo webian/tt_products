@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2010 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2007-2017 Franz Holzinger <franz@ttproducts.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -28,8 +28,6 @@
  * Part of the tt_products (Shop System) extension.
  *
  * functions for the voucher system
- *
- * $Id$
  *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
@@ -62,17 +60,26 @@ class tx_ttproducts_voucher_view extends tx_ttproducts_table_base_view {
 		$charset=''
 	)	{
 		$modelObj = $this->getModelObj();
-
 		$subpartArray['###SUB_VOUCHERCODE###'] = '';
+        $wrappedSubpartArray['###SUB_VOUCHERCODE_START###'] = array();
+        $code = $modelObj->getCode();
 
-		if ($modelObj->getValid())	{
+		if (
+            $modelObj->getValid() &&
+            $code != ''
+        ) {
 			$subpartArray['###SUB_VOUCHERCODE_DISCOUNTWRONG###'] = '';
 			$wrappedSubpartArray['###SUB_VOUCHERCODE_DISCOUNT###'] = array();
 		} else {
-			$tmp = tx_div2007_alpha5::getLL_fh002($this->langObj, 'voucher_invalid');
-			$tmpArray = explode('|',$tmp);
-			$subpartArray['###SUB_VOUCHERCODE_DISCOUNT###'] = $tmpArray[0] . htmlspecialchars($modelObj->getCode()) . $tmpArray[1];
-			$wrappedSubpartArray['###SUB_VOUCHERCODE_DISCOUNTWRONG###'] = array();
+            if (isset($code)) {
+                $tmp = tx_div2007_alpha5::getLL_fh003($this->langObj, 'voucher_invalid');
+                $tmpArray = explode('|', $tmp);
+                $subpartArray['###SUB_VOUCHERCODE_DISCOUNT###'] = $tmpArray[0] . htmlspecialchars($modelObj->getCode()) . $tmpArray[1];
+                $wrappedSubpartArray['###SUB_VOUCHERCODE_DISCOUNTWRONG###'] = array();
+            } else {
+                $subpartArray['###SUB_VOUCHERCODE_DISCOUNT###'] = '';
+                $subpartArray['###SUB_VOUCHERCODE_DISCOUNTWRONG###'] = '';
+            }
 		}
 	}
 
@@ -87,7 +94,7 @@ class tx_ttproducts_voucher_view extends tx_ttproducts_table_base_view {
 	function getMarkerArray (
 		&$markerArray
 	)	{
-		$priceViewObj = t3lib_div::getUserObj('&tx_ttproducts_field_price_view');
+		$priceViewObj = t3lib_div::makeInstance('tx_ttproducts_field_price_view');
 		$modelObj = $this->getModelObj();
 		$markerArray['###INSERT_VOUCHERCODE###'] = 'recs[tt_products][vouchercode]';
 

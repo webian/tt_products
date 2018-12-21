@@ -29,8 +29,6 @@
  *
  * functions for the product
  *
- * $Id$
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -74,7 +72,7 @@ abstract class tx_ttproducts_article_base_view extends tx_ttproducts_table_base_
 	}
 
 
-	public function getItemSubpartArrays ($templateCode, $functablename, &$row, &$subpartArray, &$wrappedSubpartArray, &$tagArray, $theCode='', $id='1')	{
+	public function getItemSubpartArrays (&$templateCode, $functablename, $row, &$subpartArray, &$wrappedSubpartArray, &$tagArray, $theCode='', $id='') {
 		global $TCA;
 
 		parent::getItemSubpartArrays($templateCode, $functablename, $row, $subpartArray, $wrappedSubpartArray, $tagArray, $theCode, $id);
@@ -110,7 +108,7 @@ abstract class tx_ttproducts_article_base_view extends tx_ttproducts_table_base_
 		global $TCA;
 
 		$modelObj = $this->getModelObj();
-		$priceViewObj = t3lib_div::getUserObj('&tx_ttproducts_field_price_view');
+		$priceViewObj = t3lib_div::makeInstance('tx_ttproducts_field_price_view');
 
 		$functablename = $modelObj->getFuncTablename();
 		$mainId = $this->getId($row, $id, $theCode);
@@ -156,8 +154,8 @@ abstract class tx_ttproducts_article_base_view extends tx_ttproducts_table_base_
 		global $TSFE, $TCA;
 
 		$modelObj = $this->getModelObj();
-		$priceObj = t3lib_div::getUserObj('&tx_ttproducts_field_price');
-		$imageObj = t3lib_div::getUserObj('&tx_ttproducts_field_image_view');
+		$priceObj = t3lib_div::makeInstance('tx_ttproducts_field_price');
+		$imageObj = t3lib_div::makeInstance('tx_ttproducts_field_image_view');
 
 		if ($markerKey)	{
 			$marker = $markerKey;

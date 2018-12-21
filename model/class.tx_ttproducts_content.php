@@ -29,8 +29,6 @@
  *
  * functions for the content
  *
- * $Id$
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -39,9 +37,6 @@
  *
  */
 
-
-// require_once(PATH_BE_table.'lib/class.tx_table_db.php');
-// require_once(PATH_BE_table.'lib/class.tx_table_db_access.php');
 
 
 class tx_ttproducts_content extends tx_ttproducts_table_base {
@@ -52,7 +47,7 @@ class tx_ttproducts_content extends tx_ttproducts_table_base {
 	/**
 	 * Getting all tt_products_cat categories into internal array
 	 */
-	public function init (&$cObj, $functablename)	{
+	public function init ($cObj, $functablename)	{
 		parent::init($cObj, $functablename);
 
 		$this->getTableObj()->setDefaultFieldArray(array('uid' => 'uid', 'pid' => 'pid', 't3ver_oid' => 't3ver_oid', 't3ver_id' => 't3ver_id', 't3ver_label' => 't3ver_label', 'tstamp' => 'tstamp', 'sorting' => 'sorting',

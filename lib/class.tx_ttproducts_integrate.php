@@ -25,15 +25,13 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 /**
- * $Id$
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products
  */
 
 
-class tx_ttproducts_integrate {
+class tx_ttproducts_integrate implements t3lib_Singleton {
 
 	/**
 	 * Includes the locallang.xml and returns the $LOCAL_LANG array found in that file.

@@ -29,8 +29,6 @@
  *
  * base class for all database table classes
  *
- * $Id$
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -39,7 +37,7 @@
  */
 
 
-abstract class tx_ttproducts_table_base	{
+abstract class tx_ttproducts_table_base implements t3lib_Singleton	{
 	public $bHasBeenInitialised = FALSE;
 	public $cObj;
 	public $conf;
@@ -91,7 +89,7 @@ abstract class tx_ttproducts_table_base	{
 		global $TCA;
 
 		$this->cObj = $cObj;
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
 		$this->tableObj = t3lib_div::makeInstance('tx_table_db');
@@ -154,7 +152,7 @@ abstract class tx_ttproducts_table_base	{
 
 	/* uid can be a string. Add a blank character to your uid integer if you want to have muliple rows as a result
 	*/
-	public function get ($uid = '0', $pid = 0, $bStore = TRUE, $where_clause = '', $groupBy = '', $orderBy = '', $limit = '', $fields = '', $bCount = FALSE, $aliasPostfix = '') {
+	public function get ($uid = '0', $pid = 0, $bStore = TRUE, $where_clause = '', $groupBy = '', $orderBy = '', $limit = '', $fields = '', $bCount = FALSE, $aliasPostfix = '', $fallback = FALSE) {
 		global $TYPO3_DB;
 
 		$tableObj = $this->getTableObj();
@@ -216,17 +214,32 @@ abstract class tx_ttproducts_table_base	{
 // 			$orderBy = $TYPO3_DB->stripOrderBy($tableConf['orderBy']);
 
 			// Fetching the records
-			$res = $tableObj->exec_SELECTquery($fields, $where, $groupBy, $orderBy, $limit, '', $aliasPostfix);
+			$res = $tableObj->exec_SELECTquery($fields, $where, $groupBy, $orderBy, $limit, '', $aliasPostfix, $fallback);
 
 			if ($res !== FALSE)	{
 
 				$rc = array();
 
-				while ($row = $TYPO3_DB->sql_fetch_assoc($res))	{
-// +++ hook +++
-					if (is_array($tableObj->langArray) && $tableObj->langArray[$row['title']])	{
+				while ($dbRow = $TYPO3_DB->sql_fetch_row($res)) {
+// 				while ($row = $TYPO3_DB->sql_fetch_assoc($res))	{
+					$row = array();
+					foreach ($dbRow as $index => $value) {
+						if ($res instanceof mysqli_result) {
+							$fieldObject = mysqli_fetch_field_direct($res, $index);
+							$field = $fieldObject->name;
+						} else {
+							$field = mysql_field_name($res, $index);
+						}
+
+						if (!isset($row[$field]) || !empty($value)) {
+							$row[$field] = $value;
+						}
+					}
+
+					if (!$fallback && is_array($tableObj->langArray) && $tableObj->langArray[$row['title']]) {
 						$row['title'] = $tableObj->langArray[$row['title']];
 					}
+
 					if ($row)	{
 						$rc[$row['uid']] = $row;
 						if($bStore && $fields == '*')	{
@@ -459,7 +472,7 @@ abstract class tx_ttproducts_table_base	{
 		if ($theCode == '' && $this->getCode() != '')	{
 			$rc = $this->tableConf;
 		} else {
-			$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+			$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 			$rc = &$cnf->getTableConf($this->getFuncTablename(), $theCode);
 		}
 		$this->fixTableConf($rc);

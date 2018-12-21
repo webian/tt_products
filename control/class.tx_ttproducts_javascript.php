@@ -29,8 +29,6 @@
  *
  * JavaScript functions
  *
- * $Id$
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products
@@ -39,7 +37,7 @@
  */
 
 
-class tx_ttproducts_javascript {
+class tx_ttproducts_javascript implements t3lib_Singleton {
 	var $pibase; // reference to object of pibase
 	var $conf;
 	var $config;
@@ -51,7 +49,7 @@ class tx_ttproducts_javascript {
 
 	function init ($pibase, $ajax) {
 		$this->pibase = $pibase;
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
@@ -81,13 +79,22 @@ class tx_ttproducts_javascript {
 
 	}
 
+	static public function convertHex($m) {
+		$result = '\\x' . (ord($m[1]) < 16 ? '0' : '') . dechex(ord($m[1]));
+		return $result;
+	}
 
 	/*
 	 * Escapes strings to be included in javascript
 	 */
-	function jsspecialchars($s) {
-	   return preg_replace('/([\x09-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e])/e',
-	       "'\\x'.(ord('\\1')<16? '0': '').dechex(ord('\\1'))",$s);
+	public function jsspecialchars ($s) {
+		$result = preg_replace_callback(
+			'/([\x09-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e])/',
+			'tx_ttproducts_javascript::convertHex',
+			$s
+		);
+
+		return $result;
 	}
 
 		/**
@@ -105,9 +112,9 @@ class tx_ttproducts_javascript {
 		$bDirectHTML = FALSE;
 		$code = '';
 		$bError = FALSE;
-		$langObj = t3lib_div::getUserObj('&tx_ttproducts_language');
+		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
 
-		$emailArr =  explode('|', $message = tx_div2007_alpha5::getLL_fh002($langObj, 'invalid_email'));
+		$emailArr =  explode('|', $message = tx_div2007_alpha5::getLL_fh003($langObj, 'invalid_email'));
 
 		if (!$this->bCopyrightShown && $fieldname != 'xajax')	{
 			$code = $this->copyright;
@@ -123,23 +130,23 @@ class tx_ttproducts_javascript {
 				$code .= '
 	function test(eing) {
 		var reg = /@/;
-		var rc = TRUE;
+		var rc = true;
 		if (!reg.exec(eing)) {
-	 		rc = FALSE;
+	 		rc = false;
 	 	}
 	 	return rc;
 	}
 
 	function checkEmail(element) {
 		if (test(element.value)){
-			return (TRUE);
+			return (true);
 		}
 		alert("' . $emailArr[0] . '\'"+element.value+"\'' . $emailArr[1] . '");
-		return (FALSE);
+		return (false);
 	}
 
 	function checkParams(formObj) {
-		var rc = TRUE;
+		var rc = true;
 		for (var i = 0; i < formObj.length; i++) {
 			if (formObj[i].type == "text") {
 				var email = /email/i;
@@ -158,7 +165,7 @@ class tx_ttproducts_javascript {
 			case 'selectcat':
 				if (is_array($params))	{
 					$funcs = count ($params);
-					$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+					$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 
 					$ajaxConf = $cnf->getAJAXConf();
 					if (is_array($ajaxConf))	{
@@ -179,7 +186,7 @@ class tx_ttproducts_javascript {
 					$code .= 'var c = new Array(); // categories
 		var boxCount = '.$count.'; // number of select boxes
 		var pi = new Array(); // names of select boxes;
-		var inAction = FALSE; // is the script still running?
+		var inAction = false; // is the script still running?
 		var maxFunc = '.$funcs.';
 		';
 					foreach ($piVarArray as $fnr => $pivar)	{
@@ -225,10 +232,10 @@ class tx_ttproducts_javascript {
 		var idel;
 		var category;
 
-		if (inAction == TRUE)	{
-			return FALSE;
+		if (inAction == true)	{
+			return false;
 		}
-		inAction = TRUE;
+		inAction = true;
 		index = select.selectedIndex;
 		selOption = select.options[index];
 		category = selOption.value;
@@ -241,7 +248,7 @@ class tx_ttproducts_javascript {
 			func = sb.selectedIndex - 1;
 			if (maxFunc == 1 || func < 0 || func > maxFunc)	{
 				func = 0;
-				bRootFunctions = FALSE;
+				bRootFunctions = false;
 			}
 			for (var l = boxCount; l >= id+1; l--)	{
 				idel = "'.$catid.'" + l;
@@ -300,8 +307,8 @@ class tx_ttproducts_javascript {
 		}
 		';
 				$code .= '
-		inAction = FALSE;
-		return TRUE;
+		inAction = false;
+		return true;
 	}
 		';
 				$code .= '
@@ -342,7 +349,7 @@ class tx_ttproducts_javascript {
 		        		$code .= $this->pibase->extKey . '_showList(data);';
 				}
 				$code .= '
-		return TRUE;
+		return true;
 	}
 	'		;
 				break;
@@ -391,7 +398,7 @@ class tx_ttproducts_javascript {
 		}
 	';
 				$code .= '	' . $this->pibase->extKey . '_fetchRow(data);
-		return TRUE;
+		return true;
 	}';
 				break;
 

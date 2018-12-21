@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2007 Franz Holzinger <kontakt@fholzinger.com>
+*  (c) 2007-2007 Franz Holzinger <franz@ttproducts.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,10 +29,8 @@
  *
  * credit card functions
  *
- * $Id$
- *
- * @author	Franz Holzinger <kontakt@fholzinger.com>
- * @maintainer	Franz Holzinger <kontakt@fholzinger.com>
+ * @author	Franz Holzinger <franz@ttproducts.de>
+ * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products
  *
@@ -47,12 +45,12 @@ class tx_ttproducts_card extends tx_ttproducts_table_base {
 	var $sizeArray = array('cc_type' => 4, 'cc_number_1' => 4,'cc_number_2' => 4,'cc_number_3' => 4, 'cc_number_4' => 4, 'owner_name' => 0, 'cvv2' => 4, 'endtime_mm' => 2, 'endtime_yy'  => 2);
 	var $asteriskArray = array(2 => '**', 4 => '****');
 
-	function init ($pibase, $functablename) {
-		$basketObj = t3lib_div::getUserObj('&tx_ttproducts_basket');
+	function init ($cObj, $functablename) {
+		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
 		$formerBasket = $basketObj->recs;
 		$allowedUids = $basketObj->basketExtra['payment.']['creditcards'];
 
-		parent::init($pibase, $functablename);
+		parent::init($cObj, $functablename);
 
 		$this->ccArray = array();
 		$this->ccArray = $formerBasket['creditcard'];
@@ -202,15 +200,19 @@ class tx_ttproducts_card extends tx_ttproducts_table_base {
 	} // create
 
 
-	function getUid ()	{
+	function getUid () {
 		global $TSFE;
 
-		$ccArray = $TSFE->fe_user->getKey('ses','cc');
-		return $ccArray['cc_uid'];
+		$result = 0;
+		$ccArray = $TSFE->fe_user->getKey('ses', 'cc');
+		if (isset($ccArray['cc_uid'])) {
+			$result = $ccArray['cc_uid'];
+		}
+		return $result;
 	}
 
 
-	function get ($uid, $bFieldArrayAll=FALSE) {
+	function getRow ($uid, $bFieldArrayAll=FALSE) {
 		global $TYPO3_DB;
 		$rcArray = array();
 		if ($bFieldArrayAll)	{

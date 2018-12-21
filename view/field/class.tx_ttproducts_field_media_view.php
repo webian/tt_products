@@ -29,8 +29,6 @@
  *
  * functions for digital medias view
  *
- * $Id$
- *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -43,8 +41,11 @@
 class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 
 
-	public function getImageCode ($imageConf, $theCode) {
-		$imageCode = $this->cObj->IMAGE($imageConf);
+public function getImageCode ($cObj, $imageConf, $theCode) {
+
+        $contentObject = 'IMAGE';
+        $imageCode =
+            $cObj->getContentObject($contentObject)->render($imageConf);
 
 		if ($theCode == 'EMAIL' && $GLOBALS['TSFE']->absRefPrefix == '') {
 			$absRefPrefix = t3lib_div::getIndpEnv('TYPO3_SITE_URL');
@@ -123,7 +124,7 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 		$markerArray['###'.$markerKey.'_PATH###'] = $dirname;
 
 		if (count($imageArray))	{
-			$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+			$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 			$tableConf = $cnf->getTableConf($functablename, $theCode);
 
 			if (is_array($tableConf))	{
@@ -158,7 +159,6 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 			}
 
 			foreach($imageArray as $c => $val)	{
-//				$confMarkerArray = array();
 				$imageConf = $imageConfStart;
 				if ($c == $mediaNum)	{
 					break;
@@ -170,7 +170,7 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 					$bUseImage = TRUE;
 				}
 				if (t3lib_extMgm::isLoaded('dam') && $bUseImage && $bImages) {
-					$damObj = t3lib_div::getUserObj('tx_dam');
+					$damObj = t3lib_div::makeInstance('tx_dam');
 					if(method_exists($damObj,'meta_getDataForFile')) {
 						$fieldList = 'uid,pid,tstamp,crdate,active,media_type,title,category,index_type,file_mime_type,file_mime_subtype,
 							file_type,file_type_version,file_name,file_path,file_size,file_mtime,file_inode,file_ctime,file_hash,file_status,
@@ -196,7 +196,7 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 				$imageConf['params'] = preg_replace('/\s+/', ' ', $imageConf['params']);
 				$this->replaceMarkerArray($markerArray, $imageConf, $this->cObj->alternativeData);
 
-				$tmpImgCode = $this->getImageCode($imageConf, $theCode);
+				$tmpImgCode = $this->getImageCode($this->cObj, $imageConf, $theCode);
 
 				if ($tmpImgCode != '')	{
 					$imgCodeArray[$key] .= $tmpImgCode;
@@ -210,7 +210,7 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 						$theImageConf = array_merge($imageConf, $specialImageConf);
 						$this->cObj->alternativeData = ($meta ? $meta : $imageRow); // has to be redone here
 						$this->replaceMarkerArray($markerArray, $theImageConf, $this->cObj->alternativeData);
-						$tmpImgCode = $this->getImageCode($theImageConf, $theCode);
+						$tmpImgCode = $this->getImageCode($this->cObj, $theImageConf, $theCode);
 
 						$key1 = $key.':'.$specialConfType;
 						$imgCodeArray[$key1] .= $tmpImgCode;
@@ -220,7 +220,7 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 		} else if ($this->conf['noImageAvailable'] != '') {	// if (count($imageArray))
 			$imageConf = $this->conf[$imageRenderObj . '.'];
 			$imageConf['file'] = $this->conf['noImageAvailable'];
-			$tmpImgCode = $this->getImageCode($imageConf, $theCode);
+			$tmpImgCode = $this->getImageCode($this->cObj, $imageConf, $theCode);
 			$imgCodeArray[0] = $tmpImgCode;
 		}
 		return $imgCodeArray;
@@ -230,9 +230,9 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 
 		$imageRow = $row;
 		$bImages = FALSE;
-		$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$tableConf = $cnf->getTableConf($functablename, $theCode);
-		$tablesObj = t3lib_div::getUserObj('&tx_ttproducts_tables');
+		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 
 			// Get image
 		$theImgDAM = array();
@@ -451,7 +451,7 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 			$bSkip = TRUE;
 
 			$mediaMarkerKeyArray = array();
-			$cnf = t3lib_div::getUserObj('&tx_ttproducts_config');
+			$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 			$tableConf = $cnf->getTableConf($functablename, $theCode);
 
 			foreach ($tagArray as $value => $k1)	{
