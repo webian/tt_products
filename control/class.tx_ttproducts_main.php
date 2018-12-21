@@ -850,6 +850,22 @@ class tx_ttproducts_main implements t3lib_Singleton {
 			$rc .= '<h>Error: The default tt_products setup is missing.</h>';
 		}
 
+        if (
+            (
+                (
+                    version_compare(TYPO3_version, '7.6.32', '>=') &&
+                    version_compare(TYPO3_version, '8.7.0', '<')
+                ) ||
+                (
+                    version_compare(TYPO3_version, '8.7.22', '>=') &&
+                    version_compare(TYPO3_version, '9.5.0', '<')
+                )
+            ) &&
+            !$GLOBALS['TYPO3_CONF_VARS']['FE']['enableRecordRegistration']
+        ) {
+            $rc .= '<h>Error: $GLOBALS[\'TYPO3_CONF_VARS\'][\'FE\'][\'enableRecordRegistration\'] must be set to TRUE.</h>';
+        }
+
 		$this->destruct();
 		return $rc;
 	}

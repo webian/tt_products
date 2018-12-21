@@ -112,6 +112,7 @@ class tx_ttproducts_match_condition implements t3lib_Singleton {
 	public function hasBulkilyItem ($where) {
 		global $TYPO3_DB;
 
+		$bBukily = FALSE;
 		tx_ttproducts_control_basket::init();
 		$recs = tx_ttproducts_control_basket::getRecs();
 		$cObj = t3lib_div::makeInstance('tslib_cObj');
@@ -131,17 +132,15 @@ class tx_ttproducts_match_condition implements t3lib_Singleton {
 				return FALSE;
 			}
 			$where .= ' AND uid IN ('.implode(',',$uidArr).')';
-		}
+            $where .= $cObj->enableFields('tt_products');
 
-		$where .= $cObj->enableFields('tt_products');
-
-		$rcArray = $TYPO3_DB->exec_SELECTgetRows('*', 'tt_products', $where);
-		$bBukily = FALSE;
-		foreach ($rcArray as $uid => $row) {
-			if ($row['bulkily']) {
-				$bBukily = TRUE;
-				break;
-			}
+            $rcArray = $TYPO3_DB->exec_SELECTgetRows('*', 'tt_products', $where);
+            foreach ($rcArray as $uid => $row) {
+                if ($row['bulkily']) {
+                    $bBukily = TRUE;
+                    break;
+                }
+            }
 		}
 
 		tx_ttproducts_control_basket::destruct();
@@ -153,6 +152,4 @@ class tx_ttproducts_match_condition implements t3lib_Singleton {
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/hooks/class.tx_ttproducts_match_condition.php']) {
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/hooks/class.tx_ttproducts_match_condition.php']);
 }
-
-
 

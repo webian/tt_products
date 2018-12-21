@@ -1,3 +1,7 @@
+2018-12-21 Franz Holzinger <franz@ttproducts.de>
+    * add status provider for TYPO3 reports module
+    * compatibility: Check in the front end and back end if $GLOBALS['TYPO3_CONF_VARS']['FE']['enableRecordRegistration'] has been set.
+
 2018-12-06 Franz Holzinger <franz@ttproducts.de>
     * Remove the support for the paymentlib extension because nothing has happened there since July 17, 2009.
 

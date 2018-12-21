@@ -499,9 +499,9 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 					} else {
 						$markerArray['###PERSON_ZONE###'] = '';
 					}
-					$countryArray = $staticInfo->initCountries('ALL','',FALSE,$whereCountries);
+					$countryArray = $staticInfo->initCountries('ALL', '', FALSE, $whereCountries);
 					$markerArray['###PERSON_COUNTRY_FIRST###'] = current($countryArray);
-					$markerArray['###PERSON_COUNTRY_FIRST_HIDDEN###'] = '<input type="hidden" name="recs[personinfo][country_code]" size="3" value="'.current(array_keys($countryArray)).'">';
+					$markerArray['###PERSON_COUNTRY_FIRST_HIDDEN###'] = '<input type="hidden" name="recs[personinfo][country_code]" size="3" value="' . current(array_keys($countryArray)) . '">';
 
 					$markerArray['###PERSON_COUNTRY###'] =
 						$staticInfo->getStaticInfoName('COUNTRIES', $countryCodeArray['billing'],'','');
@@ -548,8 +548,8 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 					$bReady = TRUE;
 				}
 
-				$markerArray['###PERSON_ZONE_DISPLAY###'] = tx_div2007_staticinfotables::getTitleFromIsoCode('static_country_zones', array($zoneCodeArray['billing'],$countryCodeArray['billing']));
-				$markerArray['###DELIVERY_ZONE_DISPLAY###'] = tx_div2007_staticinfotables::getTitleFromIsoCode('static_country_zones', array($zoneCodeArray['delivery'],$countryCodeArray['delivery']));
+				$markerArray['###PERSON_ZONE_DISPLAY###'] = tx_div2007_staticinfotables::getTitleFromIsoCode('static_country_zones', array($zoneCodeArray['billing'], $countryCodeArray['billing']));
+				$markerArray['###DELIVERY_ZONE_DISPLAY###'] = tx_div2007_staticinfotables::getTitleFromIsoCode('static_country_zones', array($zoneCodeArray['delivery'], $countryCodeArray['delivery']));
 			}
 
 			if (!$bReady)	{
