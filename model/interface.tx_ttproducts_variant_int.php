@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2006-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2006-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -42,18 +42,17 @@
 interface tx_ttproducts_variant_int {
 	public function init($itemTable, $tablename, $useArticles);
 	public function getUseArticles();
-	public function modifyRowFromVariant (&$row, $variant = '');
+	public function modifyRowFromVariant (&$row, $variant='');
 	public function getVariantFromRow (&$row);
 	public function getVariantFromProductRow (&$row, $index);
 	public function getVariantFromRawRow (&$row);
-	public function getVariantRow($row = '', $varianArray = array());
+	public function getVariantRow($row='',$varianArray=array());
 	public function getTableUid ($table, $uid);
 	public function getSelectableArray();
-	public function getVariantValuesByArticle($articleRowArray,$productRow,$withSemicolon=FALSE);
-	public function filterArticleRowsByVariant($row, $variant, $articleRows, $bCombined=FALSE);
+	public function getVariantValuesByArticle($articleRowArray, $productRow,$withSemicolon = FALSE);
+	public function filterArticleRowsByVariant($row, $variant, $articleRows, $bCombined = FALSE);
 	public function getFieldArray();
 	public function getSelectableFieldArray();
 	public function getAdditionalKey();
 }
 
-?>

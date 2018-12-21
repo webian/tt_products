@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008-2010 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2008-2008 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -39,13 +39,14 @@
 
 class tx_ttproducts_field_datetime_view extends tx_ttproducts_field_base_view {
 
-	function getRowMarkerArray ($functablename, $fieldname, &$row, $markerKey, &$markerArray, $tagArray, $theCode, $id, &$bSkip, $bHtml=TRUE, $charset='', $prefix='', $suffix='', $imageRenderObj='')	{
+	function getRowMarkerArray ($functablename, $fieldname, $row, $markerKey, &$markerArray, $tagArray, $theCode, $id, $basketExtra, &$bSkip, $bHtml=true, $charset='', $prefix='', $suffix='', $imageRenderObj='')	{
 
 		$stdWrap = 'date_stdWrap.';
 		if ($fieldname == 'usebydate' && $functablename == 'tt_products')	{
 			$stdWrap = 'usebyDate_stdWrap.';
 		}
 		$value = $this->cObj->stdWrap($row[$fieldname],$this->conf[$stdWrap]);
+
 		return $value;
 	}
 }
@@ -55,4 +56,3 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/view/field/class.tx_ttproducts_field_datetime_view.php']);
 }
 
-?>

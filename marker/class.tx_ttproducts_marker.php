@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2007-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -48,7 +48,7 @@ class tx_ttproducts_marker implements t3lib_Singleton {
 	public $urlArray;
 	private $langArray;
 	private $errorCode = array();
-	private $specialArray = array('eq', 'ne', 'lt', 'le', 'gt', 'ge', 'id');
+	private $specialArray = array('eq', 'ne', 'lt', 'le', 'gt', 'ge', 'id', 'fn');
 
 	/**
 	 * Initialized the marker object
@@ -74,24 +74,20 @@ class tx_ttproducts_marker implements t3lib_Singleton {
 
 		if ($language == '' || $language == 'default' || $language == 'en')	{
 			if ($markerFile)	{
-				tx_div2007_alpha5::loadLL_fh002($langObj,$markerFile);
+				$markerFile = $GLOBALS['TSFE']->tmpl->getFileName($markerFile);
+				tx_div2007_alpha5::loadLL_fh002($langObj, $markerFile);
 			}
 		} else	{
-			if (
-                !$markerFile
-            )	{
+			if (!$markerFile || $markerFile == '{$plugin.tt_products.file.markerFile}')	{
 				if ($language == 'de')	{
-					$markerFile = $language . '.locallang.xml';
-				} else if (
-                    defined('ADDONS_TT_PRODUCTS_EXT') &&
-                    t3lib_extMgm::isLoaded(ADDONS_TT_PRODUCTS_EXT)
-                ) {
-					$markerFile = 'EXT:' . ADDONS_TT_PRODUCTS_EXT . '/' . $language . '.locallang.xml';
+					$markerFile = 'EXT:' . TT_PRODUCTS_EXT . '/marker/' . $language . '.locallang.xml';
+				} else if (t3lib_extMgm::isLoaded(ADDONS_EXTkey))	{
+					$markerFile = 'EXT:' . ADDONS_EXTkey . '/' . $language . '.locallang.xml';
 				}
-			} else if (substr($markerFile, 0, 4) == 'EXT:')	{	// extension
-				list($extKey,$local) = explode('/', substr($markerFile, 4), 2);
+			} else if (substr($markerFile,0,4)=='EXT:')	{	// extension
+				list($extKey,$local) = explode('/',substr($markerFile,4),2);
 				$filename='';
-				if (strcmp($extKey, '') && !t3lib_extMgm::isLoaded($extKey) && strcmp($local, ''))	{
+				if (strcmp($extKey,'') && !t3lib_extMgm::isLoaded($extKey) && strcmp($local,''))	{
 					$error_code = array();
 					$error_code[0] = 'extension_missing';
 					$error_code[1] = $extKey;
@@ -99,6 +95,7 @@ class tx_ttproducts_marker implements t3lib_Singleton {
 					$this->setErrorCode($error_code);
 				}
 			}
+			$markerFile = $GLOBALS['TSFE']->tmpl->getFileName($markerFile);
 			tx_div2007_alpha5::loadLL_fh002($langObj, $markerFile);
 		}
 		$locallang = $langObj->getLocallang();
@@ -106,6 +103,7 @@ class tx_ttproducts_marker implements t3lib_Singleton {
 
 		$this->setGlobalMarkerArray($piVars, $locallang, $LLkey);
 		$error_code = $this->getErrorCode();
+
 		return (count($error_code) == 0 ? TRUE : FALSE);
 	}
 
@@ -129,9 +127,10 @@ class tx_ttproducts_marker implements t3lib_Singleton {
 		return $this->globalMarkerArray;
 	}
 
-	public function &replaceGlobalMarkers (&$content)	{
-		$markerArray = &$this->getGlobalMarkerArray();
-		$rc = &$this->cObj->substituteMarkerArrayCached($content,$markerArray);
+	public function replaceGlobalMarkers (&$content, $markerArray = array())	{
+		$globalMarkerArray = $this->getGlobalMarkerArray();
+		$markerArray = array_merge($globalMarkerArray, $markerArray);
+		$rc = $this->cObj->substituteMarkerArrayCached($content, $markerArray);
 		return $rc;
 	}
 
@@ -145,35 +144,31 @@ class tx_ttproducts_marker implements t3lib_Singleton {
 
 			// globally substituted markers, fonts and colors.
 		$splitMark = md5(microtime());
-		list($markerArray['###GW1B###' ], $markerArray['###GW1E###']) = explode($splitMark, $this->cObj->stdWrap($splitMark, $this->conf['wrap1.']));
-		list($markerArray['###GW2B###'], $markerArray['###GW2E###']) = explode($splitMark, $this->cObj->stdWrap($splitMark, $this->conf['wrap2.']));
-		list($markerArray['###GW3B###'], $markerArray['###GW3E###']) = explode($splitMark, $this->cObj->stdWrap($splitMark, $this->conf['wrap3.']));
+		list($markerArray['###GW1B###' ],$markerArray['###GW1E###']) = explode($splitMark,$this->cObj->stdWrap($splitMark,$this->conf['wrap1.']));
+		list($markerArray['###GW2B###'],$markerArray['###GW2E###']) = explode($splitMark,$this->cObj->stdWrap($splitMark,$this->conf['wrap2.']));
+		list($markerArray['###GW3B###'],$markerArray['###GW3E###']) = explode($splitMark,$this->cObj->stdWrap($splitMark,$this->conf['wrap3.']));
 		$markerArray['###GC1###'] = $this->cObj->stdWrap($this->conf['color1'], $this->conf['color1.']);
 		$markerArray['###GC2###'] = $this->cObj->stdWrap($this->conf['color2'], $this->conf['color2.']);
 		$markerArray['###GC3###'] = $this->cObj->stdWrap($this->conf['color3'], $this->conf['color3.']);
 		$markerArray['###DOMAIN###'] = $this->conf['domain'];
 		$markerArray['###PATH_FE_REL###'] = PATH_FE_TTPRODUCTS_REL;
 		$markerArray['###PATH_FE_ICONS###'] =  PATH_FE_TTPRODUCTS_REL . 'res/icons/fe/';;
-
-		if (
-            defined('ADDONS_TT_PRODUCTS_EXT') &&
-            t3lib_extMgm::isLoaded(ADDONS_TT_PRODUCTS_EXT)
-        ) {
+		if (t3lib_extMgm::isLoaded(ADDONS_EXTkey)) {
 			$markerArray['###PATH_FE_REL###'] = PATH_FE_ADDONS_TT_PRODUCTS_REL;
 			$markerArray['###PATH_FE_ICONS###'] = PATH_FE_ADDONS_TT_PRODUCTS_ICON_REL;
 		}
-		$pidMarkerArray = array('agb', 'basket', 'info', 'finalize', 'payment',
-			'thanks', 'itemDisplay', 'listDisplay', 'revocation', 'search', 'storeRoot',
-			'memo', 'tracking', 'billing', 'delivery'
+		$pidMarkerArray = array('agb','basket','info','finalize','payment',
+			'thanks','itemDisplay','listDisplay','revocation','search','storeRoot',
+			'memo','tracking','billing','delivery'
 		);
 		foreach ($pidMarkerArray as $k => $function)	{
-			$markerArray['###PID_' . strtoupper($function) . '###'] = intval($this->conf['PID' . $function]);
+			$markerArray['###PID_'.strtoupper($function).'###'] = intval($this->conf['PID'.$function]);
 		}
 		$markerArray['###SHOPADMIN_EMAIL###'] = $this->conf['orderEmail_from'];
 		$lang =  t3lib_div::_GET('L');
 
 		if ($lang!='')	{
-			$markerArray['###LANGPARAM###'] = '&amp;L=' . $lang;
+			$markerArray['###LANGPARAM###'] = '&amp;L='.$lang;
 		} else {
 			$markerArray['###LANGPARAM###'] = '';
 		}
@@ -195,15 +190,20 @@ class tx_ttproducts_marker implements t3lib_Singleton {
 				}
 			}
 		}
+
 		if (isset($locallang[$LLkey]))	{
-			$langArray = array_merge($locallang['default'], $locallang[$LLkey]);
+			if (isset($locallang['default']) && is_array($locallang['default'])) {
+				$langArray = array_merge($locallang['default'],$locallang[$LLkey]);
+			} else {
+				$langArray = $locallang[$LLkey];
+			}
 		} else {
 			$langArray = $locallang['default'];
 		}
+
 		if(isset($langArray) && is_array($langArray))	{
 			foreach ($langArray as $key => $value)	{
 				if (
-					version_compare(TYPO3_version, '4.6.0', '>=') &&
 					is_array($value)
 				) {
 					if ($value[0]['target']) {
@@ -214,7 +214,7 @@ class tx_ttproducts_marker implements t3lib_Singleton {
 				}
 
 				$langArray[$key] = $value;
-				$markerArray['###' . strtoupper($key) . '###'] = $value;
+				$markerArray['###'.strtoupper($key).'###'] = $value;
 			}
 		} else {
 			$langArray = array();
@@ -229,13 +229,13 @@ class tx_ttproducts_marker implements t3lib_Singleton {
 						case 'image.':
 							foreach ($value as $k2 => $v2)	{
 								$fileresource = $this->cObj->fileResource($v2);
-								$markerArray['###IMAGE' . strtoupper($k2) . '###'] = $fileresource;
+								$markerArray['###IMAGE'.strtoupper($k2).'###'] = $fileresource;
 							}
 						break;
 					}
 				} else {
-					if(isset($this->conf['marks.'][$key . '.']) && is_array($this->conf['marks.'][$key . '.']))	{
-						$out = $this->cObj->cObjGetSingle($this->conf['marks.'][$key], $this->conf['marks.'][$key . '.']);
+					if(isset($this->conf['marks.'][$key.'.']) && is_array($this->conf['marks.'][$key.'.']))	{
+						$out = $this->cObj->cObjGetSingle($this->conf['marks.'][$key],$this->conf['marks.'][$key.'.']);
 					} else {
 						$langArray[$key] = $value;
 						$out = $value;
@@ -244,7 +244,9 @@ class tx_ttproducts_marker implements t3lib_Singleton {
 				}
 			}
 		}
+
 		$this->globalMarkerArray = &$markerArray;
+
 		$this->setLangArray($langArray);
 	} // setGlobalMarkerArray
 
@@ -280,23 +282,17 @@ class tx_ttproducts_marker implements t3lib_Singleton {
 	 *
 	 * @access private
 	 */
-	public function &getMarkerFields (&$templateCode, &$tableFieldArray, &$requiredFieldArray, &$addCheckArray, $prefixParam, &$tagArray, &$parentArray)	{
+	public function getMarkerFields (&$templateCode, &$tableFieldArray, &$requiredFieldArray, &$addCheckArray, $prefixParam, &$tagArray, &$parentArray)	{
 
-		$retArray = (count($requiredFieldArray) ? $requiredFieldArray : array());
+		$retArray = (!empty($requiredFieldArray) ? $requiredFieldArray : array());
 		// obligatory fields uid and pid
 
 		$prefix = $prefixParam.'_';
 		$prefixLen = strlen($prefix);
-		// $tagArray = explode ('###', $templateCode);
-// 		$treffer = array();
-// 		preg_match_all('/###([\w:]+)###/', $templateCode, $treffer);
-// 		$tagArray = $treffer[1];
-// 		$bFieldaddedArray = array();
 
 		$tagArray = $this->getAllMarkers($templateCode);
 
 		if (is_array($tagArray))	{
-// 			$tagArray = array_flip($tagArray);
 			$retTagArray = $tagArray;
 			foreach ($tagArray as $tag => $v1)	{
 				$prefixFound = strstr($tag, $prefix);
@@ -308,15 +304,20 @@ class tx_ttproducts_marker implements t3lib_Singleton {
 					$fieldPartArray = t3lib_div::trimExplode('_', $fieldTmp);
 					$fieldTmp = $fieldPartArray[0];
 					$subFieldPartArray = t3lib_div::trimExplode(':', $fieldTmp);
-					$colon = (count($subFieldPartArray) > 1);
+                    $colon = (count($subFieldPartArray) > 1);
 					$field = $subFieldPartArray[0];
 
-					if (strstr($field,'image'))	{	// IMAGE markers can contain following number
-						$field = 'image';
-					} else {
+					if (!isset($tableFieldArray[$field])) {
+						$field = preg_replace('/[0-9]/', '', $field); // remove trailing numbers
+					}
+
+					if (
+                        !$colon &&
+                        !isset($tableFieldArray[$field])
+                    ) {
 						$newFieldPartArray = array();
-						foreach ($fieldPartArray as $k => $v)	{
-							if (in_array($v, $this->specialArray))	{
+						foreach ($fieldPartArray as $k => $v) {
+							if (in_array($v, $this->specialArray)) {
 								break;
 							} else {
 								$newFieldPartArray[] = $v;
@@ -324,11 +325,12 @@ class tx_ttproducts_marker implements t3lib_Singleton {
 						}
 						$field = implode('_', $newFieldPartArray);
 					}
+					$field = strtolower($field);
 
 					if (
-						!$colon &&
-						!is_array($tableFieldArray[$field])
-					)	{	// find similar field names with letters in other cases
+                        !$colon &&
+                        !is_array($tableFieldArray[$field])
+                    ) {	// find similar field names with letters in other cases
 						$upperField = strtoupper($field);
 						foreach ($tableFieldArray as $k => $v)	{
 							if (strtoupper($k) == $upperField)	{
@@ -337,8 +339,6 @@ class tx_ttproducts_marker implements t3lib_Singleton {
 							}
 						}
 					}
-					$field = strtolower($field);
-
 					if (is_array($tableFieldArray[$field]))	{
 						$retArray[] = $field;
 						$bFieldaddedArray[$field] = TRUE;
@@ -387,4 +387,5 @@ class tx_ttproducts_marker implements t3lib_Singleton {
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/marker/class.tx_ttproducts_marker.php'])	{
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/marker/class.tx_ttproducts_marker.php']);
 }
+
 

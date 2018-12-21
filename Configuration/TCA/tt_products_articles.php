@@ -33,12 +33,20 @@ $result = array (
 		'cruser_id' => 'cruser_id',
 		'iconfile' => PATH_TTPRODUCTS_ICON_TABLE_REL . 'tt_products_articles.gif',
 		'dividers2tabs' => '1',
-		'searchFields' => 'title,subtitle,itemnumber,note,note2',
+		'searchFields' => 'title,subtitle,itemnumber,keyword,note,note2',
 	),
 	'interface' => array (
-		'showRecordFieldList' => 'hidden,starttime,endtime,fe_group,title,subtitle,itemnumber,price,price2,weight,inStock,basketminquantity,color,color2,color3,size,size2,size3,description,gradings,material,quality,note,note2,image'
+		'showRecordFieldList' => 'hidden,starttime,endtime,fe_group,title,subtitle,keyword,itemnumber,price,price2,weight,inStock,basketminquantity,color,color2,color3,size,size2,size3,description,gradings,material,quality,note,note2,image,smallimage'
 	),
 	'columns' => array (
+		't3ver_label' => array (
+			'label'  => 'LLL:EXT:lang/locallang_general.xml:LGL.versionLabel',
+			'config' => array (
+				'type' => 'input',
+				'size' => '30',
+				'max'  => '30',
+			)
+		),
 		'tstamp' => array (
 			'exclude' => 1,
 			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tstamp',
@@ -133,6 +141,18 @@ $result = array (
 				'rows' => '3',
 				'cols' => '20',
 				'max' => '512'
+			)
+		),
+		'keyword' => array (
+			'exclude' => 1,
+			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.keyword',
+			'config' => array (
+				'type' => 'text',
+				'rows' => '5',
+				'cols' => '20',
+				'max' => '512',
+				'eval' => 'null',
+				'default' => NULL,
 			)
 		),
 		'itemnumber' => array (
@@ -326,18 +346,18 @@ $result = array (
 				'default' => NULL,
 			)
 		),
-		'config_type' => array (
-			'label' => 'LLL:EXT:cms/locallang_ttc.php:list_type',
-			'config' => array (
-				'type' => 'select',
-				'renderType' => 'selectSingle',
-				'items' => array (
-					array('', '')
-				),
-				'default' => '',
-				'authMode' => $GLOBALS['TYPO3_CONF_VARS']['BE']['explicitADmode'],
-			)
-		),
+        'config_type' => array (
+            'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products_articles.config_type',
+            'config' => array (
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'items' => array (
+                    array('', '')
+                ),
+                'default' => '',
+                'authMode' => $GLOBALS['TYPO3_CONF_VARS']['BE']['explicitADmode'],
+            )
+        ),
 		'config' => array (
 			'exclude' => 1,
 			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products_articles.config',
@@ -385,6 +405,22 @@ $result = array (
 				'default' => NULL,
 			)
 		),
+		'smallimage' => Array (
+			'exclude' => 1,
+			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.smallimage',
+			'config' => Array (
+				'type' => 'group',
+				'internal_type' => 'file',
+				'allowed' => $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'],
+				'max_size' => $GLOBALS['TYPO3_CONF_VARS']['BE']['maxFileSize'],
+				'uploadfolder' => $imageFolder,
+				'size' => '3',
+				'maxitems' => '10',
+				'minitems' => '0',
+				'eval' => 'null',
+				'default' => NULL,
+			)
+		),
 	),
 	'types' => array (
 		'1' =>
@@ -402,16 +438,15 @@ $result = array (
                     )
                 ),
 
-                'showitem' => 'hidden,--palette--;;1, title,--palette--;;3, itemnumber, inStock, basketminquantity, price,--palette--;;2, weight, color, color2, color3, size, size2, size3, description, gradings, material, quality, note,note2,image'
+                'showitem' => 'hidden,--palette--;;1, title,--palette--;;3, itemnumber, inStock, basketminquantity, price,--palette--;;2;;, weight, color, color2, color3, size, size2, size3, description, gradings, material, quality, note,note2,image,smallimage'
             )
 	),
 	'palettes' => array (
 		'1' => array('showitem' => 'starttime, endtime, fe_group'),
 		'2' => array('showitem' => 'price2, config'),
-		'3' => array('showitem' => 'subtitle'),
+		'3' => array('showitem' => 'subtitle, keyword'),
 	)
 );
-
 
 if (
     version_compare(TYPO3_version, '8.5.0', '<')
@@ -428,7 +463,6 @@ if (
             $result['types']['1']['showitem']
         );
 }
-
 
 
 return $result;

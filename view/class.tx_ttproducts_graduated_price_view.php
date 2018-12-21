@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2007-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -43,35 +43,33 @@ class tx_ttproducts_graduated_price_view implements t3lib_Singleton {
 	public $modelObj;
 	public $langObj;
 
-	public function init($langObj, $modelObj)	{
+	public function init($langObj, &$modelObj)	{
 		$this->langObj = $langObj;
 		$this->modelObj = $modelObj;
 	}
 
-	private function getFormulaMarkerArray($row, $priceFormula, &$markerArray, $suffix = '')	{
+	private function getFormulaMarkerArray($basketExtra, $row, $priceFormula, &$markerArray, $suffix='')	{
 		global $TCA;
 
 		if (isset($priceFormula) && is_array($priceFormula))	{
-			$tablename = $this->modelObj->tableObj->getName();
 			$priceObj = t3lib_div::makeInstance('tx_ttproducts_field_price');
 			$priceViewObj = t3lib_div::makeInstance('tx_ttproducts_field_price_view');
 			foreach ($priceFormula as $field => $value)	{
-				$keyMarker = '###' . $this->marker . '_' . strtoupper($field) . $suffix . '###';
-				if (strpos($TCA[$tablename]['interface']['showRecordFieldList'], $field) === FALSE)	{
+				$keyMarker = '###'.$this->marker.'_'.strtoupper($field).$suffix.'###';
+				if (strpos($TCA[$this->modelObj->tableObj->getName()]['interface']['showRecordFieldList'], $field) === FALSE) {
 					$value = '';
 				}
 				$markerArray[$keyMarker] = $value;
 			}
-
-			$priceNoTax = $priceObj->getPrice($priceFormula['formula'], FALSE, $row, FALSE);
-			$priceTax = $priceObj->getPrice($priceNoTax, TRUE, $row, FALSE);
-			$keyMarker = '###'.$this->marker .'_' . 'PRICE_TAX' . $suffix . '###';
+			$priceNoTax = $priceObj->getPrice($basketExtra,$priceFormula['formula'],false,$row,false);
+			$priceTax = $priceObj->getPrice($basketExtra,$priceNoTax,true,$row,false);
+			$keyMarker = '###'.$this->marker.'_'.'PRICE_TAX'.$suffix.'###';
 			$markerArray[$keyMarker] = $priceViewObj->priceFormat($priceTax);
-			$keyMarker = '###'.$this->marker . '_' . 'PRICE_NO_TAX' . $suffix . '###';
+			$keyMarker = '###'.$this->marker.'_'.'PRICE_NO_TAX'.$suffix.'###';
 			$markerArray[$keyMarker] = $priceViewObj->priceFormat($priceNoTax);
 
-			$basePriceTax = $priceObj->getResellerPrice($row, 1);
-			$basePriceNoTax = $priceObj->getResellerPrice($row, 0);
+			$basePriceTax = $priceObj->getResellerPrice($basketExtra, $row, 1);
+			$basePriceNoTax = $priceObj->getResellerPrice($basketExtra, $row, 0);
 
 			if ($basePriceTax)	{
 				$skontoTax = ($basePriceTax - $priceTax);
@@ -85,23 +83,23 @@ class tx_ttproducts_graduated_price_view implements t3lib_Singleton {
 				$tmpPercentNoTax = 'infinite';
 			}
 
-			$keyMarker = '###' . $this->marker . '_' . 'PRICE_TAX_DISCOUNT' . $suffix . '###';
+			$keyMarker = '###'.$this->marker.'_'.'PRICE_TAX_DISCOUNT'.$suffix.'###';
 			$markerArray[$keyMarker] = $priceViewObj->priceFormat($skontoTax);
-			$keyMarker = '###' . $this->marker . '_' .'PRICE_NO_TAX_DISCOUNT' . $suffix . '###';
+			$keyMarker = '###'.$this->marker.'_'.'PRICE_NO_TAX_DISCOUNT'.$suffix.'###';
 			$markerArray[$keyMarker] = $priceViewObj->priceFormat($skontoNoTax);
-			$keyMarker = '###' . $this->marker . '_' . 'PRICE_TAX_DISCOUNT_PERCENT' . $suffix . '###';
+			$keyMarker = '###'.$this->marker.'_'.'PRICE_TAX_DISCOUNT_PERCENT'.$suffix.'###';
 			$markerArray[$keyMarker] = $priceViewObj->priceFormat($tmpPercentTax);
-			$keyMarker = '###' . $this->marker . '_' . 'PRICE_NO_TAX_DISCOUNT_PERCENT' . $suffix . '###';
+			$keyMarker = '###'.$this->marker.'_'.'PRICE_NO_TAX_DISCOUNT_PERCENT'.$suffix.'###';
 			$markerArray[$keyMarker] = $priceViewObj->priceFormat($tmpPercentNoTax);
 		}
 	}
 
-	public function &getPriceSubpartArrays ($templateCode, &$row, $fieldname, &$subpartArray, &$wrappedSubpartArray, &$tagArray, $theCode='', $id='1')	{
+	public function &getPriceSubpartArrays (&$templateCode, &$row, $fieldname, &$subpartArray, &$wrappedSubpartArray, &$tagArray, $theCode='', $basketExtra=array(), $id='1') {
 
 		$subpartmarkerObj = t3lib_div::makeInstance('tx_ttproducts_subpartmarker');
 		$t = array();
-		$t['listFrameWork'] = $this->langObj->cObj->getSubpart($templateCode, '###GRADPRICE_FORMULA_ITEMS###');
-		$t['itemFrameWork'] = $this->langObj->cObj->getSubpart($t['listFrameWork'], '###ITEM_FORMULA###');
+		$t['listFrameWork'] = $this->langObj->cObj->getSubpart($templateCode,'###GRADPRICE_FORMULA_ITEMS###');
+		$t['itemFrameWork'] = $this->langObj->cObj->getSubpart($t['listFrameWork'],'###ITEM_FORMULA###');
 
 // 		$t['listFrameWork'] = $this->pibase->cObj->substituteMarkerArrayCached(
 // 				$t['listFrameWork'],
@@ -111,16 +109,15 @@ class tx_ttproducts_graduated_price_view implements t3lib_Singleton {
 // 			);
 
 		$priceFormulaArray = $this->modelObj->getFormulasByProduct($row['uid']);
-
 		if (count($priceFormulaArray))	{
 			$content = '';
 			foreach ($priceFormulaArray as $k => $priceFormula)	{
 				if (isset($priceFormula) && is_array($priceFormula))	{
 					$itemMarkerArray = array();
-					$this->getFormulaMarkerArray($row, $priceFormula, $itemMarkerArray);
+					$this->getFormulaMarkerArray($basketExtra, $row, $priceFormula, $itemMarkerArray);
 
-					$formulaContent = $this->langObj->cObj->substituteMarkerArray($t['itemFrameWork'], $itemMarkerArray);
-					$content .= $this->langObj->cObj->substituteSubpart($t['listFrameWork'],'###ITEM_FORMULA###', $formulaContent) ;
+					$formulaContent = $this->langObj->cObj->substituteMarkerArray($t['itemFrameWork'],$itemMarkerArray);
+					$content .= $this->langObj->cObj->substituteSubpart($t['listFrameWork'],'###ITEM_FORMULA###',$formulaContent) ;
 				}
 			}
 			$subpartArray['###GRADPRICE_FORMULA_ITEMS###'] = $content;
@@ -145,7 +142,8 @@ class tx_ttproducts_graduated_price_view implements t3lib_Singleton {
 	 * @access private
 	 */
 	public function getPriceMarkerArray (
-		&$row,
+		$row,
+		$basketExtra,
 		&$markerArray,
 		&$tagArray
 	)	{
@@ -153,7 +151,7 @@ class tx_ttproducts_graduated_price_view implements t3lib_Singleton {
 			$priceFormulaArray = $this->modelObj->getFormulasByProduct($row['uid']);
 			foreach ($priceFormulaArray as $k => $priceFormula)	{
 				if (isset($priceFormula) && is_array($priceFormula))	{
-					$this->getFormulaMarkerArray($row, $priceFormula, $markerArray, ($k + 1));
+					$this->getFormulaMarkerArray($basketExtra, $row, $priceFormula, $markerArray, ($k+1));
 				}
 			}
 		}
@@ -161,7 +159,6 @@ class tx_ttproducts_graduated_price_view implements t3lib_Singleton {
 		// empty all fields with no available entry
 		foreach ($tagArray as $value => $k1)	{
 			$keyMarker = '###' . $value . '###';
-
 			if (strstr($value, $this->marker . '_') && !$markerArray[$keyMarker] && $value != 'GRADPRICE_FORMULA_ITEMS') {
 				$markerArray[$keyMarker] = '';
 			}
@@ -174,4 +171,4 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/view/class.tx_ttproducts_graduated_price_view.php']);
 }
 
-?>
+

@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2007-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -38,16 +38,24 @@
  */
 
 
-class tx_ttproducts_pricetablescalc extends tx_ttproducts_pricecalc_base {
-//	var $conftablename = 'tt_products_graduated_price';
 
+
+class tx_ttproducts_pricetablescalc extends tx_ttproducts_pricecalc_base {
 
 	function init ($pibase)	{
 	// nothing
 	}
 
-	function getCalculatedData (&$itemArray, &$conf, $type, &$priceReduction, $priceTotalTax, $bUseArticles) {
-
+	function getCalculatedData (
+		&$itemArray,
+		&$conf,
+		$type,
+		&$priceReduction,
+		&$discountArray,
+		$priceTotalTax,
+		$bUseArticles,
+		$bMergeArticles = TRUE
+	) {
 		if (!$itemArray || !count($itemArray)) {
 			return;
 		}
@@ -55,7 +63,6 @@ class tx_ttproducts_pricetablescalc extends tx_ttproducts_pricecalc_base {
 		$graduatedPriceObj = t3lib_div::makeInstance('tx_ttproducts_graduated_price');
 		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$useArticles = $cnf->getUseArticles();
-
 		if ($bUseArticles && ($useArticles == 1 || $useArticles == 3)) {
 			$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 			$articleTable = $tablesObj->get('tt_products_articles', FALSE);
@@ -80,9 +87,9 @@ class tx_ttproducts_pricetablescalc extends tx_ttproducts_pricecalc_base {
 			if ($row1['graduated_price_uid'])	{
 				$count = 0;
 				$priceProduct = $row1['price'];
-
 				foreach($actItemArray as $actItem)	{
 					$count += floatval($actItem['count']);
+// 					$priceProduct += floatval($actItem['rec']['price']);
 				}
 				$priceFormulaArray = $graduatedPriceObj->getFormulasByProduct($uid);
 
@@ -91,19 +98,18 @@ class tx_ttproducts_pricetablescalc extends tx_ttproducts_pricecalc_base {
 					if ($count >= floatval($priceFormula['startamount']))	{
 						$formula = trim($priceFormula['formula']);
 						$len = strlen($formula);
-						$lastChar = substr($formula, -1, 1);
+						$lastChar = substr($formula,-1,1);
 
 						if (
-							!tx_div2007_core::testInt($lastChar)
+							tx_div2007_core::testInt($lastChar)
 						) {
-							$formula = substr($formula, 0, strlen($formula) - 1);
-
+							$formula = substr($formula,0,strlen($formula)-1);
 							switch ($lastChar)	{
 								case '%':
 									if ($formula > 100)	{
 										$formula = 100;
 									}
-									$priceProduct = $priceProduct * (1 - $formula / 100);
+									$priceProduct = $priceProduct * (1 - $formula/100);
 									break;
 							}
 						} else	{
@@ -129,7 +135,6 @@ class tx_ttproducts_pricetablescalc extends tx_ttproducts_pricecalc_base {
 						) {
 							$articleRow = $articleTable->get($articleUid);
 							$bIsAddedPrice = $cnf->hasConfig($articleRow, 'isAddedPrice');
-
 							if ($bIsAddedPrice)	{
 								$actPrice = $priceProduct + $articleRow['price'];
 							}
@@ -148,4 +153,4 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/lib/class.tx_ttproducts_pricetablescalc.php']);
 }
 
-?>
+

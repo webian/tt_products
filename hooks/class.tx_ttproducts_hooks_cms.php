@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2008 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2007-2008 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -37,9 +37,8 @@
  *
  */
 
-// require_once(PATH_BE_div2007.'hooks/class.tx_div2007_hooks_cms.php');
 
-class tx_ttproducts_hooks_cms extends tx_div2007_hooks_cms implements t3lib_Singleton {
+class tx_ttproducts_hooks_cms extends tx_div2007_hooks_cms {
 	public $extKey=TT_PRODUCTS_EXT;
 
 }
@@ -49,4 +48,4 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/hooks/class.tx_ttproducts_hooks_cms.php']);
 }
 
-?>
+

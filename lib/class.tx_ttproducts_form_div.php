@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2005-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2011 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -42,18 +42,22 @@ class tx_ttproducts_form_div {
 
 	static public function createSelect (
 		$langObj,
-		&$valueArray,
+		$valueArray,
 		$name,
 		$selectedKey,
-		$bSelectTags=TRUE,
-		$bTranslateText=TRUE,
-		$allowedArray=array(),
-		$type='select',
-		$mainAttributeArray=array(),
-		$layout='',
-		$imageFileArray=''
+		$bSelectTags = TRUE,
+		$bTranslateText = TRUE,
+		$allowedArray = array(),
+		$type = 'select',
+		$mainAttributeArray = array(),
+		$layout = '',
+		$imageFileArray = '',
+		$keyMarkerArray = ''
 	) {
 		global $TSFE;
+
+		$result = FALSE;
+		$parser = tx_div2007_core::newHtmlParser(false);
 
 		$bUseXHTML = $TSFE->config['config']['xhtmlDoctype'] != '';
 		$flags = ENT_QUOTES;
@@ -77,21 +81,23 @@ class tx_ttproducts_form_div {
 				} else {
 					$text = '';
 				}
+
 				if ($text == '')	{
 					if (strpos($selectValue,'LLL:EXT') === 0)	{
 						continue;
 					}
 					$text = $selectValue;
 				}
+
 				if (!count($allowedArray) || in_array($selectKey, $allowedArray))	{
 					$nameText = trim($text);
 					$valueText = $selectKey;
-
 					$selectedText = '';
 					$paramArray = array();
 					$preParamArray = array();
 
 					if (strcmp($selectKey, $selectedKey) == 0)	{
+
 						switch ($type)	{
 							case 'select':
 								$selectedText = ($bUseXHTML ? ' selected="selected"' : ' selected');
@@ -101,46 +107,68 @@ class tx_ttproducts_form_div {
 							case 'radio':
 								$selectedText = ($bUseXHTML ? ' checked="checked"' : ' checked');
 								$paramArray['checked'] = 'checked';
-
+								break;
+							default:
+								return FALSE;
 								break;
 						}
 					}
 
 					switch ($type)	{
 						case 'select':
-							$inputText = '<option value="' . htmlspecialchars($valueText, $flags) . '"' . $selectedText . '>' . $nameText . '</option>';
+							$inputTextArray = array('<option value="' . htmlspecialchars($valueText, $flags) . '"' . $selectedText . '>', '</option>');
 							break;
 						case 'checkbox':
 						case 'radio':
 							$preParamArray['type'] = $type;
 							$inputText = self::createTag('input', $name, $valueText, $preParamArray, $paramArray);
-							$inputText .=  ' ' . $nameText . '<br '. ($bUseXHTML ? '/' : '') . '>';
+
+							if ($layout == '')	{
+								$inputText .=  ' ' . $nameText . '<br '. ($bUseXHTML ? '/' : '') . '>';
+							}
+
+							$inputTextArray = array($inputText);
+							break;
+						default:
+							return FALSE;
 							break;
 					}
+
 					if ($layout == '')	{
-						$totaltext .= $inputText;
+						$totaltext .= $inputTextArray['0'] . ($type == 'select' ? $nameText : '') . $inputTextArray['1'];
 					} else	{
-						$tmpText = str_replace('###INPUT###', $inputText, $layout);
+						// $tmpText = str_replace('###INPUT###', $inputText, $layout);
+						$tmpText = $parser->substituteSubpart($layout, '###INPUT###', $inputTextArray);
+
 						if (is_array($imageFileArray) && isset($imageFileArray[$key]))	{
 							$tmpText = str_replace('###IMAGE###', $imageFileArray[$key], $tmpText);
+						}
+
+						if (is_array($keyMarkerArray) && isset($keyMarkerArray[$key]))	{
+
+							$tmpText = $langObj->cObj->substituteMarkerArray(
+								$tmpText,
+								$keyMarkerArray[$key]
+							);
 						}
 						$totaltext .= $tmpText;
 					}
 				}
 			} // foreach ($valueArray as $key => $parts) {
-
 			if ($bSelectTags && $type == 'select' && $name!='')	{
-
-				$mainAttributes = self::getAttributeString($mainAttributeArray);
-
-				$text = '<select name="' . $name . '"' . $mainAttributes . '>' . $totaltext . '</select>';
+				$mainAttributes = '';
+				if (isset($mainAttributeArray) && is_array($mainAttributeArray)) {
+					$mainAttributes = self::getAttributeString($mainAttributeArray);
+				}
+				$result = '<select name="' . $name . '" ' . $mainAttributes . '>' . $totaltext . '</select>';
 			} else {
-				$text = $totaltext;
+				$result = $totaltext;
 			}
 		} else {
-			$text = FALSE;
+			$result = FALSE;
 		}
-		return $text;
+
+		return $result;
 	}
 
 
@@ -156,7 +184,7 @@ class tx_ttproducts_form_div {
 	}
 
 
-	static public function getKeyValueArray ($valueArray)	{
+	public function getKeyValueArray ($valueArray)	{
 		$rc = array();
 
 		foreach ($valueArray as $k => $row)	{
@@ -166,24 +194,30 @@ class tx_ttproducts_form_div {
 	}
 
 
-	static protected function getAttributeString ($mainAttributeArray)	{
+	static protected function getAttributeString ($mainAttributeArray) {
 		global $TSFE;
 
 		$bUseXHTML = $TSFE->config['config']['xhtmlDoctype'] != '';
-		$rc = '';
-		if (count($mainAttributeArray))	{
+		$resultArray = array();
 
-			foreach ($mainAttributeArray as $attribute => $value)	{
-				if ($bUseXHTML || $attribute != 'checked' && $attribute != 'selected')	{
-					$rc .= ' ' . $attribute . '="' . $value . '"';
+		if (count($mainAttributeArray)) {
+
+			foreach ($mainAttributeArray as $attribute => $value) {
+				if (
+					$bUseXHTML ||
+					$attribute != 'checked' && $attribute != 'selected' && $attribute != 'disabled'
+				) {
+					if ($value != '') {
+						$resultArray[] = $attribute . '="' . $value . '"';
+					}
 				} else {
-					$rc .= ' ' . $attribute;
+					$resultArray[] = $attribute;
 				}
 			}
 		}
-		return $rc;
+		$result = implode(' ', $resultArray);
+		return $result;
 	}
-
 
 	static public function createTag (
 		$tag,
@@ -218,4 +252,5 @@ class tx_ttproducts_form_div {
 	}
 }
 
-?>
+
+

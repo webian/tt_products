@@ -26,12 +26,20 @@ $result = array (
 		'iconfile' => PATH_TTPRODUCTS_ICON_TABLE_REL . 'tt_products_cat_language.gif',
 		'languageField' => 'sys_language_uid',
 		'mainpalette' => 1,
-		'searchFields' => 'title,subtitle,catid,note,note2',
+		'searchFields' => 'title,subtitle,catid,keyword,note,note2',
 	),
 	'interface' => array (
 		'showRecordFieldList' => 'sys_language_uid,l18n_diffsource,hidden,starttime,endtime,fe_group,title,subtitle,note,note2,cat_uid'
 	),
 	'columns' => array (
+		't3ver_label' => array (
+			'label'  => 'LLL:EXT:lang/locallang_general.xml:LGL.versionLabel',
+			'config' => array (
+				'type' => 'input',
+				'size' => '30',
+				'max'  => '30',
+			)
+		),
 		'sys_language_uid' => array (
 			'exclude' => 0,
 			'label' => DIV2007_LANGUAGE_LGL . 'language',
@@ -131,6 +139,18 @@ $result = array (
 			),
 			'l10n_mode' => 'prefixLangTitle',
 		),
+		'keyword' => array (
+			'exclude' => 1,
+			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.keyword',
+			'config' => array (
+				'type' => 'text',
+				'rows' => '5',
+				'cols' => '20',
+				'max' => '512',
+				'eval' => 'null',
+				'default' => NULL,
+			)
+		),
 		'note' => array (
 			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.note',
 			'config' => array (
@@ -169,7 +189,7 @@ $result = array (
 		),
 	),
 	'types' => array (
-		'0' =>
+        '0' =>
             array(
                 'columnsOverrides' => array(
                     'note' => array(
@@ -183,7 +203,7 @@ $result = array (
                         )
                     )
                 ),
-                'showitem' => 'sys_language_uid, l18n_diffsource, hidden,--palette--;;1, cat_uid, title, subtitle, note, note2'
+                'showitem' => 'sys_language_uid, l18n_diffsource, hidden,--palette--;;1, cat_uid, title, subtitle, keyword, note, note2'
             )
 	),
 	'palettes' => array (
@@ -207,6 +227,7 @@ if (
             $result['types']['0']['showitem']
         );
 }
+
 
 
 return $result;

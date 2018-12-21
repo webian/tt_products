@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2009-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2009-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -38,9 +38,9 @@
  */
 
 
+
 class tx_ttproducts_mm_table extends tx_ttproducts_table_base {
 	protected $tableAlias = 'mm';
-
 
 }
 
@@ -49,4 +49,3 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/model/class.tx_ttproducts_mm_table.php']);
 }
 
-?>

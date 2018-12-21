@@ -120,7 +120,6 @@ class tx_ttproducts_cache {
 	// Todo. See http://wiki.typo3.org/Caching_framework
     protected function getCachedMagic () {
 		if (version_compare(TYPO3_version, '7.0.0', '<')) {
-
 			$cacheIdentifier = $this->calculateCacheIdentifier();
 
 			// If $entry is null, it hasn't been cached. Calculate the value and store it in the cache:
@@ -142,4 +141,3 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/cache/class.tx_ttproducts_cache.php']);
 }
 
-?>

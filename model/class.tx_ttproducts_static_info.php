@@ -37,8 +37,7 @@
  *
  */
 
-
-class tx_ttproducts_static_info {
+class tx_ttproducts_static_info implements t3lib_Singleton {
 
 	static private $staticInfo = FALSE;
 
@@ -67,7 +66,7 @@ class tx_ttproducts_static_info {
 
 				if (version_compare($sitVersion, '2.0.0', '>=')) {
 					// Initialise static info library
-					self::$staticInfo = t3lib_div::makeInstance($class);
+					self::$staticInfo = t3lib_div::makeInstance('' . $class);
 					if (
 						!method_exists(self::$staticInfo, 'needsInit') ||
 						self::$staticInfo->needsInit()
@@ -95,4 +94,4 @@ class tx_ttproducts_static_info {
 }
 
 
-?>
+

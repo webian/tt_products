@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2005-2007 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2005-2007 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -66,7 +66,7 @@ class tx_ttproducts_gifts_div {
 	/**
 	 * Adds gift markers to a markerArray
 	 */
-	static public function addGiftMarkers($markerArray, $giftnumber, $code = 'LISTGIFTS', $id = '1')	{
+	static public function addGiftMarkers($markerArray, $giftnumber, $code='LISTGIFTS', $id='1')	{
 
 		$basket = t3lib_div::makeInstance('tx_ttproducts_basket');
 		$markerArray['###GIFTNO###'] = $giftnumber;
@@ -76,7 +76,7 @@ class tx_ttproducts_gifts_div {
 		$markerArray['###GIFT_DELIVERY_EMAIL###'] = $basket->basketExt['gift'][$giftnumber]['deliveryemail'];
 		$markerArray['###GIFT_NOTE###'] = $basket->basketExt['gift'][$giftnumber]['note'];
 		//
-		$markerArray['###FIELD_ID###'] = TT_PRODUCTS_EXT . '_' . strtolower($code) . '_id_' . $id;
+		$markerArray['###FIELD_ID###'] = TT_PRODUCTS_EXT.'_'.strtolower($code).'_id_'.$id;
 		// here again, because this is here in ITEM_LIST view
 		//	  $markerArray['###FIELD_QTY###'] =  '';
 
@@ -144,10 +144,10 @@ class tx_ttproducts_gifts_div {
 					$row = array();
 					$productObj->variant->modifyRowFromVariant ($row, $variant);
 
-					$query = 'uid_product=\'' . intval($productid) . '\'';
+					$query='uid_product=\''.intval($productid).'\'';
 					foreach ($variantFields as $k => $field)	{
 						if ($row[$field])	{
-							$query .= ' AND ' . $field . '=' . $TYPO3_DB->fullQuoteStr($row[$field], 'tt_products_articles');
+							$query .= ' AND '.$field.'='.$TYPO3_DB->fullQuoteStr($row[$field],'tt_products_articles');
 						}
 					}
 					$articleRes = $GLOBALS['TYPO3_DB']->exec_SELECTquery('uid', 'tt_products_articles', $query);
@@ -174,4 +174,4 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 }
 
 
-?>
+

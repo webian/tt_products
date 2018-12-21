@@ -37,7 +37,7 @@
  *
  */
 
-class tx_ttproducts_hooks_transactor {
+class tx_ttproducts_hooks_transactor implements t3lib_Singleton {
 
 	public function execute (
 		$pObj,
@@ -52,4 +52,3 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/hooks/class.tx_ttproducts_hooks_transactor.php']);
 }
 
-?>

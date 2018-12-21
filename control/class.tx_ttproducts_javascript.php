@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2006-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2006-2012 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -45,9 +45,10 @@ class tx_ttproducts_javascript implements t3lib_Singleton {
 	var $bAjaxAdded;
 	var $bCopyrightShown;
 	var $copyright;
+	public $fixInternetExplorer;
 
 
-	function init ($pibase, $ajax) {
+	function init($pibase, $ajax) {
 		$this->pibase = $pibase;
 		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 
@@ -64,7 +65,7 @@ class tx_ttproducts_javascript implements t3lib_Singleton {
 *
 *  Copyright notice
 *
-*  (c) 2006-2014 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2006-2018 Franz Holzinger <franz@ttproducts.de>
 *  All rights reserved
 *
 *  Released under GNU/GPL (http://typo3.com/License.1625.0.html)
@@ -76,17 +77,56 @@ class tx_ttproducts_javascript implements t3lib_Singleton {
 *  This copyright notice MUST APPEAR in all copies of the script
 ***************************************************************/
 ';
+		$this->fixInternetExplorer = '
+if (!Array.prototype.indexOf) { // published by developer.mozilla.org
+	Array.prototype.indexOf = function (searchElement /*, fromIndex */ ) {
+		"use strict";
+		if (this == null) {
+			throw new TypeError();
+		}
+		var t = Object(this);
+		var len = t.length >>> 0;
+		if (len === 0) {
+			return -1;
+		}
+		var n = 0;
+		if (arguments.length > 1) {
+			n = Number(arguments[1]);
+			if (n != n) { // shortcut for verifying if it\'s NaN
+				n = 0;
+			} else if (n != 0 && n != Infinity && n != -Infinity) {
+				n = (n > 0 || -1) * Math.floor(Math.abs(n));
+			}
+		}
+		if (n >= len) {
+			return -1;
+		}
+		var k = n >= 0 ? n : Math.max(len - Math.abs(n), 0);
+		for (; k < len; k++) {
+			if (k in t && t[k] === searchElement) {
+				return k;
+			}
+		}
+		return -1;
+	}
+}
+	';
 
 	}
 
-	static public function convertHex($m) {
-		$result = '\\x' . (ord($m[1]) < 16 ? '0' : '') . dechex(ord($m[1]));
+
+	static public function convertHex ($params) {
+		$result = '\\x' . (ord($params[1]) < 16 ? '0' : '') . dechex(ord($params[1]));
 		return $result;
 	}
 
-	/*
-	 * Escapes strings to be included in javascript
-	 */
+
+ /*
+ * Escapes strings to be included in javascript
+ *
+ * @param	[type]		$s: ...
+ * @return	[type]		...
+ */
 	public function jsspecialchars ($s) {
 		$result = preg_replace_callback(
 			'/([\x09-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e])/',
@@ -97,6 +137,7 @@ class tx_ttproducts_javascript implements t3lib_Singleton {
 		return $result;
 	}
 
+
 		/**
 		 * Sets JavaScript code in the additionalJavaScript array
 		 *
@@ -106,7 +147,7 @@ class tx_ttproducts_javascript implements t3lib_Singleton {
 		 * @return	  	void
 		 * @see
 		 */
-	function set ($fieldname, $params='', $count=0, $catid='cat', $parentFieldArray=array(), $piVarArray=array(), $fieldArray=array(), $method='clickShow') {
+	function set ($fieldname, $params='', $currentRecord='', $count=0, $catid='cat', $parentFieldArray=array(), $piVarArray=array(), $fieldArray=array(), $method='clickShow') {
 		global $TSFE;
 
 		$bDirectHTML = FALSE;
@@ -114,11 +155,13 @@ class tx_ttproducts_javascript implements t3lib_Singleton {
 		$bError = FALSE;
 		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
 
-		$emailArr =  explode('|', $message = tx_div2007_alpha5::getLL_fh003($langObj, 'invalid_email'));
+		$message = tx_div2007_alpha5::getLL_fh003($langObj, 'invalid_email');
+		$emailArr =  explode('|', $message);
 
 		if (!$this->bCopyrightShown && $fieldname != 'xajax')	{
 			$code = $this->copyright;
 			$this->bCopyrightShown = TRUE;
+			$code .= $this->fixInternetExplorer;
 		}
 		if (!is_object($this->ajax) && in_array($fieldname, array('fetchdata')))	{
 			$fieldname = 'error';
@@ -141,7 +184,7 @@ class tx_ttproducts_javascript implements t3lib_Singleton {
 		if (test(element.value)){
 			return (true);
 		}
-		alert("' . $emailArr[0] . '\'"+element.value+"\'' . $emailArr[1] . '");
+		alert("'.$emailArr[0].'\'"+element.value+"\''.$emailArr[1].'");
 		return (false);
 	}
 
@@ -163,6 +206,8 @@ class tx_ttproducts_javascript implements t3lib_Singleton {
 	';
 				break;
 			case 'selectcat':
+				$name = 'tt_products[' . $fieldname . ']';
+
 				if (is_array($params))	{
 					$funcs = count ($params);
 					$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
@@ -170,7 +215,8 @@ class tx_ttproducts_javascript implements t3lib_Singleton {
 					$ajaxConf = $cnf->getAJAXConf();
 					if (is_array($ajaxConf))	{
 						// TODO: make it possible that AJAX gets all the necessary configuration
-						$code .= 'var conf = new Array();
+						$code .= '		var conf = new Array();';
+						$code .= '
 		';
 						foreach ($ajaxConf as $k => $actConf)	{
 							$pVar = t3lib_div::_GP($k);
@@ -189,64 +235,77 @@ class tx_ttproducts_javascript implements t3lib_Singleton {
 		var inAction = false; // is the script still running?
 		var maxFunc = '.$funcs.';
 		';
+
 					foreach ($piVarArray as $fnr => $pivar)	{
 						$code .= 'pi['.$fnr.'] = "'.$pivar.'";';
 					}
 					$code .= '
 		';
+
 					foreach ($params as $fnr => $catArray)	{
 						$code .= 'c['.$fnr.'] = new Array('.count($catArray).');';
 						foreach ($catArray as $k => $row)	{
-							$code .= 'c[' . $fnr . '][' . $k . '] = new Array(3);';
-							$code .= 'c[' . $fnr . '][' . $k . '][0] = "'.$this->jsspecialchars($row['title']) . '"; ' ;
+							$code .= 'c['.$fnr.']['.$k.'] = new Array(3);';
+							$code .= 'c['.$fnr.']['.$k.'][0] = "'.$this->jsspecialchars($row['title']).'"; ' ;
 							$parentField = $parentFieldArray[$fnr];
-							$code .= 'c[' . $fnr . '][' . $k . '][1] = "' . intval($row[$parentField]) . '"; ' ;
+							$code .= 'c['.$fnr.']['.$k.'][1] = "'.intval($row[$parentField]).'"; ' ;
 							$child_category = $row['child_category'];
 							if (is_array($child_category))	{
-								$code .= 'c[' . $fnr . '][' . $k . '][2] = new Array(' . count($child_category) . ');';
+								$code .= 'c['.$fnr.']['.$k.'][2] = new Array('.count($child_category).');';
 								$count = 0;
 								foreach ($child_category as $k1 => $childCat)	{
-									$newCode = 'c[' . $fnr . '][' . $k . '][2][' . $count . '] = "' . $childCat . '"; ';
+									$newCode = 'c['.$fnr.']['.$k.'][2]['.$count.'] = "'.$childCat.'"; ';
 									$code .= $newCode;
 									$count++;
 								}
 							} else {
-								$code .= 'c[' . $fnr . '][' . $k . '][2] = "0"; ' ;
+								$code .= 'c['.$fnr.']['.$k.'][2] = "0"; ' ;
 							}
 							$code .= '
 		';
 						}
 					}
 				}
+
 				$code .=
 		'
 		' .
-	'function fillSelect (select,id,showSubCategories) {
+	'function fillSelect (select,id,contentId,showSubCategories) {
 		var sb;
 		var sbt;
 		var index;
-		var selOption;
 		var subcategories;
 		var bShowArticle = 0;
 		var len;
 		var idel;
 		var category;
+		var selectBoxes;
+		var categoryArray = new Array();
 
-		if (inAction == true)	{
+		if (inAction == true) {
 			return false;
 		}
 		inAction = true;
-		index = select.selectedIndex;
-		selOption = select.options[index];
-		category = selOption.value;
+
+		selectBoxes = document.getElementsByName("' . $name . '");
+		for(var i = 0; i < selectBoxes.length; i++)
+		{
+			var obj = selectBoxes.item(i);
+
+			category = obj.value;
+			if (category != "0" && categoryArray.indexOf(category) == -1) {
+				categoryArray.push(category);
+			}
+		}
+		category = categoryArray.join(",");
 
 		if (id > 0) {
 			var func;
 			var bRootFunctions = (maxFunc > 1) && (id == 2);
 
-			sb = document.getElementById("' . $catid . '"+1);
+			sb = document.getElementById("'.$catid.'"+1);
 			func = sb.selectedIndex - 1;
-			if (maxFunc == 1 || func < 0 || func > maxFunc)	{
+			if (maxFunc == 1 || func < 0 || func > maxFunc) {
 				func = 0;
 				bRootFunctions = false;
 			}
@@ -295,12 +354,23 @@ class tx_ttproducts_javascript implements t3lib_Singleton {
 		if (bShowArticle)	{
 			var data = new Array();
 
-		data["' . $this->pibase->extKey . '"] = new Array();
-		data["' . $this->pibase->extKey . '"]["' . $catid . '"] = category;
+		data["'.$this->pibase->extKey.'"] = new Array();
+		data["'.$this->pibase->extKey.'"]["'.$catid.'"] = category;
 		';
-			if ($method == 'clickShow')	{
-				$code .= $this->pibase->extKey . '_showArticle(data);';
-			}
+				if ($currentRecord != '') {
+					$currentParts = explode(':', $currentRecord);
+					$code .= '
+		data["tt_content"] = new Array();
+		data["tt_content"]["uid"] = contentId;
+		';
+				}
+
+				$code .= '
+				';
+
+				if ($method == 'clickShow')	{
+					$code .= $this->pibase->extKey.'_showArticle(data);';
+				}
 				$code .= '
 		} else {
 			/* nothing */
@@ -316,37 +386,37 @@ class tx_ttproducts_javascript implements t3lib_Singleton {
 		var data = new Array();
 		var func;
 
-		sb = document.getElementById("' . $catid . '"+1);
+		sb = document.getElementById("'.$catid.'"+1);
 		func = sb.selectedIndex - 1;
 		for (var k = 2; k <= boxCount; k++) {
-			sb = document.getElementById("' . $catid . '"+k);
+			sb = document.getElementById("'.$catid.'"+k);
 			index = sb.selectedIndex;
 			if (index > 0)	{
 				value = sb.options[index].value;
 				if (value)	{
-					data["' . $this->pibase->extKey . '"] = new Array();
-					data["' . $this->pibase->extKey . '"][pi[func]] = value;
+					data["'.$this->pibase->extKey.'"] = new Array();
+					data["'.$this->pibase->extKey.'"][pi[func]] = value;
 				}
 			}
 		}
-		var sub = document.getElementsByName("' . $this->pibase->prefixId . '[submit]")[0];
+		var sub = document.getElementsByName("'.$this->pibase->prefixId.'[submit]")[0];
 		for (k in sub.form.elements)	{
 			var el = sub.form.elements[k];
 			var elname;
 			if (el)	{
 				elname = String(el.name);
 			}
-			if (elname && elname.indexOf("function") == -1 && elname.indexOf("' . $this->pibase->prefixId . '") == 0)	{
+			if (elname && elname.indexOf("function") == -1 && elname.indexOf("'.$this->pibase->prefixId.'") == 0)	{
 				var start = elname.indexOf("[");
 				var end = elname.indexOf("]");
 				var element = elname.substring(start+1,end);
-				data["' . $this->pibase->extKey . '"][element] = el.value;
+				data["'.$this->pibase->extKey.'"][element] = el.value;
 			}
 		}
 
 			';
 				if ($method == 'submitShow')	{
-		        		$code .= $this->pibase->extKey . '_showList(data);';
+		        		$code .= $this->pibase->extKey.'_showList(data);';
 				}
 				$code .= '
 		return true;
@@ -355,15 +425,15 @@ class tx_ttproducts_javascript implements t3lib_Singleton {
 				break;
 
 			case 'fetchdata':
-				$code .= 'var vBoxCount = new Array(' . count($params) . '); // number of select boxes'.chr(13);
+				$code .= 'var vBoxCount = new Array('.count($params).'); // number of select boxes'.chr(13);
 				$code .= 'var v = new Array(); // variants'.chr(13).chr(13);
 				foreach ($params as $tablename => $selectableVariantFieldArray)	{
 					if (is_array($selectableVariantFieldArray))	{
-						$code .= 'vBoxCount["' . $tablename.'"] = ' . (count($selectableVariantFieldArray)) . ';' . chr(13);
-						$code .= 'v["'.$tablename.'"] = new Array(' . count($selectableVariantFieldArray) . ');'. chr(13);
+						$code .= 'vBoxCount["'.$tablename.'"] = '.(count($selectableVariantFieldArray)).';'.chr(13);
+						$code .= 'v["'.$tablename.'"] = new Array('.count($selectableVariantFieldArray).');'.chr(13);
 						$k = 0;
 						foreach ($selectableVariantFieldArray as $variant => $field)	{
-							$code .= 'v["' . $tablename . '"][' . $k . '] = "' . $field . '";' . chr(13);
+							$code .= 'v["'.$tablename.'"]['.$k.'] = "'.$field.'";'.chr(13);
 							$k++;
 						}
 					}
@@ -397,7 +467,7 @@ class tx_ttproducts_javascript implements t3lib_Singleton {
 			}
 		}
 	';
-				$code .= '	' . $this->pibase->extKey . '_fetchRow(data);
+				$code .= '	'.$this->pibase->extKey.'_fetchRow(data);
 		return true;
 	}';
 				break;
@@ -411,6 +481,7 @@ class tx_ttproducts_javascript implements t3lib_Singleton {
 				break;
 
 			case 'xajax':
+
 				// XAJAX part
 				if (!$this->bAjaxAdded && is_object($this->ajax) && is_object($this->ajax->taxajax))	{
 					$code = $this->ajax->taxajax->getJavascript(t3lib_extMgm::siteRelPath(TAXAJAX_EXT));
@@ -423,6 +494,7 @@ class tx_ttproducts_javascript implements t3lib_Singleton {
 				$bError = TRUE;
 				break;
 		} // switch
+
 
 		if (!$bError)	{
 			if ($code)	{
@@ -443,4 +515,4 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 }
 
 
-?>
+

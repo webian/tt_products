@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2008 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2007-2008 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -49,14 +49,14 @@ class tx_ttproducts_country_view extends tx_ttproducts_table_base_view {
 	 * @return	array
 	 * @access private
 	 */
-	function getRowMarkerArray (&$row, &$markerArray, &$fieldsArray)	{
+	function getRowMarkerArray ($row, &$markerArray, &$fieldsArray)	{
 		global $TSFE;
 
-		$markerTable = implode('', t3lib_div::trimExplode('_' , $this->getModelObj()->getFuncTablename()));
+		$markerTable = implode('',t3lib_div::trimExplode('_',$this->getModelObj()->getFuncTablename()));
 
 		foreach ($fieldsArray as $k => $field)	{
-			$markerKey = strtoupper($markerTable . '_' . $field);
-			$markerArray['###'.$markerKey.'###'] = htmlentities($row[$field], ENT_QUOTES, 'UTF-8');
+			$markerKey = strtoupper($markerTable.'_'.$field);
+			$markerArray['###' . $markerKey . '###'] = htmlentities($row[$field], ENT_QUOTES, 'UTF-8');
 		}
 	}
 }
@@ -68,4 +68,3 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 }
 
 
-?>

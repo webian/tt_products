@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2008-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -36,6 +36,9 @@
  *
  */
 
+
+
+
 class tx_ttproducts_control_search implements t3lib_Singleton {
 	public $cObj;
 	public $conf;
@@ -49,14 +52,14 @@ class tx_ttproducts_control_search implements t3lib_Singleton {
 	public function init (&$content, &$conf, &$config, $pibaseClass, &$error_code) {
 		global $TSFE, $TCA;
 
-		$pibaseObj = t3lib_div::makeInstance($pibaseClass);
-		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
+		$pibaseObj = t3lib_div::makeInstance(''.$pibaseClass);
 		$this->cObj = $pibaseObj->cObj;
 
 		$flexformArray = t3lib_div::xml2array($this->cObj->data['pi_flexform']);
 		$flexformTyposcript = tx_div2007_ff::get($flexformArray, 'myTS');
 		if($flexformTyposcript) {
-			$tsparser = t3lib_div::makeInstance('t3lib_tsparser');
+			$tsparser = tx_div2007_core::newTsParser();
+
 			// Copy conf into existing setup
 			$tsparser->setup = $conf;
 			// Parse the new Typoscript
@@ -76,7 +79,7 @@ class tx_ttproducts_control_search implements t3lib_Singleton {
 		);
 
 		tx_div2007_alpha5::loadLL_fh002($pibaseObj, 'EXT:' . TT_PRODUCTS_EXT . '/pi_search/locallang.xml');
-		$allText = tx_div2007_alpha5::getLL_fh003($langObj, 'all');
+		$allText = tx_div2007_alpha5::getLL_fh003($pibaseObj, 'all');
 
 			// get all extending TCAs
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['extendingTCA']))	{
@@ -92,7 +95,7 @@ class tx_ttproducts_control_search implements t3lib_Singleton {
 		$templateSuffix = tx_div2007_ff::get($flexformArray, 'template_suffix');
 		$templateSuffix = strtoupper($templateSuffix);
 		$config['templateSuffix'] = ($templateSuffix ? $templateSuffix : $config['templateSuffix']);
-		$config['templateSuffix'] = ($config['templateSuffix'] ? '_' . $config['templateSuffix'] : '');
+		$config['templateSuffix'] = ($config['templateSuffix'] ? '_'.$config['templateSuffix'] : '');
 
 		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
 		$langObj->init1($pibaseObj, $pibaseObj->cObj, $conf, 'control/class.tx_ttproducts_control_search.php');
@@ -147,11 +150,11 @@ class tx_ttproducts_control_search implements t3lib_Singleton {
 		$config['local_table'] = $cnf->getTableName($ctrlArray[$config['local_param']]);
 		$config['foreign_table'] = $cnf->getTableName($ctrlArray[$config['foreign_param']]);
 		if ($config['url'] != '')	{
-			$url = str_replace('index.php?', '', $config['url']);
-			$urlArray = t3lib_div::trimExplode('=', $url);
+			$url = str_replace('index.php?','',$config['url']);
+			$urlArray = t3lib_div::trimExplode('=',$url);
 			if ($urlArray['0'] == 'id' && intval($urlArray['1']))	{
 				$id = $urlArray['1'];
-				$url = tx_div2007_alpha5::getPageLink_fh003($cObj, $id);
+				$url = tx_div2007_alpha5::getPageLink_fh003($cObj,$id);
 				$config['url'] = $url;
 			}
 		}
@@ -165,7 +168,7 @@ class tx_ttproducts_control_search implements t3lib_Singleton {
 		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$templateObj = t3lib_div::makeInstance('tx_ttproducts_template');
 		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
-		$pibaseObj = t3lib_div::makeInstance($pibaseClass);
+		$pibaseObj = t3lib_div::makeInstance('' . $pibaseClass);
 		$subpartmarkerObj = t3lib_div::makeInstance('tx_ttproducts_subpartmarker');
 		$searchViewObj = t3lib_div::makeInstance('tx_ttproducts_search_view');
 		$error_code = array();
@@ -176,10 +179,7 @@ class tx_ttproducts_control_search implements t3lib_Singleton {
 			$theCode = (string) trim($theCode);
 			$contentTmp = '';
 			$templateCode = $templateObj->get($theCode, $langObj, $this->cObj, $tmp='', $errorMessage);
-			$theTemplateCode = $this->cObj->getSubpart(
-				$templateCode,
-				$subpartmarkerObj->spMarker('###' . $theCode . $this->config['templateSuffix'] . '###')
-			);
+			$theTemplateCode = $this->cObj->getSubpart($templateCode,$subpartmarkerObj->spMarker('###'.$theCode.$this->config['templateSuffix'].'###'));
 
 			switch($theCode)	{
 				case 'FIRSTLETTER':
@@ -272,7 +272,7 @@ class tx_ttproducts_control_search implements t3lib_Singleton {
 				unset($errorMessage);
 				break; // while
 			} else {
-				$content .= tx_div2007_alpha5::wrapContentCode_fh004($contentTmp, $theCode, $pibaseObj->prefixId, $this->cObj->data['uid']);
+				$content .= tx_div2007_alpha5::wrapContentCode_fh004($contentTmp,$theCode,$pibaseObj->prefixId,$this->cObj->data['uid']);
 			}
 		}
 
@@ -299,4 +299,4 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/control/class.tx_ttproducts_control_search.php']);
 }
 
-?>
+

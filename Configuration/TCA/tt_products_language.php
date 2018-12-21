@@ -8,7 +8,6 @@ if (!$imageFolder) {
 	$imageFolder = 'uploads/pics';
 }
 
-
 // ******************************************************************
 // This is the language overlay for the products table, tt_products
 // ******************************************************************
@@ -36,9 +35,17 @@ $result = array (
 		'searchFields' => 'title,subtitle,itemnumber,ean,note,note2,www',
 	),
 	'interface' => array (
-		'showRecordFieldList' => 'sys_language_uid,hidden,starttime,endtime,prod_uid,title,subtitle,unit,note,note2,datasheet,www,image'
+		'showRecordFieldList' => 'sys_language_uid,hidden,starttime,endtime,prod_uid,title,subtitle,keyword,unit,note,note2,datasheet,www,image,smallimage'
 	),
 	'columns' => array (
+		't3ver_label' => array (
+			'label'  => 'LLL:EXT:lang/locallang_general.xml:LGL.versionLabel',
+			'config' => array (
+				'type' => 'input',
+				'size' => '30',
+				'max'  => '30',
+			)
+		),
 		'sys_language_uid' => array (
 			'exclude' => 0,
 			'label' => DIV2007_LANGUAGE_LGL . 'language',
@@ -162,9 +169,22 @@ $result = array (
 				'rows' => '3',
 				'cols' => '20',
 				'max' => '512',
+				'eval' => 'null',
 				'default' => NULL,
 			),
 			'l10n_mode' => 'prefixLangTitle',
+		),
+		'keyword' => array (
+			'exclude' => 1,
+			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.keyword',
+			'config' => array (
+				'type' => 'text',
+				'rows' => '5',
+				'cols' => '20',
+				'max' => '512',
+				'eval' => 'null',
+				'default' => NULL,
+			)
 		),
 		'itemnumber' => array (
 			'exclude' => 1,
@@ -248,9 +268,25 @@ $result = array (
 				'default' => NULL,
 			)
 		),
+		'smallimage' => Array (
+			'exclude' => 1,
+			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.smallimage',
+			'config' => Array (
+				'type' => 'group',
+				'internal_type' => 'file',
+				'allowed' => $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'],
+				'max_size' => $GLOBALS['TYPO3_CONF_VARS']['BE']['maxFileSize'],
+				'uploadfolder' => $imageFolder,
+				'size' => '5',
+				'maxitems' => '10',
+				'minitems' => '0',
+				'eval' => 'null',
+				'default' => NULL,
+			)
+		),
 	),
 	'types' => array (
-        '1' =>
+		'1' =>
             array(
                 'columnsOverrides' => array(
                     'note' => array(
@@ -264,12 +300,12 @@ $result = array (
                         )
                     )
                 ),
-            'showitem' => 'sys_language_uid, l18n_diffsource, hidden,--palette--;;1, prod_uid,title,--palette--;;2, unit, note, note2,image, datasheet'
-        )
+                'showitem' => 'sys_language_uid, l18n_diffsource, hidden,--palette--;;1, prod_uid,title,--palette--;;2, unit, note, note2, image, smallimage, datasheet'
+            )
 	),
 	'palettes' => array (
 		'1' => array('showitem' => 'starttime,endtime,fe_group'),
-		'2' => array('showitem' => 'subtitle, itemnumber, www'),
+		'2' => array('showitem' => 'subtitle, keyword, itemnumber, www'),
 	)
 );
 
@@ -290,7 +326,6 @@ if (
             $result['types']['1']['showitem']
         );
 }
-
 
 
 return $result;

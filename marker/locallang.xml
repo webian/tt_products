@@ -226,16 +226,19 @@
 			<label index="memo_not_logged_in">You are not logged onto the system.</label>
 
 			<label index="sellers_salutation">Kind regards</label>
-			<label index="sellers_company"> </label>
-			<label index="sellers_name"> </label>
-			<label index="sellers_address"> </label>
-			<label index="sellers_city"> </label>
-			<label index="sellers_country"> </label>
-			<label index="sellers_phone">Tel: +</label>
-			<label index="sellers_fax">Fax: +</label>
-			<label index="sellers_hrb">Registration court: </label>
-			<label index="sellers_executive">Managing Director: </label>
-			<label index="sellers_vat_id">EU VAT No: </label>
+			<label index="sellers_company">company of the seller</label>
+			<label index="sellers_name">name of the seller</label>
+			<label index="sellers_address">address of the seller</label>
+			<label index="sellers_city">city of the seller</label>
+			<label index="sellers_country">county of the seller</label>
+			<label index="sellers_phone">telephone of the seller</label>
+			<label index="sellers_fax">fax of the seller</label>
+			<label index="sellers_email">e-mail of the seller</label>
+			<label index="sellers_internet">internet address of the seller</label>
+			<label index="sellers_internet_other">internet addresses of the seller</label>
+			<label index="sellers_hrb">Registration court of the seller</label>
+			<label index="sellers_executive">Managing Director of the seller</label>
+			<label index="sellers_vat_id">EU VAT No of the seller</label>
 
 			<label index="order_confirmation">Order confirmation</label>
 			<label index="order_confirmation_thanks">Thank you for your order!</label>
@@ -409,6 +412,10 @@
 			<label index="voucher_received">You have received a voucher code.</label>
 			<label index="voucher_unique">Unique voucher code</label>
 			<label index="voucher_value_euro">Value of the voucher in Euro</label>
+
+			<label index="text_message_shipping_10">Shipping to countries #10</label>
+			<label index="text_message_shipping_20">Shipping to countries #20</label>
+			<label index="text_message_shipping_30">Shipping to countries #30</label>
 
 			</languageKey>
 	</data>

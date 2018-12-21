@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2006-2007 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2006-2007 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -51,7 +51,7 @@ class tx_ttproducts_javascript_marker implements t3lib_Singleton {
 
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
-		$this->bneedXajax = FALSE;
+		$this->bneedXajax = false;
 	}
 
 
@@ -80,8 +80,8 @@ class tx_ttproducts_javascript_marker implements t3lib_Singleton {
 				$marker = rtrim($key,'.');
 				$jsText = $this->pibase->cObj->substituteMarkerArray($confJS['value'], $jsItemMarkerArray);
 				$paramsArray = array($marker => $jsText);
-				$javaScriptObj->set('direct', $paramsArray);
-				$marker = '###' . $this->marker . '_' . strtoupper($marker) . '###';
+				$javaScriptObj->set('direct', $paramsArray, $this->pibase->cObj->currentRecord);
+				$marker = '###'.$this->marker.'_'.strtoupper($marker).'###';
 				$markerArray[$marker] = '';
 			}
 		}
@@ -95,4 +95,4 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 }
 
 
-?>
+

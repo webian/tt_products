@@ -39,6 +39,7 @@
  */
 
 
+
 class tx_ttproducts_subpartmarker implements t3lib_Singleton {
 	var $cObj; // reference to object
 	var $conf;
@@ -59,14 +60,15 @@ class tx_ttproducts_subpartmarker implements t3lib_Singleton {
  		$this->conf = &$cnf->conf;
 	}
 
+
 	/**
 	 * Returning template subpart marker
 	 */
 	function spMarker ($subpartMarker) {
 		$altSPM = '';
-		if (isset($this->conf['altMainMarkers.']))	{
+		if (isset($this->conf['altMainMarkers.'])) {
             $sPBody = substr($subpartMarker, 3, -3);
-			$altSPM = trim($this->cObj->stdWrap($this->conf['altMainMarkers.'][$sPBody], $this->conf['altMainMarkers.'][$sPBody . '.']));
+			$altSPM = trim($this->cObj->stdWrap($this->conf['altMainMarkers.'][$sPBody], $this->conf['altMainMarkers.'][$sPBody.'.']));
             if (
                 version_compare(TYPO3_version, '8.5.0', '<')
             ) {
@@ -74,9 +76,9 @@ class tx_ttproducts_subpartmarker implements t3lib_Singleton {
             }
 		}
 		$rc = $altSPM ? $altSPM : $subpartMarker;
-
 		return $rc;
 	} // spMarker
+
 
 	/**
 	 * Returning template subpart array
@@ -84,10 +86,11 @@ class tx_ttproducts_subpartmarker implements t3lib_Singleton {
 	function getTemplateSubParts ($templateCode, $subItemMarkerArray)	{
 		$rc = array();
 		foreach ($subItemMarkerArray as $key => $subItemMarker)	{
-			$rc[$subItemMarker] = substr($this->spMarker('###' . $subItemMarker . '_TEMPLATE###'), 3, -3);
+			$rc[$subItemMarker] = substr($this->spMarker('###'.$subItemMarker.'_TEMPLATE###'),3,-3);
 		}
 		return $rc;
 	} // getTemplate
+
 
 	/**
 	 * Returns a subpart from the input content stream.
@@ -110,8 +113,7 @@ class tx_ttproducts_subpartmarker implements t3lib_Singleton {
 	 */
 	public function getSubpart ($content, $marker, &$error_code) {
         $result = tx_div2007_core::getSubpart($content, $marker);
-
-		if (!$result) {
+		if (!$result)	{
 			$templateObj = t3lib_div::makeInstance('tx_ttproducts_template');
 			$error_code[0] = 'no_subtemplate';
 			$error_code[1] = $marker;
@@ -126,4 +128,4 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/marker/class.tx_ttproducts_subpartmarker.php']);
 }
 
-?>
+

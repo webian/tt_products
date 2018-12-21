@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2008 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2007-2008 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the Typo3 project. The Typo3 project is
@@ -43,10 +43,10 @@ class ext_update  {
 		$content.= '<br /><b>Create a backup of your TYPO3 database before you execute this script!</b>';
 
 		if(t3lib_div::_GP('integrate')) {
-// 			require_once(t3lib_extMgm::extPath(TT_PRODUCTS_EXT).'lib/class.tx_ttproducts_integrate.php');
+			require_once(t3lib_extMgm::extPath(TT_PRODUCTS_EXT).'lib/class.tx_ttproducts_integrate.php');
 			$count = tx_ttproducts_integrate::generateArticleMM();
 
-			$content .= '<p>You have integrated '.$count.' articles into the table tt_products_products_mm_articles</p>';
+			$content .= '<p>You have integrated ' . $count . ' articles into the table tt_products_products_mm_articles</p>';
 			$content .= '<p>Done</p>';
 		} else {
 			$linkScript = t3lib_div::slashJS(t3lib_div::linkThisScript());
@@ -55,7 +55,7 @@ class ext_update  {
 			$content .= 'This integration works only once. When you added entries in the articles table <br />'.
 				'and you want to do it again you have to select \'UPDATE!\' in the EM.';
 			$content .= '<br /><br />';
-			$content .= '<input type="submit" name="integrate" value="Integrate the product articles table into the relational mm table" onclick="this.form.action=\'' . $linkScript . '\';submit();" />';
+			$content .= '<input type="submit" name="integrate" value="Integrate the product articles table into the relational mm table" onclick="this.form.action=\''.$linkScript.'\';submit();" />';
 		}
 
 		return $content;
@@ -64,10 +64,10 @@ class ext_update  {
 	/**
 	 * access is always allowed
 	 *
-	 * @return	boolean		Always returns TRUE
+	 * @return	boolean		Always returns true
 	 */
 	function access() {
-		return TRUE;
+		return true;
 	}
 
 }
@@ -78,4 +78,3 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 }
 
 
-?>

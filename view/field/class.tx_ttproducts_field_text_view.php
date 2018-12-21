@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2007-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -39,7 +39,7 @@
 
 
 class tx_ttproducts_field_text_view extends tx_ttproducts_field_base_view {
-	function getRowMarkerArray ($functablename, $fieldname, &$row, $markerKey, &$markerArray, $tagArray, $theCode, $id, &$bSkip, $bHtml = TRUE, $charset = '', $prefix = '', $suffix = '', $imageRenderObj = '')	{
+	function getRowMarkerArray ($functablename, $fieldname, $row, $markerKey, &$markerArray, $tagArray, $theCode, $id, $basketExtra, &$bSkip, $bHtml=true, $charset='', $prefix='', $suffix='', $imageRenderObj='')	{
 
 		$htmlentitiesArray = array();
 		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
@@ -49,7 +49,7 @@ class tx_ttproducts_field_text_view extends tx_ttproducts_field_base_view {
 			$htmlentitiesArray = t3lib_div::trimExplode(',', $tableconf['functions.']['htmlentities']);
 		}
 
-		$value = $this->getModelObj()->getFieldValue($row, $fieldname);
+		$value = $this->getModelObj()->getFieldValue($basketExtra, $row, $fieldname);
 
 		if ($bHtml && $charset != '' && in_array($fieldname, $htmlentitiesArray))	{
 			$bConvertNewlines = $this->conf['nl2brNote'];
@@ -76,4 +76,4 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 }
 
 
-?>
+

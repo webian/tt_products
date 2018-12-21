@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2007-2011 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -40,7 +40,7 @@
 class tx_ttproducts_basketitem_view implements t3lib_Singleton {
 	private $conf;
 	private $config;
-	var $basketExt; 	// basket
+	public $basketExt; 	// basket
 	public $basketVar = 'ttp_basket';
 	public $pibaseClass;
 	protected $itemObj;
@@ -53,7 +53,7 @@ class tx_ttproducts_basketitem_view implements t3lib_Singleton {
 	 * @param		string		  $fieldname is the field in the table you want to create a JavaScript for
 	 * @return	  void
 	 */
-	function init ($pibaseClass, &$basketExt, $itemObj)	{
+	public function init ($pibaseClass, &$basketExt, $itemObj)	{
 		$this->pibaseClass = $pibaseClass;
 		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
@@ -76,6 +76,7 @@ class tx_ttproducts_basketitem_view implements t3lib_Singleton {
 		}
 
 		$basketQuantityName = $this->basketVar . '[' . $uid . ']' . $funcQuantityMarker . '[quantity]';
+
 		return $basketQuantityName;
 	}
 
@@ -106,23 +107,25 @@ class tx_ttproducts_basketitem_view implements t3lib_Singleton {
 	)	{
 		global $TCA, $TSFE;
 
-		$pibaseObj = t3lib_div::makeInstance($this->pibaseClass);
+		$pibaseObj = t3lib_div::makeInstance(''.$this->pibaseClass);
 		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
 		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
 		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$viewTable = $tablesObj->get($functablename);
-		$bUseXHTML = $TSFE->config['config']['xhtmlDoctype'] != '';
 		$fieldArray = $viewTable->variant->getFieldArray();
+		$keyAdditional = $viewTable->variant->getAdditionalKey();
+		$selectableArray = $viewTable->variant->getSelectableArray();
+		$bUseXHTML = $TSFE->config['config']['xhtmlDoctype'] != '';
         $imageObj = t3lib_div::makeInstance('tx_ttproducts_field_image_view');
 
 		$row = &$item['rec'];
 		$uid = $row['uid'];
-
 		$presetVariantArray = tx_ttproducts_control_product::getPresetVariantArray($uid);
 
 		if ($theCode=='SINGLE' && !count($presetVariantArray) && $bSelect && $functablename=='tt_products')	{
 			$articleNo = tx_ttproducts_control_product::getActiveArticleNo();
+
 			if ($articleNo !== FALSE)	{
 				$articleObj = $tablesObj->get('tt_products_articles');
 				$articleRow = $articleObj->get($articleNo);
@@ -157,17 +160,15 @@ class tx_ttproducts_basketitem_view implements t3lib_Singleton {
 		$hiddenText = '';
 		$basketQuantityName = $this->getQuantityName($row['uid'], $callFunctableArray);
 		$quantity = $item['count'];
-
 		$showAmount = ($theCode == 'BASKET' ? 'basket' : $cnf->getBasketConf('view','showAmount'));
 		$quantity = $this->itemObj->getQuantity($item, $showAmount);
 		$radioInputArray = $basketObj->getRadioInputArray($row);
 		$bUseRadioBox = is_array($radioInputArray) && count($radioInputArray) > 0 && $radioInputArray['name'] != '';
 
 		if (isset($callFunctableArray) && is_array($callFunctableArray) && count($callFunctableArray))	{
-// 			require_once (PATH_BE_ttproducts.'control/class.tx_ttproducts_control_basketquantity.php');
+			require_once (PATH_BE_ttproducts.'control/class.tx_ttproducts_control_basketquantity.php');
 
 			$quantityMarker = '###';
-
 			foreach ($callFunctableArray as $marker => $callFunctablename)	{
 				$quantityMarker .= tx_ttproducts_control_basketquantity::getQuantityMarker($marker, $uid, '###' . $marker . '_UID###');
 			}
@@ -175,28 +176,26 @@ class tx_ttproducts_basketitem_view implements t3lib_Singleton {
 		} else {
 			$quantityMarker = $quantity ? $quantity : '';
 		}
+
 		$jsTableName = str_replace('_','-',$functablename);
 		$markerArray['###FIELD_NAME###'] = ($bUseRadioBox && $radioInputArray['name'] != '' ? $radioInputArray['name'] : $basketQuantityName);
 		$markerArray['###FIELD_QTY###'] = $quantityMarker;
 		$markerArray['###FIELD_ID###'] = $jsTableName . '-' . strtolower($theCode) . '-id-' . $id;
 		$markerArray['###BASKET_ID###'] = $id;
-
-		$markerArray['###BASKET_INTO_ID###'] = 'basket-into-id-' . $row['uid'];
+		$basketIntoPrefix = tx_ttproducts_model_control::getBasketIntoIdPrefix();
+		$markerArray['###BASKET_INTO_ID###'] = $basketIntoPrefix . '-' . $row['uid'];
 		$markerArray['###BASKET_INPUT###'] = '';
 		$markerArray['###DISABLED###'] = ($row['inStock'] > 0 ? '' : 'disabled');
 		$markerArray['###IN_STOCK_ID###'] = 'in-stock-id-' . $row['uid'];
-		$markerArray['###BASKET_IN_STOCK###'] = tx_div2007_alpha5::getLL_fh003($langObj,($row['inStock'] > 0 ? 'in_stock' : 'not_in_stock'));
+		$markerArray['###BASKET_IN_STOCK###'] = tx_div2007_alpha5::getLL_fh003($langObj, ($row['inStock'] > 0 ? 'in_stock' : 'not_in_stock'));
 		$basketFile = $TSFE->tmpl->getFileName($this->conf['basketPic']);
 		$markerArray['###IMAGE_BASKET_SRC###'] = $basketFile;
 		$fileresource = $pibaseObj->cObj->fileResource($this->conf['basketPic']);
 		$markerArray['###IMAGE_BASKET###'] = $fileresource;
-		$keyAdditional = $viewTable->variant->getAdditionalKey();
-		$selectableArray = $viewTable->variant->getSelectableArray();
 
 		if (isset($fieldArray) && is_array($fieldArray))	{
 
 			$formConf = $cnf->getFormConf($theCode);
-			$sql = t3lib_div::makeInstance('tx_ttproducts_sql');
 
 			foreach($fieldArray as $k => $field)	{
 				$fieldConf = $TCA[$viewTable->getTableObj()->name]['columns'][$field];
@@ -205,12 +204,11 @@ class tx_ttproducts_basketitem_view implements t3lib_Singleton {
 				if (is_array($fieldConf))	{
 					$text = '';
 					$variantRow = $row[$field];
-
 					$prodTmpRow = explode(';', $variantRow);
 					$imageFileArray = '';
 
 					if ($bSelect && $variantRow && $prodTmpRow[0])	{
-						include_once (PATH_BE_ttproducts.'lib/class.tx_ttproducts_form_div.php');
+// 						include_once (PATH_BE_ttproducts.'lib/class.tx_ttproducts_form_div.php');
 						$selectConfKey = $viewTable->variant->getSelectConfKey($field);
 
 						if (is_array($formConf) && is_array($formConf[$selectConfKey . '.']))	{
@@ -230,7 +228,7 @@ class tx_ttproducts_basketitem_view implements t3lib_Singleton {
 
 										if (is_array($imageImport['prod.']))	{
 											if (isset($imageImport['sql.']))	{
-												$bIsValid = $sql->isValid($row, $imageImport['sql.']['where']);
+												$bIsValid = tx_ttproducts_sql::isValid($row, $imageImport['sql.']['where']);
 												if (!$bIsValid)	{
 													continue;
 												}
@@ -245,7 +243,8 @@ class tx_ttproducts_basketitem_view implements t3lib_Singleton {
                                                         $pibaseObj->cObj,
                                                         $imageConf,
                                                         $theCode
-                                                    );
+                                                    ); // neu
+// 												$tmpImgCode = $pibaseObj->cObj->IMAGE($imageConf);
 											}
 										}
 									}
@@ -258,6 +257,7 @@ class tx_ttproducts_basketitem_view implements t3lib_Singleton {
 						$prodTranslatedRow = $prodTmpRow;
 						$type='';
 						$selectedKey='0';
+
 						switch($selectableArray[$k])	{
 							case 1:
 								$type='select';
@@ -273,6 +273,7 @@ class tx_ttproducts_basketitem_view implements t3lib_Singleton {
 								}
 								break;
 						}
+
 						if (isset($presetVariantArray[$field]))	{
 							$selectedKey=$presetVariantArray[$field];
 						}
@@ -312,13 +313,13 @@ class tx_ttproducts_basketitem_view implements t3lib_Singleton {
 					}
 
 					$markerArray['###FIELD_' . $fieldMarker . '_NAME###'] = $this->basketVar . '[' . $row['uid'] . '][' . $field . ']';
+
 					$markerArray['###FIELD_' . $fieldMarker . '_VALUE###'] = $row[$field];
 					$markerArray['###FIELD_' . $fieldMarker . '_ONCHANGE'] = ''; // TODO:  use $forminfoArray['###FORM_NAME###' in something like onChange="Go(this.form.Auswahl.options[this.form.Auswahl.options.selectedIndex].value)"
 
 					$markerKey = '###' . $viewTable->marker . '_' . $fieldMarker . '###';
 					$markerArray[$markerKey] = $text;
 					$markerKey = '###' . $viewTable->marker . '_' . $fieldMarker . '_FUNCTION1###';
-
 					if (t3lib_extMgm::isLoaded('taxajax')) {
 						$markerArray[$markerKey] = 'doFetchRow(\'' . $functablename . '\',\'' . strtolower($theCode) . '\',' . $row['uid'] . ');';
 					} else {
@@ -328,8 +329,8 @@ class tx_ttproducts_basketitem_view implements t3lib_Singleton {
 			}
 		}
 		$prodAdditionalText['single'] = '';
-
 		if ($bUseRadioBox)	{
+
 			$params = 'type="' . $radioInputArray['type'] . '"';
 			$params .= ($radioInputArray['params'] != '' ? ' ' . $radioInputArray['params'] : '');
 			if ($radioInputArray['checked'] == $uid)	{
@@ -337,13 +338,12 @@ class tx_ttproducts_basketitem_view implements t3lib_Singleton {
 			}
 			$markerArray['###BASKET_INPUT###'] = tx_ttproducts_form_div::createTag('input', $radioInputArray['name'], $uid, $params);
 		}
-
 		if ($keyAdditional !== FALSE) {
 			$isSingleProduct = $viewTable->hasAdditional($row,'isSingle');
 			if ($isSingleProduct)	{
 				$message = tx_div2007_alpha5::getLL_fh003($langObj, 'additional_single');
 				$prodAdditionalText['single'] = $message . '<input type="checkbox" name="' . $basketQuantityName . '" ' . ($quantity ? 'checked="checked"':'') . 'onchange = "this.form[this.name+\'[1]\'].value=(this.checked ? 1 : 0);"' . ' value="1">';
-				$hiddenText .= '<input type="hidden" name="' . $basketQuantityName . '[1]" value="' . ($quantity ? '1' : '0') . '">';
+				$hiddenText .= '<input type="hidden" name="'.$basketQuantityName.'[1]" value="'.($quantity ? '1' : '0') . '">';
 			}
 
 			$isImageProduct = $viewTable->hasAdditional($row,'isImage');
@@ -366,7 +366,7 @@ class tx_ttproducts_basketitem_view implements t3lib_Singleton {
 			$basketAdditionalName = $this->basketVar . '[' . $row['uid'] . '][additional][' . md5($variant) . ']';
 			$bGiftService = $this->basketExt[$row['uid']][$variant . '.']['additional']['giftservice'];
 			$giftServicePostfix = '[giftservice]';
-			$message = tx_div2007_alpha5::getLL_fh003($pibaseObj, 'additional_gift_service');
+			$message = tx_div2007_alpha5::getLL_fh003($langObj, 'additional_gift_service');
 			$value = ($bGiftService ? '1' : '0');
 			$prodAdditionalText['giftService'] = $message . '<input type="checkbox" name="' . $basketAdditionalName . $giftServicePostfix . '" ' . ($value ? 'checked="checked"':'') . 'onchange = "this.form[this.name+\'[1]\'].value=(this.checked ? 1 : 0);"' . ' value="' . $value . '">';
 			$hiddenText .= '<input type="hidden" name="' . $basketAdditionalName . $giftServicePostfix . '[1]" value="' . $value . '">';
@@ -391,4 +391,4 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 }
 
 
-?>
+

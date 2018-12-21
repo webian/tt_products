@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008 Tim Lochmueller <webmaster@fruit-lab.de>
+*  (c) 2008 Tim Lochmueller (webmaster@fruit-lab.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -42,11 +42,10 @@ require_once(t3lib_extMgm::extPath('mydashboard', 'templates/interface.tx_mydash
 
 class tx_ttproducts_latest extends tx_mydashboard_template implements tx_mydashboard_widgetinterface {
 
-
 	/*
 	 * initial  the Widget
 	 */
-	function init(){
+	public function init () {
 
 		// Init Parent
 		parent::init();
@@ -71,13 +70,13 @@ class tx_ttproducts_latest extends tx_mydashboard_template implements tx_mydashb
 
 		// required
 		return TRUE;
-	} # function - init
+	} // function - init
 
 
 	/*
 	 * Print the Content
 	 */
-	public function getContent(){
+	public function getContent () {
 
 		// Build the Option Menu
 		$options = array(
@@ -97,10 +96,10 @@ class tx_ttproducts_latest extends tx_mydashboard_template implements tx_mydashb
 			case 'order':
 
 				// Show Database List
-				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'sys_products_orders', 'deleted=0', '', 'uid DESC', $limit);
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','sys_products_orders','deleted=0','','uid DESC',$limit);
 
 				// Render List
-				$c .= $this->showDatabaseList('Orders:', $res, 'uid,name,amount,crdate,note');
+				$c .= $this->showDatabaseList('Orders:',$res,'uid,name,amount,crdate,note');
 			break;
 
 			case 'products':
@@ -109,7 +108,7 @@ class tx_ttproducts_latest extends tx_mydashboard_template implements tx_mydashb
 				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tt_products', 'deleted=0 AND hidden=0', '', 'crdate DESC', $limit);
 
 				// Render List
-				$c .= $this->showDatabaseList('Products:', $res, 'uid,itemnumber,title,price');
+				$c .= $this->showDatabaseList('Products:', $res, 'uid,itemnumber,title,price,deposit');
 			break;
 
 			case 'outstock':
@@ -124,7 +123,7 @@ class tx_ttproducts_latest extends tx_mydashboard_template implements tx_mydashb
 			case 'fewstock':
 
 				// Show Database List
-				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tt_products','deleted=0 AND hidden=0 AND inStock>0', '', 'inStock', $limit);
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tt_products', 'deleted=0 AND hidden=0 AND inStock>0', '', 'inStock', $limit);
 
 				// Render List
 				$c .= $this->showDatabaseList('Products:', $res, 'uid,itemnumber,title,inStock');
@@ -132,7 +131,7 @@ class tx_ttproducts_latest extends tx_mydashboard_template implements tx_mydashb
 		}
 
 		return $c;
-	} # function - getContent
+	} // function - getContent
 
 
 } # class - tx_ttproducts_latest
@@ -140,4 +139,3 @@ class tx_ttproducts_latest extends tx_mydashboard_template implements tx_mydashb
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/tt_products/widgets/class.tx_ttproducts_latest.php']) {
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/tt_products/widgets/class.tx_ttproducts_latest.php']);
 } # if
-?>

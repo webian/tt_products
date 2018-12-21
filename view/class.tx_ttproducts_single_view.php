@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2010 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -59,8 +59,9 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 
 
 	public function init ($pibaseClass, $uidArray, $extVars, $pid, $useArticles, $pid_list, $recursive) {
+
 		$this->pibaseClass = $pibaseClass;
-		$pibaseObj = t3lib_div::makeInstance($pibaseClass);
+		$pibaseObj = t3lib_div::makeInstance(''.$pibaseClass);
 		$this->cObj = $pibaseObj->cObj;
 		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
@@ -69,7 +70,7 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 		if (count($uidArray))	{
 			$this->uidArray = $uidArray;
 			reset($uidArray);
-			if (isset($uidArray['product']))	{
+			if (isset($uidArray['product'])) {
 				$this->type = 'product';
 				$this->uid = $uidArray['product'];
 			} else if (isset($uidArray['article']))	{
@@ -80,6 +81,7 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 				$this->uid = $uidArray['dam'];
 			}
 		}
+
 		$this->variants = $extVars;
 		$this->pid = $pid;
 		$this->useArticles = $useArticles;
@@ -92,10 +94,10 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 		$this->javaScriptMarker->init($pibaseObj);
 	}
 
+
 	// returns the single view
 	public function &printView (&$templateCode, &$error_code, $pageAsCategory, $templateSuffix = '') {
 		global $TSFE, $TCA, $TYPO3_DB;
-
 
 		$pibaseObj = t3lib_div::makeInstance('tx_ttproducts_pi1_base');
 		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
@@ -105,6 +107,7 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 		$subpartmarkerObj = t3lib_div::makeInstance('tx_ttproducts_subpartmarker');
 		$theCode = 'SINGLE';
 
+		$bUseBackPid = TRUE;
 		$viewControlConf = $cnf->getViewControlConf('SINGLE');
 		if (count($viewControlConf)) {
 			if (isset($viewControlConf['param.']) && is_array($viewControlConf['param.'])) {
@@ -119,13 +122,13 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 			}
 		}
 
+		$bUseBackPid = (isset($viewParamConf) && $viewParamConf['use'] == 'backPID' ? TRUE : FALSE);
 		$itemTableArray = array();
 		$itemTableArray['product'] = $tablesObj->get('tt_products');
-
-		$tableConf=&$itemTableArray['product']->getTableConf ('SINGLE');
-		$itemTableArray['product']->initCodeConf ('SINGLE',$tableConf);
+		$tableConf=&$itemTableArray['product']->getTableConf('SINGLE');
+		$itemTableArray['product']->initCodeConf('SINGLE',$tableConf);
 		$itemTableArray['article'] = $tablesObj->get('tt_products_articles');
-		$tableConf=&$itemTableArray ['article']->getTableConf ('SINGLE');
+		$tableConf=&$itemTableArray ['article']->getTableConf('SINGLE');
 		$itemTableArray['article']->initCodeConf('SINGLE',$tableConf);
 		$itemTableViewArray = array();
 		$itemTableViewArray['product'] = $tablesObj->get('tt_products', TRUE);
@@ -134,11 +137,13 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 			$itemTableArray['dam'] = $tablesObj->get('tx_dam');
 			$itemTableViewArray['dam'] = $tablesObj->get('tx_dam', TRUE);
 		}
+
 		$rowArray = array('product' => array(), 'article' => array(), 'dam' => array());
 		$itemTableConf = $rowArray;
 		$itemTableLangFields = $rowArray;
 		$content = '';
 		$javaScriptObj = t3lib_div::makeInstance('tx_ttproducts_javascript');
+
 
 		if ($this->config['displayCurrentRecord'] && $this->type == 'product' && !$this->useArticles)	{
 			$rowArray[$this->type] = $this->cObj->data;
@@ -154,7 +159,7 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 					$itemTableArray[$this->type]->variant->modifyRowFromVariant($rowArray[$this->type], $this->variants);
 				}
 			} else if ($this->type == 'article') {
-				$where = 'pid IN (' . $this->pidListObj->getPidlist() . ')';
+				$where = 'pid IN ('.$this->pidListObj->getPidlist().')';
 				$rowArray['product'] = $itemTableArray['product']->get(intval($rowArray[$this->type]['uid_product']), 0, TRUE, $where);
 
 				$itemTableConf['product'] = $cnf->getTableConf($itemTableArray['product']->getFuncTablename(), 'SINGLE');
@@ -180,14 +185,11 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 
 			$itemTableArray['product']->getTableObj()->transformRow($row, TT_PRODUCTS_EXT);
 			$useArticles = $itemTableArray['product']->variant->getUseArticles();
-
 			if ($useArticles == 3)	{
 				$itemTableArray['product']->fillVariantsFromArticles($row);
 			}
-
 				// add Global Marker Array
 			$markerArray = $markerObj->getGlobalMarkerArray();
-
 			$subpartArray = array();
 			$wrappedSubpartArray = array();
 			$pageObj = $tablesObj->get('pages');
@@ -212,9 +214,23 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 				}
 			}
 
+			// get categories
+			if (!$pageAsCategory || $pageAsCategory == 1)	{
+				if ($this->type == 'product' || $this->type == 'article')	{
+					$catTablename = 'tt_products_cat';
+				} else if ($this->type == 'dam') {
+					$catTablename = 'tx_dam_cat';
+				}
+			} else {
+				$catTablename = 'pages';
+			}
+			$viewCatTable = $tablesObj->get($catTablename);
+			$viewCatViewTable = $tablesObj->get($catTablename, TRUE);
+
 			// Add the template suffix
-			$subPartMarker = $subPartMarker.$templateSuffix;
-			$itemFrameWork = $this->cObj->getSubpart($templateCode, $subpartmarkerObj->spMarker('###' . $subPartMarker . '###'));
+			$subPartMarker = $subPartMarker . $templateSuffix;
+			$itemFrameWork = $this->cObj->getSubpart($templateCode,$subpartmarkerObj->spMarker('###'.$subPartMarker.'###'));
+
 			$checkExpression = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['templateCheck'];
 			if (!empty($checkExpression)) {
 				$wrongPounds = preg_match_all($checkExpression, $itemFrameWork, $matches);
@@ -223,21 +239,64 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 					$error_code[0] = 'template_invalid_marker_border';
 					$error_code[1] = '###' . $subPartMarker . '###';
 					$error_code[2] = htmlspecialchars(implode('|', $matches['0']));
+
 					return '';
 				}
 			}
 
-			$tablesObj->get('fe_users', TRUE)->getWrappedSubpartArray($subpartArray, $wrappedSubpartArray, $itemTableArray ['product']->getFuncTablename());
+			$this->urlObj->getWrappedSubpartArray($wrappedSubpartArray,array(),'',$bUseBackPid);
 
+			$excludeList = '';
+
+			if (isset($viewParamConf) && is_array($viewParamConf))	{
+				if ($viewParamConf['ignore'])	{
+					$excludeList = $viewParamConf['ignore'];
+				}
+				$categoryPivar = $viewCatViewTable->getPivar();
+				if (t3lib_div::inList($viewParamConf['item'], $categoryPivar))	{
+					// nothing
+				} else {
+					$prefixId = tx_ttproducts_model_control::getPrefixId();
+					$excludeList .= ($excludeList != '' ? ',' : '') . $prefixId . '[' . $categoryPivar . ']';
+				}
+			}
+			$pidMemo = ($this->conf['PIDmemo'] ? $this->conf['PIDmemo'] : $TSFE->id);
+			tx_ttproducts_control_memo::getWrappedSubpartArray (
+				$wrappedSubpartArray,
+				$pidMemo,
+				$row['uid'],
+				$this->cObj,
+				$this->urlObj,
+				$excludeList,
+				array(),
+				'',
+				$bUseBackPid
+			);
 
 			if (!$itemFrameWork) {
 				$templateObj = t3lib_div::makeInstance('tx_ttproducts_template');
 				$error_code[0] = 'no_subtemplate';
-				$error_code[1] = '###' . $subPartMarker . '###';
+				$error_code[1] = '###'.$subPartMarker.'###';
 				$error_code[2] = $templateObj->getTemplateFile();
+
 				return '';
 			}
-			$itemFrameWork = $this->cObj->substituteMarkerArrayCached($itemFrameWork, $markerArray, $subpartArray, $wrappedSubpartArray);
+
+			$viewTagArray = $markerObj->getAllMarkers($itemFrameWork);
+			$tablesObj->get('fe_users', TRUE)->getWrappedSubpartArray(
+				$viewTagArray,
+				$bUseBackPid,
+				$subpartArray,
+				$wrappedSubpartArray
+			);
+
+			$itemFrameWork = $this->cObj->substituteMarkerArrayCached(
+				$itemFrameWork,
+				$markerArray,
+				$subpartArray,
+				$wrappedSubpartArray
+			);
+
 			$markerFieldArray = array(
 				'BULKILY_WARNING' => 'bulkily',
 				'PRODUCT_SPECIAL_PREP' => 'special_preparation',
@@ -257,7 +316,7 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 			);
 
 			$articleViewTagArray = array();
-			if ($this->type == 'product' && in_array($useArticles,array(1, 3))) {
+			if ($this->type == 'product' && in_array($useArticles,array(1,3))) {
 				$markerFieldArray = array();
 				$articleParentArray = array();
 				$articleFieldsArray = $markerObj->getMarkerFields(
@@ -279,9 +338,9 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 			}
 
 			if (count($giftNumberArray)) {
-				$personDataFrameWork = $this->cObj->getSubpart($itemFrameWork, '###PERSON_DATA###');
+				$personDataFrameWork = $this->cObj->getSubpart($itemFrameWork,'###PERSON_DATA###');
 				// the itemFramework is a smaller part here
-				$itemFrameWork = $this->cObj->getSubpart($itemFrameWork, '###PRODUCT_DATA###');
+				$itemFrameWork = $this->cObj->getSubpart($itemFrameWork,'###PRODUCT_DATA###');
 			}
 			$backPID = $pibaseObj->piVars['backPID'];
 			$backPID = ($backPID ? $backPID : t3lib_div::_GP('backPID'));
@@ -297,23 +356,10 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 				$bNeedSingleParams = TRUE;
 			}
 
-			// get categories
-			if (!$pageAsCategory || $pageAsCategory == 1)	{
-				if ($this->type == 'product' || $this->type == 'article')	{
-					$catTablename = 'tt_products_cat';
-				} else if ($this->type == 'dam') {
-					$catTablename = 'tx_dam_cat';
-				}
-			} else {
-				$catTablename = 'pages';
-			}
-			$viewCatTable = $tablesObj->get($catTablename);
-			$viewCatViewTable = $tablesObj->get($catTablename, TRUE);
-
 			if ($this->type == 'product')	{
 
 				$viewTextTable = $tablesObj->get('tt_products_texts');
-				$viewTextViewTable = $tablesObj->get('tt_products_texts',TRUE);
+				$viewTextViewTable = $tablesObj->get('tt_products_texts', TRUE);
 				$textTagArray = $viewTextViewTable->getTagMarkerArray($viewTagArray, $itemTableArray['product']->marker);
 				$itemArray = $viewTextTable->getChildUidArray($theCode, $this->uid, $textTagArray, 'tt_products');
 				$viewTextViewTable->getRowsMarkerArray($itemArray, $markerArray, $itemTableArray['product']->marker, $textTagArray);
@@ -321,12 +367,12 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 
 			// $variant = $itemTableArray[$this->type]->variant->getFirstVariantRow();
 
-			$forminfoArray = array('###FORM_NAME###' => 'item_' . $this->uid);
+			$forminfoArray = array('###FORM_NAME###' => 'item_'.$this->uid);
 
 			if ($this->type == 'product' && t3lib_extMgm::isLoaded('taxajax'))	{
 				$selectableVariantFieldArray = $itemTableArray[$this->type]->variant->getSelectableFieldArray();
 				$param = array($itemTableArray[$this->type]->getFuncTablename() => $selectableVariantFieldArray);
-				$javaScriptObj->set('fetchdata', $param);
+				$javaScriptObj->set('fetchdata', $param, $this->cObj->currentRecord);
 			}
 
 			$viewCatTagArray = array();
@@ -344,7 +390,7 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 			$mergeTagArray = array_merge($viewTagArray, $viewCatTagArray);
 			$cat = $row['category'];
 			$itemTableConf['category'] = $cnf->getTableConf($viewCatTable->getFuncTablename(), 'SINGLE');
-			$catArray = $viewCatTable->getCategoryArray($row['uid'], $itemTableConf['category']['orderBy']);
+			$catArray = $viewCatTable->getCategoryArray($row['uid'],$itemTableConf['category']['orderBy']);
 			if (count($catArray))	{
 				reset($catArray);
 				$cat = current($catArray);
@@ -362,35 +408,37 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 				array(),
 				$pageAsCategory,
 				'SINGLE',
+				$basketObj->getBasketExtra(),
 				'',
 				'',
 				''
 			);
 
-			$bUseBackPid = TRUE;
 			$categoryJoin='';
 			$whereCat = '';
 			if ($cat) {
 				$currentCat = $pibaseObj->piVars[$viewCatViewTable->getPivar()];
-				$currentCatArray = t3lib_div::trimExplode(',',$currentCat);
+				if ($currentCat != '')	{
+					$currentCatArray = t3lib_div::trimExplode(',',$currentCat);
+				}
 				if (isset($currentCatArray) && is_array($currentCatArray))	{
 					$inArray = $TYPO3_DB->fullQuoteArray($currentCatArray, 'tt_products');
 					$inCat = implode(',', $inArray);
 					$catMMTable = $viewCatTable->getMMTablename();
-					if ($currentCat != '')	{
-						// $bUseBackPid = FALSE;
+					if ($currentCat!='')	{
+						// $bUseBackPid = false;
 						$cat = $currentCat;
 						if ($catMMTable)	{
-							$categoryJoin = $itemTableArray[$this->type]->getTablename() . ' ' . $itemTableArray[$this->type]->getAlias() . ' INNER JOIN ' . $viewCatTable->getMMTablename() . ' M ON ' . $itemTableArray[$this->type]->getAlias() . '.uid=M.uid_local';
-							$whereCat = ' AND M.uid_foreign IN (' . $inCat . ') ';
+							$categoryJoin = $itemTableArray[$this->type]->getTablename().' '.$itemTableArray[$this->type]->getAlias().' INNER JOIN '.$viewCatTable->getMMTablename().' M ON '.$itemTableArray[$this->type]->getAlias().'.uid=M.uid_local';
+							$whereCat = ' AND M.uid_foreign IN ('.$inCat.') ';
 						} else {
-							$whereCat = ' AND category IN (' . $inCat . ') ';
+							$whereCat = ' AND category IN ('.$inCat.') ';
 						}
 					}
 				}
 			}
 
-			if ($pid == $TSFE->id && isset($this->conf['PIDlistDisplay'])) {
+			if (isset($this->conf['PIDlistDisplay'])) {
 				$linkPid = $pageObj->getPID($this->conf['PIDlistDisplay'], $this->conf['PIDlistDisplay.'], $row);
 			} else {
 				$linkPid = $pid;
@@ -402,6 +450,7 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 
 			if (isset($viewTagArray['LINK_ITEM'])) {
 				$addQueryString = array();
+				$excludeListLinkItem = '';
 
 				if (
 					(
@@ -412,16 +461,33 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 					$this->conf['NoSingleViewOnList']
 				) {
 					// if the page remains the same then the product parameter will still be needed
-					$excludeList = '';
+					$excludeListLinkItem = '';
 				} else {
-					$excludeList = $itemTableViewArray[$this->type]->getPivar();
+					$excludeListLinkItem = $itemTableViewArray[$this->type]->getPivar();
 				}
+
 				$sword = $this->pibase->piVars['sword'];
 				if ($sword) 	{
 					$addQueryString['sword'] = $sword;
 				}
-				$queryString = $this->urlObj->getLinkParams($excludeList, $addQueryString, TRUE, $bUseBackPid, '', $viewCatViewTable->getPivar());
-				$linkUrl = tx_div2007_alpha5::getPageLink_fh003($this->cObj, $linkPid, '', $queryString, array('useCacheHash' => TRUE));
+
+				$queryString =
+					$this->urlObj->getLinkParams(
+						$excludeListLinkItem,
+						$addQueryString,
+						TRUE,
+						$bUseBackPid,
+						'',
+						$viewCatViewTable->getPivar()
+					);
+
+				$linkUrl = tx_div2007_alpha5::getPageLink_fh003(
+					$this->cObj,
+					$linkPid,
+					'', // no product parameter if it returns to the list view
+					$queryString,
+					array('useCacheHash' => TRUE)
+				);
 				$linkUrl = htmlspecialchars($linkUrl);
 				$wrappedSubpartArray['###LINK_ITEM###'] = array('<a href="' . $linkUrl . '">', '</a>');
 			}
@@ -445,6 +511,7 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 				array(),
 				$pageAsCategory,
 				'SINGLE',
+				$basketObj->getBasketExtra(),
 				'',
 				''
 			);
@@ -455,7 +522,7 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 				$viewCatTable->getSubpartArrays($this->urlObj, $catRow, $subpartArray, $wrappedSubpartArray, $viewCatTagArray, $catListPid, 'LINK_PARENT1_CATEGORY');
 			}
 
-			if ($this->type == 'product' && in_array($useArticles,array(1, 2, 3))) {
+			if ($this->type == 'product' && in_array($useArticles,array(1,2,3))) {
 				// get the article uid with these colors, sizes and gradings
 
 				$articleRow = $itemTableArray['product']->getArticleRow($row, 'SINGLE');
@@ -475,6 +542,7 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 				$viewTagArray,
 				$forminfoArray,
 				'SINGLE',
+				$basketObj->getBasketExtra(),
 				'',
 				'',
 				'',
@@ -487,9 +555,9 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 			if ($this->type == 'product') {
 				$prodRow = $row;
 
-				if (in_array($useArticles,array(1, 2, 3)))	{
-						// use the product if no article row has been found
+				if (in_array($useArticles,array(1,2,3)))	{
 
+						// use the product if no article row has been found
 					if ($articleRow)	{
 						$itemTableArray['product']->mergeAttributeFields($prodVariantRow, $articleRow, FALSE);
 					}
@@ -504,6 +572,7 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 						$articleViewTagArray,
 						array(),
 						'SINGLE',
+						$basketObj->getBasketExtra(),
 						'from-tt-products-articles',
 						'',
 						'',
@@ -519,6 +588,7 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 						$wrappedSubpartArray,
 						$articleViewTagArray,
 						$theCode,
+						$basketObj->getBasketExtra(),
 						$iCount
 					);
 				}
@@ -535,21 +605,22 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 					$viewTagArray,
 					array(),
 					'SINGLE',
+					$basketObj->getBasketExtra(),
 					1,
 					'',
 					'',
 					TRUE,
-                    'UTF-8'
+					'UTF-8'
 				);
 			}
 
 			if ($this->type == 'product' || $this->type == 'article')	{
 				$item =
 					$basketObj->getItem(
-						$prodRow, // $prodVariantRow
+						$basketObj->getBasketExtra(),
+						$prodRow,  // $prodVariantRow,
 						'firstVariant'
 					);
-
 				$basketItemView = t3lib_div::makeInstance('tx_ttproducts_basketitem_view');
 				$basketItemView->init($this->pibaseClass,$basketObj->basketExt,$basketObj->getItemObj());
 
@@ -573,10 +644,12 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 					$wrappedSubpartArray,
 					$viewTagArray,
 					'SINGLE',
+					$basketObj->getBasketExtra(),
 					1
 				);
 
 				$currPriceMarkerArray = array();
+
 				$itemTableViewArray[$this->type]->getCurrentPriceMarkerArray(
 					$currPriceMarkerArray,
 					$itemTableArray['product']->getTablename(),
@@ -584,8 +657,10 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 					$itemTableArray['article']->getTablename(),
 					$prodVariantRow,
 					'',
-					'SINGLE'
+					'SINGLE',
+					$basketObj->getBasketExtra()
 				);
+
 				$markerArray = array_merge($markerArray, $currPriceMarkerArray);
 			}
 
@@ -599,24 +674,22 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 			}
 
 			$markerArray['###FORM_NAME###'] = $forminfoArray['###FORM_NAME###'];
-			$pidMemo = ( $this->conf['PIDmemo'] ? $this->conf['PIDmemo'] : $TSFE->id);
 			$markerArray['###FORM_MEMO###'] = htmlspecialchars(
 				tx_div2007_alpha5::getPageLink_fh003(
 					$this->cObj,
 					$pidMemo,
 					'',
 					$this->urlObj->getLinkParams(
-						'',
+						$excludeList,
 						array(),
 						TRUE,
-						TRUE,
+						$bUseBackPid,
 						$itemTableViewArray[$this->type]->getPivar()
 					),
 					$linkMemoConf
 				)
 			);
 
-			//$markerArray['###FORM_URL###']=$this->formUrl.'&tt_products='.$this->uid ;
 			$addQueryString = array();
 
 			if ($bNeedSingleParams)	{
@@ -627,10 +700,14 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 				$addQueryString['backPID'] = $backPID;
 			}
 
-			// $markerArray = $this->marker->addURLMarkers($this->pid,$markerArray, array('tt_products' => $this->uid)); // Applied it here also...
-			$markerArray = $this->urlObj->addURLMarkers($pid, $markerArray, $addQueryString, '',$bUseBackPid); // Applied it here also...
+			$markerArray = $this->urlObj->addURLMarkers(
+				$pid,
+				$markerArray,
+				$addQueryString,
+				$excludeList,
+				$bUseBackPid
+			); // Applied it here also...
 
-			// $url = $pibaseObj->pi_getPageLink($TSFE->id,'',$this->marker->getLinkParams()) ; // $this->getLinkUrl('','tt_products');
 			$queryPrevPrefix = '';
 			$queryNextPrefix = '';
 			$prevOrderby = '';
@@ -639,14 +716,15 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 
 			if ($this->conf['orderByItemNumberSg']) {
 				$itemnumberField = $itemTableArray[$this->type]->fieldArray['itemnumber'];
-				$queryPrevPrefix = $itemnumberField . ' < ' . $TYPO3_DB->fullQuoteStr($origRow[$itemnumberField], $tablename);
-				$queryNextPrefix = $itemnumberField . ' > ' . $TYPO3_DB->fullQuoteStr($origRow[$itemnumberField], $tablename);
-				$prevOrderby = $itemnumberField . ' DESC';
-				$nextOrderby = $itemnumberField . ' ASC';
+				$queryPrevPrefix = $itemnumberField.' < '.$TYPO3_DB->fullQuoteStr($origRow[$itemnumberField],$tablename);
+				$queryNextPrefix = $itemnumberField.' > '.$TYPO3_DB->fullQuoteStr($origRow[$itemnumberField],$tablename);
+				$prevOrderby = $itemnumberField.' DESC';
+				$nextOrderby = $itemnumberField.' ASC';
 				$bDefaultOrder = FALSE;
 			} else {
+
 				if(is_array($itemTableConf[$this->type]) && isset($itemTableConf[$this->type]['orderBy']))	{
-					$orderByFieldArray = t3lib_div::trimExplode(',', $itemTableConf[$this->type]['orderBy']);
+					$orderByFieldArray = t3lib_div::trimExplode(',',$itemTableConf[$this->type]['orderBy']);
 					$count = count($orderByFieldArray);
 
 					if ($count)	{
@@ -658,14 +736,13 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 						$limitArray = array();
 
 						foreach($orderByFieldArray as $i => $orderByFieldLine)	{
-							$bIsDesc = (stripos($orderByFieldLine, 'DESC') !== FALSE);
+							$bIsDesc = (stripos($orderByFieldLine,'DESC') !== FALSE);
 							$bIsLast = ($i == $count - 1);
-							$orderByField = str_ireplace('ASC', '', $orderByFieldLine);
-							$orderByField = trim(str_ireplace('DESC', '', $orderByField));
+							$orderByField = str_ireplace('ASC','',$orderByFieldLine);
+							$orderByField = trim(str_ireplace('DESC','',$orderByField));
 							$comparatorPrev = ($bIsDesc ? '>' : '<');
 							$comparatorNext = ($bIsDesc ? '<' : '>');
-							$comparand = $TYPO3_DB->fullQuoteStr($origRow[$orderByField], $tablename);
-
+							$comparand = $TYPO3_DB->fullQuoteStr($origRow[$orderByField],$tablename);
 							$newPrevPrevix = $orderByField . ' '. $comparatorPrev . ' ' . $comparand;
 							$newNextPrevix = $orderByField . ' ' . $comparatorNext . ' ' . $comparand;
 
@@ -675,16 +752,16 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 							$nextOrderbyArray[] = $orderByField . ' ' . $ascOperatorNext;
 
 							if ($bIsLast)	{
-								$lastPrevPrevix = implode(' AND ', $limitArray) . (count($limitArray) > 0 ? ' AND ' : '') . $newPrevPrevix;
-								$lastNextPrevix = implode(' AND ', $limitArray) . (count($limitArray) > 0 ? ' AND ' : '') .  $newNextPrevix;
+								$lastPrevPrevix = implode(' AND ',$limitArray) . (count($limitArray) > 0 ? ' AND ' : '') . $newPrevPrevix;
+								$lastNextPrevix = implode(' AND ',$limitArray) . (count($limitArray) > 0 ? ' AND ' : '') .  $newNextPrevix;
 							} else {
 								$limitArray[] = $orderByField . '=' . $comparand;
 								$queryPrevPrefixArray[] = $newPrevPrevix;
 								$queryNextPrefixArray[] = $newNextPrevix;
 							}
 						}
-						$queryNextPrefix = '(' . implode(' AND ', $queryNextPrefixArray) . (count($queryNextPrefixArray) > 0 ? ' OR ' : '') . $lastNextPrevix . ')';
-						$queryPrevPrefix = '(' . implode(' AND ', $queryPrevPrefixArray) . (count($queryNextPrefixArray) > 0 ? ' OR ' : '') . $lastPrevPrevix . ')';
+						$queryNextPrefix = '(' . implode(' AND ',$queryNextPrefixArray) . (count($queryNextPrefixArray) > 0 ? ' OR ' : '') . $lastNextPrevix . ')';
+						$queryPrevPrefix = '(' . implode(' AND ',$queryPrevPrefixArray) . (count($queryNextPrefixArray) > 0 ? ' OR ' : '') . $lastPrevPrevix . ')';
 						$prevOrderby = implode(',', $prevOrderbyArray);
 						$nextOrderby = implode(',', $nextOrderbyArray);
 					}
@@ -710,15 +787,13 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 			}
 			$queryprev = '';
 			$wherePid = ' AND pid IN (' . $this->pidListObj->getPidlist() . ')';
-// $viewCatTable
-			$wherestock = ($this->conf['showNotinStock'] || !is_array($TCA[$itemTableArray[$this->type]->getTableObj()->name]['columns']['inStock']) ? '' : ' AND (inStock <>0) ') . $whereFilter;
+			$wherestock = ($this->conf['showNotinStock'] || !is_array($TCA[$itemTableArray[$this->type]->getTableObj()->name]['columns']['inStock']) ? '' : ' AND (inStock <> 0) ').$whereFilter;
 			$queryprev = $queryPrevPrefix . $whereCat . $wherePid . $wherestock . $itemTableArray[$this->type]->getTableObj()->enableFields();
 
-			// $resprev = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tt_products', $queryprev,'', $prevOrderby);
-			$resprev = $itemTableArray[$this->type]->getTableObj()->exec_SELECTquery('*', $queryprev, '', $TYPO3_DB->stripOrderBy($prevOrderby), '1', $categoryJoin);
+			$resprev = $itemTableArray[$this->type]->getTableObj()->exec_SELECTquery('*', $queryprev, '', $TYPO3_DB->stripOrderBy($prevOrderby),'1',$categoryJoin);
 
 			if ($rowprev = $TYPO3_DB->sql_fetch_assoc($resprev) )	{
-				$addQueryString=array();
+				$addQueryString = array();
 				$addQueryString[$this->type] = $rowprev['uid'];
 
 				if ($bUseBackPid) 	{
@@ -727,17 +802,30 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 					$addQueryString[$viewCatViewTable->getPivar()] = $cat;
 				}
 
-				$prevUrl = tx_div2007_alpha5::getPageLink_fh003($this->cObj,$TSFE->id, '', $this->urlObj->getLinkParams('', $addQueryString, TRUE, $bUseBackPid, '', $viewCatViewTable->getPivar()), array('useCacheHash' => TRUE));
-				$wrappedSubpartArray['###LINK_PREV_SINGLE###'] = array('<a href="' . htmlspecialchars($prevUrl) . '">', '</a>');
+				$prevUrl = tx_div2007_alpha5::getPageLink_fh003(
+					$this->cObj,
+					$TSFE->id,
+					'',
+					$this->urlObj->getLinkParams(
+						$excludeList,
+						$addQueryString,
+						TRUE,
+						$bUseBackPid,
+						$itemTableViewArray[$this->type]->getPivar(),
+						$viewCatViewTable->getPivar()
+					),
+					array(
+						'useCacheHash' => TRUE
+					)
+				);
+				$wrappedSubpartArray['###LINK_PREV_SINGLE###'] = array('<a href="'. htmlspecialchars($prevUrl) .'">','</a>');
 			} else	{
 				$subpartArray['###LINK_PREV_SINGLE###']='';
 			}
 			$TYPO3_DB->sql_free_result($resprev);
 			$querynext = $queryNextPrefix . $whereCat . $wherePid . $wherestock . $itemTableArray[$this->type]->getTableObj()->enableFields();
-			// $resnext = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tt_products', $querynext, $nextOrderby);
-			$resnext = $itemTableArray[$this->type]->getTableObj()->exec_SELECTquery('*', $querynext, '', $TYPO3_DB->stripOrderBy($nextOrderby), '1', $categoryJoin);
+			$resnext = $itemTableArray[$this->type]->getTableObj()->exec_SELECTquery('*', $querynext, '', $TYPO3_DB->stripOrderBy($nextOrderby),'1',$categoryJoin);
 
-// TODO: remove the SQL queries if not LINK_NEXT markers are in the template subpart
 			if ($rownext = $TYPO3_DB->sql_fetch_assoc($resnext) )	{
 				$addQueryString=array();
 				$addQueryString[$this->type] = $rownext['uid'];
@@ -746,7 +834,22 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 				} else if ($cat)	{
 					$addQueryString[$viewCatViewTable->getPivar()] = $cat;
 				}
-				$nextUrl = tx_div2007_alpha5::getPageLink_fh003($this->cObj, $TSFE->id, '', $this->urlObj->getLinkParams('', $addQueryString, TRUE, $bUseBackPid, $itemTableViewArray[$this->type]->getPivar(), $viewCatViewTable->getPivar()), array('useCacheHash' => TRUE));
+				$nextUrl = tx_div2007_alpha5::getPageLink_fh003(
+					$this->cObj,
+					$TSFE->id,
+					'',
+					$this->urlObj->getLinkParams(
+						$excludeList,
+						$addQueryString,
+						true,
+						$bUseBackPid,
+						$itemTableViewArray[$this->type]->getPivar(),
+						$viewCatViewTable->getPivar()
+					),
+					array(
+						'useCacheHash' => true
+					)
+				);
 				$wrappedSubpartArray['###LINK_NEXT_SINGLE###'] = array('<a href="' . htmlspecialchars($nextUrl) . '">','</a>');
 			} else {
 				$subpartArray['###LINK_NEXT_SINGLE###'] = '';
@@ -760,20 +863,51 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 					$wrappedSubpartArray,
 					$row,
 					$this->conf,
-					$itemTableArray[$this->type]->hasAdditional($row, 'isSingle'),
-					!$itemTableArray[$this->type]->hasAdditional($row, 'noGiftService')
+					$itemTableArray[$this->type]->hasAdditional($row,'isSingle'),
+					!$itemTableArray[$this->type]->hasAdditional($row,'noGiftService')
 				);
 			}
 			$relatedListView = t3lib_div::makeInstance('tx_ttproducts_relatedlist_view');
 			$relatedListView->init($this->cObj, $this->pidListObj->getPidlist(), $this->pidListObj->getRecursive());
-			$listMarkerArray = $relatedListView->getListMarkerArray('SINGLE', $this->pibaseClass,$templateCode, $markerArray, $viewTagArray, $itemTableArray[$this->type]->getFuncTablename(), $this->uid, $this->uidArray, $useArticles, $pageAsCategory, $this->pid, $error_code);
+			$listMarkerArray = $relatedListView->getListMarkerArray('SINGLE',$this->pibaseClass,$templateCode, $markerArray, $viewTagArray, $itemTableArray[$this->type]->getFuncTablename(), $this->uid, $this->uidArray, $useArticles, $pageAsCategory, $this->pid, $error_code);
+
+			if (
+				$this->type == 'product' &&
+				$listMarkerArray !== FALSE &&
+				is_array($listMarkerArray) &&
+				$this->uidArray['article']
+			) {
+				$uid = $this->uidArray['article'];
+				$listArticleMarkerArray = $relatedListView->getListMarkerArray(
+					'SINGLE',
+					$this->pibaseClass,
+					$templateCode,
+					$markerArray,
+					$articleViewTagArray,
+					$itemTableArray['article']->getFuncTablename(),
+					$uid,
+					$this->uidArray,
+					$useArticles,
+					$pageAsCategory,
+					$this->pid,
+					$errorCode
+				);
+
+				if (
+					$listArticleMarkerArray !== FALSE &&
+					is_array($listArticleMarkerArray)
+				) {
+					$listMarkerArray = array_merge($listMarkerArray, $listArticleMarkerArray);
+				}
+			}
+
 			if ($listMarkerArray && is_array($listMarkerArray)) {
 				$quantityMarkerArray = array();
 
 				if ($this->type == 'dam' && is_object($relatedListView))	{
 					$itemArray = array();
 					$itemArray[] = $row;
-					$relatedListView->getQuantityMarkerArray (
+					$relatedListView->getQuantityMarkerArray(
 						$theCode,
 						$itemTableArray[$this->type]->getFuncTablename(),
 						$itemTableViewArray[$this->type]->getMarker(),
@@ -791,10 +925,9 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 				}
 			}
 
-
 			$jsMarkerArray = array();
 			$this->javaScriptMarker->getMarkerArray($jsMarkerArray, $markerArray);
-			$markerArray = array_merge($categoryMarkerArray, $jsMarkerArray, $markerArray);
+			$markerArray = array_merge ($categoryMarkerArray, $jsMarkerArray, $markerArray);
 			$markerArray['###HIDDENFIELDS###'] = $hiddenText; // TODO
 
 			// edit jf begin
@@ -811,7 +944,7 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 			$rootline = array();
 			$parent = $row['pid'];
 			do {
-				$res_parent = $TYPO3_DB->exec_SELECTquery('uid,pid,title', 'pages', 'uid=' . $parent . ' AND hidden=0 AND deleted=0');
+				$res_parent = $TYPO3_DB->exec_SELECTquery('uid,pid,title', 'pages', 'uid='.$parent.' AND hidden=0 AND deleted=0');
 				$row_parent = $TYPO3_DB->sql_fetch_assoc($res_parent);
 				$TYPO3_DB->sql_free_result($res_parent);
 				$parent = $row_parent['pid'];
@@ -828,24 +961,32 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 			$markerArray = $markerObj->reduceMarkerArray($itemFrameWork, $markerArray);
 
 				// Substitute
-			$content = $this->cObj->substituteMarkerArrayCached($itemFrameWork, $markerArray, $subpartArray, $wrappedSubpartArray);
+			$content = $this->cObj->substituteMarkerArrayCached($itemFrameWork,$markerArray,$subpartArray,$wrappedSubpartArray);
 
 			if ($personDataFrameWork) {
 				$subpartArray = array();
-				$wrappedSubpartArray=array();
+				$wrappedSubpartArray = array();
 				foreach ($giftNumberArray as $giftnumber) {
 					$markerArray = tx_ttproducts_gifts_div::addGiftMarkers($markerArray, $giftnumber);
-					$markerArray['###FORM_NAME###'] = $forminfoArray['###FORM_NAME###'] . '_' . $giftnumber;
-					$markerArray['###FORM_ONSUBMIT###']='return checkParams (document.' . $markerArray['###FORM_NAME###'] . ')';
+					$markerArray['###FORM_NAME###'] = $forminfoArray['###FORM_NAME###'].'_'.$giftnumber;
+					$markerArray['###FORM_ONSUBMIT###']='return checkParams (document.'.$markerArray['###FORM_NAME###'].')';
 					$addQueryString = array();
 					$addQueryString[$this->type] = intval($row['uid']);
 					$addQueryString['variants'] = htmlspecialchars($this->variants);
-					$markerArray = $this->urlObj->addURLMarkers($backPID, $markerArray, $addQueryString); // Applied it here also...
-					$markerArray['###FIELD_NAME###'] = 'ttp_gift[item][' . $row['uid'] . '][' . $this->variants . ']'; // here again, because this is here in ITEM_LIST view
+
+					$markerArray = $this->urlObj->addURLMarkers($pid, $markerArray, $addQueryString, '',$bUseBackPid); // Applied it here also...
+
+					$markerArray['###FIELD_NAME###'] = 'ttp_gift[item]['.$row['uid'].']['.$this->variants.']'; // here again, because this is here in ITEM_LIST view
 					$markerArray['###FIELD_QTY###'] = $basketObj->basketExt['gift'][$giftnumber]['item'][$row['uid']][$this->variants];
-					$content .= $this->cObj->substituteMarkerArrayCached($personDataFrameWork, $markerArray, $subpartArray, $wrappedSubpartArray);
+					$content .= $this->cObj->substituteMarkerArrayCached($personDataFrameWork,$markerArray,$subpartArray,$wrappedSubpartArray);
 				}
 				$javaScriptObj->set('email');  // other JavaScript checks can come here
+			}
+
+			if ($content == '') {
+				$error_code[0] = 'internal_error';
+				$error_code[1] = 'TTP_3';
+				$error_code[2] = 'TYPO3 function';
 			}
 		} else {
 			$error_code[0] = 'wrong_parameter';
@@ -855,7 +996,7 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 		}
 
 		return $content;
-	} // print
+	} // printView
 }
 
 
@@ -864,4 +1005,4 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 }
 
 
-?>
+

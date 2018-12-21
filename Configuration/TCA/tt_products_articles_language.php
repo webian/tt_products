@@ -26,12 +26,20 @@ $result = array (
 		'iconfile' => PATH_TTPRODUCTS_ICON_TABLE_REL . 'tt_products_articles_language.gif',
 		'languageField' => 'sys_language_uid',
 		'mainpalette' => 1,
-		'searchFields' => 'title,subtitle,itemnumber,note,note2',
+		'searchFields' => 'title,subtitle,itemnumber,keyword,note,note2',
 	),
 	'interface' => array (
-		'showRecordFieldList' => 'sys_language_uid,hidden,starttime,endtime,fe_group,article_uid,title,subtitle,note,note2'
+		'showRecordFieldList' => 'sys_language_uid,hidden,starttime,endtime,fe_group,article_uid,title,subtitle,keyword,note,note2'
 	),
 	'columns' => array (
+		't3ver_label' => array (
+			'label'  => 'LLL:EXT:lang/locallang_general.xml:LGL.versionLabel',
+			'config' => array (
+				'type' => 'input',
+				'size' => '30',
+				'max'  => '30',
+			)
+		),
 		'sys_language_uid' => array (
 			'exclude' => 0,
 			'label' => DIV2007_LANGUAGE_LGL . 'language',
@@ -98,7 +106,6 @@ $result = array (
 			'config' => array (
 				'type' => 'input',
 				'size' => '8',
-				'max' => '20',
 				'eval' => 'date',
                 'renderType' => 'inputDateTime',
 				'default' => '0',
@@ -158,6 +165,18 @@ $result = array (
 			),
 			'l10n_mode' => 'prefixLangTitle',
 		),
+		'keyword' => array (
+			'exclude' => 1,
+			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.keyword',
+			'config' => array (
+				'type' => 'text',
+				'rows' => '5',
+				'cols' => '20',
+				'max' => '512',
+				'eval' => 'null',
+				'default' => NULL,
+			)
+		),
 		'note' => array (
 			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.note',
 			'config' => array (
@@ -194,14 +213,16 @@ $result = array (
                         )
                     )
                 ),
+
                 'showitem' => 'sys_language_uid, l18n_diffsource, hidden,--palette--;;1, article_uid,title,--palette--;;2, note, note2'
             )
 	),
 	'palettes' => array (
 		'1' => array('showitem' => 'starttime,endtime,fe_group'),
-		'2' => array('showitem' => 'subtitle'),
+		'2' => array('showitem' => 'subtitle,keyword'),
 	)
 );
+
 
 
 if (

@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2010 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -37,31 +37,54 @@
  *
  */
 
+
+
 class tx_ttproducts_discountprice extends tx_ttproducts_pricecalc_base {
-	private $conf;
+	public $conf;
 
-	protected function handlePriceItems ($priceItems, &$itemArray, &$priceReduction, $type)	{
-
+	protected function handlePriceItems (
+		$priceItems,
+		&$itemArray,
+		&$priceReduction,
+		&$discountArray,
+		$type,
+		$bNeedsDivision
+	)	{
 		$priceItemsCount = count($priceItems);
+
 		foreach ($priceItems as $priceItem)	{
 			$k2 = $priceItem['item'];
 			$sort = $priceItem['sort'];
 			$prodValue = $priceItem['price'];
-			$itemArray[$sort][$k2][$type] = $prodValue / $priceItemsCount;
-
-			$row = &$itemArray[$sort][$k2]['rec'];
+			if ($bNeedsDivision) {
+				$price = $prodValue / $priceItemsCount;
+			} else {
+				$price = $prodValue;
+			}
+			$itemArray[$sort][$k2][$type] = $price;
+			$row = $itemArray[$sort][$k2]['rec'];
+			$discountArray[$row['uid']] += $prodValue;
 			$priceReduction[$row['uid']] = 1; // remember the reduction in order not to calculate another price with $priceCalc later
 		}
 	}
 
-	public function getCalculatedData (&$itemArray, &$conf, $type, &$priceReduction, $priceTotalTax, $bUseArticles) {
 
+	public function getCalculatedData (
+		&$itemArray,
+		&$conf,
+		$type,
+		&$priceReduction,
+		&$discountArray,
+		$priceTotalTax,
+		$bUseArticles,
+		$bMergeArticles=TRUE
+	) {
 		if (!$conf || !$itemArray || !count($itemArray)) {
 			return;
 		}
-
 		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$this->conf = $cnf->conf;
+
 		$additive = 0;
 		$countTotal = 0;
 		$countedItems = array();
@@ -70,14 +93,13 @@ class tx_ttproducts_discountprice extends tx_ttproducts_pricecalc_base {
 		ksort($conf);
 		$calctype = '';
 		$field = '';
-		$sql = t3lib_div::makeInstance('tx_ttproducts_sql');
 
 		foreach ($conf as $k1 => $priceCalcTemp) {
 
 			if (is_array($priceCalcTemp))	{
 
 				$field = 'price';
-				foreach ($priceCalcTemp as $k2=>$v2) {
+				foreach ($priceCalcTemp as $k2 => $v2) {
 					//=>	catch the values of discountprice
 					if (!is_array($k2)) {
 						switch ($k2) {
@@ -110,28 +132,39 @@ class tx_ttproducts_discountprice extends tx_ttproducts_pricecalc_base {
 
 			// array of all normal prices out of the discount price array
 			$priceCalcCount = 0;
+
 			if ($calctype == 'count')	{
 				$pricefor1 = $this->getPrice($conf, $k1);
 			}
 
-			$bConditionActive = FALSE;
-			$lastprodValue = '';
-			$prodValue = 0;
 			// loop over all items in the basket indexed by a sorting text
-			foreach ($itemArray as $sort=>$actItemArray) {
+			foreach ($itemArray as $sort => $actItemArray) {
 
 				// $actItemArray = all items array
-				foreach ($actItemArray as $k2=>$actItem) {
-					$row = &$actItem['rec'];
+				foreach ($actItemArray as $k2 => $actItem) {
+					$bConditionActive = FALSE;
+					$lastprodValue = '';
+					$prodValue = 0;
+
+					$row = $actItem['rec'];
+
+					if ($bMergeArticles)	{
+						$extArray = $row['ext'];
+						if (is_array($extArray) && is_array($extArray['mergeArticles']))	{
+							$row = $extArray['mergeArticles'];
+						}
+					}
 
 					if (is_array($priceCalcTemp['sql.']))	{
-						if (!($bIsValid = $sql->isValid($row, $priceCalcTemp['sql.']['where'])))	{
+						if (!($bIsValid = tx_ttproducts_sql::isValid($row, $priceCalcTemp['sql.']['where'])))	{
 							continue;
 						}
 					}
+
 					$pid = intval($row['pid']);
 					// count all items which will apply to the discount price
 					$count2 = $actItem['count'];
+
 					$prodConf = $priceCalcTemp['prod.'];
 
 					switch ($calctype)	{
@@ -139,8 +172,9 @@ class tx_ttproducts_discountprice extends tx_ttproducts_pricecalc_base {
 							// amount of items
 							$priceCalcCount += $count2;
 
-							if (is_array($priceCalcTemp['sql.']))	{
+							if (is_array($priceCalcTemp['sql.']) && $priceCalcTemp['sql.']['where'] != '')	{
 								$prodType = '';
+
 								if (is_array($prodConf))	{
 									$prodType = $prodConf['type'];
 									if (!$prodType) {
@@ -151,27 +185,32 @@ class tx_ttproducts_discountprice extends tx_ttproducts_pricecalc_base {
 										$bActivateImmediately = FALSE;
 									}
 
-									$prodArray = $prodConf;
-									krsort($prodArray);
+									$prodConfArray = $prodConf;
+									krsort($prodConfArray);
 									$countedItems[$k1][] = array('sort' => $sort, 'item' => $k2, 'active' => FALSE, 'price' => '');	// collect the not yet active items
 
-									foreach ($prodArray as $k3 => $v3)	{
+									foreach ($prodConfArray as $k3 => $v3)	{
 										if ($k3 == 'type')	{
 											// nothing
 										} else if (
 											tx_div2007_core::testInt($k3)
 										) {
 											$count3 = intval($k3);
+
 											if ($priceCalcCount >= $count3)	{
+
 												switch ($prodType) 	{
 													case 'percent':
+
 														foreach ($countedItems[$k1] as $k4 => $countedItemsRow)	{
-															$item = &$itemArray[$countedItemsRow['sort']][$countedItemsRow['item']];
-															$prodRow = &$item['rec'];
+															$item = $itemArray[$countedItemsRow['sort']][$countedItemsRow['item']];
+															$prodRow = $item['rec'];
 															$prodValue = $prodRow[$field] * (1 - $v3/100);
 
-															$countedItems[$k1][$k4]['active'] = TRUE;
-															$countedItems[$k1][$k4]['price'] = $prodValue;
+															if (!isset($countedItems[$k1][$k4]) || !$countedItems[$k1][$k4]['active']) {
+																$countedItems[$k1][$k4]['active'] = TRUE;
+																$countedItems[$k1][$k4]['price'] = $prodValue;
+															}
 														}
 														break;
 													case 'price':
@@ -181,9 +220,8 @@ class tx_ttproducts_discountprice extends tx_ttproducts_pricecalc_base {
 															!tx_div2007_core::testInt($lastprodValue) ||
 															$lastprodValue != $prodValue
 														) {
-
-															if (!$bConditionActive) {
-																foreach ($countedItems[$k1] as $k4 => $countItemArray) {
+															if (!$bConditionActive)	{
+																foreach ($countedItems[$k1] as $k4 => $countItemArray)	{
 																	$countedItems[$k1][$k4]['active'] = $bActivateImmediately;
 																	$countedItems[$k1][$k4]['price'] = $prodValue;
 																}
@@ -195,7 +233,7 @@ class tx_ttproducts_discountprice extends tx_ttproducts_pricecalc_base {
 												}
 											}
 										}
-									} // foreach ($prodArray as $k3 => $v3)
+									} // foreach ($prodConfArray as $k3 => $v3)
 								}
 							} else if (($count2 > 0) && isset($row[$field]) && ($row[$field] == $pricefor1) && (!$uid || $row['uid'] == $uid)) {
 								$countedItems[$k1][] = array('sort' => $sort, 'item' => $k2, 'active' => FALSE, 'price' => '');
@@ -226,7 +264,6 @@ class tx_ttproducts_discountprice extends tx_ttproducts_pricecalc_base {
 								if ($prodType == 'percent') {
 									$prodValue = ($this->conf['TAXincluded'] ? $actItem['priceTax'] : $actItem['priceNoTax']) * (1 - $prodValue / 100);
 								}
-
 								$newPriceItems[$k1][] = array('sort' => $sort, 'item' => $k2, 'price' => $prodValue);
 							}
 						break;
@@ -244,6 +281,7 @@ class tx_ttproducts_discountprice extends tx_ttproducts_pricecalc_base {
 						if (is_array($countedItems[$k1]))	{
 							$additionalCount = 0;
 							$activateArray = array();
+
 							foreach ($countedItems[$k1] as $k2 => $countedItemsRow)	{
 								if ($countedItemsRow['active'] === FALSE) {
 									$tmpArray = $itemArray[$countedItemsRow['sort']][$countedItemsRow['item']];
@@ -251,14 +289,16 @@ class tx_ttproducts_discountprice extends tx_ttproducts_pricecalc_base {
 									$activateArray[] = $k2;
 								}
 							}
+
 							if ($additionalCount > 0)	{
 								$prodType = $prodConf['type'];
-								$prodArray = $prodConf;
-								krsort($prodArray);
+								$prodConfArray = $prodConf;
+								krsort($prodConfArray);
 
-								foreach ($prodArray as $k2 => $prodv)	{
+								foreach ($prodConfArray as $k2 => $prodv)	{
 									if ($additionalCount >= $k2)	{
 										$activatePrice = $prodv / count($activateArray);
+
 										foreach ($activateArray as $k3)	{
 											$countedItems[$k1][$k3]['active'] = TRUE;
 											$countedItems[$k1][$k3]['price'] = $activatePrice;
@@ -273,23 +313,33 @@ class tx_ttproducts_discountprice extends tx_ttproducts_pricecalc_base {
 								if ($countedItemsRow['active'] === TRUE)	{
 
 									$item = &$itemArray[$countedItemsRow['sort']][$countedItemsRow['item']];
-									$row = &$item['rec'];
+									$row2 = &$item['rec'];
+									$row2[$type] = $countedItemsRow['price']; // direct write into $row and into $itemArray
 									$item[$type] = $countedItemsRow['price'];
+
+									$discountArray[$row['uid']] += $countedItemsRow['price'];
 									$priceReduction[$row['uid']] = 1; // remember the reduction in order not to calculate another price with $priceCalc
 								}
 							}
+
 							if (isset($item)) {
 								unset($item);
 							}
-							if (isset($row)) {
-								unset($row);
+							if (isset($row2)) {
+								unset($row2);
 							}
 						}
 					break;
 					case 'price':
-
 						if (isset($newPriceItems[$k1]) && is_array($newPriceItems[$k1]))	{
-							$this->handlePriceItems($newPriceItems[$k1], $itemArray, $priceReduction, $type);
+							$this->handlePriceItems(
+								$newPriceItems[$k1],
+								$itemArray,
+								$priceReduction,
+								$discountArray,
+								$type,
+								FALSE
+							);
 						}
 					break;
 				}
@@ -297,9 +347,11 @@ class tx_ttproducts_discountprice extends tx_ttproducts_pricecalc_base {
 		} // foreach ($conf as $k1 => $priceCalcTemp)
 
 		if ($additive == 1) {
+
 			switch ($calctype)	{
 				case 'count':
 					foreach ($conf as $k1 => $priceCalcTemp) {
+
 						if (!is_array($priceCalcTemp)) {
 							continue;
 						}
@@ -315,16 +367,16 @@ class tx_ttproducts_discountprice extends tx_ttproducts_pricecalc_base {
 									// store the discount price in all calculated items from before
 									if (is_array ($countedItems[$k1]))	{
 										foreach ($countedItems[$k1] as $k3 => $v3) {
-
 											if ($v3['active'] == FALSE) {
 												continue;
 											}
 
 											foreach ($itemArray[$v3['sort']] as $k1=>$actItem) {
-												$row = &$actItem['rec'];
-												if ($type == 'calcprice')	{
-													$itemArray[$v3['sort']][$k1] [$type] = $price2;
+												$row = $actItem['rec'];
+												if ($type == 'calc')	{
+													$itemArray[$v3['sort']][$k1][$type] = $price2;
 												}
+												$discountArray[$row['uid']] += $price2;
 												$priceReduction[$row['uid']] = 1; // remember the reduction in order not to calculate another price with $priceCalc later
 											}
 										}
@@ -340,7 +392,17 @@ class tx_ttproducts_discountprice extends tx_ttproducts_pricecalc_base {
 						if (!is_array($priceCalcTemp)) {
 							continue;
 						}
-						$this->handlePriceItems($newPriceItems[$k1], $itemArray, $priceReduction, $type);
+
+						if (isset($newPriceItems[$k1]) && is_array($newPriceItems[$k1]))	{
+							$this->handlePriceItems(
+								$newPriceItems[$k1],
+								$itemArray,
+								$priceReduction,
+								$discountArray,
+								$type,
+								TRUE
+							);
+						}
 					}
 				break;
 			}
@@ -350,8 +412,9 @@ class tx_ttproducts_discountprice extends tx_ttproducts_pricecalc_base {
 	} // getCalculatedData
 }
 
+
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/lib/class.tx_ttproducts_discountprice.php'])	{
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/lib/class.tx_ttproducts_discountprice.php']);
 }
 
-?>
+

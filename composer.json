@@ -24,11 +24,11 @@
     "GPL-2.0+"
   ],
   "require": {
-    "typo3/cms-core": ">=4.5.0,<8.99.99",
-    "typo3-ter/div2007": ">=1.7.11",
-    "typo3-ter/table": ">=0.3.0",
-    "typo3-ter/tsparser": ">=0.2.5",
-    "typo3-ter/migration-core": ">=0.0.0"
+    "typo3/cms-core": ">=6.2.0,<8.99.99",
+    "typo3-ter/div2007": ">=1.10.3",
+    "typo3-ter/migration-core": ">=0.0.1",
+    "typo3-ter/table": ">=0.7.0",
+    "typo3-ter/tsparser": ">=0.2.5"
   },
   "suggest": {
     "typo3-ter/addons-em": ">=0.2.1"

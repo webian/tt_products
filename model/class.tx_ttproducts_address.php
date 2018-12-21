@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2008 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2007-2008 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -27,7 +27,7 @@
 /**
  * Part of the tt_products (Shop System) extension.
  *
- * functions for the frontend users
+ * functions for the frontend users addresses
  *
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
@@ -36,6 +36,7 @@
  *
  *
  */
+
 
 
 class tx_ttproducts_address extends tx_ttproducts_category_base {
@@ -90,23 +91,26 @@ class tx_ttproducts_address extends tx_ttproducts_category_base {
 	}
 
 
-	function &getRelationArray ($excludeCats = '', $rootUids = '', $allowedCats = '') {
+	public function getRelationArray ($dataArray, $excludeCats = '', $rootUids = '', $allowedCats = '') {
 		$relationArray = array();
 		$rootArray = t3lib_div::trimExplode(',', $rootUids);
 
-		if (is_array($this->dataArray))	{
-			foreach ($this->dataArray as $k => $row)	{
+		if (is_array($dataArray))	{
+			foreach ($dataArray as $k => $row)	{
 				$uid = $row['uid'];
+				foreach ($row as $field => $value) {
+					$relationArray[$uid][$field] = $value;
+				}
+
 				$title = $row[$this->getField('name')];
-				$relationArray [$uid]['title'] = $title;
-				$relationArray [$uid]['pid'] = $row['pid'];
-				$relationArray [$uid]['parent_category'] = '';
+				$relationArray[$uid]['title'] = $title;
+				$relationArray[$uid]['pid'] = $row['pid'];
+				$relationArray[$uid]['parent_category'] = '';
 			}
 		}
 
 		return $relationArray;
 	}
-
 }
 
 
@@ -115,4 +119,4 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 }
 
 
-?>
+

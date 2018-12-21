@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2009-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2009-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -37,7 +37,6 @@
  *
  */
 
- 
 class tx_ttproducts_hooks_fe implements t3lib_Singleton {
 
 	public function login_confirmed ($params, $pObj) {
@@ -48,15 +47,14 @@ class tx_ttproducts_hooks_fe implements t3lib_Singleton {
 		$this->resetAdresses($params, $pObj);
 	}
 
-
 	public function resetAdresses (&$params, $pObj)	{
-		global $TSFE;
 
-		$recs = $TSFE->fe_user->getKey('ses', 'recs');
+		$recs = tx_ttproducts_control_basket::getStoredRecs();
+
 		if (isset($recs) && is_array($recs))	{
 			unset($recs['personinfo']);
 			unset($recs['delivery']);
-			$TSFE->fe_user->setKey('ses', 'recs', $recs);
+			tx_ttproducts_control_basket::setStoredRecs($recs);
 		}
 	}
 }
@@ -66,4 +64,4 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/hooks/class.tx_ttproducts_hooks_fe.php']);
 }
 
-?>
+

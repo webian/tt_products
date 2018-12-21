@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2007-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -59,7 +59,7 @@ class tx_ttproducts_text extends tx_ttproducts_table_base {
 		return $rcArray;
 	}
 
-	function getChildUidArray ($theCode, $uid, $tagMarkerArray, $parenttable = 'tt_products')	{
+	function getChildUidArray ($theCode, $uid, $tagMarkerArray, $parenttable='tt_products')	{
 		global $TYPO3_DB;
 
 		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
@@ -71,11 +71,11 @@ class tx_ttproducts_text extends tx_ttproducts_table_base {
 		$rcArray = array();
 		$tagWhere = '';
 		if (count($tagMarkerArray))	{
-			$tagMarkerArray = $TYPO3_DB->fullQuoteArray($tagMarkerArray, $this->getTableObj()->name);
-			$tags = implode(',', $tagMarkerArray);
-			$tagWhere = ' AND marker IN (' . $tags . ')';
+			$tagMarkerArray = $TYPO3_DB->fullQuoteArray($tagMarkerArray,$this->getTableObj()->name);
+			$tags = implode(',',$tagMarkerArray);
+			$tagWhere = ' AND marker IN ('.$tags.')';
 		}
-		$where_clause = 'parentid = '.intval($uid) . ' AND parenttable=' . $TYPO3_DB->fullQuoteStr($parenttable, $this->getTableObj()->name) . $tagWhere;
+		$where_clause = 'parentid = ' . intval($uid) . ' AND parenttable=' . $TYPO3_DB->fullQuoteStr($parenttable, $this->getTableObj()->name) . $tagWhere;
 
 		$resultArray =
 			$this->get(
@@ -83,14 +83,21 @@ class tx_ttproducts_text extends tx_ttproducts_table_base {
 				'',
 				FALSE,
 				$where_clause,
-				'', // $groupBy
-				'', // $orderBy
-				'', // $limit
-				'', // $fields
-				FALSE, // $bCount
-				'', // $aliasPostfix
+				'',
+				'',
+				'',
+				'',
+				FALSE,
+				'',
 				$fallback
 			);
+
+
+/*		$res = $this->getTableObj()->exec_SELECTquery('*', $where);
+
+		while($row = $TYPO3_DB->sql_fetch_assoc($res))	{
+			$rcArray[] = $row;
+		}*/
 
 		return $resultArray;
 	}
@@ -102,4 +109,4 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 }
 
 
-?>
+

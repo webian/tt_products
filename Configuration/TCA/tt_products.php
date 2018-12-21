@@ -44,9 +44,17 @@ $result = array(
 		'searchFields' => 'uid,title,subtitle,itemnumber,ean,note,note2,www',
 	),
 	'interface' => array (
-		'showRecordFieldList' => 'hidden,starttime,endtime,fe_group,title,subtitle,accessory_uid,related_uid,itemnumber,ean,price,price2,creditpoints,graduated_price_uid,tax,article_uid,note,note2,note_uid,text_uid,category,address,inStock,basketminquantity,weight,usebydate,bulkily,offer,highlight,bargain,directcost,color,color2,color3,size,size2,size3,description,gradings,material,quality,additional,unit,unit_factor,www,datasheet,special_preparation,image,sellstarttime,sellendtime,shipping,shipping2,handling'
+		'showRecordFieldList' => 'hidden,starttime,endtime,fe_group,title,subtitle,keyword,accessory_uid,related_uid,itemnumber,ean,shipping_point,price,price2,discount,discount_disable,tax,creditpoints,graduated_price_uid,article_uid,note,note2,note_uid,text_uid,category,address,inStock,basketminquantity,weight,usebydate,bulkily,offer,highlight,bargain,directcost,color,color2,color3,size,size2,size3,description,gradings,material,quality,additional,unit,unit_factor,www,datasheet,special_preparation,image,smallimage,sellstarttime,sellendtime,shipping,shipping2,handling'
 	),
 	'columns' => array (
+		't3ver_label' => array (
+			'label'  => 'LLL:EXT:lang/locallang_general.xml:LGL.versionLabel',
+			'config' => array (
+				'type' => 'input',
+				'size' => '30',
+				'max'  => '30',
+			)
+		),
 		'sorting' => Array (
 			'config' => Array (
 				'type' => 'passthrough',
@@ -143,6 +151,18 @@ $result = array(
 				'default' => NULL,
 			)
 		),
+		'keyword' => array (
+			'exclude' => 1,
+			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.keyword',
+			'config' => array (
+				'type' => 'text',
+				'rows' => '5',
+				'cols' => '20',
+				'max' => '512',
+				'eval' => 'null',
+				'default' => NULL,
+			)
+		),
 		'prod_uid' => array (
 			'exclude' => 1,
 			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.prod_uid',
@@ -177,6 +197,16 @@ $result = array(
 				'max' => '48'
 			)
 		),
+		'shipping_point' => array (
+			'exclude' => 1,
+			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.shipping_point',
+			'config' => array (
+				'type' => 'input',
+				'size' => '24',
+				'eval' => 'trim',
+				'max' => '24'
+			)
+		),
 		'price' => array (
 			'exclude' => 1,
 			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.price',
@@ -195,6 +225,28 @@ $result = array(
 				'size' => '20',
 				'eval' => 'trim,double2',
 				'max' => '20'
+			)
+		),
+		'discount' => array (
+			'exclude' => 1,
+			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.discount',
+			'config' => array (
+				'type' => 'input',
+				'size' => '4',
+				'max' => '8',
+				'eval' => 'trim,double2',
+				'range' => array (
+					'upper' => '1000',
+					'lower' => '0'
+				),
+				'default' => 0
+			)
+		),
+		'discount_disable' => array (
+			'exclude' => 1,
+			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.discount_disable',
+			'config' => array (
+				'type' => 'check',
 			)
 		),
 		'tax' => array (
@@ -279,6 +331,7 @@ $result = array(
 				'autoSizeMax' => '12',
 				'minitems' => '0',
 				'maxitems' => '30',
+				'show_thumbs' => '1',
 			),
 		),
 		'text_uid' => array (
@@ -366,6 +419,7 @@ $result = array(
 				'allowed' => 'doc,htm,html,pdf,sxw,txt,xls,gif,jpg,png',
 				'max_size' => $GLOBALS['TYPO3_CONF_VARS']['BE']['maxFileSize'],
 				'uploadfolder' => 'uploads/tx_ttproducts/datasheet',
+				'show_thumbs' => '1',
 				'size' => '3',
 				'maxitems' => '20',
 				'minitems' => '0',
@@ -628,6 +682,14 @@ $result = array(
 										</config>
 									</TCEforms>
 								</noMinPrice>
+								<noMaxPrice>
+									<TCEforms>
+										<label>LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.additional.noMaxPrice</label>
+										<config>
+											<type>check</type>
+										</config>
+									</TCEforms>
+								</noMaxPrice>
 								<noGiftService>
 									<TCEforms>
 										<label>LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.additional.noGiftService</label>
@@ -666,6 +728,22 @@ $result = array(
 				'size' => '5',
 				'maxitems' => '30',
 				'minitems' => '0',
+				'default' => NULL,
+			)
+		),
+		'smallimage' => Array (
+			'exclude' => 1,
+			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.smallimage',
+			'config' => Array (
+				'type' => 'group',
+				'internal_type' => 'file',
+				'allowed' => $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'],
+				'max_size' => $GLOBALS['TYPO3_CONF_VARS']['BE']['maxFileSize'],
+				'uploadfolder' => $imageFolder,
+				'size' => '5',
+				'maxitems' => '30',
+				'minitems' => '0',
+				'eval' => 'null',
 				'default' => NULL,
 			)
 		),
@@ -758,13 +836,14 @@ $result = array(
                         )
                     )
                 ),
-                'showitem' => 'title,--palette--;;7, itemnumber,--palette--;;2, category, price,--palette--;;3, tax,--palette--;;4, offer,--palette--;;6,weight,--palette--;;8,creditpoints,hidden,--palette--;;1,' .
-                '--div--;LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.descriptions,note, note2,note_uid,text_uid,image,datasheet,'.
-                '--div--;LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.variants,color,color2,--palette--;;9;;,size,size2,--palette--;;10,description,gradings,material,quality,--palette--;;,additional,--palette--;;11,'.
-                '--div--;LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.graduated,graduated_price_uid,'.
-                '--div--;LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.relations,article_uid,related_uid,accessory_uid,'.
-                '--div--;LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.shippingdiv,shipping,shipping2,handling,delivery,'
-            )
+
+                'showitem' => 'title,--palette--;;7, itemnumber,--palette--;;2, category, price,--palette--;;3, tax;;4, offer,--palette--;;6,weight,--palette--;;8,creditpoints,hidden,--palette--;;1,' .
+			'--div--;LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.descriptions,note, note2,note_uid,text_uid,image,smallimage,datasheet,'.
+			'--div--;LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.variants,color,color2,--palette--;;9,size,size2,--palette--;;10,description,gradings,material,quality,--palette--;;,additional,--palette--;;11,'.
+			'--div--;LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.graduated,graduated_price_uid,'.
+			'--div--;LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.relations,article_uid,related_uid,accessory_uid,download_info,download_uid,'.
+			'--div--;LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.shippingdiv,shipping_point,shipping,shipping2,handling,delivery,'
+        )
 	),
 	'palettes' => array (
 		'1' =>
@@ -772,13 +851,13 @@ $result = array(
 		'2' =>
 			array('showitem' => 'inStock,basketminquantity,ean'),
 		'3' =>
-			array('showitem' => 'price2,directcost'),
+			array('showitem' => 'price2,discount,discount_disable,directcost'),
 		'4' =>
 			array('showitem' => 'tax_dummy'),
 		'6' =>
 			array('showitem' => 'highlight,bargain'),
 		'7' =>
-			array('showitem' => 'subtitle,www'),
+			array('showitem' => 'subtitle,keyword,www'),
 		'8' =>
 			array('showitem' => 'bulkily,special_preparation,unit,unit_factor'),
 		'9' =>
@@ -806,6 +885,7 @@ if (
             $result['types']['0']['showitem']
         );
 }
+
 
 
 return $result;

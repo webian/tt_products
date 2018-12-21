@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2006-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2006-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -35,6 +35,7 @@
  * @subpackage tt_products
  *
  */
+
 
 
 
@@ -74,19 +75,19 @@ class tx_ttproducts_dam extends tx_ttproducts_article_base {
 		if ($type == 'products')	{
 			$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 			$productTable = $tablesObj->get('tt_products', FALSE);
-			$additional = $productTable->getFlexQuery('isImage', 1);
-			$rowArray = $productTable->getWhere('additional REGEXP ' . $TYPO3_DB->fullQuoteStr($additional, $productTable->getTablename)); // quotemeta
+			$additional = $productTable->getFlexQuery('isImage',1);
+			$rowArray = $productTable->getWhere('additional REGEXP ' . $TYPO3_DB->fullQuoteStr($additional,$productTable->getTablename)); // quotemeta
 			$rcArray = array_keys($rowArray);
 		}
 		return $rcArray;
 	}
 
 	/**
-	 * Returns TRUE if the item has the $check value checked
+	 * Returns true if the item has the $check value checked
 	 *
 	 */
 	public function hasAdditional (&$row, $check)  {
-		$hasAdditional = FALSE;
+		$hasAdditional = false;
 		return $hasAdditional;
 	}
 
@@ -127,7 +128,7 @@ class tx_ttproducts_dam extends tx_ttproducts_article_base {
 		}
 	}
 
-	public function addWhereCat (&$catObject, $theCode, $cat, $pid_list, $bLeadingOperator=TRUE) {
+	public function addWhereCat ($catObject, $theCode, $cat, $categoryAnd, $pid_list, $bLeadingOperator=TRUE) {
 		$bOpenBracket = FALSE;
 		$where = '';
 
@@ -136,7 +137,7 @@ class tx_ttproducts_dam extends tx_ttproducts_article_base {
 			foreach  ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['DAMCategory'] as $classRef) {
 				$hookObj= t3lib_div::makeInstance($classRef);
 				if (method_exists($hookObj, 'addWhereCat')) {
-					$whereNew = $hookObj->addWhereCat($this, $catObject, $cat, $where, $operator, $pid_list, $catObject->getDepth($theCode));
+					$whereNew = $hookObj->addWhereCat($this, $catObject, $cat, $where, $operator, $pid_list, $catObject->getDepth($theCode), $categoryAnd);
 					if ($bLeadingOperator)	{
 						$operator = ($operator ? $operator : 'OR');
 						$where .= ($whereNew ? ' '.$operator.' '.$whereNew : '');
@@ -147,7 +148,7 @@ class tx_ttproducts_dam extends tx_ttproducts_article_base {
 			}
 		} else if($cat || $cat == '0') {
 			$cat = implode(',',t3lib_div::intExplode(',', $cat));
-			$where = 'category IN (' . $cat . ')';
+			$where = 'category IN ('.$cat.')';
 			if ($bLeadingOperator)	{
 				$where = ' AND ( ' . $where . ')';
 			}
@@ -206,10 +207,10 @@ class tx_ttproducts_dam extends tx_ttproducts_article_base {
 			}
 		}
 		$uidArray = array_unique($uidArray);
-		return (implode(',', $uidArray));
+		return (implode(',',$uidArray));
 	}
 
-	public function getRequiredFields ($theCode = '')	{
+	public function getRequiredFields ($theCode='')	{
 		$tableConf = $this->getTableConf($theCode);
 		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 
@@ -230,4 +231,4 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 }
 
 
-?>
+

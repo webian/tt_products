@@ -1,17 +1,42 @@
-2018-12-21 Franz Holzinger <franz@ttproducts.de>
-    * add status provider for TYPO3 reports module
-    * compatibility: use tx_ttproducts_email_div::sendMail
-    * compatibility: Check in the front end and back end if $GLOBALS['TYPO3_CONF_VARS']['FE']['enableRecordRegistration'] has been set.
-    * compatibility for PHP 7.2
+2018-12-06 Franz Holzinger <franz@ttproducts.de>
+    * Remove the support for the paymentlib extension because nothing has happened there since July 17, 2009.
+
+2018-11-30 Franz Holzinger <franz@ttproducts.de>
+    * update to TYPO3 7 and 8: make ratings and commenting by tt_board possible again
 
 2018-11-21 Franz Holzinger <franz@ttproducts.de>
     * remove feature: remove marker ###PRICE_TOTUNITS_DISCOUNT###
+    * bugfix: tx_ttproducts_basket_view::init will not be called in all cases
+
+2018-11-19 Franz Holzinger <franz@ttproducts.de>
+    * bugfix: Only send a HTML email if orderEmail_htmlmail is set to 1 and if a HTML subpart is available with contents
+
+2018-10-04 Franz Holzinger <franz@ttproducts.de>
+    * remove PHP closing tags
+
+2018-10-02 Franz Holzinger <franz@ttproducts.de>
+    * bugfix for PHP 7.2
+    * Do not rely on the variable $_EXTKEY. This will be deprecated in TYPO3 9.
+    * remove apostrophe at the beginning of file Configuration/TCA/tt_products_cat.php
+
+2018-09-20 Franz Holzinger <franz@ttproducts.de>
+    * remove outdated include
+
+2018-09-17 Franz Holzinger <franz@ttproducts.de>
+    * bugfix: An empty basket has been wrongly detected.
+    * remove support for TYPO3 4.5 - 6.1 and PHP < 5.6
+
+2018-08-24 Franz Holzinger <franz@ttproducts.de>
+    * add  support for PHP 7.2: integrate control/class.tx_ttproducts_activity_base.php into control/class.tx_ttproducts_activity_finalize.php
+
+2018-08-10 Franz Holzinger <franz@ttproducts.de>
+    * remove support for TYPO3 4.5 - 6.1 and PHP < 5.6
+
+2018-08-10 Franz Holzinger <franz@ttproducts.de>
+    * new feature: Many improvements for version 2.9.1 in TYPO3 TER
 
 2018-08-09 Franz Holzinger <franz@ttproducts.de>
     * bugfix #35: Do not try to generate the missing view class for the table tt_products_emails.
-
-2018-08-08 Franz Holzinger <franz@ttproducts.de>
-    * bugfix: marker detection with IMAGE markers which contain colons
 
 2018-06-29 Franz Holzinger <franz@ttproducts.de>
     * bugfix issue #34: If no agency extension is installed then the email and other validity checks must give an appropriate error message

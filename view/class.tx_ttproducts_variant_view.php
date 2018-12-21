@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2006-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2006-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -36,6 +36,8 @@
  *
  *
  */
+
+
 
 
 class tx_ttproducts_variant_view implements tx_ttproducts_variant_view_int, t3lib_Singleton {
@@ -77,7 +79,7 @@ class tx_ttproducts_variant_view implements tx_ttproducts_variant_view_int, t3li
 			}
 
 			foreach ($areaArray as $k => $area) {
-				$subpartArray['###' . $area . '###'] = $this->cObj->getSubpart($tempContent, '###' . $area . '###');
+				$subpartArray['###'.$area.'###'] = $this->cObj->getSubpart($tempContent,'###'.$area.'###');
 			}
 		}
 		$this->removeEmptyMarkerSubpartArray($markerArray, $subpartArray, $wrappedSubpartArray, $row, $conf, $bHasAdditional, $bGiftService);
@@ -98,9 +100,9 @@ class tx_ttproducts_variant_view implements tx_ttproducts_variant_view_int, t3li
 						trim($row[$field]) == '' ||
 						!$conf['select' . ucfirst($field)]
 					) {
-						$remSubpartArray[] = 'display_variant' . $key;
+						$remSubpartArray[] = 'display_variant'.$key;
 					} else {
-						$remMarkerArray[] = 'display_variant' . $key;
+						$remMarkerArray[] = 'display_variant'.$key;
 					}
 				}
                 if ($key > $maxKey) {
@@ -130,7 +132,7 @@ class tx_ttproducts_variant_view implements tx_ttproducts_variant_view_int, t3li
             $remSubpartArray[] = 'display_variant' . $i;
         }
 
-		foreach ($remSubpartArray as $k => $subpart) {
+        foreach ($remSubpartArray as $k => $subpart) {
 			$subpartArray['###'.$subpart.'###'] = '';
 		}
 
@@ -146,4 +148,3 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/view/class.tx_ttproducts_variant_view.php']);
 }
 
-?>

@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2005-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2005-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -40,16 +40,17 @@
 
 
 class tx_ttproducts_account extends tx_ttproducts_table_base {
+	public $pibase; // reference to object of pibase
 	public $conf;
 	public $acArray;	// credit card data
-	public $bIsAllowed = array(); // allowed uids of bank ACCOUNTS
+	public $bIsAllowed = FALSE; // enable of bank ACCOUNTS
 	public $fieldArray = array('owner_name', 'ac_number', 'bic');
 	public $tablename = 'sys_products_accounts';
 	public $asterisk = '********';
 	public $useAsterisk = FALSE;
 
 
-	function init ($cObj, $functablename) {
+	public function init ($cObj, $functablename)	{
 		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
 		$formerBasket = $basketObj->recs;
 		$bIsAllowed = $basketObj->basketExtra['payment.']['accounts'];
@@ -64,10 +65,10 @@ class tx_ttproducts_account extends tx_ttproducts_table_base {
 			$this->bIsAllowed = $bIsAllowed;
 		}
 
-		$bNumberRecentlyModified = TRUE;
+		$bNumberRecentlyModified = true;
 
 		if (!$this->acArray['ac_number'])	{
-			$bNumberRecentlyModified = FALSE;
+			$bNumberRecentlyModified = false;
 		}
 
 		if ($bNumberRecentlyModified)	{
@@ -83,6 +84,11 @@ class tx_ttproducts_account extends tx_ttproducts_table_base {
 				$this->acArray['ac_number'] = $this->asterisk;
 			}
 		}
+	}
+
+
+	function getIsAllowed ()	{
+		return $this->bIsAllowed;
 	}
 
 
@@ -139,7 +145,7 @@ class tx_ttproducts_account extends tx_ttproducts_table_base {
 	}
 
 
-	function getRow ($uid, $bFieldArrayAll = FALSE) {
+	function getRow ($uid, $bFieldArrayAll=false) {
 		global $TYPO3_DB;
 		$rcArray = array();
 		if ($bFieldArrayAll)	{
@@ -149,13 +155,17 @@ class tx_ttproducts_account extends tx_ttproducts_table_base {
 		}
 
 		if ($uid) {
-			$where = 'uid = ' . intval($uid);
+			$where = 'uid = '.intval($uid);
 			// Fetching the products
 			$fields = '*';
 			if ($bFieldArrayAll)	{
-				$fields = implode(',', $this->fieldArray);
+				$fields = implode(',',$this->fieldArray);
 			}
-			$res = $TYPO3_DB->exec_SELECTquery($fields, $this->tablename, $where);
+			$tablename = $this->getTablename();
+			if ($tablename == '')	{
+				$tablename = 'sys_products_accounts';
+			}
+			$res = $TYPO3_DB->exec_SELECTquery($fields, $tablename, $where);
 			$row = $TYPO3_DB->sql_fetch_assoc($res);
 			$TYPO3_DB->sql_free_result($res);
 			if ($row)	{
@@ -190,14 +200,11 @@ class tx_ttproducts_account extends tx_ttproducts_table_base {
 		foreach ($this->fieldArray as $k => $field)	{
 			if (!$this->acArray[$field])	{
 				$rc = $field;
-
 				break;
 			}
 			if ($field == 'bic' && is_object($bankObj) /* && t3lib_extMgm::isLoaded('static_info_tables_banks_de')*/)	{
-				$where_clause = 'sort_code=' . intval(implode('', t3lib_div::trimExplode(' ', $this->acArray[$field]))) . ' AND level=1';
-
-				$bankRow = $bankObj->get('', 0, FALSE, $where_clause);
-
+				$where_clause = 'sort_code=' . intval(implode('',t3lib_div::trimExplode(' ',$this->acArray[$field]))) . ' AND level=1';
+				$bankRow = $bankObj->get('',0,FALSE,$where_clause);
 				if (!$bankRow)	{
 					$rc = $field;
 					break;
@@ -214,4 +221,4 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 }
 
 
-?>
+

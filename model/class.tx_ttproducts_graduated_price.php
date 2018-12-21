@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2008 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2007-2008 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -59,7 +59,7 @@ class tx_ttproducts_graduated_price implements t3lib_Singleton {
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
 
-		if ($tablename == '')	{
+		if ($tablename=='')	{
 			$tablename = 'tt_products_graduated_price';
 			$mmtablename = 'tt_products_mm_graduated_price';
 		}
@@ -82,25 +82,24 @@ class tx_ttproducts_graduated_price implements t3lib_Singleton {
 				$rc[] = $this->dataArray[$v];
 			}
 		}
-
 		if (!$rc) {
 			$where = '1=1 '.$this->tableObj->enableFields();
-			$mmWhere = $this->tableObj->enableFields('', -1, array(), $this->mm_table);
+			$mmWhere = $this->tableObj->enableFields('',-1,array(),$this->mm_table);
 			if ($uid)	{
-				$uidWhere = $this->mm_table . '.product_uid ';
+				$uidWhere = $this->mm_table.'.product_uid ';
 				if (is_array($uid))	{
 					foreach ($uid as $v)	{
 						if (
 							!tx_div2007_core::testInt($v)
 						) {
-							return 'ERROR: not integer ' . $v;
+							return 'ERROR: not integer '.$v;
 						}
 					}
-					$uidWhere .= 'IN (' . implode(',', $uid) . ')';
+					$uidWhere .= 'IN ('.implode(',',$uid).')';
 				} else {
 					$uidWhere .= '='.intval($uid);
 				}
-				$where .= ' AND ' . $uidWhere;
+				$where .= ' AND '.$uidWhere;
 			}
 			if ($where_clause)	{
 				$where .= ' '.$where_clause;
@@ -113,7 +112,8 @@ class tx_ttproducts_graduated_price implements t3lib_Singleton {
 			// FROM tt_products_graduated_price
 			// INNER JOIN tt_products_mm_graduated_price ON tt_products_graduated_price.uid = tt_products_mm_graduated_price.graduated_price_uid
 
-			$from = $this->tableObj->name . ' INNER JOIN ' . $this->mm_table . ' ON ' . $this->tableObj->name . '.uid=' . $this->mm_table . '.graduated_price_uid';
+			$from = $this->tableObj->name.' INNER JOIN '.$this->mm_table.' ON '.$this->tableObj->name.'.uid='.$this->mm_table.'.graduated_price_uid';
+
 			// Fetching the products
 			$res = $this->tableObj->exec_SELECTquery('*', $where, $groupBy, $orderBy, $limit, $from);
 			$rc = array();
@@ -138,7 +138,6 @@ class tx_ttproducts_graduated_price implements t3lib_Singleton {
 				}
 			}
 		}
-
 		return $rc;
 	}
 }
@@ -148,4 +147,4 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/model/class.tx_ttproducts_graduated_price.php']);
 }
 
-?>
+

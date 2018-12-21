@@ -15,50 +15,22 @@ $EM_CONF[$_EXTKEY] = array(
 	'author' => 'Franz Holzinger',
 	'author_email' => 'franz@ttproducts.de',
 	'author_company' => 'jambage.com',
-	'version' => '2.8.23',
+	'version' => '2.9.4',
 	'constraints' => array(
 		'depends' => array(
-			'div2007' => '1.7.11-0.0.0',
+			'div2007' => '1.10.3-0.0.0',
             'migration_core' => '0.0.0-0.99.99',
-			'php' => '5.2.0-7.99.99',
-			'table' => '0.3.0-0.0.0',
+			'php' => '5.6.0-7.99.99',
+			'table' => '0.7.0-0.0.0',
 			'tsparser' => '0.2.5-0.0.0',
-			'typo3' => '4.5.0-8.99.99',
+			'typo3' => '6.2.0-8.99.99',
 		),
 		'conflicts' => array(
-			'mkl_products' => '',
-			'su_products' => '',
-			'zk_products' => '',
-			'ast_rteproducts' => '',
-			'onet_ttproducts_rte' => '',
-			'shopsort' => '',
-			'c3bi_cookie_at_login' => '',
 		),
 		'suggests' => array(
 			'func_wizards' => '',
 			'addons_em' => '0.2.1-0.0.0',
-		),
-	),
-    'autoload' => array(
-        'psr-4' => array('JambageCom\\TtProducts\\' => 'Classes'),
-        'classmap' => array(
-            'api',
-            'cache',
-            'Classes',
-            'control',
-            'eid',
-            'hooks',
-            'lib',
-            'marker',
-            'model',
-            'modfunc1',
-            'modfunc2',
-            'pi1',
-            'pi_int',
-            'pi_search',
-            'view',
-            'widgets',
-        )
-    ),
+		)
+	)
 );
 

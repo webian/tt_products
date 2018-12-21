@@ -37,9 +37,10 @@
  */
 
 
-class tx_ttproducts_api {
+class tx_ttproducts_api implements t3lib_Singleton {
 
 	static public function roundPrice ($value, $format) {
+
 		$result = $oldValue = $value;
 		$priceRoundFormatArray = array();
 		$dotPos = strpos($value, '.');
@@ -68,6 +69,7 @@ class tx_ttproducts_api {
 
 			$formatText = $priceRoundFormatArray['1'];
 			$digits = 0;
+
 			while($formatText{$digits} == 'X') {
 				$digits++;
 			}
@@ -83,8 +85,8 @@ class tx_ttproducts_api {
 
 				if ($length > 3 && strpos($floatValue, '[') === 0 && strpos($floatValue, ']') === ($length - 1)) {
 					$allowedChars = substr($floatValue, 1, $length - 2);
-
 					if ($allowedChars != '') {
+
 						$digitValue = intval(round($value * $faktor * 10)) % 10;
 						$countAllowedChars = strlen($allowedChars);
 						$step = intval(10 / $countAllowedChars);
@@ -92,6 +94,7 @@ class tx_ttproducts_api {
 						$finalAddition = $digitValue;
 						$lowChar = '';
 						$lowValue = -20;
+
 						$highChar = '';
 						$highValue = 20;
 						$bKeepChar = FALSE;
@@ -134,13 +137,11 @@ class tx_ttproducts_api {
 								}
 
 								$comparatorHigh1 = $currentValue - $digitValue;
-
 								if ($comparatorHigh1 < 0) {
 									$comparatorHigh1 += 10;
 								}
 
 								$comparatorHigh2 = $highValue - $digitValue;
-
 								if ($comparatorHigh2 < 0) {
 									$comparatorHigh2 += 10;
 								}
@@ -169,6 +170,7 @@ class tx_ttproducts_api {
 								}
 							}
 						}
+
 						$lowestValuePart = (intval($finalAddition) / ($faktor * 10));
 					}
 				} else if (
@@ -188,13 +190,7 @@ class tx_ttproducts_api {
 	}
 
 
-	static public function createFeuser (
-		$conf,
-		$infoObj,
-		$basketView,
-		$calculatedArray,
-		$fromArray
-	) {
+	static public function createFeuser ($conf, $infoObj, $basketView, $calculatedArray, $fromArray) {
 		global $TYPO3_DB;
 
 		$result = FALSE;
@@ -231,6 +227,7 @@ class tx_ttproducts_api {
 					$insertFields[$fieldname] = $fieldvalue;
 				}
 			}
+
 			if (
 				t3lib_extMgm::isLoaded('agency') ||
 				t3lib_extMgm::isLoaded('femanager') ||
@@ -273,9 +270,10 @@ class tx_ttproducts_api {
 					$parts = explode(chr(10), $emailContent, 2);
 					$subject=trim($parts[0]);
 					$plain_message = trim($parts[1]);
-					tx_div2007_email::sendMail(
+
+					tx_ttproducts_email_div::send_mail(
 						$infoArray['billing']['email'],
-						$apostrophe.$subject.$apostrophe,
+						$apostrophe.$subject . $apostrophe,
 						$plain_message,
 						$tmp = '',
 						$fromArray['shop']['email'],
@@ -283,11 +281,10 @@ class tx_ttproducts_api {
 					);
 				}
 			}
-
 			$res = $TYPO3_DB->exec_SELECTquery(
 				'uid',
 				'fe_users',
-				'username=' . $TYPO3_DB->fullQuoteStr($username, 'fe_users') .
+				'username='.$TYPO3_DB->fullQuoteStr($username, 'fe_users') .
 					' AND pid=' . $pid . ' AND deleted=0');
 
 			while($row = $TYPO3_DB->sql_fetch_assoc($res)) {
@@ -295,10 +292,15 @@ class tx_ttproducts_api {
 			}
 			$TYPO3_DB->sql_free_result($res);
 		}
-
 		return $result;
 	}
 }
 
 
-?>
+
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/api/class.tx_ttproducts_api.php']) {
+	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/api/class.tx_ttproducts_api.php']);
+}
+
+
+

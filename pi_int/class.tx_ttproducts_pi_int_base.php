@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2009-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2009-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -30,7 +30,6 @@
  * Creates a list of products for the shopping basket in TYPO3.
  * Also controls basket, searching and payment.
  *
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -50,19 +49,16 @@ class tx_ttproducts_pi_int_base extends tslib_pibase implements t3lib_Singleton 
 	public $pi_USER_INT_obj = TRUE;		// If set, then links are 1) not using cHash and 2) not allowing pages to be cached. (Set this for all USER plugins!)
 	public $bRunAjax = FALSE;		// overrride this
 
+
 	/**
 	 * Main method. Call this from TypoScript by a USER cObject.
 	 */
-	public function main ($content, $conf)	{
+	public function main ($content,$conf)	{
 		global $TSFE;
 
 		tx_ttproducts_model_control::setPrefixId($this->prefixId);
 		$this->pi_setPiVarDefaults();
-
-		$confMain = $GLOBALS['TSFE']->tmpl->setup['plugin.'][TT_PRODUCTS_EXT . '.'];
-		tx_div2007_core::mergeRecursiveWithOverrule($confMain, $conf);
-		$$this->conf = $confMain;
-
+		$this->conf = &$conf;
 		$config = array();
 		$mainObj = t3lib_div::makeInstance('tx_ttproducts_main');	// fetch and store it as persistent object
 		$mainObj->bNoCachePossible = FALSE;
@@ -71,13 +67,13 @@ class tx_ttproducts_pi_int_base extends tslib_pibase implements t3lib_Singleton 
 		$errorCode = array();
 
 		if ($bDoProcessing || count($errorCode))	{
-			$content = $mainObj->run(get_class($this), $errorCode, $content);
+			$content = $mainObj->run(get_class($this),$errorCode,$content);
 		}
-
 		return $content;
 	}
 
-	public function set($bRunAjax)	{
+
+	public function set ($bRunAjax)	{
 		$this->bRunAjax = $bRunAjax;
 	}
 }
@@ -87,4 +83,4 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/pi_int/class.tx_ttproducts_pi_int_base.php']);
 }
 
-?>
+

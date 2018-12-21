@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2007-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -63,6 +63,7 @@ class tx_ttproducts_basketitem implements t3lib_Singleton {
 		return $rc;
 	}
 
+
 	/**
 	 * gets the minimum necessary quantity of an item
 	 *
@@ -83,8 +84,10 @@ class tx_ttproducts_basketitem implements t3lib_Singleton {
 		$articleRow = $prodTable->getArticleRowFromExt($row);
 
 		if (is_array($articleRow) && count($articleRow))	{
+
 			$rc = ($articleRow['basketminquantity'] != '0.00' ? $articleRow['basketminquantity'] : $rc);
 		}
+
 		return $rc;
 	}
 }
@@ -95,4 +98,4 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 }
 
 
-?>
+

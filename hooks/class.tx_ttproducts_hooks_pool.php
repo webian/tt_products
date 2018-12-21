@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2008-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -37,18 +37,16 @@
  *
  */
 
-// require_once(PATH_BE_pool.'hooks/class.tx_pool_hooks_base.php');
-// require_once (PATH_BE_ttproducts.'pi1/class.tx_ttproducts_pi1_base.php');
 
 
-class tx_ttproducts_hooks_pool extends tx_pool_hooks_base {
+class tx_ttproducts_hooks_pool extends tx_pool_hooks_base implements t3lib_Singleton {
 	public $extKey=TT_PRODUCTS_EXT;
 	public $prefixId = 'tx_ttproducts_hooks_pool';	// Same as class name
 	public $LLFileArray = array ('hooks/locallang_pool.xml', 'EXT:lang/locallang_mod_web_list.xml');
 	public $modMenu = array('function' => array('search'));
 	public $headerText = 'header_search';
 
-	public function getViewData(&$content, &$header, &$docHeaderButtons, &$markerArray, $pObj)	{
+	public function getViewData(&$content, &$header, &$docHeaderButtons, &$markerArray, $pOb)	{
 		$content = '<b>Suche &uuml;ber tt_products</b><br/>';
 		if (t3lib_extMgm::isLoaded('searchbox')) {
 
@@ -82,4 +80,4 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/hooks/class.tx_ttproducts_hooks_pool.php']);
 }
 
-?>
+

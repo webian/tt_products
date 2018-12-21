@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2005-2007 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2005-2007 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -38,6 +38,7 @@
 
 
 
+
 class tx_ttproducts_page_view extends tx_ttproducts_category_base_view {
 	var $noteArray = array(); 	// array of pages with notes
 	var $piVar = 'pid';
@@ -55,7 +56,7 @@ class tx_ttproducts_page_view extends tx_ttproducts_category_base_view {
 	 * 		 			for the tt_producst record, $row
 	 * @access private
 	 */
-	function getMarkerArray (&$markerArray, $markerKey, $category, $pid, $imageNum=0, $imageRenderObj='image', &$viewCatTagArray, $forminfoArray=array(), $pageAsCategory=0, $theCode, $id, $prefix,$linkWrap='')	{
+	function getMarkerArray (&$markerArray, $markerKey, $category, $pid, $imageNum=0, $imageRenderObj='image', &$viewCatTagArray, $forminfoArray=array(), $pageAsCategory=0, $theCode, $basketExtra, $id, $prefix,$linkWrap='')	{
 		global $TSFE;
 
 		$row = $this->modelObj->get($pid);
@@ -68,7 +69,7 @@ class tx_ttproducts_page_view extends tx_ttproducts_category_base_view {
 		$this->setMarkerArrayCatTitle ($markerArray, $pageCatTitle, $prefix);
 		$markerArray['###'.$prefix.$this->marker.'_SUBTITLE###'] = htmlentities($row['subtitle'], ENT_QUOTES, 'UTF-8');
 
-		parent::getRowMarkerArray($row, $markerKey, $markerArray, $variantFieldArray, $variantMarkerArray, $viewCatTagArray, $theCode, TRUE, '', $imageNum, $imageRenderObj, $id, $prefix);
+		parent::getRowMarkerArray($row, $markerKey, $markerArray, $variantFieldArray, $variantMarkerArray, $viewCatTagArray, $theCode, $basketExtra, TRUE, '', $imageNum, $imageRenderObj, $id, $prefix);
 	}
 }
 
@@ -78,4 +79,4 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 }
 
 
-?>
+

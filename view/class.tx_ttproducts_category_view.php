@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2005-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2005-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -38,6 +38,7 @@
  */
 
 
+
 class tx_ttproducts_category_view extends tx_ttproducts_category_base_view {
 	public $piVar = 'cat';
 
@@ -53,7 +54,7 @@ class tx_ttproducts_category_view extends tx_ttproducts_category_base_view {
 	 * 	 			for the tt_producst record, $row
 	 * @access private
 	 */
-	public function getMarkerArray (&$markerArray, $markerKey, $category, $pid, $imageNum = 0, $imageRenderObj = 'image', &$viewCatTagArray, $forminfoArray = array(), $pageAsCategory = 0, $theCode, $id, $prefix, $linkWrap = '')	{
+	public function getMarkerArray (&$markerArray, $markerKey, $category, $pid, $imageNum=0, $imageRenderObj='image', &$viewCatTagArray, $forminfoArray=array(), $pageAsCategory=0, $theCode, $basketExtra, $id, $prefix, $linkWrap='')	{
 		global $TSFE;
 
 		$modelObj = $this->getModelObj();
@@ -76,7 +77,7 @@ class tx_ttproducts_category_view extends tx_ttproducts_category_base_view {
 			$catTitle .= ($this->tableconf['separator'].$row['title']);
 		}
 		$this->setMarkerArrayCatTitle($markerArray, $catTitle, $prefix);
-		parent::getRowMarkerArray($row, $markerKey, $markerArray, $variantFieldArray, $variantMarkerArray, $viewCatTagArray, $theCode, TRUE, 'UTF-8', $imageNum, $imageRenderObj, $id, $prefix, '', $linkWrap);
+		parent::getRowMarkerArray($row, $markerKey, $markerArray, $variantFieldArray, $variantMarkerArray, $viewCatTagArray, $theCode, $basketExtra, TRUE, 'UTF-8', $imageNum, $imageRenderObj, $id, $prefix, '', $linkWrap);
 	}
 }
 
@@ -85,4 +86,4 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/view/class.tx_ttproducts_category_view.php']);
 }
 
-?>
+

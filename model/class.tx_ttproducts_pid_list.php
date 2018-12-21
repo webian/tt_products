@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2008 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2007-2008 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -71,10 +71,10 @@ class tx_ttproducts_pid_list {
 	/**
 	 * Gets the pid_list internal var or the child pid_list of the page id as parameter
 	 */
-	function getPidlist ($pid = '')	{
+	function getPidlist ($pid='')	{
 		$rc = '';
 		if ($pid)	{
-			$this->applyRecursive(1, $pid, FALSE);
+			$this->applyRecursive(1,$pid,FALSE);
 			$rc = $pid;
 		} else {
 			$rc = $this->pid_list;
@@ -92,7 +92,7 @@ class tx_ttproducts_pid_list {
 	}
 
 
-	function getPageArray ($pid = 0)	{
+	function getPageArray ($pid=0)	{
 		if ($pid)	{
 			$rc = isset($this->pageArray[$pid]);
 		} else {
@@ -149,4 +149,4 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 }
 
 
-?>
+

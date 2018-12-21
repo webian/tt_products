@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2006-2007 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2006-2007 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -63,6 +63,7 @@ class tx_ttproducts_field_media extends tx_ttproducts_field_base {
 		} else {
 			$dirname = ($this->conf['defaultImageDir'] ? $this->conf['defaultImageDir'] : ( $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['imageFolder'] ? $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['imageFolder'] . '/' : 'uploads/pics/'));
 		}
+
 		return $dirname;
 	}
 }
@@ -73,4 +74,4 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 }
 
 
-?>
+

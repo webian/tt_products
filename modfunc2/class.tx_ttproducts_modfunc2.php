@@ -52,11 +52,6 @@ class tx_ttproducts_modfunc2 extends t3lib_extobjbase {
 			// Initializes the module. Done in this function because we may need to re-initialize if data is submitted!
 		$standardFields = array('pid', 'cruser_id', 'hidden', 'starttime', 'endtime', 'fe_group');
 
-		if (version_compare(TYPO3_version, '6.1.0', '<')) {
-			t3lib_div::loadTCA('tt_products_texts');
-			t3lib_div::loadTCA('tt_products_texts_language');
-		}
-
 		$theOutput .= $this->pObj->doc->spacer(5);
 		if ($GLOBALS['BE_USER']->user['admin']) {
 			$currId = $this->pObj->id;

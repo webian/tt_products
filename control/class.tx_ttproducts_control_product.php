@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008-2010 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2008-2010 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -38,7 +38,6 @@
  */
 
 
-
 class tx_ttproducts_control_product {
 
 	/**
@@ -49,6 +48,7 @@ class tx_ttproducts_control_product {
 		$basketVar = tx_ttproducts_model_control::getBasketVar();
 		$presetVarianArray = array();
 		$basketArray = t3lib_div::_GP($basketVar);
+
 		if (
 			isset($basketArray) && is_array($basketArray) &&
 			isset($basketArray[$uid]) && is_array($basketArray[$uid])
@@ -72,5 +72,9 @@ class tx_ttproducts_control_product {
 }
 
 
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/control/class.tx_ttproducts_control_product.php'])	{
+	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/control/class.tx_ttproducts_control_product.php']);
+}
 
-?>
+
+

@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2005-2010 Klaus Zierer <zierer@pz-systeme.de>
+*  (c) 2005-2010 Klaus Zierer (zierer@pz-systeme.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -69,22 +69,19 @@ class tx_ttproducts_csv implements t3lib_Singleton {
 		$orderObj = $tablesObj->get('sys_products_orders');
 		$accountObj = $tablesObj->get('sys_products_accounts');
 		$itemTable = $tablesObj->get($functablename, FALSE);
-		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
 
 		$csvfilepath = trim($csvfilepath);
-
-		if ($csvfilepath{strlen($csvfilepath) - 1} != '/') {
+		if ($csvfilepath{strlen($csvfilepath)-1} != '/') {
 			$csvfilepath .= '/';
 		}
-		$csvfilepath .= $orderObj->getNumber($csvorderuid) . '.csv';
-
+		$csvfilepath .= $orderObj->getNumber($csvorderuid).'.csv';
 		$csvfile = fopen($csvfilepath, 'w');
 		if ($csvfile !== FALSE)	{
 			// Generate invoice and delivery address
 			$csvlinehead = '';
 			$csvlineperson = '';
 			$csvlinedelivery = '';
-			$infoFields = explode(',', 'feusers_uid,name,cnum,first_name,last_name,salutation,address,telephone,fax,email,company,city,zip,state,country,agb,business_partner,organisation_form');
+			$infoFields = explode(',','feusers_uid,name,cnum,first_name,last_name,salutation,address,telephone,fax,email,company,city,zip,state,country,agb,business_partner,organisation_form');
 			foreach($infoFields as $fName) {
 				if ($csvlinehead != '') {
 					$csvlinehead .= ';';
@@ -103,9 +100,9 @@ class tx_ttproducts_csv implements t3lib_Singleton {
 
 			$accountRow = array();
 			if ($this->accountUid)	{
-				$accountRow = $accountObj->getRow($this->accountUid, 0, TRUE);
+				$accountRow = $accountObj->getRow($this->accountUid,0,true);
 				if (is_array($accountRow) && count($accountRow))	{
-					$csvlineAccount = '"' . implode('";"', $accountRow) . '"';
+					$csvlineAccount = '"' . implode('";"',$accountRow) . '"';
 					$accountdescr = '"' . implode('";"', array_keys($accountRow)) . '"';
 				}
 			}
@@ -131,7 +128,7 @@ class tx_ttproducts_csv implements t3lib_Singleton {
 			$csvdescr = '"uid";"count"';
 			$variantFieldArray = $itemTable->variant->getSelectableFieldArray();
 			if (count($variantFieldArray))	{
-				$csvdescr .= ';"' . implode('";"', $variantFieldArray) . '"';
+				$csvdescr .= ';"' . implode('";"',$variantFieldArray) . '"';
 			}
 			if ($csvfieldcount)	{
 				foreach($csvfields as $csvfield)	{
@@ -155,8 +152,8 @@ class tx_ttproducts_csv implements t3lib_Singleton {
 			$infoWritten = FALSE;
 
 			// loop over all items in the basket indexed by a sorting text
-			foreach ($this->itemArray as $sort => $actItemArray) {
-				foreach ($actItemArray as $k1 => $actItem) {
+			foreach ($this->itemArray as $sort=>$actItemArray) {
+				foreach ($actItemArray as $k1=>$actItem) {
 					$row = &$actItem['rec'];
 					$pid = intval($row['pid']);
 					if (!$basket->getPidListObj()->getPageArray($pid)) {
@@ -165,7 +162,7 @@ class tx_ttproducts_csv implements t3lib_Singleton {
 					}
 					$variants = explode(';', $itemTable->variant->getVariantFromRow($row));
 					$csvdata = '"' . intval($row['uid']) . '";"' .
-						intval($actItem['count']) . '";"' . implode('";"', $variants) . '"';
+						intval($actItem['count']) . '";"' . implode('";"',$variants) . '"';
 					foreach($csvfields as $csvfield) {
 						$csvdata .= ';"' . $row[$csvfield] . '"';
 					}
@@ -199,6 +196,8 @@ class tx_ttproducts_csv implements t3lib_Singleton {
 			}
 			fclose($csvfile);
 		} else {
+			$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
+
 			$message = tx_div2007_alpha5::getLL_fh003($langObj, 'no_csv_creation');
 			$messageArr =  explode('|', $message);
 			$errorMessage = $messageArr[0] . $csvfilepath . $messageArr[1];
@@ -212,4 +211,4 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 }
 
 
-?>
+

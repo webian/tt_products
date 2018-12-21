@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2008-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -39,6 +39,7 @@
 
 
 class tx_ttproducts_field_tax_view extends tx_ttproducts_field_base_view {
+
 	public function &getItemSubpartArrays (
 		&$templateCode,
 		$markerKey,
@@ -50,17 +51,18 @@ class tx_ttproducts_field_tax_view extends tx_ttproducts_field_base_view {
 		&$wrappedSubpartArray,
 		&$tagArray,
 		$theCode = '',
+		$basketExtra = array(),
 		$id = '1'
 	) {
+
 		global $TCA;
 
 		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 		$staticTaxViewObj = $tablesObj->get('static_taxes', TRUE);
-		$staticTaxViewObj->getItemSubpartArrays ($templateCode, $functablename, $row, $subpartArray, $wrappedSubpartArray, $tagArray, $theCode, $id);
+		$staticTaxViewObj->getItemSubpartArrays ($templateCode, $functablename, $row, $subpartArray, $wrappedSubpartArray, $tagArray, $theCode, $basketExtra, $id);
 	}
 
-
-	public function getRowMarkerArray ($functablename, $fieldname, &$row, $markerKey, &$markerArray, $tagArray, $theCode, $id, &$bSkip, $bHtml = TRUE, $charset = '', $prefix = '', $suffix = '', $imageRenderObj = '')	{
+	public function getRowMarkerArray ($functablename, $fieldname, $row, $markerKey, &$markerArray, $tagArray, $theCode, $id, $basketExtra, &$bSkip, $bHtml=TRUE, $charset='', $prefix='', $suffix='', $imageRenderObj='')	{
 
 	}
 }
@@ -71,4 +73,4 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 }
 
 
-?>
+

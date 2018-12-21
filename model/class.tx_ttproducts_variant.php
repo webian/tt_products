@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2006-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2006-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -15,7 +15,7 @@
 *  http://www.gnu.org/copyleft/gpl.html.
 *  A copy is found in the textfile GPL.txt and important notices to the license
 *  from the author is found in LICENSE.txt distributed with these scripts.
-*
+// *
 *
 *  This script is distributed in the hope that it will be useful,
 *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -35,7 +35,6 @@
  * @subpackage tt_products
  *
  */
-
 
 
 
@@ -144,6 +143,7 @@ class tx_ttproducts_variant implements tx_ttproducts_variant_int, t3lib_Singleto
 	 */
 	public function getVariantFromRow (&$row) {
 		$extArray = $row['ext'];
+
 		if (is_array($extArray['tt_products']))	{
 			reset($extArray['tt_products']);
 			$variantRow = current($extArray['tt_products']);
@@ -187,6 +187,7 @@ class tx_ttproducts_variant implements tx_ttproducts_variant_int, t3lib_Singleto
 				}
 			}
 		}
+
 		$variant = implode (';', $variantArray);
 		return $variant;
 	}
@@ -201,6 +202,7 @@ class tx_ttproducts_variant implements tx_ttproducts_variant_int, t3lib_Singleto
 	 * @see modifyRowFromVariant
 	 */
 	public function getVariantFromRawRow (&$row) {
+
 		$variantArray = array();
 		$useArticles = $this->getUseArticles();
 
@@ -210,7 +212,9 @@ class tx_ttproducts_variant implements tx_ttproducts_variant_int, t3lib_Singleto
 
 			foreach ($fieldArray as $key => $field)	{
 				if ($this->selectableArray[$key])	{
+
 					$variantValue = $row[$field];
+
 					if (isset($variantValue))	{
 						$variantArray[] = $variantValue;
 					} else {
@@ -223,38 +227,20 @@ class tx_ttproducts_variant implements tx_ttproducts_variant_int, t3lib_Singleto
 		$variant = implode (';', $variantArray);
 		return $variant;
 	}
-/*
-	public function getFirstVariantRow($row='')	{
-		$rc = '';
-		if (is_array($row))	{
-			$fieldArray = $this->getFieldArray();
-			$firstRow = $row;
-			foreach ($fieldArray as $field)	{
-				$variants = $row[$field];
-				$variantArray = t3lib_div::trimExplode (';', $variants);
-				$firstRow[$field] = $variantArray[0];
-			}
-			$rc = $firstRow;
-		} else {
-			$rc = $this->firstVariantRow;
-		}
-		return $rc;
-	}*/
 
-
-	public function getVariantRow ($row = '', $varianArray = array())	{
+	public function getVariantRow ($row='',$variantArray=array())	{
 		$rc = '';
 
 		if (isset($row) && is_array($row))	{
-			if (!isset($varianArray))	{
-				$varianArray = array();
+			if (!isset($variantArray))	{
+				$variantArray = array();
 			}
 			$fieldArray = $this->getFieldArray();
 			$rcRow = $row;
 			foreach ($fieldArray as $field)	{
 				$variants = $row[$field];
-				$tmpArray = t3lib_div::trimExplode(';', $variants);
-				$index = (isset($varianArray[$field]) ? $varianArray[$field] : 0);
+				$tmpArray = t3lib_div::trimExplode (';', $variants);
+				$index = (isset($variantArray[$field]) ? $variantArray[$field] : 0);
 				$rcRow[$field] = $tmpArray[$index];
 			}
 			$rc = $rcRow;
@@ -277,18 +263,20 @@ class tx_ttproducts_variant implements tx_ttproducts_variant_int, t3lib_Singleto
 
 
 	public function getVariantValuesByArticle ($articleRowArray, $productRow, $withSemicolon = FALSE) {
-		$rc = array();
+		$result = array();
 
 		$selectableFieldArray = $this->getSelectableFieldArray();
 
 		foreach ($selectableFieldArray as $field)	{
 
-			if (isset($productRow[$field]))	{
+			if (
+				isset($productRow[$field])
+			) {
 				$valueArray = array();
 				$productValueArray = t3lib_div::trimExplode(';', $productRow[$field]);
 
 				foreach ($articleRowArray as $articleRow)	{
-					$articleValueArray = t3lib_div::trimExplode(';', $articleRow[$field]);
+					$articleValueArray = t3lib_div::trimExplode(';',$articleRow[$field]);
 
 					if ($articleValueArray[0])	{
 						$valueArray = array_merge($valueArray, $articleValueArray);
@@ -305,21 +293,26 @@ class tx_ttproducts_variant implements tx_ttproducts_variant_int, t3lib_Singleto
 					$valueArray = $sortedValueArray;
 				}
 
-				if ($withSemicolon)	{
-					$rc[$field] = implode(';', $valueArray);
+				if ($withSemicolon) {
+					$result[$field] = implode(';',$valueArray);
 				} else {
-					$rc[$field] = $valueArray;
+					$result[$field] = $valueArray;
 				}
 			}
 		}
-		return $rc;
+		return $result;
 	}
 
 
 	// the article rows must be in the correct order already
-	public function filterArticleRowsByVariant ($row, $variant, $articleRowArray, $bCombined = FALSE) {
+	public function filterArticleRowsByVariant ($row, $variant, $articleRowArray, $bCombined=FALSE) {
 
 		$variantRowArray = $this->getVariantValuesByArticle($articleRowArray, $row, FALSE);
+		foreach ($variantRowArray as $field => $valueArray) {
+			if ($row[$field] != '') {
+				$variantRowArray[$field] = t3lib_div::trimExplode(';', $row[$field]);
+			}
+		}
 		$variantArray = explode(';', $variant);
 		$selectableFieldArray = $this->getSelectableFieldArray();
 		$possibleArticleArray = array();
@@ -380,4 +373,4 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 }
 
 
-?>
+

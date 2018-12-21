@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 1999-2010 Kasper Skårhøj <kasperYYYY@typo3.com>
+*  (c) 1999-2010 Kasper Skårhøj (kasperYYYY@typo3.com)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -30,7 +30,6 @@
  * Creates a list of products for the shopping basket in TYPO3.
  * Also controls basket, searching and payment.
  *
- *
  * @author	Kasper Skårhøj <kasperYYYY@typo3.com>
  * @author	Renè Fritz <r.fritz@colorcube.de>
  * @author	Franz Holzinger <franz@ttproducts.de>
@@ -52,6 +51,7 @@ class tx_ttproducts_pi1 implements t3lib_Singleton {
 	 */
 	var $cObj;
 
+
 	/**
 	 * Main method. Call this from TypoScript by a USER cObject.
 	 */
@@ -61,7 +61,7 @@ class tx_ttproducts_pi1 implements t3lib_Singleton {
 		$pibaseObj->cObj = $this->cObj;
 
 		if ($conf['templateFile'] != '')	{
-			$content = $pibaseObj->main($content, $conf);
+			$content = $pibaseObj->main($content,$conf);
 		} else {
 			tx_div2007_alpha5::loadLL_fh002($pibaseObj, 'EXT:' . TT_PRODUCTS_EXT . '/pi1/locallang.xml');
 			$content = tx_div2007_alpha5::getLL_fh003($pibaseObj, 'no_template') . ' plugin.tt_products.templateFile';
@@ -69,10 +69,30 @@ class tx_ttproducts_pi1 implements t3lib_Singleton {
 
 		return $content;
 	}
+
+
+	/**
+	 * Main method for the cached object. Call this from TypoScript by a USER or COBJ cObject.
+	 */
+	public function getUserFunc ($content,$conf)	{
+		$conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tt_products.'];
+
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['getUserFunc'])) {
+			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['getUserFunc'] as $classRef) {-
+				$hookObj= t3lib_div::makeInstance($classRef);
+				if (method_exists($hookObj, 'getUserFunc')) {
+					$hookObj->cObj = $this->cObj;
+					$content .= $hookObj->getUserFunc($content,$conf);
+				}
+			}
+		}
+		return $content;
+	}
 }
+
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/pi1/class.tx_ttproducts_pi1.php'])	{
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/pi1/class.tx_ttproducts_pi1.php']);
 }
 
-?>
+

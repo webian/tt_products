@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008-2010 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2008-2010 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -30,7 +30,6 @@
  * Creates a list of products for the shopping basket in TYPO3.
  * Also controls basket, searching and payment.
  *
- *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
@@ -40,6 +39,7 @@
  *
  *
  */
+
 
 
 
@@ -57,9 +57,23 @@ class tx_ttproducts_pi1_base extends tslib_pibase implements t3lib_Singleton {
 		global $TSFE;
 
 		tx_ttproducts_model_control::setPrefixId($this->prefixId);
+        $this->conf = &$conf;
+
 		$this->pi_setPiVarDefaults();
-		$this->conf = &$conf;
-		$config = array();
+		if (
+            is_array($this->piVars) &&
+            isset($this->piVars[$this->prefixId . '.'])
+        ) {
+            $tmp = $this->piVars;
+            tx_div2007_core_php53::mergeRecursiveWithOverrule(
+                $tmp,
+                $this->piVars[$this->prefixId . '.']
+            );
+            unset($tmp[$this->prefixId . '.']);
+            $this->piVars = $tmp;
+        }
+
+        $config = array();
 		$mainObj = t3lib_div::makeInstance('tx_ttproducts_main');	// fetch and store it as persistent object
 		$errorCode = array();
 		$bDoProcessing = $mainObj->init($content, $conf, $config, get_class($this), $errorCode);
@@ -81,4 +95,4 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 }
 
 
-?>
+

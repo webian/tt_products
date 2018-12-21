@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2006-2008 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2006-2008 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -54,7 +54,7 @@ class tx_ttproducts_country extends tx_ttproducts_table_base {
 		$tablename = $this->getTablename();
 		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$this->tableconf = $cnf->getTableConf('static_countries');
-		$this->getTableObj()->setDefaultFieldArray(array('uid' => 'uid', 'pid' => 'pid'));
+		$this->getTableObj()->setDefaultFieldArray(array('uid'=>'uid', 'pid'=>'pid'));
 		$this->getTableObj()->setTCAFieldArray('static_countries');
 
 		$requiredFields = 'uid,pid';
@@ -78,7 +78,7 @@ class tx_ttproducts_country extends tx_ttproducts_table_base {
 	} // init
 
 
-	function isoGet ($country_code, $where, $fields = '') {
+	function isoGet ($country_code, $where, $fields='') {
 
 		global $TYPO3_DB, $TCA;
 
@@ -116,8 +116,6 @@ class tx_ttproducts_country extends tx_ttproducts_table_base {
 		return $rc;
 	}
 
-
-
 }
 
 
@@ -126,4 +124,4 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 }
 
 
-?>
+

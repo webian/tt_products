@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008-2008 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2008-2008 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -41,7 +41,20 @@
 
 class tx_ttproducts_field_foreign_table_view extends tx_ttproducts_field_base_view {
 
-	public function getItemSubpartArrays (&$templateCode, $functablename, &$row, $fieldname, &$subpartArray, &$wrappedSubpartArray, &$tagArray, $theCode='', $id='1')	{
+	public function &getItemSubpartArrays (
+		&$templateCode,
+		$markerKey,
+		$functablename,
+		&$row,
+		$fieldname,
+		$tableConf,
+		&$subpartArray,
+		&$wrappedSubpartArray,
+		&$tagArray,
+		$theCode = '',
+		$basketExtra = array(),
+		$id = '1'
+	) {
 		global $TCA;
 
 		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
@@ -50,7 +63,7 @@ class tx_ttproducts_field_foreign_table_view extends tx_ttproducts_field_base_vi
 	}
 
 
-	public function getRowMarkerArray ($functablename, $fieldname, &$row, $markerKey, &$markerArray, $tagArray, $theCode, $id, &$bSkip, $bHtml=TRUE, $charset='', $prefix='', $suffix='', $imageRenderObj='')	{
+	public function getRowMarkerArray ($functablename, $fieldname, $row, $markerKey, &$markerArray, $tagArray, $theCode, $id, $basketExtra, &$bSkip, $bHtml=true, $charset='', $prefix='', $suffix='', $imageRenderObj='')	{
 		global $TCA;
 
 		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
@@ -74,8 +87,7 @@ class tx_ttproducts_field_foreign_table_view extends tx_ttproducts_field_base_vi
 
 		if ($foreigntablename != '' && $row[$fieldname] > 0)	{
 /*			$tableClass = $tablesObj->getTableClass ($foreigntablename, TRUE);
-			$foreignTableViewObj = t3lib_div::makeInstance($tableClass);*/
-
+			$foreignTableViewObj = t3lib_div::makeInstance(''.$tableClass);*/
 			$foreignTableObj = $foreignTableViewObj->getModelObj();
 			if ($TCA[$tablename]['columns'][$fieldname]['config']['internal_type'] == 'db')	{
 				$foreignRow = $foreignTableObj->get($row[$fieldname]);
@@ -87,6 +99,7 @@ class tx_ttproducts_field_foreign_table_view extends tx_ttproducts_field_base_vi
 					$tmp=array(),
 					$tagArray,
 					$theCode,
+					$basketExtra,
 					$bHtml,
 					$charset,
 					0,
@@ -109,4 +122,4 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 }
 
 
-?>
+

@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008-2008 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2008-2008 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -39,8 +39,10 @@
 
 
 
+
 class tx_ttproducts_language extends tx_div2007_alpha_language_base implements t3lib_Singleton {
 	public function init1 ($pObj, $cObj, &$conf, $scriptRelPath) {
+
 		parent::init(
 			$cObj,
 			TT_PRODUCTS_EXT,
@@ -69,6 +71,7 @@ class tx_ttproducts_language extends tx_div2007_alpha_language_base implements t
 		}
 		return $rc;
 	}
+
 }
 
 
@@ -77,4 +80,3 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 }
 
 
-?>

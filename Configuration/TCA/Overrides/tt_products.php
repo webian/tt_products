@@ -5,7 +5,6 @@ if (!defined ('TYPO3_MODE')) {
 }
 
 $table = 'tt_products';
-
 $bSelectTaxMode = FALSE;
 
 if (
@@ -20,6 +19,7 @@ if (
 }
 
 if (
+    defined('STATIC_INFO_TABLES_TAXES_EXT') &&
 	\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded(STATIC_INFO_TABLES_TAXES_EXT)
 ) {
 	$eInfo = tx_div2007_alpha5::getExtensionInfo_fh003(STATIC_INFO_TABLES_TAXES_EXT);
@@ -31,7 +31,6 @@ if (
 		}
 	}
 }
-
 
 
 if ($bSelectTaxMode) {
@@ -72,6 +71,8 @@ if ($bSelectTaxMode) {
 
 }
 
+
+
 switch ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['articleMode']) {
 	case '1':
 		$GLOBALS['TCA'][$table]['columns']['article_uid'] = array (
@@ -97,9 +98,13 @@ switch ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['articleMode']) 
     case '0':
     default:
         unset($GLOBALS['TCA'][$table]['columns']['article_uid']);
-        $GLOBALS['TCA'][$table]['types']['0'] = str_replace(',article_uid,', ',', $GLOBALS['TCA'][$table]['types']['0']);
+        // neu Anfang
+        $result['types']['0'] = str_replace(',article_uid,', ',', $GLOBALS['TCA'][$table]['types']['0']);
+        // neu Ende
         break;
 }
+
+
 
 $addressTable = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['addressTable'];
 
@@ -129,14 +134,16 @@ $newFields = 'address';
     'before:price'
 );
 
-$orderBySortingTablesArray = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['orderBySortingTables']);
 
+
+$orderBySortingTablesArray = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['orderBySortingTables']);
 if (
     !empty($orderBySortingTablesArray) &&
     in_array($table, $orderBySortingTablesArray)
 ) {
     $GLOBALS['TCA'][$table]['ctrl']['sortby'] = 'sorting';
 }
+
 
 $excludeArray = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['exclude.'];
 

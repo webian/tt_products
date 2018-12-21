@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2008-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -38,6 +38,7 @@
  */
 
 
+
 class tx_ttproducts_relatedlist_view implements t3lib_Singleton {
 	public $conf;
 	public $config;
@@ -68,8 +69,6 @@ class tx_ttproducts_relatedlist_view implements t3lib_Singleton {
 		&$markerArray,
 		$viewTagArray
 	) {
-// 		require_once (PATH_BE_ttproducts.'control/class.tx_ttproducts_control_basketquantity.php');
-
 		$addListArray = $this->getAddListArray (
 			$theCode,
 			$functablename,
@@ -113,7 +112,7 @@ class tx_ttproducts_relatedlist_view implements t3lib_Singleton {
 
 		switch ($functablename)	{
 			case 'tt_products':
-				$rc =
+				$result =
 					array(
 						'articles' => array(
 							'marker' => 'PRODUCT_RELATED_ARTICLES',
@@ -148,6 +147,22 @@ class tx_ttproducts_relatedlist_view implements t3lib_Singleton {
 					);
 				break;
 
+			case 'tt_products_articles':
+				$result =
+					array(
+						'accessories' => array(
+							'marker' => 'ARTICLE_ACCESSORY_UID',
+							'template' => 'ITEM_LIST_ACCESSORY_TEMPLATE',
+							'require' => TRUE,
+							'code' => 'LISTACCESSORY',
+							'additionalPages' => $this->conf['pidsRelatedAccessories'],
+							'mergeRow' => array(),
+							'functablename' => 'tt_products_articles',
+							'callFunctableArray' => array()
+						)
+					);
+				break;
+
 			case 'tx_dam':
 				if (t3lib_extMgm::isLoaded('dam'))	{
 					if ($uid > 0)	{
@@ -160,7 +175,7 @@ class tx_ttproducts_relatedlist_view implements t3lib_Singleton {
 					} else {
 						$extArray = array();
 					}
-					$rc =
+					$result =
 						array(
 							'products' => array(
 								'marker' => 'DAM_PRODUCTS',
@@ -176,8 +191,7 @@ class tx_ttproducts_relatedlist_view implements t3lib_Singleton {
 				}
 				break;
 		}
-
-		return $rc;
+		return $result;
 	}
 
 
@@ -211,6 +225,7 @@ class tx_ttproducts_relatedlist_view implements t3lib_Singleton {
 
 					if (count($relatedIds))	{
 						// List all products:
+						include_once (PATH_BE_ttproducts.'view/class.tx_ttproducts_list_view.php');
 						if (!is_object($listView))	{
 
 							$listView = t3lib_div::makeInstance('tx_ttproducts_list_view');
@@ -231,6 +246,10 @@ class tx_ttproducts_relatedlist_view implements t3lib_Singleton {
 							$listPids = $this->pidListObj->getPidlist();
 						}
 
+						$parentDataArray = array(
+							'functablename' => $functablename,
+							'uid' => $uid
+						);
 						$tmpContent = $listView->printView (
 							$templateCode,
 							$funcArray['code'],
@@ -238,11 +257,12 @@ class tx_ttproducts_relatedlist_view implements t3lib_Singleton {
 							implode(',', $relatedIds),
 							$listPids,
 							$error_code,
-							$funcArray['template'],
+							$funcArray['template'] . $this->config['templateSuffix'],
 							$pageAsCategory,
 							array(),
 							1,
-							$callFunctableArray
+							$callFunctableArray,
+							$parentDataArray
 						);
 
 						$result['###' . $funcArray['marker'] . '###'] = $tmpContent;
@@ -250,10 +270,13 @@ class tx_ttproducts_relatedlist_view implements t3lib_Singleton {
 						$result['###' . $funcArray['marker'] . '###'] = '';
 					}
 				} else {
-					$result['###' . $funcArray['marker'] . '###'] = '';
+					if (isset($viewTagArray[$funcArray['marker']])) {
+						$result['###' . $funcArray['marker'] . '###'] = '';
+					}
 				}
 			}
 		}
+
 		return $result;
 	}
 }
@@ -263,4 +286,4 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/view/class.tx_ttproducts_relatedlist_view.php']);
 }
 
-?>
+

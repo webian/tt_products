@@ -31,6 +31,14 @@ $result = array (
 		'showRecordFieldList' => 'sys_language_uid,hidden,starttime,endtime,fe_group,title,note'
 	),
 	'columns' => array (
+		't3ver_label' => array (
+			'label'  => 'LLL:EXT:lang/locallang_general.xml:LGL.versionLabel',
+			'config' => array (
+				'type' => 'input',
+				'size' => '30',
+				'max'  => '30',
+			)
+		),
 		'tstamp' => array (
 			'exclude' => 1,
 			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tstamp',
@@ -167,14 +175,13 @@ $result = array (
                         )
                     )
                 ),
-            'showitem' => 'sys_language_uid, l18n_diffsource, hidden,--palette--;;1, text_uid, title, note, parenttable'
-        )
+                'showitem' => 'sys_language_uid, l18n_diffsource, hidden,--palette--;;1, text_uid, title, note, parenttable'
+            )
 	),
 	'palettes' => array (
 		'1' => array('showitem' => 'starttime, endtime, fe_group')
 	)
 );
-
 
 
 if (

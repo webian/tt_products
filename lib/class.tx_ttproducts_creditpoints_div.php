@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2005-2007 Els Verberne <verberne@bendoo.nl>
+*  (c) 2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -39,18 +39,18 @@
 
 
 
-class tx_ttproducts_creditpoints_div implements t3lib_Singleton {
+class tx_ttproducts_creditpoints_div {
 
 	/**
 	 * Returns the number of creditpoints for the frontend user
 	 */
-	static public function getCreditPoints($amount, $creditpointsConf)	{
+	static public function getCreditPoints ($amount, $creditpointsConf)	{
 		$type = '';
 		$creditpoints = 0;
 		if (is_array($creditpointsConf))	{
-			foreach ($creditpointsConf as $k1 => $priceCalcTemp) {
+			foreach ($creditpointsConf as $k1=>$priceCalcTemp) {
 				if (is_array($priceCalcTemp)) {
-					foreach ($priceCalcTemp as $k2 => $v2) {
+					foreach ($priceCalcTemp as $k2=>$v2) {
 						if (!is_array($v2)) {
 							switch ($k2) {
 								case 'type':
@@ -84,13 +84,13 @@ class tx_ttproducts_creditpoints_div implements t3lib_Singleton {
 	/**
 	 * adds the number of creditpoints for the frontend user
 	 */
-	static public function addCreditPoints($username, $creditpoints)  {
+	static public function addCreditPoints ($username, $creditpoints)  {
 		global $TYPO3_DB;
 
 		if ($username) {
 			$uid_voucher = '';
 			// get the "old" creditpoints for the user
-			$res1 = $TYPO3_DB->exec_SELECTquery('uid, tt_products_creditpoints', 'fe_users', 'username=' . $TYPO3_DB->fullQuoteStr($username, 'tt_products_creditpoints'));
+			$res1 = $TYPO3_DB->exec_SELECTquery('uid, tt_products_creditpoints', 'fe_users', 'username='.$TYPO3_DB->fullQuoteStr($username,'tt_products_creditpoints'));
 			if ($row = $TYPO3_DB->sql_fetch_assoc($res1)) {
 				$ttproductscreditpoints = $row['tt_products_creditpoints'];
 				$uid_voucher = $row['uid'];
@@ -99,18 +99,14 @@ class tx_ttproducts_creditpoints_div implements t3lib_Singleton {
 				$fieldsArrayFeUserCredit = array();
 				$fieldsArrayFeUserCredit['tt_products_creditpoints'] = $ttproductscreditpoints + $creditpoints;
 
-				$TYPO3_DB->exec_UPDATEquery('fe_users', 'uid=' . intval($uid_voucher), $fieldsArrayFeUserCredit);
+				$TYPO3_DB->exec_UPDATEquery('fe_users', 'uid='.intval($uid_voucher), $fieldsArrayFeUserCredit);
 			}
 		}
 	}
-
 }
-
 
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/lib/class.tx_ttproducts_creditpoints_div.php'])	{
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/lib/class.tx_ttproducts_creditpoints_div.php']);
 }
 
-
-?>

@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2005-2007 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2005-2007 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -54,7 +54,7 @@ class tx_ttproducts_email extends tx_ttproducts_table_base {
 
 	function getEmail ($uid) {
 		global $TYPO3_DB;
-		$rc = $this->emailArray[$uid];
+		$rc = $this->emailArray[$uid];;
 		if ($uid && !$rc) {
 			$sql = t3lib_div::makeInstance('tx_table_db_access');
 			$sql->prepareFields($this->getTableObj(), 'select', '*');
@@ -77,4 +77,3 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 }
 
 
-?>

@@ -71,6 +71,7 @@ class tx_ttproducts_hooks_be implements t3lib_Singleton {
 			// Field configuration from TCA:
 		$config = $PA['fieldConf']['config'];
 		$orderData = unserialize($row['orderData']);
+
 		if (
 			is_array($orderData) &&
 			isset($orderData['html_output']) &&
@@ -91,4 +92,4 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/hooks/class.tx_ttproducts_hooks_be.php']);
 }
 
-?>
+

@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008-2008 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2008-2008 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -38,14 +38,13 @@
  */
 
 
-
 class tx_ttproducts_control_creator implements t3lib_Singleton {
 
 	public function init (&$conf, &$config, $pObj, $cObj)  {
 
 		if ($conf['errorLog'] == '{$plugin.tt_products.file.errorLog}') {
 			$conf['errorLog'] = '';
-		} else {
+		} else if ($conf['errorLog']) {
 			$conf['errorLog'] = t3lib_div::resolveBackPath(PATH_typo3conf . '../' . $conf['errorLog']);
 		}
 
@@ -57,9 +56,9 @@ class tx_ttproducts_control_creator implements t3lib_Singleton {
 
 		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
 		if (is_object($pObj))	{
-			$pLangObj = $pObj;
+			$pLangObj = &$pObj;
 		} else {
-			$pLangObj = $this;
+			$pLangObj = &$this;
 		}
 		$langObj->init1($pLangObj, $cObj, $conf, 'pi1/class.tx_ttproducts_pi1.php');
 
@@ -85,6 +84,10 @@ class tx_ttproducts_control_creator implements t3lib_Singleton {
 			$tablesObj->setTableClassArray($tableClassArray);
 		}
 	}
+
+	public function destruct () {
+		tx_ttproducts_control_basket::destruct();
+	}
 }
 
 
@@ -93,4 +96,4 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 }
 
 
-?>
+

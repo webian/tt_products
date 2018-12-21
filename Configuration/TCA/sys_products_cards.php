@@ -83,23 +83,12 @@ $result = array (
 		),
 	),
 	'types' => array (
-		'1' => array('showitem' => 'cc_number, owner_name, cc_type, cvv2, endtime')
+		'1' => array('showitem' => 'hidden;;;;1-1-1, cc_number, owner_name, cc_type, cvv2, endtime')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => '')
 	)
 );
-
-
-
-$table = 'sys_products_cards';
-$orderBySortingTablesArray = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['orderBySortingTables']);
-if (
-	!empty($orderBySortingTablesArray) &&
-	in_array($table, $orderBySortingTablesArray)
-) {
-	$result['ctrl']['sortby'] = 'sorting';
-}
 
 
 return $result;

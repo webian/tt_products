@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2003-2009 Klaus Zierer <zierer@pz-systeme.de>
+*  (c) 2010-2010 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -37,6 +37,7 @@
  */
 
 
+
 class tx_ttproducts_memo_view implements t3lib_Singleton {
 	var $cObj;
 	var $pid_list;
@@ -46,25 +47,22 @@ class tx_ttproducts_memo_view implements t3lib_Singleton {
 	var $pibaseClass;
 	var $conf;
 
-
 	public function init (
 			$pibaseClass,
 			$theCode,
-			$pid_list,
+			&$pid_list,
 			$conf,
 			$useArticles
 		) {
 		global $TSFE, $TYPO3_DB;
 
 		$this->pibaseClass = $pibaseClass;
-		$pibaseObj = t3lib_div::makeInstance($pibaseClass);
+		$pibaseObj = t3lib_div::makeInstance(''.$pibaseClass);
 		$this->cObj = $pibaseObj->cObj;
 		$this->conf = $conf;
 
 		$this->pid_list = $pid_list;
 		$this->useArticles = $useArticles;
-		$fe_user_uid = $TSFE->fe_user->user['uid'];
-		$this->memoItems = array();
 
 		if (
 			tx_ttproducts_control_memo::bUseFeuser($conf) ||
@@ -78,10 +76,11 @@ class tx_ttproducts_memo_view implements t3lib_Singleton {
 		}
 	}
 
+
 	/**
 	 * Displays the memo
 	 */
-	public function &printView ($theCode,&$templateCode, $pid, &$error_code)	{
+	public function &printView ($theCode, &$templateCode, $pid, &$error_code)	{
 		global $TSFE;
 
 		$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
@@ -92,6 +91,8 @@ class tx_ttproducts_memo_view implements t3lib_Singleton {
 			tx_ttproducts_control_memo::bUseSession($this->conf)
 		) {
 			if ($this->memoItems)	{
+				include_once (PATH_BE_ttproducts.'view/class.tx_ttproducts_list_view.php');
+
 				// List all products:
 				$listView = t3lib_div::makeInstance('tx_ttproducts_list_view');
 				$listView->init (
@@ -102,7 +103,6 @@ class tx_ttproducts_memo_view implements t3lib_Singleton {
 					$this->pid_list,
 					99
 				);
-
 				if ($theCode == 'MEMO')	{
 					$theTable = 'tt_products';
 					$templateArea = 'MEMO_TEMPLATE';
@@ -128,24 +128,28 @@ class tx_ttproducts_memo_view implements t3lib_Singleton {
 					array()
 				);
 			} else {
+				include_once (PATH_BE_ttproducts.'marker/class.tx_ttproducts_subpartmarker.php');
+
 				$subpartmarkerObj = t3lib_div::makeInstance('tx_ttproducts_subpartmarker');
 				$subpartmarkerObj->init(
 					$this->cObj
 				);
 
 				$templateArea = 'MEMO_EMPTY';
-				$content = $this->cObj->getSubpart($templateCode, $subpartmarkerObj->spMarker('###' . $templateArea . '###'));
+				$content = $this->cObj->getSubpart($templateCode,$subpartmarkerObj->spMarker('###'.$templateArea.'###'));
 				$content = $markerObj->replaceGlobalMarkers($content);
 			}
 		} else if (tx_ttproducts_control_memo::bIsAllowed('fe_users', $this->conf)) {
+			include_once (PATH_BE_ttproducts.'marker/class.tx_ttproducts_subpartmarker.php');
+
 			$subpartmarkerObj = t3lib_div::makeInstance('tx_ttproducts_subpartmarker');
 			$subpartmarkerObj->init(
 				$this->cObj
 			);
 
 			$templateArea = 'MEMO_NOT_LOGGED_IN';
-			$templateAreaMarker = $subpartmarkerObj->spMarker('###' . $templateArea . '###');
-			$content = $this->cObj->getSubpart($templateCode, $templateAreaMarker);
+			$templateAreaMarker = $subpartmarkerObj->spMarker('###'.$templateArea.'###');
+			$content = $this->cObj->getSubpart($templateCode,$templateAreaMarker);
 			$content = $markerObj->replaceGlobalMarkers($content);
 		}
 
@@ -159,6 +163,7 @@ class tx_ttproducts_memo_view implements t3lib_Singleton {
 		return $content;
 	}
 
+
 	public function getFieldMarkerArray (
 		&$row,
 		$markerKey,
@@ -166,12 +171,12 @@ class tx_ttproducts_memo_view implements t3lib_Singleton {
 		$tagArray,
 		&$bUseCheckBox
 	)	{
-		$pibaseObj = t3lib_div::makeInstance($this->pibaseClass);
-		$fieldKey = 'FIELD_' . $markerKey . '_NAME';
+		$pibaseObj = t3lib_div::makeInstance(''.$this->pibaseClass);
+		$fieldKey = 'FIELD_'.$markerKey.'_NAME';
 		if (isset($tagArray[$fieldKey]))	{
-			$markerArray['###' . $fieldKey . '###'] = $pibaseObj->prefixId  .'[memo][' . $row['uid'] . ']';
+			$markerArray['###'.$fieldKey.'###'] = $pibaseObj->prefixId.'[memo]['.$row['uid'].']';
 		}
-		$fieldKey = 'FIELD_' . $markerKey . '_CHECK';
+		$fieldKey = 'FIELD_'.$markerKey.'_CHECK';
 
 		if (isset($tagArray[$fieldKey]))	{
 			$bUseCheckBox = TRUE;
@@ -180,12 +185,13 @@ class tx_ttproducts_memo_view implements t3lib_Singleton {
 			} else {
 				$value = 0;
 			}
-			$checkString = ($value ? 'checked="checked"' : '');
-			$markerArray['###' . $fieldKey . '###'] = $checkString;
+			$checkString = ($value ? 'checked="checked"':'');
+			$markerArray['###'.$fieldKey.'###'] = $checkString;
 		} else {
 			$bUseCheckBox = FALSE;
 		}
 	}
+
 
 	public function getHiddenFields (
 		$uidArray,
@@ -194,8 +200,8 @@ class tx_ttproducts_memo_view implements t3lib_Singleton {
 	)	{
 
 		if ($bUseCheckBox)	{
-			$pibaseObj = t3lib_div::makeInstance($this->pibaseClass);
-			$markerArray['###HIDDENFIELDS###'] .= '<input type="hidden" name="' . $pibaseObj->prefixId . '[memo][uids]" value="' . implode(',' , $uidArray) . '" />';
+			$pibaseObj = t3lib_div::makeInstance(''.$this->pibaseClass);
+			$markerArray['###HIDDENFIELDS###'] .= '<input type="hidden" name="' . $pibaseObj->prefixId . '[memo][uids]" value="' . implode(',',$uidArray) . '" />';
 		}
 	}
 }
@@ -206,4 +212,4 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 }
 
 
-?>
+

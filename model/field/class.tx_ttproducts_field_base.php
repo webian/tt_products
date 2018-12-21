@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2007-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -37,9 +37,8 @@
  */
 
 
-
 abstract class tx_ttproducts_field_base implements tx_ttproducts_field_int, t3lib_Singleton {
-	private $bHasBeenInitialised = FALSE;
+	private $bHasBeenInitialised = false;
 	var $cObj;
 	var $conf;		// original configuration
 	var $config;		// modified configuration
@@ -51,14 +50,14 @@ abstract class tx_ttproducts_field_base implements tx_ttproducts_field_int, t3li
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
 
-		$this->bHasBeenInitialised = TRUE;
+		$this->bHasBeenInitialised = true;
 	}
 
 	function needsInit ()	{
 		return !$this->bHasBeenInitialised;
 	}
 
-	function getFieldValue ($row, $fieldname)	{
+	function getFieldValue ($basketExtra, $row, $fieldname)	{
 		return $row[$fieldname];
 	}
 }
@@ -69,4 +68,4 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 }
 
 
-?>
+

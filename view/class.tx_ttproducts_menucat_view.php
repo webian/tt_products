@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2006-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2006-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -55,8 +55,10 @@ class tx_ttproducts_menucat_view extends tx_ttproducts_catlist_view_base {
 	) {
 		global $TSFE, $TCA;
 
-// 		$t = array();
+		$t = array();
 		$ctrlArray = array();
+		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
+
 		parent::getPrintViewArrays(
 			$functablename,
 			$templateCode,
@@ -78,14 +80,14 @@ class tx_ttproducts_menucat_view extends tx_ttproducts_catlist_view_base {
 		if (!count($error_code))	{
 			$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
 			$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
-			$categoryTableViewObj = $tablesObj->get($functablename, TRUE);
+			$categoryTableViewObj = $tablesObj->get($functablename,TRUE);
 			$categoryTable = $categoryTableViewObj->getModelObj();
 			$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 
 			$content='';
 			$out='';
 			$where='';
-			$bFinished = FALSE;
+			$bFinished = false;
 			$iCount = 0;
 			$depth = 1;
 			$countArray = array();
@@ -96,7 +98,7 @@ class tx_ttproducts_menucat_view extends tx_ttproducts_catlist_view_base {
 			$cssConf = $cssObj->getConf($functablename, $theCode);
 			$menu = $categoryTableViewObj->getPivar() . $depth;
 			$fill = '';
-			$out = '<'.$this->htmlTagMain.' id="' . $menu . '"' . $fill . '>';
+			$out = '<'.$this->htmlTagMain.' id="' . $menu . '" ' . $fill . '>';
 			$out = str_replace($this->htmlPartsMarkers[0], $out, $htmlParts[0]);
 			$parentArray = array();
 			$viewCatTagArray = array();
@@ -121,7 +123,7 @@ class tx_ttproducts_menucat_view extends tx_ttproducts_catlist_view_base {
 					$subCategories = $row['child_category'];
 					$countArray[$depth]++;
 					$css = ($actCategory == $currentCat ? 'class="act"' : $css);
-					$preOut = '<' . $this->htmlTagElement . ($css ? ' '.$css : '') . ' value="' . $actCategory . '">';
+					$preOut = '<' . $this->htmlTagElement . ($css ? ' ' . $css : '') . ' value="' . $actCategory . '">';
 					$out .= str_replace($this->htmlPartsMarkers[0], $preOut, $htmlParts[0]);
 
 					if ($pageAsCategory > 0)	{
@@ -136,8 +138,8 @@ class tx_ttproducts_menucat_view extends tx_ttproducts_catlist_view_base {
 					}
 					$addQueryString = array($categoryTableViewObj->getPivar() => $actCategory);
 					$tempUrl = $this->pibase->pi_linkTP_keepPIvars_url($addQueryString, 1, 1, $pid);
-					$linkOutArray = array('<a href="' . htmlspecialchars($tempUrl) . '"' . $css . '>','</a>');
-					$linkOut = $linkOutArray[0] . htmlentities($row['title'], ENT_QUOTES, 'UTF-8') . $linkOutArray[1];
+					$linkOutArray = array('<a href="' . htmlspecialchars($tempUrl) . '" ' . $css . '>','</a>');
+					$linkOut = $linkOutArray[0] . htmlentities($row['title'],ENT_QUOTES,'UTF-8').$linkOutArray[1];
 					$markerArray = array();
 					$categoryTableViewObj->getMarkerArray (
 						$markerArray,
@@ -150,6 +152,7 @@ class tx_ttproducts_menucat_view extends tx_ttproducts_catlist_view_base {
 						array(),
 						$pageAsCategory,
 						$theCode,
+						$basketObj->getBasketExtra(),
 						'',
 						'',
 						''
@@ -196,7 +199,6 @@ class tx_ttproducts_menucat_view extends tx_ttproducts_catlist_view_base {
 			$out = $this->pibase->cObj->substituteMarkerArrayCached($t['listFrameWork'], $markerArray, $subpartArray, $wrappedSubpartArray);
 			$content = $out;
 		}
-
 		return $content;
 	}
 }
@@ -205,4 +207,4 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/view/class.tx_ttproducts_menucat_view.php']);
 }
 
-?>
+

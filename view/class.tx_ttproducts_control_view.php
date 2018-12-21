@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2009-2010 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2009-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -55,7 +55,6 @@ class tx_ttproducts_control_view implements t3lib_Singleton {
 		if (isset($tableConfArray) && is_array($tableConfArray))	{
 			$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
 			$allValueArray = array();
-
 			$controlArray = tx_ttproducts_model_control::getControlArray();
 
 			foreach ($tableConfArray as $functablename => $tableConf)	{
@@ -63,11 +62,11 @@ class tx_ttproducts_control_view implements t3lib_Singleton {
 				if (isset($tableConf['view.']) && is_array($tableConf['view.']))	{
 					foreach ($tableConf['view.'] as $type => $typeConf)	{
 
-						$type = substr($type, 0, strpos($type, '.'));
 						if (is_array($typeConf))	{
+							$type = substr($type,0,strpos($type,'.'));
 							foreach ($typeConf as $numberx => $numberConf)	{
-								$number = substr($numberx, 0, strpos($numberx ,'.'));
-								$markerkey = strtoupper($type) . $number;
+								$number = substr($numberx,0,strpos($numberx,'.'));
+								$markerkey = strtoupper($type).$number;
 								if ($allMarkers[$markerkey] != '')	{
 									$allValueArray[$type.';'.$number] = $numberConf;
 								}
@@ -78,6 +77,7 @@ class tx_ttproducts_control_view implements t3lib_Singleton {
 			}
 
 			if (isset($allValueArray) && is_array($allValueArray))	{
+
 				foreach ($allValueArray as $key => $xValueArray)	{
 					$keyArray = t3lib_div::trimExplode(';',$key);
 					$type = $keyArray[0];
@@ -96,7 +96,7 @@ class tx_ttproducts_control_view implements t3lib_Singleton {
 							'select',
 							$attributeArray
 						);
-					} else if ($type = 'filterInput')	{
+					} else if ($type == 'filterInput')	{
 						$out = tx_ttproducts_form_div::createTag	(
 							'input',
 							tx_ttproducts_model_control::getPrefixId() . '['.tx_ttproducts_model_control::getControlVar().']['.$keyArray[0].']['.$keyArray[1].']',
@@ -104,13 +104,13 @@ class tx_ttproducts_control_view implements t3lib_Singleton {
 							$attributeArray
 						);
 					}
-					$markerkey = strtoupper($keyArray[0] . $keyArray[1]);
-					$markerArray['###' . $markerkey . '_LABEL###'] = $xValueArray['label'];
-					$markerArray['###' . $markerkey . '###'] = $out;
+					$markerkey = strtoupper($keyArray[0]  .$keyArray[1]);
+					$markerArray['###'.$markerkey.'_LABEL###'] = $xValueArray['label'];
+					$markerArray['###'.$markerkey.'###'] = $out;
 				}
 			}
 		}
-	}
+	} // function getMarkerArray
 }
 
 
@@ -119,4 +119,4 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 }
 
 
-?>
+

@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2007-2011 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -37,14 +37,15 @@
  */
 
 
+
 abstract class tx_ttproducts_table_base implements t3lib_Singleton	{
 	public $bHasBeenInitialised = FALSE;
 	public $cObj;
 	public $conf;
 	public $config;
 	public $tableObj;	// object of the type tx_table_db
-	public $defaultFieldArray = array('uid' => 'uid', 'pid' => 'pid'); // fields which must always be read in
-	public $relatedFromTableArray = array();
+	public $defaultFieldArray=array('uid'=>'uid', 'pid'=>'pid'); // fields which must always be read in
+	public $relatedFromTableArray=array();
 	protected $insertRowArray;	// array of stored insert records
 	protected $insertKey;		// array for insertion
 	public $fieldArray = array(); // field replacements
@@ -62,9 +63,8 @@ abstract class tx_ttproducts_table_base implements t3lib_Singleton	{
 	private $fieldClassArray = array (
 			'ac_uid' => 'tx_ttproducts_field_foreign_table',
 			'crdate' => 'tx_ttproducts_field_datetime',
-// 			'creditpoints' => 'tx_ttproducts_field_creditpoints',
+			'creditpoints' => 'tx_ttproducts_field_creditpoints',
 			'datasheet' => 'tx_ttproducts_field_datafield',
-// 			'delivery' => 'tx_ttproducts_field_delivery',
 			'directcost' => 'tx_ttproducts_field_price',
 			'endtime' => 'tx_ttproducts_field_datetime',
 			'graduated_price_uid' => 'tx_ttproducts_field_graduated_price',
@@ -92,6 +92,7 @@ abstract class tx_ttproducts_table_base implements t3lib_Singleton	{
 		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
+
 		$this->tableObj = t3lib_div::makeInstance('tx_table_db');
 		$this->insertKey = 0;
 
@@ -101,15 +102,13 @@ abstract class tx_ttproducts_table_base implements t3lib_Singleton	{
 		$this->setTablename($tablename);
 		$this->tableDesc = $cnf->getTableDesc($functablename);
 
-		$checkDefaultFieldArray = array('tstamp' => 'tstamp', 'crdate' => 'crdate', 'hidden' => 'hidden', 'deleted' => 'deleted');
+		$checkDefaultFieldArray = array('tstamp'=>'tstamp', 'crdate'=>'crdate', 'hidden'=>'hidden', 'deleted' => 'deleted');
 
 		if (isset($TCA[$tablename]['ctrl']) && is_array($TCA[$tablename]['ctrl']))	{
-
 			foreach ($checkDefaultFieldArray as $theField)	{
-				if (
-					isset($TCA[$tablename]['ctrl'][$theField]) && is_array($TCA[$tablename]['ctrl'][$theField]) ||
+				if (isset($TCA[$tablename]['ctrl'][$theField]) && is_array($TCA[$tablename]['columns'][$theField]) ||
 					in_array($theField,$TCA[$tablename]['ctrl'],TRUE) ||
-					isset($TCA[$tablename]['ctrl']['enablecolumns']) && is_array($TCA[$tablename]['ctrl']['enablecolumns']) && in_array($theField,$TCA[$tablename]['ctrl']['enablecolumns'],TRUE)
+					isset($TCA[$tablename]['ctrl']['enablecolumns']) && is_array($TCA[$tablename]['columns']['enablecolumns']) && in_array($theField,$TCA[$tablename]['ctrl']['enablecolumns'],TRUE)
 				)	{
 					$this->defaultFieldArray[$theField] = $theField;
 				}
@@ -152,12 +151,12 @@ abstract class tx_ttproducts_table_base implements t3lib_Singleton	{
 
 	/* uid can be a string. Add a blank character to your uid integer if you want to have muliple rows as a result
 	*/
-	public function get ($uid = '0', $pid = 0, $bStore = TRUE, $where_clause = '', $groupBy = '', $orderBy = '', $limit = '', $fields = '', $bCount = FALSE, $aliasPostfix = '', $fallback = FALSE) {
+	public function get ($uid='0', $pid=0, $bStore=TRUE, $where_clause='', $groupBy='', $orderBy='', $limit='', $fields='', $bCount=FALSE, $aliasPostfix='', $fallback = FALSE) {
 		global $TYPO3_DB;
 
+		$rc = FALSE;
 		$tableObj = $this->getTableObj();
 		$alias = $this->getAlias() . $aliasPostfix;
-
 		if (
 			tx_div2007_core::testInt($uid) &&
 			isset($this->dataArray[$uid]) &&
@@ -178,26 +177,26 @@ abstract class tx_ttproducts_table_base implements t3lib_Singleton	{
 			$where = '1=1';
 
 			if (is_int($uid))	{
-				$where .= ' AND ' . $alias . '.uid = ' . intval($uid);
+				$where .= ' AND '.$alias.'.uid = '.intval($uid);
 			} else if($uid)	{
-				$uidArray = t3lib_div::trimExplode(',', $uid);
+				$uidArray = t3lib_div::trimExplode(',',$uid);
 				foreach ($uidArray as $k => $v)	{
 					$uidArray[$k] = intval($v);
 				}
-				$where .= ' AND ' . $alias . '.uid IN (' . implode(',', $uidArray) . ')';
+				$where .= ' AND '.$alias.'.uid IN ('.implode(',',$uidArray).')';
 			}
 			if ($pid)	{
-				$pidArray = t3lib_div::trimExplode(',', $pid);
+				$pidArray = t3lib_div::trimExplode(',',$pid);
 				foreach ($pidArray as $k => $v)	{
 					$pidArray[$k] = intval($v);
 				}
-				$where .= ' AND ' . $alias . '.pid IN (' . implode(',', $pidArray) . ')';
+				$where .= ' AND '.$alias.'.pid IN ('.implode(',',$pidArray).')';
 			}
 			if ($where_clause)	{
 				if (strpos($where_clause, $enableFields) !== FALSE) {
 					$needsEnableFields = FALSE;
 				}
-				$where .= ' AND ( ' . $where_clause . ' )';
+				$where .= ' AND ( '.$where_clause.' )';
 			}
 			if ($needsEnableFields) {
 				$where .= $enableFields;
@@ -258,7 +257,7 @@ abstract class tx_ttproducts_table_base implements t3lib_Singleton	{
 					$rc = current ($rc);
 				}
 
-				if ($bCount)	{
+				if ($bCount && is_array($rc[0])) {
 					reset($rc[0]);
 					$rc = intval(current($rc[0]));
 				}
@@ -270,6 +269,7 @@ abstract class tx_ttproducts_table_base implements t3lib_Singleton	{
 				$rc = FALSE;
 			}
 		}
+
 		return $rc;
 	}
 
@@ -301,6 +301,11 @@ abstract class tx_ttproducts_table_base implements t3lib_Singleton	{
 	}
 
 
+	public function destruct ()	{
+		$this->bHasBeenInitialised = FALSE;
+	}
+
+
 	public function getDefaultFieldArray ()	{
 		return $this->defaultFieldArray;
 	}
@@ -316,6 +321,7 @@ abstract class tx_ttproducts_table_base implements t3lib_Singleton	{
 		if ($fieldname && isset($TCA[$tablename]['columns'][$fieldname]) && is_array($TCA[$tablename]['columns'][$fieldname]))	{
 
 			$funcTablename = $this->getFuncTablename();
+
 			if (
 				isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['fieldClass']) &&
 				is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['fieldClass']) &&
@@ -394,6 +400,7 @@ abstract class tx_ttproducts_table_base implements t3lib_Singleton	{
 
 	/* initalisation for code dependant configuration */
 	public function initCodeConf ($theCode, $tableConf)	{
+
 		if ($theCode != $this->getCode())	{
 			$this->setCode($theCode);
 			if ($this->orderBy != $tableConf['orderBy'])	{
@@ -422,25 +429,26 @@ abstract class tx_ttproducts_table_base implements t3lib_Singleton	{
 			if ($tableConf['language.'] && $tableConf['language.']['type'] == 'csv')	{
 				$tableObj->initLanguageFile($tableConf['language.']['file']);
 			}
+
 			if ($tableConf['language.'] && is_array($tableConf['language.']['marker.']))	{
 				$tableObj->initMarkerFile($tableConf['language.']['marker.']['file']);
 			}
 		}
 	}
 
+	public function translateByFields (&$dataArray, $theCode) {
 
-	public function translateByFields ($theCode)	{
 		$langFieldArray = $this->getLanguageFieldArray($theCode);
 
-		if (is_array($this->dataArray))	{
-			foreach ($this->dataArray as $uid => $row)	{
-				foreach ($row as $field => $value)	{
+		if (is_array($dataArray) && is_array($langFieldArray) && count($langFieldArray)) {
+			foreach ($dataArray as $uid => $row) {
+				foreach ($row as $field => $value) {
 					$realField = $langFieldArray[$field];
 
-					if (isset($realField) && $realField != $field)	{
-						$newValue = $this->dataArray[$uid][$realField];
-						if ($newValue != '')	{
-							$this->dataArray[$uid][$field] = $newValue;
+					if (isset($realField) && $realField != $field) {
+						$newValue = $dataArray[$uid][$realField];
+						if ($newValue != '') {
+							$dataArray[$uid][$field] = $newValue;
 						}
 					}
 				}
@@ -448,12 +456,12 @@ abstract class tx_ttproducts_table_base implements t3lib_Singleton	{
 		}
 	}
 
-
 	public function bUseLanguageTable ($tableConf) 	{
 		global $TSFE;
 
 		$rc = FALSE;
 		$sys_language_uid = $TSFE->config['config']['sys_language_uid'];
+
 		if (is_numeric($sys_language_uid))	{
 			if ((is_array($tableConf['language.']) && $tableConf['language.']['type'] == 'table' && $sys_language_uid > 0))	{
 				$rc = TRUE;
@@ -464,15 +472,15 @@ abstract class tx_ttproducts_table_base implements t3lib_Singleton	{
 
 
 	public function fixTableConf (&$tableConf)	{
-		// nothing. Override thisn for your table if needed
+		// nothing. Override this for your table if needed
 	}
 
 
-	public function getTableConf ($theCode = '')	{
-		if ($theCode == '' && $this->getCode() != '')	{
+	public function getTableConf ($theCode='')	{
+		if ($theCode=='' && $this->getCode()!='')	{
 			$rc = $this->tableConf;
 		} else {
-			$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+			$cnf =t3lib_div::makeInstance('tx_ttproducts_config');
 			$rc = &$cnf->getTableConf($this->getFuncTablename(), $theCode);
 		}
 		$this->fixTableConf($rc);
@@ -495,7 +503,7 @@ abstract class tx_ttproducts_table_base implements t3lib_Singleton	{
 	}
 
 
-	public function getKeyFieldArray ($theCode = '')	{
+	public function getKeyFieldArray ($theCode='')	{
 		$tableConf = $this->getTableConf($theCod);
 		$rc = array();
 		if (isset($tableConf['keyfield.']) && is_array($tableConf['keyfield.']))	{
@@ -506,18 +514,42 @@ abstract class tx_ttproducts_table_base implements t3lib_Singleton	{
 
 
 	public function getRequiredFields ($theCode='')	{
+		global $TCA;
+
+		$tableObj = $this->getTableObj();
+		$tablename = $this->getTablename();
 		$tableConf = $this->getTableConf($theCode);
-		$rc = '';
+		$fields = '';
 		if (isset($tableConf['requiredFields']))	{
-			$rc = $tableConf['requiredFields'];
+			$fields = $tableConf['requiredFields'];
 		} else {
-			$rc = 'uid,pid';
+			$fields = 'uid,pid';
 		}
-		return $rc;
+
+		$fieldArray = t3lib_div::trimExplode(',', $fields);
+		$requiredFieldArray = array();
+		$defaultFieldArray = $tableObj->getDefaultFieldArray();
+		$noTcaFieldArray = $tableObj->getNoTcaFieldArray();
+
+		if (is_array($fieldArray)) {
+			foreach ($fieldArray as $field) {
+				if (
+					in_array($field, $defaultFieldArray) ||
+					in_array($field, $noTcaFieldArray) ||
+					isset($TCA[$tablename]['columns'][$field]) &&
+					is_array($TCA[$tablename]['columns'][$field])
+				) {
+					$requiredFieldArray[] = $field;
+				}
+			}
+		}
+
+		$result = implode(',', $requiredFieldArray);
+		return $result;
 	}
 
 
-	public function getLanguageFieldArray ($theCode = '')	{
+	public function getLanguageFieldArray ($theCode='')	{
 
 		$tableConf = $this->getTableConf($theCode);
 		if (is_array($tableConf['language.']) &&
@@ -577,4 +609,4 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/model/class.tx_ttproducts_table_base.php']);
 }
 
-?>
+

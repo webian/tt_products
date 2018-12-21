@@ -1,6 +1,5 @@
 <?php
-if (!defined ('TYPO3_MODE'))
-    die ('Access denied.');
+if (!defined ('TYPO3_MODE'))	die ('Access denied.');
 
 $_EXTCONF = unserialize($_EXTCONF);    // unserializing the configuration so we can use it here:
 
@@ -13,10 +12,11 @@ if (
 ) {
 	// nothing
 } else {
-	$divClass = 't3lib_div';
 	$emClass = 't3lib_extMgm';
+	$divClass = 't3lib_div';
 }
 
+// these constants shall be used in the future:
 if (!defined ('TT_PRODUCTS_EXT')) {
 	define('TT_PRODUCTS_EXT', 'tt_products');
 }
@@ -24,6 +24,7 @@ if (!defined ('TT_PRODUCTS_EXT')) {
 if (!defined ('PATH_BE_TTPRODUCTS')) {
 	define('PATH_BE_TTPRODUCTS', call_user_func($emClass . '::extPath', TT_PRODUCTS_EXT));
 }
+
 
 if (version_compare(TYPO3_version, '7.0.0', '>=')) {
     if (!defined ('PATH_TTPRODUCTS_ICON_TABLE_REL')) {
@@ -64,32 +65,16 @@ if (!defined ('POOL_EXT')) {
 	define('POOL_EXT', 'pool');
 }
 
+
+// deprecated constants
 if (!defined ('TT_PRODUCTS_EXTkey')) {
 	define('TT_PRODUCTS_EXTkey', TT_PRODUCTS_EXT);
 }
 
-if (!defined ('TT_PRODUCTS_EXT')) {
-	define('TT_PRODUCTS_EXT', TT_PRODUCTS_EXT);
-}
-
-
-if (!defined ('DAM_EXT')) {
-	define('DAM_EXT', 'dam');
-}
-
-if (!defined ('STATIC_INFO_TABLES_TAXES_EXT')) {
-	define('STATIC_INFO_TABLES_TAXES_EXT', 'static_info_tables_taxes');
-}
-
-
-
-
-// deprecated constants:
 
 if (!defined ('PATH_BE_ttproducts')) {
 	define('PATH_BE_ttproducts', call_user_func($emClass . '::extPath', TT_PRODUCTS_EXT));
 }
-
 
 if (!defined ('TABLE_EXTkey')) {
 	define('TABLE_EXTkey','table');
@@ -101,6 +86,9 @@ if (call_user_func($emClass . '::isLoaded', TABLE_EXTkey)) {
 	}
 }
 
+if (!defined ('ADDONS_EXTkey')) {
+	define('ADDONS_EXTkey','addons_tt_products');
+}
 
 if (!defined ('TT_ADDRESS_EXTkey')) {
 	define('TT_ADDRESS_EXTkey','tt_address');
@@ -147,15 +135,14 @@ if (!defined ('DAM_EXTkey')) {
 	define('DAM_EXTkey','dam');
 }
 
-if (!defined ('STATIC_INFO_TABLES_TAXES_EXTkey')) {
-	define('STATIC_INFO_TABLES_TAXES_EXTkey', 'static_info_tables_taxes');
+if (!defined ('STATIC_INFO_TABLES_TAXES_EXT')) {
+	define('STATIC_INFO_TABLES_TAXES_EXT','static_info_tables_taxes');
 }
 
 if (call_user_func($emClass . '::isLoaded', TAXAJAX_EXT)) {
-	if (!defined ('PATH_BE_taxajax')) {
-		define('PATH_BE_taxajax', call_user_func($emClass . '::extPath', TAXAJAX_EXT));
-	}
-
+    if (!defined ('PATH_BE_taxajax')) {
+        define('PATH_BE_taxajax', call_user_func($emClass . '::extPath', TAXAJAX_EXT));
+    }
 	$GLOBALS['TYPO3_CONF_VARS'] ['FE']['eID_include'][TT_PRODUCTS_EXT] =  'EXT:'.TT_PRODUCTS_EXT.'/eid/class.tx_ttproducts_eid.php' ;
 }
 
@@ -169,99 +156,21 @@ if (isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]) && is_array($
 	unset($tmpArray);
 }
 
-if (isset($_EXTCONF) && is_array($_EXTCONF))	{
+
+if (isset($_EXTCONF) && is_array($_EXTCONF)) {
 	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT] = $_EXTCONF;
-	if (isset($tmpArray) && is_array($tmpArray))	{
+	if (isset($tmpArray) && is_array($tmpArray)) {
 		$GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT] = array_merge($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT], $tmpArray);
 	}
 } else if (!isset($tmpArray)) {
 	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT] = array();
 }
 
+
 if (!isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['useFlexforms'])) {
 	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['useFlexforms'] = '1';
 }
 
-
-if (!defined($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cms']['db_layout']['addTables']['tt_products']['MENU'])) {
-	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cms']['db_layout']['addTables']['tt_products'] = array (
-		'default' => array(
-			'MENU' => 'LLL:EXT:tt_products/locallang.xml:m_default',
-			'fList' =>  'title,image,itemnumber,ean,price,price2,directcost',
-			'icon' => TRUE
-		),
-		'ext' => array (
-			'MENU' => 'LLL:EXT:tt_products/locallang.xml:m_ext',
-			'fList' =>  'title,price2,category;inStock;weight;tax',
-			'icon' => TRUE
-		),
-		'variants' => array(
-			'MENU' => 'LLL:EXT:tt_products/locallang.xml:m_variants',
-			'fList' =>  'title,color;size;gradings,description',
-			'icon' => TRUE
-		)
-	);
-
-	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cms']['db_layout']['addTables']['tt_products_language'] = array (
-		'default' => array(
-			'MENU' => 'LLL:EXT:tt_products/locallang.xml:m_default',
-			'fList' => 'sys_language_uid,prod_uid,title,subtitle,datasheet,www',
-			'icon' => TRUE
-		),
-		'ext' => array (
-			'MENU' => 'LLL:EXT:tt_products/locallang.xml:m_ext',
-			'fList' => 'sys_language_uid,prod_uid,note,note2',
-			'icon' => TRUE
-		),
-	);
-
-	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cms']['db_layout']['addTables']['tt_products_articles'] = array (
-		'default' => array(
-			'MENU' => 'LLL:EXT:tt_products/locallang.xml:m_default',
-			'fList' =>  'title,itemnumber,price,inStock,image',
-			'icon' => TRUE
-		),
-		'ext' => array(
-			'MENU' => 'LLL:EXT:tt_products/locallang.xml:m_ext',
-			'fList' =>  'title;price2,color;size;gradings',
-			'icon' => TRUE
-		)
-	);
-
-	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cms']['db_layout']['addTables']['tt_products_cat'] = array (
-		'default' => array(
-			'MENU' => 'LLL:EXT:tt_products/locallang.xml:m_default',
-			'fList' =>  'title,image',
-			'icon' => TRUE
-		)
-	);
-
-	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cms']['db_layout']['addTables']['tt_products_cat_language'] = array (
-		'default' => array(
-			'MENU' => 'LLL:EXT:tt_products/locallang.xml:m_default',
-			'fList' => 'sys_language_uid,title,subtitle,cat_uid',
-			'icon' => TRUE
-		),
-		'ext' => array(
-			'MENU' => 'LLL:EXT:tt_products/locallang.xml:m_ext',
-			'fList' => 'sys_language_uid,title,note',
-			'icon' => TRUE
-		)
-	);
-
-	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['cms']['db_layout']['addTables']['sys_products_orders'] = array (
-		'default' => array(
-			'MENU' => 'LLL:EXT:tt_products/locallang.xml:m_default',
-			'fList' => 'name,zip,city,country,sys_language_uid,tracking_code,amount,tax_mode,pay_mode,date_of_payment,date_of_delivery,bill_no',
-			'icon' => TRUE
-		),
-		'ext' => array(
-			'MENU' => 'LLL:EXT:tt_products/locallang.xml:m_ext',
-			'fList' => 'name,first_name,last_name,feusers_uid,address,telephone,email,date_of_birth,status,note',
-			'icon' => TRUE
-		)
-	);
-}
 
 if (isset($_EXTCONF) && is_array($_EXTCONF)) {
 	if (isset($_EXTCONF['where.']) && is_array($_EXTCONF['where.'])) {
@@ -282,9 +191,10 @@ if (isset($_EXTCONF) && is_array($_EXTCONF)) {
 	}
 }
 
+
 if (
 	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['useFlexforms']
-)	{
+) {
 	// replace the output of the former CODE field with the flexform
 	$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms/layout/class.tx_cms_layout.php']['list_type_Info'][5][] = 'EXT:'.TT_PRODUCTS_EXT.'/hooks/class.tx_ttproducts_hooks_cms.php:&tx_ttproducts_hooks_cms->pmDrawItem';
 }
@@ -295,18 +205,22 @@ if (call_user_func($emClass . '::isLoaded', 'searchbox')) {
 	$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms/layout/class.tx_cms_layout.php']['list_type_Info'][$listType][] = 'EXT:'.TT_PRODUCTS_EXT.'/hooks/class.tx_ttproducts_hooks_cms.php:&tx_ttproducts_hooks_cms->pmDrawItem';
 }
 
-
-if (TYPO3_MODE=='FE')	{ // hooks for FE extensions
+if (TYPO3_MODE == 'FE') { // hooks for FE extensions
 
 	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['felogin']['login_confirmed'][TT_PRODUCTS_EXT] = 'EXT:'.TT_PRODUCTS_EXT.'/hooks/class.tx_ttproducts_hooks_fe.php:&tx_ttproducts_hooks_fe->resetAdresses';
+
+	if (call_user_func($emClass . '::isLoaded', 'patch10011')) {
+		$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['patch10011']['includeLibs'][TT_PRODUCTS_EXT] = 'EXT:'.TT_PRODUCTS_EXT.'/hooks/class.tx_ttproducts_match_condition.php:&tx_ttproducts_match_condition';
+	}
+
+	// add the table enhancements to the FE
+	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['tt_products']['extendingTCA'][] = TT_PRODUCTS_EXT;
 
 	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['transactor']['listener'][TT_PRODUCTS_EXT] = 'tx_ttproducts_hooks_transactor';
 
     if (
         isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['hook.']) &&
-        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['hook.']['setPageTitle'] &&
-        version_compare(TYPO3_version, '6.1.0', '>') &&
-        version_compare(PHP_VERSION, '5.5.0', '>=')
+        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['hook.']['setPageTitle']
     ) {
         // TYPO3 page title
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-output'][] = 'JambageCom\\TtProducts\\Hooks\\ContentPostProcessor->setPageTitle';
@@ -315,24 +229,41 @@ if (TYPO3_MODE=='FE')	{ // hooks for FE extensions
     }
 }
 
-
-$listType = TT_PRODUCTS_EXT.'_pi_int';
-$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms/layout/class.tx_cms_layout.php']['list_type_Info'][$listType][] = 'EXT:' . TT_PRODUCTS_EXT.'/hooks/class.tx_ttproducts_hooks_cms.php:&tx_ttproducts_hooks_cms->pmDrawItem';
+$listType = TT_PRODUCTS_EXT . '_pi_int';
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms/layout/class.tx_cms_layout.php']['list_type_Info'][$listType][] = 'EXT:' . TT_PRODUCTS_EXT . '/hooks/class.tx_ttproducts_hooks_cms.php:&tx_ttproducts_hooks_cms->pmDrawItem';
 
 
   // Extending TypoScript from static template uid=43 to set up userdefined tag:
-call_user_func($emClass . '::addTypoScript', TT_PRODUCTS_EXT, 'editorcfg', 'tt_content.CSS_editor.ch.tt_products = < plugin.tt_products.CSS_editor ',43);
+call_user_func($emClass . '::addTypoScript', TT_PRODUCTS_EXT,'editorcfg','tt_content.CSS_editor.ch.tt_products = < plugin.tt_products.CSS_editor ',43);
 
 
+$GLOBALS ['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/mydashboard/class.tx_mydashboard_widgetmgm.php']['addWidget']['tt_products_latest'] = 'EXT:' . TT_PRODUCTS_EXT . '/widgets/class.tx_ttproducts_latest.php:tx_ttproducts_latest';
 
-$GLOBALS ['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/mydashboard/class.tx_mydashboard_widgetmgm.php']['addWidget']['tt_products_latest'] = 'EXT:'.TT_PRODUCTS_EXT.'/widgets/class.tx_ttproducts_latest.php:tx_ttproducts_latest';
-
-$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tce']['formevals']['tx_double6'] = 'EXT:'.DIV2007_EXTkey.'/hooks/class.tx_div2007_hooks_eval.php';
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tce']['formevals']['tx_double6'] = 'EXT:' . DIV2007_EXTkey . '/hooks/class.tx_div2007_hooks_eval.php';
 
 
-if (TYPO3_MODE=='FE') { // add the table enhancements to the FE
-	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['tt_products']['extendingTCA'][] = TT_PRODUCTS_EXT;
+if (isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['livesearch']) && is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['livesearch'])) {
+	// TYPO3 4.5 with livesearch
+	$GLOBALS['TYPO3_CONF_VARS']['SYS']['livesearch'] = array_merge(
+		$GLOBALS['TYPO3_CONF_VARS']['SYS']['livesearch'],
+		array(
+			'tt_products' => 'tt_products',
+			'tt_products_language' => 'tt_products_language',
+			'tt_products_articles' => 'tt_products_articles',
+			'tt_products_articles_language' => 'tt_products_articles_language',
+			'tt_products_cat' => 'tt_products_cat',
+			'tt_products_cat_language' => 'tt_products_cat_language',
+			'sys_products_orders' => 'sys_products_orders'
+		)
+	);
 }
+
+
+if (call_user_func($emClass . '::isLoaded', 'searchbox')) {
+	call_user_func($emClass . '::addPItoST43', TT_PRODUCTS_EXT, 'pi_search/class.tx_ttproducts_pi_search.php', '_pi_search', 'list_type', 0 );
+}
+
+call_user_func($emClass . '::addPItoST43', TT_PRODUCTS_EXT, 'pi_int/class.tx_ttproducts_pi_int.php', '_pi_int', 'list_type', 0 );
 
 
 
@@ -380,71 +311,39 @@ if (
 // and overrides the default variable frontend of 4.6
 if (
 	version_compare(TYPO3_version, '7.0.0', '<') &&
-	!isset($TYPO3_CONF_VARS['SYS']['caching']['cacheConfigurations']['tt_products_cache']['frontend'])
+	!isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tt_products_cache']['frontend'])
 ) {
-    $TYPO3_CONF_VARS['SYS']['caching']['cacheConfigurations']['tt_products_cache']['frontend'] = 't3lib_cache_frontend_StringFrontend';
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tt_products_cache']['frontend'] = 't3lib_cache_frontend_StringFrontend';
 }
-
 
 if (
 	version_compare(TYPO3_version, '4.6.0', '>=') &&
 	version_compare(TYPO3_version, '7.0.0', '<')
 ) {
-	if (!isset($TYPO3_CONF_VARS['SYS']['caching']['cacheConfigurations']['tt_products_cache']['backend'])) {
-		$TYPO3_CONF_VARS['SYS']['caching']['cacheConfigurations']['tt_products_cache']['backend'] = $backendCache;
+	if (!isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tt_products_cache']['backend'])) {
+		$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tt_products_cache']['backend'] = $backendCache;
 	}
 
-	if (!isset($TYPO3_CONF_VARS['SYS']['caching']['cacheConfigurations']['tt_products_cache']['options'])) {
-		$TYPO3_CONF_VARS['SYS']['caching']['cacheConfigurations']['tt_products_cache']['options'] = $optionsArray;
+	if (!isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tt_products_cache']['options'])) {
+		$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tt_products_cache']['options'] = $optionsArray;
 	}
 }
 
-if (call_user_func($emClass . '::isLoaded', 'searchbox')) {
-	call_user_func($emClass . '::addPItoST43', TT_PRODUCTS_EXT, 'pi_search/class.tx_ttproducts_pi_search.php', '_pi_search', 'list_type', 0 );
-}
 
-call_user_func($emClass . '::addPItoST43', TT_PRODUCTS_EXT, 'pi_int/class.tx_ttproducts_pi_int.php', '_pi_int', 'list_type', 0 );
+// add missing setup for the tt_content "list_type = 5" which is used by tt_products
+$addLine = 'tt_content.list.20.5 = < plugin.tt_products';
+call_user_func($emClass . '::addTypoScript', TT_PRODUCTS_EXT, 'setup', '
+# Setting ' . TT_PRODUCTS_EXT . ' plugin TypoScript
+' . $addLine . '
+', 43);
 
-
-if (version_compare(TYPO3_version, '4.6.0', '<')) {
-
-	call_user_func($emClass . '::addPItoST43', TT_PRODUCTS_EXT, 'pi1/class.tx_ttproducts_pi1.php', '_pi1', 'list_type', 1);
-
-	// Define database backend as backend for 4.5 and below (default in 4.6)
-	if (!isset($TYPO3_CONF_VARS['SYS']['caching']['cacheConfigurations']['tt_products_cache']['backend'])) {
-        $TYPO3_CONF_VARS['SYS']['caching']['cacheConfigurations']['tt_products_cache']['backend'] = 't3lib_cache_backend_DbBackend';
-    }
-	// Define data and tags table for 4.5 and below (obsolete in 4.6)
-	if (!isset($TYPO3_CONF_VARS['SYS']['caching']['cacheConfigurations']['tt_products_cache']['options'])) {
-        $TYPO3_CONF_VARS['SYS']['caching']['cacheConfigurations']['tt_products_cache']['options'] = array();
-    }
-	if (!isset($TYPO3_CONF_VARS['SYS']['caching']['cacheConfigurations']['tt_products_cache']['options']['cacheTable'])) {
-        $TYPO3_CONF_VARS['SYS']['caching']['cacheConfigurations']['tt_products_cache']['options']['cacheTable'] = 'tt_products_cache';
-    }
-	if (!isset($TYPO3_CONF_VARS['SYS']['caching']['cacheConfigurations']['tt_products_cache']['options']['tagsTable'])) {
-        $TYPO3_CONF_VARS['SYS']['caching']['cacheConfigurations']['tt_products_cache']['options']['tagsTable'] = 'tt_products_cache_tags';
-    }
-
-	t3lib_cache::initializeCachingFramework();
-} else {
-	// add missing setup for the tt_content "list_type = 5" which is used by tt_products
-	$addLine = 'tt_content.list.20.5 = < plugin.tt_products';
-	call_user_func($emClass . '::addTypoScript', TT_PRODUCTS_EXT, 'setup', '
-	# Setting ' . TT_PRODUCTS_EXT . ' plugin TypoScript
-	' . $addLine . '
-	', 43);
-}
 
 if (
 	version_compare(TYPO3_version, '7.0.0', '<') &&
 	isset($GLOBALS['typo3CacheFactory']) &&
-	is_object($GLOBALS['typo3CacheFactory']) &&
-	(
-		version_compare(TYPO3_version, '4.6.0', '>=') ||
-		TYPO3_UseCachingFramework
-	)
+	is_object($GLOBALS['typo3CacheFactory'])
 ) {
-   // register the cache in BE so it will be cleared with "clear all caches"
+    // register the cache in BE so it will be cleared with "clear all caches"
     try {
 		$cacheName = 'tt_products_cache';
 		if (!$GLOBALS['typo3CacheManager']->hasCache($cacheName)) {
@@ -477,8 +376,4 @@ if (
             array('source' => 'EXT:' . TT_PRODUCTS_EXT . '/Resources/Public/Icons/apps/' . $filename)
         );
     }
-
-    // Register Status Report Hook
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['reports']['tx_reports']['status']['providers']['Shop System'][] = \JambageCom\TtProducts\Hooks\StatusProvider::class;
 }
-

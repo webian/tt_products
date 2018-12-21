@@ -51,7 +51,7 @@ class tx_ttproducts_table_label implements t3lib_Singleton {
 		&$params,
 		$pObj
 	) {
-		// Only get labels for tt_products* and sys_products* tables
+		// Only get labels for tt_products* tables
 		if (
 			!substr($params['table'], 0, 11) == 'tt_products' &&
 			!substr($params['table'], 0, 12) == 'sys_products'
@@ -85,8 +85,9 @@ class tx_ttproducts_table_label implements t3lib_Singleton {
 
 
 
+
+
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/model/class.tx_ttproducts_table_label.php'])	{
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/model/class.tx_ttproducts_table_label.php']);
 }
 
-?>

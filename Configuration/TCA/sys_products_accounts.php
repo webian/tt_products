@@ -5,6 +5,7 @@ if (!defined ('TYPO3_MODE')) {
 
 $accountField = 'ac_number';
 
+
 // ******************************************************************
 // These are the bank account data used for orders
 // ******************************************************************
@@ -62,16 +63,6 @@ if ($accountField != 'iban') {
 	$result['columns'][$accountField]['config']['eval'] = 'required,trim';
 }
 
-
-$table = 'sys_products_accounts';
-
-$orderBySortingTablesArray = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['orderBySortingTables']);
-if (
-	!empty($orderBySortingTablesArray) &&
-	in_array($table, $orderBySortingTablesArray)
-) {
-	$result['ctrl']['sortby'] = 'sorting';
-}
 
 
 return $result;

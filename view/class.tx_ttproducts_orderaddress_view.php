@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2006-2008 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2006-2008 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -49,25 +49,66 @@ class tx_ttproducts_orderaddress_view extends tx_ttproducts_table_base_view {
 	var $image;
 
 
-	function getWrappedSubpartArray (&$subpartArray, &$wrappedSubpartArray)	{
-		global $TSFE;
+	public function getWrappedSubpartArray(
+		$viewTagArray,
+		$bUseBackPid,
+		&$subpartArray,
+		&$wrappedSubpartArray
+	) {
+		$marker = 'FE_GROUP';
+		$markerLogin = 'LOGIN';
+		$markerNologin = 'NOLOGIN';
+		foreach ($viewTagArray as $tag => $value) {
+			if (strpos($tag, $marker . '_') === 0) {
+				$tagPart1 = substr($tag, strlen($marker . '_'));
+				$offset = strpos($tagPart1, '_TEMPLATE');
+				if ($offset > 0) {
+					$groupNumber = substr($tagPart1, 0, $offset);
 
-		if ($TSFE->fe_user->user)	{
-			$wrappedSubpartArray['###FE_GROUP_1_TEMPLATE###'] = array('','');
-			$subpartArray['###FE_GROUP_0_TEMPLATE###'] = '';
-		} else {
-			$wrappedSubpartArray['###FE_GROUP_0_TEMPLATE###'] = array('','');
-			$subpartArray['###FE_GROUP_1_TEMPLATE###'] = '';
+					if (tx_div2007_core::testInt($groupNumber)) {
+						if (t3lib_div::inList($GLOBALS['TSFE']->gr_list, $groupNumber)) {
+							$wrappedSubpartArray['###FE_GROUP_' . $groupNumber . '_TEMPLATE###'] = array('', '');
+						} else {
+							$subpartArray['###FE_GROUP_' . $groupNumber . '_TEMPLATE###'] = '';
+						}
+					}
+				}
+			} else if (strpos($tag, $markerLogin . '_') === 0) {
+                if (
+                    $GLOBALS['TSFE']->loginUser &&
+                    isset($GLOBALS['TSFE']->fe_user->user) &&
+                    is_array($GLOBALS['TSFE']->fe_user->user) &&
+                    isset($GLOBALS['TSFE']->fe_user->user['uid'])
+                ) {
+					$wrappedSubpartArray['###LOGIN_TEMPLATE###'] = array('', '');
+				} else {
+					$subpartArray['###LOGIN_TEMPLATE###'] = '';
+				}
+			} else if (strpos($tag, $markerNologin . '_') === 0) {
+                if (
+                    isset($GLOBALS['TSFE']->fe_user->user) &&
+                    is_array($GLOBALS['TSFE']->fe_user->user) &&
+                    isset($GLOBALS['TSFE']->fe_user->user['uid'])
+                ) {
+					$subpartArray['###NOLOGIN_TEMPLATE###'] = '';
+				} else {
+					$wrappedSubpartArray['###NOLOGIN_TEMPLATE###'] = array('', '');
+				}
+			}
 		}
 
-		if ($this->getModelObj()->getCondition() || !$this->getModelObj()->getConditionRecord())	{
-			$wrappedSubpartArray['###FE_CONDITION1_TRUE_TEMPLATE###'] = array('', '');
-			$subpartArray['###FE_CONDITION1_FALSE_TEMPLATE###'] = '';
-		} else {
-			$wrappedSubpartArray['###FE_CONDITION1_FALSE_TEMPLATE###'] = array('', '');
-			$subpartArray['###FE_CONDITION1_TRUE_TEMPLATE###'] = '';
+		if (
+			isset($viewTagArray['FE_CONDITION1_TRUE_TEMPLATE']) ||
+			isset($viewTagArray['FE_CONDITION1_FALSE_TEMPLATE'])
+		) {
+			if ($this->getModelObj()->getCondition() || !$this->getModelObj()->getConditionRecord()) {
+				$wrappedSubpartArray['###FE_CONDITION1_TRUE_TEMPLATE###'] = array('', '');
+				$subpartArray['###FE_CONDITION1_FALSE_TEMPLATE###'] = '';
+			} else {
+				$wrappedSubpartArray['###FE_CONDITION1_FALSE_TEMPLATE###'] = array('', '');
+				$subpartArray['###FE_CONDITION1_TRUE_TEMPLATE###'] = '';
+			}
 		}
-		return;
 	}
 
 
@@ -83,7 +124,7 @@ class tx_ttproducts_orderaddress_view extends tx_ttproducts_table_base_view {
 	 * @return	array
 	 * @access private
 	 */
-	function getAddressMarkerArray (&$row, &$markerArray, $bSelect, $type) {
+	function getAddressMarkerArray ($row, &$markerArray, $bSelect, $type)	{
 		global $TCA;
 
 		$fieldOutputArray = array();
@@ -91,13 +132,12 @@ class tx_ttproducts_orderaddress_view extends tx_ttproducts_table_base_view {
 		$selectInfoFields = $modelObj->getSelectInfoFields();
 
 		if ($bSelect)	{
-// 			t3lib_div::requireOnce (PATH_BE_ttproducts . 'lib/class.tx_ttproducts_form_div.php');
-
-
+			t3lib_div::requireOnce (PATH_BE_ttproducts . 'lib/class.tx_ttproducts_form_div.php');
 			foreach ($selectInfoFields as $field) {
 				$tablename = $modelObj->getTCATableFromField($field);
 
 				$fieldOutputArray[$field] =
+
 					tx_ttproducts_form_div::createSelect(
 						$this->langObj,
 						$TCA[$tablename]['columns'][$field]['config']['items'],
@@ -137,7 +177,7 @@ class tx_ttproducts_orderaddress_view extends tx_ttproducts_table_base_view {
 			$markerkey = '###' . ($type == 'personinfo' ? 'PERSON' : 'DELIVERY') . '_'. strtoupper($field) . '###';
 			$markerArray[$markerkey] = $fieldOutputArray[$field];
 		}
-	} // getMarkerArray
+	} // getRowMarkerArray
 }
 
 
@@ -146,4 +186,4 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 }
 
 
-?>
+

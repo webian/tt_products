@@ -39,14 +39,16 @@
 
 
 
-class tx_ttproducts_sql {
+class tx_ttproducts_sql implements t3lib_Singleton {
 
-	static public function isValid (&$row, $where)	{
+	public static function isValid ($row, $where)	{
 		$whereArray = t3lib_div::trimExplode ('AND', $where);
 		$isValid = TRUE;
+
 		foreach($whereArray as $k3 => $condition) {
+
 			if (strpos($condition, '=') !== FALSE)	{
-				if ($condition = '1=1' || $condition = '1 = 1') {
+				if ($condition == '1=1' || $condition == '1 = 1') {
 					// nothing: $isValid = TRUE;
 				} else {
 					$args = t3lib_div::trimExplode ('=', $condition);
@@ -63,17 +65,17 @@ class tx_ttproducts_sql {
 					$isValidRow = TRUE;
 				}
 				$args = t3lib_div::trimExplode ($split, $condition);
-				$leftBracket = strpos($args[1], '(');
-				$rightBracket = strpos($args[1], ')');
+				$leftBracket = strpos($args[1],'(');
+				$rightBracket = strpos($args[1],')');
 				if ($leftBracket !== FALSE && $rightBracket !== FALSE)	{
 					$args[1] = substr($args[1], $leftBracket+1, $rightBracket-$leftBracket-1);
 					$argArray = t3lib_div::trimExplode (',', $args[1]);
 					if (is_array($argArray))	{
 						foreach($argArray as $arg)	{
-							$leftQuote = strpos($arg, '\'');
-							$rightQuote = strrpos($arg, '\'');
+							$leftQuote = strpos($arg,'\'');
+							$rightQuote = strrpos($arg,'\'');
 							if ($leftQuote !== FALSE && $rightQuote !== FALSE)	{
-								$arg = substr($arg, $leftQuote+1, $rightQuote - $leftQuote - 1);
+								$arg = substr($arg, $leftQuote+1, $rightQuote-$leftQuote-1);
 							}
 							if ($row[$args[0]] == $arg) {
 								if ($split == 'IN')	{
@@ -88,7 +90,7 @@ class tx_ttproducts_sql {
 					}
 					$isValid = $isValidRow;
 				}
-			} else {
+			} else if ($condition != '') {
 				$isValid = FALSE;
 			}
 			if ($isValid == FALSE)	{
@@ -106,4 +108,4 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 }
 
 
-?>
+

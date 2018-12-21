@@ -3,6 +3,9 @@
 ## @subpackage tt_products
 ##
 
+## Includes tt_products as a TYPO3 extension:
+includeLibs.tx_ttproducts_pi_search = EXT:tt_products/pi_search/class.tx_ttproducts_pi_search.php
+
 ## This enables the tt_content.list item to display the product plugins:
 plugin.tx_ttproducts_pi_search >
 plugin.tx_ttproducts_pi_search = USER_INT

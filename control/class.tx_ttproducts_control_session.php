@@ -38,7 +38,7 @@
 
 
 
-class tx_ttproducts_control_session {
+class tx_ttproducts_control_session implements t3lib_Singleton {
 
 	static public function filterExtensionData ($session) {
 
@@ -94,15 +94,6 @@ class tx_ttproducts_control_session {
 				foreach ($keys as $key) {
 					unset($allSessionData[$extKey][$key]);
 				}
-			} else {
-				if (version_compare(TYPO3_version, '4.7.0', '<')) {
-					foreach ($keys as $key) {
-						if ($data[$key] == '__UNSET') {
-							unset($data[$key]);
-							unset($allSessionData[$extKey][$key]);
-						}
-					}
-				}
 			}
 
 			tx_div2007_core::mergeRecursiveWithOverrule($allSessionData[$extKey], $data);
@@ -115,5 +106,3 @@ class tx_ttproducts_control_session {
 	}
 }
 
-
-?>

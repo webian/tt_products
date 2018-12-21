@@ -56,6 +56,7 @@
 			<label index="extension_payment_missing">The extension for the payment method has not been configured.</label>
 			<label index="setup_missing">Setup for | is missing.</label>
 			<label index="voucher_invalid">The voucher code | is not accepted.</label>
+			<label index="voucher_invalid_amount">The total sum of the products in the basket is too small to be able to use the voucher code %s.</label>
 			<label index="voucher_payment_article">Discount</label>
 			<label index="voucher_gained">You have gained the following voucher codes</label>
 			<label index="internal_error">Internal error no. | in tt_products (|).</label>

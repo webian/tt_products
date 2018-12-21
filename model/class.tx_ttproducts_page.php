@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2005-2007 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2005-2007 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -35,7 +35,6 @@
  * @subpackage tt_products
  *
  */
-
 
 
 class tx_ttproducts_page extends tx_ttproducts_category_base {
@@ -100,7 +99,7 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 	} // init
 
 	/* initalisation for code dependant configuration */
-	public function initCodeConf ($theCode, $tableConf)	{
+	public function initCodeConf ($theCode,$tableConf)	{
 		parent::initCodeConf ($theCode,$tableConf);
 		if ($this->bUseLanguageTable($tableConf))	{
 			$this->getTableObj()->setForeignUidArray($this->getTableObj()->langname, 'pid');
@@ -108,14 +107,14 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 	}
 
 /*
-	function get ($uid = 0, $pid = 0, $bStore = TRUE, $where_clause = '', $limit = '', $fields = '', $bCount = FALSE) {
+	function get ($uid=0,$pid=0,$bStore=true,$where_clause='',$limit='',$fields='',$bCount=FALSE) {
 		global $TYPO3_DB;
 
 		$bMultple = (strstr($uid, ',') ? TRUE : FALSE);
 
 		$rc = $this->dataArray[$uid];
 		if (!$rc && !$bMultple && isset($uid)) {
-			$where = '1=1 ' . $this->getTableObj()->enableFields() . ' AND uid = ' . intval($uid);
+			$where = '1=1 '.$this->getTableObj()->enableFields().' AND uid = '.intval($uid);
 
 			// Fetching the pages
 			$res = $this->getTableObj()->exec_SELECTquery('*', $where);
@@ -139,7 +138,7 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 		$rowArray = $this->noteArray[$uid];
 		$rcArray = array();
 		if (!is_array($rowArray) && $uid) {
-			$rowArray = $TYPO3_DB->exec_SELECTgetRows('*', 'tt_products_products_note_pages_mm', 'uid_local = ' . intval($uid), '', 'sorting');
+			$rowArray = $TYPO3_DB->exec_SELECTgetRows('*', 'tt_products_products_note_pages_mm', 'uid_local = '.intval($uid),'','sorting');
 			$this->noteArray[$uid] = $rowArray;
 		}
 		foreach ($rowArray as $k => $row)	{
@@ -149,7 +148,7 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 	}
 
 
-	function getParent ($uid = 0) {
+	function getParent ($uid=0) {
 		$rc = array();
 		$row = $this->get ($uid);
 		if ($row['pid'])	{
@@ -171,18 +170,17 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 	}
 
 
-	function getParamDefault ($theCode, $piVars)	{
+	function getParamDefault ($theCode, $pid)	{
 //		$pid = $this->pibase->piVars[$this->piVar];
-		$pid = $piVars[$this->piVar];
 		$pid = ($pid ? $pid : $this->conf['defaultPageID']);
 		if ($pid)	{
-			$pid = implode(',',tx_div2007_core::intExplode(',', $pid));
+			$pid = implode(',',t3lib_div::intExplode(',', $pid));
 		}
 		return $pid;
 	}
 
 
-	function &getRelationArray ($excludeCats = '', $rootUids = '', $allowedCats = '') {
+	function getRelationArray ($dataArray, $excludeCats='',$rootUids='',$allowedCats='') {
 
 		$relationArray = array();
 		$pageArray = t3lib_div::trimExplode (',', $pid_list);
@@ -248,7 +246,7 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 	/**
 	 * Returning the pid out from the row using the where clause
 	 */
-	function getPID ($conf, $confExt, $row, $rootRow = array()) {
+	function getPID ($conf, $confExt, $row, $rootRow=array()) {
 		$rc = 0;
 		if ($confExt) {
 			foreach ($confExt as $k1 => $param) {
@@ -280,7 +278,8 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 					break;  //ready with the foreach loop
 				}
 			}
-		} else {
+		}
+		if (!$rc) {
 			if ($conf) {
 				$rc = $conf;
 			} else {
@@ -290,10 +289,10 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 				$rc = intval($rc);
 			}
 		}
+
 		return $rc;
 	} // getPID
 }
-
 
 
 
@@ -302,4 +301,4 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 // }
 
 
-?>
+

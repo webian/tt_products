@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2008 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2007-2008 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -90,7 +90,6 @@ class tx_ttproducts_text_view extends tx_ttproducts_table_base_view {
 			}
 		}
 
-
 		if (isset($tagArray) && is_array($tagArray)) {
 			foreach ($tagArray as $tag) {
 				if (!$bFoundTagArray[$tag]) {
@@ -108,4 +107,3 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 }
 
 
-?>

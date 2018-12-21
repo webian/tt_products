@@ -30,12 +30,20 @@ $result = array (
 		'crdate' => 'crdate',
 		'cruser_id' => 'cruser_id',
 		'iconfile' => PATH_TTPRODUCTS_ICON_TABLE_REL . 'tt_products_cat.gif',
-		'searchFields' => 'uid,title,subtitle,note,note2',
+		'searchFields' => 'uid,title,subtitle,catid,keyword,note,note2',
 	),
 	'interface' => array (
-		'showRecordFieldList' => 'hidden,starttime,endtime,fe_group,title, subtitle, note, note2, image, email_uid'
+		'showRecordFieldList' => 'hidden,starttime,endtime,fe_group,title, subtitle, catid, keyword, note, note2, image, discount, discount_disable, email_uid, highlight'
 	),
 	'columns' => array (
+		't3ver_label' => array (
+			'label'  => 'LLL:EXT:lang/locallang_general.xml:LGL.versionLabel',
+			'config' => array (
+				'type' => 'input',
+				'size' => '30',
+				'max'  => '30',
+			)
+		),
 		'sorting' => Array (
 			'config' => Array (
 				'type' => 'passthrough',
@@ -132,6 +140,28 @@ $result = array (
 				'default' => NULL,
 			)
 		),
+		'catid' => Array (
+			'exclude' => 1,
+			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products_cat.catid',
+			'config' => Array (
+				'type' => 'input',
+				'size' => '20',
+				'eval' => 'trim',
+				'max' => '40'
+			)
+		),
+		'keyword' => array (
+			'exclude' => 1,
+			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.keyword',
+			'config' => array (
+				'type' => 'text',
+				'rows' => '5',
+				'cols' => '20',
+				'max' => '512',
+				'eval' => 'null',
+				'default' => NULL,
+			)
+		),
 		'note' => array (
 			'exclude' => 1,
 			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.note',
@@ -170,6 +200,28 @@ $result = array (
 				'default' => NULL,
 			)
 		),
+		'discount' => array (
+			'exclude' => 1,
+			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products_cat.discount',
+			'config' => array (
+				'type' => 'input',
+				'size' => '4',
+				'max' => '8',
+				'eval' => 'trim,double2',
+				'range' => array (
+					'upper' => '1000',
+					'lower' => '0'
+				),
+				'default' => 0
+			)
+		),
+		'discount_disable' => array (
+			'exclude' => 1,
+			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products_cat.discount_disable',
+			'config' => array (
+				'type' => 'check',
+			)
+		),
 		'email_uid' => array (
 			'exclude' => 1,
 			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products_cat.email_uid',
@@ -182,6 +234,13 @@ $result = array (
 				'size' => 1,
 				'minitems' => 0,
 				'maxitems' => 1,
+			)
+		),
+		'highlight' => array (
+			'exclude' => 1,
+			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products_cat.highlight',
+			'config' => array (
+				'type' => 'check',
 			)
 		),
 	),
@@ -200,7 +259,7 @@ $result = array (
                         )
                     )
                 ),
-                'showitem' => 'title, subtitle, note, note2, email_uid, image, hidden,--palette--;;1'
+                'showitem' => 'title, subtitle, catid, keyword, note, note2, email_uid,image, discount,discount_disable,highlight,hidden,--palette--;;1'
             )
 	),
 	'palettes' => array (
@@ -224,7 +283,6 @@ if (
             $result['types']['0']['showitem']
         );
 }
-
 
 
 return $result;

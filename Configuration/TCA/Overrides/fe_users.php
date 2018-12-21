@@ -36,7 +36,7 @@ $temporaryColumns = array (
 			'max' => '8',
 			'eval' => 'trim,double2',
 			'range' => array (
-				'upper' => '1000',
+				'upper' => '100',
 				'lower' => '0'
 			),
 			'default' => 0
@@ -132,8 +132,8 @@ $temporaryColumns = array (
 );
 
 
-
 $searchFields = explode(',', $GLOBALS['TCA']['fe_users']['ctrl']['searchFields'] . ',tt_products_vouchercode,comments,tt_products_organisation_form');
 $searchFields = array_unique($searchFields);
 $GLOBALS['TCA']['fe_users']['ctrl']['searchFields'] = implode(',', $searchFields);
+
 

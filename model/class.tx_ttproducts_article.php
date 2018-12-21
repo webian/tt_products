@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2006-2010 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2006-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -39,7 +39,6 @@
 
 
 
-
 class tx_ttproducts_article extends tx_ttproducts_article_base {
 	public $fields = array();
 	public $tt_products; // element of class tx_table_db to get the parent product
@@ -67,6 +66,8 @@ class tx_ttproducts_article extends tx_ttproducts_article_base {
 		$tableObj = $this->getTableObj();
 		$tableObj->setConfig($tableConfig);
 		$tableObj->addDefaultFieldArray(array('sorting' => 'sorting'));
+
+		$this->relatedArray['accessories'] = array();
 	} // init
 
 
@@ -77,25 +78,27 @@ class tx_ttproducts_article extends tx_ttproducts_article_base {
 		$enableWhere = $this->getTableObj()->enableFields();
 		$where = ($where ? $where . ' ' . $enableWhere : '1=1 ' . $enableWhere);
 		$alias = $this->getAlias();
+		$fromJoin = '';
 
 		if (in_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['articleMode'], array(1,2)))	{
 
 			$finalWhere = 'tt_products_products_mm_articles.uid_local=' . intval($prodUid) . ' AND tt_products_products_mm_articles.deleted=0 AND tt_products_products_mm_articles.hidden=0' . ($where!='' ? ' AND '.$where : '');
+
 			$mmTable = 'tt_products_products_mm_articles';
 			$uidForeignArticle = 'uid_foreign';
 			$fromJoin = 'tt_products_articles ' . $alias . ' JOIN ' . $mmTable . ' ON ' . $alias . '.uid=' . $mmTable . '.' . $uidForeignArticle;
 			$finalOrderBy = $mmTable . '.sorting DESC';
 		} else {
-			// $fromJoin = 'tt_products_articles ' . $alias;
+		//	$fromJoin = 'tt_products_articles ' . $alias;
 			$finalWhere = $alias . '.uid_product=' . intval($prodUid) . ($where ? ' AND ' . $where : '');
 			$finalOrderBy = '';
 		}
-		$res = $this->getTableObj()->exec_SELECTquery('*', $finalWhere, '', $finalOrderBy, '', $fromJoin);
-		$variantFieldArray = $this->variant->getFieldArray();
+
+		$res = $this->getTableObj()->exec_SELECTquery('*',$finalWhere,'',$finalOrderBy,'',$fromJoin);
 
 		while($row = $TYPO3_DB->sql_fetch_assoc($res))	{
+
 			$uid = intval($row['uid']);
-			$this->getTableObj()->substituteMarkerArray($row, $variantFieldArray);
 			$this->dataArray[$uid] = $row;	// remember for later queries
 			$uidArray[] = $uid;
 			$rowArray[] = $row;
@@ -127,7 +130,7 @@ class tx_ttproducts_article extends tx_ttproducts_article_base {
 		$tableConf = $this->getTableConf($theCode);
 		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$rc = array();
-		if ($tableConf['requiredFields'] != '')	{
+		if ($tableConf['requiredFields']!='')	{
 			$requiredFields = $tableConf['requiredFields'];
 		} else {
 			$requiredFields = 'uid,pid,category,price,price2,directcost';
@@ -140,6 +143,14 @@ class tx_ttproducts_article extends tx_ttproducts_article_base {
 		$rc = $requiredFields;
 		return $rc;
 	}
+
+
+	public function getRelatedArrays (&$allowedRelatedTypeArray, &$mmTable) {
+		$allowedRelatedTypeArray = array('accessories');
+		$mmTable = array(
+			'accessories' => array('table' =>  'tt_products_accessory_articles_articles_mm')
+		);
+	}
 }
 
 
@@ -147,4 +158,4 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/model/class.tx_ttproducts_article.php']);
 }
 
-?>
+

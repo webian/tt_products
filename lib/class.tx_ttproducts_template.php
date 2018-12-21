@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008-2009 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2008-2009 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -46,13 +46,16 @@ class tx_ttproducts_template implements t3lib_Singleton {
 		return $this->templateFile;
 	}
 
+
 	public function getTemplateSuffix ()	{
 		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$config = &$cnf->getConfig();
 		return $config['templateSuffix'];
 	}
 
+
 	public function &get ($theCode, $langObj, $cObj, &$templateFile, &$errorMessage) {
+
 		$templateCode = '';
 		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$conf = &$cnf->getConf();
@@ -69,8 +72,8 @@ class tx_ttproducts_template implements t3lib_Singleton {
 				$tmplText = $theCode.'.';
 			}
 			$tmplText .= 'templateFile';
-			$errorMessage .= tx_div2007_alpha5::getLL_fh003($langObj, 'no_template') . ' plugin.' . TT_PRODUCTS_EXT . '.' . $tmplText.' = ';
-			$errorMessage .= ($conf['templateFile'] ? "'" . $conf['templateFile'] . "'" : '""');
+			$errorMessage .= tx_div2007_alpha5::getLL_fh003($langObj, 'no_template') . ' plugin.' . TT_PRODUCTS_EXT . '.' . $tmplText . ' = ';
+			$errorMessage .= ($templateFile ? "'" . $templateFile . "'" : '""');
 		}
 
 		$this->templateFile = $templateFile;
@@ -79,10 +82,9 @@ class tx_ttproducts_template implements t3lib_Singleton {
 }
 
 
-
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/lib/class.tx_ttproducts_template.php'])	{
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/lib/class.tx_ttproducts_template.php']);
 }
 
 
-?>
+

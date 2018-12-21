@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2006-2007 Franz Holzinger <franz@ttproducts.de>
+*  (c) 2006-2007 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -55,7 +55,7 @@ class tx_ttproducts_field_image extends tx_ttproducts_field_media {
 
 
 	function &getImageArray($imageRow, $imageField)	{
-		$imageArray = ($imageRow[$imageField] ? explode(',', $imageRow[$imageField]) : array());
+		$imageArray = ($imageRow[$imageField] ? explode(',',$imageRow[$imageField]) : array());
 		$tmp = count($imageArray);
 		if (!$tmp && $imageRow['file_mime_type'] == 'image')	{
 			$imageArray = array($imageRow['file_name']);
@@ -70,4 +70,3 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 }
 
 
-?>

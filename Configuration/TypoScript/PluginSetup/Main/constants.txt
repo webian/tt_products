@@ -13,7 +13,7 @@ plugin.tt_products {
     # cat=plugin.products/file; type=file[pdf,gif,jpg]; label= datasheet icon:
   file.datasheetIcon =
     # cat=plugin.products/file; type=file[xml]; label= Marker Language File: This is a simple language xml file which contains the texts for the global markers
-  file.markerFile = EXT:tt_products/marker/de.locallang.xml
+  file.markerFile =
       # cat=plugin.products/file; type=file[txt,log]; label= Error Log File: This is a simple text file into which PHP error_log entries will be made for debugging purposes only. If emtpy then no error logging will be done.
   file.errorLog =
     # cat=plugin.products/typo; type=wrap; label= Wrap 1: This wrap is used in the template-file.
@@ -23,10 +23,12 @@ plugin.tt_products {
     # cat=plugin.products/typo; type=boolean; label= break Note: Transforms linefeeds in the note field into <br /> HTML tags
   nl2brNote = 1
 
-    # cat=plugin.products//; type=integer; label= use article table: You have to set this to 1 if you want that your entries in the products articles table get used. Set it to 2 if your articles do not use the variant fields. default value is 3: The variants of the product need not be entered but are taken from the articles assigned to a product. Many articles are assigned to a product with the possibility of additional prices.
+    # cat=plugin.products//; type=integer; label= use article table: You have to set this to 1 if you want that your entries in the products articles table get used. Set it to 2 if your articles do not use the variant fields. The default value is 3: The variants of the product need not be entered but are taken from the articles assigned to a product. Many articles are assigned to a product with the possibility of additional prices.
   useArticles = 3
-    # cat=plugin.products//; type=boolean; label= keep product data: Do not overwrite the product data with the articles fetched from the variants if they are not empty. This is visible in the basket views.
+    # cat=plugin.products//; type=boolean; label= keep product data: Do not overwrite the product data with the articles fetched from the variants if they are not empty.
   keepProductData = 1
+    # cat=plugin.products//; type=boolean; label= no single display for articles:If true, then no article single view is used. Articles are instead linked to the product single view and the corresponding variant selection is shown.
+  noArticleSingleView = 1
 
     # cat=plugin.products/color; type=color; label= Color 1: This bgcolor is used in the template-file.
   color1 = #CCCCCC
@@ -41,7 +43,7 @@ plugin.tt_products {
   clickEnlarge_list = 1
     # cat=plugin.products//; type=boolean; label= Click Enlarge, List display for items listed with a filter for a category having childs: See above
   clickEnlarge_listHasChilds = 1
-    # cat=plugin.products//; type=boolean; label= Click Enlarge, Basket display: As above, but for the images in the basket
+    # cat=plugin.products//; type=boolean; label= Click Enlarge, List display for items listed with a filter for a DAM root category
   clickEnlarge_basket = 1
     # cat=plugin.products//; type=boolean; label= Click Enlarge, Category images: As above, but for the category images
   clickEnlarge_listcat = 0
@@ -119,6 +121,10 @@ plugin.tt_products {
   maxW_single = 200
     # cat=plugin.products/dims; type=int+; label= Max image height, single display: The maximum height in pixels of an image when displayed with a single product.
   maxH_single = 400
+    # cat=plugin.products/dims; type=int+; label= Max small image width, single display: The maximum width in pixels of a small image when displayed with a single product.
+  maxW_smallSingle = 15
+    # cat=plugin.products/dims; type=int+; label= Max small image height, single display: The maximum height in pixels of a small image when displayed with a single product.
+  maxH_smallSingle = 35
     # cat=plugin.products/dims; type=int+; label= Max image width, list display: The maximum width in pixels of an image when displayed in lists and searchresults.
   maxW_list = 50
     # cat=plugin.products/dims; type=int+; label= Max image height, list display: The maximum height in pixels of an image when displayed in lists and searchresults.
@@ -183,9 +189,11 @@ plugin.tt_products {
   pidsAddresses =
     # cat=plugin.products//; type=eint+; label=Store user: UID of the address table (fe_users) with the data of the shop.
   UIDstore =
+    # cat=plugin.products//; type=eint+; label=Store user: UID of the usergroup of the fe_users table with the data of the shop.
+  UIDstoreGroup =
 
-    # cat=plugin.products//; type=string; label=When the payment shall be executed. Possible values:  'payment', 'finalize'
-  paymentActivity=payment
+    # cat=plugin.products//; type=string; label=When the payment shall be executed. Possible values:  'verify', 'payment', 'finalize'
+  paymentActivity = payment
 
     # cat=plugin.products//; type=eint+; label=advance order number with integer: If this value is set, then each time a new order is created the order-number counter will be incremented with a random number between [first-integer] and [second integer].
   advanceOrderNumberWithInteger =
@@ -229,8 +237,17 @@ plugin.tt_products {
   priceDecPoint = .
     # cat=plugin.products//; type=small; label=Price Thousand point
   priceThousandPoint =
+    # cat=plugin.products//; type=boolean; label=No Zero Decimal point: No decimal point is shown if only zeros would come after it
+  noZeroDecimalPoint =
+
     # cat=plugin.products//; type=int+; label=Percent decimals
   percentDec = 3
+    # cat=plugin.products//; type=small; label=Percentage decimal point
+  percentDecPoint = .
+    # cat=plugin.products//; type=small; label=Percentage Thousand point
+  percentThousandPoint =
+    # cat=plugin.products//; type=boolean; label=Percentage No Zero Decimal point: No decimal point is shown if only zeros would come after it
+  percentNoZeroDecimalPoint =
 
     # cat=plugin.products//; type=string; label=Currency symbol. Used in shop administration.
   currencySymbol = EUR
@@ -298,7 +315,6 @@ plugin.tt_products {
     # cat=plugin.products//; type=boolean; label=Get discount price: If set the discount price will be used even for normal customers without having a frontend user in the discount group.
   getDiscountPrice = 0
 
-
     # cat=plugin.products//; type=eint+; label=PID of revocation page: PID of the page with the right of revocation
   PIDrevocation = 0
     # cat=plugin.products//; type=eint+; label=PID of AGB page: PID of the page with the AGB
@@ -356,5 +372,4 @@ plugin.tt_products {
 
 
 <INCLUDE_TYPOSCRIPT: source="FILE:EXT:tt_products/Configuration/TypoScript/PluginSetup/Share/constants.txt">
-
 

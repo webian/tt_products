@@ -26,7 +26,7 @@ $result = array (
 		'searchFields' => 'uid,name,first_name,last_name,vat_id,address,zip,city,telephone,email,giftcode,bill_no,tracking_code',
 	),
 	'interface' => array (
-		'showRecordFieldList' => 'hidden,sys_language_uid,name,first_name,last_name,company,vat_id,salutation,address,zip,city,country,telephone,email,fax,business_partner,organisation_form,payment,shipping,amount,tax_mode,pay_mode,email_notify,tracking_code,status,agb,feusers_id,creditpoints,creditpoints_spended,creditpoints_saved,creditpoints_gifts,desired_date,desired_time,client_ip,note,giftservice,cc_uid,ac_uid,date_of_birth,date_of_payment,date_of_delivery,bill_no,radio1'
+		'showRecordFieldList' => 'hidden,sys_language_uid,name,first_name,last_name,company,vat_id,salutation,address,house_no,,zip,city,country,telephone,email,fax,business_partner,organisation_form,payment,shipping,amount,tax_mode,pay_mode,email_notify,tracking_code,status,agb,feusers_id,creditpoints,creditpoints_spended,creditpoints_saved,creditpoints_gifts,desired_date,desired_time,client_ip,note,giftservice,cc_uid,ac_uid,date_of_birth,date_of_payment,date_of_delivery,bill_no,radio1,ordered_products'
 	),
 	'columns' => array (
 		'hidden' => array (
@@ -145,6 +145,16 @@ $result = array (
 				'type' => 'input',
 				'size' => '50',
 				'max' => '256'
+			)
+		),
+		'house_no' => array(
+			'exclude' => 1,
+			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:sys_products_orders.house_no',
+			'config' => array(
+				'type' => 'input',
+				'eval' => 'trim',
+				'size' => '20',
+				'max' => '20'
 			)
 		),
 		'zip' => array (
@@ -599,6 +609,15 @@ $result = array (
 				'default' => '0'
 			)
 		),
+		'ordered_products' => array (
+			'exclude' => 1,
+			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:sys_products_orders.ordered_products',
+			'config' => array (
+				'type' => 'user',
+				'userFunc' => 'tx_ttproducts_hooks_be->tceSingleOrder',
+				'db' => 'passthrough',
+			),
+		),
 	),
 	'types' => array (
 		'1' =>
@@ -610,14 +629,16 @@ $result = array (
                             )
                         )
                     ),
-				'showitem' => 'hidden,--palette--;;1, name, sys_language_uid,first_name,last_name,company,vat_id,salutation,address,zip,city,country,telephone,email,payment,shipping,amount,tax_mode,pay_mode,email_notify,tracking_code,status,fax,business_partner,organisation_form,agb,feusers_uid,creditpoints,creditpoints_spended,creditpoints_saved,creditpoints_gifts,desired_date,desired_time,client_ip,note,giftservice,foundby,giftcode,cc_uid,ac_uid,date_of_birth,date_of_payment,date_of_delivery,bill_no,radio1,' .
+                'showitem' =>
+                    'hidden,--palette--;;1, name, sys_language_uid,first_name,last_name,company,vat_id,salutation,address,house_no,zip,city,country,telephone,email,payment,shipping,amount,tax_mode,pay_mode,email_notify,tracking_code,status,fax,business_partner,organisation_form,agb,feusers_uid,creditpoints,creditpoints_spended,creditpoints_saved,creditpoints_gifts,desired_date,desired_time,client_ip,note,giftservice,foundby,giftcode,cc_uid,ac_uid,date_of_birth,date_of_payment,date_of_delivery,bill_no,radio1,ordered_products,' .
 				'--div--;LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:sys_products_orders.orderHtmlDiv,orderHtml,'
-			)
+            )
 	),
 	'palettes' => array (
 		'1' => array('showitem' => 'tstamp, crdate'),
 	)
 );
+
 
 if (
     version_compare(TYPO3_version, '8.5.0', '<')
@@ -631,7 +652,7 @@ if (
 
 
 if (!$GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['sepa']) {
-	$result['columns']['ac_uid']['label'] = 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:sys_products_accounts.ac_number';
+    $result['columns']['ac_uid']['label'] = 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:sys_products_accounts.ac_number';
 }
 
 
