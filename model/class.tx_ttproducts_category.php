@@ -96,10 +96,6 @@ class tx_ttproducts_category extends tx_ttproducts_category_base {
 			$this->parentField = $parentField;
 		}
 
-//		if ($TSFE->config['config']['sys_language_uid'] &&
-//				(!$this->catconf['language.'] ||
-//				!$this->catconf['language.']['type'])) {
-
 		if ($this->bUseLanguageTable($this->tableconf) && ($functablename == 'tt_products_cat'))	{
 			$this->getTableObj()->setLanguage ($this->config['LLkey']);
 			$langTable = 'tt_products_cat_language'; // TODO: DAM alternative language
@@ -437,4 +433,3 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 }
 
 
-?>

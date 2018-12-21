@@ -27,7 +27,7 @@ exclude.tt_products_language = datasheet,www,image
   # cat=exclude/enable; type=string; label=tt_products_cat exclude: exclude these fields from the table tt_products_cat.
 exclude.tt_products_cat =
   # cat=exclude/enable; type=string; label=tt_products_cat_language exclude: exclude these fields from the table tt_products_cat_language. For TYPO3 < 6.1: This requires the extension addons_em.
-exclude.tt_products_cat_language
+exclude.tt_products_cat_language =
   # cat=exclude/enable; type=string; label=tt_products_articles exclude: exclude these fields from the table tt_products_articles. For TYPO3 < 6.1: This requires the extension addons_em.
 exclude.tt_products_articles =
   # cat=exclude/enable; type=string; label=tt_products_articles_language exclude: exclude these fields from the table tt_products_articles_language. For TYPO3 < 6.1: This requires the extension addons_em.

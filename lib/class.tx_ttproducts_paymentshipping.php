@@ -598,7 +598,6 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 						$shippingcalc[$k] = $v;
 					}
 				}
-				include_once (PATH_BE_ttproducts.'lib/class.tx_ttproducts_discountprice.php');
 				$discountPriceObj = t3lib_div::makeInstance('tx_ttproducts_discountprice');
 				$priceReduction = array();
 				$discountPriceObj->getCalculatedData(
@@ -934,4 +933,3 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/lib/class.tx_ttproducts_paymentshipping.php']);
 }
 
-?>

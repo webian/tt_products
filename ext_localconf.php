@@ -18,20 +18,20 @@ if (
 }
 
 if (!defined ('TT_PRODUCTS_EXT')) {
-	define('TT_PRODUCTS_EXT', $_EXTKEY);
+	define('TT_PRODUCTS_EXT', 'tt_products');
 }
 
 if (!defined ('PATH_BE_TTPRODUCTS')) {
-	define('PATH_BE_TTPRODUCTS', call_user_func($emClass . '::extPath', $_EXTKEY));
+	define('PATH_BE_TTPRODUCTS', call_user_func($emClass . '::extPath', TT_PRODUCTS_EXT));
 }
 
 if (version_compare(TYPO3_version, '7.0.0', '>=')) {
     if (!defined ('PATH_TTPRODUCTS_ICON_TABLE_REL')) {
-        define('PATH_TTPRODUCTS_ICON_TABLE_REL', 'EXT:' . $_EXTKEY . '/res/icons/table/');
+        define('PATH_TTPRODUCTS_ICON_TABLE_REL', 'EXT:' . TT_PRODUCTS_EXT . '/res/icons/table/');
     }
 } else {
     if (!defined ('PATH_BE_TTPRODUCTS_REL')) {
-        define('PATH_BE_TTPRODUCTS_REL', call_user_func($emClass . '::extRelPath', $_EXTKEY));
+        define('PATH_BE_TTPRODUCTS_REL', call_user_func($emClass . '::extRelPath', TT_PRODUCTS_EXT));
     }
 
     if (!defined ('PATH_TTPRODUCTS_ICON_TABLE_REL')) {
@@ -40,7 +40,7 @@ if (version_compare(TYPO3_version, '7.0.0', '>=')) {
 }
 
 if (!defined ('PATH_FE_TTPRODUCTS_REL')) {
-	define('PATH_FE_TTPRODUCTS_REL', call_user_func($emClass . '::siteRelPath', $_EXTKEY));
+	define('PATH_FE_TTPRODUCTS_REL', call_user_func($emClass . '::siteRelPath', TT_PRODUCTS_EXT));
 }
 
 
@@ -65,11 +65,11 @@ if (!defined ('POOL_EXT')) {
 }
 
 if (!defined ('TT_PRODUCTS_EXTkey')) {
-	define('TT_PRODUCTS_EXTkey',$_EXTKEY);
+	define('TT_PRODUCTS_EXTkey', TT_PRODUCTS_EXT);
 }
 
 if (!defined ('TT_PRODUCTS_EXT')) {
-	define('TT_PRODUCTS_EXT', $_EXTKEY);
+	define('TT_PRODUCTS_EXT', TT_PRODUCTS_EXT);
 }
 
 
@@ -88,11 +88,6 @@ if (!defined ('STATIC_INFO_TABLES_TAXES_EXT')) {
 
 if (!defined ('PATH_BE_ttproducts')) {
 	define('PATH_BE_ttproducts', call_user_func($emClass . '::extPath', TT_PRODUCTS_EXT));
-}
-
-
-if (!defined ('PATH_FE_ttproducts_rel')) {
-	define('PATH_FE_ttproducts_rel', call_user_func($emClass . '::siteRelPath', TT_PRODUCTS_EXT));
 }
 
 
@@ -326,7 +321,7 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms/layout/class.tx_cms_layout.php'][
 
 
   // Extending TypoScript from static template uid=43 to set up userdefined tag:
-call_user_func($emClass . '::addTypoScript', $_EXTKEY, 'editorcfg', 'tt_content.CSS_editor.ch.tt_products = < plugin.tt_products.CSS_editor ',43);
+call_user_func($emClass . '::addTypoScript', TT_PRODUCTS_EXT, 'editorcfg', 'tt_content.CSS_editor.ch.tt_products = < plugin.tt_products.CSS_editor ',43);
 
 
 
@@ -405,15 +400,15 @@ if (
 }
 
 if (call_user_func($emClass . '::isLoaded', 'searchbox')) {
-	call_user_func($emClass . '::addPItoST43', $_EXTKEY, 'pi_search/class.tx_ttproducts_pi_search.php', '_pi_search', 'list_type', 0 );
+	call_user_func($emClass . '::addPItoST43', TT_PRODUCTS_EXT, 'pi_search/class.tx_ttproducts_pi_search.php', '_pi_search', 'list_type', 0 );
 }
 
-call_user_func($emClass . '::addPItoST43', $_EXTKEY, 'pi_int/class.tx_ttproducts_pi_int.php', '_pi_int', 'list_type', 0 );
+call_user_func($emClass . '::addPItoST43', TT_PRODUCTS_EXT, 'pi_int/class.tx_ttproducts_pi_int.php', '_pi_int', 'list_type', 0 );
 
 
 if (version_compare(TYPO3_version, '4.6.0', '<')) {
 
-	call_user_func($emClass . '::addPItoST43', $_EXTKEY, 'pi1/class.tx_ttproducts_pi1.php', '_pi1', 'list_type', 1);
+	call_user_func($emClass . '::addPItoST43', TT_PRODUCTS_EXT, 'pi1/class.tx_ttproducts_pi1.php', '_pi1', 'list_type', 1);
 
 	// Define database backend as backend for 4.5 and below (default in 4.6)
 	if (!isset($TYPO3_CONF_VARS['SYS']['caching']['cacheConfigurations']['tt_products_cache']['backend'])) {
@@ -479,8 +474,11 @@ if (
         $iconRegistry->registerIcon(
             $identifier,
             $iconRegistry->detectIconProvider($filename),
-            array('source' => 'EXT:' . $_EXTKEY . '/Resources/Public/Icons/apps/' . $filename)
+            array('source' => 'EXT:' . TT_PRODUCTS_EXT . '/Resources/Public/Icons/apps/' . $filename)
         );
     }
+
+    // Register Status Report Hook
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['reports']['tx_reports']['status']['providers']['Shop System'][] = \JambageCom\TtProducts\Hooks\StatusProvider::class;
 }
 

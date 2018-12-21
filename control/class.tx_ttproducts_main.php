@@ -213,7 +213,6 @@ class tx_ttproducts_main implements t3lib_Singleton {
 		}
 
 		if (!$bRunAjax) {
-			require_once(PATH_BE_ttproducts . 'eid/class.tx_ttproducts_db.php');
 			$db = t3lib_div::getUserObj('tx_ttproducts_db');
 			$db->init($conf, $config, $this->ajax, $pibaseObj);
 		}
@@ -785,6 +784,22 @@ class tx_ttproducts_main implements t3lib_Singleton {
 			$rc .= '<h>Error: The default tt_products setup is missing.</h>';
 		}
 
+        if (
+            (
+                (
+                    version_compare(TYPO3_version, '7.6.32', '>=') &&
+                    version_compare(TYPO3_version, '8.7.0', '<')
+                ) ||
+                (
+                    version_compare(TYPO3_version, '8.7.22', '>=') &&
+                    version_compare(TYPO3_version, '9.5.0', '<')
+                )
+            ) &&
+            !$GLOBALS['TYPO3_CONF_VARS']['FE']['enableRecordRegistration']
+        ) {
+            $rc .= '<h>Error: $GLOBALS[\'TYPO3_CONF_VARS\'][\'FE\'][\'enableRecordRegistration\'] must be set to TRUE.</h>';
+		}
+
 		return $rc;
 	}
 
@@ -1089,5 +1104,3 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/control/class.tx_ttproducts_main.php']);
 }
 
-
-?>

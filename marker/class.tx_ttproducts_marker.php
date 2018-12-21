@@ -77,10 +77,15 @@ class tx_ttproducts_marker implements t3lib_Singleton {
 				tx_div2007_alpha5::loadLL_fh002($langObj,$markerFile);
 			}
 		} else	{
-			if (!$markerFile)	{
+			if (
+                !$markerFile
+            )	{
 				if ($language == 'de')	{
 					$markerFile = $language . '.locallang.xml';
-				} else if (t3lib_extMgm::isLoaded(ADDONS_TT_PRODUCTS_EXT))	{
+				} else if (
+                    defined('ADDONS_TT_PRODUCTS_EXT') &&
+                    t3lib_extMgm::isLoaded(ADDONS_TT_PRODUCTS_EXT)
+                ) {
 					$markerFile = 'EXT:' . ADDONS_TT_PRODUCTS_EXT . '/' . $language . '.locallang.xml';
 				}
 			} else if (substr($markerFile, 0, 4) == 'EXT:')	{	// extension
@@ -147,10 +152,15 @@ class tx_ttproducts_marker implements t3lib_Singleton {
 		$markerArray['###GC2###'] = $this->cObj->stdWrap($this->conf['color2'], $this->conf['color2.']);
 		$markerArray['###GC3###'] = $this->cObj->stdWrap($this->conf['color3'], $this->conf['color3.']);
 		$markerArray['###DOMAIN###'] = $this->conf['domain'];
-		$markerArray['###PATH_FE_REL###'] = PATH_FE_ttproducts_rel;
-		if (t3lib_extMgm::isLoaded(ADDONS_TT_PRODUCTS_EXT)) {
-			$markerArray['###PATH_FE_REL###'] = PATH_FE_addons_rel;
-			$markerArray['###PATH_FE_ICONS###'] = PATH_FE_addons_icon_rel;
+		$markerArray['###PATH_FE_REL###'] = PATH_FE_TTPRODUCTS_REL;
+		$markerArray['###PATH_FE_ICONS###'] =  PATH_FE_TTPRODUCTS_REL . 'res/icons/fe/';;
+
+		if (
+            defined('ADDONS_TT_PRODUCTS_EXT') &&
+            t3lib_extMgm::isLoaded(ADDONS_TT_PRODUCTS_EXT)
+        ) {
+			$markerArray['###PATH_FE_REL###'] = PATH_FE_ADDONS_TT_PRODUCTS_REL;
+			$markerArray['###PATH_FE_ICONS###'] = PATH_FE_ADDONS_TT_PRODUCTS_ICON_REL;
 		}
 		$pidMarkerArray = array('agb', 'basket', 'info', 'finalize', 'payment',
 			'thanks', 'itemDisplay', 'listDisplay', 'revocation', 'search', 'storeRoot',
@@ -378,4 +388,3 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/marker/class.tx_ttproducts_marker.php']);
 }
 
-?>

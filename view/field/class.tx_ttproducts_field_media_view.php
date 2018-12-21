@@ -159,7 +159,6 @@ public function getImageCode ($cObj, $imageConf, $theCode) {
 			}
 
 			foreach($imageArray as $c => $val)	{
-//				$confMarkerArray = array();
 				$imageConf = $imageConfStart;
 				if ($c == $mediaNum)	{
 					break;

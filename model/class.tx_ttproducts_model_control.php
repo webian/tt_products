@@ -111,17 +111,6 @@ class tx_ttproducts_model_control {
 		return self::$controlVar;
 	}
 
-
-/*	public static function getControlArray ()	{
-		$recs = t3lib_div::_GP('recs');
-		$allValueArray = array();
-		$rc = array();
-		$controlVar = self::getControlVar();
-		if (isset($recs[$controlVar]) && is_array($recs[$controlVar]))	{
-			$rc = $recs[$controlVar];
-		}
-		return $rc;
-	}*/
 	public static function getControlArray ()	{
 		$piVars = self::getPiVars();
 		$allValueArray = array();
@@ -133,8 +122,6 @@ class tx_ttproducts_model_control {
 
 		return $rc;
 	}
-
-
 
 	public static function getTableConfArrays ($functableArray,$theCode,&$tableConfArray,&$viewConfArray)	{
 
@@ -344,16 +331,17 @@ class tx_ttproducts_model_control {
 					$searchKey = $k;
 					$searchValue = $v;
 					if (is_array($v))	{
-						list($tmpK,$tmpArray) = each($v);
+						$tmpK = key($v);
+						$tmpArray = current($v);
 						$searchKey .= '|' . $tmpK;
 						if (is_array($tmpArray))	{
-							list($tmpK,$tmpArray) = each($tmpArray);
+							$tmpK = key($tmpArray);
+							$tmpArray = current($tmpArray);
 							$searchKey .= '|' . $tmpK;
 						}
 						$searchValue = $tmpArray;
 					}
 
-	//				if ($k == $positionSearchVars[$position] || strpos($k.'|', $searchParamArray[$position]) === 0)	{
 					if ($searchKey == $positionSearchVars[$position] || (is_array($searchParamArray[$position]) && key($searchParamArray[$position]) == $k || !is_array($searchParamArray[$position]) && $searchParamArray[$position] == $k))	{
 
 						if ($searchValue{0} == '\'' && $searchValue{strlen($searchValue)-1} == '\'')	{
@@ -375,7 +363,8 @@ class tx_ttproducts_model_control {
 
 				if (isset($searchVars[$position]) && isset($positionSearchVars) && is_array($positionSearchVars) && count($positionSearchVars) && $searchVars[$foundKey] != 'all')	{
 
-					list($positionSearchKey, $positionSearchValue) = each($positionSearchVars);
+					$positionSearchKey = key($positionSearchVars);
+					$positionSearchValue = current($positionSearchVars);
  					$partArray = t3lib_div::trimExplode('|',$positionSearchKey);
  					$delimiter = ($partArray[2] ? $partArray[2] : '');
 					$searchTablename = '';
@@ -470,5 +459,3 @@ class tx_ttproducts_model_control {
 	}
 }
 
-
-?>

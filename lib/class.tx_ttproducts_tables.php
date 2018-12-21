@@ -118,7 +118,6 @@ class tx_ttproducts_tables implements t3lib_Singleton {
 
 		foreach ($classNameArray as $k => $className)	{
 			if ($className != 'skip')	{
-				// include_once (PATH_BE_ttproducts.$k.'/class.'.$className.'.php');
 				if (strpos($className, ':') === FALSE)	{
 					$path = PATH_BE_ttproducts;
 				} else {
@@ -244,4 +243,3 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/lib/class.tx_ttproducts_tables.php']);
 }
 
-?>

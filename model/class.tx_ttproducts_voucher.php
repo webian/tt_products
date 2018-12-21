@@ -56,7 +56,8 @@ class tx_ttproducts_voucher extends tx_ttproducts_table_base {
 		$usedCodeArray = $TSFE->fe_user->getKey('ses', 'vo');
 
 		if (isset($usedCodeArray) && is_array($usedCodeArray))	{
-			list($voucherCode, $voucherArray) = each($usedCodeArray);
+			$voucherCode = key($usedCodeArray);
+			$voucherArray = current($usedCodeArray);
 			$amount = $voucherArray['amount'];
 			$this->setAmount(floatval($amount));
 			$amountType = $voucherArray['amount_type'];
@@ -81,7 +82,6 @@ class tx_ttproducts_voucher extends tx_ttproducts_table_base {
 		$this->amountType = $amountType;
 	}
 
-
 	function getRebateAmount ()	{
 
 		$amountType = $this->getAmountType();
@@ -95,7 +95,6 @@ class tx_ttproducts_voucher extends tx_ttproducts_table_base {
 
 		return $amount;
 	}
-
 
 	function setUsedCodeArray ($usedCodeArray)	{
 		if (isset($usedCodeArray) && is_array($usedCodeArray))	{

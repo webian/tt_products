@@ -82,7 +82,6 @@ class tx_ttproducts_activity_finalize extends tx_ttproducts_activity_base implem
 		$recipientsArray['customer'] = array();
 		$emailTemplateArray = array();
 		$emailTemplateArray['customer'] = 'EMAIL_PLAINTEXT_TEMPLATE';
-		// $emailTemplateArray['shop'] = 'EMAIL_PLAINTEXT_TEMPLATE_SHOP';
 		if ($recipientsArray['radio1'])	{
 			$emailTemplateArray['radio1'] = 'EMAIL_PLAINTEXT_TEMPLATE_RADIO1';
 		}
@@ -245,13 +244,14 @@ class tx_ttproducts_activity_finalize extends tx_ttproducts_activity_base implem
 						$parts = explode(chr(10),$emailContent,2);
 						$subject=trim($parts[0]);
 						$plain_message = trim($parts[1]);
-						tx_ttproducts_email_div::send_mail(
+						tx_ttproducts_email_div::sendMail(
 							$address->infoArray['billing']['email'],
 							$apostrophe . $subject . $apostrophe,
 							$plain_message,
 							$tmp='',
 							$fromArray['customer']['email'],
 							$fromArray['customer']['name'],
+							'',
 							'',
 							'',
 							$fromArray['customer']['returnPath']
@@ -420,7 +420,7 @@ class tx_ttproducts_activity_finalize extends tx_ttproducts_activity_base implem
 								}
 							}
 						}
-						$HTMLmailContent=implode('', $htmlMailParts);
+						$HTMLmailContent = implode('', $htmlMailParts);
 					}
 				} else {	// ... else just plain text...
 					// nothing to initialize
@@ -434,7 +434,7 @@ class tx_ttproducts_activity_finalize extends tx_ttproducts_activity_base implem
 
 					foreach ($recipientsArray['customer'] as $key => $recipient) {
 
-						tx_ttproducts_email_div::send_mail(
+						tx_div2007_email::sendMail(
 							$recipient,
 							$apostrophe . $subjectArray['customer'] . $apostrophe,
 							$plainMessageArray['customer'],
@@ -442,6 +442,7 @@ class tx_ttproducts_activity_finalize extends tx_ttproducts_activity_base implem
 							$fromArray['customer']['email'],
 							$fromArray['customer']['name'],
                             $fileArray,
+							'',
 							'',
 							$fromArray['customer']['returnPath']
 						);
@@ -452,7 +453,7 @@ class tx_ttproducts_activity_finalize extends tx_ttproducts_activity_base implem
 					if ($type != 'customer' && $type != 'radio1' && is_array($recipientTypeArray))	{
 						foreach ($recipientTypeArray as $key => $recipient) {
 							// $headers variable removed everywhere!
-							tx_ttproducts_email_div::send_mail(
+							tx_div2007_email::sendMail(
 								$recipient,
 								$apostrophe . $subjectArray[$type] . $apostrophe,
 								$plainMessageArray[$type],
@@ -460,6 +461,7 @@ class tx_ttproducts_activity_finalize extends tx_ttproducts_activity_base implem
 								$fromArray[$type]['email'],
 								$fromArray[$type]['name'],
 								$addcsv,
+                                '',
 								$this->conf['orderEmail_bcc'],
 								$fromArray[$type]['returnPath']
 							);
@@ -470,7 +472,7 @@ class tx_ttproducts_activity_finalize extends tx_ttproducts_activity_base implem
 				if ($plainMessageArray['radio1'] && is_array($recipientsArray['radio1']))	{
 					foreach ($recipientsArray['radio1'] as $key => $recipient) {
 
-						tx_ttproducts_email_div::send_mail(
+						tx_div2007_email::sendMail(
 							$recipient,
 							$apostrophe . $subjectArray['radio1'] . $apostrophe,
 							$plainMessageArray['radio1'],
@@ -478,6 +480,7 @@ class tx_ttproducts_activity_finalize extends tx_ttproducts_activity_base implem
 							$fromArray['shop']['email'],
 							$fromArray['shop']['name'],
 							$agbAttachment,
+							'',
 							'',
 							$fromArray['shop']['returnPath']
 						);
@@ -508,7 +511,7 @@ class tx_ttproducts_activity_finalize extends tx_ttproducts_activity_base implem
 
 								foreach ($recipientsArray['shop'] as $key => $recipient) {
 									// $headers variable removed everywhere!
-									tx_ttproducts_email_div::send_mail(
+									tx_div2007_email::sendMail(
 										$recipient,
 										$apostrophe . $subject . $apostrophe,
 										$content,
@@ -517,6 +520,7 @@ class tx_ttproducts_activity_finalize extends tx_ttproducts_activity_base implem
 										$fromArray['shop']['name'],
 										'',
 										'',
+                                        '',
 										$fromArray['shop']['returnPath']
 									);
 								}

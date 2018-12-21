@@ -188,7 +188,9 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 			$this->basketExt = array();
 		}
 
-		$this->giftnumber = count($this->basketExt['gift']) + 1;
+        if (isset($this->basketExt['gift'])) {
+            $this->giftnumber = count($this->basketExt['gift']) + 1;
+        }
 		$newGiftData = t3lib_div::_GP('ttp_gift');
 		$extVars = $pibaseObj->piVars['variants'];
 		$extVars = ($extVars ? $extVars : t3lib_div::_GP('ttp_extvars'));

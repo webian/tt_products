@@ -5,35 +5,6 @@
 	  <ROOT>
 	    <type>array</type>
 	    <el>
-	      <param_mode>
-			<TCEforms>
-				<label>LLL:EXT:tt_products/locallang_db.xml:tt_content.pi_flexform.param_mode</label>
-				<config>
-					<type>select</type>
-					<items>
-						<numindex index="0">
-							<numindex index="0">LLL:EXT:tt_products/locallang_db.xml:tt_content.pi_flexform.param_mode.0</numindex>
-							<numindex index="1">0</numindex>
-						</numindex>
-						<numindex index="1">
-							<numindex index="0">LLL:EXT:tt_products/locallang_db.xml:tt_content.pi_flexform.param_mode.1</numindex>
-							<numindex index="1">1</numindex>
-						</numindex>
-						<numindex index="2">
-							<numindex index="0">LLL:EXT:tt_products/locallang_db.xml:tt_content.pi_flexform.param_mode.2</numindex>
-							<numindex index="1">2</numindex>
-						</numindex>
-						<numindex index="3">
-							<numindex index="0">LLL:EXT:tt_products/locallang_db.xml:tt_content.pi_flexform.param_mode.3</numindex>
-							<numindex index="1">3</numindex>
-						</numindex>
-					</items>
-					<size>1</size>
-					<minitems>1</minitems>
-					<maxitems>1</maxitems>
-				</config>
-			</TCEforms>
-	      </param_mode>
 	      <display_mode>
 			<TCEforms>
 				<label>LLL:EXT:tt_products/locallang_db.xml:tt_content.pi_flexform.display_mode</label>
@@ -187,6 +158,35 @@
 				</config>
 			</TCEforms>
 	      </display_mode>
+	      <param_mode>
+			<TCEforms>
+				<label>LLL:EXT:tt_products/locallang_db.xml:tt_content.pi_flexform.param_mode</label>
+				<config>
+					<type>select</type>
+					<items>
+						<numindex index="0">
+							<numindex index="0">LLL:EXT:tt_products/locallang_db.xml:tt_content.pi_flexform.param_mode.0</numindex>
+							<numindex index="1">0</numindex>
+						</numindex>
+						<numindex index="1">
+							<numindex index="0">LLL:EXT:tt_products/locallang_db.xml:tt_content.pi_flexform.param_mode.1</numindex>
+							<numindex index="1">1</numindex>
+						</numindex>
+						<numindex index="2">
+							<numindex index="0">LLL:EXT:tt_products/locallang_db.xml:tt_content.pi_flexform.param_mode.2</numindex>
+							<numindex index="1">2</numindex>
+						</numindex>
+						<numindex index="3">
+							<numindex index="0">LLL:EXT:tt_products/locallang_db.xml:tt_content.pi_flexform.param_mode.3</numindex>
+							<numindex index="1">3</numindex>
+						</numindex>
+					</items>
+					<size>1</size>
+					<minitems>1</minitems>
+					<maxitems>1</maxitems>
+				</config>
+			</TCEforms>
+	      </param_mode>
 	      <productSelection>
 			<TCEforms>
 				<label>LLL:EXT:tt_products/locallang_db.xml:tt_content.pi_flexform.product_selection</label>

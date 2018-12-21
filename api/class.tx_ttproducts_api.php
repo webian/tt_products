@@ -273,7 +273,7 @@ class tx_ttproducts_api {
 					$parts = explode(chr(10), $emailContent, 2);
 					$subject=trim($parts[0]);
 					$plain_message = trim($parts[1]);
-					tx_ttproducts_email_div::send_mail(
+					tx_div2007_email::sendMail(
 						$infoArray['billing']['email'],
 						$apostrophe.$subject.$apostrophe,
 						$plain_message,

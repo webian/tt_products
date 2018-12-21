@@ -1232,7 +1232,7 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 			}
 			$basketObj->getGraduatedPrices($uidArray);
 
-			if (count($itemArray))	{	// $itemArray must have numbered indexes to work, because the next item must be determined
+			if (!empty($itemArray))	{	// $itemArray must have numbered indexes to work, because the next item must be determined
 
 				if ($itemTable->getType() == 'dam')	{ //
 					$relatedListView = t3lib_div::makeInstance('tx_ttproducts_relatedlist_view');
@@ -1965,7 +1965,7 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 		}	// if ($theCode != 'SEARCH' || ($theCode == 'SEARCH' && $sword))	{
 		$contentEmpty = '';
 
-		if (count($itemArray))	{
+		if (!empty($itemArray))	{
 
 			// next / prev:
 			// $url = $this->getLinkUrl('','begin_at');
@@ -1995,7 +1995,7 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 			} else {
 				$subpartArray['###LINK_NEXT###']='';
 			}
-			$bUseCache = $bUseCache && (count($basketObj->itemArray)==0);
+			$bUseCache = $bUseCache && (empty($basketObj->itemArray));
 
 			if ($begin_at)	{
 				$prev = ($begin_at - $limit < 0) ? 0 : $begin_at - $limit;
@@ -2003,7 +2003,7 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 				$this->getSearchParams($addQueryString);
 
 				$tempUrl = $pibaseObj->pi_linkTP_keepPIvars($splitMark, $addQueryString, $bUseCache, 0);
-				$wrappedSubpartArray['###LINK_PREV###'] = explode($splitMark, $tempUrl); // array('<a href="'.$url.'&begin_at='.$prev.'">','</a>');
+				$wrappedSubpartArray['###LINK_PREV###'] = explode($splitMark, $tempUrl);
 			} else {
 				$subpartArray['###LINK_PREV###']='';
 			}
@@ -2120,4 +2120,3 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/view/class.tx_ttproducts_list_view.php']);
 }
 
-?>
