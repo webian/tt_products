@@ -136,6 +136,7 @@
 
 			<label index="p_old_price">Old price</label>
 			<label index="p_discount">Discount</label>
+			<label index="p_discount_price">Discount price</label>
 			<label index="p_unit_price">Unit price</label>
 			<label index="p_acccessory">Accessories</label>
 			<label index="p_category">Category</label>
@@ -416,6 +417,10 @@
 			<label index="text_message_shipping_10">Shipping to countries #10</label>
 			<label index="text_message_shipping_20">Shipping to countries #20</label>
 			<label index="text_message_shipping_30">Shipping to countries #30</label>
+
+			<label index="text_message_payment_10">Payment method #10</label>
+			<label index="text_message_payment_20">Payment method #20</label>
+			<label index="text_message_payment_30">Payment method #30</label>
 
 			</languageKey>
 	</data>
