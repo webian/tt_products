@@ -44,4 +44,6 @@ exclude.sys_products_orders = client_ip,date_of_birth,telephone,fax,ac_uid,cc_ui
 cache.backend = 0
   # cat=cache/enable; type=string; label=Cache Options for Server: Enter the cache options for the server.
 cache.options.servers =
+  # cat=error/enable; type=boolean; label=Show Configuration Error Messages: Misconfiguration Error messages are shown in the Front End.
+error.configuration = 1
 

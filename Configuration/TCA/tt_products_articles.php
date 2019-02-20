@@ -232,7 +232,7 @@ $result = array (
 				'type' => 'input',
 				'size' => '10',
 				'max' => '20',
-				'eval' => 'trim,tx_double6',
+                'eval' => 'trim,JambageCom\\Div2007\\Hooks\\Evaluation\\Double6',
 			)
 		),
 		'color' => array (
