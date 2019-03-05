@@ -123,7 +123,7 @@ class tx_ttproducts_model_control {
 		return $rc;
 	}
 
-	public static function getTableConfArrays ($functableArray,$theCode,&$tableConfArray,&$viewConfArray)	{
+	public static function getTableConfArrays (array $functableArray, $theCode, array &$tableConfArray, array &$viewConfArray)	{
 
 		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 

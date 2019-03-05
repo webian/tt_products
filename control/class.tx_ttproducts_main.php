@@ -780,11 +780,14 @@ class tx_ttproducts_main implements t3lib_Singleton {
 			$rc = '';
 		}
 
-		if (!$this->conf['defaultSetup'])	{
+		$showConfigurationError = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['error.']['configuration']; 
+
+		if ($showConfigurationError && !$this->conf['defaultSetup'])	{
 			$rc .= '<h>Error: The default tt_products setup is missing.</h>';
 		}
 
         if (
+            $showConfigurationError &&
             (
                 (
                     version_compare(TYPO3_version, '7.6.32', '>=') &&
@@ -798,7 +801,7 @@ class tx_ttproducts_main implements t3lib_Singleton {
             !$GLOBALS['TYPO3_CONF_VARS']['FE']['enableRecordRegistration']
         ) {
             $rc .= '<h>Error: $GLOBALS[\'TYPO3_CONF_VARS\'][\'FE\'][\'enableRecordRegistration\'] must be set to TRUE.</h>';
-		}
+        }
 
 		return $rc;
 	}

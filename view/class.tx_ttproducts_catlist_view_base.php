@@ -51,7 +51,7 @@ abstract class tx_ttproducts_catlist_view_base implements t3lib_Singleton {
 	var $htmlTagElement = ''; // HTML tag element
 	var $htmlPartsMarkers = array('###ITEM_SINGLE_PRE_HTML###', '###ITEM_SINGLE_POST_HTML###');
 	var $tableConfArray = array();
-	var $viewConfArray;
+	var $viewConfArray = array();
 	private $tMarkers;	// all markers which are found in the template subpart for the whole view $t['listFrameWork']
 
 
@@ -289,6 +289,7 @@ abstract class tx_ttproducts_catlist_view_base implements t3lib_Singleton {
 
 		$functableArray = array($functablename);
 		$tableConfArray = array();
+		$viewConfArray = array();
 		$searchVars = $pibaseObj->piVars[tx_ttproducts_model_control::getSearchboxVar()];
 		tx_ttproducts_model_control::getTableConfArrays($functableArray, $theCode, $tableConfArray, $viewConfArray);
 		$categoryTable = $tablesObj->get($functablename, 0);

@@ -323,6 +323,7 @@ class tx_ttproducts_variant implements tx_ttproducts_variant_int, t3lib_Singleto
 		$variantArray = explode(';', $variant);
 		$selectableFieldArray = $this->getSelectableFieldArray();
 		$possibleArticleArray = array();
+		$rc = array();
 
 		foreach ($articleRowArray as $articleRow)	{
 			$bMatches = TRUE;
