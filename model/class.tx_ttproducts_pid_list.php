@@ -91,9 +91,10 @@ class tx_ttproducts_pid_list {
 		$this->pageArray = array_flip($this->pageArray);
 	}
 
-
 	function getPageArray ($pid = 0)	{
-		if ($pid)	{
+		if (
+            $pid
+        ) {
 			$rc = isset($this->pageArray[$pid]);
 		} else {
 			$rc = $this->pageArray;
