@@ -1,3 +1,6 @@
+2019-03-09 Franz Holzinger <franz@ttproducts.de>
+    * compatibility for PHP 7.2
+
 2019-02-20 Franz Holzinger <franz@ttproducts.de>
     * change hook tx_double6 into JambageCom\Div2007\Hooks\Evaluation\Double6
     * new feature: error.configuration to show misconfiguration errors in the Front End

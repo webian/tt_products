@@ -14,8 +14,7 @@
 *  The GNU General Public License can be found at
 *  http://www.gnu.org/copyleft/gpl.html.
 *  A copy is found in the textfile GPL.txt and important notices to the license
-*  from the author is found in LICENSE.txt distributed with these scripts.
-// *
+*  from the author is found in LICENSE.txt distributed with these scripts. 
 *
 *  This script is distributed in the hope that it will be useful,
 *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -307,6 +306,7 @@ class tx_ttproducts_variant implements tx_ttproducts_variant_int, t3lib_Singleto
 	// the article rows must be in the correct order already
 	public function filterArticleRowsByVariant ($row, $variant, $articleRowArray, $bCombined=FALSE) {
 
+        $rc = array();
 		$variantRowArray = $this->getVariantValuesByArticle($articleRowArray, $row, FALSE);
 		foreach ($variantRowArray as $field => $valueArray) {
 			if ($row[$field] != '') {

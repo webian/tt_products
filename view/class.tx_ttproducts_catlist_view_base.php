@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2006-2011 Franz Holzinger (franz@ttproducts.de)
+*  (c) 2006-2019 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -40,19 +40,19 @@
 
 
 abstract class tx_ttproducts_catlist_view_base implements t3lib_Singleton {
-	var $pibase; // reference to object of pibase
+	protected $pibase; // reference to object of pibase
 	public $pibaseClass;
 	public $cObj;
-	var $conf;
-	var $config;
-	var $pidListObj; // pid where to go
-	var $subpartmarkerObj; // marker functions
-	var $urlObj; // url functions
-	var $htmlTagMain = '';	// main HTML tag
-	var $htmlTagElement = ''; // HTML tag element
-	var $htmlPartsMarkers = array('###ITEM_SINGLE_PRE_HTML###', '###ITEM_SINGLE_POST_HTML###');
-	var $tableConfArray = array();
-	var $viewConfArray;
+	public $conf;
+	public $config;
+	public $pidListObj; // pid where to go
+	public $subpartmarkerObj; // marker functions
+	public $urlObj; // url functions
+	public $htmlTagMain = '';	// main HTML tag
+	public $htmlTagElement = ''; // HTML tag element
+	public $htmlPartsMarkers = array('###ITEM_SINGLE_PRE_HTML###', '###ITEM_SINGLE_POST_HTML###');
+	public $tableConfArray = array();
+	public $viewConfArray = array;
 	private $tMarkers;	// all markers which are found in the template subpart for the whole view $t['listFrameWork']
 
 
@@ -301,6 +301,7 @@ abstract class tx_ttproducts_catlist_view_base implements t3lib_Singleton {
 
 		$functableArray = array($functablename);
 		$tableConfArray = array();
+		$viewConfArray = array();
 		$searchVars = $pibaseObj->piVars[tx_ttproducts_model_control::getSearchboxVar()];
 		tx_ttproducts_model_control::getTableConfArrays(
 			$pibaseObj->cObj,

@@ -239,7 +239,7 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 	}
 
 
-	public function &getBrowserConf ($tableConfArray)	{
+	public function &getBrowserConf (array $tableConfArray)	{
 
 		$browserConf = '';
 		if (isset($tableConfArray['view.']) && $tableConfArray['view.']['browser'] == 'div2007')	{
