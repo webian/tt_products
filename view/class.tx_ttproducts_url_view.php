@@ -88,7 +88,7 @@ class tx_ttproducts_url_view implements t3lib_Singleton {
 	public function getWrappedSubpartArray (&$wrappedSubpartArray, $addQueryString = array(), $css_current = '')	{
 		global $TSFE;
 
-		$pidBasket = ($this->conf['PIDbasket'] ? $this->conf['PIDbasket'] : $TSFE->id);
+		$pidBasket = (tx_div2007_core::testInt($this->conf['PIDbasket']) ? $this->conf['PIDbasket'] : $TSFE->id);
 		$pageLink = $this->pibase->pi_getPageLink($pidBasket, '' , $this->getLinkParams('', $addQueryString, TRUE)) ;
 		$wrappedSubpartArray['###LINK_BASKET###'] = array('<a href="' . htmlspecialchars($pageLink) . '"' . $css_current . '>', '</a>');
 	}
@@ -107,7 +107,7 @@ class tx_ttproducts_url_view implements t3lib_Singleton {
 		// disable caching as soon as someone enters products into the basket, enters user data etc.
 		// $addQueryString['no_cache'] = 1;
 			// Add's URL-markers to the $markerArray and returns it
-		$pidBasket = ($this->conf['PIDbasket'] ? $this->conf['PIDbasket'] : $TSFE->id);
+		$pidBasket = (tx_div2007_core::testInt($this->conf['PIDbasket']) ? $this->conf['PIDbasket'] : $TSFE->id);
 		$pidFormUrl = ($pidNext ? $pidNext : $TSFE->id); // formerly $pidBasket
 		if ($pidFormUrl != $TSFE->id && $bExcludeSingleVar)	{
 			$newExcludeListArray =
@@ -142,7 +142,7 @@ class tx_ttproducts_url_view implements t3lib_Singleton {
 		$commandArray = array('basket', 'info', 'payment', 'finalize', 'thanks', 'search', 'memo', 'tracking', 'billing', 'delivery', 'agb');
 
 		foreach ($commandArray as $command) {
-			$pid = ($this->conf['PID' . $command] ? $this->conf['PID' . $command] : $pidBasket);
+			$pid = (tx_div2007_core::testInt($this->conf['PID' . $command]) ? $this->conf['PID' . $command] : $pidBasket);
 
 			$url = tx_div2007_alpha5::getTypoLink_URL_fh003(
 				$this->pibase->cObj,

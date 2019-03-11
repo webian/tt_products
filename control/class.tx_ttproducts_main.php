@@ -234,7 +234,7 @@ class tx_ttproducts_main implements t3lib_Singleton {
 		$backPID = ($backPID ? $backPID : t3lib_div::_GP('backPID'));
 
 		// page where to go usually
-		$this->pid = ($this->conf['PIDbasket'] && $this->conf['clickIntoBasket'] ? $this->conf['PIDbasket'] : ($backPID ? $backPID : $TSFE->id));
+		$this->pid = (tx_div2007_core::testInt($this->conf['PIDbasket']) && $this->conf['clickIntoBasket'] ? $this->conf['PIDbasket'] : (tx_div2007_core::testInt($backPID) ? $backPID : $TSFE->id));
 
 		if ($this->conf['TAXmode'] == '' ||  $this->conf['TAXmode'] == '{$plugin.tt_products.TAXmode}')	{
 			$this->conf['TAXmode'] = 1;
@@ -1056,7 +1056,7 @@ class tx_ttproducts_main implements t3lib_Singleton {
 			);
 		} else {
 	// page where to go usually
-			$pid = ($this->conf['PIDbasket'] && $this->conf['clickIntoBasket'] ? $this->conf['PIDbasket'] : $TSFE->id);
+			$pid = (tx_div2007_core::testInt($this->conf['PIDbasket']) && $this->conf['clickIntoBasket'] ? $this->conf['PIDbasket'] : $TSFE->id);
 
 			// List all products:
 			$listView = t3lib_div::getUserObj('tx_ttproducts_list_view');

@@ -291,7 +291,7 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 			if ($this->conf['clickIntoList'])	{
 				$pid = $pageObj->getPID($this->conf['PIDlistDisplay'], $this->conf['PIDlistDisplay.'], $row);
 			} else if ($this->conf['clickIntoBasket'] && ($basketPID || $backPID))	{
-				$pid = ($basketPID ? $basketPID : $backPID);
+				$pid = (tx_div2007_core::testInt($basketPID) ? $basketPID : $backPID);
 			} else {
 				$pid = $TSFE->id;
 				$bNeedSingleParams = TRUE;

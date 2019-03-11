@@ -202,7 +202,7 @@ class tx_ttproducts_api {
 		$infoArray = $infoObj->infoArray;
 		$apostrophe = $conf['orderEmail_apostrophe'];
 
-		$pid = ($conf['PIDuserFolder'] ? $conf['PIDuserFolder'] : ($conf['PIDbasket'] ? $conf['PIDbasket'] : $GLOBALS['TSFE']->id));
+		$pid = (tx_div2007_core::testInt($conf['PIDuserFolder']) ? $conf['PIDuserFolder'] : (tx_div2007_core::testInt($conf['PIDbasket']) ? $conf['PIDbasket'] : $GLOBALS['TSFE']->id));
 		$pid = intval($pid);
 		$username = strtolower(trim($infoArray['billing']['email']));
 		$res = $TYPO3_DB->exec_SELECTquery('username', 'fe_users', 'username=' . $TYPO3_DB->fullQuoteStr($username, 'fe_users') . ' AND pid=' . $pid . ' AND deleted=0');

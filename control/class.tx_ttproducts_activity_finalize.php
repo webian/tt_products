@@ -179,7 +179,7 @@ class tx_ttproducts_activity_finalize extends tx_ttproducts_activity_base implem
 		// Move the user creation in front so that when we create the order we have a fe_userid so that the order lists work.
 		// Is no user is logged in --> create one
 		if ($this->conf['createUsers'] && $address->infoArray['billing']['email'] != '' && (trim($TSFE->fe_user->user['username']) == '')) {
-			$pid = ($this->conf['PIDuserFolder'] ? $this->conf['PIDuserFolder'] : ($this->conf['PIDbasket'] ? $this->conf['PIDbasket'] : $TSFE->id));
+			$pid = (tx_div2007_core::testInt($this->conf['PIDuserFolder']) ? $this->conf['PIDuserFolder'] : (tx_div2007_core::testInt($this->conf['PIDbasket']) ? $this->conf['PIDbasket'] : $TSFE->id));
 			$pid = intval($pid);
 			$username = strtolower(trim($address->infoArray['billing']['email']));
 			$res = $TYPO3_DB->exec_SELECTquery('username', 'fe_users', 'username='.$TYPO3_DB->fullQuoteStr($username, 'fe_users').' AND pid='. $pid.' AND deleted=0');

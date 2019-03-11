@@ -145,7 +145,6 @@ class tx_ttproducts_cat_view implements t3lib_Singleton {
 				// Fill marker arrays
 			$backPID = $this->pibase->piVars['backPID'];
 			$backPID = ($backPID ? $backPID : t3lib_div::_GP('backPID'));
-			$basketPID = $this->conf['PIDbasket'];
 			$pid = $backPID;
 
 			$param = array($functablename => $variantFieldArray);

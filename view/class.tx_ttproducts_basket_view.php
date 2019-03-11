@@ -681,7 +681,7 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 				}
 			}
 			$markerArray['###HIDDENFIELDS###'] = $hiddenFields;
-			$pid = ($this->conf['PIDbasket'] ? $this->conf['PIDbasket'] : $TSFE->id);
+			$pid = (tx_div2007_core::testInt($this->conf['PIDbasket']) ? $this->conf['PIDbasket'] : $TSFE->id);
 
             $linkConf = array('useCacheHash' => FALSE);
 			$url = tx_div2007_alpha5::getTypoLink_URL_fh003(
