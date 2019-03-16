@@ -38,8 +38,6 @@ exclude.tt_products_texts =
 exclude.tt_products_texts_language =
   # cat=exclude/enable; type=string; label=sys_products_orders exclude: exclude these fields from the table sys_products_orders.
 exclude.sys_products_orders = client_ip,date_of_birth,telephone,fax,ac_uid,cc_uid
-  # cat=exclude/enable; type=string; label=sys_products_orders exclude: exclude these fields from the table sys_products_orders.
-exclude.sys_products_orders = client_ip,date_of_birth,telephone,fax,ac_uid,cc_uid
   # cat=cache/enable; type=boolean; label=Cache for Backend: Click here if you want to activate the backend cache for tt_products tables.
 cache.backend = 0
   # cat=cache/enable; type=string; label=Cache Options for Server: Enter the cache options for the server.
