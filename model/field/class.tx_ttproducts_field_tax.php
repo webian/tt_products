@@ -38,23 +38,22 @@
 
 
 class tx_ttproducts_field_tax extends tx_ttproducts_field_base {
-	protected $bUseStaticTaxes = FALSE;
+	protected $bUseStaticTaxes = false;
 
 	/**
 	 *
 	 */
 	public function preInit ($cObj, $bUseStaticTaxes, $uidStore) {
-		global $TYPO3_DB,$TSFE,$TCA;
 
 		parent::init($cObj);
 
 		if ($bUseStaticTaxes && $uidStore)	{
 			$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
-			$staticTaxObj = $tablesObj->get('static_taxes', FALSE);
+			$staticTaxObj = $tablesObj->get('static_taxes', false);
 /*			$dummyRow = array('tax_id' => '1');*/
 			$staticTaxObj->setStoreData($uidStore);
 			if ($staticTaxObj->isValid())	{
-				$this->bUseStaticTaxes = TRUE;
+				$this->bUseStaticTaxes = true;
 			}
 		}
 	} // init
@@ -76,7 +75,7 @@ class tx_ttproducts_field_tax extends tx_ttproducts_field_base {
 		if ($this->getUseStaticTaxes())	{
 			$taxArray = array();
 			$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
-			$staticTaxObj = $tablesObj->get('static_taxes', FALSE);
+			$staticTaxObj = $tablesObj->get('static_taxes', false);
 			$staticTaxObj->getStaticTax($row, $newTax, $taxArray);
 		}
 

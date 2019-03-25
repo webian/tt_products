@@ -1,8 +1,5 @@
 <?php
-
-if (!defined ('TYPO3_MODE')) {
-	die ('Access denied.');
-}
+defined('TYPO3_MODE') || die('Access denied.');
 
 $temporaryColumns = array (
 	'tt_products_memoItems' => array (
@@ -13,7 +10,7 @@ $temporaryColumns = array (
 			'size' => '50',
 			'max' => '256',
 			'eval' => 'null',
-			'default' => NULL,
+			'default' => ''
 		)
 	),
 	'tt_products_memodam' => array (
@@ -24,7 +21,7 @@ $temporaryColumns = array (
 			'size' => '50',
 			'max' => '256',
 			'eval' => 'null',
-			'default' => NULL,
+			'default' => '',
 		)
 	),
 	'tt_products_discount' => array (
@@ -50,6 +47,7 @@ $temporaryColumns = array (
 			'size' => '5',
 			'max' => '20',
 			'eval' => 'trim,integer',
+			'default' => 0
 		)
 	),
 	'tt_products_vouchercode' => array (
@@ -58,7 +56,8 @@ $temporaryColumns = array (
 		'config' => array (
 			'type' => 'input',
 			'size' => '20',
-			'max' => '256'
+			'max' => '256',
+			'default' => ''
 		)
 	),
 	'tt_products_vat' => array (
@@ -82,6 +81,7 @@ $temporaryColumns = array (
 			),
 			'size' => 1,
 			'maxitems' => 1,
+			'default' => 0
 		)
 	),
 	'tt_products_organisation_form' => array (
@@ -121,6 +121,7 @@ $temporaryColumns = array (
 			),
 			'size' => 1,
 			'maxitems' => 1,
+			'default' => 'U'
 		)
 	),
 );

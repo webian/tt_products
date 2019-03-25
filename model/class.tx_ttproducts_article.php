@@ -52,8 +52,6 @@ class tx_ttproducts_article extends tx_ttproducts_article_base {
 	 * Getting all tt_products_cat categories into internal array
 	 */
 	function init ($cObj, $functablename)  {
-		global $TYPO3_DB,$TSFE,$TCA;
-
 		parent::init($cObj, $functablename);
 		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$tableConfig = array();
@@ -72,7 +70,6 @@ class tx_ttproducts_article extends tx_ttproducts_article_base {
 
 
 	function &getWhereArray ($prodUid, $where) {
-		global $TYPO3_DB;
 
 		$rowArray = array();
 		$enableWhere = $this->getTableObj()->enableFields();
@@ -96,14 +93,14 @@ class tx_ttproducts_article extends tx_ttproducts_article_base {
 
 		$res = $this->getTableObj()->exec_SELECTquery('*',$finalWhere,'',$finalOrderBy,'',$fromJoin);
 
-		while($row = $TYPO3_DB->sql_fetch_assoc($res))	{
+		while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))	{
 
 			$uid = intval($row['uid']);
 			$this->dataArray[$uid] = $row;	// remember for later queries
 			$uidArray[] = $uid;
 			$rowArray[] = $row;
 		}
-		$TYPO3_DB->sql_free_result($res);
+		$GLOBALS['TYPO3_DB']->sql_free_result($res);
 		return $rowArray;
 	}
 

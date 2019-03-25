@@ -71,17 +71,15 @@ class tx_ttproducts_dam_view extends tx_ttproducts_article_base_view {
 		&$tagArray,
 		$theCode,
 		$basketExtra,
-		$bHtml=TRUE,
+		$bHtml=true,
 		$charset='',
 		$imageNum=0,
 		$imageRenderObj='image',
 		$id='',	// id part to be added
-		$prefix='', // if FALSE, then no table marker will be added
+		$prefix='', // if false, then no table marker will be added
 		$suffix='',	// this could be a number to discern between repeated rows
 		$linkWrap=''
 	)	{
-		global $TSFE,$TCA;
-
 		parent::getRowMarkerArray (
 			$row,
 			$markerKey,

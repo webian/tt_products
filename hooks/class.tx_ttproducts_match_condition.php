@@ -43,9 +43,7 @@ class tx_ttproducts_match_condition implements t3lib_Singleton {
 	public function checkShipping (
 		$params
 	) {
-		global $TSFE;
-
-		$result = FALSE;
+		$result = false;
 
 		if (isset($params) && is_array($params)) {
 			tx_ttproducts_control_basket::init();
@@ -57,11 +55,11 @@ class tx_ttproducts_match_condition implements t3lib_Singleton {
 			$operator = '=';
 
 			$value = '';
-			if (strpos($params['2'], $operator) !== FALSE) {
+			if (strpos($params['2'], $operator) !== false) {
 				$value = ltrim($params['2'], ' =');
-			} else if (strpos($params['2'], 'IN') !== FALSE) {
+			} else if (strpos($params['2'], 'IN') !== false) {
 				$operator = 'IN';
-				if (strpos($params['2'], 'NOT IN') !== FALSE) {
+				if (strpos($params['2'], 'NOT IN') !== false) {
 					$operator = 'NOT IN';
 				}
 				$value = trim($params['3']);
@@ -86,7 +84,7 @@ class tx_ttproducts_match_condition implements t3lib_Singleton {
 					!is_array($infoArray[$type]) ||
 					!isset($infoArray[$type][$field])
 				) &&
- 				$TSFE->loginUser
+ 				$GLOBALS['TSFE']->loginUser
  			) {
 				if ($field == 'country_code') {
 					$field = 'static_info_country';
@@ -94,13 +92,13 @@ class tx_ttproducts_match_condition implements t3lib_Singleton {
 				$value = str_replace('\'', '', $value);
 
 				if ($operator == '=') {
-					$result = ($TSFE->fe_user->user[$field] == $value);
+					$result = ($GLOBALS['TSFE']->fe_user->user[$field] == $value);
 				} else if ($operator == 'IN') {
 					$valueArray = t3lib_div::trimExplode(',', $value);
-					$result = in_array($TSFE->fe_user->user[$field], $valueArray);
+					$result = in_array($GLOBALS['TSFE']->fe_user->user[$field], $valueArray);
 				} else if ($operator == 'NOT IN') {
 					$valueArray = t3lib_div::trimExplode(',', $value);
-					$result = !in_array($TSFE->fe_user->user[$field], $valueArray);
+					$result = !in_array($GLOBALS['TSFE']->fe_user->user[$field], $valueArray);
 				}
 			}
 		}
@@ -110,9 +108,7 @@ class tx_ttproducts_match_condition implements t3lib_Singleton {
 
 
 	public function hasBulkilyItem ($where) {
-		global $TYPO3_DB;
-
-		$bBukily = FALSE;
+		$bBukily = false;
 		tx_ttproducts_control_basket::init();
 		$recs = tx_ttproducts_control_basket::getRecs();
 		$cObj = t3lib_div::makeInstance('tslib_cObj');
@@ -129,15 +125,15 @@ class tx_ttproducts_match_condition implements t3lib_Singleton {
 			}
 
 			if (count($uidArr) == 0) {
-				return FALSE;
+				return false;
 			}
 			$where .= ' AND uid IN ('.implode(',',$uidArr).')';
             $where .= $cObj->enableFields('tt_products');
 
-            $rcArray = $TYPO3_DB->exec_SELECTgetRows('*', 'tt_products', $where);
+            $rcArray = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('*', 'tt_products', $where);
             foreach ($rcArray as $uid => $row) {
                 if ($row['bulkily']) {
-                    $bBukily = TRUE;
+                    $bBukily = true;
                     break;
                 }
             }

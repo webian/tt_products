@@ -88,8 +88,6 @@ class tx_ttproducts_field_image_view extends tx_ttproducts_field_media_view {
 		$suffix='',
 		$linkWrap = ''
 	)	{
-		global $TYPO3_DB;
-
 // hack start
 		$mediaNum =
 			$this->getMediaNum(
@@ -149,9 +147,9 @@ class tx_ttproducts_field_image_view extends tx_ttproducts_field_media_view {
 					$fieldconfParent['generateImage'] = $tempConf['field.'];
 					$where_clause = $conftable.'.'.$foreignfield .'='. $imageRow[$localfield];
 					$where_clause .= $this->cObj->enableFields($conftable);
-					$res = $TYPO3_DB->exec_SELECTquery('*',$conftable,$where_clause,'',$foreignfield,1);
+					$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*',$conftable,$where_clause,'',$foreignfield,1);
 						// only first found row will be used
-					$imageRow = $TYPO3_DB->sql_fetch_assoc($res);
+					$imageRow = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 				}
 			}
 
@@ -196,7 +194,7 @@ class tx_ttproducts_field_image_view extends tx_ttproducts_field_media_view {
 				if ($nameArray['generateImage'] && is_dir($dirname))	{
 					$directory = dir($dirname);
 					while($entry=$directory->read())	{
-						if (strstr($entry, $nameArray['generateImage'].'_') !== FALSE)	{
+						if (strstr($entry, $nameArray['generateImage'].'_') !== false)	{
 							$imgs[] = $entry;
 						}
 					}
@@ -254,7 +252,7 @@ class tx_ttproducts_field_image_view extends tx_ttproducts_field_media_view {
 		$countArray = array();
 		foreach($theImgCode as $k1 => $val) {
 			$bIsSpecial = true;
-			if (strstr($k1, ':') === FALSE)	{
+			if (strstr($k1, ':') === false)	{
 				$bIsSpecial = false;
 			}
 			$key = $marker.'_IMAGE' . intval($c);
@@ -327,7 +325,7 @@ class tx_ttproducts_field_image_view extends tx_ttproducts_field_media_view {
 		}
 	}
 
-	public function getRowMarkerArray ($functablename, $fieldname, $row, $markerKey, &$markerArray, $tagArray, $theCode, $id, $basketExtra, &$bSkip, $bHtml=TRUE, $charset='', $prefix='', $suffix='', $imageRenderObj='image')	{
+	public function getRowMarkerArray ($functablename, $fieldname, $row, $markerKey, &$markerArray, $tagArray, $theCode, $id, $basketExtra, &$bSkip, $bHtml=true, $charset='', $prefix='', $suffix='', $imageRenderObj='image')	{
 
 		parent::getRowMarkerArray($functablename, $fieldname, $row, $markerKey, $markerArray, $tagArray, $theCode, $id, $basketExtra, $bSkip, $bHtml, $charset, $prefix, $suffix='', $imageRenderObj);
 	}

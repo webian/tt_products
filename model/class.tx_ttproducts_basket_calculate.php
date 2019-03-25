@@ -66,7 +66,7 @@ class tx_ttproducts_basket_calculate implements t3lib_Singleton {
 				$priceTax = $actItem['priceTax'];
 				$priceNoTax = $actItem['priceNoTax'];
 				$totalNoTax = $priceNoTax * $count;
-				$goodsTotalTax += $priceObj->getPrice($basketExtra, $totalNoTax, TRUE, $row, FALSE);
+				$goodsTotalTax += $priceObj->getPrice($basketExtra, $totalNoTax, true, $row, false);
 			}
 		}
 
@@ -85,8 +85,6 @@ class tx_ttproducts_basket_calculate implements t3lib_Singleton {
 
 	 */
 	public function calculate ($basketExt, $basketExtra, $funcTablename, $useArticles, $maxTax, &$itemArray)	{
-		global $TYPO3_DB, $TSFE;
-
 		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$paymentshippingObj = t3lib_div::makeInstance('tx_ttproducts_paymentshipping');
 		$taxObj = t3lib_div::makeInstance('tx_ttproducts_field_tax');
@@ -100,15 +98,15 @@ class tx_ttproducts_basket_calculate implements t3lib_Singleton {
 
 			if ($conf['discountprice.'])	{
 				$getDiscount = 0;
-				$gr_list = explode (',' , $TSFE->gr_list);
+				$gr_list = explode (',' , $GLOBALS['TSFE']->gr_list);
 				if ($conf['getDiscountPrice']) {
 					$getDiscount = 1;
 				} else {
 					foreach ($gr_list as $k1 => $val) {
 						if (((float) $val > 0) && ($getDiscount == 0)) {
-							$getDiscount = 1 - strcmp($TSFE->fe_user->groupData->title, $conf['discountGroupName'] );
+							$getDiscount = 1 - strcmp($GLOBALS['TSFE']->fe_user->groupData->title, $conf['discountGroupName'] );
 
-							if (strlen($TSFE->fe_user->groupData['title']) == 0)	// repair result of strcmp
+							if (strlen($GLOBALS['TSFE']->fe_user->groupData['title']) == 0)	// repair result of strcmp
 								$getDiscount = 0;
 						}
 					}
@@ -131,8 +129,8 @@ class tx_ttproducts_basket_calculate implements t3lib_Singleton {
 						$priceReduction,
 						$discountArray,
 						$goodsTotalTax,
-						FALSE,
-						TRUE
+						false,
+						true
 					);
 				}
 			}
@@ -150,8 +148,8 @@ class tx_ttproducts_basket_calculate implements t3lib_Singleton {
 					$priceReduction,
 					$discountArray,
 					'',
-					FALSE,
-					TRUE
+					false,
+					true
 				);
 			}
 
@@ -165,8 +163,8 @@ class tx_ttproducts_basket_calculate implements t3lib_Singleton {
 				$priceReduction,
 				$discountArray,
 				'',
-				TRUE,
-				TRUE
+				true,
+				true
 			);
 
 			$this->calculatedArray['priceTax'] = array();
@@ -215,8 +213,8 @@ class tx_ttproducts_basket_calculate implements t3lib_Singleton {
 
 					// has the price been calculated before take it if it gets cheaper now
 					if ($actItem['calc'] > 0) {
-						$itemArray[$sort][$k1]['priceTax'] = $priceObj->getModePrice($basketExtra, $conf['TAXmode'], $actItem['calc'], TRUE, $row, $conf['TAXincluded']);
-						$itemArray[$sort][$k1]['priceNoTax'] = $priceObj->getModePrice($basketExtra, $conf['TAXmode'], $actItem['calc'], FALSE, $row, $conf['TAXincluded']);
+						$itemArray[$sort][$k1]['priceTax'] = $priceObj->getModePrice($basketExtra, $conf['TAXmode'], $actItem['calc'], true, $row, $conf['TAXincluded']);
+						$itemArray[$sort][$k1]['priceNoTax'] = $priceObj->getModePrice($basketExtra, $conf['TAXmode'], $actItem['calc'], false, $row, $conf['TAXincluded']);
 					}
 
 					//  multiplicate it with the count :
@@ -229,13 +227,13 @@ class tx_ttproducts_basket_calculate implements t3lib_Singleton {
 					$this->calculatedArray['categoryPriceNoTax']['goodstotal'][$row['category']]+= $itemArray[$sort][$k1]['totalNoTax'];
 					$this->calculatedArray['price2NoTax']['goodstotal'] += $price2NoTax * $count;
 
-					$this->calculatedArray['noDiscountPriceTax']['goodstotal']  += $priceObj->getPrice($basketExtra, $row['price'] * $actItem['count'], TRUE, $row, $conf['TAXincluded']);
-					$this->calculatedArray['noDiscountPriceNoTax']['goodstotal'] += $priceObj->getPrice($basketExtra, $row['price'] * $actItem['count'], FALSE, $row, $conf['TAXincluded']);
+					$this->calculatedArray['noDiscountPriceTax']['goodstotal']  += $priceObj->getPrice($basketExtra, $row['price'] * $actItem['count'], true, $row, $conf['TAXincluded']);
+					$this->calculatedArray['noDiscountPriceNoTax']['goodstotal'] += $priceObj->getPrice($basketExtra, $row['price'] * $actItem['count'], false, $row, $conf['TAXincluded']);
 
 					if ($conf['TAXmode'] == '1')	{
 						$taxstr = strval(number_format($tax,2)); // needed for floating point taxes as in Swizzerland
-						$itemArray[$sort][$k1]['totalTax'] = $priceObj->getPrice($basketExtra, $itemArray[$sort][$k1]['totalNoTax'], TRUE, $row, FALSE);
-						$itemArray[$sort][$k1]['total0Tax'] = $priceObj->getPrice($basketExtra, $itemArray[$sort][$k1]['total0NoTax'], TRUE, $row, FALSE);
+						$itemArray[$sort][$k1]['totalTax'] = $priceObj->getPrice($basketExtra, $itemArray[$sort][$k1]['totalNoTax'], true, $row, false);
+						$itemArray[$sort][$k1]['total0Tax'] = $priceObj->getPrice($basketExtra, $itemArray[$sort][$k1]['total0NoTax'], true, $row, false);
 						$this->calculatedArray['priceNoTax']['goodssametaxtotal'][$taxstr] +=  $itemArray[$sort][$k1]['totalNoTax'];
 						$this->calculatedArray['price2NoTax']['goodssametaxtotal'][$taxstr] += $itemArray[$sort][$k1]['total2NoTax'];
 						$this->calculatedArray['categoryPriceNoTax']['goodssametaxtotal'][$taxstr][$row['category']] +=  $itemArray[$sort][$k1]['totalNoTax'];
@@ -251,24 +249,24 @@ class tx_ttproducts_basket_calculate implements t3lib_Singleton {
 						$this->calculatedArray['price2Tax']['goodstotal']	+= $price2Tax * $count;
 
 						$value = $row['handling'];
-						$this->calculatedArray['handling']['0']['priceTax'] += $priceObj->getModePrice($basketExtra, $conf['TAXmode'], $value, TRUE, $shippingRow, $conf['TAXincluded'], TRUE);
+						$this->calculatedArray['handling']['0']['priceTax'] += $priceObj->getModePrice($basketExtra, $conf['TAXmode'], $value, true, $shippingRow, $conf['TAXincluded'], true);
 						$value = $row['shipping'];
-						$this->calculatedArray['shipping']['priceTax'] += $priceObj->getModePrice($basketExtra, $conf['TAXmode'], $value, TRUE, $shippingRow, $conf['TAXincluded'], TRUE);
+						$this->calculatedArray['shipping']['priceTax'] += $priceObj->getModePrice($basketExtra, $conf['TAXmode'], $value, true, $shippingRow, $conf['TAXincluded'], true);
 						$value = $row['shipping2'];
 
 						if ($count > 1)	{
-							$this->calculatedArray['shipping']['priceTax'] += $priceObj->getModePrice($basketExtra, $conf['TAXmode'], $value * ($count-1), TRUE, $shippingRow, $conf['TAXincluded'], TRUE);
+							$this->calculatedArray['shipping']['priceTax'] += $priceObj->getModePrice($basketExtra, $conf['TAXmode'], $value * ($count-1), true, $shippingRow, $conf['TAXincluded'], true);
 						}
 					}
 					$value = $row['handling'];
-					$this->calculatedArray['handling']['0']['priceNoTax'] += $priceObj->getModePrice($basketExtra, $conf['TAXmode'], $value, FALSE, $shippingRow, $conf['TAXincluded'], TRUE);
+					$this->calculatedArray['handling']['0']['priceNoTax'] += $priceObj->getModePrice($basketExtra, $conf['TAXmode'], $value, false, $shippingRow, $conf['TAXincluded'], true);
 
 					$value = $row['shipping'];
-					$this->calculatedArray['shipping']['priceNoTax'] += $priceObj->getModePrice($basketExtra, $conf['TAXmode'], $value, FALSE, $shippingRow, $conf['TAXincluded'], TRUE);
+					$this->calculatedArray['shipping']['priceNoTax'] += $priceObj->getModePrice($basketExtra, $conf['TAXmode'], $value, false, $shippingRow, $conf['TAXincluded'], true);
 
 					$value = $row['shipping2'];
 					if ($count > 1)	{
-						$this->calculatedArray['shipping']['priceNoTax'] += $priceObj->getModePrice($basketExtra, $conf['TAXmode'], $value * ($count - 1), FALSE, $shippingRow, $conf['TAXincluded'], TRUE);
+						$this->calculatedArray['shipping']['priceNoTax'] += $priceObj->getModePrice($basketExtra, $conf['TAXmode'], $value * ($count - 1), false, $shippingRow, $conf['TAXincluded'], true);
 					}
 				} // foreach ($actItemArray as $k1 => $actItem) {
 			} // foreach ($this->itemArray
@@ -286,8 +284,8 @@ class tx_ttproducts_basket_calculate implements t3lib_Singleton {
 						$value = floatval($this->conf['bulkilyAddition']) * $basketExt[$row['uid']][$viewTableObj->variant->getVariantFromRow($row)];
 						$tax = ($bulkilyFeeTax != '' ? $bulkilyFeeTax : $shippingTax);
 						$taxRow['tax'] = floatval($tax);
-						$this->calculatedArray['shipping']['priceTax'] += $priceObj->getModePrice($basketExtra, $conf['TAXmode'], $value, TRUE, $taxRow, $conf['TAXincluded'], TRUE);
-						$this->calculatedArray['shipping']['priceNoTax'] += $priceObj->getModePrice($basketExtra, $conf['TAXmode'], $value, FALSE, $taxRow, $conf['TAXincluded'], TRUE);
+						$this->calculatedArray['shipping']['priceTax'] += $priceObj->getModePrice($basketExtra, $conf['TAXmode'], $value, true, $taxRow, $conf['TAXincluded'], true);
+						$this->calculatedArray['shipping']['priceNoTax'] += $priceObj->getModePrice($basketExtra, $conf['TAXmode'], $value, false, $taxRow, $conf['TAXincluded'], true);
 					}
 				}
 			}
@@ -301,7 +299,7 @@ class tx_ttproducts_basket_calculate implements t3lib_Singleton {
 
 					foreach ($this->calculatedArray[$keyNoTax]['goodssametaxtotal'] as $tax => $value)	{
 						$taxRow['tax'] = floatval($tax);
-						$newPriceTax = $priceObj->getModePrice($basketExtra, $conf['TAXmode'], $value, TRUE, $taxRow, FALSE, TRUE);
+						$newPriceTax = $priceObj->getModePrice($basketExtra, $conf['TAXmode'], $value, true, $taxRow, false, true);
 						$priceTax += $newPriceTax;
 					}
 					$this->calculatedArray[$keyNoTax]['sametaxtotal'] = $this->calculatedArray[$keyNoTax]['goodssametaxtotal'];
@@ -318,7 +316,7 @@ class tx_ttproducts_basket_calculate implements t3lib_Singleton {
 						$taxRow['tax'] = floatval($tax);
 						if (is_array($catArray))	{
 							foreach ($catArray as $cat => $value)	{
-								$newPriceTax = $priceObj->getModePrice($basketExtra, $conf['TAXmode'], $value, TRUE, $taxRow, FALSE);
+								$newPriceTax = $priceObj->getModePrice($basketExtra, $conf['TAXmode'], $value, true, $taxRow, false);
 								$priceTax += $newPriceTax;
 								$priceTaxArray[$cat] = $newPriceTax;
 							}
@@ -326,8 +324,8 @@ class tx_ttproducts_basket_calculate implements t3lib_Singleton {
 					}
 					$this->calculatedArray[$keyTax]['goodstotal'] = $priceTaxArray;
 				}
-				$this->calculatedArray['handling']['0']['priceTax'] = $priceObj->getModePrice($basketExtra, $conf['TAXmode'], $this->calculatedArray['handling']['0']['priceNoTax'], TRUE, $shippingRow, FALSE, FALSE);
-				$this->calculatedArray['shipping']['priceTax'] = $priceObj->getModePrice($basketExtra, $conf['TAXmode'], $this->calculatedArray['shipping']['priceNoTax'], TRUE, $shippingRow, FALSE, FALSE);
+				$this->calculatedArray['handling']['0']['priceTax'] = $priceObj->getModePrice($basketExtra, $conf['TAXmode'], $this->calculatedArray['handling']['0']['priceNoTax'], true, $shippingRow, false, false);
+				$this->calculatedArray['shipping']['priceTax'] = $priceObj->getModePrice($basketExtra, $conf['TAXmode'], $this->calculatedArray['shipping']['priceNoTax'], true, $shippingRow, false, false);
 			}
 		} // if (count($itemArray))
 		$paymentTax = $paymentshippingObj->getTaxPercentage($basketExtra, 'payment', '');

@@ -66,7 +66,7 @@ class tx_ttproducts_field_creditpoints extends tx_ttproducts_field_base {
 
 	public function getBasketMissingCreditpoints ($addCreditpoints, &$missing, &$remaining)	{
 		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
-		$feuserTable = $tablesObj->get('fe_users', FALSE);
+		$feuserTable = $tablesObj->get('fe_users', false);
 
 		$feuserCreditpoints = $feuserTable->getCreditpoints();
 		$creditpointsTotal = $this->getBasketTotal() + $addCreditpoints;
@@ -79,7 +79,7 @@ class tx_ttproducts_field_creditpoints extends tx_ttproducts_field_base {
 	public function getMissingCreditpoints ($fieldname, $row, &$missing, &$remaining)	{
 
 		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
-		$feuserTable = $tablesObj->get('fe_users', FALSE);
+		$feuserTable = $tablesObj->get('fe_users', false);
 
 		$creditpointsTotal = $this->getBasketTotal();
 		$feuserCreditpoints = $feuserTable->getCreditpoints();
@@ -90,26 +90,23 @@ class tx_ttproducts_field_creditpoints extends tx_ttproducts_field_base {
 
 
 	/* reduces the amount of creditpoints of the FE user by the total amount of creditpoints from the products. */
-	/* It returns the number of credipoints by which the account of the FE user has been reduced. FALSE is if no FE user is logged in. */
+	/* It returns the number of credipoints by which the account of the FE user has been reduced. false is if no FE user is logged in. */
 	public function pay ()	{
-		global $TSFE, $TYPO3_DB;
-
-		$rc = FALSE;
-		if ($TSFE->loginUser)	{
-//			$whereGeneral = '(fe_users_uid="'.$TSFE->fe_user->user['uid'].'" OR fe_users_uid=0) ';
+		$rc = false;
+		if ($GLOBALS['TSFE']->loginUser)	{
 
 			$creditpointsTotal = $this->getBasketTotal();
 
 			if ($creditpointsTotal)	{
 				$fieldsArrayFeUsers = array();
-				$fieldsArrayFeUsers['tt_products_creditpoints'] = $TSFE->fe_user->user['tt_products_creditpoints'] - $creditpointsTotal;
+				$fieldsArrayFeUsers['tt_products_creditpoints'] = $GLOBALS['TSFE']->fe_user->user['tt_products_creditpoints'] - $creditpointsTotal;
 				if ($fieldsArrayFeUsers['tt_products_creditpoints'] < 0)	{
 					$fieldsArrayFeUsers['tt_products_creditpoints'] = 0;
-					$rc = $TSFE->fe_user->user['tt_products_creditpoints'];
+					$rc = $GLOBALS['TSFE']->fe_user->user['tt_products_creditpoints'];
 				}
-				if ($TSFE->fe_user->user['tt_products_creditpoints'] != $fieldsArrayFeUsers['tt_products_creditpoints'])	{
-					$TSFE->fe_user->user['tt_products_creditpoints'] = $fieldsArrayFeUsers['tt_products_creditpoints']; // store it also for the global FE user data
-					$TYPO3_DB->exec_UPDATEquery('fe_users', 'uid='.intval($TSFE->fe_user->user['uid']), $fieldsArrayFeUsers);
+				if ($GLOBALS['TSFE']->fe_user->user['tt_products_creditpoints'] != $fieldsArrayFeUsers['tt_products_creditpoints'])	{
+					$GLOBALS['TSFE']->fe_user->user['tt_products_creditpoints'] = $fieldsArrayFeUsers['tt_products_creditpoints']; // store it also for the global FE user data
+					$GLOBALS['TYPO3_DB']->exec_UPDATEquery('fe_users', 'uid='.intval($GLOBALS['TSFE']->fe_user->user['uid']), $fieldsArrayFeUsers);
 					$rc = $creditpointsTotal;
 				}
 			}
@@ -119,10 +116,7 @@ class tx_ttproducts_field_creditpoints extends tx_ttproducts_field_base {
 }
 
 
-
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/model/field/class.tx_ttproducts_field_creditpoints.php'])	{
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/model/field/class.tx_ttproducts_field_creditpoints.php']);
 }
-
-
 

@@ -40,10 +40,9 @@
 
 class tx_ttproducts_field_datafield extends tx_ttproducts_field_base {
 
-	function getDirname (&$row, $fieldname)	{
-		global $TCA;
+	public function getDirname (&$row, $fieldname)	{
 
-		$dirname = $TCA['tt_products']['columns'][$fieldname]['config']['uploadfolder'];
+		$dirname = $GLOBALS['TCA']['tt_products']['columns'][$fieldname]['config']['uploadfolder'];
 		if (!$dirname)	{
 			$dirname = 'uploads/tx_ttproducts/datasheet/';
 		}

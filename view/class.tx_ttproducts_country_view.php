@@ -50,7 +50,6 @@ class tx_ttproducts_country_view extends tx_ttproducts_table_base_view {
 	 * @access private
 	 */
 	function getRowMarkerArray ($row, &$markerArray, &$fieldsArray)	{
-		global $TSFE;
 
 		$markerTable = implode('',t3lib_div::trimExplode('_',$this->getModelObj()->getFuncTablename()));
 

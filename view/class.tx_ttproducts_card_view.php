@@ -53,9 +53,7 @@ class tx_ttproducts_card_view extends tx_ttproducts_table_base_view {
 	 * @return	array
 	 * @access private
 	 */
-	function getMarkerArray ($row, &$markerArray, $allowedArray, $tablename = 'sys_products_cards')	{
-		global $TCA, $TSFE;
-
+	public function getMarkerArray ($row, &$markerArray, $allowedArray, $tablename = 'sys_products_cards')	{
 		include_once (PATH_BE_ttproducts.'lib/class.tx_ttproducts_form_div.php');
 
 		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
@@ -66,7 +64,7 @@ class tx_ttproducts_card_view extends tx_ttproducts_table_base_view {
 			$ccTypeText =
 				tx_ttproducts_form_div::createSelect (
 					$langObj,
-					$TCA[$tablename]['columns']['cc_type']['config']['items'],
+					$GLOBALS['TCA'][$tablename]['columns']['cc_type']['config']['items'],
 					'recs[creditcard][cc_type]',
 					$row['cc_type'],
 					true,
@@ -93,7 +91,7 @@ class tx_ttproducts_card_view extends tx_ttproducts_table_base_view {
 		$markerArray['###PERSON_CARDS_CC_TYPE###'] = $ccTypeText;
 		$markerArray['###PERSON_CARDS_CC_TYPE_SELECTED###'] = $row['cc_type'];
 		if (isset($row['cc_type']))	{ //
-			$tmp = $TCA[$tablename]['columns']['cc_type']['config']['items'][$row['cc_type']]['0'];
+			$tmp = $GLOBALS['TCA'][$tablename]['columns']['cc_type']['config']['items'][$row['cc_type']]['0'];
 			$tmp = tx_div2007_alpha5::sL_fh002($tmp);
 			$ccTypeTextSelected = tx_div2007_alpha5::getLL_fh003($langObj, $tmp);
 		}

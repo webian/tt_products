@@ -43,11 +43,11 @@ class tx_ttproducts_account extends tx_ttproducts_table_base {
 	public $pibase; // reference to object of pibase
 	public $conf;
 	public $acArray;	// credit card data
-	public $bIsAllowed = FALSE; // enable of bank ACCOUNTS
+	public $bIsAllowed = false; // enable of bank ACCOUNTS
 	public $fieldArray = array('owner_name', 'ac_number', 'bic');
 	public $tablename = 'sys_products_accounts';
 	public $asterisk = '********';
-	public $useAsterisk = FALSE;
+	public $useAsterisk = false;
 
 
 	public function init ($cObj, $functablename)	{
@@ -72,14 +72,12 @@ class tx_ttproducts_account extends tx_ttproducts_table_base {
 		}
 
 		if ($bNumberRecentlyModified)	{
-			global $TSFE;
-
-			$acArray = $TSFE->fe_user->getKey('ses','ac');
+			$acArray = $GLOBALS['TSFE']->fe_user->getKey('ses','ac');
 			if (!$acArray)	{
 				$acArray = array();
 			}
 			$acArray['ac_uid'] = $this->create($acArray['ac_uid'], $this->acArray);
-			$TSFE->fe_user->setKey('ses','ac',$acArray);
+			$GLOBALS['TSFE']->fe_user->setKey('ses','ac',$acArray);
 			if ($this->useAsterisk)	{
 				$this->acArray['ac_number'] = $this->asterisk;
 			}
@@ -102,13 +100,11 @@ class tx_ttproducts_account extends tx_ttproducts_table_base {
 	 * Should be called only internally by eg. $order->getBlankUid, that first checks if a blank record is already created.
 	 */
 	function create ($uid, $acArray)	{
-		global $TSFE, $TYPO3_DB;
-
 		$newId = 0;
 		$pid = intval($this->conf['PID_sys_products_orders']);
-		if (!$pid)	$pid = intval($TSFE->id);
+		if (!$pid)	$pid = intval($GLOBALS['TSFE']->id);
 
-		if ($acArray['owner_name'] != '' && $acArray[$accountField] && $TSFE->sys_page->getPage_noCheck($pid)) {
+		if ($acArray['owner_name'] != '' && $acArray[$accountField] && $GLOBALS['TSFE']->sys_page->getPage_noCheck($pid)) {
 			$time = time();
 			$newFields = array (
 				'pid' => intval($pid),
@@ -122,11 +118,11 @@ class tx_ttproducts_account extends tx_ttproducts_table_base {
 			}
 
 			if ($uid)	{
-				$TYPO3_DB->exec_UPDATEquery($this->tablename, 'uid=' . $uid,$newFields);
+				$GLOBALS['TYPO3_DB']->exec_UPDATEquery($this->tablename, 'uid=' . $uid,$newFields);
 				$newId = $uid;
 			} else {
-				$TYPO3_DB->exec_INSERTquery($this->tablename, $newFields);
-				$newId = $TYPO3_DB->sql_insert_id();
+				$GLOBALS['TYPO3_DB']->exec_INSERTquery($this->tablename, $newFields);
+				$newId = $GLOBALS['TYPO3_DB']->sql_insert_id();
 			}
 		}
 		return $newId;
@@ -134,10 +130,8 @@ class tx_ttproducts_account extends tx_ttproducts_table_base {
 
 
 	function getUid () {
-		global $TSFE;
-
 		$result = 0;
-		$acArray = $TSFE->fe_user->getKey('ses', 'ac');
+		$acArray = $GLOBALS['TSFE']->fe_user->getKey('ses', 'ac');
 		if (isset($acArray['ac_uid'])) {
 			$result = $acArray['ac_uid'];
 		}
@@ -146,7 +140,6 @@ class tx_ttproducts_account extends tx_ttproducts_table_base {
 
 
 	function getRow ($uid, $bFieldArrayAll=false) {
-		global $TYPO3_DB;
 		$rcArray = array();
 		if ($bFieldArrayAll)	{
 			foreach ($this->fieldArray as $k => $field)	{
@@ -165,9 +158,9 @@ class tx_ttproducts_account extends tx_ttproducts_table_base {
 			if ($tablename == '')	{
 				$tablename = 'sys_products_accounts';
 			}
-			$res = $TYPO3_DB->exec_SELECTquery($fields, $tablename, $where);
-			$row = $TYPO3_DB->sql_fetch_assoc($res);
-			$TYPO3_DB->sql_free_result($res);
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields, $tablename, $where);
+			$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+			$GLOBALS['TYPO3_DB']->sql_free_result($res);
 			if ($row)	{
 				$rcArray = $row;
 			}
@@ -204,7 +197,7 @@ class tx_ttproducts_account extends tx_ttproducts_table_base {
 			}
 			if ($field == 'bic' && is_object($bankObj) /* && t3lib_extMgm::isLoaded('static_info_tables_banks_de')*/)	{
 				$where_clause = 'sort_code=' . intval(implode('',t3lib_div::trimExplode(' ',$this->acArray[$field]))) . ' AND level=1';
-				$bankRow = $bankObj->get('',0,FALSE,$where_clause);
+				$bankRow = $bankObj->get('',0,false,$where_clause);
 				if (!$bankRow)	{
 					$rc = $field;
 					break;

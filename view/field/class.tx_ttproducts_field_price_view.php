@@ -144,7 +144,7 @@ class tx_ttproducts_field_price_view implements tx_ttproducts_field_view_int, t3
 	 * Formatting a percentage
 	 */
 	public function percentageFormat ($double) {
-		$result = FALSE;
+		$result = false;
 		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$conf = $cnf->conf;
 		$double = round($double, 10);
@@ -164,7 +164,7 @@ class tx_ttproducts_field_price_view implements tx_ttproducts_field_view_int, t3
 
 
 	static public function convertKey ($priceType, $fieldname)	{
-		$rc = FALSE;
+		$rc = false;
 		if (isset(self::$convertArray[$fieldname]) && is_array(self::$convertArray[$fieldname]))	{
 			$rc = self::$convertArray[$fieldname][$priceType];
 		}
@@ -178,7 +178,7 @@ class tx_ttproducts_field_price_view implements tx_ttproducts_field_view_int, t3
 		$conf = $cnf->conf;
 		$config = $cnf->config;
 		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
-		$itemTableView = $tablesObj->get($functablename, TRUE);
+		$itemTableView = $tablesObj->get($functablename, true);
 		$itemTable = $itemTableView->getModelObj();
 		$modelObj = $this->getModelObj();
 		$totalDiscountField = $itemTable->getTotalDiscountField();
@@ -202,7 +202,7 @@ class tx_ttproducts_field_price_view implements tx_ttproducts_field_view_int, t3
 				$displayKey = $priceMarkerPrefix . $displayTax;
 				$priceFormatted = '';
 
-				if(strpos($priceKey, 'perc') !== FALSE) {
+				if(strpos($priceKey, 'perc') !== false) {
 					$priceFormatted = $this->percentageFormat($priceValue);
 				} else {
 					$priceFormatted = $this->priceFormat($priceValue);
@@ -232,7 +232,7 @@ class tx_ttproducts_field_price_view implements tx_ttproducts_field_view_int, t3
 		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$conf = $cnf->conf;
 		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
-		$itemTableView = $tablesObj->get($functablename, TRUE);
+		$itemTableView = $tablesObj->get($functablename, true);
 		$itemTable = $itemTableView->getModelObj();
 		$modelObj = $this->getModelObj();
 		$marker = strtoupper($fieldname);
@@ -253,7 +253,7 @@ class tx_ttproducts_field_price_view implements tx_ttproducts_field_view_int, t3
 			$taxMarker = $priceMarkerPrefix . strtoupper($displayTax);
 			$priceFormatted = '';
 
-			if(strpos($priceKey, 'perc') !== FALSE) {
+			if(strpos($priceKey, 'perc') !== false) {
 				$priceFormatted = $this->percentageFormat($priceValue);
 			} else {
 				$priceFormatted = $this->priceFormat($priceValue);

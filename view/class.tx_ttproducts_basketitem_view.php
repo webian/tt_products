@@ -71,7 +71,7 @@ class tx_ttproducts_basketitem_view implements t3lib_Singleton {
 
 		$funcQuantityMarker = '';
 		foreach ($callFunctableArray as $callFunctablename)	{
-			$funcMarker = $tablesObj->get($callFunctablename,TRUE)->getMarker();
+			$funcMarker = $tablesObj->get($callFunctablename,true)->getMarker();
 			$funcQuantityMarker .= '[###'.$funcMarker.'_UID###]';
 		}
 
@@ -101,12 +101,10 @@ class tx_ttproducts_basketitem_view implements t3lib_Singleton {
 		&$hiddenText,
 		$theCode='',
 		$id='1',
-		$bSelect=TRUE,
+		$bSelect=true,
 		$charset='',
 		$callFunctableArray=array()
 	)	{
-		global $TCA, $TSFE;
-
 		$pibaseObj = t3lib_div::makeInstance(''.$this->pibaseClass);
 		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
 		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
@@ -116,7 +114,7 @@ class tx_ttproducts_basketitem_view implements t3lib_Singleton {
 		$fieldArray = $viewTable->variant->getFieldArray();
 		$keyAdditional = $viewTable->variant->getAdditionalKey();
 		$selectableArray = $viewTable->variant->getSelectableArray();
-		$bUseXHTML = $TSFE->config['config']['xhtmlDoctype'] != '';
+		$bUseXHTML = $GLOBALS['TSFE']->config['config']['xhtmlDoctype'] != '';
         $imageObj = t3lib_div::makeInstance('tx_ttproducts_field_image_view');
 
 		$row = &$item['rec'];
@@ -126,7 +124,7 @@ class tx_ttproducts_basketitem_view implements t3lib_Singleton {
 		if ($theCode=='SINGLE' && !count($presetVariantArray) && $bSelect && $functablename=='tt_products')	{
 			$articleNo = tx_ttproducts_control_product::getActiveArticleNo();
 
-			if ($articleNo !== FALSE)	{
+			if ($articleNo !== false)	{
 				$articleObj = $tablesObj->get('tt_products_articles');
 				$articleRow = $articleObj->get($articleNo);
 
@@ -138,9 +136,9 @@ class tx_ttproducts_basketitem_view implements t3lib_Singleton {
 						$imageFileArray = '';
 
 						if ($variantRow && $prodTmpRow[0])	{
-							$key = array_search(trim($articleRow[$field]), $prodTmpRow, TRUE);
+							$key = array_search(trim($articleRow[$field]), $prodTmpRow, true);
 
-							if ($key !== FALSE)	{
+							if ($key !== false)	{
 								$presetVariantArray[$field] = $key;
 							}
 						}
@@ -188,7 +186,7 @@ class tx_ttproducts_basketitem_view implements t3lib_Singleton {
 		$markerArray['###DISABLED###'] = ($row['inStock'] > 0 ? '' : 'disabled');
 		$markerArray['###IN_STOCK_ID###'] = 'in-stock-id-' . $row['uid'];
 		$markerArray['###BASKET_IN_STOCK###'] = tx_div2007_alpha5::getLL_fh003($langObj, ($row['inStock'] > 0 ? 'in_stock' : 'not_in_stock'));
-		$basketFile = $TSFE->tmpl->getFileName($this->conf['basketPic']);
+		$basketFile = $GLOBALS['TSFE']->tmpl->getFileName($this->conf['basketPic']);
 		$markerArray['###IMAGE_BASKET_SRC###'] = $basketFile;
 		$fileresource = $pibaseObj->cObj->fileResource($this->conf['basketPic']);
 		$markerArray['###IMAGE_BASKET###'] = $fileresource;
@@ -198,7 +196,7 @@ class tx_ttproducts_basketitem_view implements t3lib_Singleton {
 			$formConf = $cnf->getFormConf($theCode);
 
 			foreach($fieldArray as $k => $field)	{
-				$fieldConf = $TCA[$viewTable->getTableObj()->name]['columns'][$field];
+				$fieldConf = $GLOBALS['TCA'][$viewTable->getTableObj()->name]['columns'][$field];
 				$fieldMarker = strtoupper($field);
 
 				if (is_array($fieldConf))	{
@@ -295,8 +293,8 @@ class tx_ttproducts_basketitem_view implements t3lib_Singleton {
 								$prodTranslatedRow,
 								$this->basketVar . '[' . $row['uid'] . '][' . $field . ']',
 								$selectedKey,
-								FALSE,
-								FALSE,
+								false,
+								false,
 								array(),
 								$type,
 								$dataArray,
@@ -338,7 +336,7 @@ class tx_ttproducts_basketitem_view implements t3lib_Singleton {
 			}
 			$markerArray['###BASKET_INPUT###'] = tx_ttproducts_form_div::createTag('input', $radioInputArray['name'], $uid, $params);
 		}
-		if ($keyAdditional !== FALSE) {
+		if ($keyAdditional !== false) {
 			$isSingleProduct = $viewTable->hasAdditional($row,'isSingle');
 			if ($isSingleProduct)	{
 				$message = tx_div2007_alpha5::getLL_fh003($langObj, 'additional_single');

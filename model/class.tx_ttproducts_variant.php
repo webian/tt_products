@@ -261,7 +261,7 @@ class tx_ttproducts_variant implements tx_ttproducts_variant_int, t3lib_Singleto
 	}
 
 
-	public function getVariantValuesByArticle ($articleRowArray, $productRow, $withSemicolon = FALSE) {
+	public function getVariantValuesByArticle ($articleRowArray, $productRow, $withSemicolon = false) {
 		$result = array();
 
 		$selectableFieldArray = $this->getSelectableFieldArray();
@@ -304,10 +304,10 @@ class tx_ttproducts_variant implements tx_ttproducts_variant_int, t3lib_Singleto
 
 
 	// the article rows must be in the correct order already
-	public function filterArticleRowsByVariant ($row, $variant, $articleRowArray, $bCombined=FALSE) {
+	public function filterArticleRowsByVariant ($row, $variant, $articleRowArray, $bCombined=false) {
 
         $rc = array();
-		$variantRowArray = $this->getVariantValuesByArticle($articleRowArray, $row, FALSE);
+		$variantRowArray = $this->getVariantValuesByArticle($articleRowArray, $row, false);
 		foreach ($variantRowArray as $field => $valueArray) {
 			if ($row[$field] != '') {
 				$variantRowArray[$field] = t3lib_div::trimExplode(';', $row[$field]);
@@ -318,7 +318,7 @@ class tx_ttproducts_variant implements tx_ttproducts_variant_int, t3lib_Singleto
 		$possibleArticleArray = array();
 
 		foreach ($articleRowArray as $articleRow)	{
-			$bMatches = TRUE;
+			$bMatches = true;
 			$vCount = 0;
 
 			foreach ($this->selectableArray as $k => $v)	{
@@ -334,11 +334,11 @@ class tx_ttproducts_variant implements tx_ttproducts_variant_int, t3lib_Singleto
 						$variantValue = $variantRowArray[$field][$variantIndex];
 
 						if (!in_array($variantValue, $tmpArray))	{
-							$bMatches = FALSE;
+							$bMatches = false;
 							break;
 						}
 					} else if (!$bCombined)	{
-						$bMatches = FALSE;
+						$bMatches = false;
 					}
 				}
 				$vCount++;

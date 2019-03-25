@@ -1,7 +1,5 @@
 <?php
-if (!defined ('TYPO3_MODE')) {
-	die ('Access denied.');
-}
+defined('TYPO3_MODE') || die('Access denied.');
 
 // ******************************************************************
 // products to graduated price relation table, tt_products_mm_graduated_price
@@ -18,7 +16,7 @@ $result = array (
 		'prependAtCopy' => DIV2007_LANGUAGE_LGL . 'prependAtCopy',
 		'crdate' => 'crdate',
 		'iconfile' => PATH_TTPRODUCTS_ICON_TABLE_REL . 'tt_products_cat.gif',
-		'hideTable' => TRUE,
+		'hideTable' => true,
 	),
 	'interface' => array (
 		'showRecordFieldList' => 'product_uid,graduated_price_uid'
@@ -28,7 +26,8 @@ $result = array (
 			'exclude' => 1,
 			'label' => DIV2007_LANGUAGE_LGL . 'hidden',
 			'config' => array (
-				'type' => 'check'
+				'type' => 'check',
+				'default' => 0
 			)
 		),
 		'product_uid' => array (
@@ -37,7 +36,8 @@ $result = array (
 				'type' => 'select',
 				'renderType' => 'selectSingle',
 				'foreign_table' => 'tt_products',
-				'maxitems' => 1
+				'maxitems' => 1,
+				'default' => 0
 			)
 		),
 		'graduated_price_uid' => array (
@@ -46,17 +46,20 @@ $result = array (
 				'type' => 'select',
 				'renderType' => 'selectSingle',
 				'foreign_table' => 'tt_products_graduated_price',
-				'maxitems' => 1
+				'maxitems' => 1,
+				'default' => 0
 			)
 		),
 		'productsort' => array (
 			'config' => array (
 				'type' => 'passthrough',
+				'default' => 0
 			)
 		),
 		'graduatedsort' => array (
 			'config' => array (
 				'type' => 'passthrough',
+				'default' => 0
 			)
 		),
 	),

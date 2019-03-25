@@ -63,7 +63,7 @@ class tx_ttproducts_control_product {
 	static public function getActiveArticleNo ()	{
 		$piVars = tx_ttproducts_model_control::getPiVars();
 		$piVar = tx_ttproducts_model_control::getPiVar('tt_products_articles');
-		$rc = FALSE;
+		$rc = false;
 		if (isset($piVars) && is_array($piVars) && isset($piVars[$piVar]))	{
 			$rc = $piVars[$piVar];
 		}

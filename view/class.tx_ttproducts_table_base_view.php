@@ -39,7 +39,7 @@
 
 
 abstract class tx_ttproducts_table_base_view  implements t3lib_Singleton {
-	private $bHasBeenInitialised = FALSE;
+	private $bHasBeenInitialised = false;
 	public $cObj;
 	public $conf;
 	public $config;
@@ -57,7 +57,7 @@ abstract class tx_ttproducts_table_base_view  implements t3lib_Singleton {
 		$this->conf = &$modelObj->conf;
 		$this->config = &$modelObj->config;
 
-		$this->bHasBeenInitialised = TRUE;
+		$this->bHasBeenInitialised = true;
 	}
 
 
@@ -67,7 +67,7 @@ abstract class tx_ttproducts_table_base_view  implements t3lib_Singleton {
 
 
 	public function destruct ()	{
-		$this->bHasBeenInitialised = FALSE;
+		$this->bHasBeenInitialised = false;
 	}
 
 
@@ -178,7 +178,6 @@ abstract class tx_ttproducts_table_base_view  implements t3lib_Singleton {
 		$basketExtra=array(),
 		$id=''
 	)	{
-		global $TCA;
 
 		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
@@ -211,14 +210,14 @@ abstract class tx_ttproducts_table_base_view  implements t3lib_Singleton {
 				foreach ($tagArray as $tag => $v1)	{
 					if (strpos($tag, $this->marker) === 0)	{
 
-						$bCondition = FALSE;
+						$bCondition = false;
 						$tagPartArray = explode('_', $tag);
 						$tagCount = count($tagPartArray);
-						$bTagProcessing = FALSE;
+						$bTagProcessing = false;
 						$fnKey = array_search('FN', $tagPartArray);
 
-						if ($tagCount > 2 && $fnKey !== FALSE) {
-							$bTagProcessing = TRUE;
+						if ($tagCount > 2 && $fnKey !== false) {
+							$bTagProcessing = true;
 							$tagPartKey = $fnKey + 1;
 							$fieldNameArray = array();
 							for ($i = 1; $i < $fnKey; ++$i) {
@@ -240,7 +239,7 @@ abstract class tx_ttproducts_table_base_view  implements t3lib_Singleton {
 								$bCondition = eval($evalString);
 							}
 						} else if ($tagCount > 2 && isset($comparatorArray[$tagPartArray[$tagCount - 2]]))	{
-							$bTagProcessing = TRUE;
+							$bTagProcessing = true;
 							$comparator = $tagPartArray[$tagCount - 2];
 							$comparand = $tagPartArray[$tagCount - 1];
 							$fieldname = strtolower($tagPartArray[1]);
@@ -251,10 +250,10 @@ abstract class tx_ttproducts_table_base_view  implements t3lib_Singleton {
 							}
 							if (!isset($row[$fieldname]))	{
 								$upperFieldname = strtoupper($fieldname);
-								$foundDifferentCase = FALSE;
+								$foundDifferentCase = false;
 								foreach ($row as $field => $v2)	{
 									if (strtoupper($field) == $upperFieldname)	{
-										$foundDifferentCase = TRUE;
+										$foundDifferentCase = true;
 										$fieldname = $field;
 										break;
 									}
@@ -279,7 +278,7 @@ abstract class tx_ttproducts_table_base_view  implements t3lib_Singleton {
 						}
 
 						if ($bTagProcessing) {
-							if ($bCondition == TRUE)	{
+							if ($bCondition == true)	{
 								$wrappedSubpartArray['###' . $tag . '###'] = '';
 							} else {
 								$subpartArray['###' . $tag . '###'] = '';
@@ -288,14 +287,14 @@ abstract class tx_ttproducts_table_base_view  implements t3lib_Singleton {
 					}
 				}
 			}
-			$itemTableObj = $tablesObj->get($functablename, FALSE);
+			$itemTableObj = $tablesObj->get($functablename, false);
 			$tablename = $itemTableObj->getTablename();
 
 			foreach ($row as $field => $value)	{
 				$upperField = strtoupper($field);
 
-				if (isset ($TCA[$tablename]['columns'][$field]) && is_array($TCA[$tablename]['columns'][$field]) &&
-				$TCA[$tablename]['columns'][$field]['config']['type'] == 'group')	{
+				if (isset ($GLOBALS['TCA'][$tablename]['columns'][$field]) && is_array($GLOBALS['TCA'][$tablename]['columns'][$field]) &&
+				$GLOBALS['TCA'][$tablename]['columns'][$field]['config']['type'] == 'group')	{
 					$markerKey = $this->marker.'_HAS_'.$upperField;
 					$valueArray = t3lib_div::trimExplode(',', $value);
 					foreach ($valueArray as $k => $partValue)	{
@@ -344,7 +343,7 @@ abstract class tx_ttproducts_table_base_view  implements t3lib_Singleton {
 				$wrappedSubpartArray['###' . $markerKey . '###'] = '';
 			}
 		} else { // if !empty($row)
-			$itemTableObj = $tablesObj->get($functablename, FALSE);
+			$itemTableObj = $tablesObj->get($functablename, false);
 			$tablename = $itemTableObj->getTablename();
 			$markerKey = $this->marker . '_NOT_EMPTY';
 			if (isset($tagArray[$markerKey]))	{
@@ -391,19 +390,17 @@ abstract class tx_ttproducts_table_base_view  implements t3lib_Singleton {
 		&$tagArray,
 		$theCode,
 		$basketExtra,
-		$bHtml=TRUE,
+		$bHtml=true,
 		$charset='',
 		$imageNum=0,
 		$imageRenderObj='image',
 		$id='',	// id part to be added
-		$prefix='', // if FALSE, then no table marker will be added
+		$prefix='', // if false, then no table marker will be added
 		$suffix='',	// this could be a number to discern between repeated rows
 		$linkWrap=''
 	)	{
-		global $TSFE,$TCA;
-
 		$rowMarkerArray = array();
-		if ($prefix === FALSE)	{
+		if ($prefix === false)	{
 			$marker = '';
 		} else {
 			$markerKey = $this->getMarkerKey($markerKey);
@@ -451,7 +448,7 @@ abstract class tx_ttproducts_table_base_view  implements t3lib_Singleton {
 					continue; // do not handle the added fields here. They must be handled with the original field.
 				}
 				$viewField = $field;
-				$bSkip = FALSE;
+				$bSkip = false;
 				$theMarkerArray = &$rowMarkerArray;
 				$fieldId = $mainId . '-' . $viewField;
 				$markerKey = $markerPrefix . strtoupper($viewField . $suffix);
@@ -498,7 +495,7 @@ abstract class tx_ttproducts_table_base_view  implements t3lib_Singleton {
 				} else {
 					switch ($field)	{
 						case 'ext':
-							$bSkip = TRUE;
+							$bSkip = true;
 							break;
 						default:
 							// nothing
@@ -539,8 +536,8 @@ abstract class tx_ttproducts_table_base_view  implements t3lib_Singleton {
 			$tmpMarkerArray = array();
 			$tmpMarkerArray[] = $marker;
 
-			if (isset($TCA[$tablename]['columns']) && is_array($TCA[$tablename]['columns']))	{
-				foreach ($TCA[$tablename]['columns'] as $theField => $confArray)	{
+			if (isset($GLOBALS['TCA'][$tablename]['columns']) && is_array($GLOBALS['TCA'][$tablename]['columns']))	{
+				foreach ($GLOBALS['TCA'][$tablename]['columns'] as $theField => $confArray)	{
 
 					if ($confArray['config']['type'] == 'group')	{
 						$foreigntablename = $confArray['config']['foreign_table'];
@@ -548,7 +545,7 @@ abstract class tx_ttproducts_table_base_view  implements t3lib_Singleton {
                             $foreigntablename != '' &&
                             !in_array($foreigntablename, $this->tablesWithoutView)
                         ) {
-							$foreignTableViewObj = $tablesObj->get($foreigntablename, TRUE);
+							$foreignTableViewObj = $tablesObj->get($foreigntablename, true);
 							if (is_object($foreignTableViewObj))	{
 								$foreignMarker = $foreignTableViewObj->getMarker();
 								$tmpMarkerArray[] = $foreignMarker;

@@ -47,15 +47,13 @@ class tx_ttproducts_pi1_base extends tslib_pibase implements t3lib_Singleton {
 	public $prefixId = TT_PRODUCTS_EXT;
 	public $scriptRelPath = 'pi1/class.tx_ttproducts_pi1_base.php';	// Path to this script relative to the extension dir.
 	public $extKey = TT_PRODUCTS_EXT;	// The extension key.
-	public $bRunAjax = FALSE;		// overrride this
+	public $bRunAjax = false;		// overrride this
 
 
 	/**
 	 * Main method. Call this from TypoScript by a USER or USER_INT cObject.
 	 */
 	public function main ($content,$conf)	{
-		global $TSFE;
-
 		tx_ttproducts_model_control::setPrefixId($this->prefixId);
         $this->conf = &$conf;
 

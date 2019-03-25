@@ -1,8 +1,5 @@
 <?php
-
-if (!defined ('TYPO3_MODE')) {
-	die ('Access denied.');
-}
+defined('TYPO3_MODE') || die('Access denied.');
 
 $imageFile = PATH_TTPRODUCTS_ICON_TABLE_REL . 'tt_products.gif';
 
@@ -12,10 +9,10 @@ if (
     // add folder icon
     $pageType = 'ttpproduct';
 
-    $addToModuleSelection = TRUE;
+    $addToModuleSelection = true;
     foreach ($GLOBALS['TCA']['pages']['columns']['module']['config']['items'] as $item) {
         if ($item['1'] == $pageType) {
-            $addToModuleSelection = FALSE;
+            $addToModuleSelection = false;
             break;
         }
     }
@@ -57,10 +54,10 @@ if (
         );
     }
 
-    $addToModuleSelection = TRUE;
+    $addToModuleSelection = true;
     foreach ($GLOBALS['TCA']['pages']['columns']['module']['config']['items'] as $item) {
         if ($item['1'] == $pageType) {
-            $addToModuleSelection = FALSE;
+            $addToModuleSelection = false;
             continue;
         }
     }

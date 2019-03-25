@@ -54,10 +54,8 @@ class tx_ttproducts_memo_view implements t3lib_Singleton {
 			$conf,
 			$useArticles
 		) {
-		global $TSFE, $TYPO3_DB;
-
 		$this->pibaseClass = $pibaseClass;
-		$pibaseObj = t3lib_div::makeInstance(''.$pibaseClass);
+		$pibaseObj = t3lib_div::makeInstance('' . $pibaseClass);
 		$this->cObj = $pibaseObj->cObj;
 		$this->conf = $conf;
 
@@ -69,7 +67,7 @@ class tx_ttproducts_memo_view implements t3lib_Singleton {
 			tx_ttproducts_control_memo::bUseSession($conf)
 		) {
 			$functablename = 'tt_products';
-			if (strpos($theCode, 'DAM') !== FALSE) {
+			if (strpos($theCode, 'DAM') !== false) {
 				$functablename = 'tx_dam';
 			}
 			$this->memoItems = tx_ttproducts_control_memo::getMemoItems($functablename);
@@ -80,9 +78,7 @@ class tx_ttproducts_memo_view implements t3lib_Singleton {
 	/**
 	 * Displays the memo
 	 */
-	public function &printView ($theCode, &$templateCode, $pid, &$error_code)	{
-		global $TSFE;
-
+	public function printView ($theCode, &$templateCode, $pid, &$error_code)	{
 		$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
 		$content = '';
 
@@ -121,7 +117,7 @@ class tx_ttproducts_memo_view implements t3lib_Singleton {
 					$theCode,
 					$theTable,
 					($this->memoItems ? implode(',', $this->memoItems) : array()),
-					FALSE,
+					false,
 					$error_code,
 					$templateArea,
 					$GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['pageAsCategory'],
@@ -158,7 +154,7 @@ class tx_ttproducts_memo_view implements t3lib_Singleton {
 			$error_code[0] = 'no_subtemplate';
 			$error_code[1] = '###' . $templateArea . $templateObj->getTemplateSuffix() . '###';
 			$error_code[2] = $templateObj->getTemplateFile();
-			$content = FALSE;
+			$content = false;
 		}
 		return $content;
 	}
@@ -179,7 +175,7 @@ class tx_ttproducts_memo_view implements t3lib_Singleton {
 		$fieldKey = 'FIELD_'.$markerKey.'_CHECK';
 
 		if (isset($tagArray[$fieldKey]))	{
-			$bUseCheckBox = TRUE;
+			$bUseCheckBox = true;
 			if (in_array($row['uid'], $this->memoItems))	{
 				$value = 1;
 			} else {
@@ -188,7 +184,7 @@ class tx_ttproducts_memo_view implements t3lib_Singleton {
 			$checkString = ($value ? 'checked="checked"':'');
 			$markerArray['###'.$fieldKey.'###'] = $checkString;
 		} else {
-			$bUseCheckBox = FALSE;
+			$bUseCheckBox = false;
 		}
 	}
 

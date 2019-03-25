@@ -40,14 +40,14 @@
 class tx_ttproducts_control_basket {
 	protected static $recs;
 	protected static $basketExt;
-	private static $bHasBeenInitialised = FALSE;
+	private static $bHasBeenInitialised = false;
 
 
 	static public function init () {
 		if (!self::$bHasBeenInitialised) {
 			self::$recs = self::getStoredRecs();
 			self::$basketExt = self::getStoredBasketExt();
-			self::$bHasBeenInitialised = TRUE;
+			self::$bHasBeenInitialised = true;
 		}
 	}
 
@@ -63,25 +63,19 @@ class tx_ttproducts_control_basket {
 
 
 	static public function getStoredRecs () {
-		global $TSFE;
-
-		$rc = $TSFE->fe_user->getKey('ses','recs');
+		$rc = $GLOBALS['TSFE']->fe_user->getKey('ses','recs');
 		return $rc;
 	}
 
 
 	static public function setStoredRecs ($valArray) {
-		global $TSFE;
-
 		self::store('recs', $valArray);
 	}
 
 
 	static public function store ($type, $valArray) {
-		global $TSFE;
-
-		$TSFE->fe_user->setKey('ses', $type, $valArray);
-		$TSFE->fe_user->storeSessionData(); // The basket shall not get lost when coming back from external scripts
+		$GLOBALS['TSFE']->fe_user->setKey('ses', $type, $valArray);
+		$GLOBALS['TSFE']->fe_user->storeSessionData(); // The basket shall not get lost when coming back from external scripts
 	}
 
 
@@ -91,9 +85,7 @@ class tx_ttproducts_control_basket {
 
 
 	static public function getStoredBasketExt () {
-		global $TSFE;
-
-		$rc = $TSFE->fe_user->getKey('ses','basketExt');
+		$rc = $GLOBALS['TSFE']->fe_user->getKey('ses','basketExt');
 		return $rc;
 	}
 
@@ -118,7 +110,7 @@ class tx_ttproducts_control_basket {
 
 
 	static public function fixCountries (&$infoArray) {
-		$rc = FALSE;
+		$rc = false;
 
 		if (
 			$infoArray['billing']['country_code'] != '' &&
@@ -129,14 +121,14 @@ class tx_ttproducts_control_basket {
 		) {
 			// a country change in the select box shall be copied
 			$infoArray['delivery']['country_code'] = $infoArray['billing']['country_code'];
-			$rc = TRUE;
+			$rc = true;
 		}
 		return $rc;
 	}
 
 
 	static public function destruct () {
-		self::$bHasBeenInitialised = FALSE;
+		self::$bHasBeenInitialised = false;
 	}
 
 

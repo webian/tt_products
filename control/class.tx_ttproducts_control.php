@@ -55,8 +55,6 @@ class tx_ttproducts_control implements t3lib_Singleton {
 
 
 	public function init ($pibaseClass, $conf, $config, $funcTablename, &$templateCode, $useArticles, &$error_code)  {
-		global $TYPO3_DB,$TSFE,$TCA;
-
 		$this->pibaseClass = $pibaseClass;
 		$this->pibase = t3lib_div::makeInstance('' . $pibaseClass);
 		$this->cObj = $this->pibase->cObj;
@@ -84,11 +82,9 @@ class tx_ttproducts_control implements t3lib_Singleton {
 
 
 	protected function getOrderUid () {
-		global $TSFE;
-
 		$result = false;
 		$orderUid = 0;
-		$orderArray = $TSFE->fe_user->getKey('ses','order');
+		$orderArray = $GLOBALS['TSFE']->fe_user->getKey('ses','order');
 
 		if (isset($orderArray['orderUid'])) {
 			$orderUid = $orderArray['orderUid'];
@@ -194,11 +190,9 @@ class tx_ttproducts_control implements t3lib_Singleton {
 		&$bFinalize,
 		&$errorMessage
 	)	{
-		global $TSFE;
-
 		$content = '';
 		$basketView = t3lib_div::makeInstance('tx_ttproducts_basket_view');
-		$handleScript = $TSFE->tmpl->getFileName($basketExtra['payment.']['handleScript']);
+		$handleScript = $GLOBALS['TSFE']->tmpl->getFileName($basketExtra['payment.']['handleScript']);
 		$handleLib = $basketExtra['payment.']['handleLib'];
 		$infoViewObj = t3lib_div::makeInstance('tx_ttproducts_info_view');
 
@@ -321,8 +315,6 @@ class tx_ttproducts_control implements t3lib_Singleton {
 		$accountRequired,
 		$paymentErrorMsg
 	) {
-		global $TSFE;
-
         if ($checkRequired || $checkAllowed) {
             $check = ($checkRequired ? $checkRequired : $checkAllowed);
             $languageKey = '';
@@ -344,13 +336,13 @@ class tx_ttproducts_control implements t3lib_Singleton {
                 if (!$languageKey) {
                     $languageKey = 'missing_' . $check;
                 }
-                $label = $TSFE->sL('LLL:EXT:sr_feuser_register/Resources/Private/Language/locallang.xlf:' . $languageKey);
-				$editPID = $TSFE->tmpl->setup['plugin.']['tx_srfeuserregister_pi1.']['editPID'];
+                $label = $GLOBALS['TSFE']->sL('LLL:EXT:sr_feuser_register/Resources/Private/Language/locallang.xlf:' . $languageKey);
+				$editPID = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_srfeuserregister_pi1.']['editPID'];
 
-				if ($TSFE->loginUser && $editPID) {
+				if ($GLOBALS['TSFE']->loginUser && $editPID) {
 					$addParams = array ('products_payment' => 1);
 					$addParams = $this->urlObj->getLinkParams('',$addParams,true);
-					$srfeuserBackUrl = $this->pibase->pi_getPageLink($TSFE->id,'',$addParams);
+					$srfeuserBackUrl = $this->pibase->pi_getPageLink($GLOBALS['TSFE']->id,'',$addParams);
 					$srfeuserParams = array('tx_srfeuserregister_pi1[backURL]' => $srfeuserBackUrl);
 					$addParams = $this->urlObj->getLinkParams('',$srfeuserParams,true);
 					$markerArray['###FORM_URL_INFO###'] = $this->pibase->pi_getPageLink($editPID,'',$addParams);
@@ -359,13 +351,13 @@ class tx_ttproducts_control implements t3lib_Singleton {
                 if (!$languageKey) {
                     $languageKey = 'missing_' . $check;
                 }
-                $label = $TSFE->sL('LLL:EXT:agency/pi/locallang.xml:' . $languageKey);
-				$editPID = $TSFE->tmpl->setup['plugin.']['tx_agency.']['editPID'];
+                $label = $GLOBALS['TSFE']->sL('LLL:EXT:agency/pi/locallang.xml:' . $languageKey);
+				$editPID = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_agency.']['editPID'];
 
-				if ($TSFE->loginUser && $editPID) {
+				if ($GLOBALS['TSFE']->loginUser && $editPID) {
 					$addParams = array ('products_payment' => 1);
 					$addParams = $this->urlObj->getLinkParams('', $addParams, true);
-					$agencyBackUrl = $this->pibase->pi_getPageLink($TSFE->id, '', $addParams);
+					$agencyBackUrl = $this->pibase->pi_getPageLink($GLOBALS['TSFE']->id, '', $addParams);
 					$agencyParams = array('agency[backURL]' => $agencyBackUrl);
 					$addParams = $this->urlObj->getLinkParams('', $agencyParams, true);
 					$markerArray['###FORM_URL_INFO###'] = $this->pibase->pi_getPageLink($editPID, '', $addParams);
@@ -435,9 +427,6 @@ class tx_ttproducts_control implements t3lib_Singleton {
 		&$errorMessage,
 		&$bFinalize
 	) {
-		global $TSFE;
-		global $TYPO3_DB;
-
 		$empty = '';
 		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
 		$basketView = t3lib_div::makeInstance('tx_ttproducts_basket_view');
@@ -614,9 +603,6 @@ class tx_ttproducts_control implements t3lib_Singleton {
 		$basketExtra,
 		&$errorMessage
 	)	{
-		global $TSFE;
-		global $TYPO3_DB;
-
 		$basket_tmpl = '';
 		$empty = '';
 		$content = '';
@@ -722,13 +708,13 @@ class tx_ttproducts_control implements t3lib_Singleton {
 						}
 					break;
 					case 'products_redeem_gift': 	// this shall never be the only activity
-						if (trim($TSFE->fe_user->user['username']) == '') {
+						if (trim($GLOBALS['TSFE']->fe_user->user['username']) == '') {
 							$basket_tmpl = 'BASKET_TEMPLATE_NOT_LOGGED_IN';
 						} else {
 							$uniqueId = t3lib_div::trimExplode ('-', $this->basket->recs['tt_products']['giftcode'], true);
 							$query='uid=\''.intval($uniqueId[0]).'\' AND crdate=\''.intval($uniqueId[1]).'\''.' AND NOT deleted' ;
-							$giftRes = $TYPO3_DB->exec_SELECTquery('*', 'tt_products_gifts', $query);
-							$row = $TYPO3_DB->sql_fetch_assoc($giftRes);
+							$giftRes = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tt_products_gifts', $query);
+							$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($giftRes);
 
 							$pricefactor = doubleval($this->conf['creditpoints.']['pricefactor']);
 							if ($row && $pricefactor > 0) {
@@ -737,12 +723,12 @@ class tx_ttproducts_control implements t3lib_Singleton {
 								$fieldsArray = array();
 								$fieldsArray['deleted']=1;
 									// Delete the gift record
-								$TYPO3_DB->exec_UPDATEquery('tt_products_gifts', 'uid='.intval($uid), $fieldsArray);
+								$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tt_products_gifts', 'uid='.intval($uid), $fieldsArray);
 								$creditpoints = $money / $pricefactor;
-								tx_ttproducts_creditpoints_div::addCreditPoints($TSFE->fe_user->user['username'], $creditpoints);
-								$cpArray = $TSFE->fe_user->getKey('ses','cp');
+								tx_ttproducts_creditpoints_div::addCreditPoints($GLOBALS['TSFE']->fe_user->user['username'], $creditpoints);
+								$cpArray = $GLOBALS['TSFE']->fe_user->getKey('ses','cp');
 								$cpArray['gift']['amount'] += $creditpoints;
-								$TSFE->fe_user->setKey('ses','cp',$cpArray);
+								$GLOBALS['TSFE']->fe_user->setKey('ses','cp',$cpArray);
 							}
 						}
 					break;
@@ -982,7 +968,7 @@ class tx_ttproducts_control implements t3lib_Singleton {
 			$checkAllowed = $infoViewObj->checkAllowed($basketExtra);
 			if ($checkRequired == '' && $checkAllowed == '')	{
 				tx_div2007_alpha5::load_noLinkExtCobj_fh002($this->pibase);	// TODO
-				$handleScript = $TSFE->tmpl->getFileName($this->basket->basketExtra['payment.']['handleScript']);
+				$handleScript = $GLOBALS['TSFE']->tmpl->getFileName($this->basket->basketExtra['payment.']['handleScript']);
 				$orderUid = $this->getOrderUid();
 				$orderNumber = $this->getOrdernumber($orderUid);
 
@@ -1119,9 +1105,6 @@ class tx_ttproducts_control implements t3lib_Singleton {
 	 * @return	string	text to display
 	 */
 	public function doProcessing (&$codes, $calculatedArray, $basketExtra, &$errorMessage) {
-		global $TSFE;
-		global $TYPO3_DB;
-
 		$content = '';
 		$empty = '';
 		$activityArray = array();

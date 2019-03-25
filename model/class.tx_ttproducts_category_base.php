@@ -76,13 +76,13 @@ abstract class tx_ttproducts_category_base extends tx_ttproducts_table_base {
 	}
 
 	function hasSpecialConf ($cat, $theCode, $type)	{
-		$rc = FALSE;
+		$rc = false;
 		$conf = $this->getTableConf ($theCode);
 
 		if (is_array($conf['special.']) && isset($conf['special.'][$type]))	{
 			$specialArray = t3lib_div::trimExplode (',', $conf['special.'][$type]);
 			if (in_array($cat, $specialArray))	{
-				$rc = TRUE;
+				$rc = true;
 			}
 		}
 

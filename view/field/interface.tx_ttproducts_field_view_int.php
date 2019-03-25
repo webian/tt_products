@@ -41,7 +41,7 @@
 interface tx_ttproducts_field_view_int	{
 	public function needsInit ();
 	public function getModelObj ();
-	public function getRowMarkerArray ($functablename, $fieldname, $row, $markerKey, &$markerArray, $tagArray, $theCode, $id, $basketExtra, &$bSkip, $bHtml=TRUE, $charset='', $prefix='', $suffix='', $imageRenderObj='');
+	public function getRowMarkerArray ($functablename, $fieldname, $row, $markerKey, &$markerArray, $tagArray, $theCode, $id, $basketExtra, &$bSkip, $bHtml=true, $charset='', $prefix='', $suffix='', $imageRenderObj='');
 }
 
 

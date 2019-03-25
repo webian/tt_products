@@ -44,8 +44,7 @@ class tx_ttproducts_field_media extends tx_ttproducts_field_base {
 	/**
 	 *
 	 */
-	function init($cObj)	{
-		global $TYPO3_DB,$TSFE,$TCA;
+	public function init($cObj)	{
 
  		parent::init($cObj);
 

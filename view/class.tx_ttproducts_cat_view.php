@@ -65,7 +65,7 @@ class tx_ttproducts_cat_view implements t3lib_Singleton {
 
 		$this->pidListObj = t3lib_div::makeInstance('tx_ttproducts_pid_list');
 		$this->pidListObj->init($this->cObj);
-		$this->pidListObj->applyRecursive($recursive, $pid_list, TRUE);
+		$this->pidListObj->applyRecursive($recursive, $pid_list, true);
 		$this->pidListObj->setPageArray();
 
 		$this->javaScriptMarker = t3lib_div::makeInstance('tx_ttproducts_javascript_marker');
@@ -74,11 +74,9 @@ class tx_ttproducts_cat_view implements t3lib_Singleton {
 
 
 	// returns the single view
-	function &printView(&$templateCode, $functablename, $uid, $theCode, &$error_code, $templateSuffix = '') {
-		global $TSFE, $TCA, $TYPO3_DB;
-
+	public function printView(&$templateCode, $functablename, $uid, $theCode, &$error_code, $templateSuffix = '') {
 		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
-		$tableViewObj = $tablesObj->get($functablename, TRUE);
+		$tableViewObj = $tablesObj->get($functablename, true);
 		$tableObj = $tableViewObj->getModelObj();
 		$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
 		$javaScriptObj = t3lib_div::makeInstance('tx_ttproducts_javascript');
@@ -90,7 +88,7 @@ class tx_ttproducts_cat_view implements t3lib_Singleton {
 		} else if ($uid) {
 			$pidField = ($functablename == 'pages' ? 'uid' : 'pid');
 			$where = $pidField.' IN ('.$this->pidListObj->getPidlist().')';
-			$row = $tableObj->get($uid, 0, TRUE, $where);
+			$row = $tableObj->get($uid, 0, true, $where);
 			$tableConf = $cnf->getTableConf($functablename, $theCode);
 			$tableObj->clear();
 			$tableObj->initCodeConf($theCode,$tableConf);
@@ -131,7 +129,7 @@ class tx_ttproducts_cat_view implements t3lib_Singleton {
 			}
 
 			$viewTagArray = $markerObj->getAllMarkers($itemFrameWork);
-			$tablesObj->get('fe_users',TRUE)->getWrappedSubpartArray(
+			$tablesObj->get('fe_users',true)->getWrappedSubpartArray(
 				$viewTagArray,
 				$bUseBackPid,
 				$subpartArray,
@@ -256,7 +254,7 @@ class tx_ttproducts_cat_view implements t3lib_Singleton {
 			$subpartArray = array();
 			$markerArray['###FORM_NAME###'] = $forminfoArray['###FORM_NAME###'];
 			$addQueryString = array();
-			if ($pid == $TSFE->id)	{
+			if ($pid == $GLOBALS['TSFE']->id)	{
 				$addQueryString[$tableViewObj->getPivar()] = $uid;
 			}
 
@@ -267,10 +265,10 @@ class tx_ttproducts_cat_view implements t3lib_Singleton {
 			$prevOrderby = '';
 			$nextOrderby = '';
 
-			if(is_array($tableConf) && isset($tableConf['orderBy']) && strpos($itemTableConf['orderBy'],',') === FALSE)	{
+			if(is_array($tableConf) && isset($tableConf['orderBy']) && strpos($itemTableConf['orderBy'],',') === false)	{
 				$orderByField = $tableConf['orderBy'];
-				$queryPrevPrefix = $orderByField.' < '.$TYPO3_DB->fullQuoteStr($row[$orderByField],$tableObj->getTableObj()->name);
-				$queryNextPrefix = $orderByField.' > '.$TYPO3_DB->fullQuoteStr($row[$orderByField],$tableObj->getTableObj()->name);
+				$queryPrevPrefix = $orderByField.' < '.$GLOBALS['TYPO3_DB']->fullQuoteStr($row[$orderByField],$tableObj->getTableObj()->name);
+				$queryNextPrefix = $orderByField.' > '.$GLOBALS['TYPO3_DB']->fullQuoteStr($row[$orderByField],$tableObj->getTableObj()->name);
 				$prevOrderby = $orderByField.' DESC';;
 				$nextOrderby = $orderByField.' ASC';
 			} else {
@@ -287,7 +285,7 @@ class tx_ttproducts_cat_view implements t3lib_Singleton {
 			if (is_array($tableConf['filter.']) && is_array($tableConf['filter.']['regexp.']))	{
 				if (is_array($tableConf['filter.']['regexp.']['field.']))	{
 					foreach ($tableConf['filter.']['field.'] as $field => $value)	{
-						$whereFilter .= ' AND '.$field.' REGEXP '.$TYPO3_DB->fullQuoteStr(quotemeta($value),$tableObj->getTableObj()->name);
+						$whereFilter .= ' AND '.$field.' REGEXP '.$GLOBALS['TYPO3_DB']->fullQuoteStr(quotemeta($value),$tableObj->getTableObj()->name);
 					}
 				}
 			}
@@ -295,9 +293,9 @@ class tx_ttproducts_cat_view implements t3lib_Singleton {
 			$queryprev = '';
 			$queryprev = $queryPrevPrefix .' AND pid IN ('.$this->pidListObj->getPidlist().')'. $tableObj->getTableObj()->enableFields();
 			// $resprev = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tt_products', $queryprev,'', $prevOrderby);
-			$resprev = $tableObj->getTableObj()->exec_SELECTquery('*', $queryprev, '', $TYPO3_DB->stripOrderBy($prevOrderby));
+			$resprev = $tableObj->getTableObj()->exec_SELECTquery('*', $queryprev, '', $GLOBALS['TYPO3_DB']->stripOrderBy($prevOrderby));
 
-			if ($rowprev = $TYPO3_DB->sql_fetch_assoc($resprev) )	{
+			if ($rowprev = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($resprev) )	{
 				$addQueryString=array();
 				$addQueryString[$tableViewObj->getPivar()] = $rowprev['uid'];
 
@@ -308,7 +306,7 @@ class tx_ttproducts_cat_view implements t3lib_Singleton {
 					'<a href="'
 					. htmlspecialchars(
 						$this->pibase->pi_getPageLink(
-								$TSFE->id,
+								$GLOBALS['TSFE']->id,
 							'',
 							$this->urlObj->getLinkParams(
 								'',
@@ -327,13 +325,13 @@ class tx_ttproducts_cat_view implements t3lib_Singleton {
 			} else	{
 				$subpartArray['###LINK_PREV_SINGLE###']='';
 			}
-			$TYPO3_DB->sql_free_result($resprev);
+			$GLOBALS['TYPO3_DB']->sql_free_result($resprev);
 
 			$querynext = $queryNextPrefix.' AND pid IN ('.$this->pidListObj->getPidlist().')'. $wherestock . $tableObj->getTableObj()->enableFields();
 			// $resnext = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tt_products', $querynext, $nextOrderby);
-			$resnext = $tableObj->getTableObj()->exec_SELECTquery('*', $querynext, '', $TYPO3_DB->stripOrderBy($nextOrderby));
+			$resnext = $tableObj->getTableObj()->exec_SELECTquery('*', $querynext, '', $GLOBALS['TYPO3_DB']->stripOrderBy($nextOrderby));
 
-			if ($rownext = $TYPO3_DB->sql_fetch_assoc($resnext) )	{
+			if ($rownext = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($resnext) )	{
 				$addQueryString=array();
 				$addQueryString[$this->type] = $rownext['uid'];
 				$addQueryString['backPID'] = $backPID;
@@ -347,7 +345,7 @@ class tx_ttproducts_cat_view implements t3lib_Singleton {
 					'<a href="'
 						. htmlspecialchars(
 							$this->pibase->pi_getPageLink(
-								$TSFE->id,
+								$GLOBALS['TSFE']->id,
 								'',
 								$this->urlObj->getLinkParams(
 									'',
@@ -364,7 +362,7 @@ class tx_ttproducts_cat_view implements t3lib_Singleton {
 			} else {
 				$subpartArray['###LINK_NEXT_SINGLE###'] = '';
 			}
-			$TYPO3_DB->sql_free_result($resnext);
+			$GLOBALS['TYPO3_DB']->sql_free_result($resnext);
 
 			$jsMarkerArray = array();
 			$this->javaScriptMarker->getMarkerArray($jsMarkerArray, $markerArray);

@@ -71,8 +71,6 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 		$pid_list,
 		$bStoreBasket
 	)	{
-		global $TSFE;
-
 		$formerBasket = tx_ttproducts_control_basket::getRecs();
 		$pibaseObj = t3lib_div::makeInstance('' . $pibaseClass);
 		$cnfObj = t3lib_div::makeInstance('tx_ttproducts_config');
@@ -104,7 +102,7 @@ class tx_ttproducts_basket implements t3lib_Singleton {
             $bAgbSet = $this->recs['personinfo']['agb'];
             $this->recs['personinfo']['agb'] = (boolean) $_REQUEST['recs']['personinfo']['agb'];
             if ($bAgbSet != $this->recs['personinfo']['agb'])   {
-                $TSFE->fe_user->setKey('ses', 'recs', $this->recs); // store this change
+                $GLOBALS['TSFE']->fe_user->setKey('ses', 'recs', $this->recs); // store this change
             }
         }
 
@@ -125,9 +123,9 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 		$this->setFuncTablename($funcTablename);
 		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 		$viewTableObj = $tablesObj->get($funcTablename);
-		$tmpBasketExt = $TSFE->fe_user->getKey('ses','basketExt');
+		$tmpBasketExt = $GLOBALS['TSFE']->fe_user->getKey('ses','basketExt');
 
-		$order = $TSFE->fe_user->getKey('ses','order');
+		$order = $GLOBALS['TSFE']->fe_user->getKey('ses','order');
 		$this->setOrder($order);
 		$basketExtRaw = t3lib_div::_GP('ttp_basket');
 		$basketInputConf = &$cnfObj->getBasketConf('view','input');
@@ -285,11 +283,11 @@ class tx_ttproducts_basket implements t3lib_Singleton {
                     is_array($this->basketExt) &&
                     count($this->basketExt)
                 ) {
-					$TSFE->fe_user->setKey('ses','basketExt',$this->basketExt);
+					$GLOBALS['TSFE']->fe_user->setKey('ses','basketExt',$this->basketExt);
 				} else {
-					$TSFE->fe_user->setKey('ses','basketExt',array());
+					$GLOBALS['TSFE']->fe_user->setKey('ses','basketExt',array());
 				}
-				$TSFE->fe_user->storeSessionData(); // The basket shall not get lost when coming back from external scripts
+				$GLOBALS['TSFE']->fe_user->storeSessionData(); // The basket shall not get lost when coming back from external scripts
 			}
 		}
 
@@ -583,8 +581,6 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 	 * Empties the shopping basket!
 	 */
 	public function clearBasket ($bForce=false)	{
-		global $TSFE;
-
 		if ($this->conf['debug'] != '1' || $bForce)	{
 
 			// TODO: delete only records from relevant pages

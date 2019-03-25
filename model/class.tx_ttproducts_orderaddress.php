@@ -48,16 +48,14 @@ class tx_ttproducts_orderaddress extends tx_ttproducts_table_base {
 	var $piVar = 'fe';
 	var $marker = 'FEUSER';
 
-	private $bCondition = FALSE;
-	private $bConditionRecord = FALSE;
+	private $bCondition = false;
+	private $bConditionRecord = false;
 
 
 	/**
 	 * Getting all tt_products_cat categories into internal array
 	 */
 	public function init ($cObj, $functablename)  {
-		global $TYPO3_DB,$TSFE,$TCA;
-
 		parent::init($cObj, $functablename);
 		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 
@@ -95,22 +93,6 @@ class tx_ttproducts_orderaddress extends tx_ttproducts_table_base {
 		return $result;
 	}
 
-/*
-	public function get ($uid) {
-		global $TYPO3_DB;
-
-		$rc = $this->dataArray[$uid];
-		if (!$rc && $uid) {
-			$where = '1=1 '.$this->getTableObj()->enableFields();
-			$res = $this->getTableObj()->exec_SELECTquery('*',$where.' AND uid = '.intval($uid));
-			$row = $TYPO3_DB->sql_fetch_assoc($res);
-			$TYPO3_DB->sql_free_result($res);
-			$rc = $this->dataArray[$row['uid']] = $row;
-		}
-		return $rc;
-	}
-*/
-
 	public function getFieldName ($field)	{
 		$rc = $field;
 		if (is_array($this->fieldArray) && $this->fieldArray[$field])	{
@@ -131,9 +113,7 @@ class tx_ttproducts_orderaddress extends tx_ttproducts_table_base {
 
 
 	public function setCondition ($row, $funcTablename)	{
-		global $TSFE;
-
-		$bCondition = FALSE;
+		$bCondition = false;
 
 		if (isset($this->conf['conf.'][$funcTablename.'.']['ALL.']['fe_users.']['date_of_birth.']['period.']['y']))	{
 			$year = $this->conf['conf.'][$funcTablename.'.']['ALL.']['fe_users.']['date_of_birth.']['period.']['y'];
@@ -141,15 +121,15 @@ class tx_ttproducts_orderaddress extends tx_ttproducts_table_base {
 
 			if ($infoObj->infoArray['billing']['date_of_birth'])	{
 				$timeTemp = $infoObj->infoArray['billing']['date_of_birth'];
-				$bAge = TRUE;
+				$bAge = true;
 			} else if (
                 $GLOBALS['TSFE']->loginUser &&
                 is_array($GLOBALS['TSFE']->fe_user->user)
             )	{
 				$timeTemp = date('d-m-Y', ($GLOBALS['TSFE']->fe_user->user['date_of_birth']));
-				$bAge = TRUE;
+				$bAge = true;
 			} else {
-				$bAge = FALSE;
+				$bAge = false;
 			}
 
 			if ($bAge)	{
@@ -160,11 +140,11 @@ class tx_ttproducts_orderaddress extends tx_ttproducts_table_base {
 					$offset = 1;
 				}
 				if ($date['year'] - $feDateArray[2] - $offset >= $year)	{
-					$bCondition = TRUE;
+					$bCondition = true;
 				}
 			}
 		} else {
-			$bCondition = TRUE;
+			$bCondition = true;
 		}
 
 		$whereConf = $this->conf['conf.'][$funcTablename.'.']['ALL.']['fe_users.']['where'];
@@ -176,12 +156,12 @@ class tx_ttproducts_orderaddress extends tx_ttproducts_table_base {
 		$valueArray = t3lib_div::trimExplode(',', $inString);
 		foreach ($valueArray as $value)	{
 			if ($row[$whereArray[0]] == $value)	{
-				$this->bConditionRecord = TRUE;
+				$this->bConditionRecord = true;
 			}
 		}
 
 		if ($bCondition)	{
-			$this->bCondition = TRUE;
+			$this->bCondition = true;
 		}
 	}
 
@@ -197,11 +177,9 @@ class tx_ttproducts_orderaddress extends tx_ttproducts_table_base {
 
 
 	public function getCreditpoints ()	{
-		global $TSFE;
-
-		$rc = FALSE;
-		if (isset($TSFE->fe_user->user) && is_array(($TSFE->fe_user->user)))	{
-			$rc = $TSFE->fe_user->user['tt_products_creditpoints'];
+		$rc = false;
+		if (isset($GLOBALS['TSFE']->fe_user->user) && is_array(($GLOBALS['TSFE']->fe_user->user)))	{
+			$rc = $GLOBALS['TSFE']->fe_user->user['tt_products_creditpoints'];
 		}
 		return $rc;
 	}

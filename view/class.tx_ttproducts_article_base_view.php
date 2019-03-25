@@ -75,8 +75,6 @@ abstract class tx_ttproducts_article_base_view extends tx_ttproducts_table_base_
 
 
 	public function getItemSubpartArrays (&$templateCode, $functablename, $row, &$subpartArray, &$wrappedSubpartArray, &$tagArray, $theCode='', $basketExtra=array(), $id='') {
-		global $TCA;
-
 		parent::getItemSubpartArrays($templateCode, $functablename, $row, $subpartArray, $wrappedSubpartArray, $tagArray, $theCode, $basketExtra, $id);
 	}
 
@@ -113,15 +111,13 @@ abstract class tx_ttproducts_article_base_view extends tx_ttproducts_table_base_
 
 
 	public function getPriceMarkerArray ($basketExtra, &$markerArray, $row, $markerKey, $id, $theCode)	{
-		global $TCA;
-
 		$modelObj = $this->getModelObj();
 		$priceViewObj = t3lib_div::makeInstance('tx_ttproducts_field_price_view');
 
 		$functablename = $modelObj->getFuncTablename();
 		$mainId = $this->getId($row, $id, $theCode);
 
-		foreach ($TCA[$functablename]['columns'] as $field => $fieldTCA)	{
+		foreach ($GLOBALS['TCA'][$functablename]['columns'] as $field => $fieldTCA)	{
 			if (strpos($field, 'price') === 0)	{
 				$priceViewObj->getModelMarkerArray($functablename, $basketExtra, $field, $row, $markerArray, $markerKey, $mainId);
 			}
@@ -160,8 +156,6 @@ abstract class tx_ttproducts_article_base_view extends tx_ttproducts_table_base_
 		$bHtml=true,
 		$charset=''
 	)	{
-		global $TSFE, $TCA;
-
 		$modelObj = $this->getModelObj();
 		$imageObj = t3lib_div::makeInstance('tx_ttproducts_field_image_view');
 

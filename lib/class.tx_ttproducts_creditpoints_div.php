@@ -85,13 +85,11 @@ class tx_ttproducts_creditpoints_div {
 	 * adds the number of creditpoints for the frontend user
 	 */
 	static public function addCreditPoints ($username, $creditpoints)  {
-		global $TYPO3_DB;
-
 		if ($username) {
 			$uid_voucher = '';
 			// get the "old" creditpoints for the user
-			$res1 = $TYPO3_DB->exec_SELECTquery('uid, tt_products_creditpoints', 'fe_users', 'username='.$TYPO3_DB->fullQuoteStr($username,'tt_products_creditpoints'));
-			if ($row = $TYPO3_DB->sql_fetch_assoc($res1)) {
+			$res1 = $GLOBALS['TYPO3_DB']->exec_SELECTquery('uid, tt_products_creditpoints', 'fe_users', 'username='.$GLOBALS['TYPO3_DB']->fullQuoteStr($username,'tt_products_creditpoints'));
+			if ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res1)) {
 				$ttproductscreditpoints = $row['tt_products_creditpoints'];
 				$uid_voucher = $row['uid'];
 			}
@@ -99,7 +97,7 @@ class tx_ttproducts_creditpoints_div {
 				$fieldsArrayFeUserCredit = array();
 				$fieldsArrayFeUserCredit['tt_products_creditpoints'] = $ttproductscreditpoints + $creditpoints;
 
-				$TYPO3_DB->exec_UPDATEquery('fe_users', 'uid='.intval($uid_voucher), $fieldsArrayFeUserCredit);
+				$GLOBALS['TYPO3_DB']->exec_UPDATEquery('fe_users', 'uid='.intval($uid_voucher), $fieldsArrayFeUserCredit);
 			}
 		}
 	}

@@ -73,7 +73,7 @@ class tx_ttproducts_text_view extends tx_ttproducts_table_base_view {
 		if (isset($rowArray) && is_array($rowArray) && count($rowArray)) {
 			foreach ($rowArray as $k => $row) {
 				$tag = strtoupper($row['marker']);
-				$bFoundTagArray[$tag] = TRUE;
+				$bFoundTagArray[$tag] = true;
 				$marker = $parentMarker . '_' . $this->getMarker() . '_' . $tag;
 				$value = $row['note'];
 				$value = ($this->conf['nl2brNote'] ? nl2br($value) : $value);

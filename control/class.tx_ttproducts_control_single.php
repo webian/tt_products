@@ -47,8 +47,6 @@ class tx_ttproducts_control_single implements t3lib_Singleton {
 	 * @access private
 	 */
 	function triggerEvents ($conf)	{
-		global $TSFE, $TYPO3_DB;
-
 		if (isset($conf['trigger.']))	{
 
 			$triggerConf = $conf['trigger.'];
@@ -56,15 +54,15 @@ class tx_ttproducts_control_single implements t3lib_Singleton {
 			$piVar = tx_ttproducts_model_control::getPiVar('tt_products');
 			$uid = $piVars[$piVar];
 
-			if ($TSFE->loginUser)	{
+			if ($GLOBALS['TSFE']->loginUser)	{
 	/*
 	$productTableObj->getTableConf('LISTVIEWEDITEMS');*/
 				$mmTablename = 'sys_products_fe_users_mm_visited_products';
 
 				if ($uid && in_array($mmTablename, $triggerConf))	{	// check if this trigger has been activated
 
-					$where = 'uid_local=' . intval($TSFE->fe_user->user['uid']) . ' AND uid_foreign=' . intval($uid);
-					$mmArray = $TYPO3_DB->exec_SELECTgetRows('*', $mmTablename, $where, '', 'tstamp', '1');
+					$where = 'uid_local=' . intval($GLOBALS['TSFE']->fe_user->user['uid']) . ' AND uid_foreign=' . intval($uid);
+					$mmArray = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('*', $mmTablename, $where, '', 'tstamp', '1');
 					$time = time();
 
 					if ($mmArray)	{
@@ -72,15 +70,15 @@ class tx_ttproducts_control_single implements t3lib_Singleton {
 						$updateFields['uid_foreign'] = $uid;
 						$updateFields['tstamp'] = $time;
 						$updateFields['qty'] += 1;
-						$TYPO3_DB->exec_UPDATEquery($mmTablename, $where, $updateFields);
+						$GLOBALS['TYPO3_DB']->exec_UPDATEquery($mmTablename, $where, $updateFields);
 					} else {
 						$insertFields = array (
 							'tstamp' => $time,
-							'uid_local' => $TSFE->fe_user->user['uid'],
+							'uid_local' => $GLOBALS['TSFE']->fe_user->user['uid'],
 							'uid_foreign' => $uid,
 							'qty' => 1
 						);
-						$TYPO3_DB->exec_INSERTquery($mmTablename, $insertFields);
+						$GLOBALS['TYPO3_DB']->exec_INSERTquery($mmTablename, $insertFields);
 					}
 				}
 			}
@@ -90,22 +88,22 @@ class tx_ttproducts_control_single implements t3lib_Singleton {
 			if ($uid && in_array($tablename, $triggerConf))	{	// check if this trigger has been activated
 
 				$where = 'uid=' . intval($uid);
-				$rowArray = $TYPO3_DB->exec_SELECTgetRows('*', $tablename, $where, '', 'tstamp', '1');
+				$rowArray = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('*', $tablename, $where, '', 'tstamp', '1');
 				$time = time();
 				if ($rowArray)	{
 
 					$updateFields = $rowArray['0'];
 					$updateFields['tstamp'] = $time;
 					$updateFields['qty'] += 1;
-					$TYPO3_DB->exec_UPDATEquery($tablename, $where, $updateFields);
+					$GLOBALS['TYPO3_DB']->exec_UPDATEquery($tablename, $where, $updateFields);
 				} else {
 					$insertFields = array (
-						'pid' => $TSFE->id,
+						'pid' => $GLOBALS['TSFE']->id,
 						'tstamp' => $time,
 						'uid' => $uid,
 						'qty' => 1
 					);
-					$TYPO3_DB->exec_INSERTquery($tablename, $insertFields);
+					$GLOBALS['TYPO3_DB']->exec_INSERTquery($tablename, $insertFields);
 				}
 			}
 		}

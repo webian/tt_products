@@ -65,10 +65,8 @@ class tx_ttproducts_order_view extends tx_ttproducts_table_base_view {
 		}
 	}
 
-	public function &printView(&$templateCode, &$error_code)	 {
-		global $TSFE, $TYPO3_DB;
-
-		$feusers_uid = $TSFE->fe_user->user['uid'];
+	public function printView(&$templateCode, &$error_code)	 {
+		$feusers_uid = $GLOBALS['TSFE']->fe_user->user['uid'];
 		$priceViewObj = t3lib_div::makeInstance('tx_ttproducts_field_price_view');
 		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 		$subpartmarkerObj = t3lib_div::makeInstance('tx_ttproducts_subpartmarker');
@@ -86,7 +84,7 @@ class tx_ttproducts_order_view extends tx_ttproducts_table_base_view {
 		}
 
 		$where = 'feusers_uid = ' . intval($feusers_uid) . $orderObj->getTableObj()->enableFields() . ' ORDER BY crdate';
-		$res = $TYPO3_DB->exec_SELECTquery('*', 'sys_products_orders', $where);
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'sys_products_orders', $where);
 		$templateArea = 'ORDERS_LIST_TEMPLATE';
 
 		$frameWork = $this->cObj->getSubpart($templateCode,$subpartmarkerObj->spMarker('###' . $templateArea . '###'));
@@ -101,7 +99,7 @@ class tx_ttproducts_order_view extends tx_ttproducts_table_base_view {
 
 		$content = $this->cObj->substituteMarkerArray($frameWork, $globalMarkerArray);
 		$orderitem = $this->cObj->getSubpart($content,'###ORDER_ITEM###');
-		$count = $TYPO3_DB->sql_num_rows($res);
+		$count = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
 
 		if ($count) {
 			// Fill marker arrays
@@ -112,7 +110,7 @@ class tx_ttproducts_order_view extends tx_ttproducts_table_base_view {
 			$tot_creditpoints_spended = 0;
 			$tot_creditpoints_gifts = 0;
 			$this->orders = array();
-			while($row = $TYPO3_DB->sql_fetch_assoc($res)) {
+			while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 				$markerArray['###TRACKING_CODE###'] = $row['tracking_code'];
 				$markerArray['###ORDER_DATE###'] = $this->cObj->stdWrap($row['crdate'],$this->conf['orderDate_stdWrap.']);
 				$markerArray['###ORDER_NUMBER###'] = $orderObj->getNumber($row['uid']);
@@ -133,26 +131,26 @@ class tx_ttproducts_order_view extends tx_ttproducts_table_base_view {
 				$tot_creditpoints_gifts += $row['creditpoints_gifts'];
 				$orderlistc .= $this->cObj->substituteMarkerArray($orderitem, $markerArray);
 			}
-			$TYPO3_DB->sql_free_result($res);
+			$GLOBALS['TYPO3_DB']->sql_free_result($res);
 
-			$res1 = $TYPO3_DB->exec_SELECTquery('username ', 'fe_users', 'uid="'.intval($feusers_uid).'"');
-			if ($row = $TYPO3_DB->sql_fetch_assoc($res1)) {
+			$res1 = $GLOBALS['TYPO3_DB']->exec_SELECTquery('username ', 'fe_users', 'uid="'.intval($feusers_uid).'"');
+			if ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res1)) {
 				$username = $row['username'];
 			}
-			$TYPO3_DB->sql_free_result($res1);
+			$GLOBALS['TYPO3_DB']->sql_free_result($res1);
 
-			$res2 = $TYPO3_DB->exec_SELECTquery('username', 'fe_users', 'tt_products_vouchercode='.$TYPO3_DB->fullQuoteStr($username, 'fe_users'));
-			$num_rows = $TYPO3_DB->sql_num_rows($res2) * 5;
-			$TYPO3_DB->sql_free_result($res2);
+			$res2 = $GLOBALS['TYPO3_DB']->exec_SELECTquery('username', 'fe_users', 'tt_products_vouchercode='.$GLOBALS['TYPO3_DB']->fullQuoteStr($username, 'fe_users'));
+			$num_rows = $GLOBALS['TYPO3_DB']->sql_num_rows($res2) * 5;
+			$GLOBALS['TYPO3_DB']->sql_free_result($res2);
 
-			$res3 = $TYPO3_DB->exec_SELECTquery('tt_products_creditpoints ', 'fe_users', 'uid='.intval($feusers_uid).' AND NOT deleted');
+			$res3 = $GLOBALS['TYPO3_DB']->exec_SELECTquery('tt_products_creditpoints ', 'fe_users', 'uid='.intval($feusers_uid).' AND NOT deleted');
 			$this->creditpoints = array();
-			if ($res3 !== FALSE)	{
-				while($row = $TYPO3_DB->sql_fetch_assoc($res3)) {
+			if ($res3 !== false)	{
+				while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res3)) {
 					$this->creditpoints[$row['uid']] = $row['tt_products_creditpoints'];
 					$totalcreditpoints= $row['tt_products_creditpoints'];
 				}
-				$TYPO3_DB->sql_free_result($res3);
+				$GLOBALS['TYPO3_DB']->sql_free_result($res3);
 			}
 			$markerArray = array();
 			$subpartArray = array();
@@ -170,7 +168,7 @@ class tx_ttproducts_order_view extends tx_ttproducts_table_base_view {
 			$subpartArray['###ORDER_NOROWS###'] = '';
 			$content = $this->cObj->substituteMarkerArrayCached($content,$markerArray,$subpartArray);
 		} else {
-			$TYPO3_DB->sql_free_result($res);
+			$GLOBALS['TYPO3_DB']->sql_free_result($res);
 			$norows = $this->cObj->getSubpart($content,'###ORDER_NOROWS###');
 			$content = $norows;
 		} // else of if ($GLOBALS['TYPO3_DB']->sql_num_rows($res))

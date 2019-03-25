@@ -75,11 +75,11 @@ class tx_ttproducts_control_address {
 
 			foreach ($addressExtKeyTable as $addressTable => $extKey) {
 
-				$testIntResult = FALSE;
+				$testIntResult = false;
 				if (class_exists('tx_div2007_core')) {
 					$testIntResult = tx_div2007_core::testInt($extKey);
 				} else { // workaround for bug #55727
-					$result = FALSE;
+					$result = false;
 					$callingClassName = '\\TYPO3\\CMS\\Core\\Utility\\MathUtility';
 
 					if (

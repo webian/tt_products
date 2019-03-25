@@ -1,7 +1,5 @@
 <?php
-if (!defined ('TYPO3_MODE')) {
-	die ('Access denied.');
-}
+defined('TYPO3_MODE') || die('Access denied.');
 
 // *****************************************************************
 // These are the orders
@@ -34,7 +32,7 @@ $result = array (
 			'label' => DIV2007_LANGUAGE_LGL . 'hidden',
 			'config' => array (
 				'type' => 'check',
-				'default' => '0'
+				'default' => 0
 			)
 		),
 		'tstamp' => array (
@@ -45,7 +43,7 @@ $result = array (
 				'size' => '8',
 				'eval' => 'date',
                 'renderType' => 'inputDateTime',
-				'default' => '0'
+				'default' => 0
 			)
 		),
 		'crdate' => array (
@@ -56,7 +54,7 @@ $result = array (
 				'size' => '8',
 				'eval' => 'date',
                 'renderType' => 'inputDateTime',
-				'default' => '0'
+				'default' => 0
 			)
 		),
 		'sys_language_uid' => array (
@@ -70,7 +68,8 @@ $result = array (
 				'items' => array(
 					array(DIV2007_LANGUAGE_LGL . 'allLanguages', -1),
 					array(DIV2007_LANGUAGE_LGL . 'default_value', 0)
-				)
+				),
+				'default' => 0
 			)
 		),
 		'name' => array (
@@ -81,6 +80,7 @@ $result = array (
 				'size' => '40',
 				'max' => '80',
 				'eval' => 'required,trim',
+				'default' => ''
 			)
 		),
 		'first_name' => array (
@@ -91,6 +91,7 @@ $result = array (
 				'size' => '40',
 				'max' => '50',
 				'eval' => 'trim',
+				'default' => ''
 			)
 		),
 		'last_name' => array (
@@ -101,6 +102,7 @@ $result = array (
 				'size' => '40',
 				'max' => '50',
 				'eval' => 'trim',
+				'default' => ''
 			)
 		),
 		'company' => array (
@@ -111,6 +113,7 @@ $result = array (
 				'size' => '40',
 				'max' => '80',
 				'eval' => 'trim',
+				'default' => ''
 			)
 		),
 		'vat_id' => Array (
@@ -119,7 +122,8 @@ $result = array (
 			'config' => Array (
 				'type' => 'input',
 				'size' => '15',
-				'max' => '15'
+				'max' => '15',
+				'default' => ''
 			)
 		),
 		'salutation' => array (
@@ -136,6 +140,7 @@ $result = array (
 				),
 				'size' => 1,
 				'maxitems' => 1,
+				'default' => 0
 			)
 		),
 		'address' => array (
@@ -144,7 +149,8 @@ $result = array (
 			'config' => array (
 				'type' => 'input',
 				'size' => '50',
-				'max' => '256'
+				'max' => '256',
+				'default' => ''
 			)
 		),
 		'house_no' => array(
@@ -154,7 +160,8 @@ $result = array (
 				'type' => 'input',
 				'eval' => 'trim',
 				'size' => '20',
-				'max' => '20'
+				'max' => '20',
+				'default' => ''
 			)
 		),
 		'zip' => array (
@@ -165,6 +172,7 @@ $result = array (
 				'size' => '10',
 				'max' => '20',
 				'eval' => 'trim',
+				'default' => ''
 			)
 		),
 		'city' => array (
@@ -175,6 +183,7 @@ $result = array (
 				'size' => '40',
 				'max' => '50',
 				'eval' => 'trim',
+				'default' => ''
 			)
 		),
 		'country' => array (
@@ -185,6 +194,7 @@ $result = array (
 				'size' => '40',
 				'max' => '60',
 				'eval' => 'trim',
+				'default' => ''
 			)
 		),
 		'telephone' => array (
@@ -194,6 +204,7 @@ $result = array (
 				'type' => 'input',
 				'size' => '20',
 				'max' => '20',
+				'default' => ''
 			)
 		),
 		'email' => array (
@@ -203,6 +214,7 @@ $result = array (
 				'type' => 'input',
 				'size' => '20',
 				'max' => '80',
+				'default' => ''
 			)
 		),
 		'fax' => array (
@@ -212,6 +224,7 @@ $result = array (
 				'type' => 'input',
 				'size' => '4',
 				'max' => '4',
+				'default' => ''
 			)
 		),
 		'business_partner' => array (
@@ -226,6 +239,7 @@ $result = array (
 				),
 				'size' => 1,
 				'maxitems' => 1,
+				'default' => 0
 			)
 		),
 		'organisation_form' => array (
@@ -265,6 +279,7 @@ $result = array (
 				),
 				'size' => 1,
 				'maxitems' => 1,
+				'default' => 'U'
 			)
 		),
 		'payment' => array (
@@ -274,6 +289,7 @@ $result = array (
 				'type' => 'input',
 				'size' => '40',
 				'max' => '80',
+				'default' => ''
 			)
 		),
 		'shipping' => array (
@@ -283,6 +299,7 @@ $result = array (
 				'type' => 'input',
 				'size' => '40',
 				'max' => '80',
+				'default' => ''
 			)
 		),
 		'amount' => array (
@@ -293,6 +310,7 @@ $result = array (
 				'size' => '20',
 				'max' => '20',
 				'eval' => 'trim,double2',
+				'default' => 0
 			)
 		),
 		'tax_mode' => array (
@@ -304,7 +322,7 @@ $result = array (
 					array ('LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:sys_products_orders.tax_mode.I.0', '0'),
 					array ('LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:sys_products_orders.tax_mode.I.1', '1'),
 				),
-				'default' => '0'
+				'default' => 0
 			)
 		),
 		'pay_mode' => array (
@@ -332,7 +350,7 @@ $result = array (
                     array ('LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:sys_products_orders.pay_mode.I.16', '16'),
                     array ('LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:sys_products_orders.pay_mode.I.17', '17')
 				),
-				'default' => '0'
+				'default' => 0
 			)
 		),
 		'email_notify' => array (
@@ -342,6 +360,7 @@ $result = array (
 				'type' => 'input',
 				'size' => '4',
 				'max' => '4',
+				'default' => ''
 			)
 		),
 		'tracking_code' => array (
@@ -351,6 +370,7 @@ $result = array (
 				'type' => 'input',
 				'size' => '32',
 				'max' => '64',
+				'default' => ''
 			)
 		),
 		'status' => array (
@@ -360,6 +380,7 @@ $result = array (
 				'type' => 'input',
 				'size' => '4',
 				'max' => '4',
+				'default' => ''
 			)
 		),
 		'status_log' => array (
@@ -370,7 +391,7 @@ $result = array (
 				'cols' => '80',
 				'rows' => '4',
 				'eval' => 'null',
-				'default' => NULL,
+				'default' => ''
 			)
 		),
 		'orderData' => array (
@@ -382,7 +403,7 @@ $result = array (
 				'rows' => '160',
 				'wrap' => 'off',
 				'eval' => 'null',
-				'default' => NULL,
+				'default' => ''
 			)
 		),
 		'orderHtml' => Array (
@@ -396,6 +417,7 @@ $result = array (
 				'parameters' => array(
 					'format' => 'html'
 				),
+				'default' => ''
 			)
 		),
 		'agb' => array (
@@ -415,6 +437,7 @@ $result = array (
 				'type' => 'input',
 				'size' => '11',
 				'max' => '11',
+				'default' => 0
 			)
 		),
 		'creditpoints' => array (
@@ -424,6 +447,7 @@ $result = array (
 				'type' => 'input',
 				'size' => '10',
 				'max' => '10',
+				'default' => 0
 			)
 		),
 		'creditpoints_spended' => array (
@@ -433,6 +457,7 @@ $result = array (
 				'type' => 'input',
 				'size' => '10',
 				'max' => '10',
+				'default' => ''
 			)
 		),
 		'creditpoints_saved' => array (
@@ -442,6 +467,7 @@ $result = array (
 				'type' => 'input',
 				'size' => '10',
 				'max' => '10',
+				'default' => ''
 			)
 		),
 		'creditpoints_gifts' => array (
@@ -451,6 +477,7 @@ $result = array (
 				'type' => 'input',
 				'size' => '10',
 				'max' => '10',
+				'default' => ''
 			)
 		),
 		'desired_date' => array (
@@ -460,6 +487,7 @@ $result = array (
 				'type' => 'input',
 				'size' => '10',
 				'max' => '10',
+				'default' => ''
 			)
 		),
 		'desired_time' => array (
@@ -469,6 +497,7 @@ $result = array (
 				'type' => 'input',
 				'size' => '10',
 				'max' => '10',
+				'default' => ''
 			)
 		),
 		'client_ip' => array (
@@ -478,6 +507,7 @@ $result = array (
 				'type' => 'input',
 				'size' => '15',
 				'max' => '15',
+				'default' => ''
 			)
 		),
 		'note' => array (
@@ -488,7 +518,7 @@ $result = array (
 				'cols' => '48',
 				'rows' => '5',
 				'eval' => 'null',
-				'default' => NULL,
+				'default' => ''
 			)
 		),
 		'giftservice' => array (
@@ -499,7 +529,7 @@ $result = array (
 				'cols' => '48',
 				'rows' => '5',
 				'eval' => 'null',
-				'default' => NULL,
+				'default' => ''
 			)
 		),
 		'cc_uid' => array (
@@ -512,6 +542,7 @@ $result = array (
 				'size' => 1,
 				'minitems' => 0,
 				'maxitems' => 1,
+				'default' => 0
 			)
 		),
 		'ac_uid' => array (
@@ -524,6 +555,7 @@ $result = array (
 				'size' => 1,
 				'minitems' => 0,
 				'maxitems' => 1,
+				'default' => 0
 			)
 		),
 		'foundby' => array (
@@ -543,6 +575,7 @@ $result = array (
 				),
 				'size' => 1,
 				'maxitems' => 1,
+				'default' => 0
 			)
 		),
 		'giftcode' => array (
@@ -552,6 +585,7 @@ $result = array (
 				'type' => 'input',
 				'size' => '30',
 				'max' => '80',
+				'default' => ''
 			)
 		),
 		'date_of_birth' => array (
@@ -562,7 +596,7 @@ $result = array (
 				'size' => '8',
 				'eval' => 'date',
                 'renderType' => 'inputDateTime',
-				'default' => '0'
+				'default' => 0
 			)
 		),
 		'date_of_payment' => array (
@@ -573,7 +607,7 @@ $result = array (
 				'size' => '8',
 				'eval' => 'date',
                 'renderType' => 'inputDateTime',
-				'default' => '0'
+				'default' => 0
 			)
 		),
 		'date_of_delivery' => array (
@@ -584,7 +618,7 @@ $result = array (
 				'size' => '8',
 				'eval' => 'date',
                 'renderType' => 'inputDateTime',
-				'default' => '0'
+				'default' => 0
 			)
 		),
 		'bill_no' => array (
@@ -594,6 +628,7 @@ $result = array (
 				'type' => 'input',
 				'size' => '30',
 				'max' => '80',
+				'default' => ''
 			)
 		),
 		'radio1' => array (
@@ -606,7 +641,7 @@ $result = array (
 					array ('LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:sys_products_orders.radio1.I.1', '1'),
 					array ('LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:sys_products_orders.radio1.I.2', '2'),
 				),
-				'default' => '0'
+				'default' => 0
 			)
 		),
 		'ordered_products' => array (
@@ -616,6 +651,7 @@ $result = array (
 				'type' => 'user',
 				'userFunc' => 'tx_ttproducts_hooks_be->tceSingleOrder',
 				'db' => 'passthrough',
+				'default' => ''
 			),
 		),
 	),

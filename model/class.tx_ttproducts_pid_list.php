@@ -47,7 +47,7 @@ class tx_ttproducts_pid_list {
 	/**
 	 * Getting all tt_products_cat categories into internal array
 	 */
-	function init ($cObj)	{
+	public function init ($cObj)	{
 		$this->cObj = $cObj;
 	} // init
 
@@ -55,7 +55,7 @@ class tx_ttproducts_pid_list {
 	/**
 	 * Sets the pid_list internal var
 	 */
-	function setPidlist ($pid_list)	{
+	public function setPidlist ($pid_list)	{
 		$this->pid_list = $pid_list;
 	}
 
@@ -63,7 +63,7 @@ class tx_ttproducts_pid_list {
 	/**
 	 * gets the latest applied recursive
 	 */
-	function getRecursive ()	{
+	public function getRecursive ()	{
 		return $this->recursive;
 	}
 
@@ -71,10 +71,10 @@ class tx_ttproducts_pid_list {
 	/**
 	 * Gets the pid_list internal var or the child pid_list of the page id as parameter
 	 */
-	function getPidlist ($pid='')	{
+	public function getPidlist ($pid='')	{
 		$rc = '';
 		if ($pid)	{
-			$this->applyRecursive(1,$pid,FALSE);
+			$this->applyRecursive(1,$pid,false);
 			$rc = $pid;
 		} else {
 			$rc = $this->pid_list;
@@ -86,12 +86,12 @@ class tx_ttproducts_pid_list {
 	/**
 	 * Sets the pid_list internal var
 	 */
-	function setPageArray ()	{
+	public function setPageArray ()	{
 		$this->pageArray = t3lib_div::trimExplode (',', $this->pid_list);
 		$this->pageArray = array_flip($this->pageArray);
 	}
 
-	function getPageArray ($pid = 0)	{
+	public function getPageArray ($pid = 0)	{
 		if (
             $pid
         ) {
@@ -103,7 +103,7 @@ class tx_ttproducts_pid_list {
 		return $rc;
 	}
 
-	public function applyRecursive ($recursive, &$pids, $bStore = FALSE) {
+	public function applyRecursive ($recursive, &$pids, $bStore = false) {
 		$cObj = t3lib_div::makeInstance('tx_div2007_cobj');
 
 		if ($pids != '') {

@@ -37,19 +37,17 @@ class tx_ttproducts_integrate implements t3lib_Singleton {
 	 * Includes the locallang.xml and returns the $LOCAL_LANG array found in that file.
 	 */
 	public function generateArticleMM()	{
-		global $TYPO3_DB;
-
 		$count = 0;
 		$mmTable = 'tt_products_products_mm_articles';
 
-		$resArticle = $TYPO3_DB->exec_SELECTquery('*','tt_products_articles', 'uid_product>0 AND deleted=0');
-		while ($rowArticle = $TYPO3_DB->sql_fetch_assoc($resArticle) )	{
+		$resArticle = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tt_products_articles', 'uid_product>0 AND deleted=0');
+		while ($rowArticle = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($resArticle) )	{
 			$prodUid = intval($rowArticle['uid_product']);
 			$where = 'uid_foreign='.$rowArticle['uid'].' AND uid_local='.$prodUid;
-			$resMM = $TYPO3_DB->exec_SELECTquery('count(*)',$mmTable, $where);
+			$resMM = $GLOBALS['TYPO3_DB']->exec_SELECTquery('count(*)',$mmTable, $where);
 
-			$rowMM = $TYPO3_DB->sql_fetch_row($resMM);
-			$TYPO3_DB->sql_free_result($resMM);
+			$rowMM = $GLOBALS['TYPO3_DB']->sql_fetch_row($resMM);
+			$GLOBALS['TYPO3_DB']->sql_free_result($resMM);
 			$productsCount = $rowMM[0];
 
 			if ($productsCount == 0)	{
@@ -62,11 +60,11 @@ class tx_ttproducts_integrate implements t3lib_Singleton {
 					$insertFields['pid'] = $rowArticle['pid'];
 					$insertFields['sorting'] = 1;
 				}
-				$TYPO3_DB->exec_INSERTquery($mmTable, $insertFields);
+				$GLOBALS['TYPO3_DB']->exec_INSERTquery($mmTable, $insertFields);
 
 				$updateFields = array();
 				$updateFields['article_uid'] = 'article_uid + 1';
-				$TYPO3_DB->exec_UPDATEquery('tt_products', 'uid='.$prodUid, $updateFields, 'article_uid');
+				$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tt_products', 'uid='.$prodUid, $updateFields, 'article_uid');
 				$count++;
 			}
 		}

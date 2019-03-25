@@ -62,10 +62,8 @@ class tx_ttproducts_language extends tx_div2007_alpha_language_base implements t
 	}
 
 	public function getLanguage ()	{
-		global $TSFE;
-
-		if (isset($TSFE->config) && is_array($TSFE->config) && isset($TSFE->config['config']) && is_array($TSFE->config['config']))	{
-			$rc = $TSFE->config['config']['language'];
+		if (isset($GLOBALS['TSFE']->config) && is_array($GLOBALS['TSFE']->config) && isset($GLOBALS['TSFE']->config['config']) && is_array($GLOBALS['TSFE']->config['config']))	{
+			$rc = $GLOBALS['TSFE']->config['config']['language'];
 		} else {
 			$rc = 'default';
 		}

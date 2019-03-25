@@ -53,7 +53,6 @@ class tx_ttproducts_email extends tx_ttproducts_table_base {
 
 
 	function getEmail ($uid) {
-		global $TYPO3_DB;
 		$rc = $this->emailArray[$uid];;
 		if ($uid && !$rc) {
 			$sql = t3lib_div::makeInstance('tx_table_db_access');
@@ -63,7 +62,7 @@ class tx_ttproducts_email extends tx_ttproducts_table_base {
 			//$this->getTableObj()->enableFields();
 			// Fetching the email
 			$res = $sql->exec_SELECTquery();
-			$row = $TYPO3_DB->sql_fetch_assoc($res);
+			$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 			$rc = $this->emailArray[$row['uid']] = $row;
 		}
 		return $rc;

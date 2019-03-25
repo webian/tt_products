@@ -60,34 +60,32 @@ class tx_ttproducts_text extends tx_ttproducts_table_base {
 	}
 
 	function getChildUidArray ($theCode, $uid, $tagMarkerArray, $parenttable='tt_products')	{
-		global $TYPO3_DB;
-
 		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$functablename = $this->getFuncTablename();
-		$fallback = FALSE;
+		$fallback = false;
 		$tableConf = $cnf->getTableConf($functablename, $theCode);
 		$fallback = $cnf->getFallback($tableConf);
 
 		$rcArray = array();
 		$tagWhere = '';
 		if (count($tagMarkerArray))	{
-			$tagMarkerArray = $TYPO3_DB->fullQuoteArray($tagMarkerArray,$this->getTableObj()->name);
+			$tagMarkerArray = $GLOBALS['TYPO3_DB']->fullQuoteArray($tagMarkerArray,$this->getTableObj()->name);
 			$tags = implode(',',$tagMarkerArray);
 			$tagWhere = ' AND marker IN ('.$tags.')';
 		}
-		$where_clause = 'parentid = ' . intval($uid) . ' AND parenttable=' . $TYPO3_DB->fullQuoteStr($parenttable, $this->getTableObj()->name) . $tagWhere;
+		$where_clause = 'parentid = ' . intval($uid) . ' AND parenttable=' . $GLOBALS['TYPO3_DB']->fullQuoteStr($parenttable, $this->getTableObj()->name) . $tagWhere;
 
 		$resultArray =
 			$this->get(
 				'',
 				'',
-				FALSE,
+				false,
 				$where_clause,
 				'',
 				'',
 				'',
 				'',
-				FALSE,
+				false,
 				'',
 				$fallback
 			);
@@ -95,7 +93,7 @@ class tx_ttproducts_text extends tx_ttproducts_table_base {
 
 /*		$res = $this->getTableObj()->exec_SELECTquery('*', $where);
 
-		while($row = $TYPO3_DB->sql_fetch_assoc($res))	{
+		while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))	{
 			$rcArray[] = $row;
 		}*/
 

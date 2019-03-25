@@ -91,11 +91,9 @@ class tx_ttproducts_url_view implements t3lib_Singleton {
 		&$wrappedSubpartArray,
 		$addQueryString=array(),
 		$css_current='',
-		$bUseBackPid=TRUE
+		$bUseBackPid=true
 	)	{
-		global $TSFE;
-
-		$pidBasket = ($this->conf['PIDbasket'] ? $this->conf['PIDbasket'] : $TSFE->id);
+		$pidBasket = ($this->conf['PIDbasket'] ? $this->conf['PIDbasket'] : $GLOBALS['TSFE']->id);
 		$pageLink = tx_div2007_alpha5::getPageLink_fh003(
 			$this->cObj,
 			$pidBasket,
@@ -103,7 +101,7 @@ class tx_ttproducts_url_view implements t3lib_Singleton {
 			$this->getLinkParams(
 				'',
 				$addQueryString,
-				TRUE,
+				true,
 				$bUseBackPid
 			)
 		) ;
@@ -119,23 +117,21 @@ class tx_ttproducts_url_view implements t3lib_Singleton {
 		$markerArray,
 		$addQueryString=array(),
 		$excludeList='',
-		$bUseBackPid=TRUE,
-		$bExcludeSingleVar=TRUE
+		$bUseBackPid=true,
+		$bExcludeSingleVar=true
 	)	{
-		global $TSFE;
-
 		$charset = 'UTF-8';
 		$urlMarkerArray = array();
-		$conf = array('useCacheHash' => TRUE);
+		$conf = array('useCacheHash' => true);
 		$target = '';
 
 		// disable caching as soon as someone enters products into the basket, enters user data etc.
 		// $addQueryString['no_cache'] = 1;
 			// Add's URL-markers to the $markerArray and returns it
-		$pidBasket = ($this->conf['PIDbasket'] ? $this->conf['PIDbasket'] : $TSFE->id);
-		$pidFormUrl = ($pidNext ? $pidNext : $TSFE->id);
+		$pidBasket = ($this->conf['PIDbasket'] ? $this->conf['PIDbasket'] : $GLOBALS['TSFE']->id);
+		$pidFormUrl = ($pidNext ? $pidNext : $GLOBALS['TSFE']->id);
 
-		if ($pidFormUrl != $TSFE->id && $bExcludeSingleVar)	{
+		if ($pidFormUrl != $GLOBALS['TSFE']->id && $bExcludeSingleVar)	{
 			$newExcludeListArray =
 				array(
 					'tt_products[article]',
@@ -150,7 +146,7 @@ class tx_ttproducts_url_view implements t3lib_Singleton {
 			}
 			$excludeList = implode(',', $excludeListArray);
 		}
-		$bUseBackPid = ($bUseBackPid && $pidNext != $TSFE->id);
+		$bUseBackPid = ($bUseBackPid && $pidNext != $GLOBALS['TSFE']->id);
 
 		$url = tx_div2007_alpha5::getTypoLink_URL_fh003(
 			$this->cObj,
@@ -158,7 +154,7 @@ class tx_ttproducts_url_view implements t3lib_Singleton {
 			$this->getLinkParams(
 				$excludeList,
 				$addQueryString,
-				TRUE,
+				true,
 				$bUseBackPid
 			),
 			$target,
@@ -177,7 +173,7 @@ class tx_ttproducts_url_view implements t3lib_Singleton {
 				$this->getLinkParams(
 					$excludeList,
 					$addQueryString,
-					TRUE,
+					true,
 					$bUseBackPid
 				),
 				$target,
@@ -223,7 +219,7 @@ class tx_ttproducts_url_view implements t3lib_Singleton {
 	/**
 	 * Returns a url for use in forms and links
 	 */
-	public function addQueryStringParam (&$queryString, $param, $bUsePrefix=FALSE) {
+	public function addQueryStringParam (&$queryString, $param, $bUsePrefix=false) {
 		$temp = $this->pibase->piVars[$param];
 		$temp = ($temp ? $temp : (t3lib_div::_GP($param) && ($param!='pid') ? t3lib_div::_GP($param) : 0));
 
@@ -243,20 +239,18 @@ class tx_ttproducts_url_view implements t3lib_Singleton {
 	public function getLinkParams (
 		$excludeList='',
 		$addQueryString=array(),
-		$bUsePrefix=FALSE,
-		$bUseBackPid=TRUE,
+		$bUsePrefix=false,
+		$bUseBackPid=true,
 		$piVarSingle='product',
 		$piVarCat='cat'
 	) {
-		global $TSFE;
-
 		$prefixId = $this->pibase->prefixId;
 		$queryString=array();
 		if ($bUseBackPid)	{
 			if ($bUsePrefix && !$addQueryString[$prefixId . '[backPID]'])	{
-				$queryString[$prefixId . '[backPID]'] = $TSFE->id;
+				$queryString[$prefixId . '[backPID]'] = $GLOBALS['TSFE']->id;
 			} else if (!$addQueryString['backPID'])	{
-				$queryString['backPID'] = $TSFE->id;
+				$queryString['backPID'] = $GLOBALS['TSFE']->id;
 			}
 		}
 
@@ -280,7 +274,7 @@ class tx_ttproducts_url_view implements t3lib_Singleton {
 		$this->addQueryStringParam($queryString, $listPointerParam, $bUsePrefix);
 		$catlistPointerParam = tx_ttproducts_model_control::getPointerPiVar('CATLIST');
 
-		$this->addQueryStringParam($queryString, 'mode', FALSE);
+		$this->addQueryStringParam($queryString, 'mode', false);
 		$this->addQueryStringParam($queryString, $listPointerParam, $bUsePrefix);
 		$this->addQueryStringParam($queryString, 'newitemdays', $bUsePrefix);
 		$this->addQueryStringParam($queryString, 'searchbox', $bUsePrefix);
@@ -291,7 +285,7 @@ class tx_ttproducts_url_view implements t3lib_Singleton {
 			$tmpArray = t3lib_div::trimExplode(',',$excludeList);
 			if (isset($tmpArray) && is_array($tmpArray) && $tmpArray['0'])	{
 				foreach($tmpArray as $param)	{
-					if (strpos($param, $prefixId) === FALSE)	{
+					if (strpos($param, $prefixId) === false)	{
 						$excludeListArray[] = $prefixId . '[' . $param . ']';
 					}
 				}

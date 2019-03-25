@@ -72,9 +72,7 @@ class tx_ttproducts_card extends tx_ttproducts_table_base {
 		}
 
 		if ($bNumberRecentlyModified)	{
-			global $TSFE;
-
-			$ccArray = $TSFE->fe_user->getKey('ses','cc');
+			$ccArray = $GLOBALS['TSFE']->fe_user->getKey('ses','cc');
 
 			if (!$ccArray)	{
 				$ccArray = array();
@@ -90,7 +88,7 @@ class tx_ttproducts_card extends tx_ttproducts_table_base {
 
 				if ($newId)	{
 					$ccArray['cc_uid'] = $newId;
-					$TSFE->fe_user->setKey('ses','cc',$ccArray);
+					$GLOBALS['TSFE']->fe_user->setKey('ses','cc',$ccArray);
 					for ($i = 1; $i <= 3; ++$i)	{
 						$this->ccArray['cc_number_'.$i] = ($this->ccArray['cc_number_'.$i] ? $this->asteriskArray[$this->sizeArray['cc_number_'.$i]] : '');
 					}
@@ -119,15 +117,13 @@ class tx_ttproducts_card extends tx_ttproducts_table_base {
 	 * Should be called only internally by eg. $order->getBlankUid, that first checks if a blank record is already created.
 	 */
 	function create ($uid, $ccArray)	{
-		global $TSFE, $TYPO3_DB;
-
 		$newId = 0;
 		$tablename = $this->getTablename();
 		$pid = intval($this->conf['PID_sys_products_orders']);
 
-		if (!$pid)	$pid = intval($TSFE->id);
+		if (!$pid)	$pid = intval($GLOBALS['TSFE']->id);
 
-		if ($ccArray['cc_number_1'] && $TSFE->sys_page->getPage_noCheck ($pid))	{
+		if ($ccArray['cc_number_1'] && $GLOBALS['TSFE']->sys_page->getPage_noCheck ($pid))	{
 			$time = time();
 			$timeArray =
 				array(
@@ -157,9 +153,9 @@ class tx_ttproducts_card extends tx_ttproducts_table_base {
 
 			if ($uid)	{
 				$where_clause = 'uid='.$uid;
-				$res = $TYPO3_DB->exec_SELECTquery('*',$tablename,$where_clause);
-				$row = $TYPO3_DB->sql_fetch_assoc($res);
-				$TYPO3_DB->sql_free_result($res);
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*',$tablename,$where_clause);
+				$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+				$GLOBALS['TYPO3_DB']->sql_free_result($res);
 				for ($i = 1; $i <= 4; ++$i)	{
 					$tmpOldPart = substr($row['cc_number'],($i-1) * 4, 4);
 					if (strcmp($ccArray['cc_number_'.$i],$this->asteriskArray[$this->sizeArray['cc_number_'.$i]]) == 0)	{
@@ -194,11 +190,11 @@ class tx_ttproducts_card extends tx_ttproducts_table_base {
 				$endtime = mktime($timeArray['hour'], $timeArray['minute'], $timeArray['second'], $timeArray['month'], $timeArray['day'], $timeArray['year']);
 				$newFields['endtime'] = $endtime;
 
-				$TYPO3_DB->exec_UPDATEquery($tablename,$where_clause,$newFields);
+				$GLOBALS['TYPO3_DB']->exec_UPDATEquery($tablename,$where_clause,$newFields);
 				$newId = $uid;
 			} else {
-				$TYPO3_DB->exec_INSERTquery($tablename, $newFields);
-				$newId = $TYPO3_DB->sql_insert_id();
+				$GLOBALS['TYPO3_DB']->exec_INSERTquery($tablename, $newFields);
+				$newId = $GLOBALS['TYPO3_DB']->sql_insert_id();
 			}
 		}
 		return $newId;
@@ -206,10 +202,8 @@ class tx_ttproducts_card extends tx_ttproducts_table_base {
 
 
 	function getUid () {
-		global $TSFE;
-
 		$result = 0;
-		$ccArray = $TSFE->fe_user->getKey('ses', 'cc');
+		$ccArray = $GLOBALS['TSFE']->fe_user->getKey('ses', 'cc');
 		if (isset($ccArray['cc_uid'])) {
 			$result = $ccArray['cc_uid'];
 		}
@@ -223,8 +217,6 @@ class tx_ttproducts_card extends tx_ttproducts_table_base {
 
 
 	function getRow ($uid, $bFieldArrayAll=false) {
-		global $TYPO3_DB;
-
 		$rcArray = array();
 		if ($bFieldArrayAll)	{
 			foreach ($this->inputFieldArray as $k => $field)	{
@@ -243,9 +235,9 @@ class tx_ttproducts_card extends tx_ttproducts_table_base {
 			if ($tablename == '')	{
 				$tablename = 'sys_products_cards';
 			}
-			$res = $TYPO3_DB->exec_SELECTquery($fields, $tablename, $where);
-			$row = $TYPO3_DB->sql_fetch_assoc($res);
-			$TYPO3_DB->sql_free_result($res);
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields, $tablename, $where);
+			$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+			$GLOBALS['TYPO3_DB']->sql_free_result($res);
 			if ($row)	{
 				$rcArray = $row;
 			}

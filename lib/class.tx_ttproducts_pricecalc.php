@@ -48,7 +48,7 @@ class tx_ttproducts_pricecalc extends tx_ttproducts_pricecalc_base {
 		&$discountArray,
 		$priceTotalTax,
 		$bUseArticles,
-		$bMergeArticles=TRUE
+		$bMergeArticles=true
 	) {
 		$sql = t3lib_div::makeInstance('tx_ttproducts_sql');
 

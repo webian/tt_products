@@ -39,7 +39,7 @@
 
 class tx_ttproducts_user_view implements t3lib_Singleton  {
 
-	public function &printView (
+	public function printView (
 		$pibaseClass,
 		&$templateCode,
 		$theCode

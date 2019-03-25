@@ -43,8 +43,7 @@ class tx_ttproducts_field_image extends tx_ttproducts_field_media {
 	/**
 	 *
 	 */
-	function init($cObj)	{
-		global $TYPO3_DB,$TSFE,$TCA;
+	public function init($cObj)	{
 
 		parent::init($cObj);
 
@@ -54,7 +53,7 @@ class tx_ttproducts_field_image extends tx_ttproducts_field_media {
 	} // init
 
 
-	function &getImageArray($imageRow, $imageField)	{
+	public function &getImageArray($imageRow, $imageField)	{
 		$imageArray = ($imageRow[$imageField] ? explode(',',$imageRow[$imageField]) : array());
 		$tmp = count($imageArray);
 		if (!$tmp && $imageRow['file_mime_type'] == 'image')	{

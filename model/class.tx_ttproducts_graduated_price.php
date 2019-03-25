@@ -53,8 +53,6 @@ class tx_ttproducts_graduated_price implements t3lib_Singleton {
 	 * Getting the price formulas for graduated prices
 	 */
 	function init ($tablename, $mmtablename)  {
-		global $TYPO3_DB,$TSFE,$TCA;
-
 		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
@@ -74,8 +72,6 @@ class tx_ttproducts_graduated_price implements t3lib_Singleton {
 
 
 	function getFormulasByProduct ($uid=0,$where_clause='') {
-		global $TYPO3_DB;
-
 		if ($uid && !is_array($uid) && isset($this->mmArray[$uid]) && is_array($this->mmArray[$uid]))	{
 			$rc = array();
 			foreach ($this->mmArray[$uid] as $v)	{
@@ -119,18 +115,18 @@ class tx_ttproducts_graduated_price implements t3lib_Singleton {
 			$rc = array();
 			$newDataArray = array();
 
-			while ($row = $TYPO3_DB->sql_fetch_assoc($res))	{
+			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))	{
 				$rc[] = $this->dataArray[$row['uid']] = $newDataArray[$row['uid']] = $row;
 			}
-			$TYPO3_DB->sql_free_result($res);
+			$GLOBALS['TYPO3_DB']->sql_free_result($res);
 
 			if (is_array($uid))	{
-				$res = $TYPO3_DB->exec_SELECTquery('*', $this->mm_table, $uidWhere, '', '', $limit);
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', $this->mm_table, $uidWhere, '', '', $limit);
 				unset($this->mmArray[$row['product_uid']]);
-				while ($row = $TYPO3_DB->sql_fetch_assoc($res))	{
+				while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))	{
 					$this->mmArray[$row['product_uid']][] = $row['graduated_price_uid'];
 				}
-				$TYPO3_DB->sql_free_result($res);
+				$GLOBALS['TYPO3_DB']->sql_free_result($res);
 			} else {
 				unset($this->mmArray[$uid]);
 				foreach ($newDataArray as $k => $v)	{

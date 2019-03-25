@@ -50,8 +50,6 @@ class tx_ttproducts_control_view implements t3lib_Singleton {
 	 * @access private
 	 */
 	function getMarkerArray (&$markerArray, &$allMarkers, $tableConfArray)	{
-		global $TSFE;
-
 		if (isset($tableConfArray) && is_array($tableConfArray))	{
 			$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
 			$allValueArray = array();
@@ -90,8 +88,8 @@ class tx_ttproducts_control_view implements t3lib_Singleton {
 							$valueArray,
 							tx_ttproducts_model_control::getPrefixId() . '[' . tx_ttproducts_model_control::getControlVar() . '][' . $keyArray[0] . '][' . $keyArray[1] . ']',
 							$controlArray[$keyArray[0]][$keyArray[1]],
-							TRUE,
-							TRUE,
+							true,
+							true,
 							array(),
 							'select',
 							$attributeArray

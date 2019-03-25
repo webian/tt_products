@@ -59,10 +59,10 @@ class tx_ttproducts_email_div {
 
 		if ($toEMail == '' || $fromEMail == '' || ($html == '' && $message == '')) {
 
-			return FALSE;
+			return false;
 		}
 
-		$result = TRUE;
+		$result = true;
 
         if (!is_array($toEMail)) {
             $emailArray = t3lib_div::trimExplode(',', $toEMail);
@@ -131,8 +131,6 @@ class tx_ttproducts_email_div {
 		$sendername='',
 		$senderemail=''
 	) {
-		global $TSFE;
-
 			// initialize order data.
 		$orderData = unserialize($orderRow['orderData']);
 		$sendername = ($sendername ? $sendername : $conf['orderEmail_fromName']);
@@ -164,13 +162,13 @@ class tx_ttproducts_email_div {
 				$feusersObj->getAddressMarkerArray(
 					$orderData['billing'],
 					$markerArray,
-					FALSE,
+					false,
 					'person'
 				);
 				$feusersObj->getAddressMarkerArray(
 					$orderData['delivery'],
 					$markerArray,
-					FALSE,
+					false,
 					'delivery'
 				);
 
@@ -190,8 +188,6 @@ class tx_ttproducts_email_div {
 	 * Send notification email for gift certificates
 	 */
 	static public function sendGiftEmail ($cObj,&$conf,$recipient,$comment,$giftRow,$templateCode,$templateMarker, $bHtmlMail=false)	{
-		global $TSFE;
-
 		$sendername = ($giftRow['personname'] ? $giftRow['personname'] : $conf['orderEmail_fromName']);
 		$senderemail = ($giftRow['personemail'] ? $giftRow['personemail'] : $conf['orderEmail_from']);
 		$recipients = $recipient;

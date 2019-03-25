@@ -104,7 +104,7 @@ class tx_ttproducts_marker implements t3lib_Singleton {
 		$this->setGlobalMarkerArray($piVars, $locallang, $LLkey);
 		$error_code = $this->getErrorCode();
 
-		return (count($error_code) == 0 ? TRUE : FALSE);
+		return (count($error_code) == 0 ? true : false);
 	}
 
 	public function getErrorCode ()	{
@@ -138,8 +138,6 @@ class tx_ttproducts_marker implements t3lib_Singleton {
 	 * getting the global markers
 	 */
 	public function setGlobalMarkerArray ($piVars, $locallang, $LLkey)	{
-		global $TSFE;
-
 		$markerArray = array();
 
 			// globally substituted markers, fonts and colors.
@@ -173,12 +171,12 @@ class tx_ttproducts_marker implements t3lib_Singleton {
 			$markerArray['###LANGPARAM###'] = '';
 		}
 		$markerArray['###LANG###'] = $lang;
-		$markerArray['###LANGUAGE###'] = $TSFE->config['config']['language'];
-		$markerArray['###LOCALE_ALL###'] = $TSFE->config['config']['locale_all'];
+		$markerArray['###LANGUAGE###'] = $GLOBALS['TSFE']->config['config']['language'];
+		$markerArray['###LOCALE_ALL###'] = $GLOBALS['TSFE']->config['config']['locale_all'];
 
 		$backPID = $piVars['backPID'];
 		$backPID = ($backPID ? $backPID : t3lib_div::_GP('backPID'));
-		$backPID = ($backPID  ? $backPID : ($this->conf['PIDlistDisplay'] ? $this->conf['PIDlistDisplay'] : $TSFE->id));
+		$backPID = ($backPID  ? $backPID : ($this->conf['PIDlistDisplay'] ? $this->conf['PIDlistDisplay'] : $GLOBALS['TSFE']->id));
 		$markerArray['###BACK_PID###'] = $backPID;
 
 			// Call all addURLMarkers hooks at the end of this method
@@ -341,10 +339,10 @@ class tx_ttproducts_marker implements t3lib_Singleton {
 					}
 					if (is_array($tableFieldArray[$field]))	{
 						$retArray[] = $field;
-						$bFieldaddedArray[$field] = TRUE;
+						$bFieldaddedArray[$field] = true;
 					}
 					$parentFound = strpos($tag, 'PARENT');
-					if ($parentFound !== FALSE)	{
+					if ($parentFound !== false)	{
 						$parentEnd = strpos($tag, '_');
 						$parentLen = strlen('PARENT');
 						$temp = substr($tag, $parentLen, ($parentEnd - $parentFound) - $parentLen);
@@ -356,7 +354,7 @@ class tx_ttproducts_marker implements t3lib_Singleton {
 					foreach ($this->markerArray as $k => $marker)	{
 						if ($marker != $prefixParam) 	{
 							$bMarkerFound = strpos($tag, $marker);
-							if ($bMarkerFound == 0 && $bMarkerFound !== FALSE)	{
+							if ($bMarkerFound == 0 && $bMarkerFound !== false)	{
 								unset($retTagArray[$tag]);
 							}
 						}

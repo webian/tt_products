@@ -41,13 +41,12 @@ class tx_ttproducts_css implements t3lib_Singleton {
 	var $pibase; // reference to object of pibase
 	public $conf;
 	protected $isCssStyled;
-	private $bIncluded = FALSE;
+	private $bIncluded = false;
 
 	/**
 	 * Getting all tt_products_cat categories into internal array
 	 */
 	public function init ($pibase)	{
-		global $TYPO3_DB;
 		$this->pibase = $pibase;
 		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$this->isCssStyled = ($cnf->conf['templateStyle'] == 'css-styled');
@@ -56,15 +55,15 @@ class tx_ttproducts_css implements t3lib_Singleton {
 
 	public function isCSSStyled ()	{
 		if (isset($this->conf) && is_array($this->conf) && $this->isCssStyled && $this->conf['file']!='')	{
-			$rc = TRUE;
+			$rc = true;
 		} else {
-			$rc = FALSE;
+			$rc = false;
 		}
 		return $rc;
 	}
 
 	public function setIncluded () {
-		$this->bIncluded = TRUE;
+		$this->bIncluded = true;
 	}
 
 	public function getIncluded () {

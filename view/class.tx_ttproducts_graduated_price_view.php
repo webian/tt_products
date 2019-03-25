@@ -49,14 +49,12 @@ class tx_ttproducts_graduated_price_view implements t3lib_Singleton {
 	}
 
 	private function getFormulaMarkerArray($basketExtra, $row, $priceFormula, &$markerArray, $suffix='')	{
-		global $TCA;
-
 		if (isset($priceFormula) && is_array($priceFormula))	{
 			$priceObj = t3lib_div::makeInstance('tx_ttproducts_field_price');
 			$priceViewObj = t3lib_div::makeInstance('tx_ttproducts_field_price_view');
 			foreach ($priceFormula as $field => $value)	{
 				$keyMarker = '###'.$this->marker.'_'.strtoupper($field).$suffix.'###';
-				if (strpos($TCA[$this->modelObj->tableObj->getName()]['interface']['showRecordFieldList'], $field) === FALSE) {
+				if (strpos($GLOBALS['TCA'][$this->modelObj->tableObj->getName()]['interface']['showRecordFieldList'], $field) === false) {
 					$value = '';
 				}
 				$markerArray[$keyMarker] = $value;

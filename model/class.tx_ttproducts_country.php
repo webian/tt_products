@@ -79,15 +79,12 @@ class tx_ttproducts_country extends tx_ttproducts_table_base {
 
 
 	function isoGet ($country_code, $where, $fields='') {
-
-		global $TYPO3_DB, $TCA;
-
 		if (!$fields)	{
 			$rc = $this->dataArray[$country_code];
 		}
 		if (!$rc || $where) {
 			if ($country_code)	{
-				$whereString = 'cn_iso_3 = '.$TYPO3_DB->fullQuoteStr($country_code, $this->getTableObj()->name);
+				$whereString = 'cn_iso_3 = '.$GLOBALS['TYPO3_DB']->fullQuoteStr($country_code, $this->getTableObj()->name);
 			} else {
 				$whereString = '1=1';
 			}
@@ -101,17 +98,17 @@ class tx_ttproducts_country extends tx_ttproducts_table_base {
 
 			$res = $this->getTableObj()->exec_SELECTquery($fields, $whereString);
 			if ($country_code)	{
-				$row = $TYPO3_DB->sql_fetch_assoc($res);
+				$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 			 	$rc = $row;
 			 	if ($row)	{
 			 		$this->dataArray[$row['cn_iso_3']] = $row;
 			 	}
 			} else {
-				while ($row = $TYPO3_DB->sql_fetch_assoc($res))	{
+				while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))	{
 					$rc []= $this->dataArray[$row['uid']] = $row;
 				}
 			}
-			$TYPO3_DB->sql_free_result($res);
+			$GLOBALS['TYPO3_DB']->sql_free_result($res);
 		}
 		return $rc;
 	}

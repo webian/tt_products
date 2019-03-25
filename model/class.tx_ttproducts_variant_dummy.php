@@ -103,10 +103,10 @@ class tx_ttproducts_variant_dummy  implements t3lib_Singleton, tx_ttproducts_var
 		return $this->selectableArray;
 	}
 
-	public function getVariantValuesByArticle ($articleRowArray,$productRow,$withSemicolon = FALSE) {
+	public function getVariantValuesByArticle ($articleRowArray,$productRow,$withSemicolon = false) {
 	}
 
-	public function filterArticleRowsByVariant($row, $variant, $articleRows, $bCombined=FALSE) {
+	public function filterArticleRowsByVariant($row, $variant, $articleRows, $bCombined=false) {
 	}
 
 	public function getFieldArray ()	{

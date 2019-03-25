@@ -46,19 +46,17 @@ class tx_ttproducts_pi_search_base extends tslib_pibase implements t3lib_Singlet
 	public $prefixId = TT_PRODUCTS_EXT;
 	public $scriptRelPath = 'pi_search_base/class.tx_ttproducts_pi_search_base.php';	// Path to this script relative to the extension dir.
 	public $extKey = TT_PRODUCTS_EXT;	// The extension key.
-	public $pi_checkCHash = TRUE;		// activate cHash
-	public $bRunAjax = FALSE;		// overrride this
+	public $pi_checkCHash = true;		// activate cHash
+	public $bRunAjax = false;		// overrride this
 
 
 	/**
 	 * Main method. Call this from TypoScript by a USER cObject.
 	 */
 	public function main ($content,$conf)	{
-		global $TSFE;
-
 		tx_ttproducts_model_control::setPrefixId($this->prefixId);
 		$this->pi_setPiVarDefaults();
-		$confMain = $TSFE->tmpl->setup['plugin.'][TT_PRODUCTS_EXT.'.'];
+		$confMain = $GLOBALS['TSFE']->tmpl->setup['plugin.'][TT_PRODUCTS_EXT.'.'];
 		$this->conf = array_merge($confMain, $conf);
 		$config = array();
 		$mainObj = t3lib_div::makeInstance('tx_ttproducts_control_search');	// fetch and store it as persistent object

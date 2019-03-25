@@ -38,7 +38,7 @@
 
 
 abstract class tx_ttproducts_field_base_view implements tx_ttproducts_field_view_int, t3lib_Singleton {
-	private $bHasBeenInitialised = FALSE;
+	private $bHasBeenInitialised = false;
 	public $modelObj;
 	public $cObj;
 	public $conf;		// original configuration
@@ -53,7 +53,7 @@ abstract class tx_ttproducts_field_base_view implements tx_ttproducts_field_view
 		$this->conf = &$modelObj->conf;
 		$this->config = &$modelObj->config;
 
-		$this->bHasBeenInitialised = TRUE;
+		$this->bHasBeenInitialised = true;
 	}
 
 
@@ -79,7 +79,7 @@ abstract class tx_ttproducts_field_base_view implements tx_ttproducts_field_view
 		$tagArray
 	) {
 		// overwrite this!
-		return FALSE;
+		return false;
 	}
 
 	public function getRepeatedRowMarkerArray (
@@ -96,7 +96,7 @@ abstract class tx_ttproducts_field_base_view implements tx_ttproducts_field_view
 		$id='1'
 	)	{
 		// overwrite this!
-		return FALSE;
+		return false;
 	}
 
 	public function getRepeatedSubpartArrays (
@@ -112,7 +112,7 @@ abstract class tx_ttproducts_field_base_view implements tx_ttproducts_field_view
 		$theCode='',
 		$id='1'
 	)	{
-		$result = FALSE;
+		$result = false;
 		$newContent = '';
 		$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
 		$upperField = strtoupper($fieldname);

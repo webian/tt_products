@@ -69,7 +69,7 @@ class tx_ttproducts_latest extends tx_mydashboard_template implements tx_mydashb
 		$this->setIcon(PATH_BE_TTPRODUCTS_REL . 'ext_icon.gif');
 
 		// required
-		return TRUE;
+		return true;
 	} // function - init
 
 

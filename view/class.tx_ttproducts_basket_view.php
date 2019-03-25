@@ -153,7 +153,7 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 		$bSelectSalutation,
 		$bSelectVariants,
 		$calculatedArray,
-		$bHtml = TRUE,
+		$bHtml = true,
 		$subpartMarker = 'BASKET_TEMPLATE',
 		$mainMarkerArray = array(),
 		$templateFilename = '',
@@ -168,8 +168,6 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 				and substitutes a lot of fields and subparts.
 				Any pre-preparred fields can be set in $mainMarkerArray, which is substituted in the subpart before the item-and-categories part is substituted.
 			*/
-		global $TSFE, $TCA;
-		global $TYPO3_DB;
 
 		$out = '';
 		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
@@ -198,7 +196,7 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 				$viewParamConf = $viewControlConf['param.'];
 			}
 		}
-		$bUseBackPid = (isset($viewControlConf['param.']) && $viewControlConf['param.']['use'] == 'backPID' ? TRUE : FALSE);
+		$bUseBackPid = (isset($viewControlConf['param.']) && $viewControlConf['param.']['use'] == 'backPID' ? true : false);
 
 		$funcTablename = $basketObj->getFuncTablename();
 		$itemTableView = $tablesObj->get($funcTablename, true);
@@ -207,7 +205,7 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 		$itemTable->initCodeConf($theCode,$tableConf);
 		$minQuantityArray = array();
 
-		$articleViewObj = $tablesObj->get('tt_products_articles', TRUE);
+		$articleViewObj = $tablesObj->get('tt_products_articles', true);
 		$articleTable = $articleViewObj->getModelObj();
 
 		$paymentshippingObj = t3lib_div::makeInstance('tx_ttproducts_paymentshipping');
@@ -226,7 +224,7 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 
 		$viewTagArray = $markerObj->getAllMarkers($tempContent);
 
-		$feUsersViewObj = $tablesObj->get('fe_users', TRUE);
+		$feUsersViewObj = $tablesObj->get('fe_users', true);
 		$feUsersViewObj->getWrappedSubpartArray(
 			$viewTagArray,
 			$bUseBackPid,
@@ -282,7 +280,7 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 				// If there is a specific section for the billing address if user is logged in (used because the address may then be hardcoded from the database
 			if (trim($this->cObj->getSubpart($t['basketFrameWork'],'###BILLING_ADDRESS_LOGIN###')))	{
 				//if ($GLOBALS['TSFE']->loginUser)	{
-				if ($TSFE->loginUser && $this->conf['lockLoginUserInfo']) {
+				if ($GLOBALS['TSFE']->loginUser && $this->conf['lockLoginUserInfo']) {
 					$t['basketFrameWork'] = $this->cObj->substituteSubpart($t['basketFrameWork'], '###BILLING_ADDRESS###', '');
 				} else {
 					$t['basketFrameWork'] = $this->cObj->substituteSubpart($t['basketFrameWork'], '###BILLING_ADDRESS_LOGIN###', '');
@@ -312,15 +310,15 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 			);
 			$count = 0;
 			$basketItemView = '';
-			$bCopyProduct2Article = FALSE;
+			$bCopyProduct2Article = false;
 
 			if ($this->useArticles == 0)	{
-				if (strpos($t['item'], $articleViewObj->getMarker()) !== FALSE)	{
-					$bCopyProduct2Article = TRUE;
+				if (strpos($t['item'], $articleViewObj->getMarker()) !== false)	{
+					$bCopyProduct2Article = true;
 				}
 			}
 
-			$checkMinPrice = FALSE;
+			$checkMinPrice = false;
 
 			if ($this->useArticles == 1 || $this->useArticles == 3) {
 				$markerFieldArray = array();
@@ -402,7 +400,7 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 
 					$bIsNoMinPrice = $itemTable->hasAdditional($row, 'noMinPrice');
 					if (!$bIsNoMinPrice)	{
-						$checkMinPrice = TRUE;
+						$checkMinPrice = true;
 					}
 					$pidcategory = ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['pageAsCategory'] == 1 ? $pid : '');
 					$currentPnew = $pidcategory . '_' . $actItem['rec']['category'];
@@ -467,7 +465,7 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 						$hiddenFields,
 						$theCode,
 						$count,
-						FALSE,
+						false,
 						'UTF-8'
 					);
 
@@ -530,7 +528,7 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 								$itemTable->variant->modifyRowFromVariant($prodVariantRow);
 							}
 							foreach ($articleRows as $articleRow) {
-								$itemTable->mergeAttributeFields($prodVariantRow, $articleRow, $bKeepNotEmpty, TRUE);
+								$itemTable->mergeAttributeFields($prodVariantRow, $articleRow, $bKeepNotEmpty, true);
 							}
 						} else {
 							$variant = $itemTable->variant->getVariantFromRow($row);
@@ -617,7 +615,7 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 						$this->conf['PIDitemDisplay'],
 						$this->conf['PIDitemDisplay.'],
 						$row,
-						$TSFE->rootLine[1]
+						$GLOBALS['TSFE']->rootLine[1]
 					);
 					$addQueryString=array();
 					$addQueryString[$itemTable->type] = intval($row['uid']);
@@ -642,7 +640,7 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 							$damCat = current($damCategoryArray);
 						}
 
-						$tablesObj->get('tx_dam_cat',TRUE)->getMarkerArray (
+						$tablesObj->get('tx_dam_cat',true)->getMarkerArray (
 							$damCategoryMarkerArray,
 							'',
 							$damCat,
@@ -658,7 +656,7 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 							''
 						);
 
-						$tablesObj->get('tx_dam',TRUE)->getModelMarkerArray (
+						$tablesObj->get('tx_dam',true)->getModelMarkerArray (
 							$damRow,
 							'',
 							$damMarkerArray,
@@ -684,11 +682,11 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 							$this->urlObj->getLinkParams(
 								'',
 								$addQueryString,
-								TRUE,
+								true,
 								$bUseBackPid,
 								''
 							),
-							array('useCacheHash' => TRUE)
+							array('useCacheHash' => true)
 						)
 					);
 					$wrappedSubpartArray['###LINK_ITEM###'] = array('<a href="'.$tempUrl .'"'.$css_current.'>','</a>');
@@ -755,14 +753,14 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 					$activity = 'info';
 				}
 				if ($activity)	{
-					$bUseXHTML = $TSFE->config['config']['xhtmlDoctype'] != '';
+					$bUseXHTML = $GLOBALS['TSFE']->config['config']['xhtmlDoctype'] != '';
 					$hiddenFields .= '<input type="hidden" name="' . TT_PRODUCTS_EXT . '[activity]['. $activity . ']" value="1" ' . ($bUseXHTML ? '/' : '') . '>';
 				}
 			}
 			$markerArray['###HIDDENFIELDS###'] = $hiddenFields;
-			$pid = ($this->conf['PIDbasket'] ? $this->conf['PIDbasket'] : $TSFE->id);
+			$pid = ($this->conf['PIDbasket'] ? $this->conf['PIDbasket'] : $GLOBALS['TSFE']->id);
 
-			$linkConf = array('useCacheHash' => FALSE);
+			$linkConf = array('useCacheHash' => false);
 			$excludeList = '';
 
 			if (isset($viewParamConf) && is_array($viewParamConf) && $viewParamConf['ignore'])	{
@@ -775,7 +773,7 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 				$this->urlObj->getLinkParams(
 					$excludeList,
 					array(),
-					TRUE,
+					true,
 					$bUseBackPid,
 					''
 				),
@@ -796,14 +794,14 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 			$markerArray['###PRICE_TAX_DISCOUNT###'] = $markerArray['###PRICE_DISCOUNT_TAX###'] = $priceViewObj->priceFormat($calculatedArray['price0Tax']['goodstotal']-$calculatedArray['priceTax']['goodstotal']);
 			$markerArray['###PRICE_VAT###'] = $priceViewObj->priceFormat($calculatedArray['priceTax']['goodstotal']-$calculatedArray['priceNoTax']['goodstotal']);
 
-			$orderViewObj = $tablesObj->get('sys_products_orders', TRUE);
+			$orderViewObj = $tablesObj->get('sys_products_orders', true);
 			$orderViewObj->getBasketRecsMarkerArray($markerArray, $orderArray);
 			$billdeliveryObj->getMarkerArray($markerArray, $orderArray['orderTrackingNo'], 'bill');
 			$billdeliveryObj->getMarkerArray($markerArray, $orderArray['orderTrackingNo'], 'delivery');
 
 				// URL
-			$bUseBackPid = TRUE;
-			$bUseBackPid = (isset($viewParamConf) && $viewParamConf['use'] == 'backPID' ? TRUE : FALSE);
+			$bUseBackPid = true;
+			$bUseBackPid = (isset($viewParamConf) && $viewParamConf['use'] == 'backPID' ? true : false);
 			$markerArray = $this->urlObj->addURLMarkers(
 				0,
 				$markerArray,
@@ -827,7 +825,7 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 	/* Added Els6: routine for redeeming the gift certificate (other way then proposed by Franz */
 				$markerArray['###INSERT_GIFTCODE###'] = 'recs[tt_products][giftcode]';
 				$markerArray['###VALUE_GIFTCODE###'] = htmlspecialchars($basketObj->recs['tt_products']['giftcode']);
-				$cpArray = $TSFE->fe_user->getKey('ses','cp');
+				$cpArray = $GLOBALS['TSFE']->fe_user->getKey('ses','cp');
 				$creditpointsGifts = '';
 				if (
 					isset($cpArray['gift']) &&
@@ -842,14 +840,14 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 					$subpartArray['###SUB_GIFTCODE_DISCOUNT###'] = '';
 					$subpartArray['###SUB_GIFTCODE_DISCOUNTWRONG###'] = '';
 					if ($creditpointsGifts == '') {
-						$subpartArray['###SUB_GIFTCODE_DISCOUNT_TRUE###'] = '';
+						$subpartArray['###SUB_GIFTCODE_DISCOUNT_true###'] = '';
 					}
 				} else {
 					$uniqueId = t3lib_div::trimExplode ('-', $basketObj->recs['tt_products']['giftcode'], true);
 					$query='uid=\'' . intval($uniqueId[0]) . '\' AND crdate=\'' . intval($uniqueId[1]) . '\'';
-					$giftRes = $TYPO3_DB->exec_SELECTquery('*', 'tt_products_gifts', $query);
-					$row = $TYPO3_DB->sql_fetch_assoc($giftRes);
-					$TYPO3_DB->sql_free_result($giftRes);
+					$giftRes = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tt_products_gifts', $query);
+					$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($giftRes);
+					$GLOBALS['TYPO3_DB']->sql_free_result($giftRes);
 					$pricefactor = doubleval($this->conf['creditpoints.']['pricefactor']);
 					$creditpointsDiscount = intval($creditpointsGifts) * $pricefactor;
 					$markerArray['###GIFT_DISCOUNT###'] = $creditpointsDiscount;
@@ -858,17 +856,17 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 					if ($row && $creditpointsGifts && $pricefactor > 0) {
 						$subpartArray['###SUB_GIFTCODE_DISCOUNTWRONG###']= '';
 						if ($creditpointsGifts == '') {
-							$subpartArray['###SUB_GIFTCODE_DISCOUNT_TRUE###'] = '';
+							$subpartArray['###SUB_GIFTCODE_DISCOUNT_true###'] = '';
 						}
 					} else {
 						$markerArray['###VALUE_GIFTCODE_USED###'] = '**********';
 						if (t3lib_div::_GP('creditpoints_gifts') == '') {
-							$subpartArray['###SUB_GIFTCODE_DISCOUNT_TRUE###'] = '';
+							$subpartArray['###SUB_GIFTCODE_DISCOUNT_true###'] = '';
 						}
 					}
 				}
 			}
-			$amountCreditpoints = $TSFE->fe_user->user['tt_products_creditpoints'] + intval($creditpointsGifts);
+			$amountCreditpoints = $GLOBALS['TSFE']->fe_user->user['tt_products_creditpoints'] + intval($creditpointsGifts);
 			$markerArray['###AMOUNT_CREDITPOINTS###'] = $amountCreditpoints;
 
 			$pricefactor = doubleval($this->conf['creditpoints.']['priceprod']);
@@ -879,11 +877,11 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 			$remainingCreditpoints = 0;
 			$creditpointsObj->getBasketMissingCreditpoints(0, $tmp, $remainingCreditpoints);
  			$markerArray['###AUTOCREDITPOINTS_REMAINING###'] = number_format($remainingCreditpoints,'0');
-			$markerArray['###CREDITPOINTS_AVAILABLE###'] = number_format($TSFE->fe_user->user['tt_products_creditpoints'],'0');
+			$markerArray['###CREDITPOINTS_AVAILABLE###'] = number_format($GLOBALS['TSFE']->fe_user->user['tt_products_creditpoints'],'0');
  			$markerArray['###USERCREDITPOINTS_PRICE_TOTAL_TAX###'] = $priceViewObj->priceFormat(($autoCreditpointsTotal < $amountCreditpoints ? $autoCreditpointsTotal : $amountCreditpoints) * $pricefactor);
 
 			// maximum1 amount of creditpoint to change is amount on account minus amount already spended in the credit-shop
-			$max1_creditpoints = $TSFE->fe_user->user['tt_products_creditpoints'] + intval($creditpointsGifts);
+			$max1_creditpoints = $GLOBALS['TSFE']->fe_user->user['tt_products_creditpoints'] + intval($creditpointsGifts);
 			// maximum2 amount of creditpoint to change is amount bought multiplied with creditpointfactor
 			$max2_creditpoints = 0;
 			$pricefactor = doubleval($this->conf['creditpoints.']['pricefactor']);
@@ -939,7 +937,7 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 
 			// check the basket limits
 			$basketConf = $cnf->getBasketConf('minPrice');
-			$minPriceSuccess = TRUE;
+			$minPriceSuccess = true;
 
 			if ($checkMinPrice && $basketConf['type'] == 'price')	{
 				$value = $calculatedArray['priceTax'][$basketConf['collect']];
@@ -948,7 +946,7 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 					$subpartArray['###MESSAGE_MINPRICE###'] = '';
 					$tmpSubpart = $this->cObj->getSubpart($t['basketFrameWork'],'###MESSAGE_MINPRICE_ERROR###');
 					$subpartArray['###MESSAGE_MINPRICE_ERROR###'] = $this->cObj->substituteMarkerArray($tmpSubpart,$markerArray);
-					$minPriceSuccess = FALSE;
+					$minPriceSuccess = false;
 				}
 			}
 
@@ -985,7 +983,7 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 			} else {
 				$subpartArray['###MESSAGE_ERROR###'] = '';
 			}
-			$voucherView = $tablesObj->get('voucher', TRUE);
+			$voucherView = $tablesObj->get('voucher', true);
 			$voucherView->getsubpartMarkerArray($subpartArray, $wrappedSubpartArray);
 			$voucherView->getMarkerArray($markerArray);
 			$markerArray['###CREDITPOINTS_SAVED###'] = number_format($creditpoints,'0');
@@ -996,8 +994,8 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 			$pointerExcludeArray = array_keys(tx_ttproducts_model_control::getPointerParamsCodeArray());
 			$singleExcludeList = $this->urlObj->getSingleExcludeList(implode(',', $pointerExcludeArray));
 
-			if ($TSFE->type)	{
-				$addQueryString['type'] = $TSFE->type;
+			if ($GLOBALS['TSFE']->type)	{
+				$addQueryString['type'] = $GLOBALS['TSFE']->type;
 			}
 			$wrappedSubpartArray['###LINK_AGB###'] = array(
 				'<a href="' . htmlspecialchars(
@@ -1007,7 +1005,7 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 						$this->urlObj->getLinkParams(
 							$singleExcludeList,
 							$addQueryString,
-							TRUE,
+							true,
 							$bUseBackPid,
 							''
 						)
@@ -1045,7 +1043,7 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 						$this->urlObj->getLinkParams(
 							$singleExcludeList,
 							$addQueryString,
-							TRUE,
+							true,
 							$bUseBackPid,
 							''
 						)
@@ -1055,7 +1053,7 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 			);
 
 				// Final substitution:
-			if (!$TSFE->loginUser)	{		// Remove section for FE_USERs only, if there are no fe_user
+			if (!$GLOBALS['TSFE']->loginUser)	{		// Remove section for FE_USERs only, if there are no fe_user
 				$subpartArray['###FE_USER_SECTION###'] = '';
 			}
 			if (is_object($infoObj))	{
@@ -1093,13 +1091,13 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 
 			$variantFieldArray = array();
 			$variantMarkerArray = array();
-			$staticTaxViewObj = $tablesObj->get('static_taxes', TRUE);
+			$staticTaxViewObj = $tablesObj->get('static_taxes', true);
 			$staticTaxObj = $staticTaxViewObj->getModelObj();
 
 			if ($staticTaxObj->isInstalled())	{
 
 				$allTaxesArray = $staticTaxObj->getAllTaxesArray();
-				$bUseTaxArray = FALSE;
+				$bUseTaxArray = false;
 				$viewTaxTagArray = array();
 				$parentArray = array();
 				$markerFieldArray = array();
@@ -1116,7 +1114,7 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 
 				if (isset($allTaxesArray) && is_array($allTaxesArray))	{
 					if (count($allTaxesArray))	{
-						$bUseTaxArray = TRUE;
+						$bUseTaxArray = true;
 						foreach ($allTaxesArray as $taxId => $taxArray)	{
 							foreach ($taxArray as $k => $taxRow)	{
 								$theTax = $taxRow['tx_rate'] * 0.01;
@@ -1134,7 +1132,7 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 									0,
 									'',
 									$id,
-									$prefix, // if FALSE, then no table marker will be added
+									$prefix, // if false, then no table marker will be added
 									$suffix,
 									''
 								);
@@ -1171,7 +1169,7 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 				foreach ($viewTagArray as $theTag => $v1)	{
 					if (!isset($markerArray['###'.$theTag.'###']))	{
 						foreach ($priceCalcMarkerArray as $markerKey => $value)	{
-							if (strpos($theTag,$markerKey) !== FALSE)	{
+							if (strpos($theTag,$markerKey) !== false)	{
 								$markerArray['###'.$theTag.'###'] = '';
 							}
 						}
@@ -1206,7 +1204,7 @@ class tx_ttproducts_basket_view implements t3lib_Singleton {
 				array(),
 				$this->useArticles,
 				$GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['pageAsCategory'],
-				$TSFE->id,
+				$GLOBALS['TSFE']->id,
 				$this->error_code
 			);
 			if ($relatedMarkerArray && is_array($relatedMarkerArray)) {

@@ -92,8 +92,6 @@ class tx_ttproducts_db implements t3lib_Singleton {
 
 
 	public function &fetchRow ($data) {
-		global $TYPO3_DB, $TSFE;
-
 		$rc = '';
 		$view = '';
 		$rowArray = array();
@@ -116,10 +114,10 @@ class tx_ttproducts_db implements t3lib_Singleton {
 			$this->cObj,
 			$priceObj
 		);
-		$discount = $TSFE->fe_user->user['tt_products_discount'];
+		$discount = $GLOBALS['TSFE']->fe_user->user['tt_products_discount'];
 
         // We put our incomming data to the regular piVars
-		$itemTable = $tablesObj->get('tt_products', FALSE);
+		$itemTable = $tablesObj->get('tt_products', false);
 
 		if (is_array($data))	{
 			$useArticles = $itemTable->variant->getUseArticles();
@@ -153,10 +151,10 @@ class tx_ttproducts_db implements t3lib_Singleton {
 								}
 							}
 							$tmpRow = $rowArray[$table];
-							$bKeepNotEmpty = FALSE;
+							$bKeepNotEmpty = false;
 
 							if ($useArticles == 1)	{
-								$rowArticle = $itemTable->getArticleRow($rowArray[$table], $theCode, FALSE);
+								$rowArticle = $itemTable->getArticleRow($rowArray[$table], $theCode, false);
 							} else if ($useArticles == 3) {
 
 								$rowArticle = $itemTable->getMatchingArticleRows($tmpRow, $articleRows);
@@ -165,7 +163,7 @@ class tx_ttproducts_db implements t3lib_Singleton {
 
 							if ($rowArticle)	{
 
-								$itemTable->mergeAttributeFields($tmpRow, $rowArticle, $bKeepNotEmpty, TRUE);
+								$itemTable->mergeAttributeFields($tmpRow, $rowArticle, $bKeepNotEmpty, true);
 								$tmpRow['uid'] = $uid;
 							}
 
@@ -176,7 +174,7 @@ class tx_ttproducts_db implements t3lib_Singleton {
 							$priceTaxArray = $priceObj->getPriceTaxArray(
 								$this->conf['discountPriceMode'], $basketObj->basketExtra, 'price', tx_ttproducts_control_basket::getRoundFormat(), tx_ttproducts_control_basket::getRoundFormat('discount'), $tmpRow, $totalDiscountField, $priceTaxArray);
 
-							$csConvObj = $TSFE->csConvObj;
+							$csConvObj = $GLOBALS['TSFE']->csConvObj;
 							$field = 'price';
 							foreach ($priceTaxArray as $priceKey => $priceValue) {
 								$displayTax = $priceViewObj->convertKey($priceKey, $field);
@@ -221,9 +219,7 @@ class tx_ttproducts_db implements t3lib_Singleton {
 
 
 	protected function &generateResponse ($view, &$rowArray, &$variantArray)	{
-		global $TSFE;
-
-		$csConvObj = $TSFE->csConvObj;
+		$csConvObj = $GLOBALS['TSFE']->csConvObj;
 
 		$theCode = strtoupper($view);
 		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
@@ -243,7 +239,7 @@ class tx_ttproducts_db implements t3lib_Singleton {
 		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 
 		// Instantiate the tx_xajax_response object
-		$objResponse = new tx_taxajax_response($this->ajax->taxajax->getCharEncoding(), TRUE);
+		$objResponse = new tx_taxajax_response($this->ajax->taxajax->getCharEncoding(), true);
 
 		foreach ($rowArray as $functablename => $row)	{ // tt-products-list-1-size
 			if (!is_object($tableObjArray[$functablename]))	{
@@ -252,7 +248,7 @@ class tx_ttproducts_db implements t3lib_Singleton {
 				$suffix = '';
 			}
 
-			$itemTableView = $tablesObj->get($functablename, TRUE);
+			$itemTableView = $tablesObj->get($functablename, true);
 			$itemTable = $itemTableView->getModelObj();
 
 			$jsTableNamesId = str_replace('_','-',$functablename).$suffix;
@@ -281,8 +277,8 @@ class tx_ttproducts_db implements t3lib_Singleton {
 									$theCode,
 									'',
 									$basketObj->basketExtra,
-									$tmp=FALSE,
-									TRUE,
+									$tmp=false,
+									true,
 									'',
 									'',
 									'',
@@ -439,7 +435,7 @@ class tx_ttproducts_db implements t3lib_Singleton {
 				$cnf->getConfig(),
 				'tx_ttproducts_pi1_base',
 				$errorCode,
-				TRUE
+				true
 			);
 
 		$code = 'LIST';
@@ -447,7 +443,7 @@ class tx_ttproducts_db implements t3lib_Singleton {
 		$tagId = 'tt-products-' . strtolower($code);
 
 		if ($bDoProcessing || count($errorCode)) {
-			$content = $mainObj->run('tx_ttproducts_pi1_base', $errorCode, $content, TRUE);
+			$content = $mainObj->run('tx_ttproducts_pi1_base', $errorCode, $content, true);
 		}
 
 		$objResponse->addAssign($tagId, 'innerHTML', $content);
@@ -511,12 +507,12 @@ class tx_ttproducts_db implements t3lib_Singleton {
 				$cnf->getConfig(),
 				'tx_ttproducts_pi1_base',
 				$errorCode,
-				TRUE
+				true
 			);
 
 		if ($tagId != '') {
 			if ($bDoProcessing || count($errorCode)) {
-				$content = $mainObj->run('tx_ttproducts_pi1_base', $errorCode, $content, TRUE);
+				$content = $mainObj->run('tx_ttproducts_pi1_base', $errorCode, $content, true);
 
 				$objResponse->addAssign($tagId, 'innerHTML', $content);
 

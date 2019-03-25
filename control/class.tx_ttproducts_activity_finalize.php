@@ -98,9 +98,6 @@ class tx_ttproducts_activity_finalize {
 		$orderUid,
 		&$errorMessage
 	) {
-		global $TSFE;
-		global $TYPO3_DB;
-
 		if ($this->conf['errorLog']) {
 			error_log('doProcessing $orderUid = ' . $orderUid . chr(13), 3, $this->conf['errorLog']);
 		}
@@ -233,7 +230,7 @@ class tx_ttproducts_activity_finalize {
 
 		// Move the user creation in front so that when we create the order we have a fe_userid so that the order lists work.
 		// Is no user is logged in --> create one
-		if ($this->conf['createUsers'] && $infoViewObj->infoArray['billing']['email'] != '' && (trim($TSFE->fe_user->user['username']) == '')) {
+		if ($this->conf['createUsers'] && $infoViewObj->infoArray['billing']['email'] != '' && (trim($GLOBALS['TSFE']->fe_user->user['username']) == '')) {
 			$feuserUid = tx_ttproducts_api::createFeuser(
 				$this->conf,
 				$infoViewObj,
@@ -275,7 +272,7 @@ class tx_ttproducts_activity_finalize {
 			$pid = intval($this->conf['PIDGiftsTable']);
 
 			if (!$pid) {
-				$pid = intval($TSFE->id);
+				$pid = intval($GLOBALS['TSFE']->id);
 			}
 
 			$rc = tx_ttproducts_gifts_div::saveOrderRecord(
@@ -356,16 +353,16 @@ class tx_ttproducts_activity_finalize {
 					if ($emailConfig['to.'] != '') {
 						$toConfig = $emailConfig['to.'];
 						if (
-							trim($TSFE->fe_user->user['username']) != ''
+							trim($GLOBALS['TSFE']->fe_user->user['username']) != ''
 							&& $toConfig['table'] == 'fe_users'
 							&& $toConfig['field'] != ''
 							&& $toConfig['foreign_table'] != ''
 							&& $toConfig['foreign_field'] != ''
 							&& $toConfig['foreign_email_field'] != ''
-							&& $TSFE->fe_user->user[$toConfig['field']] != ''
+							&& $GLOBALS['TSFE']->fe_user->user[$toConfig['field']] != ''
 						) {
-							$where_clause = $toConfig['foreign_table'] . '.' . $toConfig['foreign_field'] . '=' . $TYPO3_DB->fullQuoteStr($TSFE->fe_user->user[$toConfig['field']], $toConfig['foreign_table']);
-							$recordArray = $TYPO3_DB->exec_SELECTgetRows($toConfig['foreign_email_field'], $toConfig['foreign_table'], $where_clause);
+							$where_clause = $toConfig['foreign_table'] . '.' . $toConfig['foreign_field'] . '=' . $GLOBALS['TYPO3_DB']->fullQuoteStr($GLOBALS['TSFE']->fe_user->user[$toConfig['field']], $toConfig['foreign_table']);
+							$recordArray = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows($toConfig['foreign_email_field'], $toConfig['foreign_table'], $where_clause);
 							if (isset($recordArray) && is_array($recordArray)) {
 								foreach ($recordArray as $record) {
 									if ($record[$toConfig['foreign_email_field']] != '') {

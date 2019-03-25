@@ -39,13 +39,13 @@
 
 class tx_ttproducts_static_info implements t3lib_Singleton {
 
-	static private $staticInfo = FALSE;
+	static private $staticInfo = false;
 
 	/**
 	 * Getting all tt_products_cat categories into internal array
 	 */
 	static public function init () {
-		$result = FALSE;
+		$result = false;
 
 		if (
 			!is_object(self::$staticInfo) &&
@@ -76,9 +76,9 @@ class tx_ttproducts_static_info implements t3lib_Singleton {
 				}
 
 				if (is_object(self::$staticInfo)) {
-					$result = TRUE;
+					$result = true;
 				} else {
-					self::$staticInfo = FALSE;
+					self::$staticInfo = false;
 				}
 			} else {
 				// TODO: inform the user about wrong version of static_info_tables

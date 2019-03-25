@@ -49,8 +49,8 @@ interface tx_ttproducts_variant_int {
 	public function getVariantRow($row='',$varianArray=array());
 	public function getTableUid ($table, $uid);
 	public function getSelectableArray();
-	public function getVariantValuesByArticle($articleRowArray, $productRow,$withSemicolon = FALSE);
-	public function filterArticleRowsByVariant($row, $variant, $articleRows, $bCombined = FALSE);
+	public function getVariantValuesByArticle($articleRowArray, $productRow,$withSemicolon = false);
+	public function filterArticleRowsByVariant($row, $variant, $articleRows, $bCombined = false);
 	public function getFieldArray();
 	public function getSelectableFieldArray();
 	public function getAdditionalKey();

@@ -1,8 +1,5 @@
 <?php
-
-if (!defined ('TYPO3_MODE')) {
-	die ('Access denied.');
-}
+defined('TYPO3_MODE') || die('Access denied.');
 
 $table = 'tt_products_cat_language';
 
@@ -17,7 +14,6 @@ if (
     }
 }
 
-
 $orderBySortingTablesArray = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['orderBySortingTables']);
 if (
     !empty($orderBySortingTablesArray) &&
@@ -25,7 +21,6 @@ if (
 ) {
     $GLOBALS['TCA'][$table]['ctrl']['sortby'] = 'sorting';
 }
-
 
 $excludeArray = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['exclude.'];
 

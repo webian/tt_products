@@ -45,8 +45,8 @@ class tx_ttproducts_form_div {
 		$valueArray,
 		$name,
 		$selectedKey,
-		$bSelectTags = TRUE,
-		$bTranslateText = TRUE,
+		$bSelectTags = true,
+		$bTranslateText = true,
 		$allowedArray = array(),
 		$type = 'select',
 		$mainAttributeArray = array(),
@@ -54,12 +54,10 @@ class tx_ttproducts_form_div {
 		$imageFileArray = '',
 		$keyMarkerArray = ''
 	) {
-		global $TSFE;
-
-		$result = FALSE;
+		$result = false;
 		$parser = tx_div2007_core::newHtmlParser(false);
 
-		$bUseXHTML = $TSFE->config['config']['xhtmlDoctype'] != '';
+		$bUseXHTML = $GLOBALS['TSFE']->config['config']['xhtmlDoctype'] != '';
 		$flags = ENT_QUOTES;
 
 		if (is_array($valueArray))	{
@@ -109,7 +107,7 @@ class tx_ttproducts_form_div {
 								$paramArray['checked'] = 'checked';
 								break;
 							default:
-								return FALSE;
+								return false;
 								break;
 						}
 					}
@@ -130,7 +128,7 @@ class tx_ttproducts_form_div {
 							$inputTextArray = array($inputText);
 							break;
 						default:
-							return FALSE;
+							return false;
 							break;
 					}
 
@@ -165,7 +163,7 @@ class tx_ttproducts_form_div {
 				$result = $totaltext;
 			}
 		} else {
-			$result = FALSE;
+			$result = false;
 		}
 
 		return $result;
@@ -195,9 +193,7 @@ class tx_ttproducts_form_div {
 
 
 	static protected function getAttributeString ($mainAttributeArray) {
-		global $TSFE;
-
-		$bUseXHTML = $TSFE->config['config']['xhtmlDoctype'] != '';
+		$bUseXHTML = $GLOBALS['TSFE']->config['config']['xhtmlDoctype'] != '';
 		$resultArray = array();
 
 		if (count($mainAttributeArray)) {

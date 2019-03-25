@@ -58,7 +58,7 @@ class tx_ttproducts_pricecalc_base implements t3lib_Singleton {
 		&$discountArray,
 		$priceTotalTax,
 		$bUseArticles,
-		$bMergeArticles = TRUE
+		$bMergeArticles = true
 	) {
 	} // getCalculatedData
 

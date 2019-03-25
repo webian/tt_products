@@ -61,14 +61,12 @@ class tx_ttproducts_currency_view implements t3lib_Singleton {
 	 * currency selector
 	 */
 	function printView()  {
-		global $TSFE;
-
 		$currList = $this->exchangeRate->initCurrencies($this->BaseCurrency);
 		$jScript =  '	var currlink = new Array(); '.chr(10);
 		$index = 0;
 		foreach( $currList as $key => $value)	{
 			//$url = $this->getLinkUrl('','',array('C' => 'C='.$key));
-			$url = $this->pibase->pi_getPageLink($TSFE->id,'',$this->urlObj->getLinkParams('',array('C' => 'C='.$key),true));
+			$url = $this->pibase->pi_getPageLink($GLOBALS['TSFE']->id,'',$this->urlObj->getLinkParams('',array('C' => 'C='.$key),true));
 			$jScript .= '	currlink['.$index.'] = "'.$url.'"; '.chr(10) ;
 			$index ++ ;
 		}

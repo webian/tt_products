@@ -95,7 +95,6 @@ class tx_ttproducts_gifts_div {
 	 *
 	 */
 	static public function saveOrderRecord($orderUid, $pid, &$giftBasket) {
-		global $TYPO3_DB;
 		$rc = '';
 
 		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
@@ -133,8 +132,8 @@ class tx_ttproducts_gifts_div {
 			);
 			// Saving the gifts order record
 
-			$TYPO3_DB->exec_INSERTquery('tt_products_gifts', $insertFields);
-			$newId = $TYPO3_DB->sql_insert_id();
+			$GLOBALS['TYPO3_DB']->exec_INSERTquery('tt_products_gifts', $insertFields);
+			$newId = $GLOBALS['TYPO3_DB']->sql_insert_id();
 			$insertFields = array();
 			$insertFields['uid_local'] = $newId;
 			$variantFields = $productObj->variant->getFieldArray();
@@ -147,7 +146,7 @@ class tx_ttproducts_gifts_div {
 					$query='uid_product=\''.intval($productid).'\'';
 					foreach ($variantFields as $k => $field)	{
 						if ($row[$field])	{
-							$query .= ' AND '.$field.'='.$TYPO3_DB->fullQuoteStr($row[$field],'tt_products_articles');
+							$query .= ' AND '.$field.'='.$GLOBALS['TYPO3_DB']->fullQuoteStr($row[$field],'tt_products_articles');
 						}
 					}
 					$articleRes = $GLOBALS['TYPO3_DB']->exec_SELECTquery('uid', 'tt_products_articles', $query);

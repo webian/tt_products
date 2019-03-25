@@ -45,7 +45,7 @@ class tx_ttproducts_model_creator implements t3lib_Singleton {
 
 		tx_ttproducts_static_info::init();
 
-		$bUseStaticTaxes = FALSE;
+		$bUseStaticTaxes = false;
 		if (t3lib_extMgm::isLoaded('static_info_tables')) {
 			$eInfo = tx_div2007_alpha5::getExtensionInfo_fh003('static_info_tables');
 
@@ -59,7 +59,7 @@ class tx_ttproducts_model_creator implements t3lib_Singleton {
 						if (is_array($eInfo2)) {
 							$sittVersion = $eInfo2['version'];
 							if (version_compare($sittVersion, '0.3.0', '>=')) {
-								$bUseStaticTaxes = TRUE;
+								$bUseStaticTaxes = true;
 							}
 						}
 					}

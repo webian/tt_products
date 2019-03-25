@@ -69,7 +69,7 @@ class tx_ttproducts_static_tax extends tx_ttproducts_table_base {
 	} // init
 
 	public function isInstalled () {
-		$rc = FALSE;
+		$rc = false;
 
 		if (t3lib_extMgm::isLoaded('static_info_tables_taxes')) {
 			$eInfo = tx_div2007_alpha5::getExtensionInfo_fh003('static_info_tables_taxes');
@@ -77,7 +77,7 @@ class tx_ttproducts_static_tax extends tx_ttproducts_table_base {
 			if (is_array($eInfo)) {
 				$sittVersion = $eInfo['version'];
 				if (version_compare($sittVersion, '0.1.0', '>=')) {
-					$rc = TRUE;
+					$rc = true;
 				}
 			}
 		}
@@ -98,11 +98,9 @@ class tx_ttproducts_static_tax extends tx_ttproducts_table_base {
 	}
 
 	public function setStoreData ($uidStore)	{
-		global $TYPO3_DB;
-
 		if ($this->isInstalled() && $uidStore > 0)	{
 			$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
-			$orderAdressObj = $tablesObj->get('address', FALSE);
+			$orderAdressObj = $tablesObj->get('address', false);
 			$storeRow = $orderAdressObj->get($uidStore);
 			$theCountryCode = '';
 
@@ -126,7 +124,7 @@ class tx_ttproducts_static_tax extends tx_ttproducts_table_base {
 
 				$zoneField = $orderAdressObj->getField('zone');
 				if ($tableconf['zoneReference'] == 'uid')	{
-					$zoneArray = $TYPO3_DB->exec_SELECTgetRows('zn_code','static_country_zones','uid='.intval($storeRow[$zoneField]));
+					$zoneArray = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('zn_code','static_country_zones','uid='.intval($storeRow[$zoneField]));
 					if (isset($zoneArray) && is_array($zoneArray) && isset($zoneArray[0]))	{
 						$theZoneCode = $zoneArray[0]['zn_code'];
 					}

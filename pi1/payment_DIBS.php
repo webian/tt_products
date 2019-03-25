@@ -57,7 +57,7 @@ $localTemplateCode = $this->cObj->fileResource($lConf['templateFile'] ? $lConf['
 if (!is_object($basketView))	{
 	$error_code = '';
 	$basketView = t3lib_div::makeInstance('tx_ttproducts_basket_view',1);
-	$basketView->init ($pibase, array(), FALSE, $this->templateCode, $error_code);
+	$basketView->init ($pibase, array(), false, $this->templateCode, $error_code);
 }
 $markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
 $localTemplateCode = $this->cObj->substituteMarkerArrayCached($localTemplateCode, $markerObj->getGlobalMarkerArray());
@@ -86,10 +86,10 @@ switch($products_cmd)	{
 			$localTemplateCode,
 			'PAYMENT',
 			$infoViewObj,
-			FALSE,
-			FALSE,
+			false,
+			false,
 			$this->basket->getCalculatedArray(),
-			TRUE,
+			true,
 			$tSubpart
 		);		// This not only gets the output but also calculates the basket total, so it's NECESSARY!
 		$markerArray=array();
@@ -210,10 +210,10 @@ value="'.$priceViewObj->priceFormat($calculatedArray['priceTax']['total'] - $cal
 				$localTemplateCode,
 				'PAYMENT',
 				$infoViewObj,
-				FALSE,
-				FALSE,
+				false,
+				false,
 				$this->basket->getCalculatedArray(),
-				TRUE,
+				true,
 				'DIBS_DECLINE_TEMPLATE',
 				$markerArray
 			);	  // This not only gets the output but also calculates the basket total, so it's NECESSARY!
@@ -224,10 +224,10 @@ value="'.$priceViewObj->priceFormat($calculatedArray['priceTax']['total'] - $cal
 				$localTemplateCode,
 				'PAYMENT',
 				$infoViewObj,
-				FALSE,
-				FALSE,
+				false,
+				false,
 				$this->basket->getCalculatedArray(),
-				TRUE,
+				true,
 				'DIBS_SOLOE_CANCEL_TEMPLATE',
 				$markerArray
 			);	 // This not only gets the output but also calculates the basket total, so it's NECESSARY!
@@ -238,10 +238,10 @@ value="'.$priceViewObj->priceFormat($calculatedArray['priceTax']['total'] - $cal
 				$localTemplateCode,
 				'PAYMENT',
 				$infoViewObj,
-				FALSE,
-				FALSE,
+				false,
+				false,
 				$this->basket->getCalculatedArray(),
-				TRUE,
+				true,
 				'DIBS_ACCEPT_TEMPLATE'
 			);
 	// This is just done to calculate stuff
@@ -262,10 +262,10 @@ value="'.$priceViewObj->priceFormat($calculatedArray['priceTax']['total'] - $cal
 					$localTemplateCode,
 					'PAYMENT',
 					$infoViewObj,
-					FALSE,
-					FALSE,
+					false,
+					false,
 					$this->basket->getCalculatedArray(),
-					TRUE,
+					true,
 					'DIBS_DECLINE_MD5_TEMPLATE'
 				);		// This not only gets the output but also calculates the basket total, so it's NECESSARY!
 		} elseif (t3lib_div::_GP('orderid')!=$order->getNumber($orderUid)) {
@@ -274,9 +274,9 @@ value="'.$priceViewObj->priceFormat($calculatedArray['priceTax']['total'] - $cal
 					$localTemplateCode,
 					'PAYMENT',
 					$infoViewObj,
-					FALSE,
-					FALSE,
-					TRUE,
+					false,
+					false,
+					true,
 					'DIBS_DECLINE_ORDERID_TEMPLATE'
 				);		// This not only gets the output but also calculates the basket total, so it's NECESSARY!
 		} else {
@@ -288,10 +288,10 @@ value="'.$priceViewObj->priceFormat($calculatedArray['priceTax']['total'] - $cal
 					$tmp='',
 					'PAYMENT',
 					$infoViewObj,
-					FALSE,
-					FALSE,
+					false,
+					false,
 					$this->basket->getCalculatedArray(),
-					TRUE,
+					true,
 					'BASKET_ORDERCONFIRMATION_TEMPLATE',
 					$markerArray
 				);
@@ -308,10 +308,10 @@ value="'.$priceViewObj->priceFormat($calculatedArray['priceTax']['total'] - $cal
 					$localTemplateCode,
 					'PAYMENT',
 					$infoViewObj,
-					FALSE,
-					FALSE,
+					false,
+					false,
 					$this->basket->getCalculatedArray(),
-					TRUE,
+					true,
 					'DIBS_REDIRECT_TEMPLATE',
 					$markerArray
 				);

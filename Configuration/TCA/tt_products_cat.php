@@ -1,7 +1,5 @@
 <?php
-if (!defined ('TYPO3_MODE')) {
-	die ('Access denied.');
-}
+defined('TYPO3_MODE') || die('Access denied.');
 
 $imageFolder = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['imageFolder'];
 if (!$imageFolder) {
@@ -42,18 +40,21 @@ $result = array (
 				'type' => 'input',
 				'size' => '30',
 				'max'  => '30',
+				'default' => ''
 			)
 		),
 		'sorting' => Array (
 			'config' => Array (
 				'type' => 'passthrough',
+				'default' => 0
 			)
 		),
 		'hidden' => array (
 			'exclude' => 1,
 			'label' => DIV2007_LANGUAGE_LGL . 'hidden',
 			'config' => array (
-				'type' => 'check'
+				'type' => 'check',
+				'default' => 0
 			)
 		),
 		'tstamp' => array (
@@ -64,7 +65,7 @@ $result = array (
 				'size' => '8',
 				'eval' => 'date',
                 'renderType' => 'inputDateTime',
-				'default' => '0'
+				'default' => 0
 			)
 		),
 		'crdate' => array (
@@ -75,7 +76,7 @@ $result = array (
 				'size' => '8',
 				'eval' => 'date',
                 'renderType' => 'inputDateTime',
-				'default' => '0'
+				'default' => 0
 			)
 		),
 		'starttime' => array (
@@ -86,7 +87,7 @@ $result = array (
 				'size' => '8',
 				'eval' => 'date',
                 'renderType' => 'inputDateTime',
-				'default' => '0'
+				'default' => 0
 			)
 		),
 		'endtime' => array (
@@ -97,7 +98,7 @@ $result = array (
 				'size' => '8',
 				'eval' => 'date',
                 'renderType' => 'inputDateTime',
-				'default' => '0',
+				'default' => 0,
 				'range' => array (
 					'upper' => mktime(0, 0, 0, 12, 31, $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['endtimeYear']),
 					'lower' => mktime(0, 0, 0, date('n') - 1, date('d'), date('Y'))
@@ -116,7 +117,8 @@ $result = array (
 					array(DIV2007_LANGUAGE_LGL . 'any_login', -2),
 					array(DIV2007_LANGUAGE_LGL . 'usergroups', '--div--')
 				),
-				'foreign_table' => 'fe_groups'
+				'foreign_table' => 'fe_groups',
+				'default' => 0
 			)
 		),
 		'title' => array (
@@ -126,7 +128,7 @@ $result = array (
 				'type' => 'input',
 				'size' => '40',
 				'max' => '256',
-				'default' => ' ',
+				'default' => ''
 			)
 		),
 		'subtitle' => array (
@@ -137,7 +139,7 @@ $result = array (
 				'rows' => '3',
 				'cols' => '20',
 				'max' => '512',
-				'default' => NULL,
+				'default' => ''
 			)
 		),
 		'catid' => Array (
@@ -147,7 +149,8 @@ $result = array (
 				'type' => 'input',
 				'size' => '20',
 				'eval' => 'trim',
-				'max' => '40'
+				'max' => '40',
+				'default' => ''
 			)
 		),
 		'keyword' => array (
@@ -159,7 +162,7 @@ $result = array (
 				'cols' => '20',
 				'max' => '512',
 				'eval' => 'null',
-				'default' => NULL,
+				'default' => ''
 			)
 		),
 		'note' => array (
@@ -170,7 +173,7 @@ $result = array (
 				'cols' => '48',
 				'rows' => '5',
 				'eval' => 'null',
-				'default' => NULL,
+				'default' => ''
 			)
 		),
 		'note2' => array (
@@ -181,7 +184,7 @@ $result = array (
 				'cols' => '48',
 				'rows' => '5',
 				'eval' => 'null',
-				'default' => NULL,
+				'default' => ''
 			)
 		),
 		'image' => array (
@@ -197,7 +200,7 @@ $result = array (
 				'maxitems' => '10',
 				'minitems' => '0',
 				'eval' => 'null',
-				'default' => NULL,
+				'default' => ''
 			)
 		),
 		'discount' => array (
@@ -220,6 +223,7 @@ $result = array (
 			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products_cat.discount_disable',
 			'config' => array (
 				'type' => 'check',
+				'default' => 0
 			)
 		),
 		'email_uid' => array (
@@ -234,6 +238,7 @@ $result = array (
 				'size' => 1,
 				'minitems' => 0,
 				'maxitems' => 1,
+				'default' => 0
 			)
 		),
 		'highlight' => array (
@@ -241,6 +246,7 @@ $result = array (
 			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products_cat.highlight',
 			'config' => array (
 				'type' => 'check',
+				'default' => 0
 			)
 		),
 	),

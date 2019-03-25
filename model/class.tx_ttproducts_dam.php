@@ -55,7 +55,6 @@ class tx_ttproducts_dam extends tx_ttproducts_article_base {
 	 * DAM elements
 	 */
 	public function init ($cObj, $functablename)  {
-		global $TYPO3_DB,$TSFE,$TCA;
 
 		parent::init($cObj, $functablename);
 
@@ -69,14 +68,14 @@ class tx_ttproducts_dam extends tx_ttproducts_article_base {
 	} // init
 
 	function getRelated ($uid, $type) {
-		global $TYPO3_DB;
+		global $GLOBALS['TYPO3_DB'];
 
 		$rcArray = array();
 		if ($type == 'products')	{
 			$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
-			$productTable = $tablesObj->get('tt_products', FALSE);
+			$productTable = $tablesObj->get('tt_products', false);
 			$additional = $productTable->getFlexQuery('isImage',1);
-			$rowArray = $productTable->getWhere('additional REGEXP ' . $TYPO3_DB->fullQuoteStr($additional,$productTable->getTablename)); // quotemeta
+			$rowArray = $productTable->getWhere('additional REGEXP ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($additional,$productTable->getTablename)); // quotemeta
 			$rcArray = array_keys($rowArray);
 		}
 		return $rcArray;
@@ -128,8 +127,8 @@ class tx_ttproducts_dam extends tx_ttproducts_article_base {
 		}
 	}
 
-	public function addWhereCat ($catObject, $theCode, $cat, $categoryAnd, $pid_list, $bLeadingOperator=TRUE) {
-		$bOpenBracket = FALSE;
+	public function addWhereCat ($catObject, $theCode, $cat, $categoryAnd, $pid_list, $bLeadingOperator=true) {
+		$bOpenBracket = false;
 		$where = '';
 
 			// Call all addWhere hooks for categories at the end of this method

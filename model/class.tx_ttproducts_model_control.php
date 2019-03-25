@@ -130,7 +130,7 @@ class tx_ttproducts_model_control {
 
 
 	static public function getAndVar ($k) {
-		$result = FALSE;
+		$result = false;
 
 		if (isset(self::$andVars[$k])) {
 			$result = self::$andVars[$k];
@@ -230,7 +230,7 @@ class tx_ttproducts_model_control {
 												'key' => $valueConf['key'],
 												'key.' => $valueConf['key.'],
 											);
-											$bFitValueArray[$v] = TRUE;
+											$bFitValueArray[$v] = true;
 										}
 									}
 								}
@@ -292,13 +292,13 @@ class tx_ttproducts_model_control {
 		if ($searchFunctablename != '')	{
 			$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 
-			$tableObj = $tablesObj->get($searchFunctablename, FALSE);
+			$tableObj = $tablesObj->get($searchFunctablename, false);
 			$searchTablename = $tableObj->getTablename();
 			$searchAlias = $tableObj->getAlias();
 
 			if ($searchTablename != '' && $searchAlias != '')	{
 				$tableAliasArray[$searchTablename] = $searchAlias;
-				$bUseSearchboxArray[$searchFunctablename] = TRUE;
+				$bUseSearchboxArray[$searchFunctablename] = true;
 			}
 			$enableFieldArray = $tableObj->getTableObj()->getEnableFieldArray();
 		}
@@ -306,16 +306,14 @@ class tx_ttproducts_model_control {
 
 
 	public static function getWhereByFields ($tablename, $alias, $aliasPostfix, $fields, $sword, $delimiter)	{
-		global $TYPO3_DB;
-
-		$rc = FALSE;
+		$rc = false;
 		$fieldArray = t3lib_div::trimExplode(',',$fields);
 		if (isset($fieldArray) && is_array($fieldArray))	{
 			$rcArray = array();
 			$regexpDelimiter = self::determineRegExpDelimiter($delimiter);
 
 			foreach ($fieldArray as $field)	{
-				$rcArray[] = $alias . $aliasPostfix . '.' . $field . ' REGEXP ' . $TYPO3_DB->fullQuoteStr('^([[:print:]]*[' . $regexpDelimiter . '])*' . '(' . $sword . ')([[:print:]]*[[:blank:]]*)*([' . $regexpDelimiter . '][[:print:]]*)*$', $tablename);
+				$rcArray[] = $alias . $aliasPostfix . '.' . $field . ' REGEXP ' . $GLOBALS['TYPO3_DB']->fullQuoteStr('^([[:print:]]*[' . $regexpDelimiter . '])*' . '(' . $sword . ')([[:print:]]*[[:blank:]]*)*([' . $regexpDelimiter . '][[:print:]]*)*$', $tablename);
 			}
 			$rc = implode(' OR ',$rcArray);
 		}
@@ -324,8 +322,6 @@ class tx_ttproducts_model_control {
 
 
 	public static function getSearchInfo ($cObj, $searchVars,$functablename,$tablename,&$searchboxWhere,&$bUseSearchboxArray, &$sqlTableArray,&$sqlTableIndex,&$latest)	{
-		global $TCA,$TYPO3_DB;
-
 		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 
@@ -344,7 +340,7 @@ class tx_ttproducts_model_control {
 		}
 
 		if (isset($searchVars['uid']))	{
-			$contentObj = $tablesObj->get('tt_content',FALSE);
+			$contentObj = $tablesObj->get('tt_content',false);
 			$contentRow = $contentObj->get($searchVars['uid']);
 
 			if($contentRow['pi_flexform']!='')	{
@@ -400,7 +396,7 @@ class tx_ttproducts_model_control {
 			$sqlTableArray['where'] = array();
 
 			$loopArray = array('local', 'foreign');
-			$bUseSearchboxCat = FALSE;
+			$bUseSearchboxCat = false;
 			$theTable = $cnf->getTableName($paramsTableArray[$searchParamArray['local']]);
 
 			foreach ($loopArray as $position)	{
@@ -471,12 +467,12 @@ class tx_ttproducts_model_control {
 
 					if ($searchTablename != '')	{
 
-						$field = ($searchField!='' && isset($TCA[$searchTablename]['columns'][$searchField]) ? $searchField : 'title');
-						$configArray = $TCA[$searchTablename]['columns'][$field]['config'];
+						$field = ($searchField!='' && isset($GLOBALS['TCA'][$searchTablename]['columns'][$searchField]) ? $searchField : 'title');
+						$configArray = $GLOBALS['TCA'][$searchTablename]['columns'][$field]['config'];
 
 						if (isset($configArray) && is_array($configArray) || in_array($field,$enableFieldArray))	{
 							if ($configArray['eval'] == 'date')	{
-								$searchboxWhere = 'YEAR('.$searchAlias.$aliasPostfix.'.'.$field.')='.$TYPO3_DB->fullQuoteStr($positionSearchValue, $searchTablename);
+								$searchboxWhere = 'YEAR('.$searchAlias.$aliasPostfix.'.'.$field.')='.$GLOBALS['TYPO3_DB']->fullQuoteStr($positionSearchValue, $searchTablename);
 							} else {
 								if ($delimiter != '')	{
 									if ($searchVars['query'] == 'IN')	{
@@ -484,12 +480,12 @@ class tx_ttproducts_model_control {
 										$tmpParamArray = t3lib_div::trimExplode(',',$positionSearchValue);
 										foreach ($tmpParamArray as $param => $v)	{
 											if ($v != '')	{
-												$valueArray[] = $TYPO3_DB->fullQuoteStr($v, $searchTablename);;
+												$valueArray[] = $GLOBALS['TYPO3_DB']->fullQuoteStr($v, $searchTablename);;
 											}
 										}
 										$searchboxWhereArray=array();
 										foreach ($valueArray as $v)	{
-											$searchboxWhereArray[] = $searchAlias.$aliasPostfix.'.'.$field.' REGEXP '.$TYPO3_DB->fullQuoteStr('.*['.$delimiter.']*'.$positionSearchValue.'['.$delimiter.']*.*', $searchTablename);
+											$searchboxWhereArray[] = $searchAlias.$aliasPostfix.'.'.$field.' REGEXP '.$GLOBALS['TYPO3_DB']->fullQuoteStr('.*['.$delimiter.']*'.$positionSearchValue.'['.$delimiter.']*.*', $searchTablename);
 										}
 										$searchboxWhere = implode(' OR ',$searchboxWhereArray);
 									} else {
@@ -514,11 +510,11 @@ class tx_ttproducts_model_control {
 										}
 										$searchboxWhereArray=array();
 										foreach ($valueArray as $v)	{
-											$searchboxWhereArray[] = $searchAlias.$aliasPostfix.'.'.$field.' LIKE '.$TYPO3_DB->fullQuoteStr($v.'%', $searchTablename);
+											$searchboxWhereArray[] = $searchAlias.$aliasPostfix.'.'.$field.' LIKE '.$GLOBALS['TYPO3_DB']->fullQuoteStr($v.'%', $searchTablename);
 										}
 										$searchboxWhere = '('.implode(' OR ',$searchboxWhereArray).')';
 									} else {
-										$searchboxWhere = $searchAlias.$aliasPostfix.'.'.$field.' LIKE '.$TYPO3_DB->fullQuoteStr($positionSearchValue.'%', $searchTablename);
+										$searchboxWhere = $searchAlias.$aliasPostfix.'.'.$field.' LIKE '.$GLOBALS['TYPO3_DB']->fullQuoteStr($positionSearchValue.'%', $searchTablename);
 									}
 								}
 							}

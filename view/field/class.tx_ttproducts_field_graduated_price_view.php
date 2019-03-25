@@ -55,8 +55,6 @@ class tx_ttproducts_field_graduated_price_view extends tx_ttproducts_field_base_
 		$basketExtra = array(),
 		$id = '1'
 	) {
-		global $TCA;
-
 		$priceTablesViewObj = t3lib_div::makeInstance('tx_ttproducts_graduated_price_view');
 		$priceTablesViewObj->getPriceSubpartArrays($templateCode, $row, $fieldname, $subpartArray, $wrappedSubpartArray, $tagArray, $theCode, $basketExtra, $id);
 	}

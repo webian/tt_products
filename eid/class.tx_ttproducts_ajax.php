@@ -44,8 +44,6 @@ class tx_ttproducts_ajax implements t3lib_Singleton {
 	var $conf; 	// conf coming from JavaScript via Ajax
 
 	public function init()	{
-		global $TSFE;
-
 		$this->taxajax = t3lib_div::makeInstance('tx_taxajax');
 
 			// Encoding of the response to FE charset
@@ -89,7 +87,7 @@ class tx_ttproducts_ajax implements t3lib_Singleton {
 
 // 		$reqURI = t3lib_div::getIndpEnv('TYPO3_REQUEST_URL');
 // 		$origUrlArray = explode('?', $reqURI);
-// 		$urlArray = t3lib_div::explodeUrl2Array($origUrlArray['1'],TRUE);
+// 		$urlArray = t3lib_div::explodeUrl2Array($origUrlArray['1'],true);
 // 		unset($urlArray['cHash']);
 // 		$urlArray['no_cache'] = 1;
 // 		$urlArray['eID'] = TT_PRODUCTS_EXT;
@@ -108,8 +106,8 @@ class tx_ttproducts_ajax implements t3lib_Singleton {
 		$queryString = $urlObj->getLinkParams(
 			$excludeList,
 			$addQueryString,
-			FALSE,
-			FALSE,
+			false,
+			false,
 			$piVarSingle,
 			$piVarCat
 		);

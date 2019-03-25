@@ -1,8 +1,5 @@
 <?php
-
-if (!defined ('TYPO3_MODE')) {
-	die ('Access denied.');
-}
+defined('TYPO3_MODE') || die('Access denied.');
 
 $table = 'tt_products_articles';
 
@@ -16,8 +13,6 @@ if (
         $GLOBALS['TCA'][$table]['columns'][$field]['config']['max'] = '20';
     }
 }
-
-
 
 switch ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['articleMode']) {
     case '0':
@@ -33,6 +28,7 @@ switch ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['articleMode']) 
                 'size' => 1,
                 'minitems' => 0,
                 'maxitems' => 1,
+                'default' => 0
             )
         );
 
@@ -46,7 +42,6 @@ switch ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['articleMode']) 
         break;
 }
 
-
 $orderBySortingTablesArray = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['orderBySortingTables']);
 if (
     !empty($orderBySortingTablesArray) &&
@@ -55,17 +50,16 @@ if (
     $GLOBALS['TCA'][$table]['ctrl']['sortby'] = 'sorting';
 }
 
-
 $excludeArray = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['exclude.'];
 
 if (
-	isset($excludeArray) &&
-	is_array($excludeArray) &&
-	isset($excludeArray[$table])
+    isset($excludeArray) &&
+    is_array($excludeArray) &&
+    isset($excludeArray[$table])
 ) {
-	\JambageCom\Div2007\Utility\TcaUtility::removeField(
-		$GLOBALS['TCA'][$table],
-		$excludeArray[$table]
-	);
+    \JambageCom\Div2007\Utility\TcaUtility::removeField(
+        $GLOBALS['TCA'][$table],
+        $excludeArray[$table]
+    );
 }
 

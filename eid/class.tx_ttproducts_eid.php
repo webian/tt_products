@@ -50,7 +50,7 @@ tx_div2007_alpha5::initFE();
 // Start with tt_products
 // ******************************************************
 
-$conf = $TSFE->tmpl->setup['plugin.'][TT_PRODUCTS_EXT.'.'];
+$conf = $GLOBALS['TSFE']->tmpl->setup['plugin.'][TT_PRODUCTS_EXT.'.'];
 $config = array();
 $config['LLkey'] = '';
 

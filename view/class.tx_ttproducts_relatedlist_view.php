@@ -55,7 +55,7 @@ class tx_ttproducts_relatedlist_view implements t3lib_Singleton {
 
 		$this->pidListObj = t3lib_div::makeInstance('tx_ttproducts_pid_list');
 		$this->pidListObj->init($cObj);
-		$this->pidListObj->applyRecursive($recursive, $pid_list, TRUE);
+		$this->pidListObj->applyRecursive($recursive, $pid_list, true);
 		$this->pidListObj->setPageArray();
 	}
 
@@ -127,7 +127,7 @@ class tx_ttproducts_relatedlist_view implements t3lib_Singleton {
 						'accessories' => array(
 							'marker' => 'PRODUCT_ACCESSORY_UID',
 							'template' => 'ITEM_LIST_ACCESSORY_TEMPLATE',
-							'require' => TRUE,
+							'require' => true,
 							'code' => 'LISTACCESSORY',
 							'additionalPages' => $this->conf['pidsRelatedAccessories'],
 							'mergeRow' => array(),
@@ -137,7 +137,7 @@ class tx_ttproducts_relatedlist_view implements t3lib_Singleton {
 						'products' => array(
 							'marker' => 'PRODUCT_RELATED_UID',
 							'template' => 'ITEM_LIST_RELATED_TEMPLATE',
-							'require' => TRUE,
+							'require' => true,
 							'code' => 'LISTRELATED',
 							'additionalPages' => $this->conf['pidsRelatedProducts'],
 							'mergeRow' => array(),
@@ -153,7 +153,7 @@ class tx_ttproducts_relatedlist_view implements t3lib_Singleton {
 						'accessories' => array(
 							'marker' => 'ARTICLE_ACCESSORY_UID',
 							'template' => 'ITEM_LIST_ACCESSORY_TEMPLATE',
-							'require' => TRUE,
+							'require' => true,
 							'code' => 'LISTACCESSORY',
 							'additionalPages' => $this->conf['pidsRelatedAccessories'],
 							'mergeRow' => array(),
@@ -180,9 +180,9 @@ class tx_ttproducts_relatedlist_view implements t3lib_Singleton {
 							'products' => array(
 								'marker' => 'DAM_PRODUCTS',
 								'template' => 'DAM_ITEM_LIST_TEMPLATE',
-								'require' => TRUE,
+								'require' => true,
 								'code' => $theCode,
-								'additionalPages' => FALSE,
+								'additionalPages' => false,
 								'mergeRow' => $extArray,
 								'functablename' => 'tt_products',
 								'callFunctableArray' => array($marker => 'tx_dam')
@@ -209,9 +209,9 @@ class tx_ttproducts_relatedlist_view implements t3lib_Singleton {
 		$pid,
 		&$error_code
 	)	{
-		$result = FALSE;
+		$result = false;
 		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
-		$itemViewObj = $tablesObj->get($functablename, TRUE);
+		$itemViewObj = $tablesObj->get($functablename, true);
 		$addListArray = $this->getAddListArray($theCode, $functablename, $itemViewObj->getMarker(), $uid, $useArticles);
 
 		if (is_array($addListArray))	{

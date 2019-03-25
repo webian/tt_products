@@ -51,7 +51,6 @@ class tx_ttproducts_csv implements t3lib_Singleton {
 	 * Getting all tt_products_cat categories into internal array
 	 */
 	function init ($pibase, &$itemArray, &$calculatedArray, $accountUid)	{
-		global $TYPO3_DB;
 		$this->pibase = $pibase;
 		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 
@@ -68,7 +67,7 @@ class tx_ttproducts_csv implements t3lib_Singleton {
 		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 		$orderObj = $tablesObj->get('sys_products_orders');
 		$accountObj = $tablesObj->get('sys_products_accounts');
-		$itemTable = $tablesObj->get($functablename, FALSE);
+		$itemTable = $tablesObj->get($functablename, false);
 
 		$csvfilepath = trim($csvfilepath);
 		if ($csvfilepath{strlen($csvfilepath)-1} != '/') {
@@ -76,7 +75,7 @@ class tx_ttproducts_csv implements t3lib_Singleton {
 		}
 		$csvfilepath .= $orderObj->getNumber($csvorderuid).'.csv';
 		$csvfile = fopen($csvfilepath, 'w');
-		if ($csvfile !== FALSE)	{
+		if ($csvfile !== false)	{
 			// Generate invoice and delivery address
 			$csvlinehead = '';
 			$csvlineperson = '';
@@ -149,7 +148,7 @@ class tx_ttproducts_csv implements t3lib_Singleton {
 			fwrite($csvfile, $csvdescr);
 
 			// Write ordered product list
-			$infoWritten = FALSE;
+			$infoWritten = false;
 
 			// loop over all items in the basket indexed by a sorting text
 			foreach ($this->itemArray as $sort=>$actItemArray) {
@@ -167,7 +166,7 @@ class tx_ttproducts_csv implements t3lib_Singleton {
 						$csvdata .= ';"' . $row[$csvfield] . '"';
 					}
 					if ($this->conf['CSVinOneLine'] && (!$infoWritten))	{
-						$infoWritten = TRUE;
+						$infoWritten = true;
 						$csvfullline = ';' . $csvlinedeliverynote . ';' . $csvlinedeliverydesireddate . ';' . $csvlinedeliverydesiredtime . ';' . $csvlineshipping .
 							($csvlineAccount != '' ? ';' . $csvlineAccount : '') .
 							';' . $csvlinepayment . ';' . $csvlinegift . ';' . $csvlineperson . ';' . $csvlinedelivery;

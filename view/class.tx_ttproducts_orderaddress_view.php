@@ -98,15 +98,15 @@ class tx_ttproducts_orderaddress_view extends tx_ttproducts_table_base_view {
 		}
 
 		if (
-			isset($viewTagArray['FE_CONDITION1_TRUE_TEMPLATE']) ||
-			isset($viewTagArray['FE_CONDITION1_FALSE_TEMPLATE'])
+			isset($viewTagArray['FE_CONDITION1_true_TEMPLATE']) ||
+			isset($viewTagArray['FE_CONDITION1_false_TEMPLATE'])
 		) {
 			if ($this->getModelObj()->getCondition() || !$this->getModelObj()->getConditionRecord()) {
-				$wrappedSubpartArray['###FE_CONDITION1_TRUE_TEMPLATE###'] = array('', '');
-				$subpartArray['###FE_CONDITION1_FALSE_TEMPLATE###'] = '';
+				$wrappedSubpartArray['###FE_CONDITION1_true_TEMPLATE###'] = array('', '');
+				$subpartArray['###FE_CONDITION1_false_TEMPLATE###'] = '';
 			} else {
-				$wrappedSubpartArray['###FE_CONDITION1_FALSE_TEMPLATE###'] = array('', '');
-				$subpartArray['###FE_CONDITION1_TRUE_TEMPLATE###'] = '';
+				$wrappedSubpartArray['###FE_CONDITION1_false_TEMPLATE###'] = array('', '');
+				$subpartArray['###FE_CONDITION1_true_TEMPLATE###'] = '';
 			}
 		}
 	}
@@ -125,8 +125,6 @@ class tx_ttproducts_orderaddress_view extends tx_ttproducts_table_base_view {
 	 * @access private
 	 */
 	function getAddressMarkerArray ($row, &$markerArray, $bSelect, $type)	{
-		global $TCA;
-
 		$fieldOutputArray = array();
 		$modelObj = $this->getModelObj();
 		$selectInfoFields = $modelObj->getSelectInfoFields();
@@ -140,11 +138,11 @@ class tx_ttproducts_orderaddress_view extends tx_ttproducts_table_base_view {
 
 					tx_ttproducts_form_div::createSelect(
 						$this->langObj,
-						$TCA[$tablename]['columns'][$field]['config']['items'],
+						$GLOBALS['TCA'][$tablename]['columns'][$field]['config']['items'],
 						'recs['.$type.'][' . $field . ']',
 						(is_array($row) ? $row[$field] : ''),
-						TRUE,
-						TRUE,
+						true,
+						true,
 						array(),
 						'select',
 						array('id' => 'field_' . $type . '_' . $field) /* Add ID for field to be able to use labels. */
@@ -153,7 +151,7 @@ class tx_ttproducts_orderaddress_view extends tx_ttproducts_table_base_view {
 		} else {
 			foreach ($selectInfoFields as $field) {
 				$tablename = $modelObj->getTCATableFromField($field);
-				$itemConfig = $TCA[$tablename]['columns'][$field]['config']['items'];
+				$itemConfig = $GLOBALS['TCA'][$tablename]['columns'][$field]['config']['items'];
 
 				if ($row[$field] != '' && isset($itemConfig) && is_array($itemConfig)) {
 

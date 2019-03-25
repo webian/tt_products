@@ -179,7 +179,7 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 				unset($imageConfStart['imageLinkWrap.']);
 				$imageConfStart['wrap'] = $linkWrap;
 			}
-			if ($linkWrap === FALSE)	{
+			if ($linkWrap === false)	{
 				$imageConfStart['imageLinkWrap'] = 0;
 			}
 
@@ -208,11 +208,11 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 				if ($c == $mediaNum)	{
 					break;
 				}
-				$bUseImage = FALSE;
-				$meta = FALSE;
+				$bUseImage = false;
+				$meta = false;
 				if ($val)	{
 					$imageConf['file'] = $dirname.$val;
-					$bUseImage = TRUE;
+					$bUseImage = true;
 				}
 				if (t3lib_extMgm::isLoaded('dam') && $bUseImage && $bImages) {
 					$damObj = t3lib_div::makeInstance('tx_dam');
@@ -290,14 +290,14 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 		$theCode,
 		$id,
 		&$bSkip,
-		$bHtml=TRUE,
+		$bHtml=true,
 		$charset='',
 		$prefix='',
 		$suffix='',
 		$imageRenderObj='image'
 	)	{
 		$imageRow = $row;
-		$bImages = FALSE;
+		$bImages = false;
 		$dirname = '';
 		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$tableConf = $cnf->getTableConf($functablename, $theCode);
@@ -324,7 +324,7 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 					$imgs[] = $contentRow[$imageField];
 				}
 			}
-			$bImages = TRUE;
+			$bImages = true;
 		}
 
 		if (!$bImages)	{
@@ -377,7 +377,7 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 									$nameArray[$generate] .= substr($imageRow[$field], 0, $count);
 
 									if ($generate == 'generateImage')	{
-										$bImages = TRUE;
+										$bImages = true;
 									}
 								}
 							}
@@ -406,14 +406,14 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 				}
 
 				while($entry = $directory->read()) {
-					if (strstr($entry, $nameArray['generateImage'] . $separator) !== FALSE)	{
+					if (strstr($entry, $nameArray['generateImage'] . $separator) !== false)	{
 						$imgs[] = $entry;
 					}
 				}
 				$directory->close();
 			}
 			if (count($imgs))	{
-				$bImages = TRUE;
+				$bImages = true;
 			}
 		} // if (!$bImages) {
 
@@ -463,9 +463,9 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 
 		foreach($theImgCode as $k1 => $val) {
 
-			$bIsSpecial = TRUE;
-			if (strstr($k1, ':') === FALSE)	{
-				$bIsSpecial = FALSE;
+			$bIsSpecial = true;
+			if (strstr($k1, ':') === false)	{
+				$bIsSpecial = false;
 			} else {
 				$c--; // the former index mus be used again
 			}
@@ -501,11 +501,11 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 			$c++;
 		} // foreach
 
-		$bImageMarker = FALSE;
+		$bImageMarker = false;
 		if (is_array($tableConf) &&
 			is_array($tableConf['imageMarker.']) &&
 			$tableConf['imageMarker.']['type'] == 'imagename' )	{
-			$bImageMarker = TRUE;
+			$bImageMarker = true;
 		}
 
 		if ($bImageMarker)	{
@@ -558,7 +558,7 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 				$partArray = $codeArray['part'];
 				if (count($partArray))	{
 					foreach ($partArray as $k => $part)	{
-						if (strpos($theCode, $part) !== FALSE)	{
+						if (strpos($theCode, $part) !== false)	{
 							$mediaNum = $codeArray['num'];
 							break;
 						}
@@ -581,14 +581,14 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 		$id,
 		$basketExtra,
 		&$bSkip,
-		$bHtml=TRUE,
+		$bHtml=true,
 		$charset='',
 		$prefix='',
 		$suffix='',
 		$imageRenderObj='image'
 	)	{
 		if ($bHtml) {
-			$bSkip = TRUE;
+			$bSkip = true;
 
 			if ($fieldname == 'smallimage') {
 				$imageRenderObj = 'smallImage';
@@ -597,11 +597,11 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 
 			if (isset($tagArray) && is_array($tagArray)) {
 				foreach ($tagArray as $value => $k1)	{
-					if (strpos($value, $markerKey) !== FALSE)	{
+					if (strpos($value, $markerKey) !== false)	{
 						$keyMarker = '###'.$value.'###';
 						$foundPos = strpos($value, $markerKey.'_ID');
 
-						if ($foundPos !== FALSE)	{
+						if ($foundPos !== false)	{
 							$c = substr($value, strlen($markerKey.'_ID'));
 							$markerArray[$keyMarker] = $id.'-'.$c;
 						} else {

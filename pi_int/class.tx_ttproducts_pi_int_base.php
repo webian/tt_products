@@ -46,22 +46,20 @@ class tx_ttproducts_pi_int_base extends tslib_pibase implements t3lib_Singleton 
 	public $prefixId = TT_PRODUCTS_EXT;
 	public $scriptRelPath = 'pi_int_base/class.tx_ttproducts_pi_int_base.php';	// Path to this script relative to the extension dir.
 	public $extKey = TT_PRODUCTS_EXT;	// The extension key.
-	public $pi_USER_INT_obj = TRUE;		// If set, then links are 1) not using cHash and 2) not allowing pages to be cached. (Set this for all USER plugins!)
-	public $bRunAjax = FALSE;		// overrride this
+	public $pi_USER_INT_obj = true;		// If set, then links are 1) not using cHash and 2) not allowing pages to be cached. (Set this for all USER plugins!)
+	public $bRunAjax = false;		// overrride this
 
 
 	/**
 	 * Main method. Call this from TypoScript by a USER cObject.
 	 */
 	public function main ($content,$conf)	{
-		global $TSFE;
-
 		tx_ttproducts_model_control::setPrefixId($this->prefixId);
 		$this->pi_setPiVarDefaults();
 		$this->conf = &$conf;
 		$config = array();
 		$mainObj = t3lib_div::makeInstance('tx_ttproducts_main');	// fetch and store it as persistent object
-		$mainObj->bNoCachePossible = FALSE;
+		$mainObj->bNoCachePossible = false;
 		$errorCode = array();
 		$bDoProcessing = $mainObj->init($content, $this->conf, $config, get_class($this), $errorCode);
 		$errorCode = array();

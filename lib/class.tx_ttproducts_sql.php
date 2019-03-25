@@ -43,46 +43,46 @@ class tx_ttproducts_sql implements t3lib_Singleton {
 
 	public static function isValid ($row, $where)	{
 		$whereArray = t3lib_div::trimExplode ('AND', $where);
-		$isValid = TRUE;
+		$isValid = true;
 
 		foreach($whereArray as $k3 => $condition) {
 
-			if (strpos($condition, '=') !== FALSE)	{
+			if (strpos($condition, '=') !== false)	{
 				if ($condition == '1=1' || $condition == '1 = 1') {
-					// nothing: $isValid = TRUE;
+					// nothing: $isValid = true;
 				} else {
 					$args = t3lib_div::trimExplode ('=', $condition);
 
 					if ($row[$args[0]] != $args[1]) {
-						$isValid = FALSE;
+						$isValid = false;
 					}
 				}
-			} else if (strpos($condition, 'IN') !== FALSE)	{
+			} else if (strpos($condition, 'IN') !== false)	{
 				$split = 'IN';
-				$isValidRow = FALSE;
-				if (strpos($condition, 'NOT IN') !== FALSE)	{
+				$isValidRow = false;
+				if (strpos($condition, 'NOT IN') !== false)	{
 					$split = 'NOT IN';
-					$isValidRow = TRUE;
+					$isValidRow = true;
 				}
 				$args = t3lib_div::trimExplode ($split, $condition);
 				$leftBracket = strpos($args[1],'(');
 				$rightBracket = strpos($args[1],')');
-				if ($leftBracket !== FALSE && $rightBracket !== FALSE)	{
+				if ($leftBracket !== false && $rightBracket !== false)	{
 					$args[1] = substr($args[1], $leftBracket+1, $rightBracket-$leftBracket-1);
 					$argArray = t3lib_div::trimExplode (',', $args[1]);
 					if (is_array($argArray))	{
 						foreach($argArray as $arg)	{
 							$leftQuote = strpos($arg,'\'');
 							$rightQuote = strrpos($arg,'\'');
-							if ($leftQuote !== FALSE && $rightQuote !== FALSE)	{
+							if ($leftQuote !== false && $rightQuote !== false)	{
 								$arg = substr($arg, $leftQuote+1, $rightQuote-$leftQuote-1);
 							}
 							if ($row[$args[0]] == $arg) {
 								if ($split == 'IN')	{
-									$isValidRow = TRUE;
+									$isValidRow = true;
 									break;
 								} else {
-									$isValidRow = FALSE;
+									$isValidRow = false;
 									break;
 								}
 							}
@@ -91,9 +91,9 @@ class tx_ttproducts_sql implements t3lib_Singleton {
 					$isValid = $isValidRow;
 				}
 			} else if ($condition != '') {
-				$isValid = FALSE;
+				$isValid = false;
 			}
-			if ($isValid == FALSE)	{
+			if ($isValid == false)	{
 				break;
 			}
 		}

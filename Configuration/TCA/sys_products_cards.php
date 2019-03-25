@@ -1,7 +1,5 @@
 <?php
-if (!defined ('TYPO3_MODE')) {
-	die ('Access denied.');
-}
+defined('TYPO3_MODE') || die('Access denied.');
 
 // ******************************************************************
 // These are the credit cards data used for orders
@@ -29,7 +27,7 @@ $result = array (
 				'size' => '8',
 				'eval' => 'date',
                 'renderType' => 'inputDateTime',
-				'default' => '0',
+				'default' => 0,
 				'range' => array (
 					'upper' => mktime(0, 0, 0, 12, 31, $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['endtimeYear']),
 					'lower' => mktime(0, 0, 0, date('m') - 1, date('d'), date('Y'))
@@ -44,6 +42,7 @@ $result = array (
 				'size' => '40',
 				'max' => '80',
 				'eval' => 'required,trim',
+                'default' => ''
 			)
 		),
 		'owner_name' => array (
@@ -52,7 +51,8 @@ $result = array (
 			'config' => array (
 				'type' => 'input',
 				'size' => '40',
-				'max' => '80'
+				'max' => '80',
+                'default' => ''
 			)
 		),
 		'cc_type' => array (
@@ -69,6 +69,7 @@ $result = array (
 				),
 				'size' => 1,
 				'maxitems' => 1,
+				'default' => ''
 			)
 		),
 		'cvv2' => array (
@@ -78,7 +79,8 @@ $result = array (
 				'type' => 'input',
 				'size' => '4',
 				'eval' => 'int',
-				'max' => '4'
+				'max' => '4',
+				'default' => 0
 			)
 		),
 	),
@@ -89,7 +91,6 @@ $result = array (
 		'1' => array('showitem' => '')
 	)
 );
-
 
 return $result;
 

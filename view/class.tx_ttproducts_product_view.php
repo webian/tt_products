@@ -89,9 +89,9 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 		} else if (is_array($extArray) && is_array($extArray['tx_dam']))	{
 			$variant = $extArray['tx_dam'][0]['vars'];
 		}
-		$bGiftService = TRUE;
+		$bGiftService = true;
 		if ($this->getModelObj()->hasAdditional($row,'noGiftService'))	{
-			$bGiftService = FALSE;
+			$bGiftService = false;
 		}
 
 		$this->variant->getVariantSubpartMarkerArray(
@@ -152,11 +152,9 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 		$prefix='',
 		$suffix='',
 		$linkWrap='',
-		$bHtml=TRUE,
+		$bHtml=true,
 		$charset=''
 	)	{
-		global $TYPO3_DB;
-
 			// Returns a markerArray ready for substitution with information for the tt_producst record, $row
 		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 		$modelObj = $this->getModelObj ();
@@ -194,7 +192,7 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 				$id,
 				$basketExtra,
 				$tmp,
-				FALSE,
+				false,
 				'',
 				'',
 				'',
@@ -220,7 +218,7 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 		if ($theCode == 'SINGLE')	{
 			$addressUid = intval($row['address']);
 			$addressRow = array();
-			$addressViewObj = $tablesObj->get('address',TRUE);
+			$addressViewObj = $tablesObj->get('address',true);
 
 			if (($this->conf['table.']['address'] != 'tt_address' || t3lib_extMgm::isLoaded(TT_ADDRESS_EXTkey)) && $addressUid && $modelObj->fieldArray['address'])	{
 				$addressObj = $addressViewObj->getModelObj();
@@ -256,13 +254,13 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 
 						foreach($tagArray as $index => $v)	{
 							$pageFoundPos = strpos($index, $pageMarkerKey);
-							if ($pageFoundPos == 0 && $pageFoundPos !== FALSE)	{
+							if ($pageFoundPos == 0 && $pageFoundPos !== false)	{
 								$fieldName = str_replace($pageMarkerKey.'_','',$index);
 								if (isset($pageRow[$fieldName]))	{
 									$markerArray['###'.$index.'###'] = $pageRow[$fieldName];
 								}
 							}
-							if (strstr($index, $markerKey) === FALSE)	{
+							if (strstr($index, $markerKey) === false)	{
 								continue;
 							}
 							$fieldPos = strrpos($index, '_');
@@ -284,7 +282,7 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 			}
 
 			foreach ($tagArray as $key => $val)	{
-				if (strstr($key,'PRODUCT_NOTE_UID') !== FALSE)	{
+				if (strstr($key,'PRODUCT_NOTE_UID') !== false)	{
 					if (!isset($markerArray['###'.$key.'###']))	{
 						$markerArray['###'.$key.'###'] = '';
 					}
@@ -368,8 +366,8 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 					array(
 						'product' => $row['uid']
 					),
-					TRUE,
-					FALSE,
+					true,
+					false,
 					''
 				);
 				$commentConf['linkParams'] = $linkParams;

@@ -17,7 +17,7 @@ namespace JambageCom\TtProducts\Hooks;
 use JambageCom\Div2007\Utility\StatusUtility;
 
 /**
- * Hook into the backend module "Reports" checking the configuration required for agency
+ * Hook into the backend module "Reports" checking the configuration required for tt_products
  */
 class StatusProvider extends \JambageCom\Div2007\Base\StatusProviderBase
 {
@@ -32,7 +32,7 @@ class StatusProvider extends \JambageCom\Div2007\Base\StatusProviderBase
     protected $extensionName = 'Shop System (' . TT_PRODUCTS_EXT . ')';
 
     public function getGlobalVariables () {
-        $result = null;
+        $result = '';
         
         if (
             (

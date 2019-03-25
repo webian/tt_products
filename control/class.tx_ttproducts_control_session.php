@@ -58,7 +58,7 @@ class tx_ttproducts_control_session implements t3lib_Singleton {
 	* @param	boolean	$readAll: whether to retrieve all session data or only data for this extension key
 	* @return	array	session data
 	*/
-	static public function readSessionData ($readAll = FALSE) {
+	static public function readSessionData ($readAll = false) {
 		$sessionData = array();
 		$extKey = TT_PRODUCTS_EXT;
 		$allSessionData = $GLOBALS['TSFE']->fe_user->getKey('ses', 'feuser');
@@ -86,7 +86,7 @@ class tx_ttproducts_control_session implements t3lib_Singleton {
 		$clearSession = empty($data);
 		$extKey = TT_PRODUCTS_EXT;
 			// Read all session data
-		$allSessionData = self::readSessionData(TRUE);
+		$allSessionData = self::readSessionData(true);
 
 		if (is_array($allSessionData[$extKey])) {
 			$keys = array_keys($allSessionData[$extKey]);

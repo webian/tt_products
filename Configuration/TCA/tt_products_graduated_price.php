@@ -1,7 +1,5 @@
 <?php
-if (!defined ('TYPO3_MODE')) {
-	die ('Access denied.');
-}
+defined('TYPO3_MODE') || die('Access denied.');
 
 // ******************************************************************
 // graduated price calculation table, tt_products_graduated_price
@@ -37,7 +35,7 @@ $result = array (
 				'size' => '8',
 				'eval' => 'date',
                 'renderType' => 'inputDateTime',
-				'default' => '0'
+				'default' => 0
 			)
 		),
 		'crdate' => array (
@@ -48,19 +46,21 @@ $result = array (
 				'size' => '8',
 				'eval' => 'date',
                 'renderType' => 'inputDateTime',
-				'default' => '0'
+				'default' => 0
 			)
 		),
 		'sorting' => Array (
 			'config' => Array (
 				'type' => 'passthrough',
+				'default' => 0
 			)
 		),
 		'hidden' => array (
 			'exclude' => 1,
 			'label' => DIV2007_LANGUAGE_LGL . 'hidden',
 			'config' => array (
-				'type' => 'check'
+				'type' => 'check',
+				'default' => 0
 			)
 		),
 		'starttime' => array (
@@ -71,7 +71,7 @@ $result = array (
 				'size' => '8',
 				'eval' => 'date',
                 'renderType' => 'inputDateTime',
-				'default' => '0'
+				'default' => 0
 			)
 		),
 		'endtime' => array (
@@ -82,7 +82,7 @@ $result = array (
 				'size' => '8',
 				'eval' => 'date',
                 'renderType' => 'inputDateTime',
-				'default' => '0',
+				'default' => 0,
 				'range' => array (
 					'upper' => mktime(0, 0, 0, 12, 31, $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['endtimeYear']),
 					'lower' => mktime(0, 0, 0, date('n') - 1, date('d'), date('Y'))
@@ -101,7 +101,8 @@ $result = array (
 					array(DIV2007_LANGUAGE_LGL . 'any_login', -2),
 					array(DIV2007_LANGUAGE_LGL . 'usergroups', '--div--')
 				),
-				'foreign_table' => 'fe_groups'
+				'foreign_table' => 'fe_groups',
+				'default' => 0
 			)
 		),
 		'title' => array (
@@ -111,7 +112,7 @@ $result = array (
 				'type' => 'input',
 				'size' => '40',
 				'max' => '256',
-				'default' => ' ',
+				'default' => ''
 			)
 		),
 		'formula' => array (
@@ -121,7 +122,7 @@ $result = array (
 				'type' => 'text',
 				'cols' => '48',
 				'rows' => '1',
-				'default' => NULL,
+				'default' => ''
 			)
 		),
 		'startamount' => array (
@@ -131,7 +132,8 @@ $result = array (
 				'type' => 'input',
 				'size' => '12',
 				'eval' => 'trim,double2',
-				'max' => '20'
+				'max' => '20',
+				'default' => 0
 			)
 		),
 		'note' => array (
@@ -141,7 +143,7 @@ $result = array (
 				'type' => 'text',
 				'cols' => '48',
 				'rows' => '2',
-				'default' => NULL,
+				'default' => ''
 			)
 		),
 		'items' => array (
@@ -160,6 +162,7 @@ $result = array (
 				'size' => 6,
 				'minitems' => 0,
 				'maxitems' => 100,
+				'default' => 0
 			)
 		),
 	),
@@ -181,7 +184,6 @@ $result = array (
 	)
 );
 
-
 if (
     version_compare(TYPO3_version, '8.5.0', '<')
 ) {
@@ -191,9 +193,6 @@ if (
             $result['types']['0']['showitem']
         );
 }
-
-
-
 
 return $result;
 

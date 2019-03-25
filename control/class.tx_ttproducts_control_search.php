@@ -50,8 +50,6 @@ class tx_ttproducts_control_search implements t3lib_Singleton {
 
 
 	public function init (&$content, &$conf, &$config, $pibaseClass, &$error_code) {
-		global $TSFE, $TCA;
-
 		$pibaseObj = t3lib_div::makeInstance(''.$pibaseClass);
 		$this->cObj = $pibaseObj->cObj;
 
@@ -111,7 +109,7 @@ class tx_ttproducts_control_search implements t3lib_Singleton {
 			$this->cObj
 		);
 
-		return TRUE;
+		return true;
 	} // init
 
 
@@ -163,8 +161,6 @@ class tx_ttproducts_control_search implements t3lib_Singleton {
 
 
 	public function &run ($pibaseClass,&$errorCode,$content='')	{
-		global $TSFE;
-
 		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$templateObj = t3lib_div::makeInstance('tx_ttproducts_template');
 		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');

@@ -41,10 +41,10 @@
 class tx_ttproducts_hooks_be implements t3lib_Singleton {
 
 	public function displayCategoryTree ($PA, $fobj) {
-		$result = FALSE;
+		$result = false;
 
 		if (t3lib_extMgm::isLoaded('mbi_products_categories')) {
-			$treeObj = FALSE;
+			$treeObj = false;
 
 			if (class_exists('JambageCom\\MbiProductsCategories\\View\\TreeSelector')) {
 				$treeObj = t3lib_div::makeInstance('JambageCom\\MbiProductsCategories\\View\\TreeSelector');

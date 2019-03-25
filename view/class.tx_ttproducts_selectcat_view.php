@@ -45,8 +45,7 @@ class tx_ttproducts_selectcat_view extends tx_ttproducts_catlist_view_base {
 	var $htmlTagElement = 'option';
 
 	// returns the products list view
-	public function &printView ($functablename, &$templateCode, $theCode, &$error_code, $templateArea = 'ITEM_CATEGORY_SELECT_TEMPLATE', $pageAsCategory, $templateSuffix = '') {
-		global $TSFE, $TCA;
+	public function printView ($functablename, &$templateCode, $theCode, &$error_code, $templateArea = 'ITEM_CATEGORY_SELECT_TEMPLATE', $pageAsCategory, $templateSuffix = '') {
 		$content='';
 		$out='';
 		$where='';
@@ -89,7 +88,7 @@ class tx_ttproducts_selectcat_view extends tx_ttproducts_catlist_view_base {
 			$contentId = '';
 
 			$contentPos = strpos($this->pibase->cObj->currentRecord, 'tt_content');
-			if ($contentPos !== FALSE) {
+			if ($contentPos !== false) {
 				$contentIdPos = strpos($this->pibase->cObj->currentRecord, ':');
 				$contentId = substr($this->pibase->cObj->currentRecord, $contentIdPos + 1);
 			}
@@ -203,8 +202,8 @@ class tx_ttproducts_selectcat_view extends tx_ttproducts_catlist_view_base {
 				$valueArray,
 				$name,
 				$selectedCat,
-				$bSelectTags = TRUE,
-				$bTranslateText = FALSE,
+				$bSelectTags = true,
+				$bTranslateText = false,
 				array(),
 				$this->htmlTagMain,
 				$mainAttributeArray,

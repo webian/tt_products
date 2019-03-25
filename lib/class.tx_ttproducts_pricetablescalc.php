@@ -54,7 +54,7 @@ class tx_ttproducts_pricetablescalc extends tx_ttproducts_pricecalc_base {
 		&$discountArray,
 		$priceTotalTax,
 		$bUseArticles,
-		$bMergeArticles = TRUE
+		$bMergeArticles = true
 	) {
 		if (!$itemArray || !count($itemArray)) {
 			return;
@@ -65,7 +65,7 @@ class tx_ttproducts_pricetablescalc extends tx_ttproducts_pricecalc_base {
 		$useArticles = $cnf->getUseArticles();
 		if ($bUseArticles && ($useArticles == 1 || $useArticles == 3)) {
 			$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
-			$articleTable = $tablesObj->get('tt_products_articles', FALSE);
+			$articleTable = $tablesObj->get('tt_products_articles', false);
 		}
 
 		$prodArray = array();

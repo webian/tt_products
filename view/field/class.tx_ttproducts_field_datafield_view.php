@@ -159,7 +159,7 @@ class tx_ttproducts_field_datafield_view extends tx_ttproducts_field_base_view {
 		// empty all image fields with no available image
 		foreach ($tagArray as $value => $k1)	{
 			$keyMarker = '###'.$value.'###';
-			if (strpos($value, $markerKey . '_LINK_' . $upperField) !== FALSE && !$wrappedSubpartArray[$keyMarker])	{
+			if (strpos($value, $markerKey . '_LINK_' . $upperField) !== false && !$wrappedSubpartArray[$keyMarker])	{
 				$wrappedSubpartArray[$keyMarker] =  array('<!--','-->');
 			}
 		}
@@ -202,7 +202,7 @@ class tx_ttproducts_field_datafield_view extends tx_ttproducts_field_base_view {
 			$value
 		);
 
-		return TRUE;
+		return true;
 	}
 
 
@@ -245,7 +245,7 @@ class tx_ttproducts_field_datafield_view extends tx_ttproducts_field_base_view {
 	) {
 		$extensionPos = strrpos($filename, '.');
 		$extension = '';
-		if ($extensionPos !== FALSE) {
+		if ($extensionPos !== false) {
 			$extension = substr($filename, $extensionPos + 1);
 		}
 

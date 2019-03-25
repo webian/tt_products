@@ -82,8 +82,6 @@ abstract class tx_ttproducts_article_base extends tx_ttproducts_table_base {
 	 *
 	 */
 	public function reduceInStock ($uid, $count)	{
-		global $TYPO3_DB;
-
 		$tableDesc = $this->getTableDesc();
 		$instockField = $tableDesc['inStock'];
 		$instockField = ($instockField ? $instockField : 'inStock');
@@ -92,7 +90,7 @@ abstract class tx_ttproducts_article_base extends tx_ttproducts_table_base {
 			$uid = intval($uid);
 			$fieldsArray = array();
 			$fieldsArray[$instockField] = $instockField.'-'.$count;
-			$res = $TYPO3_DB->exec_UPDATEquery($this->getTableObj()->name,'uid=\''.$uid.'\'', $fieldsArray,$instockField);
+			$res = $GLOBALS['TYPO3_DB']->exec_UPDATEquery($this->getTableObj()->name,'uid=\''.$uid.'\'', $fieldsArray,$instockField);
 		}
 	}
 
@@ -186,7 +184,7 @@ abstract class tx_ttproducts_article_base extends tx_ttproducts_table_base {
 	}
 
 
-	public function addWhereCat ($catObject, $theCode, $cat, $categoryAnd, $pid_list, $bLeadingOperator = TRUE) {
+	public function addWhereCat ($catObject, $theCode, $cat, $categoryAnd, $pid_list, $bLeadingOperator = true) {
 		$where = '';
 
 		return $where;
@@ -220,26 +218,24 @@ abstract class tx_ttproducts_article_base extends tx_ttproducts_table_base {
 
 
 	public function getWhere ($where, $theCode = '', $orderBy = '') {
-		global $TYPO3_DB;
-
 		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$tableconf = $cnf->getTableConf($this->getFuncTablename(), $theCode);
 		$rc = array();
 		$where = ($where ? $where : '1=1 ') . $this->getTableObj()->enableFields();
 
 		// Fetching the products
-		$res = $this->getTableObj()->exec_SELECTquery('*', $where, '', $TYPO3_DB->stripOrderBy($orderBy));
+		$res = $this->getTableObj()->exec_SELECTquery('*', $where, '', $GLOBALS['TYPO3_DB']->stripOrderBy($orderBy));
 
 		$translateFields = $cnf->getTranslationFields($tableconf);
 
-		while($row = $TYPO3_DB->sql_fetch_assoc($res))	{
+		while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))	{
 
 			foreach ($translateFields as $field => $transfield)	{
 				$row[$field] = $row[$transfield];
 			}
 			$rc[$row['uid']] = $this->dataArray[$row['uid']] = $row;
 		}
-		$TYPO3_DB->sql_free_result($res);
+		$GLOBALS['TYPO3_DB']->sql_free_result($res);
 		return $rc;
 	}
 
@@ -261,7 +257,7 @@ abstract class tx_ttproducts_article_base extends tx_ttproducts_table_base {
 				$this->getTableObj()->searchWhere(
 					$sw,
 					$searchFieldList,
-					TRUE,
+					true,
 					$charRegExp,
 					$replaceConf
 				);
@@ -270,7 +266,7 @@ abstract class tx_ttproducts_article_base extends tx_ttproducts_table_base {
 				$this->getTableObj()->searchWhere(
 					$sw,
 					$searchFieldList,
-					FALSE,
+					false,
 					$charRegExp,
 					$replaceConf
 				);
@@ -324,7 +320,7 @@ abstract class tx_ttproducts_article_base extends tx_ttproducts_table_base {
 	public function mergeVariantFields (
 		&$targetRow,
 		$sourceRow,
-		$bKeepNotEmpty = TRUE
+		$bKeepNotEmpty = true
 	) {
 
 		$variantFieldArray = $this->variant->getFieldArray();
@@ -349,16 +345,16 @@ abstract class tx_ttproducts_article_base extends tx_ttproducts_table_base {
 	public function mergeAttributeFields (
 		&$targetRow,
 		$sourceRow,
-		$bKeepNotEmpty = TRUE,
-		$bAddValues = FALSE,
-		$bUseExt = FALSE
+		$bKeepNotEmpty = true,
+		$bAddValues = false,
+		$bUseExt = false
 	) {
 		$fieldArray = array();
 		$fieldArray['config'] = array('config');
 		$fieldArray['data'] = array('itemnumber', 'image');
 		$fieldArray['number'] = array('weight', 'inStock');
 		$fieldArray['price'] = array('price', 'price2', 'directcost');
-		$bIsAddedPrice = FALSE;
+		$bIsAddedPrice = false;
 		$cnfObj = t3lib_div::makeInstance('tx_ttproducts_config');
 		$tableDesc = $this->getTableDesc();
 
@@ -406,7 +402,7 @@ abstract class tx_ttproducts_article_base extends tx_ttproducts_table_base {
 							if (!round($targetRow[$field], 16) || round($value, 16)) {
 								$targetRow[$field] = $value;
 							}
-						} else { // $bKeepNotEmpty == FALSE
+						} else { // $bKeepNotEmpty == false
 							$targetRow[$field] = $value;
 						}
 					} else if (($type == 'text') || ($type == 'data') || ($type == 'number')) {
@@ -417,7 +413,7 @@ abstract class tx_ttproducts_article_base extends tx_ttproducts_table_base {
 							) {
 								$targetRow[$field] = $value;
 							}
-						} else { // $bKeepNotEmpty == FALSE
+						} else { // $bKeepNotEmpty == false
 							if (
 								$type == 'number' &&
 								(
@@ -429,7 +425,7 @@ abstract class tx_ttproducts_article_base extends tx_ttproducts_table_base {
 								$type != 'number' &&
 								(empty($targetRow[$field]) || !empty($value))
 							) {
-								if (($bAddValues == TRUE) && in_array($field, $mergeAppendArray))	{
+								if (($bAddValues == true) && in_array($field, $mergeAppendArray))	{
 									$targetRow[$field] .= ' ' . $value;
 								} else {
 									$targetRow[$field] = $value;

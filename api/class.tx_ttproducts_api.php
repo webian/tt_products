@@ -46,7 +46,7 @@ class tx_ttproducts_api implements t3lib_Singleton {
 		$dotPos = strpos($value, '.');
 		$floatLen = strlen($value) - $dotPos - 1;
 
-		if (strpos($format, '.') !== FALSE) {
+		if (strpos($format, '.') !== false) {
 			$priceRoundFormatArray = t3lib_div::trimExplode('.', $format);
 		} else {
 			$priceRoundFormatArray['0'] = $format;
@@ -97,7 +97,7 @@ class tx_ttproducts_api implements t3lib_Singleton {
 
 						$highChar = '';
 						$highValue = 20;
-						$bKeepChar = FALSE;
+						$bKeepChar = false;
 
 						for ($allowedPos = 0; $allowedPos < $countAllowedChars; $allowedPos++) {
 
@@ -115,7 +115,7 @@ class tx_ttproducts_api implements t3lib_Singleton {
 							}
 
 							if ($digitValue == $currentChar && $floatLen == ($length - 2)) { // '0' means '10'
-								$bKeepChar = TRUE;
+								$bKeepChar = true;
 								break;
 							} else {
 								$comparatorLow1 = $digitValue - $currentValue;
@@ -191,9 +191,8 @@ class tx_ttproducts_api implements t3lib_Singleton {
 
 
 	static public function createFeuser ($conf, $infoObj, $basketView, $calculatedArray, $fromArray) {
-		global $TYPO3_DB;
 
-		$result = FALSE;
+		$result = false;
 		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 		$infoArray = $infoObj->infoArray;
 		$apostrophe = $conf['orderEmail_apostrophe'];
@@ -201,9 +200,9 @@ class tx_ttproducts_api implements t3lib_Singleton {
 		$pid = ($conf['PIDuserFolder'] ? $conf['PIDuserFolder'] : ($conf['PIDbasket'] ? $conf['PIDbasket'] : $GLOBALS['TSFE']->id));
 		$pid = intval($pid);
 		$username = strtolower(trim($infoArray['billing']['email']));
-		$res = $TYPO3_DB->exec_SELECTquery('username', 'fe_users', 'username=' . $TYPO3_DB->fullQuoteStr($username, 'fe_users') . ' AND pid=' . $pid . ' AND deleted=0');
-		$num_rows = $TYPO3_DB->sql_num_rows($res);
-		$TYPO3_DB->sql_free_result($res);
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('username', 'fe_users', 'username=' . $GLOBALS['TYPO3_DB']->fullQuoteStr($username, 'fe_users') . ' AND pid=' . $pid . ' AND deleted=0');
+		$num_rows = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
+		$GLOBALS['TYPO3_DB']->sql_free_result($res);
 
 		if (!$num_rows) {
 			$password = $infoObj->password = substr(md5(rand()), 0, 12);
@@ -248,7 +247,7 @@ class tx_ttproducts_api implements t3lib_Singleton {
 				$insertFields['date_of_birth'] = strtotime($date);
 			}
 
-			$res = $TYPO3_DB->exec_INSERTquery('fe_users', $insertFields);
+			$res = $GLOBALS['TYPO3_DB']->exec_INSERTquery('fe_users', $insertFields);
 			// send new user mail
 			if (count($infoArray['billing']['email'])) {
 				$empty = '';
@@ -257,10 +256,10 @@ class tx_ttproducts_api implements t3lib_Singleton {
 						$empty,
 						'EMAIL',
 						$infoObj,
-						FALSE,
-						FALSE,
+						false,
+						false,
 						$calculatedArray,
-						FALSE,
+						false,
 						'EMAIL_NEWUSER_TEMPLATE',
 						array()
 					)
@@ -281,16 +280,16 @@ class tx_ttproducts_api implements t3lib_Singleton {
 					);
 				}
 			}
-			$res = $TYPO3_DB->exec_SELECTquery(
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'uid',
 				'fe_users',
-				'username='.$TYPO3_DB->fullQuoteStr($username, 'fe_users') .
+				'username='.$GLOBALS['TYPO3_DB']->fullQuoteStr($username, 'fe_users') .
 					' AND pid=' . $pid . ' AND deleted=0');
 
-			while($row = $TYPO3_DB->sql_fetch_assoc($res)) {
+			while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 				$result = intval($row['uid']);
 			}
-			$TYPO3_DB->sql_free_result($res);
+			$GLOBALS['TYPO3_DB']->sql_free_result($res);
 		}
 		return $result;
 	}

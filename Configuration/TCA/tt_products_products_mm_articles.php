@@ -1,7 +1,5 @@
 <?php
-if (!defined ('TYPO3_MODE')) {
-	die ('Access denied.');
-}
+defined('TYPO3_MODE') || die('Access denied.');
 
 $result = NULL;
 
@@ -18,7 +16,7 @@ if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['articleMode'] == '2
 			'prependAtCopy' => DIV2007_LANGUAGE_LGL . 'prependAtCopy',
 			'crdate' => 'crdate',
 			'iconfile' => PATH_TTPRODUCTS_ICON_TABLE_REL . 'tt_products_articles.gif',
-			'hideTable' => TRUE,
+			'hideTable' => true,
 		),
 		'interface' => array (
 			'showRecordFieldList' => 'uid_local,uid_foreign'
@@ -30,7 +28,8 @@ if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['articleMode'] == '2
 					'type' => 'select',
 					'renderType' => 'selectSingle',
 					'foreign_table' => 'tt_products',
-					'maxitems' => 1
+					'maxitems' => 1,
+					'default' => 0
 				)
 			),
 			'uid_foreign' => array (
@@ -39,17 +38,20 @@ if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['articleMode'] == '2
 					'type' => 'select',
 					'renderType' => 'selectSingle',
 					'foreign_table' => 'tt_products_articles',
-					'maxitems' => 1
+					'maxitems' => 1,
+					'default' => 0
 				)
 			),
 			'sorting' => array (
 				'config' => array (
 					'type' => 'passthrough',
+					'default' => 0
 				)
 			),
 			'articlesort' => array (
 				'config' => array (
 					'type' => 'passthrough',
+					'default' => 0
 				)
 			),
 		),
@@ -60,6 +62,5 @@ if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['articleMode'] == '2
 		)
 	);
 }
-
 
 return $result;

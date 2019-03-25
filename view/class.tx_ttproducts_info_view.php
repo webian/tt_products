@@ -53,13 +53,11 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 	public $feuserfields;
 	public $creditpointfields;
 	public $overwriteMode = 0;
-	public $bDeliveryAddress = FALSE;	// normally the delivery is copied from the bill data. But also another table can be used for it.
-	public $bHasBeenInitialised = FALSE;
+	public $bDeliveryAddress = false;	// normally the delivery is copied from the bill data. But also another table can be used for it.
+	public $bHasBeenInitialised = false;
 
 
 	private function init_intern ()	{
-		global $TCA;
-
 		$this->feuserfields = 'name,cnum,first_name,last_name,username,email,telephone,title,salutation,address,house_no,telephone,fax,email,company,city,zip,state,country,country_code,tt_products_vat,date_of_birth,tt_products_business_partner,tt_products_organisation_form';
 		$this->creditpointfields = 'tt_products_creditpoints,tt_products_vouchercode';
 
@@ -73,8 +71,8 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 			$this->feuserfields .= ',' . $this->feuserextrafields;
 		}
 
-		if (isset($TCA['fe_users']['columns']) && is_array(($TCA['fe_users']['columns'])))	{
-			foreach (($TCA['fe_users']['columns']) as $field => $fieldTCA)	{
+		if (isset($GLOBALS['TCA']['fe_users']['columns']) && is_array(($GLOBALS['TCA']['fe_users']['columns'])))	{
+			foreach (($GLOBALS['TCA']['fe_users']['columns']) as $field => $fieldTCA)	{
 				if (!t3lib_div::inList($this->feuserfields, $field))	{
 					$this->feuserfields .= ',' . $field;
 				}
@@ -87,8 +85,6 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 	 * Getting all tt_products_cat categories into internal array
 	 */
 	public function init ($pibase, $bProductsPayment, $fixCountry, $basketExtra)  {
-		global $TYPO3_DB,$TSFE, $TCA;
-
 		$this->pibase = $pibase;
 		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$paymentshippingObj = t3lib_div::makeInstance('tx_ttproducts_paymentshipping');
@@ -106,7 +102,7 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 			$shippingType == 'pick_store' ||
 			$shippingType == 'nocopy'
 		)	{
-			$this->bDeliveryAddress = TRUE;
+			$this->bDeliveryAddress = true;
 		}
 
 		$allowedTags = '<br><a><b><td><tr><div>';
@@ -144,17 +140,17 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 		}
 
 		if (
-			$TSFE->loginUser &&
+			$GLOBALS['TSFE']->loginUser &&
 			(!$this->infoArray['billing'] || !$this->infoArray['billing'][$checkField] || $this->conf['editLockedLoginInfo'] || $this->infoArray['billing']['error']) &&
 			$this->conf['lockLoginUserInfo']
 		)	{
 			$address = '';
-			$this->infoArray['billing']['feusers_uid'] = $TSFE->fe_user->user['uid'];
+			$this->infoArray['billing']['feusers_uid'] = $GLOBALS['TSFE']->fe_user->user['uid'];
 
 			if ($this->conf['useStaticInfoCountry'] && !$this->infoArray['billing']['country_code'])	{
-				$this->infoArray['billing']['country_code'] = $TSFE->fe_user->user['static_info_country'];
+				$this->infoArray['billing']['country_code'] = $GLOBALS['TSFE']->fe_user->user['static_info_country'];
 // 				if (!$this->bDeliveryAddress)	{
-// 					$this->infoArray['delivery']['country_code'] = $TSFE->fe_user->user['static_info_country'];
+// 					$this->infoArray['delivery']['country_code'] = $GLOBALS['TSFE']->fe_user->user['static_info_country'];
 // 				}
 			}
 
@@ -162,29 +158,29 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 				$address = implode(chr(10),
 					t3lib_div::trimExplode(
 						chr(10),
-						$TSFE->fe_user->user['address'].chr(10) . ($TSFE->fe_user->user['house_no'] != '' ? $TSFE->fe_user->user['house_no'] . chr(10) : '') .
-						$TSFE->fe_user->user['zip'].' '.$TSFE->fe_user->user['city'].chr(10).
-						($this->conf['useStaticInfoCountry'] ? $TSFE->fe_user->user['static_info_country']:$TSFE->fe_user->user['country']),
+						$GLOBALS['TSFE']->fe_user->user['address'].chr(10) . ($GLOBALS['TSFE']->fe_user->user['house_no'] != '' ? $GLOBALS['TSFE']->fe_user->user['house_no'] . chr(10) : '') .
+						$GLOBALS['TSFE']->fe_user->user['zip'].' '.$GLOBALS['TSFE']->fe_user->user['city'].chr(10).
+						($this->conf['useStaticInfoCountry'] ? $GLOBALS['TSFE']->fe_user->user['static_info_country']:$GLOBALS['TSFE']->fe_user->user['country']),
 						1
 					)
 				);
 			} else {
-				$address = $TSFE->fe_user->user['address'];
+				$address = $GLOBALS['TSFE']->fe_user->user['address'];
 			}
 			$this->infoArray['billing']['address'] = $address;
 
 			$fields = $this->feuserfields.','.$this->creditpointfields;
 			$fieldArray = t3lib_div::trimExplode(',',$fields);
 			foreach ($fieldArray as $k => $field)	{
-				$this->infoArray['billing'][$field] = ($this->infoArray['billing'][$field] ? $this->infoArray['billing'][$field]: $TSFE->fe_user->user[$field]);
+				$this->infoArray['billing'][$field] = ($this->infoArray['billing'][$field] ? $this->infoArray['billing'][$field]: $GLOBALS['TSFE']->fe_user->user[$field]);
 			}
-			$this->infoArray['billing']['country'] = ($this->infoArray['billing']['country'] ? $this->infoArray['billing']['country'] : (($this->conf['useStaticInfoCountry'] || !$TSFE->fe_user->user['country']) ? $TSFE->fe_user->user['static_info_country']:$TSFE->fe_user->user['country']));
-			$this->infoArray['billing']['agb'] = (isset($this->infoArray['billing']['agb']) ? $this->infoArray['billing']['agb'] : $TSFE->fe_user->user['agb']);
+			$this->infoArray['billing']['country'] = ($this->infoArray['billing']['country'] ? $this->infoArray['billing']['country'] : (($this->conf['useStaticInfoCountry'] || !$GLOBALS['TSFE']->fe_user->user['country']) ? $GLOBALS['TSFE']->fe_user->user['static_info_country']:$GLOBALS['TSFE']->fe_user->user['country']));
+			$this->infoArray['billing']['agb'] = (isset($this->infoArray['billing']['agb']) ? $this->infoArray['billing']['agb'] : $GLOBALS['TSFE']->fe_user->user['agb']);
 
 			$dateBirth = $this->infoArray['billing']['date_of_birth'];
 			$tmpPos =  strpos($dateBirth,'-');
-			if (!$dateBirth || $tmpPos === FALSE || $tmpPos == 0)	{
-				$this->infoArray['billing']['date_of_birth'] = date('d-m-Y', ($TSFE->fe_user->user['date_of_birth']));
+			if (!$dateBirth || $tmpPos === false || $tmpPos == 0)	{
+				$this->infoArray['billing']['date_of_birth'] = date('d-m-Y', ($GLOBALS['TSFE']->fe_user->user['date_of_birth']));
 			}
 			unset($this->infoArray['billing']['error']);
 			$this->overwriteMode = 1;
@@ -192,10 +188,10 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 
 		if ($bProductsPayment && isset($_REQUEST['recs']) && is_array($_REQUEST['recs']) &&
 			isset($_REQUEST['recs']['personinfo']) && is_array($_REQUEST['recs']['personinfo']) && !$_REQUEST['recs']['personinfo']['agb'])	{
-			$this->infoArray['billing']['agb'] = FALSE;
+			$this->infoArray['billing']['agb'] = false;
 		}
 
-		$this->bHasBeenInitialised = TRUE;
+		$this->bHasBeenInitialised = true;
 	} // init
 
 
@@ -203,8 +199,6 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 	 * Getting all tt_products_cat categories into internal array
 	 */
 	public function init2 ($infoArray)  {
-		global $TYPO3_DB,$TSFE, $TCA;
-
 		$pibaseObj = t3lib_div::makeInstance('tx_ttproducts_pi1_base');
 		$this->pibase = $pibase;
 		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
@@ -216,7 +210,7 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 
 		$this->init_intern();
 
-		$this->bHasBeenInitialised = TRUE;
+		$this->bHasBeenInitialised = true;
 	}
 
 
@@ -240,9 +234,15 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 	public function mapPersonIntoDelivery ()	{
 
 			// all of the delivery address will be overwritten when no address and no email address have been filled in
-		if ((!trim($this->infoArray['delivery']['address']) && !trim($this->infoArray['delivery']['email']) || $this->overwriteMode) && !$this->bDeliveryAddress) {
-
-			$fieldArray = t3lib_div::trimExplode(',',$this->feuserfields . ',feusers_uid');
+		if (
+            (
+                !trim($this->infoArray['delivery']['address']) &&
+                !trim($this->infoArray['delivery']['email']) ||
+                $this->overwriteMode
+            ) &&
+            !$this->bDeliveryAddress
+        ) {
+			$fieldArray = t3lib_div::trimExplode(',', $this->feuserfields . ',feusers_uid');
 			$address = trim($this->infoArray['delivery']['address']);
 
 			foreach($fieldArray as $k => $fName) {
@@ -252,7 +252,8 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 						$this->infoArray['delivery'][$fName] == '' ||
 						(
 							$this->infoArray['delivery'][$fName] == '0' && !$address
-						)
+						) ||
+                        in_array($fName, array('country', 'static_info_country', 'zone'))
 					)
 				) {
 					$this->infoArray['delivery'][$fName] = $this->infoArray['billing'][$fName];
@@ -410,14 +411,12 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 	 * @access private
 	 */
 	public function getRowMarkerArray ($basketExtra, &$markerArray, $bHtml, $bSelectSalutation)	{
-		global $TCA, $TSFE;
-
 		$cObj = t3lib_div::makeInstance('tx_div2007_cobj');
 		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
 		$infoFields = t3lib_div::trimExplode(',',$this->feuserfields); // Fields...
-		$orderAddressViewObj = $tablesObj->get('fe_users', TRUE);
+		$orderAddressViewObj = $tablesObj->get('fe_users', true);
 		$orderAddressObj = $orderAddressViewObj->getModelObj();
 		$selectInfoFields = $orderAddressObj->getSelectInfoFields();
 		$staticInfo = tx_ttproducts_static_info::getStaticInfo();
@@ -440,7 +439,7 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 		}
 
 		if ($this->conf['useStaticInfoCountry'] && is_object($staticInfo))	{
-			$bReady = FALSE;
+			$bReady = false;
 			$whereCountries = $this->getWhereAllowedCountries($basketExtra);
 			$countryCodeArray = array();
 			$countryCodeArray['billing'] = ($this->infoArray['billing']['country_code'] != '' ? $this->infoArray['billing']['country_code'] : ($GLOBALS['TSFE']->fe_user->user['static_info_country'] != '' ? $GLOBALS['TSFE']->fe_user->user['static_info_country'] : false));
@@ -452,11 +451,11 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 
 
             if (
-                $countryCodeArray['billing'] === FALSE &&
+                $countryCodeArray['billing'] === false &&
                 $this->infoArray['billing']['country'] != ''
             ) {
                 // nothing to do
-                $bReady = TRUE;
+                $bReady = true;
             } else if (
                 t3lib_extMgm::isLoaded('static_info_tables')
             ) {
@@ -476,7 +475,7 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 							'',
 							$whereCountries,
 							'',
-							FALSE,
+							false,
 							array(),
 							1,
 							$outSelectedArray
@@ -499,7 +498,7 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 					} else {
 						$markerArray['###PERSON_ZONE###'] = '';
 					}
-					$countryArray = $staticInfo->initCountries('ALL', '', FALSE, $whereCountries);
+					$countryArray = $staticInfo->initCountries('ALL', '', false, $whereCountries);
 					$markerArray['###PERSON_COUNTRY_FIRST###'] = current($countryArray);
 					$markerArray['###PERSON_COUNTRY_FIRST_HIDDEN###'] = '<input type="hidden" name="recs[personinfo][country_code]" size="3" value="' . current(array_keys($countryArray)) . '">';
 
@@ -518,7 +517,7 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 							'',
 							$whereCountries,
 							'',
-							FALSE,
+							false,
 							array(),
 							1,
 							$outSelectedArray
@@ -545,7 +544,7 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 					$markerArray['###DELIVERY_COUNTRY_FIRST###'] = $markerArray['###PERSON_COUNTRY_FIRST###'];
 					$markerArray['###DELIVERY_COUNTRY###'] =
 						$staticInfo->getStaticInfoName('COUNTRIES', $countryCodeArray['delivery'],'','');
-					$bReady = TRUE;
+					$bReady = true;
 				}
 
 				$markerArray['###PERSON_ZONE_DISPLAY###'] = tx_div2007_staticinfotables::getTitleFromIsoCode('static_country_zones', array($zoneCodeArray['billing'], $countryCodeArray['billing']));
@@ -592,7 +591,7 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 		$orderAddressViewObj->getAddressMarkerArray($this->infoArray['billing'], $markerArray, $bSelectSalutation, 'personinfo');
 		$orderAddressViewObj->getAddressMarkerArray($this->infoArray['delivery'], $markerArray, $bSelectSalutation, 'delivery');
 
-		$text = tx_div2007_core::csConv($this->infoArray['delivery']['note'],$TSFE->metaCharset);
+		$text = tx_div2007_core::csConv($this->infoArray['delivery']['note'],$GLOBALS['TSFE']->metaCharset);
 		$markerArray['###DELIVERY_NOTE###'] = $text;
 		$markerArray['###DELIVERY_NOTE_DISPLAY###'] = nl2br($text);
 		$markerArray['###DELIVERY_GIFT_SERVICE###'] = $this->infoArray['delivery']['giftservice'];
@@ -607,7 +606,7 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 		$markerArray['###DELIVERY_STORE_SELECT###'] = '';
 
 		if ($this->bDeliveryAddress) {
-			$addressObj = $tablesObj->get('address', FALSE);
+			$addressObj = $tablesObj->get('address', false);
 			if (is_object($addressObj)) {
 				$markerArray['###DELIVERY_STORE_SELECT###'] = '';
 				$tablename = $addressObj->getTablename();
@@ -658,13 +657,13 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 						$addressObj->get(
 							'',
 							0,
-							FALSE,
+							false,
 							$where_clause,
 							'',
 							$orderBy,
 							'',
 							'',
-							FALSE,
+							false,
 							''
 						);
 					$actUidStore = $this->infoArray['delivery']['store'];
@@ -702,8 +701,8 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 								$valueArray,
 								'recs[delivery][store]',
 								$actUidStore,
-								TRUE,
-								FALSE,
+								true,
+								false,
 								array(),
 								'select',
 								$dataArray,
@@ -724,15 +723,15 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 		}
 
 			// Fe users:
-		$markerArray['###FE_USER_TT_PRODUCTS_DISCOUNT###'] = $TSFE->fe_user->user['tt_products_discount'];
-		$markerArray['###FE_USER_USERNAME###'] = $TSFE->fe_user->user['username'];
-		$markerArray['###FE_USER_UID###'] = $TSFE->fe_user->user['uid'];
+		$markerArray['###FE_USER_TT_PRODUCTS_DISCOUNT###'] = $GLOBALS['TSFE']->fe_user->user['tt_products_discount'];
+		$markerArray['###FE_USER_USERNAME###'] = $GLOBALS['TSFE']->fe_user->user['username'];
+		$markerArray['###FE_USER_UID###'] = $GLOBALS['TSFE']->fe_user->user['uid'];
 		$bAgb = ($this->infoArray['billing']['agb'] && (!isset($this->pibase->piVars['agb']) || $this->pibase->piVars['agb']>0));
-		$markerArray['###FE_USER_CNUM###'] = $TSFE->fe_user->user['cnum'];
+		$markerArray['###FE_USER_CNUM###'] = $GLOBALS['TSFE']->fe_user->user['cnum'];
 		$markerArray['###PERSON_AGB###'] = 'value="1" '. ($bAgb ? 'checked="checked"' : '');
 		$markerArray['###USERNAME###'] = $this->infoArray['billing']['email'];
 		$markerArray['###PASSWORD###'] = $this->password;
-		$valueArray = $TCA['sys_products_orders']['columns']['foundby']['config']['items'];
+		$valueArray = $GLOBALS['TCA']['sys_products_orders']['columns']['foundby']['config']['items'];
 
 		unset($valueArray[0]);
 
@@ -741,8 +740,8 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 			$valueArray,
 			'recs[delivery][foundby]',
 			$this->infoArray['delivery']['foundby'],
-			TRUE,
-			TRUE,
+			true,
+			true,
 			array(),
 			'radio'
 		);

@@ -1,7 +1,5 @@
 <?php
-if (!defined ('TYPO3_MODE')) {
-	die ('Access denied.');
-}
+defined('TYPO3_MODE') || die('Access denied.');
 
 $result = array (
 	'ctrl' => array (
@@ -33,6 +31,7 @@ $result = array (
 				'type' => 'input',
 				'size' => '30',
 				'max'  => '30',
+				'default' => ''
 			)
 		),
 		'tstamp' => array (
@@ -43,7 +42,7 @@ $result = array (
 				'size' => '8',
 				'eval' => 'date',
                 'renderType' => 'inputDateTime',
-				'default' => '0'
+				'default' => 0
 			)
 		),
 		'crdate' => array (
@@ -54,7 +53,7 @@ $result = array (
 				'size' => '8',
 				'eval' => 'date',
                 'renderType' => 'inputDateTime',
-				'default' => '0'
+				'default' => 0
 			)
 		),
 		'hidden' => array (
@@ -62,7 +61,7 @@ $result = array (
 			'label' => DIV2007_LANGUAGE_LGL . 'hidden',
 			'config' => array (
 				'type' => 'check',
-				'default' => '0'
+				'default' => 0
 			)
 		),
 		'starttime' => array (
@@ -73,7 +72,7 @@ $result = array (
 				'size' => '8',
 				'eval' => 'date',
                 'renderType' => 'inputDateTime',
-				'default' => '0'
+				'default' => 0
 			)
 		),
 		'endtime' => array (
@@ -84,7 +83,7 @@ $result = array (
 				'size' => '8',
 				'eval' => 'date',
                 'renderType' => 'inputDateTime',
-				'default' => '0',
+				'default' => 0,
 				'range' => array (
 					'upper' => mktime(0, 0, 0, 12, 31, $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['endtimeYear']),
 					'lower' => mktime(0, 0, 0, date('n') - 1, date('d'), date('Y'))
@@ -103,7 +102,8 @@ $result = array (
 					array(DIV2007_LANGUAGE_LGL . 'any_login', -2),
 					array(DIV2007_LANGUAGE_LGL . 'usergroups', '--div--')
 				),
-				'foreign_table' => 'fe_groups'
+				'foreign_table' => 'fe_groups',
+				'default' => 0
 			)
 		),
 		'name' => array (
@@ -111,7 +111,8 @@ $result = array (
 			'config' => array (
 				'type' => 'input',
 				'size' => '40',
-				'max' => '80'
+				'max' => '80',
+				'default' => ''
 			)
 		),
 		'email' => array (
@@ -119,7 +120,8 @@ $result = array (
 			'config' => array (
 				'type' => 'input',
 				'size' => '40',
-				'max' => '80'
+				'max' => '80',
+				'default' => ''
 			)
 		),
 		'suffix' => array (
@@ -127,7 +129,8 @@ $result = array (
 			'config' => array (
 				'type' => 'input',
 				'size' => '24',
-				'max' => '24'
+				'max' => '24',
+				'default' => ''
 			)
 		),
 	),
@@ -137,7 +140,6 @@ $result = array (
 	'palettes' => array (
 		'1' => array('showitem' => 'starttime, endtime, fe_group')
 	)
-
 );
 
 

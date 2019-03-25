@@ -43,7 +43,7 @@
 class tx_ttproducts_catlist_view extends tx_ttproducts_catlist_view_base {
 
 	// returns the products list view
-	public function &printView (
+	public function printView (
 		$functablename,
 		&$templateCode,
 		$theCode,
@@ -52,8 +52,6 @@ class tx_ttproducts_catlist_view extends tx_ttproducts_catlist_view_base {
 		$pageAsCategory,
 		$templateSuffix=''
 	) {
-		global $TSFE, $TCA;
-
 		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
 		$t = array();
 		$ctrlArray = array();
@@ -81,7 +79,7 @@ class tx_ttproducts_catlist_view extends tx_ttproducts_catlist_view_base {
 		$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
 		$subpartmarkerObj = t3lib_div::makeInstance('tx_ttproducts_subpartmarker');
 		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
-		$catView = $tablesObj->get($functablename, TRUE);
+		$catView = $tablesObj->get($functablename, true);
 		$catTableObj = $catView->getModelObj();
 
 		if (count($error_code)) {
@@ -261,7 +259,7 @@ class tx_ttproducts_catlist_view extends tx_ttproducts_catlist_view_base {
 			if (count($viewConfArray))	{
 				$allMarkers = $this->getTemplateMarkers($t);
 				$addQueryString = array();
-				$markerArray = $this->urlObj->addURLMarkers($TSFE->id,$markerArray,$addQueryString,FALSE);
+				$markerArray = $this->urlObj->addURLMarkers($GLOBALS['TSFE']->id,$markerArray,$addQueryString,false);
 
 				$controlViewObj = t3lib_div::makeInstance('tx_ttproducts_control_view');
 				$controlViewObj->getMarkerArray($markerArray, $allMarkers, $this->getTableConfArray());
@@ -307,7 +305,7 @@ class tx_ttproducts_catlist_view extends tx_ttproducts_catlist_view_base {
 		// $pid = $row['pid'];
 		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 		$pageObj = $tablesObj->get('pages');
-		$categoryTableViewObj = $tablesObj->get($functablename,TRUE);
+		$categoryTableViewObj = $tablesObj->get($functablename,true);
 		$categoryTable = $categoryTableViewObj->getModelObj();
 		$cssConf = $cnf->getCSSConf($categoryTable->getFuncTablename(), $theCode);
 		if (isset($cssConf) && is_array($cssConf))	{

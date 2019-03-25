@@ -54,15 +54,12 @@ class tx_ttproducts_field_tax_view extends tx_ttproducts_field_base_view {
 		$basketExtra = array(),
 		$id = '1'
 	) {
-
-		global $TCA;
-
 		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
-		$staticTaxViewObj = $tablesObj->get('static_taxes', TRUE);
+		$staticTaxViewObj = $tablesObj->get('static_taxes', true);
 		$staticTaxViewObj->getItemSubpartArrays ($templateCode, $functablename, $row, $subpartArray, $wrappedSubpartArray, $tagArray, $theCode, $basketExtra, $id);
 	}
 
-	public function getRowMarkerArray ($functablename, $fieldname, $row, $markerKey, &$markerArray, $tagArray, $theCode, $id, $basketExtra, &$bSkip, $bHtml=TRUE, $charset='', $prefix='', $suffix='', $imageRenderObj='')	{
+	public function getRowMarkerArray ($functablename, $fieldname, $row, $markerKey, &$markerArray, $tagArray, $theCode, $id, $basketExtra, &$bSkip, $bHtml=true, $charset='', $prefix='', $suffix='', $imageRenderObj='')	{
 
 	}
 }

@@ -1,7 +1,5 @@
 <?php
-if (!defined ('TYPO3_MODE')) {
-	die ('Access denied.');
-}
+defined('TYPO3_MODE') || die('Access denied.');
 
 $accountField = 'ac_number';
 
@@ -29,6 +27,7 @@ $result = array (
 				'type' => 'input',
 				'size' => '40',
 				'max' => '80',
+                'default' => ''
 			)
 		),
 		'owner_name' => array (
@@ -37,7 +36,8 @@ $result = array (
 			'config' => array (
 				'type' => 'input',
 				'size' => '40',
-				'max' => '80'
+				'max' => '80',
+				'default' => ''
 			)
 		),
 		'bic' => array (
@@ -46,7 +46,8 @@ $result = array (
 			'config' => array (
 				'type' => 'input',
 				'size' => '11',
-				'max' => '11'
+				'max' => '11',
+				'default' => ''
 			)
 		),
 	),

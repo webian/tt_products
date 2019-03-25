@@ -86,7 +86,7 @@ class tx_ttproducts_ts implements t3lib_Singleton {
 			$pids = implode(',', $allChilds);
 			$where = 'pid IN (' . $pids . ')' . $cObj->enableFields('tt_products');
 			$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('uid', 'tt_products', $where);
-			$result = FALSE;
+			$result = false;
 
 			if (isset($rows) && is_array($rows)) {
 				$result = count($rows);
@@ -108,7 +108,7 @@ class tx_ttproducts_ts implements t3lib_Singleton {
 			$count = 0;
 			$fieldName = 'display_mode';
 
-			$bMemoFound = FALSE;
+			$bMemoFound = false;
 
 			foreach ($rows as $row) {
 				if (
@@ -129,7 +129,7 @@ class tx_ttproducts_ts implements t3lib_Singleton {
 					$codeArray = t3lib_div::trimExplode(',' , $codes);
 					if (in_array('MEMO', $codeArray)) {
 
-						$bMemoFound = TRUE;
+						$bMemoFound = true;
 						break;
 					}
 				}

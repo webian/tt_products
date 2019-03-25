@@ -153,13 +153,11 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 	 * Setting shipping, payment methods
 	 */
 	public function getBasketExtras ($basketRec) {
-		global $TSFE;
-
 		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 		$basketExtra = array();
 
 		// handling and shipping
-		$pskeyArray = array('shipping' => FALSE, 'handling' => TRUE);	// keep this order, because shipping can unable some handling configuration
+		$pskeyArray = array('shipping' => false, 'handling' => true);	// keep this order, because shipping can unable some handling configuration
 		$excludePayment = '';
 		$excludeHandling = '';
 
@@ -250,10 +248,10 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 					if ($val['type'] == 'fe_users')	{
 						if (
                             $GLOBALS['TSFE']->loginUser &&
-                            is_array($TSFE->fe_user->user)
+                            is_array($GLOBALS['TSFE']->fe_user->user)
                         )	{
 							$paymentField = $tablesObj->get('fe_users')->getFieldName('payment');
-							$paymentMethod = $TSFE->fe_user->user[$paymentField];
+							$paymentMethod = $GLOBALS['TSFE']->fe_user->user[$paymentField];
 							$this->conf['payment.'][$key.'.']['title'] = $paymentMethod;
 						} else {
 							unset($this->conf['payment.'][$key.'.']);
@@ -287,10 +285,10 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 	 * Check if payment/shipping option is available
 	 */
 	public function checkExtraAvailable ($confArray)	{
-		$result = FALSE;
+		$result = false;
 
 		if (is_array($confArray) && (!isset($confArray['show']) || $confArray['show']))	{
-			$result = TRUE;
+			$result = true;
 		}
 
 		return $result;
@@ -334,7 +332,7 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 
 		$handleLib = $basketExtra['payment.']['handleLib'];
 
-		if (strpos($handleLib,'transactor') !== FALSE && t3lib_extMgm::isLoaded($handleLib))	{
+		if (strpos($handleLib,'transactor') !== false && t3lib_extMgm::isLoaded($handleLib))	{
 
 			$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
 				// Payment Transactor
@@ -426,7 +424,7 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 
 				if (strpos($k3, $markerPrefix) === 0 && !isset($subpartArray['###' . $k3 . '###']))	{
 
-					if ($bCheckNE && strpos($k3,'_NE_') !== FALSE)	{
+					if ($bCheckNE && strpos($k3,'_NE_') !== false)	{
 						$wrappedSubpartArray['###' . $k3 . '###'] = '';
 						$tmpSubpartArray[$pskey] = $this->cObj->getSubpart($framework,'###' . $k3 . '###');
 						$psMessageArray[$pskey] .=
@@ -497,7 +495,7 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 
 	public function getMarkerArray ($theCode, &$markerArray, $pid, $bUseBackPid, $calculatedArray, $basketExtra) {
 
-        $linkConf = array('useCacheHash' => TRUE);
+        $linkConf = array('useCacheHash' => true);
 		$priceViewObj = t3lib_div::makeInstance('tx_ttproducts_field_price_view');
 		$urlObj = t3lib_div::makeInstance('tx_ttproducts_url_view');
 		$basketUrl = htmlspecialchars(
@@ -507,7 +505,7 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 				$urlObj->getLinkParams(
 					'',
 					array(),
-					TRUE,
+					true,
 					$bUseBackPid
 				),
 				'',
@@ -573,17 +571,15 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 			 The conf-array for the payment/shipping/handling configuration has numeric keys for the elements
 			 But there are also these properties:
 				.radio	  [boolean]	Enables radiobuttons instead of the default, selector-boxes
-				.wrap		[string]	<select>|</select> - wrap for the selectorboxes.  Only if .radio is FALSE. See default value below
-				.template	[string]	Template string for the display of radiobuttons.  Only if .radio is TRUE. See default below
+				.wrap		[string]	<select>|</select> - wrap for the selectorboxes.  Only if .radio is false. See default value below
+				.template	[string]	Template string for the display of radiobuttons.  Only if .radio is true. See default below
 			 */
-		global $TSFE;
-
 		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
         $imageObj = t3lib_div::makeInstance('tx_ttproducts_field_image_view');
 
 		$active = $basketExtra[$pskey];
 		$activeArray = is_array($active) ? $active : array($active);
-		$bUseXHTML = $TSFE->config['config']['xhtmlDoctype'] != '';
+		$bUseXHTML = $GLOBALS['TSFE']->config['config']['xhtmlDoctype'] != '';
 		$selectedText = ($bUseXHTML ? 'selected="selected"' : 'selected');
 
 		if ($subkey != '')	{
@@ -643,7 +639,7 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 					$t['title'] = $item['title'];
 					if ($item['where.'] && strstr($t['title'], '###'))	{
 						$tableName = key($item['where.']);
-						$itemTableView = $tablesObj->get($tableName,TRUE);
+						$itemTableView = $tablesObj->get($tableName,true);
 						$itemTable = $itemTableView->getModelObj();
 
 						if (($tableName == 'static_countries') && t3lib_extMgm::isLoaded('static_info_tables')) {
@@ -661,7 +657,7 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 									$viewTagArray,
 									$parentArray
 								);
-								$addItems = $itemTable->get('',0,FALSE, $item['where.'][$tableName],'','','', implode(',',$fieldsArray));
+								$addItems = $itemTable->get('',0,false, $item['where.'][$tableName],'','','', implode(',',$fieldsArray));
 
 								if (isset($addItems) && is_array($addItems))	{
 									foreach ($addItems as $k1 => $row)	{
@@ -942,8 +938,8 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
                 $priceTax = $priceNoTax = 0;
             }
 			$taxIncluded = $this->priceObj->getTaxIncluded();
-			$priceTax += $this->priceObj->getPrice($basketExtra,$priceNew,1,$row,$taxIncluded,TRUE);
-			$priceNoTax += $this->priceObj->getPrice($basketExtra,$priceNew,0,$row,$taxIncluded,TRUE);
+			$priceTax += $this->priceObj->getPrice($basketExtra,$priceNew,1,$row,$taxIncluded,true);
+			$priceNoTax += $this->priceObj->getPrice($basketExtra,$priceNew,0,$row,$taxIncluded,true);
 		}
 	}
 
@@ -987,8 +983,8 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 				$priceReduction,
 				$discountArray,
 				$priceTotalTax,
-				FALSE,
-				TRUE
+				false,
+				true
 			);
 
 			if (count($discountArray))	{
@@ -996,8 +992,8 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 				foreach ($discountArray as $uid => $price)	{
 					$localPriceTotal += $price;
 				}
-				$priceTax = $priceTax + $this->priceObj->getPrice($basketExtra, $localPriceTotal, TRUE, $row, $taxIncluded, TRUE);
-				$priceNoTax = $priceNoTax + $this->priceObj->getPrice($basketExtra,  $localPriceTotal, FALSE, $row, $taxIncluded, TRUE);
+				$priceTax = $priceTax + $this->priceObj->getPrice($basketExtra, $localPriceTotal, true, $row, $taxIncluded, true);
+				$priceNoTax = $priceNoTax + $this->priceObj->getPrice($basketExtra,  $localPriceTotal, false, $row, $taxIncluded, true);
 			}
 		}
 	}
@@ -1021,14 +1017,14 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 // 				$row['tax'] = $actItem['tax'];
 
 // 				if ($shippingPrice)	{
-// 					$priceShippingTax += $this->priceObj->getPrice($shippingPrice,TRUE,$row,$taxIncluded,TRUE);
-// 					$priceShippingNoTax += $this->priceObj->getPrice($shippingPrice,FALSE,$row,$taxIncluded,TRUE);
+// 					$priceShippingTax += $this->priceObj->getPrice($shippingPrice,true,$row,$taxIncluded,true);
+// 					$priceShippingNoTax += $this->priceObj->getPrice($shippingPrice,false,$row,$taxIncluded,true);
 // 				}
 				if ($row['bulkily'])	{
 					$value = floatval($basketExtra['shipping.']['bulkilyAddition']) * $actItem['count'];
 					$row['tax'] = floatval($basketExtra['shipping.']['bulkilyFeeTax']);
-					$priceShippingTax += $this->priceObj->getPrice($basketExtra, $value, TRUE, $row, $taxIncluded, TRUE);
-					$priceShippingNoTax += $this->priceObj->getPrice($basketExtra, $value, FALSE, $row, $taxIncluded, TRUE);
+					$priceShippingTax += $this->priceObj->getPrice($basketExtra, $value, true, $row, $taxIncluded, true);
+					$priceShippingNoTax += $this->priceObj->getPrice($basketExtra, $value, false, $row, $taxIncluded, true);
 				}
 			}
 		}
@@ -1072,7 +1068,7 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 			$priceAdd = doubleVal($basketConf['price']);
 
 			if ($priceAdd) {
-				$priceTaxAdd = $this->priceObj->getPrice($basketExtra, $priceAdd, TRUE, $row, $taxIncluded, TRUE);
+				$priceTaxAdd = $this->priceObj->getPrice($basketExtra, $priceAdd, true, $row, $taxIncluded, true);
 			} else {
 				$priceTaxAdd = doubleVal($basketConf['priceTax']);
 			}
@@ -1080,7 +1076,7 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 			$priceNoTaxAdd = doubleVal($basketConf['priceNoTax']);
 
 			if (!$priceNoTaxAdd) {
-				$priceNoTaxAdd = $this->priceObj->getPrice($basketExtra, $priceTaxAdd, FALSE, $row, TRUE, TRUE);
+				$priceNoTaxAdd = $this->priceObj->getPrice($basketExtra, $priceTaxAdd, false, $row, true, true);
 			}
 			$priceNoTax += $priceNoTaxAdd;
 		}
@@ -1114,22 +1110,20 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 
 
 	public function getSpecialPrices ($basketExtra, $pskey, $subkey, $row, $calculatedArray, &$priceShippingTax, &$priceShippingNoTax)	{
-		global $TSFE;
-
 		$basketConf = $this->getBasketConf($basketExtra, $pskey, $subkey);
 
 		$perc = doubleVal($basketConf['percentOfGoodstotal']);
 		if ($perc)  {
 			$priceShipping = doubleVal(($calculatedArray['priceTax']['goodstotal']/100) * $perc);
-			$dum = $this->priceObj->getPrice($basketExtra, $priceShipping, TRUE, $row);
+			$dum = $this->priceObj->getPrice($basketExtra, $priceShipping, true, $row);
 			$taxIncluded = $this->priceObj->getTaxIncluded();
-			$priceShippingTax = $priceShippingTax + $this->priceObj->getPrice($basketExtra, $priceShipping, TRUE, $row, $taxIncluded, TRUE);
-			$priceShippingNoTax = $priceShippingNoTax + $this->priceObj->getPrice($basketExtra, $priceShipping, FALSE, $row, $taxIncluded, TRUE);
+			$priceShippingTax = $priceShippingTax + $this->priceObj->getPrice($basketExtra, $priceShipping, true, $row, $taxIncluded, true);
+			$priceShippingNoTax = $priceShippingNoTax + $this->priceObj->getPrice($basketExtra, $priceShipping, false, $row, $taxIncluded, true);
 		}
 
 		$calculationScript = $basketConf['calculationScript'];
 		if ($calculationScript) {
-			$calcScript = $TSFE->tmpl->getFileName($calculationScript);
+			$calcScript = $GLOBALS['TSFE']->tmpl->getFileName($calculationScript);
 			if ($calcScript)	{
 				$confScript = &$basketConf['calculationScript.'];
 				include($calcScript);
@@ -1151,8 +1145,6 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 			&$pricePaymentTax,
 			&$pricePaymentNoTax
 		) {
-		global $TSFE;
-
 		$row = $shippingRow;
 		$taxIncluded = $this->priceObj->getTaxIncluded();
 
@@ -1160,14 +1152,14 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 		$weigthFactor = doubleVal($basketExtra['shipping.']['priceFactWeight']);
 		if($weigthFactor > 0) {
 			$priceShipping = $calculatedArray['weight'] * $weigthFactor;
-			$priceShippingTax += $this->priceObj->getPrice($basketExtra, $priceShipping, TRUE, $row, $taxIncluded, TRUE);
-			$priceShippingNoTax += $this->priceObj->getPrice($basketExtra, $priceShipping, FALSE, $row, $taxIncluded, TRUE);
+			$priceShippingTax += $this->priceObj->getPrice($basketExtra, $priceShipping, true, $row, $taxIncluded, true);
+			$priceShippingNoTax += $this->priceObj->getPrice($basketExtra, $priceShipping, false, $row, $taxIncluded, true);
 		}
 		$countFactor = doubleVal($basketExtra['shipping.']['priceFactCount']);
 		if($countFactor > 0) {
 			$priceShipping = $countTotal * $countFactor;
-			$priceShippingTax += $this->priceObj->getPrice($basketExtra, $priceShipping, TRUE, $row, $taxIncluded, TRUE);
-			$priceShippingNoTax += $this->priceObj->getPrice($basketExtra, $priceShipping, FALSE, $row, $taxIncluded, TRUE);
+			$priceShippingTax += $this->priceObj->getPrice($basketExtra, $priceShipping, true, $row, $taxIncluded, true);
+			$priceShippingNoTax += $this->priceObj->getPrice($basketExtra, $priceShipping, false, $row, $taxIncluded, true);
 		}
 		$this->getSpecialPrices($basketExtra, 'shipping', '', $row, $calculatedArray, $priceShippingTax, $priceShippingNoTax);
 		$this->getPrices('shipping', $basketExtra, '', $row, $countTotal, $priceTotalTax, $itemArray, $calculatedArray, $priceShippingTax, $priceShippingNoTax);
@@ -1194,8 +1186,8 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 		$perc = doubleVal($basketExtra['payment.']['percentOfTotalShipping']);
 		if ($perc)  {
 			$payment = ($calculatedArray['priceTax']['goodstotal'] + $calculatedArray['shipping']['priceTax'] ) * doubleVal($perc);
-			$pricePaymentTax += $this->priceObj->getPrice($basketExtra, $payment, TRUE, $row, $taxIncluded, TRUE);
-			$pricePaymentNoTax += $this->priceObj->getPrice($basketExtra, $payment, FALSE, $row, $taxIncluded, TRUE);
+			$pricePaymentTax += $this->priceObj->getPrice($basketExtra, $payment, true, $row, $taxIncluded, true);
+			$pricePaymentNoTax += $this->priceObj->getPrice($basketExtra, $payment, false, $row, $taxIncluded, true);
 		}
 		$this->getSpecialPrices($basketExtra, 'payment', '', $row, $calculatedArray, $pricePaymentTax, $pricePaymentNoTax);
 		$this->getPrices('payment', $basketExtra, '', $row, $countTotal, $priceTotalTax, $itemArray, $calculatedArray, $pricePaymentTax, $pricePaymentNoTax);
@@ -1209,8 +1201,6 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 			&$calculatedArray,
 			$itemArray
 		)	{
-		global $TSFE;
-
 		$taxIncluded = $this->priceObj->getTaxIncluded();
 		$rc = '';
 
@@ -1401,20 +1391,20 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 
 
 	public function useCreditcard ($basketExtra)	{
-		$rc = FALSE;
+		$rc = false;
 		$payConf = $basketExtra['payment.'];
 		if (is_array($payConf) && $payConf['creditcards'] != '')	{
-			$rc = TRUE;
+			$rc = true;
 		}
 		return $rc;
 	}
 
 
 	public function useAccount ($basketExtra)	{
-		$rc = FALSE;
+		$rc = false;
 		$payConf = &$basketExtra['payment.'];
 		if (is_array($payConf) && $payConf['accounts'] != '')	{
-			$rc = TRUE;
+			$rc = true;
 		}
 		return $rc;
 	}
@@ -1423,7 +1413,7 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 
 	public function getHandleLib ($request, $basketExtra)	{ // getGatewayRequestExt
 
-		$rc = FALSE;
+		$rc = false;
 		$payConf = $basketExtra['payment.'];
 
 		if (is_array($payConf))	{
@@ -1431,7 +1421,7 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 		}
 
 		if (
-			(strpos($handleLib,'transactor') !== FALSE) &&
+			(strpos($handleLib,'transactor') !== false) &&
 			is_array($payConf['handleLib.']) &&
 			$payConf['handleLib.']['gatewaymode'] == $request &&
 			t3lib_extMgm::isLoaded($handleLib)

@@ -57,7 +57,6 @@ class tx_ttproducts_content extends tx_ttproducts_table_base {
 
 
 	public function getFromPid ($pid) {
-		global $TYPO3_DB, $TSFE;
 		$rcArray = $this->dataPageArray[$pid];
 
 		if (!is_array($rcArray)) {
@@ -65,16 +64,16 @@ class tx_ttproducts_content extends tx_ttproducts_table_base {
 			$sql->prepareFields($this->getTableObj(), 'select', '*');
 			$sql->prepareFields($this->getTableObj(), 'orderBy', 'sorting');
 			$sql->prepareWhereFields ($this->getTableObj(), 'pid', '=', intval($pid));
-			$sql->prepareWhereFields ($this->getTableObj(), 'sys_language_uid', '=', intval($TSFE->config['config']['sys_language_uid']));
+			$sql->prepareWhereFields ($this->getTableObj(), 'sys_language_uid', '=', intval($GLOBALS['TSFE']->config['config']['sys_language_uid']));
 			$enableFields = $this->getTableObj()->enableFields();
 			$sql->where_clause .= $enableFields;
 
 			// Fetching the category
 			$res = $sql->exec_SELECTquery();
-			while ($row = $TYPO3_DB->sql_fetch_assoc($res)) {
+			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 				$this->dataPageArray[$pid][$row['uid']] = $row;
 			}
-			$TYPO3_DB->sql_free_result($res);
+			$GLOBALS['TYPO3_DB']->sql_free_result($res);
 			$tmp = $this->dataPageArray[$pid];
 			$rcArray = (is_array($tmp) ? $tmp : array());
 		}

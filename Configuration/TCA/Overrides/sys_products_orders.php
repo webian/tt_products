@@ -1,8 +1,5 @@
 <?php
-
-if (!defined ('TYPO3_MODE')) {
-    die ('Access denied.');
-}
+defined('TYPO3_MODE') || die('Access denied.');
 
 $table = 'sys_products_orders';
 

@@ -55,8 +55,6 @@ class tx_ttproducts_category_view extends tx_ttproducts_category_base_view {
 	 * @access private
 	 */
 	public function getMarkerArray (&$markerArray, $markerKey, $category, $pid, $imageNum=0, $imageRenderObj='image', &$viewCatTagArray, $forminfoArray=array(), $pageAsCategory=0, $theCode, $basketExtra, $id, $prefix, $linkWrap='')	{
-		global $TSFE;
-
 		$modelObj = $this->getModelObj();
 		$row = ($category ? $modelObj->get($category) : array ('title' => '', 'pid' => $pid));
 		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
@@ -77,7 +75,7 @@ class tx_ttproducts_category_view extends tx_ttproducts_category_base_view {
 			$catTitle .= ($this->tableconf['separator'].$row['title']);
 		}
 		$this->setMarkerArrayCatTitle($markerArray, $catTitle, $prefix);
-		parent::getRowMarkerArray($row, $markerKey, $markerArray, $variantFieldArray, $variantMarkerArray, $viewCatTagArray, $theCode, $basketExtra, TRUE, 'UTF-8', $imageNum, $imageRenderObj, $id, $prefix, '', $linkWrap);
+		parent::getRowMarkerArray($row, $markerKey, $markerArray, $variantFieldArray, $variantMarkerArray, $viewCatTagArray, $theCode, $basketExtra, true, 'UTF-8', $imageNum, $imageRenderObj, $id, $prefix, '', $linkWrap);
 	}
 }
 

@@ -55,8 +55,6 @@ class tx_ttproducts_billdelivery implements t3lib_Singleton {
 	 * @return	  void
 	 */
 	public function init ($cObj) {
-		global $TSFE;
-
 		$this->cObj = $cObj;
 		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
@@ -108,7 +106,7 @@ class tx_ttproducts_billdelivery implements t3lib_Singleton {
 
 		$typeCode = strtoupper($type);
         $generationType = strtolower($generationConf['type']);
-		$result = FALSE;
+		$result = false;
 
         // Hook
             // Call all billing delivery hooks
@@ -148,10 +146,10 @@ class tx_ttproducts_billdelivery implements t3lib_Singleton {
                     $templateCode,
                     $typeCode,
                     $infoViewObj,
-                    FALSE,
-                    TRUE,
+                    false,
+                    true,
                     $basketObj->getCalculatedArray(),
-                    FALSE,
+                    false,
                     $subpart,
                     $mainMarkerArray
                 );
@@ -160,10 +158,10 @@ class tx_ttproducts_billdelivery implements t3lib_Singleton {
                     $templateCode,
                     $typeCode,
                     $infoViewObj,
-                    FALSE,
-                    TRUE,
+                    false,
+                    true,
                     $basketObj->getCalculatedArray(),
-                    FALSE,
+                    false,
                     $subpart,
                     $mainMarkerArray
                 );
@@ -173,10 +171,10 @@ class tx_ttproducts_billdelivery implements t3lib_Singleton {
                     $templateCode,
                     $typeCode,
                     $infoViewObj,
-                    FALSE,
-                    TRUE,
+                    false,
+                    true,
                     $basketObj->getCalculatedArray(),
-                    FALSE,
+                    false,
                     $subpart,
                     $mainMarkerArray
                 );
@@ -196,10 +194,10 @@ class tx_ttproducts_billdelivery implements t3lib_Singleton {
                     $templateCode,
                     $typeCode,
                     $infoViewObj,
-                    FALSE,
-                    TRUE,
+                    false,
+                    true,
                     $basketObj->getCalculatedArray(),
-                    TRUE,
+                    true,
                     $subpart,
                     $mainMarkerArray
                 );
@@ -224,8 +222,6 @@ class tx_ttproducts_billdelivery implements t3lib_Singleton {
 		This is extension information to tracking at another page
 		See Tracking for further information
 		*/
-		global $TSFE;
-
 		$priceObj = t3lib_div::makeInstance('tx_ttproducts_field_price');
 		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
 
@@ -265,10 +261,10 @@ class tx_ttproducts_billdelivery implements t3lib_Singleton {
 			$templateCode,
 			$theCode,
 			$infoViewObj,
-			FALSE,
-			FALSE,
+			false,
+			false,
 			$calculatedArray,
-			TRUE,
+			true,
 			$subpartMarker,
 			$globalMarkerArray,
 			'',

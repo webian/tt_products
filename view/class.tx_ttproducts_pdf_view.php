@@ -44,7 +44,7 @@ class tx_ttproducts_pdf_view implements t3lib_Singleton {
 	 * generates the bill as a PDF file
 	 *
 	 * @param	string		reference to an item array with all the data of the item
-	 * @return	string / boolean	returns the absolute filename of the PDF bill or FALSE
+	 * @return	string / boolean	returns the absolute filename of the PDF bill or false
 	 * 		 			for the tt_producst record, $row
 	 * @access private
 	 */
@@ -55,19 +55,17 @@ class tx_ttproducts_pdf_view implements t3lib_Singleton {
 		$footer,
 		$absFileName
 	) {
-		global $TSFE;
-
-		$result = FALSE;
+		$result = false;
 		$charset = 'UTF-8';
 		if (
-            isset($TSFE->renderCharset) &&
-            $TSFE->renderCharset != ''
+            isset($GLOBALS['TSFE']->renderCharset) &&
+            $GLOBALS['TSFE']->renderCharset != ''
         ) {
-            $charset = $TSFE->renderCharset;
+            $charset = $GLOBALS['TSFE']->renderCharset;
         }
 
 		if (t3lib_extMgm::isLoaded('fpdf')) {
-			$csConvObj = $TSFE->csConvObj;
+			$csConvObj = $GLOBALS['TSFE']->csConvObj;
 			$header = $csConvObj->conv(
 				$header,
 				$charset,

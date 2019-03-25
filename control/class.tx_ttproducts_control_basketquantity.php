@@ -59,14 +59,14 @@ class tx_ttproducts_control_basketquantity implements t3lib_Singleton {
 		&$markerArray
 	)	{
 		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
-		$prodViewObj = $tablesObj->get('tt_products',TRUE);
+		$prodViewObj = $tablesObj->get('tt_products',true);
 
 		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
 		$quantityArray = $basketObj->getQuantityArray($relatedIds,$rowArray);
 
 		foreach ($rowArray as $functablename => $functableRowArray)	{
 
-			$viewObj = $tablesObj->get($functablename,TRUE);
+			$viewObj = $tablesObj->get($functablename,true);
 			$modelObj = $viewObj->getModelObj();
 			$marker = $viewObj->getMarker();
 

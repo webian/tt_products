@@ -47,9 +47,7 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 	/**
 	 * Getting all tt_products_cat categories into internal array
 	 */
-	function init ($cObj, $tablename)	{
-		global $TYPO3_DB;
-
+	public function init ($cObj, $tablename)	{
 		parent::init($cObj, $tablename);
 
 		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
@@ -106,39 +104,17 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 		}
 	}
 
-/*
-	function get ($uid=0,$pid=0,$bStore=true,$where_clause='',$limit='',$fields='',$bCount=FALSE) {
-		global $TYPO3_DB;
-
-		$bMultple = (strstr($uid, ',') ? TRUE : FALSE);
-
-		$rc = $this->dataArray[$uid];
-		if (!$rc && !$bMultple && isset($uid)) {
-			$where = '1=1 '.$this->getTableObj()->enableFields().' AND uid = '.intval($uid);
-
-			// Fetching the pages
-			$res = $this->getTableObj()->exec_SELECTquery('*', $where);
-			$row = $TYPO3_DB->sql_fetch_assoc($res);
-			$TYPO3_DB->sql_free_result($res);
-			$rc = $this->dataArray[$uid] = $row;
-		}
-		return $rc;
-	}*/
-
-
-	function getRootCat ()	{
+	public function getRootCat ()	{
 		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$rc = $cnf->config['rootPageID'];
 		return $rc;
 	}
 
-
-	function getNotes ($uid) {
-		global $TYPO3_DB;
+	public function getNotes ($uid) {
 		$rowArray = $this->noteArray[$uid];
 		$rcArray = array();
 		if (!is_array($rowArray) && $uid) {
-			$rowArray = $TYPO3_DB->exec_SELECTgetRows('*', 'tt_products_products_note_pages_mm', 'uid_local = '.intval($uid),'','sorting');
+			$rowArray = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('*', 'tt_products_products_note_pages_mm', 'uid_local = '.intval($uid),'','sorting');
 			$this->noteArray[$uid] = $rowArray;
 		}
 		foreach ($rowArray as $k => $row)	{
@@ -147,8 +123,7 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 		return $rcArray;
 	}
 
-
-	function getParent ($uid=0) {
+	public function getParent ($uid=0) {
 		$rc = array();
 		$row = $this->get ($uid);
 		if ($row['pid'])	{
@@ -157,21 +132,17 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 		return $rc;
 	}
 
-
-	function getRowCategory ($row) {
+	public function getRowCategory ($row) {
 		$rc = $row['pid'];
 		return $rc;
 	}
 
-
-	function getRowPid($row) {
+	public function getRowPid($row) {
 		$rc = $row['uid'];
 		return $rc;
 	}
 
-
-	function getParamDefault ($theCode, $pid)	{
-//		$pid = $this->pibase->piVars[$this->piVar];
+	public function getParamDefault ($theCode, $pid)	{
 		$pid = ($pid ? $pid : $this->conf['defaultPageID']);
 		if ($pid)	{
 			$pid = implode(',',t3lib_div::intExplode(',', $pid));
@@ -179,8 +150,7 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 		return $pid;
 	}
 
-
-	function getRelationArray ($dataArray, $excludeCats='',$rootUids='',$allowedCats='') {
+	public function getRelationArray ($dataArray, $excludeCats='',$rootUids='',$allowedCats='') {
 
 		$relationArray = array();
 		$pageArray = t3lib_div::trimExplode (',', $pid_list);
@@ -210,7 +180,7 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 				}
 				$pid = $row['pid'];
 				$parentKey = array_search($pid, $pageArray);
-				if ($parentKey === FALSE || $parentKey == 0 && $pageArray[0] != $pid)	{
+				if ($parentKey === false || $parentKey == 0 && $pageArray[0] != $pid)	{
 					$pid = 0;
 				}
 				$relationArray [$uid]['parent_category'] = $pid;
@@ -228,45 +198,30 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 		return $relationArray;
 	}
 
-
-//	/**
-//	 * Generates an array, ->pageArray of the pagerecords from ->pid_list
-//	 */
-//	function generatePageArray()	{
-//			// Get pages (for category titles)
-//		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('title,uid,pid', 'pages', 'uid IN ('.$this->pid_list.')');
-//		$this->pageArray = array();
-//		while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))		{
-//			$this->pageArray[$row['uid']] = $row;
-//		}
-//	} // generatePageArray
-//
-
-
 	/**
 	 * Returning the pid out from the row using the where clause
 	 */
-	function getPID ($conf, $confExt, $row, $rootRow=array()) {
+	public function getPID ($conf, $confExt, $row, $rootRow=array()) {
 		$rc = 0;
 		if ($confExt) {
 			foreach ($confExt as $k1 => $param) {
 				$type  = $param['type'];
 				$where = $param['where'];
-				$isValid = FALSE;
+				$isValid = false;
 				if ($where) {
 					$wherelist = t3lib_div::trimExplode ('AND', $where);
-					$isValid = TRUE;
+					$isValid = true;
 					foreach ($wherelist as $k2 => $condition) {
 						$args = t3lib_div::trimExplode ('=', $condition);
 						if ($row[$args[0]] != $args[1]) {
-							$isValid = FALSE;
+							$isValid = false;
 						}
 					}
 				} else {
-					$isValid = TRUE;
+					$isValid = true;
 				}
 
-				if ($isValid == TRUE) {
+				if ($isValid == true) {
 					switch ($type) {
 						case 'sql':
 							$rc = $param['pid'];
@@ -283,9 +238,7 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 			if ($conf) {
 				$rc = $conf;
 			} else {
-				global $TSFE;
-
-				$rc = ($rootRow['uid'] ? $rootRow['uid'] : $TSFE->id);
+				$rc = ($rootRow['uid'] ? $rootRow['uid'] : $GLOBALS['TSFE']->id);
 				$rc = intval($rc);
 			}
 		}
@@ -293,12 +246,6 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 		return $rc;
 	} // getPID
 }
-
-
-
-// if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/model/class.tx_ttproducts_page.php'])	{
-// 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/model/class.tx_ttproducts_page.php']);
-// }
 
 
 

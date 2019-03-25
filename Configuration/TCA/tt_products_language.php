@@ -1,7 +1,5 @@
 <?php
-if (!defined ('TYPO3_MODE')) {
-	die ('Access denied.');
-}
+defined('TYPO3_MODE') || die('Access denied.');
 
 $imageFolder = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['imageFolder'];
 if (!$imageFolder) {
@@ -44,6 +42,7 @@ $result = array (
 				'type' => 'input',
 				'size' => '30',
 				'max'  => '30',
+				'default' => ''
 			)
 		),
 		'sys_language_uid' => array (
@@ -57,12 +56,14 @@ $result = array (
 				'items' => array(
 					array(DIV2007_LANGUAGE_LGL . 'allLanguages', -1),
 					array(DIV2007_LANGUAGE_LGL . 'default_value', 0)
-				)
+				),
+				'default' => 0
 			)
 		),
 		'sorting' => Array (
 			'config' => Array (
 				'type' => 'passthrough',
+				'default' => 0
 			)
 		),
 		'hidden' => array (
@@ -70,7 +71,7 @@ $result = array (
 			'label' => DIV2007_LANGUAGE_LGL . 'hidden',
 			'config' => array (
 				'type' => 'check',
-				'default' => '0'
+				'default' => 0
 			)
 		),
 		'tstamp' => array (
@@ -81,7 +82,7 @@ $result = array (
 				'size' => '8',
 				'eval' => 'date',
                 'renderType' => 'inputDateTime',
-				'default' => '0'
+				'default' => 0
 			)
 		),
 		'crdate' => array (
@@ -92,7 +93,7 @@ $result = array (
 				'size' => '8',
 				'eval' => 'date',
                 'renderType' => 'inputDateTime',
-				'default' => '0'
+				'default' => 0
 			)
 		),
 		'starttime' => array (
@@ -103,7 +104,7 @@ $result = array (
 				'size' => '8',
 				'eval' => 'date',
                 'renderType' => 'inputDateTime',
-				'default' => '0'
+				'default' => 0
 			)
 		),
 		'endtime' => array (
@@ -114,7 +115,7 @@ $result = array (
 				'size' => '8',
 				'eval' => 'date',
                 'renderType' => 'inputDateTime',
-				'default' => '0',
+				'default' => 0,
 				'range' => array (
 					'upper' => mktime(0, 0, 0, 12, 31, $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['endtimeYear']),
 					'lower' => mktime(0, 0, 0, date('n') - 1, date('d'), date('Y'))
@@ -133,7 +134,8 @@ $result = array (
 					array(DIV2007_LANGUAGE_LGL . 'any_login', -2),
 					array(DIV2007_LANGUAGE_LGL . 'usergroups', '--div--')
 				),
-				'foreign_table' => 'fe_groups'
+				'foreign_table' => 'fe_groups',
+				'default' => 0
 			)
 		),
 		'prod_uid' => array (
@@ -148,6 +150,7 @@ $result = array (
 				'size' => 1,
 				'minitems' => 0,
 				'maxitems' => 1,
+				'default' => 0
 			),
 		),
 		'title' => array (
@@ -157,7 +160,7 @@ $result = array (
 				'type' => 'input',
 				'size' => '40',
 				'max' => '256',
-				'default' => ' ',
+				'default' => ''
 			),
 			'l10n_mode' => 'prefixLangTitle',
 		),
@@ -170,7 +173,7 @@ $result = array (
 				'cols' => '20',
 				'max' => '512',
 				'eval' => 'null',
-				'default' => NULL,
+				'default' => ''
 			),
 			'l10n_mode' => 'prefixLangTitle',
 		),
@@ -183,7 +186,7 @@ $result = array (
 				'cols' => '20',
 				'max' => '512',
 				'eval' => 'null',
-				'default' => NULL,
+				'default' => ''
 			)
 		),
 		'itemnumber' => array (
@@ -193,7 +196,8 @@ $result = array (
 				'type' => 'input',
 				'size' => '40',
 				'eval' => 'trim',
-				'max' => '120'
+				'max' => '120',
+				'default' => ''
 			)
 		),
 		'unit' => array (
@@ -202,7 +206,8 @@ $result = array (
 				'type' => 'input',
 				'size' => '20',
 				'eval' => 'trim',
-				'max' => '20'
+				'max' => '20',
+				'default' => ''
 			)
 		),
 		'note' => array (
@@ -211,7 +216,7 @@ $result = array (
 				'type' => 'text',
 				'cols' => '48',
 				'rows' => '5',
-				'default' => NULL,
+				'default' => ''
 			),
 			'l10n_mode' => 'prefixLangTitle',
 		),
@@ -221,7 +226,7 @@ $result = array (
 				'type' => 'text',
 				'cols' => '48',
 				'rows' => '2',
-				'default' => NULL,
+				'default' => ''
 			),
 			'l10n_mode' => 'prefixLangTitle',
 		),
@@ -238,7 +243,7 @@ $result = array (
 				'maxitems' => '20',
 				'minitems' => '0',
 				'eval' => 'null',
-				'default' => NULL,
+				'default' => ''
 			)
 		),
 		'www' => array (
@@ -248,7 +253,8 @@ $result = array (
 				'type' => 'input',
 				'eval' => 'trim',
 				'size' => '30',
-				'max' => '160'
+				'max' => '160',
+				'default' => ''
 			),
 			'l10n_mode' => 'prefixLangTitle',
 		),
@@ -265,7 +271,7 @@ $result = array (
 				'maxitems' => '10',
 				'minitems' => '0',
 				'eval' => 'null',
-				'default' => NULL,
+				'default' => ''
 			)
 		),
 		'smallimage' => Array (
@@ -281,7 +287,7 @@ $result = array (
 				'maxitems' => '10',
 				'minitems' => '0',
 				'eval' => 'null',
-				'default' => NULL,
+				'default' => ''
 			)
 		),
 	),
@@ -302,14 +308,12 @@ $result = array (
                 ),
                 'showitem' => 'sys_language_uid, l18n_diffsource, hidden,--palette--;;1, prod_uid,title,--palette--;;2, unit, note, note2, image, smallimage, datasheet'
             )
-	),
-	'palettes' => array (
-		'1' => array('showitem' => 'starttime,endtime,fe_group'),
-		'2' => array('showitem' => 'subtitle, keyword, itemnumber, www'),
-	)
+    ),
+    'palettes' => array (
+        '1' => array('showitem' => 'starttime,endtime,fe_group'),
+        '2' => array('showitem' => 'subtitle, keyword, itemnumber, www'),
+    )
 );
-
-
 
 if (
     version_compare(TYPO3_version, '8.5.0', '<')
@@ -326,7 +330,6 @@ if (
             $result['types']['1']['showitem']
         );
 }
-
 
 return $result;
 

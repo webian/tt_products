@@ -127,7 +127,7 @@ class tx_ttproducts_field_price extends tx_ttproducts_field_base {
 	}
 
 
-	public function setTaxIncluded ($bTaxIncluded=TRUE)	{
+	public function setTaxIncluded ($bTaxIncluded=true)	{
 		$this->bTaxIncluded = $bTaxIncluded;
 	}
 
@@ -183,14 +183,12 @@ class tx_ttproducts_field_price extends tx_ttproducts_field_base {
 	 * This function reads the TypoScript configuration to see whether prices in the database
 	 * are entered with or without tax. That's why this function is needed.
 	 */
-	public function getPrice ($basketExtra, $price, $tax, $row, $bTaxIncluded=FALSE, $bEnableTaxZero=FALSE)	{
-		global $TSFE;
-
+	public function getPrice ($basketExtra, $price, $tax, $row, $bTaxIncluded=false, $bEnableTaxZero=false)	{
 		$rc = 0;
 		$taxObj = t3lib_div::makeInstance('tx_ttproducts_field_tax');
 
 		$bTax = ($tax==1);
-		$price = $this->toNumber(TRUE, $price);
+		$price = $this->toNumber(true, $price);
 
 		if (isset($row['tax']) && strlen($row['tax'])) {
 			$taxpercentage = $row['tax'];
@@ -344,10 +342,10 @@ class tx_ttproducts_field_price extends tx_ttproducts_field_base {
 			}
 			$priceArray['0tax'] = $price0tax;
 			$priceArray['0notax'] = $this->getResellerPrice($basketExtra, $row, 0, 0);
-			$priceArray['unotax'] = $this->getPrice($basketExtra, ($internalRow['unit_factor'] > 0 ? ($priceArray['notax'] / $row['unit_factor']) : 0), FALSE, $row, FALSE);
-			$priceArray['utax'] = $this->getPrice($basketExtra, $priceArray['unotax'], TRUE, $row, FALSE);;
-			$priceArray['wnotax'] = $this->getPrice($basketExtra, ($row['weight'] > 0 ? ($priceArray['notax'] / $internalRow['weight']) : 0), FALSE, $row, FALSE);
-			$priceArray['wtax'] = $this->getPrice($basketExtra, $priceArray['wnotax'], TRUE, $row, FALSE);
+			$priceArray['unotax'] = $this->getPrice($basketExtra, ($internalRow['unit_factor'] > 0 ? ($priceArray['notax'] / $row['unit_factor']) : 0), false, $row, false);
+			$priceArray['utax'] = $this->getPrice($basketExtra, $priceArray['unotax'], true, $row, false);;
+			$priceArray['wnotax'] = $this->getPrice($basketExtra, ($row['weight'] > 0 ? ($priceArray['notax'] / $internalRow['weight']) : 0), false, $row, false);
+			$priceArray['wtax'] = $this->getPrice($basketExtra, $priceArray['wnotax'], true, $row, false);
 
 			self::getSkonto(
 				$price0tax,

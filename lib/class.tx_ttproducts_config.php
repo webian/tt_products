@@ -40,7 +40,7 @@
 class tx_ttproducts_config implements t3lib_Singleton {
 	public $conf;
 	public $config;
-	private $bHasBeenInitialised = FALSE;
+	private $bHasBeenInitialised = false;
 
 
 	/**
@@ -49,7 +49,7 @@ class tx_ttproducts_config implements t3lib_Singleton {
 	public function init (&$conf, &$config) {
 		$this->conf = &$conf;
 		$this->config = &$config;
-		$this->bHasBeenInitialised = TRUE;
+		$this->bHasBeenInitialised = true;
 	} // init
 
 
@@ -201,9 +201,7 @@ class tx_ttproducts_config implements t3lib_Singleton {
 
 
 	public function getFallback ($tableConf) {
-		global $TSFE;
-
-		$result = FALSE;
+		$result = false;
 		if (
 			isset($tableConf) &&
 			is_array($tableConf) &&
@@ -211,7 +209,7 @@ class tx_ttproducts_config implements t3lib_Singleton {
 			$tableConf['language.']['type'] == 'table' &&
 			$tableConf['language.']['mode'] == 'fallback'
 		) {
-			$result = TRUE;
+			$result = true;
 		}
 
 		return $result;
@@ -310,7 +308,6 @@ class tx_ttproducts_config implements t3lib_Singleton {
 
 
 	public function mergeAJAX ($ajaxconf)	{
-		global $TYPO3_DB;
 	}
 }
 

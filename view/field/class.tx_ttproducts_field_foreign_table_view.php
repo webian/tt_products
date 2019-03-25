@@ -55,25 +55,22 @@ class tx_ttproducts_field_foreign_table_view extends tx_ttproducts_field_base_vi
 		$basketExtra = array(),
 		$id = '1'
 	) {
-		global $TCA;
-
 		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
-		$itemTableObj = $tablesObj->get($functablename, FALSE);
+		$itemTableObj = $tablesObj->get($functablename, false);
 		$tablename = $itemTableObj->getTablename();
 	}
 
 
 	public function getRowMarkerArray ($functablename, $fieldname, $row, $markerKey, &$markerArray, $tagArray, $theCode, $id, $basketExtra, &$bSkip, $bHtml=true, $charset='', $prefix='', $suffix='', $imageRenderObj='')	{
-		global $TCA;
-
 		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
-		$itemTableObj = $tablesObj->get($functablename, FALSE);
+		$itemTableObj = $tablesObj->get($functablename, false);
 		$tablename = $itemTableObj->getTablename();
 		$foreigntablename = '';
 		$rowMarkerArray = array();
-		if ($TCA[$tablename]['columns'][$fieldname]['config']['type'] == 'group')	{
-			$foreigntablename = $TCA[$tablename]['columns'][$fieldname]['config']['allowed'];
-			$foreignTableViewObj = $tablesObj->get($foreigntablename,TRUE);
+
+		if ($GLOBALS['TCA'][$tablename]['columns'][$fieldname]['config']['type'] == 'group')	{
+			$foreigntablename = $GLOBALS['TCA'][$tablename]['columns'][$fieldname]['config']['allowed'];
+			$foreignTableViewObj = $tablesObj->get($foreigntablename,true);
 			if (!$row[$fieldname])	{
 				$foreignMarker = $foreignTableViewObj->getMarker();
 
@@ -86,10 +83,10 @@ class tx_ttproducts_field_foreign_table_view extends tx_ttproducts_field_base_vi
 		}
 
 		if ($foreigntablename != '' && $row[$fieldname] > 0)	{
-/*			$tableClass = $tablesObj->getTableClass ($foreigntablename, TRUE);
+/*			$tableClass = $tablesObj->getTableClass ($foreigntablename, true);
 			$foreignTableViewObj = t3lib_div::makeInstance(''.$tableClass);*/
 			$foreignTableObj = $foreignTableViewObj->getModelObj();
-			if ($TCA[$tablename]['columns'][$fieldname]['config']['internal_type'] == 'db')	{
+			if ($GLOBALS['TCA'][$tablename]['columns'][$fieldname]['config']['internal_type'] == 'db')	{
 				$foreignRow = $foreignTableObj->get($row[$fieldname]);
 				$foreignTableViewObj->getRowMarkerArray (
 					$foreignRow,

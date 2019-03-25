@@ -52,8 +52,6 @@ class tx_ttproducts_tracking implements t3lib_Singleton {
 	 * @return	  void
 	 */
 	function init ($cObj) {
-		global $TSFE;
-
 		$this->cObj = $cObj;
 		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
@@ -118,15 +116,15 @@ class tx_ttproducts_tracking implements t3lib_Singleton {
 
 	/* search the order status for paid and closed */
 	function searchOrderStatus ($status_log,&$orderPaid, &$orderClosed) {
-		$orderPaid = FALSE;
-		$orderClosed = FALSE;
+		$orderPaid = false;
+		$orderClosed = false;
 		if (isset($status_log) && is_array($status_log)) {
 			foreach($status_log as $key=>$val) {
 				if ($val['status'] == 13) {// Numbers 13 means order has been payed
-					$orderPaid = TRUE;
+					$orderPaid = true;
 				}
 				if ($val['status'] >= 100) {// Numbers 13 means order has been payed
-					$orderClosed = TRUE;
+					$orderClosed = true;
 					break;
 				}
 			}
@@ -165,8 +163,6 @@ class tx_ttproducts_tracking implements t3lib_Singleton {
 		All status values can be altered only if you're logged in as a BE-user and if you know the correct code (setup as .update_code in TypoScript config)
 	*/
 	function getTrackingInformation ($orderRow, $templateCode, $trackingCode, $updateCode, &$orderRecord, $admin) {
-		global $TSFE, $TYPO3_DB;
-
 		$bUseXHTML = $GLOBALS['TSFE']->config['config']['xhtmlDoctype'] != '';
 
 		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
@@ -183,7 +179,7 @@ class tx_ttproducts_tracking implements t3lib_Singleton {
 
 		$allowUpdateFields = array('email', 'email_notify', 'status', 'status_log');
 		$newData = $pibaseObj->piVars['data'];
-		$bStatusValid = FALSE;
+		$bStatusValid = false;
 
 		if (isset($orderRow) && is_array($orderRow) && $orderRow['uid']) {
 			$statusCodeArray = $this->getStatusCodeArray();
@@ -206,7 +202,7 @@ class tx_ttproducts_tracking implements t3lib_Singleton {
 			}
 
 			if (is_array($orderRecord['status']) && isset($statusCodeArray) && is_array($statusCodeArray)) {
-				$bStatusValid = TRUE;
+				$bStatusValid = true;
 				$status_log = unserialize($orderRow['status_log']);
 				$update=0;
 				$count=0;
@@ -214,7 +210,7 @@ class tx_ttproducts_tracking implements t3lib_Singleton {
 
 					if (!isset($statusCodeArray[$val])) {
 
-						$bStatusValid = FALSE;
+						$bStatusValid = false;
 						break;
 					}
 
@@ -280,7 +276,7 @@ class tx_ttproducts_tracking implements t3lib_Singleton {
 							$recipient .= ','.$orderRow['email'];
 						}
 						$templateMarker = 'TRACKING_EMAILNOTIFY_TEMPLATE';
-						$feusersObj = $tablesObj->get('fe_users', TRUE);
+						$feusersObj = $tablesObj->get('fe_users', true);
 						tx_ttproducts_email_div::sendNotifyEmail(
 							$this->cObj,
 							$this->conf,
@@ -300,8 +296,8 @@ class tx_ttproducts_tracking implements t3lib_Singleton {
 					} else if ($val>=60 && $val<69) { //  60 -69 are special messages
 						$templateMarker = 'TRACKING_EMAIL_GIFTNOTIFY_TEMPLATE';
 						$query = 'ordernumber=\''.intval($orderRow['uid']).'\'';
-						$giftRes = $TYPO3_DB->exec_SELECTquery('*', 'tt_products_gifts', $query);
-						while ($giftRow = $TYPO3_DB->sql_fetch_assoc($giftRes)) {
+						$giftRes = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tt_products_gifts', $query);
+						while ($giftRow = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($giftRes)) {
 							$recipient = $giftRow['deliveryemail'].','.$giftRow['personemail'];
 							tx_ttproducts_email_div::sendGiftEmail(
 								$this->cObj,
@@ -316,7 +312,7 @@ class tx_ttproducts_tracking implements t3lib_Singleton {
 						}
 						$status_log[] = $status_log_element;
 						$update=1;
-						$TYPO3_DB->sql_free_result($giftRes);
+						$GLOBALS['TYPO3_DB']->sql_free_result($giftRes);
 					}
 					$count++;
 				}
@@ -333,15 +329,15 @@ class tx_ttproducts_tracking implements t3lib_Singleton {
 
 				if (count($fieldsArray)) {
 					$fieldsArray['tstamp'] = time();
-					$TYPO3_DB->exec_UPDATEquery('sys_products_orders', 'uid='.intval($orderRow['uid']), $fieldsArray);
+					$GLOBALS['TYPO3_DB']->exec_UPDATEquery('sys_products_orders', 'uid='.intval($orderRow['uid']), $fieldsArray);
 					$orderRow = $orderObj->getRecord($orderRow['uid']);
 				}
 			}
 			$status_log = unserialize($orderRow['status_log']);
 			$orderData = unserialize($orderRow['orderData']);
 
-			if ($orderData === FALSE) {
-				$orderData = tx_div2007_alpha5::unserialize_fh002($orderRow['orderData'],FALSE);
+			if ($orderData === false) {
+				$orderData = tx_div2007_alpha5::unserialize_fh002($orderRow['orderData'],false);
 			}
 		}
 
@@ -384,7 +380,7 @@ class tx_ttproducts_tracking implements t3lib_Singleton {
 		$subpartArray['###STATUS_ITEM###']=$STATUS_ITEM_c;
 
 			// Display admin-interface if access.
-		if (!$TSFE->beUserLogin) {
+		if (!$GLOBALS['TSFE']->beUserLogin) {
 			$subpartArray['###ADMIN_CONTROL###']='';
 		} elseif ($admin) {
 			$subpartArray['###ADMIN_CONTROL_DENY###']='';
@@ -396,7 +392,7 @@ class tx_ttproducts_tracking implements t3lib_Singleton {
 			$wrappedSubpartArray['###ADMIN_CONTROL###']='';
 		}
 		$markerFieldArray = array();
-		$orderView = $tablesObj->get('sys_products_orders', TRUE);
+		$orderView = $tablesObj->get('sys_products_orders', true);
 		$orderObj = $orderView->getModelObj();
 		$orderMarkerArray = $globalMarkerArray;
 		$viewTagArray = array();
@@ -465,19 +461,19 @@ class tx_ttproducts_tracking implements t3lib_Singleton {
 				}
 			}
 
-			$bUseHistoryMarkers = (strpos($orderBy, 'crdate') !== FALSE);
-			$bInverseHistory = (strpos($orderBy, 'crdate desc') !== FALSE);
+			$bUseHistoryMarkers = (strpos($orderBy, 'crdate') !== false);
+			$bInverseHistory = (strpos($orderBy, 'crdate desc') !== false);
 
 			if ($bInverseHistory)	{
 				$orderBy = 'crdate'; // Todo: all order by fields must be reversed to keep the history program logic
 			}
 
 				// Get unprocessed orders.
-			$res = $TYPO3_DB->exec_SELECTquery($fields, 'sys_products_orders', $where . $this->cObj->enableFields('sys_products_orders'), '', $orderBy);
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields, 'sys_products_orders', $where . $this->cObj->enableFields('sys_products_orders'), '', $orderBy);
 
 			$valueArray = array();
 			$keyMarkerArray = array();
-			while(($row = $TYPO3_DB->sql_fetch_assoc($res))) {
+			while(($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))) {
 				$tmpStatuslog = unserialize($row['status_log']);
 				$classPrefix = str_replace('_','-',$pibaseObj->prefixId);
 				$this->searchOrderStatus($tmpStatuslog, $tmpPaid, $tmpClosed);
@@ -542,7 +538,7 @@ class tx_ttproducts_tracking implements t3lib_Singleton {
 					$keyMarkerArray[$row['tracking_code']] = $fieldMarkerArray;
 				}
 			}
-			$TYPO3_DB->sql_free_result($res);
+			$GLOBALS['TYPO3_DB']->sql_free_result($res);
 
 			if (!$oldMode) {
 // checks if t3jquery is loaded
@@ -550,7 +546,7 @@ class tx_ttproducts_tracking implements t3lib_Singleton {
 					require_once(t3lib_extMgm::extPath('t3jquery').'class.tx_t3jquery.php');
 				}
 				// if t3jquery is loaded and the custom Library had been created
-				if (T3JQUERY === TRUE) {
+				if (T3JQUERY === true) {
 					tx_t3jquery::addJqJS();
 				} else if ($this->conf['pathToJquery'] != '')	{
 				// if none of the previous is true, you need to include your own library
@@ -577,8 +573,8 @@ class tx_ttproducts_tracking implements t3lib_Singleton {
 					$valueArray,
 					'tracking',
 					$orderRow['tracking_code'],
-					FALSE,
-					FALSE,
+					false,
+					false,
 					array(),
 					$type,
 					array(),
@@ -610,15 +606,15 @@ class tx_ttproducts_tracking implements t3lib_Singleton {
 
 			if ($orderRow['ac_uid']) {
 				// get bank account info
-				$accountViewObj = $tablesObj->get('sys_products_accounts', TRUE, FALSE);
-				$accountObj = $tablesObj->get('sys_products_accounts', FALSE, FALSE);
+				$accountViewObj = $tablesObj->get('sys_products_accounts', true, false);
+				$accountObj = $tablesObj->get('sys_products_accounts', false, false);
 				$accountRow = $accountObj->getRow($orderRow['ac_uid']);
-				$accountViewObj->getMarkerArray($accountRow, $globalMarkerArray, TRUE);
+				$accountViewObj->getMarkerArray($accountRow, $globalMarkerArray, true);
 			}
 
 			if ($orderRow['cc_uid']) {
-				$cardViewObj = $tablesObj->get('sys_products_cards', TRUE, FALSE);
-				$cardObj = $tablesObj->get('sys_products_cards', FALSE, FALSE);
+				$cardViewObj = $tablesObj->get('sys_products_cards', true, false);
+				$cardObj = $tablesObj->get('sys_products_cards', false, false);
 				$cardRow = $cardObj->getRow($orderRow['cc_uid']);
 				$cardViewObj->setCObj($this->cObj);
 				$cardViewObj->setConf($this->conf);
@@ -632,10 +628,10 @@ class tx_ttproducts_tracking implements t3lib_Singleton {
 					$templateCode,
 					'TRACKING',
 					$infoViewObj,
-					FALSE,
-					FALSE,
+					false,
+					false,
 					$calculatedArray,
-					TRUE,
+					true,
 					'TRACKING_TEMPLATE',
 					$globalMarkerArray,
 					'',

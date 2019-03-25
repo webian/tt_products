@@ -100,8 +100,6 @@ class tx_ttproducts_main implements t3lib_Singleton {
 	 * @return	  bool		if true processing should be done
 	 */
 	public function init (&$content, &$conf, &$config, $pibaseClass, &$error_code, $bRunAjax = false) {
-		global $TSFE, $TCA;
-
 		$rc = true;
 		$this->setSingleFromList(false);
 		$cacheObj = t3lib_div::makeInstance('tx_ttproducts_cache');
@@ -222,7 +220,7 @@ class tx_ttproducts_main implements t3lib_Singleton {
 		$backPID = ($backPID ? $backPID : t3lib_div::_GP('backPID'));
 
 		// page where to go usually
-		$this->pid = ($this->conf['PIDbasket'] && $this->conf['clickIntoBasket'] ? $this->conf['PIDbasket'] : ($backPID ? $backPID : $TSFE->id));
+		$this->pid = ($this->conf['PIDbasket'] && $this->conf['clickIntoBasket'] ? $this->conf['PIDbasket'] : ($backPID ? $backPID : $GLOBALS['TSFE']->id));
 
 		if ($this->conf['TAXmode'] == '' ||  $this->conf['TAXmode'] == '{$plugin.tt_products.TAXmode}')	{
 			$this->conf['TAXmode'] = 1;
@@ -246,7 +244,7 @@ class tx_ttproducts_main implements t3lib_Singleton {
 		if ($this->conf['PIDstoreRoot'])	{
 			$config['storeRootPid'] = $this->conf['PIDstoreRoot'];
 		} else {
-			foreach ($TSFE->tmpl->rootLine as $k => $row)	{
+			foreach ($GLOBALS['TSFE']->tmpl->rootLine as $k => $row)	{
 				if ($row['doktype'] == 1)	{
 					$config['storeRootPid'] = $row['uid'];
 					break;
@@ -381,8 +379,6 @@ class tx_ttproducts_main implements t3lib_Singleton {
 
 
 	public function &run ($pibaseClass, &$error_code, $content = '', $bRunAjax = false) {
-		global $TSFE;
-
 		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$conf = $cnf->getConf();
 		$config = $cnf->getConfig();
@@ -866,7 +862,7 @@ class tx_ttproducts_main implements t3lib_Singleton {
             ) &&
             !$GLOBALS['TYPO3_CONF_VARS']['FE']['enableRecordRegistration']
         ) {
-            $rc .= '<h>Error: $GLOBALS[\'TYPO3_CONF_VARS\'][\'FE\'][\'enableRecordRegistration\'] must be set to TRUE.</h>';
+            $rc .= '<h>Error: $GLOBALS[\'TYPO3_CONF_VARS\'][\'FE\'][\'enableRecordRegistration\'] must be set to true.</h>';
         }
 
 		$this->destruct();
@@ -925,8 +921,6 @@ class tx_ttproducts_main implements t3lib_Singleton {
 	 * @see enableFields()
 	 */
 	public function products_tracking (&$errorCode, &$templateCode, $theCode, $conf)	{ // t3lib_div::_GP('tracking')
-		global $TSFE;
-
 		$pibaseObj = t3lib_div::makeInstance('tx_ttproducts_pi1_base');
 		$urlObj = t3lib_div::makeInstance('tx_ttproducts_url_view');
 		$updateCode = '';
@@ -993,13 +987,13 @@ class tx_ttproducts_main implements t3lib_Singleton {
 				return '';
 			}
 
-			if (!$TSFE->beUserLogin)	{
+			if (!$GLOBALS['TSFE']->beUserLogin)	{
 				$content = $this->cObj->substituteSubpart($content,'###ADMIN_CONTROL###','');
 			}
 		}
 
 		$markerArray = $globalMarkerArray;
-		$markerArray['###FORM_URL###'] = $pibaseObj->pi_getPageLink($TSFE->id,'',$urlObj->getLinkParams('',array(),true)) ;
+		$markerArray['###FORM_URL###'] = $pibaseObj->pi_getPageLink($GLOBALS['TSFE']->id,'',$urlObj->getLinkParams('',array(),true)) ;
 		$content = $this->cObj->substituteMarkerArray($content, $markerArray);
 		return $content;
 	}  // products_tracking
@@ -1019,8 +1013,6 @@ class tx_ttproducts_main implements t3lib_Singleton {
 	 * Displaying single products/ the products list / searching
 	 */
 	public function products_display ($templateCode, $theCode, &$errorMessage, &$error_code)	{
-		global $TSFE;
-
 		$pibaseObj = t3lib_div::makeInstance('tx_ttproducts_pi1_base');
 		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 		$conf = $cnf->getConf();
@@ -1087,7 +1079,7 @@ class tx_ttproducts_main implements t3lib_Singleton {
 			$content .= $ctrlContent;
 		} else {
 	// page where to go usually
-			$pid = ($conf['PIDbasket'] && $conf['clickIntoBasket'] ? $conf['PIDbasket'] : $TSFE->id);
+			$pid = ($conf['PIDbasket'] && $conf['clickIntoBasket'] ? $conf['PIDbasket'] : $GLOBALS['TSFE']->id);
 
 			// List all products:
 			$listView = t3lib_div::makeInstance('tx_ttproducts_list_view');

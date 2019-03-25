@@ -1,8 +1,5 @@
 <?php
-
-if (!defined ('TYPO3_MODE')) {
-	die ('Access denied.');
-}
+defined('TYPO3_MODE') || die('Access denied.');
 
 $table = 'tt_products_cat';
 
@@ -18,6 +15,7 @@ if (
 }
 
 $orderBySortingTablesArray = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['orderBySortingTables']);
+
 if (
     !empty($orderBySortingTablesArray) &&
     in_array($table, $orderBySortingTablesArray)

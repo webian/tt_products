@@ -44,7 +44,7 @@ class tx_ttproducts_menucat_view extends tx_ttproducts_catlist_view_base {
 	var $htmlTagElement = 'li'; // HTML tag element
 
 	// returns the products list view
-	function &printView(
+	function printView(
 		$functablename,
 		&$templateCode,
 		$theCode,
@@ -53,8 +53,6 @@ class tx_ttproducts_menucat_view extends tx_ttproducts_catlist_view_base {
 		$pageAsCategory,
 		$templateSuffix = ''
 	) {
-		global $TSFE, $TCA;
-
 		$t = array();
 		$ctrlArray = array();
 		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
@@ -80,7 +78,7 @@ class tx_ttproducts_menucat_view extends tx_ttproducts_catlist_view_base {
 		if (!count($error_code))	{
 			$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
 			$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
-			$categoryTableViewObj = $tablesObj->get($functablename,TRUE);
+			$categoryTableViewObj = $tablesObj->get($functablename,true);
 			$categoryTable = $categoryTableViewObj->getModelObj();
 			$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
 
@@ -170,7 +168,7 @@ class tx_ttproducts_menucat_view extends tx_ttproducts_catlist_view_base {
 
 					// $out .= str_replace('###LIST_LINK###', $linkOut, $t['linkCategoryFrameWork']);
 					if (is_array($subCategories)	&&
-						(!$catConf['onlyChildsOfCurrent'] || $isParentArray[$actCategory] == TRUE))	{
+						(!$catConf['onlyChildsOfCurrent'] || $isParentArray[$actCategory] == true))	{
 						$depth++;
 						$preOut = '<' . $this->htmlTagMain . ' ' . $css . ' >';
 						$countArray[(int) $depth] = 0;

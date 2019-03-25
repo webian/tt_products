@@ -196,13 +196,11 @@ class tx_ttproducts_tables implements t3lib_Singleton	{
 	 *
 	 */
 	public function getForeignTableInfo ($functablename,$fieldname)	{
-		global $TCA, $TYPO3_DB;
-
 		$rc = array();
 		if ($fieldname != '')	{
 			$tableObj = $this->get($functablename,false);
-			$tablename = $tableObj->getTableName ($functablename);
-			$rc = tx_div2007_alpha5::getForeignTableInfo_fh003 ($tablename,$fieldname);
+			$tablename = $tableObj->getTableName($functablename);
+			$rc = tx_div2007_alpha5::getForeignTableInfo_fh003($tablename, $fieldname);
 		}
 		return $rc;
 	}

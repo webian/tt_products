@@ -51,8 +51,6 @@ class tx_ttproducts_basketitem implements t3lib_Singleton {
 		&$item,
 		$overwriteAmount=''
 	)	{
-		global $TCA, $TSFE;
-
 		$rc = $item['count'];
 		if (
 			$overwriteAmount != 'basket' &&
@@ -75,12 +73,10 @@ class tx_ttproducts_basketitem implements t3lib_Singleton {
 	function getMinQuantity (
 		&$item
 	)	{
-		global $TCA, $TSFE;
-
 		$row = $item['rec'];
 		$rc = $row['basketminquantity'];
 		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
-		$prodTable = $tablesObj->get('tt_products', FALSE);
+		$prodTable = $tablesObj->get('tt_products', false);
 		$articleRow = $prodTable->getArticleRowFromExt($row);
 
 		if (is_array($articleRow) && count($articleRow))	{

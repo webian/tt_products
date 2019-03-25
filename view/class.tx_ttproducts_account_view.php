@@ -53,7 +53,6 @@ class tx_ttproducts_account_view extends tx_ttproducts_table_base_view {
 	 * @access private
 	 */
 	function getMarkerArray ($row, &$markerArray, $bIsAllowed)	{
-		global $TCA;
 
 		if ($bIsAllowed)	{
 			$acNumber = $row['ac_number'];

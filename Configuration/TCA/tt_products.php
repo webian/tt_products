@@ -1,7 +1,5 @@
 <?php
-if (!defined ('TYPO3_MODE')) {
-	die ('Access denied.');
-}
+defined('TYPO3_MODE') || die('Access denied.');
 
 $whereCategory = '';
 
@@ -17,7 +15,6 @@ $imageFolder = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['imageFol
 if (!$imageFolder) {
 	$imageFolder = 'uploads/pics';
 }
-
 
 $result = array(
 	'ctrl' => array(
@@ -53,18 +50,21 @@ $result = array(
 				'type' => 'input',
 				'size' => '30',
 				'max'  => '30',
+                'default' => ''
 			)
 		),
 		'sorting' => Array (
 			'config' => Array (
 				'type' => 'passthrough',
+				'default' => 0
 			)
 		),
 		'hidden' => array (
 			'exclude' => 1,
 			'label' => DIV2007_LANGUAGE_LGL . 'hidden',
 			'config' => array (
-				'type' => 'check'
+				'type' => 'check',
+				'default' => 0
 			)
 		),
 		'tstamp' => array (
@@ -75,7 +75,7 @@ $result = array(
 				'size' => '8',
 				'eval' => 'date',
                 'renderType' => 'inputDateTime',
-				'default' => '0'
+				'default' => 0
 			)
 		),
 		'crdate' => array (
@@ -86,7 +86,7 @@ $result = array(
 				'size' => '8',
 				'eval' => 'date',
                 'renderType' => 'inputDateTime',
-				'default' => '0'
+				'default' => 0
 			)
 		),
 		'starttime' => array (
@@ -97,7 +97,7 @@ $result = array(
 				'size' => '8',
 				'eval' => 'date',
                 'renderType' => 'inputDateTime',
-				'default' => '0'
+				'default' => 0
 			)
 		),
 		'endtime' => array (
@@ -108,7 +108,7 @@ $result = array(
 				'size' => '8',
 				'eval' => 'date',
                 'renderType' => 'inputDateTime',
-				'default' => '0',
+				'default' => 0,
 				'range' => array (
 					'upper' => mktime(0, 0, 0, 12, 31, $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['endtimeYear']),
 					'lower' => mktime(0, 0, 0, date('n') - 1, date('d'), date('Y'))
@@ -127,7 +127,8 @@ $result = array(
 					array(DIV2007_LANGUAGE_LGL . 'any_login', -2),
 					array(DIV2007_LANGUAGE_LGL . 'usergroups', '--div--')
 				),
-				'foreign_table' => 'fe_groups'
+				'foreign_table' => 'fe_groups',
+				'default' => 0
 			)
 		),
 		'title' => array (
@@ -137,7 +138,7 @@ $result = array(
 				'type' => 'input',
 				'size' => '40',
 				'max' => '256',
-				'default' => ' ',
+				'default' => '',
 			)
 		),
 		'subtitle' => array (
@@ -148,7 +149,7 @@ $result = array(
 				'rows' => '3',
 				'cols' => '20',
 				'max' => '512',
-				'default' => NULL,
+				'default' => '',
 			)
 		),
 		'keyword' => array (
@@ -160,7 +161,7 @@ $result = array(
 				'cols' => '20',
 				'max' => '512',
 				'eval' => 'null',
-				'default' => NULL,
+				'default' => '',
 			)
 		),
 		'prod_uid' => array (
@@ -175,6 +176,7 @@ $result = array(
 				'size' => 3,
 				'minitems' => 0,
 				'maxitems' => 3,
+				'default' => 0
 			)
 		),
 		'itemnumber' => array (
@@ -184,7 +186,8 @@ $result = array(
 				'type' => 'input',
 				'size' => '40',
 				'eval' => 'trim',
-				'max' => '120'
+				'max' => '120',
+				'default' => ''
 			)
 		),
 		'ean' => array (
@@ -194,7 +197,8 @@ $result = array(
 				'type' => 'input',
 				'size' => '48',
 				'eval' => 'trim',
-				'max' => '48'
+				'max' => '48',
+				'default' => ''
 			)
 		),
 		'shipping_point' => array (
@@ -204,7 +208,8 @@ $result = array(
 				'type' => 'input',
 				'size' => '24',
 				'eval' => 'trim',
-				'max' => '24'
+				'max' => '24',
+				'default' => ''
 			)
 		),
 		'price' => array (
@@ -214,7 +219,8 @@ $result = array(
 				'type' => 'input',
 				'size' => '20',
 				'eval' => 'trim,double2',
-				'max' => '20'
+				'max' => '20',
+				'default' => 0
 			)
 		),
 		'price2' => array (
@@ -224,7 +230,8 @@ $result = array(
 				'type' => 'input',
 				'size' => '20',
 				'eval' => 'trim,double2',
-				'max' => '20'
+				'max' => '20',
+				'default' => 0
 			)
 		),
 		'discount' => array (
@@ -247,6 +254,7 @@ $result = array(
 			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.discount_disable',
 			'config' => array (
 				'type' => 'check',
+				'default' => 0
 			)
 		),
 		'tax' => array (
@@ -256,7 +264,8 @@ $result = array(
 				'type' => 'input',
 				'size' => '12',
 				'max' => '19',
-				'eval' => 'trim,double2'
+				'eval' => 'trim,double2',
+				'default' => 0
 			)
 		),
 		'creditpoints' => array (
@@ -266,7 +275,8 @@ $result = array(
 				'type' => 'input',
 				'size' => '12',
 				'eval' => 'int',
-				'max' => '12'
+				'max' => '12',
+				'default' => 0
 			)
 		),
 		'graduated_price_uid' => array (
@@ -274,14 +284,15 @@ $result = array(
 			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.graduated_price_uid',
 			'config' => array (
 				'type' => 'inline',
-				'appearance' => array ('collapseAll' => TRUE, 'newRecordLinkAddTitle' => TRUE, 'useCombination' => TRUE),
+				'appearance' => array ('collapseAll' => true, 'newRecordLinkAddTitle' => true, 'useCombination' => true),
 				'foreign_table' => 'tt_products_mm_graduated_price',
 				'foreign_field' => 'product_uid',
 				'foreign_sortby' => 'productsort',
 				'foreign_label' => 'graduated_price_uid',
 				'foreign_selector' => 'graduated_price_uid',
 				'foreign_unique' => 'graduated_price_uid',
-				'maxitems' => 10
+				'maxitems' => 10,
+				'default' => 0
 			),
 		),
 		'article_uid' => array (
@@ -289,14 +300,15 @@ $result = array(
 			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.article_uid',
 			'config' => array (
 				'type' => 'inline',
-				'appearance' => array ('collapseAll' => TRUE, 'newRecordLinkAddTitle' => TRUE, 'useCombination' => TRUE),
+				'appearance' => array ('collapseAll' => true, 'newRecordLinkAddTitle' => true, 'useCombination' => true),
 				'foreign_table' => 'tt_products_products_mm_articles',
 				'foreign_field' => 'uid_local',
 				'foreign_sortby' => 'sorting',
 				'foreign_label' => 'uid_foreign',
 				'foreign_selector' => 'uid_foreign',
 				'foreign_unique' => 'uid_foreign',
-				'maxitems' => 1000
+				'maxitems' => 1000,
+				'default' => 0
 			),
 		),
 		'note' => array (
@@ -306,7 +318,7 @@ $result = array(
 				'type' => 'text',
 				'cols' => '48',
 				'rows' => '5',
-				'default' => NULL,
+				'default' => '',
 			)
 		),
 		'note2' => array (
@@ -316,7 +328,7 @@ $result = array(
 				'type' => 'text',
 				'cols' => '48',
 				'rows' => '2',
-				'default' => NULL,
+				'default' => '',
 			)
 		),
 		'note_uid' => array (
@@ -332,6 +344,7 @@ $result = array(
 				'minitems' => '0',
 				'maxitems' => '30',
 				'show_thumbs' => '1',
+				'default' => 0
 			),
 		),
 		'text_uid' => array (
@@ -342,7 +355,8 @@ $result = array(
 				'foreign_table' => 'tt_products_texts',
 				'foreign_field' => 'parentid',
 				'foreign_table_field' => 'parenttable',
-				'maxitems' => 20
+				'maxitems' => 20,
+				'default' => 0
 			),
 		),
 		'unit_factor' => array (
@@ -363,7 +377,8 @@ $result = array(
 				'type' => 'input',
 				'size' => '20',
 				'eval' => 'trim',
-				'max' => '20'
+				'max' => '20',
+				'default' => ''
 			)
 		),
 		'www' => array (
@@ -373,7 +388,8 @@ $result = array(
 				'type' => 'input',
 				'eval' => 'trim',
 				'size' => '30',
-				'max' => '160'
+				'max' => '160',
+				'default' => ''
 			)
 		),
 		'category' => array (
@@ -386,7 +402,8 @@ $result = array(
 					array('', 0)
 				),
 				'foreign_table' => 'tt_products_cat',
-				'foreign_table_where' => $whereCategory
+				'foreign_table_where' => $whereCategory,
+				'default' => 0
 			)
 		),
 		'inStock' => array (
@@ -397,7 +414,7 @@ $result = array(
 				'size' => '6',
 				'max' => '6',
 				'eval' => 'int',
-				'default' => '1'
+				'default' => 1
 			)
 		),
 		'basketminquantity' => array (
@@ -407,7 +424,8 @@ $result = array(
 				'type' => 'input',
 				'size' => '10',
 				'eval' => 'trim,double2',
-				'max' => '10'
+				'max' => '10',
+				'default' => 0
 			)
 		),
 		'datasheet' => array (
@@ -424,7 +442,7 @@ $result = array(
 				'maxitems' => '20',
 				'minitems' => '0',
 				'eval' => 'null',
-				'default' => NULL,
+				'default' => ''
 			)
 		),
 		'weight' => array (
@@ -435,6 +453,7 @@ $result = array(
 				'size' => '10',
 				'max' => '20',
                 'eval' => 'trim,JambageCom\\Div2007\\Hooks\\Evaluation\\Double6',
+                'default' => 0
 			)
 		),
 		'usebydate' => array (
@@ -445,7 +464,7 @@ $result = array(
 				'size' => '8',
 				'eval' => 'date',
                 'renderType' => 'inputDateTime',
-				'default' => '0'
+				'default' => 0
 			)
 		),
 		'bulkily' => array (
@@ -453,6 +472,7 @@ $result = array(
 			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.bulkily',
 			'config' => array (
 				'type' => 'check',
+				'default' => 0
 			)
 		),
 		'offer' => array (
@@ -460,6 +480,7 @@ $result = array(
 			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.offer',
 			'config' => array (
 				'type' => 'check',
+				'default' => 0
 			)
 		),
 		'highlight' => array (
@@ -467,6 +488,7 @@ $result = array(
 			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.highlight',
 			'config' => array (
 				'type' => 'check',
+				'default' => 0
 			)
 		),
 		'bargain' => array (
@@ -474,6 +496,7 @@ $result = array(
 			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.bargain',
 			'config' => array (
 				'type' => 'check',
+				'default' => 0
 			)
 		),
 		'directcost' => array (
@@ -483,7 +506,8 @@ $result = array(
 				'type' => 'input',
 				'size' => '12',
 				'eval' => 'trim,double2',
-				'max' => '20'
+				'max' => '20',
+				'default' => 0
 			)
 		),
 		'accessory_uid' => array (
@@ -499,6 +523,7 @@ $result = array(
 				'size' => 10,
 				'minitems' => 0,
 				'maxitems' => 12,
+				'default' => 0
 			),
 		),
 		'related_uid' => array (
@@ -514,6 +539,7 @@ $result = array(
 				'size' => 10,
 				'minitems' => 0,
 				'maxitems' => 50,
+				'default' => 0
 			),
 		),
 		'color' => array (
@@ -524,7 +550,7 @@ $result = array(
 				'cols' => '46',
 				'rows' => '5',
 				'eval' => 'null',
-				'default' => NULL,
+				'default' => '',
 			)
 		),
 		'color2' => array (
@@ -535,7 +561,7 @@ $result = array(
 				'cols' => '46',
 				'rows' => '5',
 				'eval' => 'null',
-				'default' => NULL,
+				'default' => '',
 			)
 		),
 		'color3' => array (
@@ -546,7 +572,7 @@ $result = array(
 				'cols' => '46',
 				'rows' => '5',
 				'eval' => 'null',
-				'default' => NULL,
+				'default' => '',
 			)
 		),
 		'size' => array (
@@ -557,7 +583,7 @@ $result = array(
 				'cols' => '46',
 				'rows' => '5',
 				'eval' => 'null',
-				'default' => NULL,
+				'default' => '',
 			)
 		),
 		'size2' => array (
@@ -568,7 +594,7 @@ $result = array(
 				'cols' => '46',
 				'rows' => '5',
 				'eval' => 'null',
-				'default' => NULL,
+				'default' => '',
 			)
 		),
 		'size3' => array (
@@ -579,7 +605,7 @@ $result = array(
 				'cols' => '46',
 				'rows' => '5',
 				'eval' => 'null',
-				'default' => NULL,
+				'default' => '',
 			)
 		),
 		'description' => array (
@@ -590,7 +616,7 @@ $result = array(
 				'cols' => '46',
 				'rows' => '5',
 				'eval' => 'null',
-				'default' => NULL,
+				'default' => '',
 			)
 		),
 		'gradings' => array (
@@ -601,7 +627,7 @@ $result = array(
 				'cols' => '46',
 				'rows' => '5',
 				'eval' => 'null',
-				'default' => NULL,
+				'default' => '',
 			)
 		),
 		'material' => array (
@@ -612,7 +638,7 @@ $result = array(
 				'cols' => '46',
 				'rows' => '5',
 				'eval' => 'null',
-				'default' => NULL,
+				'default' => '',
 			)
 		),
 		'quality' => array (
@@ -623,7 +649,7 @@ $result = array(
 				'cols' => '46',
 				'rows' => '5',
 				'eval' => 'null',
-				'default' => NULL,
+				'default' => '',
 			)
 		),
 		'additional_type' => array (
@@ -713,7 +739,8 @@ $result = array(
 			'exclude' => 1,
 			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.special_preparation',
 			'config' => array (
-				'type' => 'check'
+				'type' => 'check',
+				'default' => 0
 			)
 		),
 		'image' => array (
@@ -728,7 +755,7 @@ $result = array(
 				'size' => '5',
 				'maxitems' => '30',
 				'minitems' => '0',
-				'default' => NULL,
+				'default' => '',
 			)
 		),
 		'smallimage' => Array (
@@ -744,7 +771,7 @@ $result = array(
 				'maxitems' => '30',
 				'minitems' => '0',
 				'eval' => 'null',
-				'default' => NULL,
+				'default' => '',
 			)
 		),
 		'shipping' => array (
@@ -755,6 +782,7 @@ $result = array(
 				'size' => '10',
 				'max' => '20',
 				'eval' => 'trim,double2',
+				'default' => 0
 			)
 		),
 		'shipping2' => array (
@@ -765,6 +793,7 @@ $result = array(
 				'size' => '10',
 				'max' => '20',
 				'eval' => 'trim,double2',
+				'default' => 0
 			)
 		),
 		'handling' => array (
@@ -775,6 +804,7 @@ $result = array(
 				'size' => '10',
 				'max' => '20',
 				'eval' => 'trim,double2',
+				'default' => 0
 			)
 		),
 		'delivery' => array (
@@ -792,6 +822,7 @@ $result = array(
 				'size' => '6',
 				'minitems' => 0,
 				'maxitems' => 1,
+				'default' => 0
 			)
 		),
 		'sellstarttime' => array (
@@ -802,7 +833,7 @@ $result = array(
 				'size' => '8',
 				'eval' => 'date',
                 'renderType' => 'inputDateTime',
-				'default' => '0'
+				'default' => 0
 			)
 		),
 		'sellendtime' => array (
@@ -813,7 +844,7 @@ $result = array(
 				'size' => '8',
 				'eval' => 'date',
                 'renderType' => 'inputDateTime',
-				'default' => '0',
+				'default' => 0,
 				'range' => array (
 					'upper' => mktime(0, 0, 0, 12, 31, 2300),
 					'lower' => mktime(0, 0, 0, date('n') - 1, date('d'), date('Y'))
@@ -869,7 +900,6 @@ $result = array(
 	)
 );
 
-
 if (
     version_compare(TYPO3_version, '8.5.0', '<')
 ) {
@@ -885,9 +915,6 @@ if (
             $result['types']['0']['showitem']
         );
 }
-
-
-
 
 return $result;
 

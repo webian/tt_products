@@ -57,8 +57,6 @@ class tx_ttproducts_page_view extends tx_ttproducts_category_base_view {
 	 * @access private
 	 */
 	function getMarkerArray (&$markerArray, $markerKey, $category, $pid, $imageNum=0, $imageRenderObj='image', &$viewCatTagArray, $forminfoArray=array(), $pageAsCategory=0, $theCode, $basketExtra, $id, $prefix,$linkWrap='')	{
-		global $TSFE;
-
 		$row = $this->modelObj->get($pid);
 		$imageObj = t3lib_div::makeInstance('tx_ttproducts_field_image_view');
 
@@ -69,7 +67,7 @@ class tx_ttproducts_page_view extends tx_ttproducts_category_base_view {
 		$this->setMarkerArrayCatTitle ($markerArray, $pageCatTitle, $prefix);
 		$markerArray['###'.$prefix.$this->marker.'_SUBTITLE###'] = htmlentities($row['subtitle'], ENT_QUOTES, 'UTF-8');
 
-		parent::getRowMarkerArray($row, $markerKey, $markerArray, $variantFieldArray, $variantMarkerArray, $viewCatTagArray, $theCode, $basketExtra, TRUE, '', $imageNum, $imageRenderObj, $id, $prefix);
+		parent::getRowMarkerArray($row, $markerKey, $markerArray, $variantFieldArray, $variantMarkerArray, $viewCatTagArray, $theCode, $basketExtra, true, '', $imageNum, $imageRenderObj, $id, $prefix);
 	}
 }
 

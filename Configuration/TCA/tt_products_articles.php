@@ -1,13 +1,10 @@
 <?php
-if (!defined ('TYPO3_MODE')) {
-	die ('Access denied.');
-}
+defined('TYPO3_MODE') || die('Access denied.');
 
 $imageFolder = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['imageFolder'];
 if (!$imageFolder) {
 	$imageFolder = 'uploads/pics';
 }
-
 
 // ******************************************************************
 // This is the standard TypoScript products article table, tt_products_articles
@@ -45,6 +42,7 @@ $result = array (
 				'type' => 'input',
 				'size' => '30',
 				'max'  => '30',
+				'default' => ''
 			)
 		),
 		'tstamp' => array (
@@ -55,7 +53,7 @@ $result = array (
 				'size' => '8',
 				'eval' => 'date',
                 'renderType' => 'inputDateTime',
-				'default' => '0'
+				'default' => 0
 			)
 		),
 		'crdate' => array (
@@ -66,12 +64,13 @@ $result = array (
 				'size' => '8',
 				'eval' => 'date',
                 'renderType' => 'inputDateTime',
-				'default' => '0'
+				'default' => 0
 			)
 		),
 		'sorting' => Array (
 			'config' => Array (
 				'type' => 'passthrough',
+				'default' => 0
 			)
 		),
 		'hidden' => array (
@@ -79,7 +78,7 @@ $result = array (
 			'label' => DIV2007_LANGUAGE_LGL . 'hidden',
 			'config' => array (
 				'type' => 'check',
-				'default' => '0'
+				'default' => 0
 			)
 		),
 		'starttime' => array (
@@ -90,7 +89,7 @@ $result = array (
 				'size' => '8',
 				'eval' => 'date',
                 'renderType' => 'inputDateTime',
-				'default' => '0'
+				'default' => 0
 			)
 		),
 		'endtime' => array (
@@ -101,7 +100,7 @@ $result = array (
 				'size' => '8',
 				'eval' => 'date',
                 'renderType' => 'inputDateTime',
-				'default' => '0',
+				'default' => 0,
 				'range' => array (
 					'upper' => mktime(0, 0, 0, 12, 31, $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['endtimeYear']),
 					'lower' => mktime(0, 0, 0, date('n') - 1, date('d'), date('Y'))
@@ -120,7 +119,8 @@ $result = array (
 					array(DIV2007_LANGUAGE_LGL . 'any_login', -2),
 					array(DIV2007_LANGUAGE_LGL . 'usergroups', '--div--')
 				),
-				'foreign_table' => 'fe_groups'
+				'foreign_table' => 'fe_groups',
+				'default' => 0
 			)
 		),
 		'title' => array (
@@ -131,6 +131,7 @@ $result = array (
 				'size' => '40',
 				'max' => '80',
 				'eval' => 'trim',
+				'default' => ''
 			)
 		),
 		'subtitle' => array (
@@ -140,7 +141,8 @@ $result = array (
 				'type' => 'text',
 				'rows' => '3',
 				'cols' => '20',
-				'max' => '512'
+				'max' => '512',
+				'default' => ''
 			)
 		),
 		'keyword' => array (
@@ -152,7 +154,7 @@ $result = array (
 				'cols' => '20',
 				'max' => '512',
 				'eval' => 'null',
-				'default' => NULL,
+				'default' => ''
 			)
 		),
 		'itemnumber' => array (
@@ -161,7 +163,8 @@ $result = array (
 				'type' => 'input',
 				'size' => '40',
 				'eval' => 'trim',
-				'max' => '120'
+				'max' => '120',
+				'default' => ''
 			)
 		),
 		'price' => array (
@@ -171,7 +174,8 @@ $result = array (
 				'type' => 'input',
 				'size' => '12',
 				'eval' => 'trim,double2',
-				'max' => '20'
+				'max' => '20',
+				'default' => 0
 			)
 		),
 		'price2' => array (
@@ -181,7 +185,8 @@ $result = array (
 				'type' => 'input',
 				'size' => '12',
 				'eval' => 'trim,double2',
-				'max' => '20'
+				'max' => '20',
+				'default' => 0
 			)
 		),
 		'note' => array (
@@ -190,7 +195,7 @@ $result = array (
 				'type' => 'text',
 				'cols' => '48',
 				'rows' => '5',
-				'default' => NULL,
+				'default' => ''
 			),
 			'l10n_mode' => 'prefixLangTitle',
 		),
@@ -200,7 +205,7 @@ $result = array (
 				'type' => 'text',
 				'cols' => '48',
 				'rows' => '5',
-				'default' => NULL,
+				'default' => ''
 			),
 			'l10n_mode' => 'prefixLangTitle',
 		),
@@ -212,7 +217,7 @@ $result = array (
 				'size' => '6',
 				'max' => '6',
 				'eval' => 'int',
-				'default' => '1'
+				'default' => 1
 			)
 		),
 		'basketminquantity' => array (
@@ -222,7 +227,8 @@ $result = array (
 				'type' => 'input',
 				'size' => '10',
 				'eval' => 'trim,double2',
-				'max' => '10'
+				'max' => '10',
+				'default' => 0
 			)
 		),
 		'weight' => array (
@@ -233,6 +239,7 @@ $result = array (
 				'size' => '10',
 				'max' => '20',
                 'eval' => 'trim,JambageCom\\Div2007\\Hooks\\Evaluation\\Double6',
+                'default' => 0
 			)
 		),
 		'color' => array (
@@ -244,7 +251,7 @@ $result = array (
 				'rows' => '5',
 				'default' => '',
 				'eval' => 'null',
-				'default' => NULL,
+				'default' => ''
 			)
 		),
 		'color2' => array (
@@ -255,7 +262,7 @@ $result = array (
 				'cols' => '46',
 				'rows' => '5',
 				'eval' => 'null',
-				'default' => NULL,
+				'default' => ''
 			)
 		),
 		'color3' => array (
@@ -266,7 +273,7 @@ $result = array (
 				'cols' => '46',
 				'rows' => '5',
 				'eval' => 'null',
-				'default' => NULL,
+				'default' => ''
 			)
 		),
 		'size' => array (
@@ -277,7 +284,7 @@ $result = array (
 				'cols' => '46',
 				'rows' => '5',
 				'eval' => 'null',
-				'default' => NULL,
+				'default' => ''
 			)
 		),
 		'size2' => array (
@@ -288,7 +295,7 @@ $result = array (
 				'cols' => '46',
 				'rows' => '5',
 				'eval' => 'null',
-				'default' => NULL,
+				'default' => ''
 			)
 		),
 		'size3' => array (
@@ -299,7 +306,7 @@ $result = array (
 				'cols' => '46',
 				'rows' => '5',
 				'eval' => 'null',
-				'default' => NULL,
+				'default' => ''
 			)
 		),
 		'description' => array (
@@ -310,7 +317,7 @@ $result = array (
 				'cols' => '46',
 				'rows' => '5',
 				'eval' => 'null',
-				'default' => NULL,
+				'default' => ''
 			)
 		),
 		'gradings' => array (
@@ -321,7 +328,7 @@ $result = array (
 				'cols' => '46',
 				'rows' => '5',
 				'eval' => 'null',
-				'default' => NULL,
+				'default' => ''
 			)
 		),
 		'material' => array (
@@ -332,7 +339,7 @@ $result = array (
 				'cols' => '46',
 				'rows' => '5',
 				'eval' => 'null',
-				'default' => NULL,
+				'default' => ''
 			)
 		),
 		'quality' => array (
@@ -343,7 +350,7 @@ $result = array (
 				'cols' => '46',
 				'rows' => '5',
 				'eval' => 'null',
-				'default' => NULL,
+				'default' => ''
 			)
 		),
         'config_type' => array (
@@ -402,7 +409,7 @@ $result = array (
 				'maxitems' => '10',
 				'minitems' => '0',
 				'eval' => 'null',
-				'default' => NULL,
+				'default' => ''
 			)
 		),
 		'smallimage' => Array (
@@ -418,7 +425,7 @@ $result = array (
 				'maxitems' => '10',
 				'minitems' => '0',
 				'eval' => 'null',
-				'default' => NULL,
+				'default' => ''
 			)
 		),
 	),
@@ -440,12 +447,12 @@ $result = array (
 
                 'showitem' => 'hidden,--palette--;;1, title,--palette--;;3, itemnumber, inStock, basketminquantity, price,--palette--;;2;;, weight, color, color2, color3, size, size2, size3, description, gradings, material, quality, note,note2,image,smallimage'
             )
-	),
-	'palettes' => array (
-		'1' => array('showitem' => 'starttime, endtime, fe_group'),
-		'2' => array('showitem' => 'price2, config'),
-		'3' => array('showitem' => 'subtitle, keyword'),
-	)
+    ),
+    'palettes' => array (
+        '1' => array('showitem' => 'starttime, endtime, fe_group'),
+        '2' => array('showitem' => 'price2, config'),
+        '3' => array('showitem' => 'subtitle, keyword'),
+    )
 );
 
 if (
@@ -463,7 +470,6 @@ if (
             $result['types']['1']['showitem']
         );
 }
-
 
 return $result;
 

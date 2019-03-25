@@ -55,8 +55,8 @@ class tx_ttproducts_javascript implements t3lib_Singleton {
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
 		$this->ajax = $ajax;
-		$this->bAjaxAdded = FALSE;
-		$this->bCopyrightShown = FALSE;
+		$this->bAjaxAdded = false;
+		$this->bCopyrightShown = false;
 		$this->copyright = '
 /***************************************************************
 *
@@ -148,11 +148,9 @@ if (!Array.prototype.indexOf) { // published by developer.mozilla.org
 		 * @see
 		 */
 	function set ($fieldname, $params='', $currentRecord='', $count=0, $catid='cat', $parentFieldArray=array(), $piVarArray=array(), $fieldArray=array(), $method='clickShow') {
-		global $TSFE;
-
-		$bDirectHTML = FALSE;
+		$bDirectHTML = false;
 		$code = '';
-		$bError = FALSE;
+		$bError = false;
 		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
 
 		$message = tx_div2007_alpha5::getLL_fh003($langObj, 'invalid_email');
@@ -160,7 +158,7 @@ if (!Array.prototype.indexOf) { // published by developer.mozilla.org
 
 		if (!$this->bCopyrightShown && $fieldname != 'xajax')	{
 			$code = $this->copyright;
-			$this->bCopyrightShown = TRUE;
+			$this->bCopyrightShown = true;
 			$code .= $this->fixInternetExplorer;
 		}
 		if (!is_object($this->ajax) && in_array($fieldname, array('fetchdata')))	{
@@ -485,13 +483,13 @@ if (!Array.prototype.indexOf) { // published by developer.mozilla.org
 				// XAJAX part
 				if (!$this->bAjaxAdded && is_object($this->ajax) && is_object($this->ajax->taxajax))	{
 					$code = $this->ajax->taxajax->getJavascript(t3lib_extMgm::siteRelPath(TAXAJAX_EXT));
-					$this->bXajaxAdded = TRUE;
+					$this->bXajaxAdded = true;
 				}
-				$bDirectHTML = TRUE;
+				$bDirectHTML = true;
 				break;
 
 			default:
-				$bError = TRUE;
+				$bError = true;
 				break;
 		} // switch
 
@@ -499,10 +497,10 @@ if (!Array.prototype.indexOf) { // published by developer.mozilla.org
 		if (!$bError)	{
 			if ($code)	{
 				if ($bDirectHTML)	{
-					// $TSFE->setHeaderHTML ($fieldname, $code);
-					$TSFE->additionalHeaderData['tx_ttproducts-xajax'] = $code;
+					// $GLOBALS['TSFE']->setHeaderHTML ($fieldname, $code);
+					$GLOBALS['TSFE']->additionalHeaderData['tx_ttproducts-xajax'] = $code;
 				} else {
-					$TSFE->setJS($JSfieldname, $code);
+					$GLOBALS['TSFE']->setJS($JSfieldname, $code);
 				}
 			}
 		}

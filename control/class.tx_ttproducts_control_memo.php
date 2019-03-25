@@ -61,14 +61,14 @@ class tx_ttproducts_control_memo {
 	}
 
 	static public function bIsAllowed ($type, $conf) {
-		$result = FALSE;
+		$result = false;
 
 		if (
 			isset($conf['memo.']) &&
 			isset($conf['memo.']['allow'])
 		) {
 			if (t3lib_div::inList($conf['memo.']['allow'], $type)) {
-				$result = TRUE;
+				$result = true;
 			}
 		}
 		return $result;
@@ -76,7 +76,7 @@ class tx_ttproducts_control_memo {
 
 	static public function bUseFeuser ($conf) {
 
-		$result = FALSE;
+		$result = false;
 		$fe_user_uid = tx_div2007::getFrontEndUser('uid');
 
 		if ($fe_user_uid) {
@@ -93,7 +93,7 @@ class tx_ttproducts_control_memo {
 
 	static public function process ($functablename, $piVars, $conf) {
 
-		$bMemoChanged = FALSE;
+		$bMemoChanged = false;
 		self::loadMemo($functablename, $conf);
 
 		$memoItems = self::getMemoItems($functablename);
@@ -133,7 +133,7 @@ class tx_ttproducts_control_memo {
 					$uid = intval($addMemoSingle);
 					if ($uid) {
 						$memoItems[] = $uid;
-						$bMemoChanged = TRUE;
+						$bMemoChanged = true;
 					}
 				}
 			}
@@ -144,7 +144,7 @@ class tx_ttproducts_control_memo {
 				$val = intval($delMemoSingle);
 				if (in_array($val, $memoItems)) {
 					unset($memoItems[array_search($val, $memoItems)]);
-					$bMemoChanged = TRUE;
+					$bMemoChanged = true;
 				}
 			}
 		}
@@ -153,11 +153,11 @@ class tx_ttproducts_control_memo {
 			foreach ($memoArray['upmemo'] as $memoSingle) {
 				$val = intval($memoSingle);
 				$key = array_search($val, $memoItems);
-				if ($key !== FALSE && $key > 0) {
+				if ($key !== false && $key > 0) {
 					$formerValue = $memoItems[$key - 1];
 					$memoItems[$key - 1] = $val;
 					$memoItems[$key] = $formerValue;
-					$bMemoChanged = TRUE;
+					$bMemoChanged = true;
 				}
 			}
 		}
@@ -167,11 +167,11 @@ class tx_ttproducts_control_memo {
 			foreach ($memoArray['downmemo'] as $memoSingle) {
 				$val = intval($memoSingle);
 				$key = array_search($val, $memoItems);
-				if ($key !== FALSE && $key < $maxKey) {
+				if ($key !== false && $key < $maxKey) {
 					$formerValue = $memoItems[$key + 1];
 					$memoItems[$key + 1] = $val;
 					$memoItems[$key] = $formerValue;
-					$bMemoChanged = TRUE;
+					$bMemoChanged = true;
 				}
 			}
 		}
@@ -187,7 +187,7 @@ class tx_ttproducts_control_memo {
 		if (isset(self::$memoTableFieldArray[$functablename])) {
 			$result = ($bFeuser ? 'tt_products_' : '') . self::$memoTableFieldArray[$functablename];
 		} else {
-			$result = FALSE;
+			$result = false;
 		}
 		return $result;
 	}
@@ -227,7 +227,7 @@ class tx_ttproducts_control_memo {
 
 	static public function readFeUserMemoItems ($functablename) {
 		$result = '';
-		$feuserField = self::getMemoField($functablename, TRUE);
+		$feuserField = self::getMemoField($functablename, true);
 
 		if (
             $GLOBALS['TSFE']->loginUser &&
@@ -297,7 +297,7 @@ class tx_ttproducts_control_memo {
 		$excludeList = '',
 		$addQueryString = array(),
 		$css_current = '',
-		$bUseBackPid = TRUE
+		$bUseBackPid = true
 	) {
 		$cmdArray = array('add', 'del');
 
@@ -311,7 +311,7 @@ class tx_ttproducts_control_memo {
 				$urlObj->getLinkParams(
 					$excludeList,
 					$addQueryString,
-					TRUE,
+					true,
 					$bUseBackPid
 				)
 			);
