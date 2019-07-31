@@ -37,6 +37,8 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 
 class tx_ttproducts_card extends tx_ttproducts_table_base {
 	var $ccArray;	// credit card data
@@ -48,7 +50,7 @@ class tx_ttproducts_card extends tx_ttproducts_table_base {
 
 	public function init ($cObj, $functablename)	{
 
-		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
+		$basketObj = GeneralUtility::makeInstance('tx_ttproducts_basket');
 		$formerBasket = $basketObj->recs;
 		$allowedUids = $basketObj->basketExtra['payment.']['creditcards'];
 
@@ -58,7 +60,7 @@ class tx_ttproducts_card extends tx_ttproducts_table_base {
 		$this->ccArray = $formerBasket['creditcard'];
 
 		if (isset($allowedUids))	{
-			$this->allowedArray = t3lib_div::trimExplode(',',$allowedUids);
+			$this->allowedArray = GeneralUtility::trimExplode(',',$allowedUids);
 		}
 		$bNumberRecentlyModified = false;
 

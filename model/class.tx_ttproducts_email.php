@@ -37,6 +37,9 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
+
 class tx_ttproducts_email extends tx_ttproducts_table_base {
 	var $emailArray;	// array of read in emails
 	var $table;		 // object of the type tx_table_db
@@ -44,7 +47,7 @@ class tx_ttproducts_email extends tx_ttproducts_table_base {
 	/**
 	 * Getting all tt_products_cat categories into internal array
 	 */
-	function init($cObj, $functablename)  {
+	public function init($cObj, $functablename)  {
 		parent::init($cObj, $functablename);
 		$tablename = $this->getTablename();
 		$this->getTableObj()->addDefaultFieldArray(array('sorting' => 'sorting'));
@@ -52,10 +55,10 @@ class tx_ttproducts_email extends tx_ttproducts_table_base {
 	} // init
 
 
-	function getEmail ($uid) {
+	public function getEmail ($uid) {
 		$rc = $this->emailArray[$uid];;
 		if ($uid && !$rc) {
-			$sql = t3lib_div::makeInstance('tx_table_db_access');
+			$sql = GeneralUtility::makeInstance('tx_table_db_access');
 			$sql->prepareFields($this->getTableObj(), 'select', '*');
 			$sql->prepareWhereFields ($this->getTableObj(), 'uid', '=', intval($uid));
 			$sql->prepareEnableFields ($this->getTableObj());

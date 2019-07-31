@@ -37,16 +37,19 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
+
 
 class tx_ttproducts_field_text_view extends tx_ttproducts_field_base_view {
 	function getRowMarkerArray ($functablename, $fieldname, $row, $markerKey, &$markerArray, $tagArray, $theCode, $id, $basketExtra, &$bSkip, $bHtml=true, $charset='', $prefix='', $suffix='', $imageRenderObj='')	{
 
 		$htmlentitiesArray = array();
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$tableconf = $cnf->getTableConf($functablename, $theCode);
 
 		if (is_array($tableconf['functions.']) && isset($tableconf['functions.']['htmlentities']))	{
-			$htmlentitiesArray = t3lib_div::trimExplode(',', $tableconf['functions.']['htmlentities']);
+			$htmlentitiesArray = GeneralUtility::trimExplode(',', $tableconf['functions.']['htmlentities']);
 		}
 
 		$value = $this->getModelObj()->getFieldValue($basketExtra, $row, $fieldname);

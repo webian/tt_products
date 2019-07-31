@@ -37,6 +37,8 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 
 class tx_ttproducts_control_memo {
 
@@ -67,7 +69,7 @@ class tx_ttproducts_control_memo {
 			isset($conf['memo.']) &&
 			isset($conf['memo.']['allow'])
 		) {
-			if (t3lib_div::inList($conf['memo.']['allow'], $type)) {
+			if (GeneralUtility::inList($conf['memo.']['allow'], $type)) {
 				$result = true;
 			}
 		}

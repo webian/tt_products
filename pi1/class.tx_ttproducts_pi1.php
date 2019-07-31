@@ -42,8 +42,11 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class tx_ttproducts_pi1 implements t3lib_Singleton {
+
+
+class tx_ttproducts_pi1 implements \TYPO3\CMS\Core\SingletonInterface {
 	/**
 	 * The backReference to the mother cObj object set at call time
 	 *
@@ -57,7 +60,7 @@ class tx_ttproducts_pi1 implements t3lib_Singleton {
 	 */
 	public function main ($content,$conf)	{
 
-		$pibaseObj = t3lib_div::makeInstance('tx_ttproducts_pi1_base');
+		$pibaseObj = GeneralUtility::makeInstance('tx_ttproducts_pi1_base');
 		$pibaseObj->cObj = $this->cObj;
 
 		if ($conf['templateFile'] != '')	{
@@ -79,7 +82,7 @@ class tx_ttproducts_pi1 implements t3lib_Singleton {
 
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['getUserFunc'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['getUserFunc'] as $classRef) {-
-				$hookObj= t3lib_div::makeInstance($classRef);
+				$hookObj= GeneralUtility::makeInstance($classRef);
 				if (method_exists($hookObj, 'getUserFunc')) {
 					$hookObj->cObj = $this->cObj;
 					$content .= $hookObj->getUserFunc($content,$conf);

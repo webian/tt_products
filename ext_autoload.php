@@ -17,7 +17,6 @@ return array(
 	'tx_ttproducts_wizicon' => $extensionPath . 'class.tx_ttproducts_wizicon.php',
 	'tx_ttproducts_api' => $extensionPath . 'api/class.tx_ttproducts_api.php',
 	'tx_ttproducts_ts' => $extensionPath . 'api/class.tx_ttproducts_ts.php',
-	'tx_ttproducts_cache' => $extensionPath . 'cache/class.tx_ttproducts_cache.php',
 	'tx_ttproducts_activity_base' => $extensionPath . 'control/class.tx_ttproducts_activity_base.php',
 	'tx_ttproducts_activity_finalize' => $extensionPath . 'control/class.tx_ttproducts_activity_finalize.php',
 	'tx_ttproducts_control' => $extensionPath . 'control/class.tx_ttproducts_control.php',
@@ -176,5 +175,4 @@ return array(
 	'tx_ttproducts_field_tax_view' => $extensionPath . 'view/field/class.tx_ttproducts_field_tax_view.php',
 	'tx_ttproducts_field_text_view' => $extensionPath . 'view/field/class.tx_ttproducts_field_text_view.php',
 	'tx_ttproducts_field_view_int' => $extensionPath . 'view/field/interface.tx_ttproducts_field_view_int.php',
-	'tx_ttproducts_latest' => $extensionPath . 'widgets/class.tx_ttproducts_latest.php',
 );

@@ -38,6 +38,7 @@
  */
 
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
 class tx_ttproducts_orderaddress extends tx_ttproducts_table_base {
@@ -57,13 +58,13 @@ class tx_ttproducts_orderaddress extends tx_ttproducts_table_base {
 	 */
 	public function init ($cObj, $functablename)  {
 		parent::init($cObj, $functablename);
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 
 		$this->tableconf = $cnf->getTableConf($functablename);
 		$tablename = $this->getTablename ();
 
 // 			// image
-// 		$this->image = t3lib_div::makeInstance('tx_ttproducts_field_image_view');
+// 		$this->image = GeneralUtility::makeInstance('tx_ttproducts_field_image_view');
 // 		$this->image->init($this->cObj, $this->pibase);
 
 		$this->getTableObj()->setTCAFieldArray($tablename);
@@ -73,7 +74,7 @@ class tx_ttproducts_orderaddress extends tx_ttproducts_table_base {
 			$tmp = $this->tableconf['ALL.']['requiredFields'];
 			$requiredFields = ($tmp ? $tmp : $requiredFields);
 		}
-		$requiredListArray = t3lib_div::trimExplode(',', $requiredFields);
+		$requiredListArray = GeneralUtility::trimExplode(',', $requiredFields);
 		$this->getTableObj()->setRequiredFieldArray($requiredListArray);
 	} // init
 
@@ -117,7 +118,7 @@ class tx_ttproducts_orderaddress extends tx_ttproducts_table_base {
 
 		if (isset($this->conf['conf.'][$funcTablename.'.']['ALL.']['fe_users.']['date_of_birth.']['period.']['y']))	{
 			$year = $this->conf['conf.'][$funcTablename.'.']['ALL.']['fe_users.']['date_of_birth.']['period.']['y'];
-			$infoObj = t3lib_div::makeInstance('tx_ttproducts_info_view');
+			$infoObj = GeneralUtility::makeInstance('tx_ttproducts_info_view');
 
 			if ($infoObj->infoArray['billing']['date_of_birth'])	{
 				$timeTemp = $infoObj->infoArray['billing']['date_of_birth'];
@@ -133,7 +134,7 @@ class tx_ttproducts_orderaddress extends tx_ttproducts_table_base {
 			}
 
 			if ($bAge)	{
-				$feDateArray = t3lib_div::trimExplode('-', $timeTemp);
+				$feDateArray = GeneralUtility::trimExplode('-', $timeTemp);
 				$date = getdate();
 				$offset = 0;
 				if ($date['mon'] < $feDateArray[1])	{
@@ -148,12 +149,12 @@ class tx_ttproducts_orderaddress extends tx_ttproducts_table_base {
 		}
 
 		$whereConf = $this->conf['conf.'][$funcTablename.'.']['ALL.']['fe_users.']['where'];
-		$whereArray = t3lib_div::trimExplode('IN', $whereConf);
+		$whereArray = GeneralUtility::trimExplode('IN', $whereConf);
 		$pos1 = strpos ($whereArray[1], '(');
 		$pos2 = strpos ($whereArray[1], ')');
 		$inString = substr ($whereArray[1], $pos1+1, $pos2-$pos1-1);
 
-		$valueArray = t3lib_div::trimExplode(',', $inString);
+		$valueArray = GeneralUtility::trimExplode(',', $inString);
 		foreach ($valueArray as $value)	{
 			if ($row[$whereArray[0]] == $value)	{
 				$this->bConditionRecord = true;

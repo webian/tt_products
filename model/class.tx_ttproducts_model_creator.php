@@ -38,8 +38,11 @@
  */
 
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class tx_ttproducts_model_creator implements t3lib_Singleton {
+
+
+class tx_ttproducts_model_creator implements \TYPO3\CMS\Core\SingletonInterface {
 
 	public function init (&$conf, &$config, $cObj)  {
 
@@ -68,11 +71,11 @@ class tx_ttproducts_model_creator implements t3lib_Singleton {
 		}
 
 		if (isset($conf['UIDstore']))	{
-			$tmpArray = t3lib_div::trimExplode(',',$conf['UIDstore']);
+			$tmpArray = GeneralUtility::trimExplode(',',$conf['UIDstore']);
 			$UIDstore = $tmpArray['0'];
 		}
 
-		$taxObj = t3lib_div::makeInstance('tx_ttproducts_field_tax');
+		$taxObj = GeneralUtility::makeInstance('tx_ttproducts_field_tax');
 		$taxObj->preInit(
 			$cObj,
 			$bUseStaticTaxes,
@@ -80,20 +83,20 @@ class tx_ttproducts_model_creator implements t3lib_Singleton {
 		);
 
 			// price
-		$priceObj = t3lib_div::makeInstance('tx_ttproducts_field_price');
+		$priceObj = GeneralUtility::makeInstance('tx_ttproducts_field_price');
 		$priceObj->preInit(
 			$cObj,
 			$conf
 		);
 
 			// paymentshipping
-		$paymentshippingObj = t3lib_div::makeInstance('tx_ttproducts_paymentshipping');
+		$paymentshippingObj = GeneralUtility::makeInstance('tx_ttproducts_paymentshipping');
 		$paymentshippingObj->init(
 			$cObj,
 			$priceObj
 		);
 
-		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket'); // TODO: initialization
+		$basketObj = GeneralUtility::makeInstance('tx_ttproducts_basket'); // TODO: initialization
 	}
 
 	public function destruct () {

@@ -37,6 +37,7 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
 class tx_ttproducts_account extends tx_ttproducts_table_base {
@@ -51,7 +52,7 @@ class tx_ttproducts_account extends tx_ttproducts_table_base {
 
 
 	public function init ($cObj, $functablename)	{
-		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
+		$basketObj = GeneralUtility::makeInstance('tx_ttproducts_basket');
 		$formerBasket = $basketObj->recs;
 		$bIsAllowed = $basketObj->basketExtra['payment.']['accounts'];
 		if (isset($basketObj->basketExtra['payment.']['useAsterisk']))	{
@@ -185,7 +186,7 @@ class tx_ttproducts_account extends tx_ttproducts_table_base {
 	 */
 	function checkRequired ()	{
 		$rc = '';
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		if (t3lib_extMgm::isLoaded('static_info_tables_banks_de')) {
 			$bankObj = $tablesObj->get('static_banks_de');
 		}
@@ -196,7 +197,7 @@ class tx_ttproducts_account extends tx_ttproducts_table_base {
 				break;
 			}
 			if ($field == 'bic' && is_object($bankObj) /* && t3lib_extMgm::isLoaded('static_info_tables_banks_de')*/)	{
-				$where_clause = 'sort_code=' . intval(implode('',t3lib_div::trimExplode(' ',$this->acArray[$field]))) . ' AND level=1';
+				$where_clause = 'sort_code=' . intval(implode('',GeneralUtility::trimExplode(' ',$this->acArray[$field]))) . ' AND level=1';
 				$bankRow = $bankObj->get('',0,false,$where_clause);
 				if (!$bankRow)	{
 					$rc = $field;

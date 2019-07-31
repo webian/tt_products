@@ -38,6 +38,9 @@
  */
 
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
+
 class tx_ttproducts_email_div {
 
 
@@ -65,7 +68,7 @@ class tx_ttproducts_email_div {
 		$result = true;
 
         if (!is_array($toEMail)) {
-            $emailArray = t3lib_div::trimExplode(',', $toEMail);
+            $emailArray = GeneralUtility::trimExplode(',', $toEMail);
 
             $toEMail = array();
             foreach ($emailArray as $email) {
@@ -138,7 +141,7 @@ class tx_ttproducts_email_div {
 
 			// Notification email
 		$recipients = $recipient;
-		$recipients = t3lib_div::trimExplode(',',$recipients,1);
+		$recipients = GeneralUtility::trimExplode(',',$recipients,1);
 
 		if (count($recipients)) {	// If any recipients, then compile and send the mail.
 			$emailContent=trim($cObj->getSubpart($templateCode,'###'.$templateMarker.$config['templateSuffix'].'###'));
@@ -146,7 +149,7 @@ class tx_ttproducts_email_div {
 				$emailContent=trim($cObj->getSubpart($templateCode,'###'.$templateMarker.'###'));
 			}
 			if ($emailContent)  {		// If there is plain text content - which is required!!
-				$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
+				$markerObj = GeneralUtility::makeInstance('tx_ttproducts_marker');
 				$globalMarkerArray = &$markerObj->getGlobalMarkerArray();
 
 				$markerArray = $globalMarkerArray;
@@ -191,14 +194,14 @@ class tx_ttproducts_email_div {
 		$sendername = ($giftRow['personname'] ? $giftRow['personname'] : $conf['orderEmail_fromName']);
 		$senderemail = ($giftRow['personemail'] ? $giftRow['personemail'] : $conf['orderEmail_from']);
 		$recipients = $recipient;
-		$recipients = t3lib_div::trimExplode(',',$recipients,1);
+		$recipients = GeneralUtility::trimExplode(',',$recipients,1);
 
 		if (count($recipients)) {	// If any recipients, then compile and send the mail.
 			$emailContent=trim($cObj->getSubpart($templateCode,'###'.$templateMarker.'###'));
 			if ($emailContent)  {		// If there is plain text content - which is required!!
-				$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
+				$markerObj = GeneralUtility::makeInstance('tx_ttproducts_marker');
 				$globalMarkerArray = &$markerObj->getGlobalMarkerArray();
-				$priceViewObj = t3lib_div::makeInstance('tx_ttproducts_field_price_view');
+				$priceViewObj = GeneralUtility::makeInstance('tx_ttproducts_field_price_view');
 
 				$parts = explode(chr(10),$emailContent,2);	// First line is subject
 				$subject = trim($parts[0]);
@@ -218,7 +221,7 @@ class tx_ttproducts_email_div {
 				if ($bHtmlMail) {	// If htmlmail lib is included, then generate a nice HTML-email
 					$HTMLmailShell = $cObj->getSubpart($this->templateCode,'###EMAIL_HTML_SHELL###');
 					$HTMLmailContent = $cObj->substituteMarker($HTMLmailShell,'###HTML_BODY###',$emailContent);
-					$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
+					$markerObj = GeneralUtility::makeInstance('tx_ttproducts_marker');
 					$HTMLmailContent=$cObj->substituteMarkerArray($HTMLmailContent, $markerObj->getGlobalMarkerArray());
 
 					self::send_mail($recipients,  $subject, $emailContent, $HTMLmailContent, $senderemail, $sendername, $conf['GiftAttachment']);

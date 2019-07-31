@@ -36,24 +36,21 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
-abstract class tx_ttproducts_table_base_view  implements t3lib_Singleton {
+abstract class tx_ttproducts_table_base_view  implements \TYPO3\CMS\Core\SingletonInterface {
 	private $bHasBeenInitialised = false;
-	public $cObj;
 	public $conf;
 	public $config;
 	public $piVar;
 	public $modelObj;
-	public $langObj;
 	public $marker;		// can be overridden
 	public $tablesWithoutView = array('tt_products_emails');
 
 
-	public function init ($langObj, $modelObj)	{
-		$this->langObj = $langObj;
+	public function init ($modelObj)	{
 		$this->modelObj = $modelObj;
-		$this->cObj = $langObj->cObj;
 		$this->conf = &$modelObj->conf;
 		$this->config = &$modelObj->config;
 
@@ -78,14 +75,6 @@ abstract class tx_ttproducts_table_base_view  implements t3lib_Singleton {
 
 	public function getConf ()	{
 		return $this->conf;
-	}
-
-	public function setCObj ($cObj)	{
-		$this->cObj = $cObj;
-	}
-
-	public function getCObj ()	{
-		return $this->cObj;
 	}
 
 
@@ -140,22 +129,21 @@ abstract class tx_ttproducts_table_base_view  implements t3lib_Singleton {
 		$classNameView = $className.'_view';
 		$path = $classArray['path'];
 
-// 		include_once ($path.'view/field/class.'.$classNameView.'.php');
-		$fieldViewObj = t3lib_div::makeInstance(''.$classNameView);	// fetch and store it as persistent object
+		$fieldViewObj = GeneralUtility::makeInstance(''.$classNameView);	// fetch and store it as persistent object
 		if (!is_object($fieldViewObj)) {
 			throw new RuntimeException('Error in tt_products: The class "' . $classNameView . '" is not found.', 50001);
 		}
 
 		if ($fieldViewObj->needsInit())	{
-// 			include_once ($path.'model/field/class.'.$className.'.php');
-			$fieldObj = t3lib_div::makeInstance(''.$className);	// fetch and store it as persistent object
+			$fieldObj = GeneralUtility::makeInstance(''.$className);	// fetch and store it as persistent object
 			if (!is_object($fieldObj)) {
 				throw new RuntimeException('Error in tt_products: The class "' . $className . '" is not found.', 50002);
 			}
 			if ($fieldObj->needsInit())	{
-				$fieldObj->init($this->cObj);
+                $cObj = \JambageCom\TtProducts\Api\ControlApi::getCObj();
+				$fieldObj->init($cObj);
 			}
-			$fieldViewObj->init($this->langObj, $fieldObj);
+			$fieldViewObj->init($fieldObj);
 		}
 		return $fieldViewObj;
 	}
@@ -179,8 +167,8 @@ abstract class tx_ttproducts_table_base_view  implements t3lib_Singleton {
 		$id=''
 	)	{
 
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$tableconf = $cnf->getTableConf($functablename, $theCode);
 
 		if (
@@ -296,7 +284,7 @@ abstract class tx_ttproducts_table_base_view  implements t3lib_Singleton {
 				if (isset ($GLOBALS['TCA'][$tablename]['columns'][$field]) && is_array($GLOBALS['TCA'][$tablename]['columns'][$field]) &&
 				$GLOBALS['TCA'][$tablename]['columns'][$field]['config']['type'] == 'group')	{
 					$markerKey = $this->marker.'_HAS_'.$upperField;
-					$valueArray = t3lib_div::trimExplode(',', $value);
+					$valueArray = GeneralUtility::trimExplode(',', $value);
 					foreach ($valueArray as $k => $partValue)	{
 						$partMarkerKey = $markerKey.($k+1);
 						if (isset($tagArray[$partMarkerKey]))	{
@@ -399,6 +387,8 @@ abstract class tx_ttproducts_table_base_view  implements t3lib_Singleton {
 		$suffix='',	// this could be a number to discern between repeated rows
 		$linkWrap=''
 	)	{
+        $local_cObj = \JambageCom\Div2007\Utility\FrontendUtility::getContentObjectRenderer();
+
 		$rowMarkerArray = array();
 		if ($prefix === false)	{
 			$marker = '';
@@ -431,7 +421,7 @@ abstract class tx_ttproducts_table_base_view  implements t3lib_Singleton {
 			$rowMarkerArray['###' . $markerPrefix . 'ID###'] = $mainId;
 
 			$rowMarkerArray['###' . $markerPrefix . 'NAME###'] = $extTableName . '-' . $row['uid'];
-			$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+			$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 			$tableconf = $cnf->getTableConf($functablename,$theCode);
 			$tabledesc = $cnf->getTableDesc($functablename);
 
@@ -513,12 +503,12 @@ abstract class tx_ttproducts_table_base_view  implements t3lib_Singleton {
 							}
 							$tableconf['field.'][$modField . '.']['value'] = $modValue;
 
-							$fieldContent = $this->cObj->cObjGetSingle(
+							$fieldContent = $local_cObj->cObjGetSingle(
 								$tableconf['field.'][$modField],
 								$tableconf['field.'][$modField . '.'],
 								TT_PRODUCTS_EXT
 							);
-							$modValue = $this->cObj->substituteMarkerArray($fieldContent,$fieldMarkerArray);
+							$modValue = $local_cObj->substituteMarkerArray($fieldContent,$fieldMarkerArray);
 						}
 						$markerKey = $markerPrefix . strtoupper($modField . $suffix);
 
@@ -531,7 +521,7 @@ abstract class tx_ttproducts_table_base_view  implements t3lib_Singleton {
 				}
 			}
 		} else {
-			$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+			$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 			$tablename = $this->getModelObj()->getTablename();
 			$tmpMarkerArray = array();
 			$tmpMarkerArray[] = $marker;
@@ -589,7 +579,7 @@ abstract class tx_ttproducts_table_base_view  implements t3lib_Singleton {
 
 		if (is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT][$marker])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT][$marker] as $classRef) {
-				$hookObj = t3lib_div::makeInstance($classRef);
+				$hookObj = GeneralUtility::makeInstance($classRef);
 
 				if (method_exists($hookObj, 'getRowMarkerArray')) {
 					$hookObj->getRowMarkerArray($pObj, $markerArray, $cObjectMarkerArray, $row, $imageNum, $imageRenderObj, $forminfoArray, $theCode, $basketExtra, $id, $linkWrap);

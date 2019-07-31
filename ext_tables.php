@@ -2,25 +2,7 @@
 defined('TYPO3_MODE') || die('Access denied.');
 
 $emClass = '\\TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility';
-
-if (
-	class_exists($emClass) &&
-	method_exists($emClass, 'extPath')
-) {
-	// nothing
-} else {
-	$emClass = 't3lib_extMgm';
-}
-
 $divClass = '\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility';
-
-if (
-	class_exists($divClass)
-) {
-	// nothing
-} else {
-	$divClass = 't3lib_div';
-}
 
 
 if (!$loadTcaAdditions) {

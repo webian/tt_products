@@ -92,11 +92,6 @@ class tx_ttproducts_control_address {
 						method_exists('t3lib_utility_Math', 'canBeInterpretedAsInteger')
 					) {
 						$result = t3lib_utility_Math::canBeInterpretedAsInteger($extKey);
-					} else if (
-						class_exists('t3lib_div') &&
-						method_exists('t3lib_div', 'testInt')
-					) {
-						$result = t3lib_div::testInt($extKey);
 					}
 
 					$testIntResult = $result;

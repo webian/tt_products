@@ -38,7 +38,10 @@
  */
 
 
-class tx_ttproducts_billdelivery implements t3lib_Singleton {
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
+
+class tx_ttproducts_billdelivery implements \TYPO3\CMS\Core\SingletonInterface {
 	public $cObj;
 	public $conf;		  // original configuration
 	public $config;		// updated configuration
@@ -56,7 +59,7 @@ class tx_ttproducts_billdelivery implements t3lib_Singleton {
 	 */
 	public function init ($cObj) {
 		$this->cObj = $cObj;
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
 	}
@@ -86,7 +89,7 @@ class tx_ttproducts_billdelivery implements t3lib_Singleton {
 
 	public function getFileAbsFileName ($type, $tracking, $fileExtension) {
 		$relfilename = $this->getRelFilename($tracking, $type, $fileExtension);
-		$filename = t3lib_div::getFileAbsFileName($relfilename);
+		$filename = GeneralUtility::getFileAbsFileName($relfilename);
 		return $filename;
 	}
 
@@ -100,9 +103,9 @@ class tx_ttproducts_billdelivery implements t3lib_Singleton {
 
     public function generateBill ($templateCode, $mainMarkerArray, $type, $generationConf) {
 
-		$basketView = t3lib_div::makeInstance('tx_ttproducts_basket_view');
-		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
-		$infoViewObj = t3lib_div::makeInstance('tx_ttproducts_info_view');
+		$basketView = GeneralUtility::makeInstance('tx_ttproducts_basket_view');
+		$basketObj = GeneralUtility::makeInstance('tx_ttproducts_basket');
+		$infoViewObj = GeneralUtility::makeInstance('tx_ttproducts_info_view');
 
 		$typeCode = strtoupper($type);
         $generationType = strtolower($generationConf['type']);
@@ -112,7 +115,7 @@ class tx_ttproducts_billdelivery implements t3lib_Singleton {
             // Call all billing delivery hooks
         if (is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['billdelivery'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['billdelivery'] as $classRef) {
-                $hookObj= t3lib_div::makeInstance($classRef);
+                $hookObj= GeneralUtility::makeInstance($classRef);
 
                 if (method_exists($hookObj, 'generateBill')) {
                     $billGeneratedFromHook = $hookObj->generateBill(
@@ -139,7 +142,7 @@ class tx_ttproducts_billdelivery implements t3lib_Singleton {
         if (!$billGeneratedFromHook) {
 
             if ($generationType == 'pdf') {
-                $pdfViewObj = t3lib_div::makeInstance('tx_ttproducts_pdf_view');
+                $pdfViewObj = GeneralUtility::makeInstance('tx_ttproducts_pdf_view');
 
                 $subpart = $typeCode . '_PDF_HEADER_TEMPLATE';
                 $header = $basketView->getView(
@@ -222,16 +225,16 @@ class tx_ttproducts_billdelivery implements t3lib_Singleton {
 		This is extension information to tracking at another page
 		See Tracking for further information
 		*/
-		$priceObj = t3lib_div::makeInstance('tx_ttproducts_field_price');
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$priceObj = GeneralUtility::makeInstance('tx_ttproducts_field_price');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 
- 		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
-		$basketView = t3lib_div::makeInstance('tx_ttproducts_basket_view');
-		$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
+ 		$basketObj = GeneralUtility::makeInstance('tx_ttproducts_basket');
+		$basketView = GeneralUtility::makeInstance('tx_ttproducts_basket_view');
+		$markerObj = GeneralUtility::makeInstance('tx_ttproducts_marker');
 		$globalMarkerArray = $markerObj->getGlobalMarkerArray();
 		$orderObj = $tablesObj->get('sys_products_orders');
-		$infoViewObj = t3lib_div::makeInstance('tx_ttproducts_info_view');
-		$paymentshippingObj = t3lib_div::makeInstance('tx_ttproducts_paymentshipping');
+		$infoViewObj = GeneralUtility::makeInstance('tx_ttproducts_info_view');
+		$paymentshippingObj = GeneralUtility::makeInstance('tx_ttproducts_paymentshipping');
 
 			// initialize order data.
 		$orderData = unserialize($orderRow['orderData']);

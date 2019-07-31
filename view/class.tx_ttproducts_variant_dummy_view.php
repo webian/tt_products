@@ -39,14 +39,10 @@
 
 
 
-class tx_ttproducts_variant_dummy_view implements tx_ttproducts_variant_view_int, t3lib_Singleton {
+class tx_ttproducts_variant_dummy_view implements tx_ttproducts_variant_view_int, \TYPO3\CMS\Core\SingletonInterface {
 	public $modelObj;
-	public $cObj;
-	public $langObj;
 
-	public function init($langObj, $modelObj)	{
-		$this->langObj = $langObj;
-		$this->cObj = $langObj->cObj;
+	public function init($modelObj)	{
 		$this->modelObj = $modelObj;
 	}
 

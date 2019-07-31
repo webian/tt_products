@@ -37,21 +37,21 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class tx_ttproducts_graduated_price_view implements t3lib_Singleton {
+
+class tx_ttproducts_graduated_price_view implements \TYPO3\CMS\Core\SingletonInterface {
 	public $marker = 'GRADPRICE';
 	public $modelObj;
-	public $langObj;
 
-	public function init($langObj, &$modelObj)	{
-		$this->langObj = $langObj;
+	public function init($modelObj)	{
 		$this->modelObj = $modelObj;
 	}
 
 	private function getFormulaMarkerArray($basketExtra, $row, $priceFormula, &$markerArray, $suffix='')	{
 		if (isset($priceFormula) && is_array($priceFormula))	{
-			$priceObj = t3lib_div::makeInstance('tx_ttproducts_field_price');
-			$priceViewObj = t3lib_div::makeInstance('tx_ttproducts_field_price_view');
+			$priceObj = GeneralUtility::makeInstance('tx_ttproducts_field_price');
+			$priceViewObj = GeneralUtility::makeInstance('tx_ttproducts_field_price_view');
 			foreach ($priceFormula as $field => $value)	{
 				$keyMarker = '###'.$this->marker.'_'.strtoupper($field).$suffix.'###';
 				if (strpos($GLOBALS['TCA'][$this->modelObj->tableObj->getName()]['interface']['showRecordFieldList'], $field) === false) {
@@ -92,19 +92,13 @@ class tx_ttproducts_graduated_price_view implements t3lib_Singleton {
 		}
 	}
 
-	public function &getPriceSubpartArrays (&$templateCode, &$row, $fieldname, &$subpartArray, &$wrappedSubpartArray, &$tagArray, $theCode='', $basketExtra=array(), $id='1') {
+	public function getPriceSubpartArrays (&$templateCode, &$row, $fieldname, &$subpartArray, &$wrappedSubpartArray, &$tagArray, $theCode='', $basketExtra=array(), $id='1') {
 
-		$subpartmarkerObj = t3lib_div::makeInstance('tx_ttproducts_subpartmarker');
+        $local_cObj = \JambageCom\Div2007\Utility\FrontendUtility::getContentObjectRenderer();
+		$subpartmarkerObj = GeneralUtility::makeInstance('tx_ttproducts_subpartmarker');
 		$t = array();
-		$t['listFrameWork'] = $this->langObj->cObj->getSubpart($templateCode,'###GRADPRICE_FORMULA_ITEMS###');
-		$t['itemFrameWork'] = $this->langObj->cObj->getSubpart($t['listFrameWork'],'###ITEM_FORMULA###');
-
-// 		$t['listFrameWork'] = $this->pibase->cObj->substituteMarkerArrayCached(
-// 				$t['listFrameWork'],
-// 				$markerArray,
-// 				$subPartArray,
-// 				$wrappedSubpartArray
-// 			);
+		$t['listFrameWork'] = $local_cObj->getSubpart($templateCode,'###GRADPRICE_FORMULA_ITEMS###');
+		$t['itemFrameWork'] = $local_cObj->getSubpart($t['listFrameWork'],'###ITEM_FORMULA###');
 
 		$priceFormulaArray = $this->modelObj->getFormulasByProduct($row['uid']);
 		if (count($priceFormulaArray))	{
@@ -114,8 +108,8 @@ class tx_ttproducts_graduated_price_view implements t3lib_Singleton {
 					$itemMarkerArray = array();
 					$this->getFormulaMarkerArray($basketExtra, $row, $priceFormula, $itemMarkerArray);
 
-					$formulaContent = $this->langObj->cObj->substituteMarkerArray($t['itemFrameWork'],$itemMarkerArray);
-					$content .= $this->langObj->cObj->substituteSubpart($t['listFrameWork'],'###ITEM_FORMULA###',$formulaContent) ;
+					$formulaContent = $local_cObj->substituteMarkerArray($t['itemFrameWork'],$itemMarkerArray);
+					$content .= $local_cObj->substituteSubpart($t['listFrameWork'],'###ITEM_FORMULA###',$formulaContent) ;
 				}
 			}
 			$subpartArray['###GRADPRICE_FORMULA_ITEMS###'] = $content;

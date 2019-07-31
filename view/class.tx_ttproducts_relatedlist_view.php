@@ -38,8 +38,11 @@
  */
 
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class tx_ttproducts_relatedlist_view implements t3lib_Singleton {
+
+
+class tx_ttproducts_relatedlist_view implements \TYPO3\CMS\Core\SingletonInterface {
 	public $conf;
 	public $config;
 	public $pidListObj;
@@ -49,11 +52,11 @@ class tx_ttproducts_relatedlist_view implements t3lib_Singleton {
 	public function init ($cObj, $pid_list, $recursive)	{
 		$this->cObj = $cObj;
 
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
 
-		$this->pidListObj = t3lib_div::makeInstance('tx_ttproducts_pid_list');
+		$this->pidListObj = GeneralUtility::makeInstance('tx_ttproducts_pid_list');
 		$this->pidListObj->init($cObj);
 		$this->pidListObj->applyRecursive($recursive, $pid_list, true);
 		$this->pidListObj->setPageArray();
@@ -76,7 +79,7 @@ class tx_ttproducts_relatedlist_view implements t3lib_Singleton {
 			'',
 			$this->useArticles
 		);
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		$itemObj = $tablesObj->get($functablename);
 
 		$rowArray = array();
@@ -210,7 +213,7 @@ class tx_ttproducts_relatedlist_view implements t3lib_Singleton {
 		&$error_code
 	)	{
 		$result = false;
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		$itemViewObj = $tablesObj->get($functablename, true);
 		$addListArray = $this->getAddListArray($theCode, $functablename, $itemViewObj->getMarker(), $uid, $useArticles);
 
@@ -225,10 +228,9 @@ class tx_ttproducts_relatedlist_view implements t3lib_Singleton {
 
 					if (count($relatedIds))	{
 						// List all products:
-						include_once (PATH_BE_ttproducts.'view/class.tx_ttproducts_list_view.php');
 						if (!is_object($listView))	{
 
-							$listView = t3lib_div::makeInstance('tx_ttproducts_list_view');
+							$listView = GeneralUtility::makeInstance('tx_ttproducts_list_view');
 							$listView->init (
 								$pibaseClass,
 								$pid,

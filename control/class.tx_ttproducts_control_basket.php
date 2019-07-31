@@ -36,6 +36,9 @@
  *
  */
 
+ 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 
 class tx_ttproducts_control_basket {
 	protected static $recs;
@@ -133,7 +136,7 @@ class tx_ttproducts_control_basket {
 
 
 	static public function getRoundFormat ($type = '') {
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 
 		$result = $cnf->getBasketConf('round', $type); // check the basket rounding format
 // 		$roundDiscount = $cnf->getBasketConf('round', 'discount');

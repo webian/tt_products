@@ -37,6 +37,9 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
+
 
 class tx_ttproducts_field_tax_view extends tx_ttproducts_field_base_view {
 
@@ -54,7 +57,7 @@ class tx_ttproducts_field_tax_view extends tx_ttproducts_field_base_view {
 		$basketExtra = array(),
 		$id = '1'
 	) {
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		$staticTaxViewObj = $tablesObj->get('static_taxes', true);
 		$staticTaxViewObj->getItemSubpartArrays ($templateCode, $functablename, $row, $subpartArray, $wrappedSubpartArray, $tagArray, $theCode, $basketExtra, $id);
 	}

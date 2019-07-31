@@ -36,8 +36,11 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class tx_ttproducts_basketitem implements t3lib_Singleton {
+
+
+class tx_ttproducts_basketitem implements \TYPO3\CMS\Core\SingletonInterface {
 
 	/**
 	 * gets the quantity of an item
@@ -47,7 +50,7 @@ class tx_ttproducts_basketitem implements t3lib_Singleton {
 	 * @return	array
 	 * @access private
 	 */
-	function getQuantity (
+	public function getQuantity (
 		&$item,
 		$overwriteAmount=''
 	)	{
@@ -70,12 +73,12 @@ class tx_ttproducts_basketitem implements t3lib_Singleton {
 	 * @return	array
 	 * @access private
 	 */
-	function getMinQuantity (
+	public function getMinQuantity (
 		&$item
 	)	{
 		$row = $item['rec'];
 		$rc = $row['basketminquantity'];
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		$prodTable = $tablesObj->get('tt_products', false);
 		$articleRow = $prodTable->getArticleRowFromExt($row);
 

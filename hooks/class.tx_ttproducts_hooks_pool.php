@@ -38,8 +38,10 @@
  */
 
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class tx_ttproducts_hooks_pool extends tx_pool_hooks_base implements t3lib_Singleton {
+
+class tx_ttproducts_hooks_pool extends tx_pool_hooks_base implements \TYPO3\CMS\Core\SingletonInterface {
 	public $extKey=TT_PRODUCTS_EXT;
 	public $prefixId = 'tx_ttproducts_hooks_pool';	// Same as class name
 	public $LLFileArray = array ('hooks/locallang_pool.xml', 'EXT:lang/locallang_mod_web_list.xml');
@@ -50,8 +52,7 @@ class tx_ttproducts_hooks_pool extends tx_pool_hooks_base implements t3lib_Singl
 		$content = '<b>Suche &uuml;ber tt_products</b><br/>';
 		if (t3lib_extMgm::isLoaded('searchbox')) {
 
-			include_once(t3lib_extMgm::extPath('searchbox').'view/class.tx_searchbox_view.php');
-			$searchBoxObj = t3lib_div::makeInstance('tx_searchbox_view');
+			$searchBoxObj = GeneralUtility::makeInstance('tx_searchbox_view');
 
 			$content .= $searchBoxObj->getContent(
 				$GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['templateFile'],
@@ -63,8 +64,7 @@ class tx_ttproducts_hooks_pool extends tx_pool_hooks_base implements t3lib_Singl
 			$dbListConf = $searchBoxObj->getDblistConf($this->prefixId);
 		}
 		if (t3lib_extMgm::isLoaded('db_list')) {
-			include_once(t3lib_extMgm::extPath('db_list').'class.tx_dblist_script.php');
-			$dbListObj = t3lib_div::makeInstance('tx_dblist_script');
+			$dbListObj = GeneralUtility::makeInstance('tx_dblist_script');
 			$dbListObj->init($this->vars,$dbListConf);
 
 			$dbListObj->clearCache();

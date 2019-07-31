@@ -36,6 +36,9 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
+
 
 abstract class tx_ttproducts_category_base extends tx_ttproducts_table_base {
 	var $dataArray;  // array of read in categories
@@ -75,12 +78,12 @@ abstract class tx_ttproducts_category_base extends tx_ttproducts_table_base {
 		return $this->mm_table;
 	}
 
-	function hasSpecialConf ($cat, $theCode, $type)	{
+	public function hasSpecialConf ($cat, $theCode, $type)	{
 		$rc = false;
 		$conf = $this->getTableConf ($theCode);
 
 		if (is_array($conf['special.']) && isset($conf['special.'][$type]))	{
-			$specialArray = t3lib_div::trimExplode (',', $conf['special.'][$type]);
+			$specialArray = GeneralUtility::trimExplode (',', $conf['special.'][$type]);
 			if (in_array($cat, $specialArray))	{
 				$rc = true;
 			}
@@ -89,17 +92,17 @@ abstract class tx_ttproducts_category_base extends tx_ttproducts_table_base {
 		return $rc;
 	}
 
-	function getRowPid ($row) {
+	public function getRowPid ($row) {
 		$rc = '';
 		return $rc;
 	}
 
-	function getParamDefault ($theCode, $piVars)	{
+	public function getParamDefault ($theCode, $piVars)	{
 		$rc = '';
 		return $rc;
 	}
 
-	function getChildUidArray ($uid)	{
+	public function getChildUidArray ($uid)	{
 		$rcArray = array();
 		return $rcArray;
 	}
@@ -109,7 +112,7 @@ abstract class tx_ttproducts_category_base extends tx_ttproducts_table_base {
 		return $rcArray;
 	}
 
-	function getCategoryArray ($uid, $orderBy='')	{
+	public function getCategoryArray ($uid, $orderBy='')	{
 		$catArray = array();
 		if($this->getMMTablename()) {
 			$hookVar = '';
@@ -122,7 +125,7 @@ abstract class tx_ttproducts_category_base extends tx_ttproducts_table_base {
 				// Call all addWhere hooks for categories at the end of this method
 			if ($hookVar && isset ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT][$hookVar]) && is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT][$hookVar])) {
 				foreach  ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT][$hookVar] as $classRef) {
-					$hookObj= t3lib_div::makeInstance($classRef);
+					$hookObj= GeneralUtility::makeInstance($classRef);
 					if (method_exists($hookObj, 'init')) {
 						$hookObj->init($this->parentField);
 					}
@@ -143,7 +146,7 @@ abstract class tx_ttproducts_category_base extends tx_ttproducts_table_base {
 
 	public function getDepth ($theCode)	{
 
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$functablename = $this->getFuncTablename();
 		$conf = $this->getTableConf($theCode);
 		$tableconf = $cnf->getTableConf($functablename, $theCode);
@@ -169,7 +172,7 @@ abstract class tx_ttproducts_category_base extends tx_ttproducts_table_base {
 			// Call all addWhere hooks for categories at the end of this method
 		if ($hookVar && is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT][$hookVar])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT][$hookVar] as $classRef) {
-				$hookObj= t3lib_div::makeInstance($classRef);
+				$hookObj= GeneralUtility::makeInstance($classRef);
 				if (method_exists($hookObj, 'init')) {
 					$hookObj->init($this->parentField);
 				}
@@ -200,7 +203,7 @@ abstract class tx_ttproducts_category_base extends tx_ttproducts_table_base {
 			// Call all addWhere hooks for categories at the end of this method
 		if ($hookVar && is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT][$hookVar])) {
 			foreach  ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT][$hookVar] as $classRef) {
-				$hookObj= t3lib_div::makeInstance($classRef);
+				$hookObj= GeneralUtility::makeInstance($classRef);
 				if (method_exists($hookObj, 'init')) {
 					$hookObj->init($this->parentField);
 				}
@@ -220,7 +223,7 @@ abstract class tx_ttproducts_category_base extends tx_ttproducts_table_base {
 
 	function &getRootArray ($rootCat, $categoryArray)	{
 		$rootArray = array();
-		$rootCatArray = t3lib_div::trimExplode(',', $rootCat);
+		$rootCatArray = GeneralUtility::trimExplode(',', $rootCat);
 
 		foreach ($categoryArray as $uid => $row)	{
 
@@ -243,7 +246,7 @@ abstract class tx_ttproducts_category_base extends tx_ttproducts_table_base {
 
 	function &getRootpathArray (&$relationArray,$rootCat,$currentCat) {
 		$rootpathArray = array();
-		$rootCatArray = t3lib_div::trimExplode(',', $rootCat);
+		$rootCatArray = GeneralUtility::trimExplode(',', $rootCat);
 		$uid = $currentCat;
 
 		if (isset($uid))	{

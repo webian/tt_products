@@ -37,8 +37,10 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class tx_ttproducts_hooks_be implements t3lib_Singleton {
+
+class tx_ttproducts_hooks_be implements \TYPO3\CMS\Core\SingletonInterface {
 
 	public function displayCategoryTree ($PA, $fobj) {
 		$result = false;
@@ -47,9 +49,9 @@ class tx_ttproducts_hooks_be implements t3lib_Singleton {
 			$treeObj = false;
 
 			if (class_exists('JambageCom\\MbiProductsCategories\\View\\TreeSelector')) {
-				$treeObj = t3lib_div::makeInstance('JambageCom\\MbiProductsCategories\\View\\TreeSelector');
+				$treeObj = GeneralUtility::makeInstance('JambageCom\\MbiProductsCategories\\View\\TreeSelector');
 			} else if (class_exists('tx_mbiproductscategories_treeview')) {
-				$treeObj = t3lib_div::makeInstance('tx_mbiproductscategories_treeview');
+				$treeObj = GeneralUtility::makeInstance('tx_mbiproductscategories_treeview');
 			}
 
 			if (is_object($treeObj)) {

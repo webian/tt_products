@@ -37,6 +37,7 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
 class tx_ttproducts_order_view extends tx_ttproducts_table_base_view {
@@ -44,6 +45,8 @@ class tx_ttproducts_order_view extends tx_ttproducts_table_base_view {
 
 	/** add the markers for uid, date and the tracking number which is stored in the basket recs */
 	public function getBasketRecsMarkerArray (&$markerArray, $orderArray)	{
+        $local_cObj = \JambageCom\Div2007\Utility\FrontendUtility::getContentObjectRenderer();
+
 			// order
 		if (
 			isset($orderArray) &&
@@ -56,7 +59,7 @@ class tx_ttproducts_order_view extends tx_ttproducts_table_base_view {
 
 				// Order:	NOTE: Data exist only if the order->getBlankUid() has been called. Therefore this field in the template should be used only when an order has been established
 			$markerArray['###ORDER_UID###'] = $orderObj->getNumber($orderArray['orderUid']);
-			$markerArray['###ORDER_DATE###'] = $this->cObj->stdWrap($orderArray['orderDate'],$this->conf['orderDate_stdWrap.']);
+			$markerArray['###ORDER_DATE###'] = $local_cObj->stdWrap($orderArray['orderDate'], $this->conf['orderDate_stdWrap.']);
 			$markerArray['###ORDER_TRACKING_NO###'] = $orderArray['orderTrackingNo'];
 		} else {
 			$markerArray['###ORDER_UID###'] = '';
@@ -66,11 +69,13 @@ class tx_ttproducts_order_view extends tx_ttproducts_table_base_view {
 	}
 
 	public function printView(&$templateCode, &$error_code)	 {
+        $local_cObj = \JambageCom\Div2007\Utility\FrontendUtility::getContentObjectRenderer();
+
 		$feusers_uid = $GLOBALS['TSFE']->fe_user->user['uid'];
-		$priceViewObj = t3lib_div::makeInstance('tx_ttproducts_field_price_view');
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
-		$subpartmarkerObj = t3lib_div::makeInstance('tx_ttproducts_subpartmarker');
-		$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
+		$priceViewObj = GeneralUtility::makeInstance('tx_ttproducts_field_price_view');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
+		$subpartmarkerObj = GeneralUtility::makeInstance('tx_ttproducts_subpartmarker');
+		$markerObj = GeneralUtility::makeInstance('tx_ttproducts_marker');
 		$globalMarkerArray = $markerObj->getGlobalMarkerArray();
 		$functablename = 'sys_products_orders';
 		$orderObj = $tablesObj->get($functablename); // order
@@ -78,8 +83,8 @@ class tx_ttproducts_order_view extends tx_ttproducts_table_base_view {
 			// order
 		$orderObj = $tablesObj->get('sys_products_orders');
 		if (!$feusers_uid)	{
-			$frameWork = $this->cObj->getSubpart($templateCode,$subpartmarkerObj->spMarker('###MEMO_NOT_LOGGED_IN###'));
-			$content = $this->cObj->substituteMarkerArray($frameWork, $globalMarkerArray);
+			$frameWork = $local_cObj->getSubpart($templateCode,$subpartmarkerObj->spMarker('###MEMO_NOT_LOGGED_IN###'));
+			$content = $local_cObj->substituteMarkerArray($frameWork, $globalMarkerArray);
 			return $content;
 		}
 
@@ -87,18 +92,18 @@ class tx_ttproducts_order_view extends tx_ttproducts_table_base_view {
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'sys_products_orders', $where);
 		$templateArea = 'ORDERS_LIST_TEMPLATE';
 
-		$frameWork = $this->cObj->getSubpart($templateCode,$subpartmarkerObj->spMarker('###' . $templateArea . '###'));
+		$frameWork = $local_cObj->getSubpart($templateCode,$subpartmarkerObj->spMarker('###' . $templateArea . '###'));
 
 		if (!$frameWork) {
-			$templateObj = t3lib_div::makeInstance('tx_ttproducts_template');
+			$templateObj = GeneralUtility::makeInstance('tx_ttproducts_template');
 			$error_code[0] = 'no_subtemplate';
 			$error_code[1] = '###'.$templateArea.'###';
 			$error_code[2] = $templateObj->getTemplateFile();
 			return '';
 		}
 
-		$content = $this->cObj->substituteMarkerArray($frameWork, $globalMarkerArray);
-		$orderitem = $this->cObj->getSubpart($content,'###ORDER_ITEM###');
+		$content = $local_cObj->substituteMarkerArray($frameWork, $globalMarkerArray);
+		$orderitem = $local_cObj->getSubpart($content,'###ORDER_ITEM###');
 		$count = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
 
 		if ($count) {
@@ -112,7 +117,7 @@ class tx_ttproducts_order_view extends tx_ttproducts_table_base_view {
 			$this->orders = array();
 			while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 				$markerArray['###TRACKING_CODE###'] = $row['tracking_code'];
-				$markerArray['###ORDER_DATE###'] = $this->cObj->stdWrap($row['crdate'],$this->conf['orderDate_stdWrap.']);
+				$markerArray['###ORDER_DATE###'] = $local_cObj->stdWrap($row['crdate'],$this->conf['orderDate_stdWrap.']);
 				$markerArray['###ORDER_NUMBER###'] = $orderObj->getNumber($row['uid']);
 				//$rt= $row['creditpoints_saved'] + $row['creditpoints_gifts'] - $row['creditpoints_spended'] - $row['creditpoints'];
 				$markerArray['###ORDER_CREDITS###'] = $row['creditpoints_saved'] + $row['creditpoints_gifts'] - $row['creditpoints_spended'] - $row['creditpoints'];
@@ -129,7 +134,7 @@ class tx_ttproducts_order_view extends tx_ttproducts_table_base_view {
 
 				// total amount of creditpoints from gifts
 				$tot_creditpoints_gifts += $row['creditpoints_gifts'];
-				$orderlistc .= $this->cObj->substituteMarkerArray($orderitem, $markerArray);
+				$orderlistc .= $local_cObj->substituteMarkerArray($orderitem, $markerArray);
 			}
 			$GLOBALS['TYPO3_DB']->sql_free_result($res);
 
@@ -166,10 +171,10 @@ class tx_ttproducts_order_view extends tx_ttproducts_table_base_view {
 			$markerArray['###CALC_DATE###'] = date('d M Y');
 			$subpartArray['###ORDER_LIST###'] = $orderlistc;
 			$subpartArray['###ORDER_NOROWS###'] = '';
-			$content = $this->cObj->substituteMarkerArrayCached($content,$markerArray,$subpartArray);
+			$content = $local_cObj->substituteMarkerArrayCached($content,$markerArray,$subpartArray);
 		} else {
 			$GLOBALS['TYPO3_DB']->sql_free_result($res);
-			$norows = $this->cObj->getSubpart($content,'###ORDER_NOROWS###');
+			$norows = $local_cObj->getSubpart($content,'###ORDER_NOROWS###');
 			$content = $norows;
 		} // else of if ($GLOBALS['TYPO3_DB']->sql_num_rows($res))
 

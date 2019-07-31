@@ -37,11 +37,10 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
-class tx_ttproducts_field_price_view implements tx_ttproducts_field_view_int, t3lib_Singleton {
-	public $langObj;
-	public $cObj;
+class tx_ttproducts_field_price_view implements tx_ttproducts_field_view_int, \TYPO3\CMS\Core\SingletonInterface {
 	public $conf;			// original configuration
 	public $modelObj;
 	protected static $convertArray = array(
@@ -77,10 +76,8 @@ class tx_ttproducts_field_price_view implements tx_ttproducts_field_view_int, t3
 	/**
 	 * Getting all tt_products_cat categories into internal array
 	 */
-	public function init ($langObj, &$cObj, &$modelObj)	{
-		$this->langObj = $langObj;
-		$this->cObj = $cObj;
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+	public function init ($modelObj)	{
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$this->conf = $cnf->conf;
 		$this->modelObj = $modelObj;
 		$this->bHasBeenInitialised = true;
@@ -100,18 +97,19 @@ class tx_ttproducts_field_price_view implements tx_ttproducts_field_view_int, t3
 	/**
 	 * Generate a graphical price tag or print the price as text
 	 */
-	public function printPrice ($priceText,$taxInclExcl='')	{
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+	public function printPrice ($priceText, $taxInclExcl = '')	{
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$conf = $cnf->conf;
 
 		if (($conf['usePriceTag']) && (isset($conf['priceTagObj.'])))	{
+            $local_cObj = \JambageCom\Div2007\Utility\FrontendUtility::getContentObjectRenderer();
 			$ptconf = $conf['priceTagObj.'];
 			$markContentArray = array();
 			$markContentArray['###PRICE###'] = $priceText;
-			$markContentArray['###TAX_INCL_EXCL###'] = ($taxInclExcl ? tx_div2007_alpha5::getLL_fh003($this->langObj, $taxInclExcl) : '');
+			$markContentArray['###TAX_INCL_EXCL###'] = ($taxInclExcl ? $languageObj->getLabel($taxInclExcl) : '');
 
-			$this->cObj->substituteMarkerInObject($ptconf, $markContentArray);
-			$rc = $this->cObj->cObjGetSingle($conf['priceTagObj'], $ptconf);
+			$local_cObj->substituteMarkerInObject($ptconf, $markContentArray);
+			$rc = $local_cObj->cObjGetSingle($conf['priceTagObj'], $ptconf);
 		} else {
 			$rc = $priceText;
 		}
@@ -123,7 +121,7 @@ class tx_ttproducts_field_price_view implements tx_ttproducts_field_view_int, t3
 	 * Formatting a price
 	 */
 	public function priceFormat ($double) {
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$conf = $cnf->conf;
 		$double = round($double, 10);
 
@@ -145,7 +143,7 @@ class tx_ttproducts_field_price_view implements tx_ttproducts_field_view_int, t3
 	 */
 	public function percentageFormat ($double) {
 		$result = false;
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$conf = $cnf->conf;
 		$double = round($double, 10);
 
@@ -174,10 +172,11 @@ class tx_ttproducts_field_price_view implements tx_ttproducts_field_view_int, t3
 
 	public function getModelMarkerArray ($functablename, $basketExtra, $field, $row, &$markerArray, $priceMarkerPrefix, $id)	{
 
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+        $languageObj = GeneralUtility::makeInstance(\JambageCom\TtProducts\Api\Localization::class);
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$conf = $cnf->conf;
 		$config = $cnf->config;
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		$itemTableView = $tablesObj->get($functablename, true);
 		$itemTable = $itemTableView->getModelObj();
 		$modelObj = $this->getModelObj();
@@ -189,7 +188,7 @@ class tx_ttproducts_field_price_view implements tx_ttproducts_field_view_int, t3
 		$priceMarkerArray = array();
 
 		$priceNo = intval($config['priceNoReseller']);
-		$paymentshippingObj = t3lib_div::makeInstance('tx_ttproducts_paymentshipping');
+		$paymentshippingObj = GeneralUtility::makeInstance('tx_ttproducts_paymentshipping');
 		$taxFromShipping = $paymentshippingObj->getReplaceTaxPercentage($basketExtra);
 		$taxInclExcl = (isset($taxFromShipping) && is_double($taxFromShipping) && $taxFromShipping == 0 ? 'tax_zero' : 'tax_included');
 
@@ -217,7 +216,7 @@ class tx_ttproducts_field_price_view implements tx_ttproducts_field_view_int, t3
 
 		$priceMarkerArray['###CUR_SYM###'] = ' ' . ($conf['currencySymbol'] ? ($charset ? htmlentities($this->conf['currencySymbol'], ENT_QUOTES, $charset) : $conf['currencySymbol']) : '');
 
-		$priceMarkerArray['###TAX_INCL_EXCL###'] = ($taxInclExcl ? tx_div2007_alpha5::getLL_fh003($this->langObj, $taxInclExcl) : '');
+		$priceMarkerArray['###TAX_INCL_EXCL###'] = ($taxInclExcl ? $languageObj->getLabel($taxInclExcl) : '');
 
 		if (is_array($markerArray))	{
 			$markerArray = array_merge($markerArray, $priceMarkerArray);
@@ -229,14 +228,14 @@ class tx_ttproducts_field_price_view implements tx_ttproducts_field_view_int, t3
 
 	public function getRowMarkerArray ($functablename, $fieldname, $row, $markerKey, &$markerArray, $tagArray, $theCode, $id, $basketExtra, &$bSkip, $bHtml=true, $charset='', $prefix='', $suffix='', $imageRenderObj='')	{
 
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$conf = $cnf->conf;
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		$itemTableView = $tablesObj->get($functablename, true);
 		$itemTable = $itemTableView->getModelObj();
 		$modelObj = $this->getModelObj();
 		$marker = strtoupper($fieldname);
-		$paymentshippingObj = t3lib_div::makeInstance('tx_ttproducts_paymentshipping');
+		$paymentshippingObj = GeneralUtility::makeInstance('tx_ttproducts_paymentshipping');
 		$taxFromShipping = $paymentshippingObj->getReplaceTaxPercentage($basketExtra);
 		$taxInclExcl = (isset($taxFromShipping) && is_double($taxFromShipping) && ($taxFromShipping == 0) ? 'tax_zero' : 'tax_included');
 // tt-products-single-1-pricetax

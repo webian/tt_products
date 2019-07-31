@@ -37,13 +37,15 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 
 class tx_ttproducts_field_creditpoints extends tx_ttproducts_field_base {
 
 
 	public function getBasketTotal ()	{
 		$rc = 0;
-		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
+		$basketObj = GeneralUtility::makeInstance('tx_ttproducts_basket');
 		$itemArray = &$basketObj->getItemArray();
 
 		if (count($itemArray))	{
@@ -65,7 +67,7 @@ class tx_ttproducts_field_creditpoints extends tx_ttproducts_field_base {
 
 
 	public function getBasketMissingCreditpoints ($addCreditpoints, &$missing, &$remaining)	{
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		$feuserTable = $tablesObj->get('fe_users', false);
 
 		$feuserCreditpoints = $feuserTable->getCreditpoints();
@@ -78,7 +80,7 @@ class tx_ttproducts_field_creditpoints extends tx_ttproducts_field_base {
 
 	public function getMissingCreditpoints ($fieldname, $row, &$missing, &$remaining)	{
 
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		$feuserTable = $tablesObj->get('fe_users', false);
 
 		$creditpointsTotal = $this->getBasketTotal();

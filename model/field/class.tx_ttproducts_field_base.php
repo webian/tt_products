@@ -36,28 +36,30 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-abstract class tx_ttproducts_field_base implements tx_ttproducts_field_int, t3lib_Singleton {
+
+abstract class tx_ttproducts_field_base implements tx_ttproducts_field_int, \TYPO3\CMS\Core\SingletonInterface {
 	private $bHasBeenInitialised = false;
 	var $cObj;
 	var $conf;		// original configuration
 	var $config;		// modified configuration
 	var $viewObj;		// view object
 
-	function init ($cObj)	{
+	public function init ($cObj)	{
 		$this->cObj = $cObj;
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
 
 		$this->bHasBeenInitialised = true;
 	}
 
-	function needsInit ()	{
+	public function needsInit ()	{
 		return !$this->bHasBeenInitialised;
 	}
 
-	function getFieldValue ($basketExtra, $row, $fieldname)	{
+	public function getFieldValue ($basketExtra, $row, $fieldname)	{
 		return $row[$fieldname];
 	}
 }

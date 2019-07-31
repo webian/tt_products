@@ -37,6 +37,9 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
+
  
 class tx_ttproducts_pricecalc extends tx_ttproducts_pricecalc_base {
 
@@ -50,7 +53,7 @@ class tx_ttproducts_pricecalc extends tx_ttproducts_pricecalc_base {
 		$bUseArticles,
 		$bMergeArticles=true
 	) {
-		$sql = t3lib_div::makeInstance('tx_ttproducts_sql');
+		$sql = GeneralUtility::makeInstance('tx_ttproducts_sql');
 
 		if (!$itemArray || !count($itemArray)) {
 			return;

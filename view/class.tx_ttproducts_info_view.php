@@ -38,9 +38,10 @@
  */
 
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
-class tx_ttproducts_info_view implements t3lib_Singleton {
+class tx_ttproducts_info_view implements \TYPO3\CMS\Core\SingletonInterface {
 	public $pibase; // reference to object of pibase
 	public $conf;
 	public $config;
@@ -73,7 +74,7 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 
 		if (isset($GLOBALS['TCA']['fe_users']['columns']) && is_array(($GLOBALS['TCA']['fe_users']['columns'])))	{
 			foreach (($GLOBALS['TCA']['fe_users']['columns']) as $field => $fieldTCA)	{
-				if (!t3lib_div::inList($this->feuserfields, $field))	{
+				if (!GeneralUtility::inList($this->feuserfields, $field))	{
 					$this->feuserfields .= ',' . $field;
 				}
 			}
@@ -86,8 +87,8 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 	 */
 	public function init ($pibase, $bProductsPayment, $fixCountry, $basketExtra)  {
 		$this->pibase = $pibase;
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
-		$paymentshippingObj = t3lib_div::makeInstance('tx_ttproducts_paymentshipping');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
+		$paymentshippingObj = GeneralUtility::makeInstance('tx_ttproducts_paymentshipping');
 
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
@@ -122,7 +123,7 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 		$possibleCheckFieldArray = array('name', 'last_name', 'email', 'telephone');
 
 		foreach ($possibleCheckFieldArray as $possibleCheckField) {
-			if (t3lib_div::inList($requiredInfoFields, $possibleCheckField)) {
+			if (GeneralUtility::inList($requiredInfoFields, $possibleCheckField)) {
 				$checkField = $possibleCheckField;
 				break;
 			}
@@ -156,7 +157,7 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 
 			if ($this->conf['loginUserInfoAddress']) {
 				$address = implode(chr(10),
-					t3lib_div::trimExplode(
+					GeneralUtility::trimExplode(
 						chr(10),
 						$GLOBALS['TSFE']->fe_user->user['address'].chr(10) . ($GLOBALS['TSFE']->fe_user->user['house_no'] != '' ? $GLOBALS['TSFE']->fe_user->user['house_no'] . chr(10) : '') .
 						$GLOBALS['TSFE']->fe_user->user['zip'].' '.$GLOBALS['TSFE']->fe_user->user['city'].chr(10).
@@ -170,7 +171,7 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 			$this->infoArray['billing']['address'] = $address;
 
 			$fields = $this->feuserfields.','.$this->creditpointfields;
-			$fieldArray = t3lib_div::trimExplode(',',$fields);
+			$fieldArray = GeneralUtility::trimExplode(',',$fields);
 			foreach ($fieldArray as $k => $field)	{
 				$this->infoArray['billing'][$field] = ($this->infoArray['billing'][$field] ? $this->infoArray['billing'][$field]: $GLOBALS['TSFE']->fe_user->user[$field]);
 			}
@@ -199,9 +200,9 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 	 * Getting all tt_products_cat categories into internal array
 	 */
 	public function init2 ($infoArray)  {
-		$pibaseObj = t3lib_div::makeInstance('tx_ttproducts_pi1_base');
+		$pibaseObj = GeneralUtility::makeInstance('tx_ttproducts_pi1_base');
 		$this->pibase = $pibase;
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
@@ -220,7 +221,7 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 
 
 	public function getCustomerEmail () {
-		$infoViewObj = t3lib_div::makeInstance('tx_ttproducts_info_view');
+		$infoViewObj = GeneralUtility::makeInstance('tx_ttproducts_info_view');
 
 		$result = ($this->conf['orderEmail_toDelivery'] && $this->infoArray['delivery']['email'] || !$this->infoArray['billing']['email'] ? $this->infoArray['delivery']['email'] : $this->infoArray['billing']['email']); // former: deliveryInfo
 
@@ -242,7 +243,7 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
             ) &&
             !$this->bDeliveryAddress
         ) {
-			$fieldArray = t3lib_div::trimExplode(',', $this->feuserfields . ',feusers_uid');
+			$fieldArray = GeneralUtility::trimExplode(',', $this->feuserfields . ',feusers_uid');
 			$address = trim($this->infoArray['delivery']['address']);
 
 			foreach($fieldArray as $k => $fName) {
@@ -264,7 +265,7 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 			// Call info hooks
 		if (is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['info'])) {
 			foreach  ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['info'] as $classRef) {
-				$hookObj = t3lib_div::makeInstance($classRef);
+				$hookObj = GeneralUtility::makeInstance($classRef);
 				if (method_exists($hookObj, 'mapPersonIntoDelivery')) {
 					$hookObj->mapPersonIntoDelivery($this);
 				}
@@ -277,7 +278,7 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 	 * Checks if required fields are filled in
 	 */
 	public function getRequiredInfoFields ($type = '', $basketExtra)	{
-		$paymentshippingObj = t3lib_div::makeInstance('tx_ttproducts_paymentshipping');
+		$paymentshippingObj = GeneralUtility::makeInstance('tx_ttproducts_paymentshipping');
 		$rc = '';
 		$requiredInfoFieldArray = $this->conf['requiredInfoFields.'];
 		if ($type != '' && isset($requiredInfoFieldArray) && is_array($requiredInfoFieldArray) && isset($requiredInfoFieldArray[$type]))	{
@@ -330,7 +331,7 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 			$requiredInfoFields = $this->getRequiredInfoFields($type, $basketExtra);
 
 			if ($requiredInfoFields)	{
-				$infoFields = t3lib_div::trimExplode(',',$requiredInfoFields);
+				$infoFields = GeneralUtility::trimExplode(',',$requiredInfoFields);
 
 				foreach($infoFields as $fName)	{
 
@@ -369,7 +370,7 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 		$staticInfo = tx_ttproducts_static_info::getStaticInfo();
 
 		if ($where && $this->conf['useStaticInfoCountry'] && is_object($staticInfo))	{
-			$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+			$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 			$countryObj = $tablesObj->get('static_countries');
 			if (is_object($countryObj))	{
 				$type = ($this->bDeliveryAddress ? 'billing' : 'delivery');
@@ -391,7 +392,7 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 		$staticInfo = tx_ttproducts_static_info::getStaticInfo();
 
 		if (is_object($staticInfo))	{
-			$paymentshippingObj = t3lib_div::makeInstance('tx_ttproducts_paymentshipping');
+			$paymentshippingObj = GeneralUtility::makeInstance('tx_ttproducts_paymentshipping');
 			$where = $paymentshippingObj->getWhere($basketExtra, 'static_countries');
 		}
 		return $where;
@@ -411,11 +412,11 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 	 * @access private
 	 */
 	public function getRowMarkerArray ($basketExtra, &$markerArray, $bHtml, $bSelectSalutation)	{
-		$cObj = t3lib_div::makeInstance('tx_div2007_cobj');
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
-		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
-		$infoFields = t3lib_div::trimExplode(',',$this->feuserfields); // Fields...
+		$cObj = GeneralUtility::makeInstance('tx_div2007_cobj');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
+		$languageObj = GeneralUtility::makeInstance(\JambageCom\TtProducts\Api\Localization::class);
+		$infoFields = GeneralUtility::trimExplode(',',$this->feuserfields); // Fields...
 		$orderAddressViewObj = $tablesObj->get('fe_users', true);
 		$orderAddressObj = $orderAddressViewObj->getModelObj();
 		$selectInfoFields = $orderAddressObj->getSelectInfoFields();
@@ -627,7 +628,7 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 
 				if (isset($this->conf['UIDstore'])) {
 
-					$tmpArray = t3lib_div::trimExplode(',', $this->conf['UIDstore']);
+					$tmpArray = GeneralUtility::trimExplode(',', $this->conf['UIDstore']);
 					foreach ($tmpArray as $value) {
 						if ($value) {
 							$uidStoreArray[] = $value;
@@ -638,7 +639,7 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 				$where_clause = '';
 				if ($tablename == 'fe_users' && $this->conf['UIDstoreGroup'] != '') {
 					$orChecks = array();
-					$memberGroups = t3lib_div::trimExplode(',', $this->conf['UIDstoreGroup']);
+					$memberGroups = GeneralUtility::trimExplode(',', $this->conf['UIDstoreGroup']);
 					foreach ($memberGroups as $value) {
 						$orChecks[] = $GLOBALS['TYPO3_DB']->listQuery('usergroup', $value, $tablename);
 					}
@@ -697,7 +698,7 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 
 						$markerArray['###DELIVERY_STORE_SELECT###'] =
 							tx_ttproducts_form_div::createSelect(
-								$langObj,
+								$languageObj,
 								$valueArray,
 								'recs[delivery][store]',
 								$actUidStore,
@@ -736,7 +737,7 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 		unset($valueArray[0]);
 
 		$foundbyText = tx_ttproducts_form_div::createSelect(
-			$langObj,
+			$languageObj,
 			$valueArray,
 			'recs[delivery][foundby]',
 			$this->infoArray['delivery']['foundby'],
@@ -749,7 +750,7 @@ class tx_ttproducts_info_view implements t3lib_Singleton {
 		$foundbyKey = $this->infoArray['delivery']['foundby'];
 		if (is_array($valueArray[$foundbyKey]))	{
 			$tmp = tx_div2007_alpha5::sL_fh002($valueArray[$foundbyKey][0]);
-			$text = tx_div2007_alpha5::getLL_fh003($langObj, $tmp);
+			$text = $languageObj->getLabel($tmp);
 		}
 
 		$markerArray['###DELIVERY_FOUNDBY###'] = $text;

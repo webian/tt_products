@@ -36,8 +36,10 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class tx_ttproducts_api implements t3lib_Singleton {
+
+class tx_ttproducts_api implements \TYPO3\CMS\Core\SingletonInterface {
 
 	static public function roundPrice ($value, $format) {
 
@@ -47,7 +49,7 @@ class tx_ttproducts_api implements t3lib_Singleton {
 		$floatLen = strlen($value) - $dotPos - 1;
 
 		if (strpos($format, '.') !== false) {
-			$priceRoundFormatArray = t3lib_div::trimExplode('.', $format);
+			$priceRoundFormatArray = GeneralUtility::trimExplode('.', $format);
 		} else {
 			$priceRoundFormatArray['0'] = $format;
 		}
@@ -193,7 +195,7 @@ class tx_ttproducts_api implements t3lib_Singleton {
 	static public function createFeuser ($conf, $infoObj, $basketView, $calculatedArray, $fromArray) {
 
 		$result = false;
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		$infoArray = $infoObj->infoArray;
 		$apostrophe = $conf['orderEmail_apostrophe'];
 

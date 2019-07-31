@@ -41,7 +41,7 @@ class tx_ttproducts_form_div {
 
 
 	static public function createSelect (
-		$langObj,
+		$languageObj,
 		$valueArray,
 		$name,
 		$selectedKey,
@@ -75,7 +75,7 @@ class tx_ttproducts_form_div {
 
 				if ($bTranslateText)	{
 					$tmp = tx_div2007_alpha5::sL_fh002($selectValue);
-					$text = tx_div2007_alpha5::getLL_fh003($langObj, $tmp);
+					$text = $languageObj->getLabel($tmp);
 				} else {
 					$text = '';
 				}

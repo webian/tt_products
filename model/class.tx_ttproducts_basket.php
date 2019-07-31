@@ -40,9 +40,10 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
-class tx_ttproducts_basket implements t3lib_Singleton {
+class tx_ttproducts_basket implements \TYPO3\CMS\Core\SingletonInterface {
 	public $conf;
 	public $config;
 
@@ -72,22 +73,22 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 		$bStoreBasket
 	)	{
 		$formerBasket = tx_ttproducts_control_basket::getRecs();
-		$pibaseObj = t3lib_div::makeInstance('' . $pibaseClass);
-		$cnfObj = t3lib_div::makeInstance('tx_ttproducts_config');
+		$pibaseObj = GeneralUtility::makeInstance('' . $pibaseClass);
+		$cnfObj = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$this->conf = &$cnfObj->conf;
 		$this->config = &$cnfObj->config;
 		$this->recs = $formerBasket;	// Sets it internally
-		$this->itemObj = t3lib_div::makeInstance('tx_ttproducts_basketitem');
+		$this->itemObj = GeneralUtility::makeInstance('tx_ttproducts_basketitem');
 
 		if (isset($pibaseObj->piVars) && is_array($pibaseObj->piVars) && isset($pibaseObj->piVars['type']) && is_array($pibaseObj->piVars['type']))	{
 			$typeArray = $pibaseObj->piVars['type'];
 		}
 
         // neu Anfang
-        $gpVars = t3lib_div::_GP(TT_PRODUCTS_EXT);
+        $gpVars = GeneralUtility::_GP(TT_PRODUCTS_EXT);
         $payment =
-            t3lib_div::_POST('products_payment') ||
-            t3lib_div::_POST('products_payment_x') ||
+            GeneralUtility::_POST('products_payment') ||
+            GeneralUtility::_POST('products_payment_x') ||
             isset($gpVars['activity']) &&
             is_array($gpVars['activity']) &&
             $gpVars['activity']['payment'];
@@ -108,8 +109,8 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 
 		$this->basket = array();
 		$this->itemArray = array();
-		$paymentshippingObj = t3lib_div::makeInstance('tx_ttproducts_paymentshipping');
-		$this->pidListObj = t3lib_div::makeInstance('tx_ttproducts_pid_list');
+		$paymentshippingObj = GeneralUtility::makeInstance('tx_ttproducts_paymentshipping');
+		$this->pidListObj = GeneralUtility::makeInstance('tx_ttproducts_pid_list');
 		$this->pidListObj->init($pibaseObj->cObj);
 		$this->pidListObj->applyRecursive(99, $pid_list, true);
 		$this->pidListObj->setPageArray();
@@ -121,19 +122,19 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 		}
 
 		$this->setFuncTablename($funcTablename);
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		$viewTableObj = $tablesObj->get($funcTablename);
 		$tmpBasketExt = $GLOBALS['TSFE']->fe_user->getKey('ses','basketExt');
 
 		$order = $GLOBALS['TSFE']->fe_user->getKey('ses','order');
 		$this->setOrder($order);
-		$basketExtRaw = t3lib_div::_GP('ttp_basket');
+		$basketExtRaw = GeneralUtility::_GP('ttp_basket');
 		$basketInputConf = &$cnfObj->getBasketConf('view','input');
 
 		if (isset($basketInputConf) && is_array($basketInputConf))	{
 			foreach ($basketInputConf as $lineNo => $inputConf)	{
 				if (strpos($lineNo,'.') !== false && $inputConf['type'] == 'radio' && $inputConf['where'] && $inputConf['name'] != '')	{
-					$radioUid = t3lib_div::_GP($inputConf['name']);
+					$radioUid = GeneralUtility::_GP($inputConf['name']);
 					if ($radioUid)	{
 						$rowArray = $viewTableObj->get('',0,false,$inputConf['where']);
 
@@ -160,12 +161,12 @@ class tx_ttproducts_basket implements t3lib_Singleton {
         if (isset($this->basketExt['gift'])) {
             $this->giftnumber = count($this->basketExt['gift']) + 1;
         }
-		$newGiftData = t3lib_div::_GP('ttp_gift');
+		$newGiftData = GeneralUtility::_GP('ttp_gift');
 		$extVars = $pibaseObj->piVars['variants'];
-		$extVars = ($extVars ? $extVars : t3lib_div::_GP('ttp_extvars'));
+		$extVars = ($extVars ? $extVars : GeneralUtility::_GP('ttp_extvars'));
 		$paramProduct = strtolower($viewTableObj->marker);
 		$uid = $pibaseObj->piVars[$paramProduct];
-		$uid = ($uid ? $uid : t3lib_div::_GP('tt_products'));
+		$uid = ($uid ? $uid : GeneralUtility::_GP('tt_products'));
 		$sameGiftData = true;
 		$identGiftnumber = 0;
 
@@ -178,7 +179,7 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 			// Call all changeBasket hooks
 		if (is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['changeBasket'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['changeBasket'] as $classRef) {
-				$hookObj= t3lib_div::makeInstance($classRef);
+				$hookObj= GeneralUtility::makeInstance($classRef);
 				if (method_exists($hookObj, 'changeBasket')) {
 					$hookObj->changeBasket($this, $basketExtRaw, $extVars, $paramProduct, $uid, $sameGiftData, $identGiftnumber);
 				}
@@ -186,7 +187,7 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 		}
 
 		if ($newGiftData) {
-			$giftnumber = t3lib_div::_GP('giftnumber');
+			$giftnumber = GeneralUtility::_GP('giftnumber');
 			if ($updateMode) {
 				$this->basketExt['gift'][$giftnumber] = $newGiftData;
 				$giftcount = intval($this->basketExt['gift'][$giftnumber]['item'][$uid][$extVars]);
@@ -324,7 +325,7 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 	public function getRadioInputArray (
 		$row
 	) {
-		$cnfObj = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnfObj = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$basketConf = $cnfObj->getBasketConf('view', 'input');
 		$result = false;
 		if (count($basketConf)) {
@@ -360,7 +361,7 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 		if ($this->conf['errorLog'] && isset($item['quantity']) && $item['quantity'] != '') {
 			error_log('addItem $item = ' . print_r($item, true) . chr(13), 3, $this->conf['errorLog']);
 		}
-		$priceObj = t3lib_div::makeInstance('tx_ttproducts_field_price');
+		$priceObj = GeneralUtility::makeInstance('tx_ttproducts_field_price');
 
 		// quantities for single values are stored in an array. This is necessary because a HTML checkbox does not send any values if it has been unchecked
 		if (isset($item['quantity']) && is_array($item['quantity']))	{
@@ -511,7 +512,7 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 		$count = 0;
 
 		if ($this->conf['basketMaxQuantity'] == 'inStock' && !$this->conf['alwaysInStock'] && !empty($uid)) {
-			$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+			$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 			$viewTableObj = $tablesObj->get('tt_products');
 			$row = $viewTableObj->get($uid);
 			$count =
@@ -521,12 +522,11 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 						tx_div2007_core::intInRange($quantity, 0, $row['inStock'], 0)
 				);
 		} elseif ($this->conf['basketMaxQuantity'] == 'creditpoint' && !empty($uid)) {
-			include_once (PATH_BE_ttproducts.'model/field/class.tx_ttproducts_field_creditpoints.php');
-			$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+			$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 			$viewTableObj = $tablesObj->get('tt_products');
 			$row = $viewTableObj->get($uid);
 
-			$creditpointsObj = t3lib_div::makeInstance('tx_ttproducts_field_creditpoints');
+			$creditpointsObj = GeneralUtility::makeInstance('tx_ttproducts_field_creditpoints');
 			$missingCreditpoints = 0;
 			$creditpointsObj->getBasketMissingCreditpoints($row['creditpoints'] * $quantity, $missingCreditpoints, $tmp);
 
@@ -624,7 +624,7 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 
 	// get gradutated prices for all products in a list view or a single product in a single view
 	public function getGraduatedPrices ($uid)	{
-		$graduatedPriceObj = t3lib_div::makeInstance('tx_ttproducts_graduated_price');
+		$graduatedPriceObj = GeneralUtility::makeInstance('tx_ttproducts_graduated_price');
 		$this->formulaArray = $graduatedPriceObj->getFormulasByProduct($uid);
 	}
 
@@ -669,7 +669,7 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 
 	public function getAddressArray ()	{
 		$rc = array();
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		$addressObj = $tablesObj->get('address',false);
 
 		foreach ($this->itemArray as $sort => $actItemArray) {
@@ -723,7 +723,7 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 	public function &getItem ($basketExtra, $row, $fetchMode, $funcTablename='') {
 
 		$item = array();
-		$priceObj = t3lib_div::makeInstance('tx_ttproducts_field_price');
+		$priceObj = GeneralUtility::makeInstance('tx_ttproducts_field_price');
 		$priceRow = $row;
 		$maxDiscount = 0;
 
@@ -732,9 +732,9 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 		}
 
 		if ($funcTablename == 'tt_products') {
-			$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+			$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 			$viewTableObj = $tablesObj->get($funcTablename);
-			$cnfObj = t3lib_div::makeInstance('tx_ttproducts_config');
+			$cnfObj = GeneralUtility::makeInstance('tx_ttproducts_config');
 			$count = 0;
 			$variant = '';
 
@@ -797,7 +797,7 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 			is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['changeBasketItem'])
 		) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['changeBasketItem'] as $classRef) {
-				$hookObj= t3lib_div::makeInstance($classRef);
+				$hookObj= GeneralUtility::makeInstance($classRef);
 				if (method_exists($hookObj, 'changeBasketItem')) {
 					$hookObj->changeBasketItem($row, $fetchMode, $funcTablename, $item);
 				}
@@ -810,8 +810,8 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 
 	public function create ($basketExtra, $useArticles, $funcTablename)	{
 
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
-		$cnfObj = t3lib_div::makeInstance('tx_ttproducts_config');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
+		$cnfObj = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$conf = &$cnfObj->conf;
 		$theCode = 'BASKET';
 		$itemTableConf = $cnfObj->getTableConf($funcTablename, $theCode);
@@ -829,7 +829,7 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 		if (count($uidArr) == 0) {
 			return;
 		}
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		$viewTableObj = $tablesObj->get($funcTablename);
 		$pidListObj = $this->pidListObj;
 		$pid_list = $pidListObj->getPidlist();
@@ -860,7 +860,7 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 						continue;
 					}
 
-					$bextVarArray = t3lib_div::trimExplode('|', $bextVarLine);
+					$bextVarArray = GeneralUtility::trimExplode('|', $bextVarLine);
 					$bextVars = $bextVarArray[0];
 					$currRow = $row;
 
@@ -934,9 +934,9 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 		}
 		$this->itemArray = array(); // array of the items in the basket
 		$maxTax = 0;
-		$taxObj = t3lib_div::makeInstance('tx_ttproducts_field_tax');
+		$taxObj = GeneralUtility::makeInstance('tx_ttproducts_field_tax');
 		$uidArray = array();
-		$calculObj = t3lib_div::makeInstance('tx_ttproducts_basket_calculate');
+		$calculObj = GeneralUtility::makeInstance('tx_ttproducts_basket_calculate');
 		$calculArray = array();
 		$categoryQuantity = array();
 		$categoryArray = array();
@@ -976,10 +976,10 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 
 
 	public function calculate ()	{
-		$cnfObj = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnfObj = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$useArticles = $cnfObj->getUseArticles();
 
-		$calculObj = t3lib_div::makeInstance('tx_ttproducts_basket_calculate');
+		$calculObj = GeneralUtility::makeInstance('tx_ttproducts_basket_calculate');
 		$calculObj->calculate(
 			$this->basketExt,
 			$this->basketExtra,
@@ -992,26 +992,26 @@ class tx_ttproducts_basket implements t3lib_Singleton {
 
 
 	public function calculateSums () {
-		$calculObj = t3lib_div::makeInstance('tx_ttproducts_basket_calculate');
+		$calculObj = GeneralUtility::makeInstance('tx_ttproducts_basket_calculate');
 		$calculObj->calculateSums($this->recs);
 	}
 
 
 	public function getCalculatedSums () {
-		$calculObj = t3lib_div::makeInstance('tx_ttproducts_basket_calculate');
+		$calculObj = GeneralUtility::makeInstance('tx_ttproducts_basket_calculate');
 		$calculatedArray = $calculObj->getCalculatedArray();
 		return $calculatedArray;
 	}
 
 
 	public function addVoucherSums () {
-		$calculObj = t3lib_div::makeInstance('tx_ttproducts_basket_calculate');
+		$calculObj = GeneralUtility::makeInstance('tx_ttproducts_basket_calculate');
 		$calculObj->addVoucherSums();
 	}
 
 
 	public function getCalculatedArray ()	{
-		$calculObj = t3lib_div::makeInstance('tx_ttproducts_basket_calculate');
+		$calculObj = GeneralUtility::makeInstance('tx_ttproducts_basket_calculate');
 		$rc = $calculObj->getCalculatedArray();
 		return $rc;
 	}

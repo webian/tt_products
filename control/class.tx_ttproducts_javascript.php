@@ -37,7 +37,11 @@
  */
 
 
-class tx_ttproducts_javascript implements t3lib_Singleton {
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
+
+
+class tx_ttproducts_javascript implements \TYPO3\CMS\Core\SingletonInterface {
 	var $pibase; // reference to object of pibase
 	var $conf;
 	var $config;
@@ -50,7 +54,7 @@ class tx_ttproducts_javascript implements t3lib_Singleton {
 
 	function init($pibase, $ajax) {
 		$this->pibase = $pibase;
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
@@ -151,9 +155,9 @@ if (!Array.prototype.indexOf) { // published by developer.mozilla.org
 		$bDirectHTML = false;
 		$code = '';
 		$bError = false;
-		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
+		$languageObj = GeneralUtility::makeInstance(\JambageCom\TtProducts\Api\Localization::class);
 
-		$message = tx_div2007_alpha5::getLL_fh003($langObj, 'invalid_email');
+		$message = $languageObj->getLabel('invalid_email');
 		$emailArr =  explode('|', $message);
 
 		if (!$this->bCopyrightShown && $fieldname != 'xajax')	{
@@ -208,7 +212,7 @@ if (!Array.prototype.indexOf) { // published by developer.mozilla.org
 
 				if (is_array($params))	{
 					$funcs = count ($params);
-					$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+					$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 
 					$ajaxConf = $cnf->getAJAXConf();
 					if (is_array($ajaxConf))	{
@@ -217,7 +221,7 @@ if (!Array.prototype.indexOf) { // published by developer.mozilla.org
 						$code .= '
 		';
 						foreach ($ajaxConf as $k => $actConf)	{
-							$pVar = t3lib_div::_GP($k);
+							$pVar = GeneralUtility::_GP($k);
 							if (isset($pVar) && is_array($actConf[$pVar.'.']))	{
 								foreach ($actConf[$pVar.'.'] as $k2 => $v2)	{
 									$code .= 'conf['.$k2.'] = '.$v2.'; ';

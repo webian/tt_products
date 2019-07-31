@@ -38,6 +38,7 @@
  */
 
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
 class tx_ttproducts_catlist_view extends tx_ttproducts_catlist_view_base {
@@ -52,7 +53,7 @@ class tx_ttproducts_catlist_view extends tx_ttproducts_catlist_view_base {
 		$pageAsCategory,
 		$templateSuffix=''
 	) {
-		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
+		$basketObj = GeneralUtility::makeInstance('tx_ttproducts_basket');
 		$t = array();
 		$ctrlArray = array();
 		parent::getPrintViewArrays(
@@ -76,9 +77,9 @@ class tx_ttproducts_catlist_view extends tx_ttproducts_catlist_view_base {
 		$out='';
 		$where='';
 		$bFinished = false;
-		$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
-		$subpartmarkerObj = t3lib_div::makeInstance('tx_ttproducts_subpartmarker');
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$markerObj = GeneralUtility::makeInstance('tx_ttproducts_marker');
+		$subpartmarkerObj = GeneralUtility::makeInstance('tx_ttproducts_subpartmarker');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		$catView = $tablesObj->get($functablename, true);
 		$catTableObj = $catView->getModelObj();
 
@@ -261,7 +262,7 @@ class tx_ttproducts_catlist_view extends tx_ttproducts_catlist_view_base {
 				$addQueryString = array();
 				$markerArray = $this->urlObj->addURLMarkers($GLOBALS['TSFE']->id,$markerArray,$addQueryString,false);
 
-				$controlViewObj = t3lib_div::makeInstance('tx_ttproducts_control_view');
+				$controlViewObj = GeneralUtility::makeInstance('tx_ttproducts_control_view');
 				$controlViewObj->getMarkerArray($markerArray, $allMarkers, $this->getTableConfArray());
 			}
 			$out = $this->cObj->substituteMarkerArrayCached($t['listFrameWork'], $markerArray, $subpartArray, $wrappedSubpartArray);
@@ -298,12 +299,12 @@ class tx_ttproducts_catlist_view extends tx_ttproducts_catlist_view_base {
 		$theCode,
 		$basketExtra
 	) {
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$css = 'class="w' . $iCount . '"';
 		$css = ($actCategory == $currentCat ? 'class="act"' : $css);
 
 		// $pid = $row['pid'];
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		$pageObj = $tablesObj->get('pages');
 		$categoryTableViewObj = $tablesObj->get($functablename,true);
 		$categoryTable = $categoryTableViewObj->getModelObj();

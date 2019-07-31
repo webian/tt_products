@@ -37,8 +37,10 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class tx_ttproducts_match_condition implements t3lib_Singleton {
+
+class tx_ttproducts_match_condition implements \TYPO3\CMS\Core\SingletonInterface {
 
 	public function checkShipping (
 		$params
@@ -68,10 +70,10 @@ class tx_ttproducts_match_condition implements t3lib_Singleton {
 			if ($operator == '=') {
 				$result = ($infoArray[$type][$field] == $value);
 			} else if ($operator == 'IN') {
-				$valueArray = t3lib_div::trimExplode(',', $value);
+				$valueArray = GeneralUtility::trimExplode(',', $value);
 				$result = in_array($infoArray[$type][$field], $valueArray);
 			} else if ($operator == 'NOT IN') {
-				$valueArray = t3lib_div::trimExplode(',', $value);
+				$valueArray = GeneralUtility::trimExplode(',', $value);
 				$result = !in_array($infoArray[$type][$field], $valueArray);
 			}
 
@@ -94,10 +96,10 @@ class tx_ttproducts_match_condition implements t3lib_Singleton {
 				if ($operator == '=') {
 					$result = ($GLOBALS['TSFE']->fe_user->user[$field] == $value);
 				} else if ($operator == 'IN') {
-					$valueArray = t3lib_div::trimExplode(',', $value);
+					$valueArray = GeneralUtility::trimExplode(',', $value);
 					$result = in_array($GLOBALS['TSFE']->fe_user->user[$field], $valueArray);
 				} else if ($operator == 'NOT IN') {
-					$valueArray = t3lib_div::trimExplode(',', $value);
+					$valueArray = GeneralUtility::trimExplode(',', $value);
 					$result = !in_array($GLOBALS['TSFE']->fe_user->user[$field], $valueArray);
 				}
 			}
@@ -111,7 +113,7 @@ class tx_ttproducts_match_condition implements t3lib_Singleton {
 		$bBukily = false;
 		tx_ttproducts_control_basket::init();
 		$recs = tx_ttproducts_control_basket::getRecs();
-		$cObj = t3lib_div::makeInstance('tslib_cObj');
+		$cObj = GeneralUtility::makeInstance('tslib_cObj');
 		$basketExt = tx_ttproducts_control_basket::getBasketExt();
 
 		if (isset($basketExt) && is_array($basketExt)) {

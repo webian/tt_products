@@ -36,6 +36,8 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 
 class tx_ttproducts_field_tax extends tx_ttproducts_field_base {
 	protected $bUseStaticTaxes = false;
@@ -48,7 +50,7 @@ class tx_ttproducts_field_tax extends tx_ttproducts_field_base {
 		parent::init($cObj);
 
 		if ($bUseStaticTaxes && $uidStore)	{
-			$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+			$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 			$staticTaxObj = $tablesObj->get('static_taxes', false);
 /*			$dummyRow = array('tax_id' => '1');*/
 			$staticTaxObj->setStoreData($uidStore);
@@ -74,7 +76,7 @@ class tx_ttproducts_field_tax extends tx_ttproducts_field_base {
 
 		if ($this->getUseStaticTaxes())	{
 			$taxArray = array();
-			$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+			$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 			$staticTaxObj = $tablesObj->get('static_taxes', false);
 			$staticTaxObj->getStaticTax($row, $newTax, $taxArray);
 		}
@@ -83,7 +85,7 @@ class tx_ttproducts_field_tax extends tx_ttproducts_field_base {
 			$fieldValue = $newTax;
 		} else {
 			$fieldValue = parent::getFieldValue($basketExtra, $row, $fieldname);
-			$paymentshippingObj = t3lib_div::makeInstance('tx_ttproducts_paymentshipping');
+			$paymentshippingObj = GeneralUtility::makeInstance('tx_ttproducts_paymentshipping');
 			if (isset($paymentshippingObj) && is_object($paymentshippingObj)) {
 				$taxFromShipping =
 					$paymentshippingObj->getReplaceTaxPercentage(

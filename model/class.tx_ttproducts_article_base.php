@@ -37,6 +37,8 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 
 abstract class tx_ttproducts_article_base extends tx_ttproducts_table_base {
 	public $table;	 // object of the type tx_table_db
@@ -58,17 +60,13 @@ abstract class tx_ttproducts_article_base extends tx_ttproducts_table_base {
 		parent::init($cObj, $functablename);
 		$tablename = $this->getTablename();
 		$useArticles = $this->conf['useArticles'];
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 
 		if ($this->type == 'product')	{
-			include_once (PATH_BE_ttproducts.'model/class.tx_ttproducts_variant.php');
-
-			$this->variant = t3lib_div::makeInstance('tx_ttproducts_variant');
+			$this->variant = GeneralUtility::makeInstance('tx_ttproducts_variant');
 			$this->variant->init($this, $tablename, $useArticles);
 		} else {
-			include_once (PATH_BE_ttproducts.'model/class.tx_ttproducts_variant_dummy.php');
-
-			$this->variant = t3lib_div::makeInstance('tx_ttproducts_variant_dummy');
+			$this->variant = GeneralUtility::makeInstance('tx_ttproducts_variant_dummy');
 		}
 		$tableDesc = $this->getTableDesc();
 
@@ -218,7 +216,7 @@ abstract class tx_ttproducts_article_base extends tx_ttproducts_table_base {
 
 
 	public function getWhere ($where, $theCode = '', $orderBy = '') {
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$tableconf = $cnf->getTableConf($this->getFuncTablename(), $theCode);
 		$rc = array();
 		$where = ($where ? $where : '1=1 ') . $this->getTableObj()->enableFields();
@@ -308,7 +306,7 @@ abstract class tx_ttproducts_article_base extends tx_ttproducts_table_base {
 
 	public function getNeededUrlParams ($functablename, $theCode)	{
 		$rc = '';
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$tableconf = $cnf->getTableConf($functablename, $theCode);
 		if (is_array($tableconf) && $tableconf['urlparams'])	{
 			$rc = $tableconf['urlparams'];
@@ -355,11 +353,11 @@ abstract class tx_ttproducts_article_base extends tx_ttproducts_table_base {
 		$fieldArray['number'] = array('weight', 'inStock');
 		$fieldArray['price'] = array('price', 'price2', 'directcost');
 		$bIsAddedPrice = false;
-		$cnfObj = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnfObj = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$tableDesc = $this->getTableDesc();
 
 		if (isset($tableDesc['conf.']) && is_array($tableDesc['conf.']) && isset($tableDesc['conf.']['mergeAppendFields']))	{
-			$mergeAppendArray = t3lib_div::trimExplode(',',$tableDesc['conf.']['mergeAppendFields']);
+			$mergeAppendArray = GeneralUtility::trimExplode(',',$tableDesc['conf.']['mergeAppendFields']);
 			$fieldArray['text'] = $mergeAppendArray;
 		} else {
 			$mergeAppendArray = array();

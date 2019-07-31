@@ -37,9 +37,10 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
-class tx_ttproducts_template implements t3lib_Singleton {
+class tx_ttproducts_template implements \TYPO3\CMS\Core\SingletonInterface {
 	private $templateFile;
 
 	public function getTemplateFile ()	{
@@ -48,16 +49,16 @@ class tx_ttproducts_template implements t3lib_Singleton {
 
 
 	public function getTemplateSuffix ()	{
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$config = &$cnf->getConfig();
 		return $config['templateSuffix'];
 	}
 
 
-	public function &get ($theCode, $langObj, $cObj, &$templateFile, &$errorMessage) {
+	public function &get ($theCode, $languageObj, $cObj, &$templateFile, &$errorMessage) {
 
 		$templateCode = '';
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$conf = &$cnf->getConf();
 		$templateFile = $cnf->getTemplateFile($theCode);
 
@@ -72,7 +73,7 @@ class tx_ttproducts_template implements t3lib_Singleton {
 				$tmplText = $theCode.'.';
 			}
 			$tmplText .= 'templateFile';
-			$errorMessage .= tx_div2007_alpha5::getLL_fh003($langObj, 'no_template') . ' plugin.' . TT_PRODUCTS_EXT . '.' . $tmplText . ' = ';
+			$errorMessage .= $languageObj->getLabel('no_template') . ' plugin.' . TT_PRODUCTS_EXT . '.' . $tmplText . ' = ';
 			$errorMessage .= ($templateFile ? "'" . $templateFile . "'" : '""');
 		}
 

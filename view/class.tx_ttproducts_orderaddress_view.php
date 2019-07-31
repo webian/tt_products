@@ -37,6 +37,7 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
 class tx_ttproducts_orderaddress_view extends tx_ttproducts_table_base_view {
@@ -66,7 +67,7 @@ class tx_ttproducts_orderaddress_view extends tx_ttproducts_table_base_view {
 					$groupNumber = substr($tagPart1, 0, $offset);
 
 					if (tx_div2007_core::testInt($groupNumber)) {
-						if (t3lib_div::inList($GLOBALS['TSFE']->gr_list, $groupNumber)) {
+						if (GeneralUtility::inList($GLOBALS['TSFE']->gr_list, $groupNumber)) {
 							$wrappedSubpartArray['###FE_GROUP_' . $groupNumber . '_TEMPLATE###'] = array('', '');
 						} else {
 							$subpartArray['###FE_GROUP_' . $groupNumber . '_TEMPLATE###'] = '';
@@ -128,16 +129,16 @@ class tx_ttproducts_orderaddress_view extends tx_ttproducts_table_base_view {
 		$fieldOutputArray = array();
 		$modelObj = $this->getModelObj();
 		$selectInfoFields = $modelObj->getSelectInfoFields();
+		$languageObj = GeneralUtility::makeInstance(\JambageCom\TtProducts\Api\Localization::class);
 
 		if ($bSelect)	{
-			t3lib_div::requireOnce (PATH_BE_ttproducts . 'lib/class.tx_ttproducts_form_div.php');
 			foreach ($selectInfoFields as $field) {
 				$tablename = $modelObj->getTCATableFromField($field);
 
 				$fieldOutputArray[$field] =
 
 					tx_ttproducts_form_div::createSelect(
-						$this->langObj,
+						$languageObj,
 						$GLOBALS['TCA'][$tablename]['columns'][$field]['config']['items'],
 						'recs['.$type.'][' . $field . ']',
 						(is_array($row) ? $row[$field] : ''),
@@ -164,7 +165,7 @@ class tx_ttproducts_orderaddress_view extends tx_ttproducts_table_base_view {
 					}
 
 					$tmp = tx_div2007_alpha5::sL_fh002($tcaValue);
-					$fieldOutputArray[$field] = htmlspecialchars(tx_div2007_alpha5::getLL_fh003($this->langObj, $tmp));
+					$fieldOutputArray[$field] = htmlspecialchars($languageObj->getLabel($tmp));
 				} else {
 					$fieldOutputArray[$field] = '';
 				}

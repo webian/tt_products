@@ -25,7 +25,7 @@
   ],
   "require": {
     "typo3/cms-core": ">=6.2.0,<8.99.99",
-    "jambagecom/div2007": ">=1.10.17",
+    "jambagecom/div2007": ">=1.10.20",
     "jambagecom/migration-core": ">=0.0.1",
     "jambagecom/table": ">=0.7.0",
     "jambagecom/tsparser": ">=0.2.5"
@@ -39,7 +39,6 @@
     },
     "classmap": [
       "api",
-      "cache",
       "Classes",
       "control",
       "eid",
@@ -52,8 +51,7 @@
       "pi1",
       "pi_int",
       "pi_search",
-      "view",
-      "widgets"
+      "view"
     ]
   },
   "replace": {

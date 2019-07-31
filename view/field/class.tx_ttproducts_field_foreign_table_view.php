@@ -37,6 +37,7 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
 class tx_ttproducts_field_foreign_table_view extends tx_ttproducts_field_base_view {
@@ -55,14 +56,14 @@ class tx_ttproducts_field_foreign_table_view extends tx_ttproducts_field_base_vi
 		$basketExtra = array(),
 		$id = '1'
 	) {
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		$itemTableObj = $tablesObj->get($functablename, false);
 		$tablename = $itemTableObj->getTablename();
 	}
 
 
 	public function getRowMarkerArray ($functablename, $fieldname, $row, $markerKey, &$markerArray, $tagArray, $theCode, $id, $basketExtra, &$bSkip, $bHtml=true, $charset='', $prefix='', $suffix='', $imageRenderObj='')	{
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		$itemTableObj = $tablesObj->get($functablename, false);
 		$tablename = $itemTableObj->getTablename();
 		$foreigntablename = '';
@@ -84,7 +85,7 @@ class tx_ttproducts_field_foreign_table_view extends tx_ttproducts_field_base_vi
 
 		if ($foreigntablename != '' && $row[$fieldname] > 0)	{
 /*			$tableClass = $tablesObj->getTableClass ($foreigntablename, true);
-			$foreignTableViewObj = t3lib_div::makeInstance(''.$tableClass);*/
+			$foreignTableViewObj = GeneralUtility::makeInstance(''.$tableClass);*/
 			$foreignTableObj = $foreignTableViewObj->getModelObj();
 			if ($GLOBALS['TCA'][$tablename]['columns'][$fieldname]['config']['internal_type'] == 'db')	{
 				$foreignRow = $foreignTableObj->get($row[$fieldname]);

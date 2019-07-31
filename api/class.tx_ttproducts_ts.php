@@ -36,12 +36,14 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class tx_ttproducts_ts implements t3lib_Singleton {
+
+class tx_ttproducts_ts implements \TYPO3\CMS\Core\SingletonInterface {
 	static $count = 0;
 
 	protected function getChilds ($uid = 0) {
-		$cObj = t3lib_div::makeInstance('tx_div2007_cobj');
+		$cObj = GeneralUtility::makeInstance('tx_div2007_cobj');
 		$where = 'pid = ' . $uid . $cObj->enableFields('pages');
 
 		$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('uid', 'pages', $where);
@@ -78,7 +80,7 @@ class tx_ttproducts_ts implements t3lib_Singleton {
 
 	protected function getProductCount ($uid = 0) {
 		$result = 0;
-		$cObj = t3lib_div::makeInstance('tx_div2007_cobj');
+		$cObj = GeneralUtility::makeInstance('tx_div2007_cobj');
 
 		$allChilds = $this->getAllChilds($uid);
 
@@ -99,7 +101,7 @@ class tx_ttproducts_ts implements t3lib_Singleton {
 
 	protected function getMemoCount ($uid = 0) {
 		$result = 0;
-		$cObj = t3lib_div::makeInstance('tx_div2007_cobj');
+		$cObj = GeneralUtility::makeInstance('tx_div2007_cobj');
 		$where = 'pid = ' . $uid . $cObj->enableFields('tt_content');
 
 		$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('uid,CType,list_type,pi_flexform', 'tt_content', $where);
@@ -116,7 +118,7 @@ class tx_ttproducts_ts implements t3lib_Singleton {
 					$row['list_type'] == '5' &&
 					$row['pi_flexform'] != ''
 				) {
-					$flexformArray = t3lib_div::xml2array($row['pi_flexform']);
+					$flexformArray = GeneralUtility::xml2array($row['pi_flexform']);
 					$codes =
 						tx_div2007_ff::get(
 							$flexformArray,
@@ -126,7 +128,7 @@ class tx_ttproducts_ts implements t3lib_Singleton {
 							'vDEF'
 						);
 
-					$codeArray = t3lib_div::trimExplode(',' , $codes);
+					$codeArray = GeneralUtility::trimExplode(',' , $codes);
 					if (in_array('MEMO', $codeArray)) {
 
 						$bMemoFound = true;
@@ -139,7 +141,7 @@ class tx_ttproducts_ts implements t3lib_Singleton {
 				$functablename = 'tt_products';
 				$memoItems = tx_ttproducts_control_memo::readSessionMemoItems($functablename);
 				if ($memoItems != '') {
-					$memoArray = t3lib_div::trimExplode(',', $memoItems);
+					$memoArray = GeneralUtility::trimExplode(',', $memoItems);
 					$count = count($memoArray);
 				}
 			}
@@ -183,7 +185,7 @@ class tx_ttproducts_ts implements t3lib_Singleton {
 
 		$functablename = 'tt_products';
 		$conf = $GLOBALS['TSFE']->tmpl->setup['plugin.'][TT_PRODUCTS_EXT . '.'];
-		$piVars = t3lib_div::_GPmerged('tt_products');
+		$piVars = GeneralUtility::_GPmerged('tt_products');
 
 		tx_ttproducts_control_memo::process($functablename, $piVars, $conf);
 	}

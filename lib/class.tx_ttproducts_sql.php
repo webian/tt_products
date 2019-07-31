@@ -37,12 +37,13 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
-class tx_ttproducts_sql implements t3lib_Singleton {
+class tx_ttproducts_sql implements \TYPO3\CMS\Core\SingletonInterface {
 
 	public static function isValid ($row, $where)	{
-		$whereArray = t3lib_div::trimExplode ('AND', $where);
+		$whereArray = GeneralUtility::trimExplode ('AND', $where);
 		$isValid = true;
 
 		foreach($whereArray as $k3 => $condition) {
@@ -51,7 +52,7 @@ class tx_ttproducts_sql implements t3lib_Singleton {
 				if ($condition == '1=1' || $condition == '1 = 1') {
 					// nothing: $isValid = true;
 				} else {
-					$args = t3lib_div::trimExplode ('=', $condition);
+					$args = GeneralUtility::trimExplode ('=', $condition);
 
 					if ($row[$args[0]] != $args[1]) {
 						$isValid = false;
@@ -64,12 +65,12 @@ class tx_ttproducts_sql implements t3lib_Singleton {
 					$split = 'NOT IN';
 					$isValidRow = true;
 				}
-				$args = t3lib_div::trimExplode ($split, $condition);
+				$args = GeneralUtility::trimExplode ($split, $condition);
 				$leftBracket = strpos($args[1],'(');
 				$rightBracket = strpos($args[1],')');
 				if ($leftBracket !== false && $rightBracket !== false)	{
 					$args[1] = substr($args[1], $leftBracket+1, $rightBracket-$leftBracket-1);
-					$argArray = t3lib_div::trimExplode (',', $args[1]);
+					$argArray = GeneralUtility::trimExplode (',', $args[1]);
 					if (is_array($argArray))	{
 						foreach($argArray as $arg)	{
 							$leftQuote = strpos($arg,'\'');

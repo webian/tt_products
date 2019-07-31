@@ -48,8 +48,9 @@ abstract class tx_ttproducts_category_base_view extends tx_ttproducts_table_base
 
 
 	public function setMarkerArrayCatTitle (&$markerArray, $catTitle, $prefix)	{
-		$this->cObj->setCurrentVal($catTitle);
-		$title = $this->cObj->cObjGetSingle($this->conf['categoryHeader'],$this->conf['categoryHeader.'], 'categoryHeader');
+		$local_cObj = \JambageCom\Div2007\Utility\FrontendUtility::getContentObjectRenderer();
+		$local_cObj->setCurrentVal($catTitle);
+		$title = $local_cObj->cObjGetSingle($this->conf['categoryHeader'],$this->conf['categoryHeader.'], 'categoryHeader');
 		$markerArray['###' . $prefix . $this->marker . '_TITLE###'] = htmlentities($title, ENT_QUOTES, 'UTF-8');
 	}
 
@@ -60,9 +61,10 @@ abstract class tx_ttproducts_category_base_view extends tx_ttproducts_table_base
 
 
 	public function &getSubpartArrays ($urlmarkerObj, $row, &$subpartArray, &$wrappedSubpartArray, &$tagArray, $pid, $linkMarker)	{
+        $local_cObj = \JambageCom\Div2007\Utility\FrontendUtility::getContentObjectRenderer();
 		$addQueryString = array();
 		$addQueryString[$this->piVar] = $row['uid'];
-		$wrappedSubpartArray['###'.$linkMarker.'###'] = array('<a href="'.  htmlspecialchars(tx_div2007_alpha5::getPageLink_fh003($this->cObj, $pid,'',$urlmarkerObj->getLinkParams('',$addQueryString,true,false,'product',$this->piVar),array('useCacheHash' => true))) .'">','</a>');
+		$wrappedSubpartArray['###'.$linkMarker.'###'] = array('<a href="'.  htmlspecialchars(tx_div2007_alpha5::getPageLink_fh003($local_cObj, $pid,'',$urlmarkerObj->getLinkParams('',$addQueryString,true,false,'product',$this->piVar),array('useCacheHash' => true))) . '">','</a>');
 	}
 
 

@@ -38,9 +38,10 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
-class tx_ttproducts_subpartmarker implements t3lib_Singleton {
+class tx_ttproducts_subpartmarker implements \TYPO3\CMS\Core\SingletonInterface {
 	var $cObj; // reference to object
 	var $conf;
 
@@ -53,9 +54,9 @@ class tx_ttproducts_subpartmarker implements t3lib_Singleton {
 	* @param	array		array urls which should be overridden with marker key as index
 	 * @return	  void
  	 */
-	function init ($cObj)	{
+	public function init ($cObj)	{
  		$this->cObj = $cObj;
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 
  		$this->conf = &$cnf->conf;
 	}
@@ -64,7 +65,7 @@ class tx_ttproducts_subpartmarker implements t3lib_Singleton {
 	/**
 	 * Returning template subpart marker
 	 */
-	function spMarker ($subpartMarker) {
+	public function spMarker ($subpartMarker) {
 		$altSPM = '';
 		if (isset($this->conf['altMainMarkers.'])) {
             $sPBody = substr($subpartMarker, 3, -3);
@@ -114,7 +115,7 @@ class tx_ttproducts_subpartmarker implements t3lib_Singleton {
 	public function getSubpart ($content, $marker, &$error_code) {
         $result = tx_div2007_core::getSubpart($content, $marker);
 		if (!$result)	{
-			$templateObj = t3lib_div::makeInstance('tx_ttproducts_template');
+			$templateObj = GeneralUtility::makeInstance('tx_ttproducts_template');
 			$error_code[0] = 'no_subtemplate';
 			$error_code[1] = $marker;
 			$error_code[2] = $templateObj->getTemplateFile();

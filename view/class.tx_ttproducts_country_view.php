@@ -37,6 +37,9 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
+
 
 class tx_ttproducts_country_view extends tx_ttproducts_table_base_view {
 
@@ -49,9 +52,9 @@ class tx_ttproducts_country_view extends tx_ttproducts_table_base_view {
 	 * @return	array
 	 * @access private
 	 */
-	function getRowMarkerArray ($row, &$markerArray, &$fieldsArray)	{
+	public function getRowMarkerArray ($row, &$markerArray, &$fieldsArray)	{
 
-		$markerTable = implode('',t3lib_div::trimExplode('_',$this->getModelObj()->getFuncTablename()));
+		$markerTable = implode('',GeneralUtility::trimExplode('_',$this->getModelObj()->getFuncTablename()));
 
 		foreach ($fieldsArray as $k => $field)	{
 			$markerKey = strtoupper($markerTable.'_'.$field);

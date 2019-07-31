@@ -38,8 +38,11 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class tx_ttproducts_list_view implements t3lib_Singleton {
+
+
+class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 	public $cObj;
 	public $pibaseClass;
 	public $conf;
@@ -62,26 +65,26 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 		$recursive
 	) {
 		$this->pibaseClass = $pibaseClass;
-		$pibaseObj = t3lib_div::makeInstance(''.$pibaseClass);
+		$pibaseObj = GeneralUtility::makeInstance('' . $pibaseClass);
 		$this->cObj = $pibaseObj->cObj;
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$this->conf = &$cnf->getConf();
 		$this->config = &$cnf->getConfig();
 		$this->pid = $pid;
 		$this->useArticles = $useArticles;
 		$this->uidArray = $uidArray;
-		$this->urlObj = t3lib_div::makeInstance('tx_ttproducts_url_view');
+		$this->urlObj = GeneralUtility::makeInstance('tx_ttproducts_url_view');
 
-		$this->javaScriptMarker = t3lib_div::makeInstance('tx_ttproducts_javascript_marker');
+		$this->javaScriptMarker = GeneralUtility::makeInstance('tx_ttproducts_javascript_marker');
 		$this->javaScriptMarker->init($pibaseObj);
-		$this->pidListObj = t3lib_div::makeInstance('tx_ttproducts_pid_list');
+		$this->pidListObj = GeneralUtility::makeInstance('tx_ttproducts_pid_list');
 		$this->pidListObj->init($this->cObj);
 		$this->pidListObj->applyRecursive($recursive, $pid_list, true);
 		$this->pidListObj->setPageArray();
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 
 			//extend standard search fields with user setup
-		$this->searchFieldList = trim($this->conf['stdSearchFieldExt']) ? implode(',', array_unique(t3lib_div::trimExplode(',',$this->searchFieldList.','.trim($this->conf['stdSearchFieldExt']),1))) : 'title,note,'.$tablesObj->get('tt_products')->fieldArray['itemnumber'];
+		$this->searchFieldList = trim($this->conf['stdSearchFieldExt']) ? implode(',',  array_unique(GeneralUtility::trimExplode(',', $this->searchFieldList . ',' . trim($this->conf['stdSearchFieldExt']),1))) : 'title,note,' . $tablesObj->get('tt_products')->fieldArray['itemnumber'];
 	}
 
 
@@ -94,7 +97,7 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 		$itemsOut = '';
 		if ($tableRowOpen)	{
 			$iColCount++;
-			$itemSingleWrapArray = t3lib_div::trimExplode('|', $cssConf['itemSingleWrap']);
+			$itemSingleWrapArray = GeneralUtility::trimExplode('|', $cssConf['itemSingleWrap']);
 			$bIsTable = (strpos($itemSingleWrapArray[0], 'td') != false);
 			if ($bIsTable)	{
 				// fill up with empty fields
@@ -103,7 +106,7 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 					$iColCount++;
 				}
 			}
-			$itemRowWrapArray = t3lib_div::trimExplode('|', $cssConf['itemRowWrap']);
+			$itemRowWrapArray = GeneralUtility::trimExplode('|', $cssConf['itemRowWrap']);
 			$itemsOut.= ($tableRowOpen ? $itemRowWrapArray[1] : '');
 		}
 		$iColCount = 0;
@@ -120,7 +123,7 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 		$oldFormCount,
 		&$formCount
 	)	{
-		$pibaseObj = t3lib_div::makeInstance(''.$this->pibaseClass);
+		$pibaseObj = GeneralUtility::makeInstance(''.$this->pibaseClass);
 		$subpartArray = array();
 		$subpartArray['###ITEM_CATEGORY###'] = $categoryOut;
 		$subpartArray[$itemListSubpart] = $itemListOut;
@@ -164,10 +167,10 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 	 * @return	[type]		...
 	 */
 	public function getSearchParams (&$queryString) {
-		$sword = t3lib_div::_GP('sword');
+		$sword = GeneralUtility::_GP('sword');
 
 		if (!isset($sword))	{
-			$sword = t3lib_div::_GP('swords');
+			$sword = GeneralUtility::_GP('swords');
 		}
 
 		if ($sword)	{
@@ -175,7 +178,7 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 		}
 
 		if (!isset($sword))	{
-			$pibaseObj = t3lib_div::makeInstance('' . $this->pibaseClass);
+			$pibaseObj = GeneralUtility::makeInstance('' . $this->pibaseClass);
 			$sword = $pibaseObj->piVars['sword'];
 		}
 
@@ -239,6 +242,47 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 	}
 
 
+	public function getBrowserObj(
+        $pibaseObj,
+		$conf,
+		$browserConf,
+		$productsCount,
+		$limit,
+		$maxPages
+	) {
+		$bShowFirstLast = true;
+
+		if (
+			isset($browserConf) &&
+			is_array($browserConf) &&
+			isset($browserConf['showFirstLast'])
+		) {
+			$bShowFirstLast = $browserConf['showFirstLast'];
+		}
+		$pagefloat = 0;
+		$imageArray = array();
+		$imageActiveArray = array();
+		$piVars = tx_ttproducts_model_control::getPiVars();
+		$browseObj = GeneralUtility::makeInstance(\JambageCom\Div2007\Base\BrowserBase::class);
+		$browseObj->init(
+			$conf,
+			$piVars,
+			array(),
+			false,	// no autocache used yet
+			$pibaseObj->pi_USER_INT_ob,
+			$productsCount,
+			$limit,
+			$maxPages,
+			$bShowFirstLast,
+			false,
+			$pagefloat,
+			$imageArray,
+			$imageActiveArray
+		);
+
+		return $browseObj;
+	}
+
 	public function &getBrowserConf (array $tableConfArray)	{
 
 		$browserConf = '';
@@ -254,6 +298,8 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 
 
 	public function getBrowserMarkers (
+        $browseObj,
+        $browseConf,
 		$t,
 		$itemTableConfArray,
 		$addQueryString,
@@ -266,9 +312,8 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 		&$subpartArray,
 		&$wrappedSubpartArray
 	)	{
-		$browserConf = $this->getBrowserConf($itemTableConfArray);
-		$pibaseObj = t3lib_div::makeInstance('' . $this->pibaseClass);
-		$subpartmarkerObj = t3lib_div::makeInstance('tx_ttproducts_subpartmarker');
+		$pibaseObj = GeneralUtility::makeInstance('' . $this->pibaseClass);
+		$subpartmarkerObj = GeneralUtility::makeInstance('tx_ttproducts_subpartmarker');
 		$pointerParam = tx_ttproducts_model_control::getPointerPiVar('LIST');
 		$splitMark = md5(microtime());
 		$prefixId = tx_ttproducts_model_control::getPrefixId();
@@ -307,14 +352,12 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 				$wrappedSubpartArray['###LINK_BROWSE###'] = array('','');
 
 				if (is_array($browserConf))	{
-					include_once (PATH_BE_div2007.'class.tx_div2007_alpha_browse_base.php');
-
 					$bShowFirstLast = (isset($browserConf['showFirstLast']) ? $browserConf['showFirstLast'] : true);
 					$pagefloat = 0;
 					$imageArray = array();
 					$imageActiveArray = array();
 					$piVars = tx_ttproducts_model_control::getPiVars();
-					$browseObj = t3lib_div::makeInstance('tx_div2007_alpha_browse_base');
+					$browseObj = GeneralUtility::makeInstance('tx_div2007_alpha_browse_base');
 					$browseObj->init_fh001(
 						$piVars,
 						array(),
@@ -332,11 +375,11 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 
 					$addQueryString = array();
 					$this->getSearchParams($addQueryString);
-					$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
+					$languageObj = GeneralUtility::makeInstance(\JambageCom\TtProducts\Api\Localization::class);
 					$markerArray['###BROWSE_LINKS###'] =
 						tx_div2007_alpha5::list_browseresults_fh003(
 							$browseObj,
-							$langObj,
+							$languageObj,
 							$pibaseObj->cObj,
 							$prefixId,
 							true,
@@ -380,17 +423,17 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 
 	// returns the products list view
 	public function printView (
-		&$templateCode,
+		$templateCode,
 		$theCode,
 		$functablename,
 		$allowedItems,
 		$additionalPages,
 		&$error_code,
-		$templateArea='ITEM_LIST_TEMPLATE',
+		$templateArea = 'ITEM_LIST_TEMPLATE',
 		$pageAsCategory,
-		$mergeRow=array(),
-		$calllevel=0,
-		$callFunctableArray=array(),
+		$mergeRow = array(),
+		$calllevel = 0,
+		$callFunctableArray = array(),
 		$parentDataArray = array()
 	) {
 		if (count($error_code))	{
@@ -400,18 +443,18 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 		$viewedCodeArray = array('LISTAFFORDABLE', 'LISTVIEWEDITEMS', 'LISTVIEWEDMOST', 'LISTVIEWEDMOSTOTHERS');
 		$bUseCache = true;
 		$prefixId = tx_ttproducts_model_control::getPrefixId();
-		$pibaseObj = t3lib_div::makeInstance('' . $this->pibaseClass);
-		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
-		$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
-		$subpartmarkerObj = t3lib_div::makeInstance('tx_ttproducts_subpartmarker');
+		$pibaseObj = GeneralUtility::makeInstance('' . $this->pibaseClass);
+		$basketObj = GeneralUtility::makeInstance('tx_ttproducts_basket');
+		$markerObj = GeneralUtility::makeInstance('tx_ttproducts_marker');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
+		$subpartmarkerObj = GeneralUtility::makeInstance('tx_ttproducts_subpartmarker');
 		$itemTableArray = array();
 		$itemTableViewArray = array();
 		$globalMarkerArray = $markerObj->getGlobalMarkerArray();
 		$whereCat = '';
 
-		$relatedListView = t3lib_div::makeInstance('tx_ttproducts_relatedlist_view');
+		$relatedListView = GeneralUtility::makeInstance('tx_ttproducts_relatedlist_view');
 		$relatedListView->init($this->cObj, $this->pidListObj->getPidlist(), $this->pidListObj->getRecursive());
 
 		$viewControlConf = $cnf->getViewControlConf($theCode);
@@ -435,7 +478,7 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 		$bUseBackPid = (isset($viewParamConf) && $viewParamConf['use'] == 'backPID' ? true : false);
 
 		if (strpos($theCode,'MEMO') === false)	{
-			$memoViewObj = t3lib_div::makeInstance('tx_ttproducts_memo_view');
+			$memoViewObj = GeneralUtility::makeInstance('tx_ttproducts_memo_view');
 
 			$memoViewObj->init(
 				$this->pibaseClass,
@@ -472,15 +515,15 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 		$htmlSwords = '';
 
 		if ($calllevel == 0)	{
-			$sword = t3lib_div::_GP('sword');
-			$sword = (isset($sword) ? $sword : t3lib_div::_GP('swords'));
+			$sword = GeneralUtility::_GP('sword');
+			$sword = (isset($sword) ? $sword : GeneralUtility::_GP('swords'));
 
 			if (!isset($sword))	{
-				$postVars = t3lib_div::_POST($prefixId);
+				$postVars = GeneralUtility::_POST($prefixId);
 				$sword = $postVars['sword'];
 
 				if (!isset($sword))	{
-					$getVars = t3lib_div::_GET($prefixId);
+					$getVars = GeneralUtility::_GET($prefixId);
 					$sword = $getVars['sword'];
 				}
 			}
@@ -545,7 +588,7 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 			$itemTableArray['article'] = $articleTable;
 			$itemTableViewArray['article'] = $articleViewObj;
 			$param = array($itemTable->getFuncTablename() => $selectableVariantFieldArray);
-			$javaScriptObj = t3lib_div::makeInstance('tx_ttproducts_javascript');
+			$javaScriptObj = GeneralUtility::makeInstance('tx_ttproducts_javascript');
 			if ($theCode != 'LISTRELATED' && t3lib_extMgm::isLoaded('taxajax')) {
 				$javaScriptObj->set('fetchdata', $param);
 			}
@@ -591,7 +634,7 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 			$dam_where = tx_div2007_ff::get($flexformArray, 'dam_where');
 			$dam_group_by = tx_div2007_ff::get($flexformArray, 'dam_group_by');
 			$dam_join_tables = tx_div2007_ff::get($flexformArray, 'dam_join_tables');
-			$damJoinTableArray = t3lib_div::trimExplode(',',$dam_join_tables);
+			$damJoinTableArray = GeneralUtility::trimExplode(',',$dam_join_tables);
 
 			if ($dam_where)	{
 				$dam_where = $itemTable->getTableObj()->transformWhere($dam_where);
@@ -607,14 +650,14 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 
 		// if parameter 'newitemdays' is specified, only new items from the last X days are displayed
 		$newitemdays = $pibaseObj->piVars['newitemdays'];
-		$newitemdays = ($newitemdays ? $newitemdays : t3lib_div::_GP('newitemdays'));
+		$newitemdays = ($newitemdays ? $newitemdays : GeneralUtility::_GP('newitemdays'));
 
 		if (($newitemdays || $theCode == 'LISTNEWITEMS') && is_array($tableConfArray[$functablename]) && is_array($tableConfArray[$functablename]['controlFields.'])) {
 			if (!$newitemdays)	{
 				$newitemdays = $this->conf['newItemDays'];
 			}
 			$temptime = time() - 86400 * intval(trim($newitemdays));
-			$timeFieldArray = t3lib_div::trimExplode(',', $tableConfArray[$functablename]['controlFields.']['newItemDays']);
+			$timeFieldArray = GeneralUtility::trimExplode(',', $tableConfArray[$functablename]['controlFields.']['newItemDays']);
 			$whereTimeFieldArray = array();
 			foreach ($timeFieldArray as $k => $value)	{
 				$whereTimeFieldArray[] = $tableAliasArray[$tablename] . '.' . $value . ' >= ' . $temptime;
@@ -642,7 +685,7 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 		$hookVar = 'allowedItems';
 		if ($hookVar && is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT][$hookVar])) {
 			foreach  ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT][$hookVar] as $classRef) {
-				$hookObj= t3lib_div::makeInstance($classRef);
+				$hookObj= GeneralUtility::makeInstance($classRef);
 				if (method_exists($hookObj, 'init')) {
 					$hookObj->init($this);
 				}
@@ -689,7 +732,7 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 
 			if ($whereCat == '' && ($allowedItems == '' || $bForceCatParams))	{
 				$neededParams = $itemTable->getNeededUrlParams($functablename, $theCode);
-				$needArray = t3lib_div::trimExplode(',', $neededParams);
+				$needArray = GeneralUtility::trimExplode(',', $neededParams);
 				$bListStartEmpty = false;
 				foreach($needArray as $k => $param)	{
 					if ($param && !isset($pibaseObj->piVars[$param]))	{
@@ -795,7 +838,7 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 					);
 
 				if (!($t['search'])) {
-					$templateObj = t3lib_div::makeInstance('tx_ttproducts_template');
+					$templateObj = GeneralUtility::makeInstance('tx_ttproducts_template');
 
 					$error_code[0] = 'no_subtemplate';
 					$error_code[1] = '###' . $searchTemplateArea . '###';
@@ -811,13 +854,13 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 				$this->getSearchParams($addQueryString);
 				$excludeList = 'sword';
 
-				if (isset($viewParamConf) && is_array($viewParamConf) && t3lib_div::inList($viewParamConf['item'], $categoryPivar))	{
+				if (isset($viewParamConf) && is_array($viewParamConf) && GeneralUtility::inList($viewParamConf['item'], $categoryPivar))	{
 					// nothing
 				} else {
 					$excludeList .= ',' . $prefixId . '[' . $categoryPivar . ']';
 				}
 				if (isset($viewParamConf) && is_array($viewParamConf) && isset($viewParamConf['ignore']))	{
-					$ignoreArray = t3lib_div::trimExplode(',',$viewParamConf['ignore']);
+					$ignoreArray = GeneralUtility::trimExplode(',',$viewParamConf['ignore']);
 					foreach($ignoreArray as $ignoreParam)	{
 						if ($ignoreParam == 'backPID') {
 							$bUseBackPid = false;
@@ -864,7 +907,7 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 
 		if ($allowedItems || $allowedItems == '0')	{
 			$allowedItemArray = array();
-			$tempArray = t3lib_div::trimExplode(',',$allowedItems);
+			$tempArray = GeneralUtility::trimExplode(',',$allowedItems);
 			$allowedItemArray = $GLOBALS['TYPO3_DB']->cleanIntArray($tempArray);
 			$where .= ' AND uid IN ('.implode(',',$allowedItemArray).')';
 		}
@@ -874,7 +917,7 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 
 		if ($calllevel == 0)	{
 			$begin_at = $pibaseObj->piVars[$pointerParam] * $limit;
-			$begin_at = ($begin_at ? $begin_at : t3lib_div::_GP($pointerParam) * $limit);
+			$begin_at = ($begin_at ? $begin_at : GeneralUtility::_GP($pointerParam) * $limit);
 		}
 		$begin_at = tx_div2007_core::intInRange($begin_at, 0, 100000);
 
@@ -890,7 +933,7 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 
 			// $templateArea = 'ITEM_LIST_TEMPLATE'
 			if (!$t['listFrameWork']) {
-				$templateObj = t3lib_div::makeInstance('tx_ttproducts_template');
+				$templateObj = GeneralUtility::makeInstance('tx_ttproducts_template');
 				$error_code[0] = 'no_subtemplate';
 				$error_code[1] = '###'.$templateArea.'###';
 				$error_code[2] = $templateObj->getTemplateFile();
@@ -941,7 +984,7 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 			);
 
 			if (count($viewConfArray))	{
-				$controlViewObj = t3lib_div::makeInstance('tx_ttproducts_control_view');
+				$controlViewObj = GeneralUtility::makeInstance('tx_ttproducts_control_view');
 				$controlViewObj->getMarkerArray($markerArray, $viewTagArray, $tableConfArray);
 			}
 
@@ -1088,7 +1131,7 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 			if (!$selectConf['orderBy'])	{
 				$selectConf['orderBy'] = $this->conf['orderBy'];
 			}
-			$tmpArray = t3lib_div::trimExplode(',', $selectConf['orderBy']);
+			$tmpArray = GeneralUtility::trimExplode(',', $selectConf['orderBy']);
 			$orderByArray[$functablename] = $tmpArray[0]; // $orderByProduct
 
 			$orderByCat = $tableConfArray[$categoryfunctablename]['orderBy'];
@@ -1096,7 +1139,7 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 			// sorting by category not yet possible for articles
 			if ($itemTable->getType() == 'article')	{ // ($itemTable === $this->tt_products_articles)
 				$orderByCat = '';	// articles do not have a direct category
-				$tmpArray = t3lib_div::trimExplode(',', $selectConf['orderBy']);
+				$tmpArray = GeneralUtility::trimExplode(',', $selectConf['orderBy']);
 				$tmpArray = array_diff($tmpArray, array('category'));
 				$selectConf['orderBy'] = implode (',', $tmpArray);
 			}
@@ -1118,7 +1161,7 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 			$viewTagArray = array();
 			$parentArray = array();
 			$requiredFields = $itemTable->getRequiredFields($theCode);
-			$requiredFieldArray = t3lib_div::trimExplode(',', $requiredFields);
+			$requiredFieldArray = GeneralUtility::trimExplode(',', $requiredFields);
 
 			$fieldsArray = $markerObj->getMarkerFields(
 				$t['item'],
@@ -1135,7 +1178,7 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 				$articleViewTagArray = array();
 				$articleParentArray = array();
 				$requiredFields = $itemTable->getRequiredFields($theCode);
-				$requiredFieldArray = t3lib_div::trimExplode(',', $requiredFields);
+				$requiredFieldArray = GeneralUtility::trimExplode(',', $requiredFields);
 				$articleFieldsArray = $markerObj->getMarkerFields(
 					$t['item'],
 					$itemTable->getTableObj()->tableFieldArray,
@@ -1210,7 +1253,7 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 			// if ($orderByCat && ($pageAsCategory < 2) || $itemTable->getType() == 'dam')	{
 				// $catFields = ($orderByCat == 'uid' ? $orderByCat : 'uid,'.$orderByCat);
 				$catOrderBy = $categoryTable->getTableObj()->transformOrderby($orderByCat);
-				$orderByCatFieldArray = t3lib_div::trimExplode(',',$catOrderBy);
+				$orderByCatFieldArray = GeneralUtility::trimExplode(',',$catOrderBy);
 				$selectConf['orderBy'] = $catOrderBy . ($selectConf['orderBy'] ? ($catOrderBy != '' ? ',' : '') . $selectConf['orderBy'] : '');
 
 				$catAlias = $categoryTable->getTableObj()->getAlias();
@@ -1259,7 +1302,7 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 
 				$addressConf = $addressTable->getTableConf($theCode);
 				if (isset($addressConf['requiredFields']))	{
-					$addressFieldArray = t3lib_div::trimExplode(',',$addressConf['requiredFields']);
+					$addressFieldArray = GeneralUtility::trimExplode(',',$addressConf['requiredFields']);
 					foreach ($addressFieldArray as $field)	{
 						$selectConf['selectFields'] .= ',' . $addressAlias . $aliasPostfix . '.' . $field . ' address_' . $field;
 					}
@@ -1365,6 +1408,18 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 			$GLOBALS['TYPO3_DB']->sql_free_result($res);
 			$productsCount = $row[0];
 
+            $browserConf = $this->getBrowserConf($tableConfArray[$functablename]); // needed for the replacement of the method pi_linkTP_keepPIvars by FrontendUtility::linkTPKeepCtrlVars and the page browser
+
+            $browseObj =
+                $this->getBrowserObj(
+                    $pibaseObj,
+                    $this->conf,
+                    $browserConf,
+                    $productsCount,
+                    $limit,
+                    10000
+                );
+
 				// range check to current productsCount
 			$begin_at_start = (($begin_at >= $productsCount) ? ($productsCount >= $limit ? $productsCount - $limit : $productsCount) : $begin_at);
 			$begin_at = (
@@ -1459,7 +1514,7 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 			if ($theCode == 'LISTGIFTS') {
 				$markerArray = tx_ttproducts_gifts_div::addGiftMarkers($markerArray, $this->giftnumber);
 				if (!isset($javaScriptObj)) {
-					$javaScriptObj = t3lib_div::makeInstance('tx_ttproducts_javascript');
+					$javaScriptObj = GeneralUtility::makeInstance('tx_ttproducts_javascript');
 				}
 				$javaScriptObj->set('email');
 			}
@@ -1526,7 +1581,7 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 				$categorySubpartArray = array();
 				$categoryWrappedSubpartArray = array();
 
-				$itemRowWrapArray = t3lib_div::trimExplode('|', $cssConf['itemRowWrap']);
+				$itemRowWrapArray = GeneralUtility::trimExplode('|', $cssConf['itemRowWrap']);
 
 				foreach ($itemArray as $k2 => $row) {
 
@@ -1635,7 +1690,17 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 
 							if ($linkCat)	{
 								$addQueryString = array($categoryTableView->getPivar() => $linkCat);
-								$tempUrl = $pibaseObj->pi_linkTP_keepPIvars_url($addQueryString,1,1,$GLOBALS['TSFE']->id);
+                                $tempUrl =
+                                    FrontendUtility::linkTPKeepCtrlVars(
+                                        $browseObj,
+                                        $cObj,
+                                        $prefixId,
+                                        '|',
+                                        $addQueryString,
+                                        1,
+                                        1,
+                                        $GLOBALS['TSFE']->id
+                                    );								
 								$childCatWrap = '<a href="' . htmlspecialchars($tempUrl) . '"' . $css . '> | </a>';
 								$imageWrap = false;
 							}
@@ -1833,7 +1898,7 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 					$piVarCat = $pibaseObj->piVars[$categoryPivar];
 					$bUseBackPid = $bUseBackPid && ($pid != $GLOBALS['TSFE']->id);
 					$nextcat = $cat;
-					if (isset($viewParamConf) && is_array($viewParamConf) && t3lib_div::inList($viewParamConf['item'], $categoryPivar))	{
+					if (isset($viewParamConf) && is_array($viewParamConf) && GeneralUtility::inList($viewParamConf['item'], $categoryPivar))	{
 						$nextcat = $row['category'];
 					} else if ($piVarCat)	{
 						if ($this->conf['PIDlistDisplay'])	{
@@ -1889,7 +1954,7 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 					);
 
 					if ($childCatWrap)	{
-						$wrappedSubpartArray['###LINK_ITEM###'] = t3lib_div::trimExplode('|',$childCatWrap);
+						$wrappedSubpartArray['###LINK_ITEM###'] = GeneralUtility::trimExplode('|',$childCatWrap);
 					} else {
 						$wrappedSubpartArray['###LINK_ITEM###'] = array('<a href="' . htmlspecialchars($pageLink) . '"' . $css_current . '>', '</a>');
 					}
@@ -1985,7 +2050,7 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 						);
 						$markerArray = array_merge($markerArray, $currPriceMarkerArray);
 
-						$basketItemView = t3lib_div::makeInstance('tx_ttproducts_basketitem_view');
+						$basketItemView = GeneralUtility::makeInstance('tx_ttproducts_basketitem_view');
 						$basketItemView->init($this->pibaseClass,$basketObj->basketExt,$basketObj->getItemObj());
 						$mergedProdRowWithoutVariants = $prodVariantRow;
 						$itemTable->mergeVariantFields(
@@ -2210,7 +2275,7 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 						$tableRowOpen = 1;
 					}
 
-					$itemSingleWrapArray = t3lib_div::trimExplode('|', $cssConf['itemSingleWrap']);
+					$itemSingleWrapArray = GeneralUtility::trimExplode('|', $cssConf['itemSingleWrap']);
 					if ($itemSingleWrapArray[0]) {
 						$temp .= str_replace('###UNEVEN###', $evenUneven, $itemSingleWrapArray[0]);
 					}
@@ -2416,6 +2481,8 @@ class tx_ttproducts_list_view implements t3lib_Singleton {
 			$bUseCache = $bUseCache && (empty($basketObj->itemArray));
 
 			$this->getBrowserMarkers(
+				$browseObj,
+				$browserConf,
 				$t,
 				$tableConfArray[$functablename],
 				$addQueryString,

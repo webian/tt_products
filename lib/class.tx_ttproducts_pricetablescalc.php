@@ -37,6 +37,7 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
 
@@ -60,11 +61,11 @@ class tx_ttproducts_pricetablescalc extends tx_ttproducts_pricecalc_base {
 			return;
 		}
 
-		$graduatedPriceObj = t3lib_div::makeInstance('tx_ttproducts_graduated_price');
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$graduatedPriceObj = GeneralUtility::makeInstance('tx_ttproducts_graduated_price');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$useArticles = $cnf->getUseArticles();
 		if ($bUseArticles && ($useArticles == 1 || $useArticles == 3)) {
-			$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+			$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 			$articleTable = $tablesObj->get('tt_products_articles', false);
 		}
 

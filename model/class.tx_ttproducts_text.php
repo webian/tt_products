@@ -35,6 +35,8 @@
  * @subpackage tt_products
  *
  */
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 
 
 class tx_ttproducts_text extends tx_ttproducts_table_base {
@@ -46,7 +48,7 @@ class tx_ttproducts_text extends tx_ttproducts_table_base {
 	var $tt_products_texts; // element of class tx_table_db
 
 
-	function &getTagMarkerArray (&$tagArray, $parentMarker)	{
+	public function &getTagMarkerArray (&$tagArray, $parentMarker)	{
 		$rcArray = array();
 		$search = $parentMarker.'_'.$this->marker.'_';
 		$searchLen = strlen($search);
@@ -59,8 +61,8 @@ class tx_ttproducts_text extends tx_ttproducts_table_base {
 		return $rcArray;
 	}
 
-	function getChildUidArray ($theCode, $uid, $tagMarkerArray, $parenttable='tt_products')	{
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+	public function getChildUidArray ($theCode, $uid, $tagMarkerArray, $parenttable='tt_products')	{
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$functablename = $this->getFuncTablename();
 		$fallback = false;
 		$tableConf = $cnf->getTableConf($functablename, $theCode);

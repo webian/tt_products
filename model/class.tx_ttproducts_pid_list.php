@@ -37,6 +37,9 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
+
 
 class tx_ttproducts_pid_list {
 	var $pid_list;				// list of page ids
@@ -87,7 +90,7 @@ class tx_ttproducts_pid_list {
 	 * Sets the pid_list internal var
 	 */
 	public function setPageArray ()	{
-		$this->pageArray = t3lib_div::trimExplode (',', $this->pid_list);
+		$this->pageArray = GeneralUtility::trimExplode (',', $this->pid_list);
 		$this->pageArray = array_flip($this->pageArray);
 	}
 
@@ -104,7 +107,7 @@ class tx_ttproducts_pid_list {
 	}
 
 	public function applyRecursive ($recursive, &$pids, $bStore = false) {
-		$cObj = t3lib_div::makeInstance('tx_div2007_cobj');
+		$cObj = GeneralUtility::makeInstance('tx_div2007_cobj');
 
 		if ($pids != '') {
 			$pid_list = &$pids;

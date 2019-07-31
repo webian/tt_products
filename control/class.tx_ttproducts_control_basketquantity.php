@@ -36,8 +36,11 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class tx_ttproducts_control_basketquantity implements t3lib_Singleton {
+
+
+class tx_ttproducts_control_basketquantity implements \TYPO3\CMS\Core\SingletonInterface {
 
 	public function getQuantityMarker (
 		$marker,
@@ -58,10 +61,10 @@ class tx_ttproducts_control_basketquantity implements t3lib_Singleton {
 		&$rowArray,
 		&$markerArray
 	)	{
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		$prodViewObj = $tablesObj->get('tt_products',true);
 
-		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
+		$basketObj = GeneralUtility::makeInstance('tx_ttproducts_basket');
 		$quantityArray = $basketObj->getQuantityArray($relatedIds,$rowArray);
 
 		foreach ($rowArray as $functablename => $functableRowArray)	{

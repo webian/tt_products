@@ -1,14 +1,17 @@
 <?php
+
+namespace JambageCom\TtProducts\Api;
+
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2008-2009 Franz Holzinger (franz@ttproducts.de)
+*  (c) 2018 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
 *  free software; you can redistribute it and/or modify
 *  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License or
+*  the Free Software Foundation; either version 2 of the License, or
 *  (at your option) any later version.
 *
 *  The GNU General Public License can be found at
@@ -25,11 +28,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 /**
- * Part of the tt_products (Shop System) extension.
  *
- * error functions
+ * language object
  *
- * @author  Franz Holzinger <franz@ttproducts.de>
+ * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products
@@ -37,30 +39,9 @@
  *
  */
 
+ 
+class Localization extends \JambageCom\Div2007\Base\TranslationBase implements \TYPO3\CMS\Core\SingletonInterface {
 
-class tx_ttproducts_model_error {
-
-	public static function getMessage ($error_code, $languageObj)	{
-		$rc = '';
-		$messageArr = array();
-		$i = 0;
-
-		foreach ($error_code as $key => $indice) {
-			if ($key == 0) {
-				$messageArr = explode('|', $message = $languageObj->getLabel($indice));
-				$rc .= '<b>' . $languageObj->getLabel('plugin') . ': ' . $messageArr[0] . '</b>';
-			} else if (isset($messageArr[$i])) {
-				$rc .= '<b>' . $indice . $messageArr[$i] . '</b>';
-			}
-			$i++;
-		}
-
-		return $rc;
-	}
 }
 
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/model/class.tx_ttproducts_model_error.php']) {
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/model/class.tx_ttproducts_model_error.php']);
-}
 

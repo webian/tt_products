@@ -37,7 +37,11 @@
  */
 
 
-class tx_ttproducts_basketitem_view implements t3lib_Singleton {
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
+
+
+class tx_ttproducts_basketitem_view implements \TYPO3\CMS\Core\SingletonInterface {
 	private $conf;
 	private $config;
 	public $basketExt; 	// basket
@@ -55,7 +59,7 @@ class tx_ttproducts_basketitem_view implements t3lib_Singleton {
 	 */
 	public function init ($pibaseClass, &$basketExt, $itemObj)	{
 		$this->pibaseClass = $pibaseClass;
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
 		$this->basketExt = &$basketExt;
@@ -67,7 +71,7 @@ class tx_ttproducts_basketitem_view implements t3lib_Singleton {
 		$uid,
 		$callFunctableArray
 	)	{
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 
 		$funcQuantityMarker = '';
 		foreach ($callFunctableArray as $callFunctablename)	{
@@ -105,17 +109,17 @@ class tx_ttproducts_basketitem_view implements t3lib_Singleton {
 		$charset='',
 		$callFunctableArray=array()
 	)	{
-		$pibaseObj = t3lib_div::makeInstance(''.$this->pibaseClass);
-		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
-		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$pibaseObj = GeneralUtility::makeInstance(''.$this->pibaseClass);
+		$basketObj = GeneralUtility::makeInstance('tx_ttproducts_basket');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
+		$languageObj = GeneralUtility::makeInstance(\JambageCom\TtProducts\Api\Localization::class);
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$viewTable = $tablesObj->get($functablename);
 		$fieldArray = $viewTable->variant->getFieldArray();
 		$keyAdditional = $viewTable->variant->getAdditionalKey();
 		$selectableArray = $viewTable->variant->getSelectableArray();
 		$bUseXHTML = $GLOBALS['TSFE']->config['config']['xhtmlDoctype'] != '';
-        $imageObj = t3lib_div::makeInstance('tx_ttproducts_field_image_view');
+        $imageObj = GeneralUtility::makeInstance('tx_ttproducts_field_image_view');
 
 		$row = &$item['rec'];
 		$uid = $row['uid'];
@@ -132,7 +136,7 @@ class tx_ttproducts_basketitem_view implements t3lib_Singleton {
 
 					foreach($fieldArray as $k => $field)	{
 						$variantRow = $row[$field];
-						$prodTmpRow = t3lib_div::trimExplode(';', $variantRow);
+						$prodTmpRow = GeneralUtility::trimExplode(';', $variantRow);
 						$imageFileArray = '';
 
 						if ($variantRow && $prodTmpRow[0])	{
@@ -185,7 +189,7 @@ class tx_ttproducts_basketitem_view implements t3lib_Singleton {
 		$markerArray['###BASKET_INPUT###'] = '';
 		$markerArray['###DISABLED###'] = ($row['inStock'] > 0 ? '' : 'disabled');
 		$markerArray['###IN_STOCK_ID###'] = 'in-stock-id-' . $row['uid'];
-		$markerArray['###BASKET_IN_STOCK###'] = tx_div2007_alpha5::getLL_fh003($langObj, ($row['inStock'] > 0 ? 'in_stock' : 'not_in_stock'));
+		$markerArray['###BASKET_IN_STOCK###'] = $languageObj->getLabel( ($row['inStock'] > 0 ? 'in_stock' : 'not_in_stock'));
 		$basketFile = $GLOBALS['TSFE']->tmpl->getFileName($this->conf['basketPic']);
 		$markerArray['###IMAGE_BASKET_SRC###'] = $basketFile;
 		$fileresource = $pibaseObj->cObj->fileResource($this->conf['basketPic']);
@@ -206,7 +210,6 @@ class tx_ttproducts_basketitem_view implements t3lib_Singleton {
 					$imageFileArray = '';
 
 					if ($bSelect && $variantRow && $prodTmpRow[0])	{
-// 						include_once (PATH_BE_ttproducts.'lib/class.tx_ttproducts_form_div.php');
 						$selectConfKey = $viewTable->variant->getSelectConfKey($field);
 
 						if (is_array($formConf) && is_array($formConf[$selectConfKey . '.']))	{
@@ -238,11 +241,9 @@ class tx_ttproducts_basketitem_view implements t3lib_Singleton {
 												$imageConf['file'] = $imagePath . $imageFile;
                                                 $tmpImgCode =
                                                     $imageObj->getImageCode(
-                                                        $pibaseObj->cObj,
                                                         $imageConf,
                                                         $theCode
                                                     ); // neu
-// 												$tmpImgCode = $pibaseObj->cObj->IMAGE($imageConf);
 											}
 										}
 									}
@@ -289,7 +290,7 @@ class tx_ttproducts_basketitem_view implements t3lib_Singleton {
 
 						if ($type != '') {
 							$text = tx_ttproducts_form_div::createSelect(
-								$langObj,
+								$languageObj,
 								$prodTranslatedRow,
 								$this->basketVar . '[' . $row['uid'] . '][' . $field . ']',
 								$selectedKey,
@@ -339,7 +340,7 @@ class tx_ttproducts_basketitem_view implements t3lib_Singleton {
 		if ($keyAdditional !== false) {
 			$isSingleProduct = $viewTable->hasAdditional($row,'isSingle');
 			if ($isSingleProduct)	{
-				$message = tx_div2007_alpha5::getLL_fh003($langObj, 'additional_single');
+				$message = $languageObj->getLabel('additional_single');
 				$prodAdditionalText['single'] = $message . '<input type="checkbox" name="' . $basketQuantityName . '" ' . ($quantity ? 'checked="checked"':'') . 'onchange = "this.form[this.name+\'[1]\'].value=(this.checked ? 1 : 0);"' . ' value="1">';
 				$hiddenText .= '<input type="hidden" name="'.$basketQuantityName.'[1]" value="'.($quantity ? '1' : '0') . '">';
 			}
@@ -364,7 +365,7 @@ class tx_ttproducts_basketitem_view implements t3lib_Singleton {
 			$basketAdditionalName = $this->basketVar . '[' . $row['uid'] . '][additional][' . md5($variant) . ']';
 			$bGiftService = $this->basketExt[$row['uid']][$variant . '.']['additional']['giftservice'];
 			$giftServicePostfix = '[giftservice]';
-			$message = tx_div2007_alpha5::getLL_fh003($langObj, 'additional_gift_service');
+			$message = $languageObj->getLabel('additional_gift_service');
 			$value = ($bGiftService ? '1' : '0');
 			$prodAdditionalText['giftService'] = $message . '<input type="checkbox" name="' . $basketAdditionalName . $giftServicePostfix . '" ' . ($value ? 'checked="checked"':'') . 'onchange = "this.form[this.name+\'[1]\'].value=(this.checked ? 1 : 0);"' . ' value="' . $value . '">';
 			$hiddenText .= '<input type="hidden" name="' . $basketAdditionalName . $giftServicePostfix . '[1]" value="' . $value . '">';

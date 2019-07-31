@@ -37,6 +37,7 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
 class tx_ttproducts_article extends tx_ttproducts_article_base {
@@ -51,9 +52,9 @@ class tx_ttproducts_article extends tx_ttproducts_article_base {
 	/**
 	 * Getting all tt_products_cat categories into internal array
 	 */
-	function init ($cObj, $functablename)  {
+	public function init ($cObj, $functablename)  {
 		parent::init($cObj, $functablename);
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$tableConfig = array();
 		$tableConfig['orderBy'] = $cnf->conf['orderBy'];
 
@@ -69,7 +70,7 @@ class tx_ttproducts_article extends tx_ttproducts_article_base {
 	} // init
 
 
-	function &getWhereArray ($prodUid, $where) {
+	public function &getWhereArray ($prodUid, $where) {
 
 		$rowArray = array();
 		$enableWhere = $this->getTableObj()->enableFields();
@@ -125,7 +126,7 @@ class tx_ttproducts_article extends tx_ttproducts_article_base {
 
 	public function getRequiredFieldArray ($theCode='')	{
 		$tableConf = $this->getTableConf($theCode);
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$rc = array();
 		if ($tableConf['requiredFields']!='')	{
 			$requiredFields = $tableConf['requiredFields'];

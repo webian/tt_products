@@ -39,7 +39,10 @@
  */
 
 
-class tx_ttproducts_csv implements t3lib_Singleton {
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
+
+class tx_ttproducts_csv implements \TYPO3\CMS\Core\SingletonInterface {
 	var $pibase; // reference to object of pibase
 	var $conf;
 	var $calculatedArray; // reference to calculated basket array
@@ -52,7 +55,7 @@ class tx_ttproducts_csv implements t3lib_Singleton {
 	 */
 	function init ($pibase, &$itemArray, &$calculatedArray, $accountUid)	{
 		$this->pibase = $pibase;
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 
 		$this->conf = &$cnf->conf;
 		$this->calculatedArray = &$calculatedArray;
@@ -62,9 +65,9 @@ class tx_ttproducts_csv implements t3lib_Singleton {
 
 
 	function create ($functablename, &$address, $csvorderuid, &$csvfilepath, &$errorMessage) {
-		$basket = t3lib_div::makeInstance('tx_ttproducts_basket');
-		$priceViewObj = t3lib_div::makeInstance('tx_ttproducts_field_price_view');
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$basket = GeneralUtility::makeInstance('tx_ttproducts_basket');
+		$priceViewObj = GeneralUtility::makeInstance('tx_ttproducts_field_price_view');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		$orderObj = $tablesObj->get('sys_products_orders');
 		$accountObj = $tablesObj->get('sys_products_accounts');
 		$itemTable = $tablesObj->get($functablename, false);
@@ -195,9 +198,8 @@ class tx_ttproducts_csv implements t3lib_Singleton {
 			}
 			fclose($csvfile);
 		} else {
-			$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
-
-			$message = tx_div2007_alpha5::getLL_fh003($langObj, 'no_csv_creation');
+            $languageObj = GeneralUtility::makeInstance(\JambageCom\TtProducts\Api\Localization::class);
+			$message = $languageObj->getLabel('no_csv_creation');
 			$messageArr =  explode('|', $message);
 			$errorMessage = $messageArr[0] . $csvfilepath . $messageArr[1];
 		}

@@ -37,6 +37,8 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 
 class tx_ttproducts_control_product {
 
@@ -47,7 +49,7 @@ class tx_ttproducts_control_product {
 	)	{
 		$basketVar = tx_ttproducts_model_control::getBasketVar();
 		$presetVarianArray = array();
-		$basketArray = t3lib_div::_GP($basketVar);
+		$basketArray = GeneralUtility::_GP($basketVar);
 
 		if (
 			isset($basketArray) && is_array($basketArray) &&

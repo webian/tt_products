@@ -37,8 +37,11 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class tx_ttproducts_cat_view implements t3lib_Singleton {
+
+
+class tx_ttproducts_cat_view implements \TYPO3\CMS\Core\SingletonInterface {
 	var $pibase; // reference to object of pibase
 	var $conf;
 	var $config;
@@ -51,37 +54,37 @@ class tx_ttproducts_cat_view implements t3lib_Singleton {
 	var $pidListObj;
 	var $cOjb;
 
-	function init($pibase, $pid, $pid_list, $recursive) {
+	public function init($pibase, $pid, $pid_list, $recursive) {
 		$this->pibase = $pibase;
 		$this->cObj = $pibase->cObj;
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
 
 		$this->pid = $pid;
-		$this->subpartmarkerObj = t3lib_div::makeInstance('tx_ttproducts_subpartmarker');
+		$this->subpartmarkerObj = GeneralUtility::makeInstance('tx_ttproducts_subpartmarker');
 		$this->subpartmarkerObj->init($this->cObj);
-		$this->urlObj = t3lib_div::makeInstance('tx_ttproducts_url_view');
+		$this->urlObj = GeneralUtility::makeInstance('tx_ttproducts_url_view');
 
-		$this->pidListObj = t3lib_div::makeInstance('tx_ttproducts_pid_list');
+		$this->pidListObj = GeneralUtility::makeInstance('tx_ttproducts_pid_list');
 		$this->pidListObj->init($this->cObj);
 		$this->pidListObj->applyRecursive($recursive, $pid_list, true);
 		$this->pidListObj->setPageArray();
 
-		$this->javaScriptMarker = t3lib_div::makeInstance('tx_ttproducts_javascript_marker');
+		$this->javaScriptMarker = GeneralUtility::makeInstance('tx_ttproducts_javascript_marker');
 		$this->javaScriptMarker->init($pibase);
 	}
 
 
 	// returns the single view
 	public function printView(&$templateCode, $functablename, $uid, $theCode, &$error_code, $templateSuffix = '') {
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		$tableViewObj = $tablesObj->get($functablename, true);
 		$tableObj = $tableViewObj->getModelObj();
-		$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
-		$javaScriptObj = t3lib_div::makeInstance('tx_ttproducts_javascript');
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
-		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
+		$markerObj = GeneralUtility::makeInstance('tx_ttproducts_marker');
+		$javaScriptObj = GeneralUtility::makeInstance('tx_ttproducts_javascript');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
+		$basketObj = GeneralUtility::makeInstance('tx_ttproducts_basket');
 
 		if ($this->config['displayCurrentRecord'])	{
 			$row = $this->cObj->data;
@@ -121,7 +124,7 @@ class tx_ttproducts_cat_view implements t3lib_Singleton {
 			$itemFrameWork = $this->cObj->getSubpart($templateCode,$this->subpartmarkerObj->spMarker($subPartMarker));
 
 			if (!$itemFrameWork) {
-				$templateObj = t3lib_div::makeInstance('tx_ttproducts_template');
+				$templateObj = GeneralUtility::makeInstance('tx_ttproducts_template');
 				$error_code[0] = 'no_subtemplate';
 				$error_code[1] = '###' . $subPartMarker . '###';
 				$error_code[2] = $templateObj->getTemplateFile();
@@ -153,7 +156,7 @@ class tx_ttproducts_cat_view implements t3lib_Singleton {
 
 				// Fill marker arrays
 			$backPID = $this->pibase->piVars['backPID'];
-			$backPID = ($backPID ? $backPID : t3lib_div::_GP('backPID'));
+			$backPID = ($backPID ? $backPID : GeneralUtility::_GP('backPID'));
 			$basketPID = $this->conf['PIDbasket'];
 			$pid = $backPID;
 

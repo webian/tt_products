@@ -38,8 +38,11 @@
  */
 
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class tx_ttproducts_marker implements t3lib_Singleton {
+
+
+class tx_ttproducts_marker implements \TYPO3\CMS\Core\SingletonInterface {
 	public $cObj;
 	public $conf;
 	public $config;
@@ -60,51 +63,49 @@ class tx_ttproducts_marker implements t3lib_Singleton {
 	 */
 	public function init ($cObj, $piVars)	{
 		$this->cObj = $cObj;
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
 		$this->markerArray = array('CATEGORY', 'PRODUCT', 'ARTICLE');
-		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
-		$langObj->init1($this, $this->cObj, $this->conf['marks.'], 'marker/class.tx_ttproducts_marker.php');
+		$languageObj = GeneralUtility::makeInstance(\JambageCom\TtProducts\Api\Localization::class);
+		$defaultMarkerFile = 'EXT:' . TT_PRODUCTS_EXT . '/marker/locallang.xml';
+		$languageObj->loadLocalLang($defaultMarkerFile);
 
-		$markerFile = $this->conf['markerFile'];
-		$language = $langObj->getLanguage();
-		$defaultMarkerFile = 'EXT:'.TT_PRODUCTS_EXT.'/marker/locallang.xml';
-		tx_div2007_alpha5::loadLL_fh002($langObj, $defaultMarkerFile);
-
-		if ($language == '' || $language == 'default' || $language == 'en')	{
-			if ($markerFile)	{
+		if ($language == '' || $language == 'default' || $language == 'en') {
+			if ($markerFile) {
 				$markerFile = $GLOBALS['TSFE']->tmpl->getFileName($markerFile);
-				tx_div2007_alpha5::loadLL_fh002($langObj, $markerFile);
+				$languageObj->loadLocalLang($markerFile);
 			}
-		} else	{
-			if (!$markerFile || $markerFile == '{$plugin.tt_products.file.markerFile}')	{
-				if ($language == 'de')	{
+		} else {
+			if (!$markerFile || $markerFile == '{$plugin.tt_products.file.markerFile}') {
+				if ($language == 'de') {
 					$markerFile = 'EXT:' . TT_PRODUCTS_EXT . '/marker/' . $language . '.locallang.xml';
-				} else if (t3lib_extMgm::isLoaded(ADDONS_EXTkey))	{
-					$markerFile = 'EXT:' . ADDONS_EXTkey . '/' . $language . '.locallang.xml';
+				} else if (ExtensionManagementUtility::isLoaded(ADDONS_EXT)) {
+					$markerFile = 'EXT:' . ADDONS_EXT . '/' . $language . '.locallang.xml';
 				}
-			} else if (substr($markerFile,0,4)=='EXT:')	{	// extension
-				list($extKey,$local) = explode('/',substr($markerFile,4),2);
+			} else if (substr($markerFile, 0, 4) == 'EXT:') {	// extension
+				list($extKey, $local) = explode('/', substr($markerFile, 4), 2);
 				$filename='';
-				if (strcmp($extKey,'') && !t3lib_extMgm::isLoaded($extKey) && strcmp($local,''))	{
-					$error_code = array();
-					$error_code[0] = 'extension_missing';
-					$error_code[1] = $extKey;
-					$error_code[2] = $markerFile;
-					$this->setErrorCode($error_code);
+				if (
+					strcmp($extKey, '') &&
+					!ExtensionManagementUtility::isLoaded($extKey) &&
+					strcmp($local, '')
+				) {
+					$errorCode = array();
+					$errorCode[0] = 'extension_missing';
+					$errorCode[1] = $extKey;
+					$errorCode[2] = $markerFile;
+					$this->setErrorCode($errorCode);
 				}
 			}
 			$markerFile = $GLOBALS['TSFE']->tmpl->getFileName($markerFile);
-			tx_div2007_alpha5::loadLL_fh002($langObj, $markerFile);
+			$languageObj->loadLocalLang($markerFile);
 		}
-		$locallang = $langObj->getLocallang();
-		$LLkey = $langObj->getLLkey();
-
+		$locallang = $languageObj->getLocallang();
+		$LLkey = $languageObj->getLocalLangKey();
 		$this->setGlobalMarkerArray($piVars, $locallang, $LLkey);
-		$error_code = $this->getErrorCode();
-
-		return (count($error_code) == 0 ? true : false);
+		$errorCode = $this->getErrorCode();
+		return (count($errorCode) == 0 ? true : false);
 	}
 
 	public function getErrorCode ()	{
@@ -163,10 +164,10 @@ class tx_ttproducts_marker implements t3lib_Singleton {
 			$markerArray['###PID_'.strtoupper($function).'###'] = intval($this->conf['PID'.$function]);
 		}
 		$markerArray['###SHOPADMIN_EMAIL###'] = $this->conf['orderEmail_from'];
-		$lang =  t3lib_div::_GET('L');
+		$lang =  GeneralUtility::_GET('L');
 
 		if ($lang!='')	{
-			$markerArray['###LANGPARAM###'] = '&amp;L='.$lang;
+			$markerArray['###LANGPARAM###'] = '&amp;L=' . $lang;
 		} else {
 			$markerArray['###LANGPARAM###'] = '';
 		}
@@ -175,14 +176,14 @@ class tx_ttproducts_marker implements t3lib_Singleton {
 		$markerArray['###LOCALE_ALL###'] = $GLOBALS['TSFE']->config['config']['locale_all'];
 
 		$backPID = $piVars['backPID'];
-		$backPID = ($backPID ? $backPID : t3lib_div::_GP('backPID'));
+		$backPID = ($backPID ? $backPID : GeneralUtility::_GP('backPID'));
 		$backPID = ($backPID  ? $backPID : ($this->conf['PIDlistDisplay'] ? $this->conf['PIDlistDisplay'] : $GLOBALS['TSFE']->id));
 		$markerArray['###BACK_PID###'] = $backPID;
 
 			// Call all addURLMarkers hooks at the end of this method
 		if (is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['addGlobalMarkers'])) {
 			foreach  ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['addGlobalMarkers'] as $classRef) {
-				$hookObj= t3lib_div::makeInstance($classRef);
+				$hookObj= GeneralUtility::makeInstance($classRef);
 				if (method_exists($hookObj, 'addGlobalMarkers')) {
 					$hookObj->addGlobalMarkers($markerArray);
 				}
@@ -212,7 +213,7 @@ class tx_ttproducts_marker implements t3lib_Singleton {
 				}
 
 				$langArray[$key] = $value;
-				$markerArray['###'.strtoupper($key).'###'] = $value;
+				$markerArray['###' . strtoupper($key) . '###'] = $value;
 			}
 		} else {
 			$langArray = array();
@@ -227,13 +228,13 @@ class tx_ttproducts_marker implements t3lib_Singleton {
 						case 'image.':
 							foreach ($value as $k2 => $v2)	{
 								$fileresource = $this->cObj->fileResource($v2);
-								$markerArray['###IMAGE'.strtoupper($k2).'###'] = $fileresource;
+								$markerArray['###IMAGE' . strtoupper($k2) . '###'] = $fileresource;
 							}
 						break;
 					}
 				} else {
 					if(isset($this->conf['marks.'][$key.'.']) && is_array($this->conf['marks.'][$key.'.']))	{
-						$out = $this->cObj->cObjGetSingle($this->conf['marks.'][$key],$this->conf['marks.'][$key.'.']);
+						$out = $this->cObj->cObjGetSingle($this->conf['marks.'][$key], $this->conf['marks.'][$key.'.']);
 					} else {
 						$langArray[$key] = $value;
 						$out = $value;
@@ -243,7 +244,7 @@ class tx_ttproducts_marker implements t3lib_Singleton {
 			}
 		}
 
-		$this->globalMarkerArray = &$markerArray;
+		$this->globalMarkerArray = $markerArray;
 
 		$this->setLangArray($langArray);
 	} // setGlobalMarkerArray
@@ -262,7 +263,7 @@ class tx_ttproducts_marker implements t3lib_Singleton {
 		return $result;
 	}
 
-	public function &getAllMarkers (&$templateCode)	{
+	public function getAllMarkers (&$templateCode)	{
 		$treffer = array();
 		preg_match_all('/###([\w:]+)###/', $templateCode, $treffer);
 		$tagArray = $treffer[1];
@@ -299,9 +300,9 @@ class tx_ttproducts_marker implements t3lib_Singleton {
 					$fieldTmp = substr($prefixFound, $prefixLen);
 					$fieldTmp = strtolower($fieldTmp);
 
-					$fieldPartArray = t3lib_div::trimExplode('_', $fieldTmp);
+					$fieldPartArray = GeneralUtility::trimExplode('_', $fieldTmp);
 					$fieldTmp = $fieldPartArray[0];
-					$subFieldPartArray = t3lib_div::trimExplode(':', $fieldTmp);
+					$subFieldPartArray = GeneralUtility::trimExplode(':', $fieldTmp);
                     $colon = (count($subFieldPartArray) > 1);
 					$field = $subFieldPartArray[0];
 

@@ -36,20 +36,19 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-abstract class tx_ttproducts_field_base_view implements tx_ttproducts_field_view_int, t3lib_Singleton {
+
+
+abstract class tx_ttproducts_field_base_view implements tx_ttproducts_field_view_int, \TYPO3\CMS\Core\SingletonInterface {
 	private $bHasBeenInitialised = false;
 	public $modelObj;
-	public $cObj;
 	public $conf;		// original configuration
 	public $config;		// modified configuration
-	public $langObj;
 
 
-	public function init ($langObj, $modelObj)	{
-		$this->langObj = $langObj;
+	public function init ($modelObj)	{
 		$this->modelObj = $modelObj;
-		$this->cObj = $modelObj->cObj;
 		$this->conf = &$modelObj->conf;
 		$this->config = &$modelObj->config;
 
@@ -114,22 +113,23 @@ abstract class tx_ttproducts_field_base_view implements tx_ttproducts_field_view
 	)	{
 		$result = false;
 		$newContent = '';
-		$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
+        $local_cObj = \JambageCom\Div2007\Utility\FrontendUtility::getContentObjectRenderer();
+		$markerObj = GeneralUtility::makeInstance('tx_ttproducts_marker');
 		$upperField = strtoupper($fieldname);
 		$templateAreaList = $markerKey . '_' . $upperField . '_LIST';
 
 		$t = array();
-		$t['listFrameWork'] = $this->cObj->getSubpart($templateCode, '###' . $templateAreaList . '###');
+		$t['listFrameWork'] = $local_cObj->getSubpart($templateCode, '###' . $templateAreaList . '###');
 
 		$templateAreaSingle = $markerKey . '_' . $upperField . '_SINGLE';
 
-		$t['singleFrameWork'] = $this->cObj->getSubpart($t['listFrameWork'], '###' . $templateAreaSingle . '###');
+		$t['singleFrameWork'] = $local_cObj->getSubpart($t['listFrameWork'], '###' . $templateAreaSingle . '###');
 
 		if ($t['singleFrameWork'] != '') {
 			$repeatedTagArray = $markerObj->getAllMarkers($t['singleFrameWork']);
 
 			$value = $row[$fieldname];
-			$valueArray = t3lib_div::trimExplode(',', $value);
+			$valueArray = GeneralUtility::trimExplode(',', $value);
 
 			if (isset($valueArray) && is_array($valueArray) && $valueArray['0'] != '') {
 
@@ -165,7 +165,7 @@ abstract class tx_ttproducts_field_base_view implements tx_ttproducts_field_view
 						$tagArray
 					);
 
-					$newContent = $this->cObj->substituteMarkerArrayCached(
+					$newContent = $local_cObj->substituteMarkerArrayCached(
 						$t['singleFrameWork'],
 						$repeatedMarkerArray,
 						$repeatedSubpartArray,
@@ -178,7 +178,7 @@ abstract class tx_ttproducts_field_base_view implements tx_ttproducts_field_view
 					}
 				}
 
-				$newContent = $this->cObj->substituteMarkerArrayCached(
+				$newContent = $local_cObj->substituteMarkerArrayCached(
 					$t['listFrameWork'],
 					array(),
 					array('###' . $templateAreaSingle . '###' => $content),

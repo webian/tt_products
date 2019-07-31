@@ -37,8 +37,10 @@
  */
 
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class tx_ttproducts_memo_view implements t3lib_Singleton {
+
+class tx_ttproducts_memo_view implements \TYPO3\CMS\Core\SingletonInterface {
 	var $cObj;
 	var $pid_list;
 	var $pid; // pid where to go
@@ -55,7 +57,7 @@ class tx_ttproducts_memo_view implements t3lib_Singleton {
 			$useArticles
 		) {
 		$this->pibaseClass = $pibaseClass;
-		$pibaseObj = t3lib_div::makeInstance('' . $pibaseClass);
+		$pibaseObj = GeneralUtility::makeInstance('' . $pibaseClass);
 		$this->cObj = $pibaseObj->cObj;
 		$this->conf = $conf;
 
@@ -79,7 +81,7 @@ class tx_ttproducts_memo_view implements t3lib_Singleton {
 	 * Displays the memo
 	 */
 	public function printView ($theCode, &$templateCode, $pid, &$error_code)	{
-		$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
+		$markerObj = GeneralUtility::makeInstance('tx_ttproducts_marker');
 		$content = '';
 
 		if (
@@ -87,10 +89,8 @@ class tx_ttproducts_memo_view implements t3lib_Singleton {
 			tx_ttproducts_control_memo::bUseSession($this->conf)
 		) {
 			if ($this->memoItems)	{
-				include_once (PATH_BE_ttproducts.'view/class.tx_ttproducts_list_view.php');
-
 				// List all products:
-				$listView = t3lib_div::makeInstance('tx_ttproducts_list_view');
+				$listView = GeneralUtility::makeInstance('tx_ttproducts_list_view');
 				$listView->init (
 					$this->pibaseClass,
 					$pid,
@@ -124,9 +124,7 @@ class tx_ttproducts_memo_view implements t3lib_Singleton {
 					array()
 				);
 			} else {
-				include_once (PATH_BE_ttproducts.'marker/class.tx_ttproducts_subpartmarker.php');
-
-				$subpartmarkerObj = t3lib_div::makeInstance('tx_ttproducts_subpartmarker');
+				$subpartmarkerObj = GeneralUtility::makeInstance('tx_ttproducts_subpartmarker');
 				$subpartmarkerObj->init(
 					$this->cObj
 				);
@@ -138,7 +136,7 @@ class tx_ttproducts_memo_view implements t3lib_Singleton {
 		} else if (tx_ttproducts_control_memo::bIsAllowed('fe_users', $this->conf)) {
 			include_once (PATH_BE_ttproducts.'marker/class.tx_ttproducts_subpartmarker.php');
 
-			$subpartmarkerObj = t3lib_div::makeInstance('tx_ttproducts_subpartmarker');
+			$subpartmarkerObj = GeneralUtility::makeInstance('tx_ttproducts_subpartmarker');
 			$subpartmarkerObj->init(
 				$this->cObj
 			);
@@ -150,7 +148,7 @@ class tx_ttproducts_memo_view implements t3lib_Singleton {
 		}
 
 		if (!$content && !count($error_code)) {
-			$templateObj = t3lib_div::makeInstance('tx_ttproducts_template');
+			$templateObj = GeneralUtility::makeInstance('tx_ttproducts_template');
 			$error_code[0] = 'no_subtemplate';
 			$error_code[1] = '###' . $templateArea . $templateObj->getTemplateSuffix() . '###';
 			$error_code[2] = $templateObj->getTemplateFile();
@@ -167,7 +165,7 @@ class tx_ttproducts_memo_view implements t3lib_Singleton {
 		$tagArray,
 		&$bUseCheckBox
 	)	{
-		$pibaseObj = t3lib_div::makeInstance(''.$this->pibaseClass);
+		$pibaseObj = GeneralUtility::makeInstance(''.$this->pibaseClass);
 		$fieldKey = 'FIELD_'.$markerKey.'_NAME';
 		if (isset($tagArray[$fieldKey]))	{
 			$markerArray['###'.$fieldKey.'###'] = $pibaseObj->prefixId.'[memo]['.$row['uid'].']';
@@ -196,7 +194,7 @@ class tx_ttproducts_memo_view implements t3lib_Singleton {
 	)	{
 
 		if ($bUseCheckBox)	{
-			$pibaseObj = t3lib_div::makeInstance(''.$this->pibaseClass);
+			$pibaseObj = GeneralUtility::makeInstance(''.$this->pibaseClass);
 			$markerArray['###HIDDENFIELDS###'] .= '<input type="hidden" name="' . $pibaseObj->prefixId . '[memo][uids]" value="' . implode(',',$uidArray) . '" />';
 		}
 	}

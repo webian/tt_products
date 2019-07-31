@@ -37,6 +37,8 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 
 
 class tx_ttproducts_content extends tx_ttproducts_table_base {
@@ -60,7 +62,7 @@ class tx_ttproducts_content extends tx_ttproducts_table_base {
 		$rcArray = $this->dataPageArray[$pid];
 
 		if (!is_array($rcArray)) {
-			$sql = t3lib_div::makeInstance('tx_table_db_access');
+			$sql = GeneralUtility::makeInstance('tx_table_db_access');
 			$sql->prepareFields($this->getTableObj(), 'select', '*');
 			$sql->prepareFields($this->getTableObj(), 'orderBy', 'sorting');
 			$sql->prepareWhereFields ($this->getTableObj(), 'pid', '=', intval($pid));

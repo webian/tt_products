@@ -37,6 +37,7 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
 class tx_ttproducts_menucat_view extends tx_ttproducts_catlist_view_base {
@@ -55,7 +56,7 @@ class tx_ttproducts_menucat_view extends tx_ttproducts_catlist_view_base {
 	) {
 		$t = array();
 		$ctrlArray = array();
-		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
+		$basketObj = GeneralUtility::makeInstance('tx_ttproducts_basket');
 
 		parent::getPrintViewArrays(
 			$functablename,
@@ -76,11 +77,11 @@ class tx_ttproducts_menucat_view extends tx_ttproducts_catlist_view_base {
 		);
 
 		if (!count($error_code))	{
-			$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
-			$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+			$markerObj = GeneralUtility::makeInstance('tx_ttproducts_marker');
+			$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 			$categoryTableViewObj = $tablesObj->get($functablename,true);
 			$categoryTable = $categoryTableViewObj->getModelObj();
-			$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+			$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 
 			$content='';
 			$out='';
@@ -92,7 +93,7 @@ class tx_ttproducts_menucat_view extends tx_ttproducts_catlist_view_base {
 			$countArray[0] = 0;
 			$countArray[1] = 0;
 			$catConf = $categoryTable->getTableConf($theCode);
-			$cssObj = t3lib_div::makeInstance('tx_ttproducts_css');
+			$cssObj = GeneralUtility::makeInstance('tx_ttproducts_css');
 			$cssConf = $cssObj->getConf($functablename, $theCode);
 			$menu = $categoryTableViewObj->getPivar() . $depth;
 			$fill = '';

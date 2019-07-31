@@ -37,8 +37,10 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class tx_ttproducts_db implements t3lib_Singleton {
+
+class tx_ttproducts_db implements \TYPO3\CMS\Core\SingletonInterface {
 	protected $extKey = TT_PRODUCTS_EXT;	// The extension key.
 	protected $conf;			// configuration from template
 	protected $config;
@@ -70,15 +72,15 @@ class tx_ttproducts_db implements t3lib_Singleton {
 		) {
 			$this->cObj = $pObj->cObj;
 		} else {
-		    $this->cObj = t3lib_div::makeInstance('tslib_cObj');	// Local cObj.
+		    $this->cObj = GeneralUtility::makeInstance('tslib_cObj');	// Local cObj.
 		    $this->cObj->start(array());
 // TODO: $cObj->start($contentRow,'tt_content');
 		}
 
-		$controlCreatorObj = t3lib_div::makeInstance('tx_ttproducts_control_creator');
+		$controlCreatorObj = GeneralUtility::makeInstance('tx_ttproducts_control_creator');
 		$controlCreatorObj->init($conf, $config, $pObj, $this->cObj);
 
-		$modelCreatorObj = t3lib_div::makeInstance('tx_ttproducts_model_creator');
+		$modelCreatorObj = GeneralUtility::makeInstance('tx_ttproducts_model_creator');
 		$modelCreatorObj->init($conf, $config, $this->cObj);
 	}
 
@@ -97,20 +99,18 @@ class tx_ttproducts_db implements t3lib_Singleton {
 		$rowArray = array();
 		$variantArray = array();
 		$theCode = 'ALL';
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
-		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
-		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
+		$basketObj = GeneralUtility::makeInstance('tx_ttproducts_basket');
 
 			// price
-		$priceObj = t3lib_div::makeInstance('tx_ttproducts_field_price');
+		$priceObj = GeneralUtility::makeInstance('tx_ttproducts_field_price');
 		$priceObj->init(
 			$this->cObj,
 			$this->conf
 		);
-		$priceViewObj = t3lib_div::makeInstance('tx_ttproducts_field_price_view');
+		$priceViewObj = GeneralUtility::makeInstance('tx_ttproducts_field_price_view');
 		$priceViewObj->init(
-			$langObj,
 			$this->cObj,
 			$priceObj
 		);
@@ -144,7 +144,7 @@ class tx_ttproducts_db implements t3lib_Singleton {
 							foreach ($row as $field => $v)	{
 								if ($field != 'uid' && isset($dataRow[$field]))	{
 									$variantArray[] = $field;
-									$variantValues = t3lib_div::trimExplode(';', $v);
+									$variantValues = GeneralUtility::trimExplode(';', $v);
 
 									$theValue = $variantValues[$dataRow[$field]];
 									$rowArray[$table][$field] = $theValue;
@@ -193,8 +193,8 @@ class tx_ttproducts_db implements t3lib_Singleton {
 									isset($articleConf['fieldIndex.']) && is_array($articleConf['fieldIndex.']) &&
 									isset($articleConf['fieldIndex.']['image.']) && is_array($articleConf['fieldIndex.']['image.'])
 								)	{
-									$prodImageArray = t3lib_div::trimExplode(',',$rowArray[$table]['image']);
-									$artImageArray = t3lib_div::trimExplode(',',$rowArticle['image']);
+									$prodImageArray = GeneralUtility::trimExplode(',',$rowArray[$table]['image']);
+									$artImageArray = GeneralUtility::trimExplode(',',$rowArticle['image']);
 									$tmpDestArray = $prodImageArray;
 									foreach($articleConf['fieldIndex.']['image.'] as $kImage => $vImage)	{
 										$tmpDestArray[$vImage-1] = $artImageArray[$kImage-1];
@@ -222,21 +222,21 @@ class tx_ttproducts_db implements t3lib_Singleton {
 		$csConvObj = $GLOBALS['TSFE']->csConvObj;
 
 		$theCode = strtoupper($view);
-		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
-		$imageObj = t3lib_div::makeInstance('tx_ttproducts_field_image');
-		$imageViewObj = t3lib_div::makeInstance('tx_ttproducts_field_image_view');
-		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
+		$languageObj = GeneralUtility::makeInstance(\JambageCom\TtProducts\Api\Localization::class);
+		$imageObj = GeneralUtility::makeInstance('tx_ttproducts_field_image');
+		$imageViewObj = GeneralUtility::makeInstance('tx_ttproducts_field_image_view');
+		$basketObj = GeneralUtility::makeInstance('tx_ttproducts_basket');
 
 		$imageObj->init($this->cObj);
-		$imageViewObj->init($langObj, $imageObj);
+		$imageViewObj->init($imageObj);
 
-		$priceObj = t3lib_div::makeInstance('tx_ttproducts_field_price');
+		$priceObj = GeneralUtility::makeInstance('tx_ttproducts_field_price');
 			// price
-		$priceViewObj = t3lib_div::makeInstance('tx_ttproducts_field_price_view');
+		$priceViewObj = GeneralUtility::makeInstance('tx_ttproducts_field_price_view');
 
 		$priceFieldArray = $priceObj->getPriceFieldArray();
 		$tableObjArray = array();
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 
 		// Instantiate the tx_xajax_response object
 		$objResponse = new tx_taxajax_response($this->ajax->taxajax->getCharEncoding(), true);
@@ -260,7 +260,7 @@ class tx_ttproducts_db implements t3lib_Singleton {
 				}
 				if (($field == 'title') || ($field == 'subtitle') || ($field == 'note') || ($field == 'note2'))	{
 					if (($field == 'note') || ($field == 'note2'))	{
-						$noteObj = t3lib_div::makeInstance('tx_ttproducts_field_note_view');
+						$noteObj = GeneralUtility::makeInstance('tx_ttproducts_field_note_view');
 						$classAndPath = $itemTable->getFieldClassAndPath($field);
 
 						if ($classAndPath['class'])	{
@@ -334,7 +334,7 @@ class tx_ttproducts_db implements t3lib_Singleton {
 							} else {
 								$objResponse->addAssign($basketIntoPrefix . '-' . $uid,'disabled', 'disabled');
 							}
-							$objResponse->addAssign('in-stock-id-'.$uid,'innerHTML',tx_div2007_alpha5::getLL_fh003($langObj, ($v > 0 ? 'in_stock' : 'not_in_stock')));
+							$objResponse->addAssign('in-stock-id-'.$uid,'innerHTML', $languageObj->getLabel(($v > 0 ? 'in_stock' : 'not_in_stock')));
 
 							break;
 
@@ -377,7 +377,7 @@ class tx_ttproducts_db implements t3lib_Singleton {
 				$hookVar = 'ajaxCommands';
 				if ($hookVar && is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT][$hookVar])) {
 					foreach  ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT][$hookVar] as $classRef) {
-						$hookObj= t3lib_div::makeInstance($classRef);
+						$hookObj= GeneralUtility::makeInstance($classRef);
 						if (method_exists($hookObj, 'init')) {
 							$hookObj->init($this);
 						}
@@ -404,10 +404,10 @@ class tx_ttproducts_db implements t3lib_Singleton {
 			$this->cObj->start($contentRow, 'tt_content');
 		}
 
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$result = '';
-		$pibaseObj = t3lib_div::makeInstance('tx_ttproducts_pi1_base');
-		$mainObj = t3lib_div::makeInstance('tx_ttproducts_main');
+		$pibaseObj = GeneralUtility::makeInstance('tx_ttproducts_pi1_base');
+		$mainObj = GeneralUtility::makeInstance('tx_ttproducts_main');
 
 		$piVars = tx_ttproducts_model_control::getPiVars();
 		$pibaseObj->piVars = $piVars;
@@ -458,10 +458,10 @@ class tx_ttproducts_db implements t3lib_Singleton {
 
 		$tagId = '';
 		$result = '';
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
-		$mainObj = t3lib_div::makeInstance('tx_ttproducts_main');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
+		$mainObj = GeneralUtility::makeInstance('tx_ttproducts_main');
 
-		$pibaseObj = t3lib_div::makeInstance('tx_ttproducts_pi1_base');
+		$pibaseObj = GeneralUtility::makeInstance('tx_ttproducts_pi1_base');
         // We put our incomming data to the regular piVars
 
 		$piVars = tx_ttproducts_model_control::getPiVars();
@@ -526,13 +526,13 @@ class tx_ttproducts_db implements t3lib_Singleton {
 
 
 	public function destruct () {
-		$controlCreatorObj = t3lib_div::makeInstance('tx_ttproducts_control_creator');
+		$controlCreatorObj = GeneralUtility::makeInstance('tx_ttproducts_control_creator');
 		$controlCreatorObj->destruct();
 
-		$modelCreatorObj = t3lib_div::makeInstance('tx_ttproducts_model_creator');
+		$modelCreatorObj = GeneralUtility::makeInstance('tx_ttproducts_model_creator');
 		$modelCreatorObj->destruct();
 
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		$tablesObj->destruct();
 	}
 }

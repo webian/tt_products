@@ -34,8 +34,11 @@
  * @package TYPO3
  * @subpackage tt_products
  */
-class tx_ttproducts_table_label implements t3lib_Singleton {
+ 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
+
+class tx_ttproducts_table_label implements \TYPO3\CMS\Core\SingletonInterface {
 
 	/**
 	 * Factory function which is called by label_userFunc. The function decides how to build the label.
@@ -59,7 +62,7 @@ class tx_ttproducts_table_label implements t3lib_Singleton {
 			return '';
 		}
 
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 
 		// Init
 		$label = '';
@@ -68,7 +71,7 @@ class tx_ttproducts_table_label implements t3lib_Singleton {
 
 		// Get the label from the model
 		if ($className) {
-			$model = t3lib_div::makeInstance($className);
+			$model = GeneralUtility::makeInstance($className);
 			$row =
 				$GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow('*', $tablename, 'uid=' . intval($params['row']['uid']));
 			$label = $model->getLabel($row);

@@ -37,8 +37,10 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class tx_ttproducts_control_view implements t3lib_Singleton {
+
+class tx_ttproducts_control_view implements \TYPO3\CMS\Core\SingletonInterface {
 
 	/**
 	 * Template marker substitution
@@ -49,9 +51,9 @@ class tx_ttproducts_control_view implements t3lib_Singleton {
 	 * @return	array
 	 * @access private
 	 */
-	function getMarkerArray (&$markerArray, &$allMarkers, $tableConfArray)	{
+	public function getMarkerArray (&$markerArray, &$allMarkers, $tableConfArray)	{
 		if (isset($tableConfArray) && is_array($tableConfArray))	{
-			$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
+			$languageObj = GeneralUtility::makeInstance(\JambageCom\TtProducts\Api\Localization::class);
 			$allValueArray = array();
 			$controlArray = tx_ttproducts_model_control::getControlArray();
 
@@ -77,14 +79,14 @@ class tx_ttproducts_control_view implements t3lib_Singleton {
 			if (isset($allValueArray) && is_array($allValueArray))	{
 
 				foreach ($allValueArray as $key => $xValueArray)	{
-					$keyArray = t3lib_div::trimExplode(';',$key);
+					$keyArray = GeneralUtility::trimExplode(';',$key);
 					$type = $keyArray[0];
 					$valueArray = tx_ttproducts_form_div::fetchValueArray($xValueArray['valueArray.']);
 					$attributeArray = $xValueArray['attribute.'];
 
 					if (in_array($type, array('sortSelect', 'filterSelect')))	{
-						$out = tx_ttproducts_form_div::createSelect (
-							$langObj,
+						$out = tx_ttproducts_form_div::createSelect(
+							$languageObj,
 							$valueArray,
 							tx_ttproducts_model_control::getPrefixId() . '[' . tx_ttproducts_model_control::getControlVar() . '][' . $keyArray[0] . '][' . $keyArray[1] . ']',
 							$controlArray[$keyArray[0]][$keyArray[1]],

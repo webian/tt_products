@@ -37,6 +37,8 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 
 
 class tx_ttproducts_selectcat_view extends tx_ttproducts_catlist_view_base {
@@ -50,8 +52,8 @@ class tx_ttproducts_selectcat_view extends tx_ttproducts_catlist_view_base {
 		$out='';
 		$where='';
 
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
-		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
+		$languageObj = GeneralUtility::makeInstance(\JambageCom\TtProducts\Api\Localization::class);
 		$categoryTableView = $tablesObj->get($functablename,1);
 		$categoryTable = $categoryTableView->getModelObj();
 
@@ -111,7 +113,7 @@ class tx_ttproducts_selectcat_view extends tx_ttproducts_catlist_view_base {
 						$selectArray[$k] = array();
 						$type = $setting['type'];
 						if ($type)	{
-							$parts = t3lib_div::trimExplode('=', $type);
+							$parts = GeneralUtility::trimExplode('=', $type);
 							if ($parts[1] == 'select')	{
 								$selectArray[$k]['name'] = $parts[0];
 							}
@@ -188,7 +190,7 @@ class tx_ttproducts_selectcat_view extends tx_ttproducts_catlist_view_base {
 					}
 				}
 			}
-			$paramArray = t3lib_div::get_tag_attributes($params);
+			$paramArray = GeneralUtility::get_tag_attributes($params);
 			if (isset($paramArray) && is_array($paramArray)) {
 				$mainAttributeArray = array_merge($mainAttributeArray, $paramArray);
 			}
@@ -198,7 +200,7 @@ class tx_ttproducts_selectcat_view extends tx_ttproducts_catlist_view_base {
 			}
 
 			$selectOut = tx_ttproducts_form_div::createSelect(
-				$langObj,
+				$languageObj,
 				$valueArray,
 				$name,
 				$selectedCat,
@@ -230,7 +232,7 @@ class tx_ttproducts_selectcat_view extends tx_ttproducts_catlist_view_base {
 			$piVar = $categoryTableView->piVar;
 
 			if ($method == 'clickShow') {
-				$javaScriptObj = t3lib_div::makeInstance('tx_ttproducts_javascript');
+				$javaScriptObj = GeneralUtility::makeInstance('tx_ttproducts_javascript');
 				$javaScriptObj->set(
 					'selectcat',
 					array($categoryArray),

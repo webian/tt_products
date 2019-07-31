@@ -37,18 +37,20 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 
 class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 
+	public function getImageCode ($imageConf, $theCode) {
+        $local_cObj = \JambageCom\TtProducts\Api\ControlApi::getCObj();
 
-
-	public function getImageCode ($cObj, $imageConf, $theCode) {
         $contentObject = 'IMAGE';
         $imageCode =
-            $cObj->getContentObject($contentObject)->render($imageConf); // neu
+            $local_cObj->getContentObject($contentObject)->render($imageConf); // neu
 
 		if ($theCode == 'EMAIL' && $GLOBALS['TSFE']->absRefPrefix == '') {
-			$absRefPrefix = t3lib_div::getIndpEnv('TYPO3_SITE_URL');
+			$absRefPrefix = GeneralUtility::getIndpEnv('TYPO3_SITE_URL');
 			$fixImgCode = str_replace('index.php', $absRefPrefix . 'index.php', $imageCode);
 			$fixImgCode = str_replace('src="', 'src="' . $absRefPrefix, $fixImgCode);
 			$fixImgCode = str_replace('"uploads/', '"' . $absRefPrefix . 'uploads/', $fixImgCode);
@@ -70,6 +72,7 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 		&$imageConf,
 		&$row
 	)	{
+        $local_cObj = \JambageCom\Div2007\Utility\FrontendUtility::getContentObjectRenderer();
 		$confArray = array('params', 'altText', 'titleText');
 		if (!count($markerArray))	{
 			$this->getExtItemMarkerArray($markerArray, $imageConf, $row);
@@ -77,7 +80,7 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 		foreach ($confArray as $conftype)	{
 			if ($imageConf[$conftype])	{
 				$text = $imageConf[$conftype];
-				$text = $this->cObj->substituteMarkerArray($text, $markerArray);
+				$text = $local_cObj->substituteMarkerArray($text, $markerArray);
 				$imageConf[$conftype] = $text;
 			}
 		}
@@ -120,14 +123,14 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 			$keyArray[] = $suffix;
 		}
 		if (is_array($imageMarkerArray))	{
-			$imageNameArray = t3lib_div::trimExplode('_', $imageName);
-			$partsArray = t3lib_div::trimExplode(',', $imageMarkerArray['parts']);
+			$imageNameArray = GeneralUtility::trimExplode('_', $imageName);
+			$partsArray = GeneralUtility::trimExplode(',', $imageMarkerArray['parts']);
 			foreach ($partsArray as $k2 => $part)	{
 				$keyArray[] = $imageNameArray[$part-1];
 			}
 		}
 		$tmp = implode('_', $keyArray);
-		$tmpArray = t3lib_div::trimExplode('.',$tmp);
+		$tmpArray = GeneralUtility::trimExplode('.',$tmp);
 		reset($tmpArray);
 		$key = current($tmpArray);
 
@@ -152,8 +155,8 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 		&$theImgDAM,
 		&$specialConf
 	)	{
-		$cObj = t3lib_div::makeInstance('tslib_cObj');	// Local cObj.
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$cObj = GeneralUtility::makeInstance('tslib_cObj');	// Local cObj.
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		$theTableObj = $tablesObj->get($functablename);
 		$theTablename = $theTableObj->getTablename();
 		$cObj->start($imageRow, $theTablename);
@@ -163,7 +166,7 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 		$markerArray['###'.$markerKey.'_PATH###'] = $dirname;
 
 		if (count($imageArray))	{
-			$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+			$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 			$tableConf = $cnf->getTableConf($functablename, $theCode);
 			if (is_array($tableConf))	{
 				$imageMarkerArray = $tableConf['imageMarker.'];
@@ -215,7 +218,7 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 					$bUseImage = true;
 				}
 				if (t3lib_extMgm::isLoaded('dam') && $bUseImage && $bImages) {
-					$damObj = t3lib_div::makeInstance('tx_dam');
+					$damObj = GeneralUtility::makeInstance('tx_dam');
 					if(method_exists($damObj,'meta_getDataForFile')) {
 						$fieldList = 'uid,pid,tstamp,crdate,active,media_type,title,category,index_type,file_mime_type,file_mime_subtype,
 							file_type,file_type_version,file_name,file_path,file_size,file_mtime,file_inode,file_ctime,file_hash,file_status,
@@ -242,7 +245,7 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 				$cObj->alternativeData = ($meta ? $meta : $imageRow);
 				$imageConf['params'] = preg_replace('/\s+/',' ',$imageConf['params']);
 				$this->replaceMarkerArray($markerArray, $imageConf, $cObj->alternativeData);
-				$tmpImgCode = $this->getImageCode($cObj, $imageConf, $theCode);
+				$tmpImgCode = $this->getImageCode($imageConf, $theCode);
 
 				if ($tmpImgCode != '')	{
 					$imgCodeArray[$key] .= $tmpImgCode;
@@ -256,7 +259,7 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 						$theImageConf = array_merge($imageConf, $specialImageConf);
 						$cObj->alternativeData = ($meta ? $meta : $imageRow); // has to be redone here
 						$this->replaceMarkerArray($markerArray, $theImageConf, $cObj->alternativeData);
-						$tmpImgCode = $this->getImageCode($cObj, $theImageConf, $theCode);
+						$tmpImgCode = $this->getImageCode($theImageConf, $theCode);
 						$key1 = $key . ':' . $specialConfType;
 						$imgCodeArray[$key1] .= $tmpImgCode;
 					}
@@ -265,7 +268,7 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 		} else if ($this->conf['noImageAvailable']!='') {	// if (count($imageArray))
 			$imageConf = $this->conf[$imageRenderObj.'.'];
 			$imageConf['file'] = $this->conf['noImageAvailable'];
-			$tmpImgCode = $this->getImageCode($cObj, $imageConf, $theCode);
+			$tmpImgCode = $this->getImageCode($imageConf, $theCode);
 			$imgCodeArray[0] = $tmpImgCode;
 		}
 
@@ -299,9 +302,10 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 		$imageRow = $row;
 		$bImages = false;
 		$dirname = '';
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$tableConf = $cnf->getTableConf($functablename, $theCode);
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
+		$local_cObj = \JambageCom\Div2007\Utility\FrontendUtility::getContentObjectRenderer();
 
 			// Get image
 		$theImgDAM = array();
@@ -344,7 +348,7 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 					$foreignfield = $tempConf['uid_foreign'];
 					$fieldconfParent['generateImage'] = $tempConf['field.'];
 					$where_clause = $conftable.'.'.$foreignfield .'='. $imageRow[$localfield];
-					$where_clause .= $this->cObj->enableFields($conftable);
+					$where_clause .= $local_cObj->enableFields($conftable);
 					$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*',$conftable,$where_clause,'',$foreignfield,1);
 						// only first found row will be used
 					$imageRow = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
@@ -431,7 +435,7 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 
 		if (is_array($tempImageConf))	{
 			foreach ($tagArray as $key => $value)	{
-				$keyArray = t3lib_div::trimExplode (':', $key);
+				$keyArray = GeneralUtility::trimExplode (':', $key);
 				$specialConfType = strtolower($keyArray[1]);
 				$tagKey = $keyArray[0];
 				if ($specialConfType &&
@@ -472,7 +476,7 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 			$key = $markerKey . intval($c);
 
  			if ($bIsSpecial)	{
-				$keyArray = t3lib_div::trimExplode(':', $k1);
+				$keyArray = GeneralUtility::trimExplode(':', $k1);
 				$count = $countArray[$keyArray[0]];
 				$key =  $markerKey . intval($count);
 
@@ -510,7 +514,7 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 
 		if ($bImageMarker)	{
 			foreach ($theImgCode as $imageName => $imgValue)	{
-				$nameArray = t3lib_div::trimExplode(':', $imageName);
+				$nameArray = GeneralUtility::trimExplode(':', $imageName);
 				$suffix = ($nameArray[1] ? ':'.$nameArray[1] : '');
 				$tagkey = $this->getMarkerkey($imageMarkerArray, $markerKey, $imageName).strtoupper($suffix);
 				if (isset($tagArray[$tagkey]))	{
@@ -533,7 +537,7 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 		$fieldname,
 		$theCode
 	) {
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$tableConf = $cnf->getTableConf($functablename, $theCode);
 
 		// example: plugin.tt_products.conf.tt_products.ALL.limitImage = 10

@@ -37,9 +37,10 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
-class tx_ttproducts_tracking implements t3lib_Singleton {
+class tx_ttproducts_tracking implements \TYPO3\CMS\Core\SingletonInterface {
 	var $cObj;
 	var $conf;		  // original configuration
 	private $statusCodeArray;
@@ -51,9 +52,9 @@ class tx_ttproducts_tracking implements t3lib_Singleton {
 	 * @param		string		  $fieldname is the field in the table you want to create a JavaScript for
 	 * @return	  void
 	 */
-	function init ($cObj) {
+	public function init ($cObj) {
 		$this->cObj = $cObj;
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 
 		if (isset($this->conf['statusCodes.']) && is_array($this->conf['statusCodes.'])) {
@@ -68,7 +69,7 @@ class tx_ttproducts_tracking implements t3lib_Singleton {
 
 			switch ($this->conf['statusCodesSource']) {
 				case 'marker_locallang':
-					$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
+					$markerObj = GeneralUtility::makeInstance('tx_ttproducts_marker');
 					$langArray = $markerObj->getLangArray();
 					if (is_array($langArray)) {
 						$statusMessage = 'tracking_status_message_';
@@ -105,7 +106,7 @@ class tx_ttproducts_tracking implements t3lib_Singleton {
 	protected function getDate ($newData) {
 		$date = '';
 		if ($newData) {
-			$dateArray = t3lib_div::trimExplode('-', $newData);
+			$dateArray = GeneralUtility::trimExplode('-', $newData);
 			$date = mktime(0, 0, 0, $dateArray[1], $dateArray[0], $dateArray[2]);
 		} else {
 			$date = time();
@@ -165,14 +166,14 @@ class tx_ttproducts_tracking implements t3lib_Singleton {
 	function getTrackingInformation ($orderRow, $templateCode, $trackingCode, $updateCode, &$orderRecord, $admin) {
 		$bUseXHTML = $GLOBALS['TSFE']->config['config']['xhtmlDoctype'] != '';
 
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		$orderObj = $tablesObj->get('sys_products_orders');
-		$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
-		$pibaseObj = t3lib_div::makeInstance('tx_ttproducts_pi1_base');
-		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
-		$basketView = t3lib_div::makeInstance('tx_ttproducts_basket_view');
-		$infoViewObj = t3lib_div::makeInstance('tx_ttproducts_info_view');
-		$paymentshippingObj = t3lib_div::makeInstance('tx_ttproducts_paymentshipping');
+		$markerObj = GeneralUtility::makeInstance('tx_ttproducts_marker');
+		$pibaseObj = GeneralUtility::makeInstance('tx_ttproducts_pi1_base');
+		$languageObj = GeneralUtility::makeInstance(\JambageCom\TtProducts\Api\Localization::class);
+		$basketView = GeneralUtility::makeInstance('tx_ttproducts_basket_view');
+		$infoViewObj = GeneralUtility::makeInstance('tx_ttproducts_info_view');
+		$paymentshippingObj = GeneralUtility::makeInstance('tx_ttproducts_paymentshipping');
 		$theTable = 'sys_products_orders';
 
 		$statusCodeArray = array();
@@ -242,8 +243,7 @@ class tx_ttproducts_tracking implements t3lib_Singleton {
 									$textSchema = $theTable . '.' . $colName . '.I.';
 									$i = 0;
 									do {
-										$text = tx_div2007_alpha5::getLL_fh003(
-											$langObj,
+										$text = $languageObj->getLabel(
 											$textSchema . $i,
 											$usedLang = 'default'
 										);
@@ -286,7 +286,7 @@ class tx_ttproducts_tracking implements t3lib_Singleton {
 							$recipient,
 							$status_log_element,
 							$statusCodeArray,
-							t3lib_div::_GP('tracking'),
+							GeneralUtility::_GP('tracking'),
 							$orderRow,
 							$templateCode,
 							$templateMarker
@@ -437,7 +437,7 @@ class tx_ttproducts_tracking implements t3lib_Singleton {
 					}
 				}
 			}
-			$priceViewObj = t3lib_div::makeInstance('tx_ttproducts_field_price_view');
+			$priceViewObj = GeneralUtility::makeInstance('tx_ttproducts_field_price_view');
 
 			if (isset($this->conf['tracking.']) && isset($this->conf['tracking.']['fields']))	{
 				$fields = $this->conf['tracking.']['fields'];
@@ -445,7 +445,7 @@ class tx_ttproducts_tracking implements t3lib_Singleton {
 				$fields = 'uid';
 			}
 			$fields .= ',' . 'crdate,tracking_code,status,status_log,bill_no,name,amount,feusers_uid';
-			$fields = t3lib_div::uniqueList($fields);
+			$fields = GeneralUtility::uniqueList($fields);
 			$history = array();
 			$fieldMarkerArray = array();
 			$oldMode = preg_match('/###OTHER_ORDERS_OPTIONS###\s*<\/select>/i', $templateCode);
@@ -502,18 +502,18 @@ class tx_ttproducts_tracking implements t3lib_Singleton {
 						$last_order = $history[$row['feusers_uid']];
 
 						if($last_order['count'] == 1) {
-							$fieldMarkerArray['###LAST_ORDER_TYPE###'] = tx_div2007_alpha5::getLL_fh003($langObj, 'first_order');
+							$fieldMarkerArray['###LAST_ORDER_TYPE###'] = $languageObj->getLabel('first_order');
 							$fieldMarkerArray['###LAST_ORDER_COUNT###'] = '-';
 						} else {
 							$fieldMarkerArray['###LAST_ORDER_TYPE###'] = $last_order['out'];
 							$fieldMarkerArray['###LAST_ORDER_COUNT###'] = $last_order['count'];
 						}
 						if($row['feusers_uid'] == 0) {
-							$fieldMarkerArray['###LAST_ORDER_TYPE###'] = tx_div2007_alpha5::getLL_fh003($langObj, 'unregistered');
+							$fieldMarkerArray['###LAST_ORDER_TYPE###'] = $languageObj->getLabel('unregistered');
 							$fieldMarkerArray['###LAST_ORDER_COUNT###'] = '-';
 						}
 						if($row['company'] == '') {
-							$row['company'] = tx_div2007_alpha5::getLL_fh003($langObj, 'undeclared');
+							$row['company'] = $languageObj->getLabel( 'undeclared');
 						}
 						$history[$row['feusers_uid']]['out'] = date('d.m.Y - H:i', $row['crdate']);
 					}
@@ -551,7 +551,7 @@ class tx_ttproducts_tracking implements t3lib_Singleton {
 				} else if ($this->conf['pathToJquery'] != '')	{
 				// if none of the previous is true, you need to include your own library
 				// just as an example in this way
-					$GLOBALS['TSFE']->additionalHeaderData[$ext_key] = '<script src="' . t3lib_div::getFileAbsFileName($this->conf['pathToJquery']) . '" type="text/javascript"></script>';
+					$GLOBALS['TSFE']->additionalHeaderData[$ext_key] = '<script src="' . GeneralUtility::getFileAbsFileName($this->conf['pathToJquery']) . '" type="text/javascript"></script>';
 				}
 
 				if ($bInverseHistory)	{
@@ -664,7 +664,7 @@ class tx_ttproducts_tracking implements t3lib_Singleton {
 
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['tracking'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['tracking'] as $classRef) {
-				$hookObj= t3lib_div::makeInstance($classRef);
+				$hookObj= GeneralUtility::makeInstance($classRef);
 				if (method_exists($hookObj, 'getTrackingInformation')) {
 					$hookObj->getTrackingInformation($this, $orderRow, $templateCode, $trackingCode, $updateCode, $orderRecord, $admin, $template, $markerArray, $subpartArray);
 				}

@@ -38,6 +38,8 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 
 global $TYPO3_CONF_VARS, $TSFE, $TT, $BE_USER, $error;
 
@@ -58,10 +60,10 @@ $config['LLkey'] = '';
 
 
 // Make instance:
-$ajax = t3lib_div::makeInstance('tx_ttproducts_ajax');
+$ajax = GeneralUtility::makeInstance('tx_ttproducts_ajax');
 $ajax->init();
 
-$SOBE = t3lib_div::makeInstance('tx_ttproducts_db');
+$SOBE = GeneralUtility::makeInstance('tx_ttproducts_db');
 $SOBE->init($conf, $config, $ajax, $tmp='');
 
 if($_POST['xajax']) {

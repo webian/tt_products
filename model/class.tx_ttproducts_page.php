@@ -36,6 +36,8 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 
 class tx_ttproducts_page extends tx_ttproducts_category_base {
 	var $noteArray = array(); 	// array of pages with notes
@@ -50,7 +52,7 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 	public function init ($cObj, $tablename)	{
 		parent::init($cObj, $tablename);
 
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$tablename = ($tablename ? $tablename : 'pages');
 		$this->tableconf = $cnf->getTableConf('pages');
 		$this->pageAsCategory = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['pageAsCategory'];
@@ -63,7 +65,7 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 			$tmp = $this->tableconf['requiredFields'];
 			$requiredFields = ($tmp ? $tmp : $requiredFields);
 		}
-		$requiredListArray = t3lib_div::trimExplode(',', $requiredFields);
+		$requiredListArray = GeneralUtility::trimExplode(',', $requiredFields);
 		$this->getTableObj()->setRequiredFieldArray($requiredListArray);
 		if (is_array($this->tableconf['language.']) &&
 			$this->tableconf['language.']['type'] == 'field' &&
@@ -105,7 +107,7 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 	}
 
 	public function getRootCat ()	{
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$rc = $cnf->config['rootPageID'];
 		return $rc;
 	}
@@ -145,7 +147,7 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 	public function getParamDefault ($theCode, $pid)	{
 		$pid = ($pid ? $pid : $this->conf['defaultPageID']);
 		if ($pid)	{
-			$pid = implode(',',t3lib_div::intExplode(',', $pid));
+			$pid = implode(',',GeneralUtility::intExplode(',', $pid));
 		}
 		return $pid;
 	}
@@ -153,8 +155,8 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 	public function getRelationArray ($dataArray, $excludeCats='',$rootUids='',$allowedCats='') {
 
 		$relationArray = array();
-		$pageArray = t3lib_div::trimExplode (',', $pid_list);
-		$excludeArray = t3lib_div::trimExplode (',', $excludeCats);
+		$pageArray = GeneralUtility::trimExplode (',', $pid_list);
+		$excludeArray = GeneralUtility::trimExplode (',', $excludeCats);
 		foreach ($excludeArray as $k => $cat)	{
 			$excludeKey = array_search($cat, $pageArray);
 			unset($pageArray[$excludeKey]);
@@ -209,10 +211,10 @@ class tx_ttproducts_page extends tx_ttproducts_category_base {
 				$where = $param['where'];
 				$isValid = false;
 				if ($where) {
-					$wherelist = t3lib_div::trimExplode ('AND', $where);
+					$wherelist = GeneralUtility::trimExplode ('AND', $where);
 					$isValid = true;
 					foreach ($wherelist as $k2 => $condition) {
-						$args = t3lib_div::trimExplode ('=', $condition);
+						$args = GeneralUtility::trimExplode ('=', $condition);
 						if ($row[$args[0]] != $args[1]) {
 							$isValid = false;
 						}

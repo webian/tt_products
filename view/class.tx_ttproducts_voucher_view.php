@@ -37,6 +37,8 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 
 
 class tx_ttproducts_voucher_view extends tx_ttproducts_table_base_view {
@@ -54,11 +56,12 @@ class tx_ttproducts_voucher_view extends tx_ttproducts_table_base_view {
 	 * @return	void
 	 * @access private
 	 */
-	function getsubpartMarkerArray (
+	public function getsubpartMarkerArray (
 		&$subpartArray,
 		&$wrappedSubpartArray,
 		$charset=''
 	)	{
+        $local_cObj = \JambageCom\Div2007\Utility\FrontendUtility::getContentObjectRenderer();
 		$modelObj = $this->getModelObj();
 
 		$subpartArray['###SUB_VOUCHERCODE###'] = '';
@@ -74,7 +77,7 @@ class tx_ttproducts_voucher_view extends tx_ttproducts_table_base_view {
 			$code = $modelObj->getCode();
 
 			if (isset($code)) {
-				$tmp = tx_div2007_alpha5::getLL_fh003($this->langObj, 'voucher_invalid');
+				$tmp = $languageObj->getLabel('voucher_invalid');
 				$tmpArray = explode('|',$tmp);
 				$subpartArray['###SUB_VOUCHERCODE_DISCOUNT###'] = $tmpArray[0] . htmlspecialchars($modelObj->getCode()) . $tmpArray[1];
 				$wrappedSubpartArray['###SUB_VOUCHERCODE_DISCOUNTWRONG###'] = array();
@@ -93,10 +96,10 @@ class tx_ttproducts_voucher_view extends tx_ttproducts_table_base_view {
 	 * @return	void
 	 * @access private
 	 */
-	function getMarkerArray (
+	public function getMarkerArray (
 		&$markerArray
 	)	{
-		$priceViewObj = t3lib_div::makeInstance('tx_ttproducts_field_price_view');
+		$priceViewObj = GeneralUtility::makeInstance('tx_ttproducts_field_price_view');
 		$modelObj = $this->getModelObj();
 		$markerArray['###INSERT_VOUCHERCODE###'] = 'recs[tt_products][vouchercode]';
 		$voucherCode = $modelObj->getCode();

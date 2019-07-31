@@ -37,6 +37,8 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 
 
 class tx_ttproducts_category_view extends tx_ttproducts_category_base_view {
@@ -57,9 +59,9 @@ class tx_ttproducts_category_view extends tx_ttproducts_category_base_view {
 	public function getMarkerArray (&$markerArray, $markerKey, $category, $pid, $imageNum=0, $imageRenderObj='image', &$viewCatTagArray, $forminfoArray=array(), $pageAsCategory=0, $theCode, $basketExtra, $id, $prefix, $linkWrap='')	{
 		$modelObj = $this->getModelObj();
 		$row = ($category ? $modelObj->get($category) : array ('title' => '', 'pid' => $pid));
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		$functablename = $modelObj->getFuncTablename();
-		$imageObj = t3lib_div::makeInstance('tx_ttproducts_field_image_view');
+		$imageObj = GeneralUtility::makeInstance('tx_ttproducts_field_image_view');
 
 			// Get image
 		$imageObj->getRowMarkerArrayEnhanced($functablename, $row, $this->marker, $markerArray, $row['pid'], $imageNum, $imageRenderObj, $viewCatTagArray, $theCode, $id, $prefix, $linkWrap);

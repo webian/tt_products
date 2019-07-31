@@ -41,21 +41,7 @@
 
 class tx_ttproducts_field_media extends tx_ttproducts_field_base {
 
-	/**
-	 *
-	 */
-	public function init($cObj)	{
-
- 		parent::init($cObj);
-
-		// DAM support
-		if (t3lib_extMgm::isLoaded('dam')) {
-			include_once(t3lib_extMgm::extPath('dam').'lib/class.tx_dam.php');
-		}
-	} // init
-
-
-	function getDirname(&$imageRow)	{
+	public function getDirname (&$imageRow)	{
 
 		if($imageRow['file_mime_type'] == 'image' && isset($imageRow['file_path']))	{
 			$dirname = $imageRow['file_path'];
@@ -71,6 +57,4 @@ class tx_ttproducts_field_media extends tx_ttproducts_field_base {
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/model/field/class.tx_ttproducts_field_media.php']) {
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/model/field/class.tx_ttproducts_field_media.php']);
 }
-
-
 

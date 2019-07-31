@@ -37,23 +37,25 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class tx_ttproducts_currency_view implements t3lib_Singleton {
+
+class tx_ttproducts_currency_view implements \TYPO3\CMS\Core\SingletonInterface {
 
 	var $pibase; // reference to object of pibase
 	var $conf;
 	var $subpartMarkerObj; // marker functions
 	var $urlObj;
 
-	function init($pibase) {
+	public function init($pibase) {
 		$this->pibase = $pibase;
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 
 		$this->conf = &$cnf->conf;
 
-		$this->subpartmarkerObj = t3lib_div::makeInstance('tx_ttproducts_subpartmarker');
+		$this->subpartmarkerObj = GeneralUtility::makeInstance('tx_ttproducts_subpartmarker');
 		$this->subpartmarkerObj->init($pibase->cObj);
-		$this->urlObj = t3lib_div::makeInstance('tx_ttproducts_url_view');
+		$this->urlObj = GeneralUtility::makeInstance('tx_ttproducts_url_view');
 	}
 
 

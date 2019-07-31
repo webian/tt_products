@@ -38,9 +38,11 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
-class tx_ttproducts_pi_search implements t3lib_Singleton {
+
+class tx_ttproducts_pi_search implements \TYPO3\CMS\Core\SingletonInterface {
 	/**
 	 * The backReference to the mother cObj object set at call time
 	 *
@@ -53,7 +55,7 @@ class tx_ttproducts_pi_search implements t3lib_Singleton {
 	 */
 	public function main($content, $conf)	{
 
-		$pibaseObj = t3lib_div::makeInstance('tx_ttproducts_pi_search_base');
+		$pibaseObj = GeneralUtility::makeInstance('tx_ttproducts_pi_search_base');
 		$pibaseObj->cObj = &$this->cObj;
 
 		if ($conf['templateFile'] != '')	{

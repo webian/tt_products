@@ -6,16 +6,6 @@ $_EXTCONF = unserialize($_EXTCONF);    // unserializing the configuration so we 
 $emClass = '\\TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility';
 $divClass = '\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility';
 
-if (
-	class_exists($emClass) &&
-	method_exists($emClass, 'extPath')
-) {
-	// nothing
-} else {
-	$emClass = 't3lib_extMgm';
-	$divClass = 't3lib_div';
-}
-
 // these constants shall be used in the future:
 if (!defined ('TT_PRODUCTS_EXT')) {
 	define('TT_PRODUCTS_EXT', 'tt_products');
@@ -237,8 +227,6 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms/layout/class.tx_cms_layout.php'][
 call_user_func($emClass . '::addTypoScript', TT_PRODUCTS_EXT,'editorcfg','tt_content.CSS_editor.ch.tt_products = < plugin.tt_products.CSS_editor ',43);
 
 
-$GLOBALS ['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/mydashboard/class.tx_mydashboard_widgetmgm.php']['addWidget']['tt_products_latest'] = 'EXT:' . TT_PRODUCTS_EXT . '/widgets/class.tx_ttproducts_latest.php:tx_ttproducts_latest';
-
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tce']['formevals']['JambageCom\\Div2007\\Hooks\\Evaluation\\Double6'] = '';
 
 
@@ -271,64 +259,6 @@ call_user_func($emClass . '::addPItoST43', TT_PRODUCTS_EXT, 'pi_int/class.tx_ttp
 // support for new Caching Framework
 
 $optionsArray = array();
-$backendCache = 't3lib_cache_backend_NullBackend';
-
-// Register cache 'tt_products_cache'
-if (
-	version_compare(TYPO3_version, '7.0.0', '<') &&
-	isset($_EXTCONF['cache.']) &&
-	$_EXTCONF['cache.']['backend'] &&
-	!is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tt_products_cache'])
-) {
-	if (
-		isset($_EXTCONF['cache.']['options.']) &&
-		$_EXTCONF['cache.']['options.']['servers'] != ''
-	) {
-		$optionsArray['servers'] = array($_EXTCONF['cache.']['options.']['servers']);
-	}
-
-	if (
-		extension_loaded('memcache') &&
-		isset($optionsArray['servers']) &&
-		is_array($optionsArray['servers'])
-	) {
-		$backendCache = 't3lib_cache_backend_MemcachedBackend';
-	} else if (extension_loaded('apc') || extension_loaded('apcu')) {
-		$backendCache = 't3lib_cache_backend_ApcBackend';
-	} else if (extension_loaded('redis')) {
-		$backendCache = 't3lib_cache_backend_RedisBackend';
-	}
-}
-
-if (
-	version_compare(TYPO3_version, '7.0.0', '<') &&
-	!isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tt_products_cache'])
-) {
-	$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tt_products_cache'] = array();
-}
-
-// Define string frontend as default frontend, this must be set with TYPO3 4.5 and below
-// and overrides the default variable frontend of 4.6
-if (
-	version_compare(TYPO3_version, '7.0.0', '<') &&
-	!isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tt_products_cache']['frontend'])
-) {
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tt_products_cache']['frontend'] = 't3lib_cache_frontend_StringFrontend';
-}
-
-if (
-	version_compare(TYPO3_version, '4.6.0', '>=') &&
-	version_compare(TYPO3_version, '7.0.0', '<')
-) {
-	if (!isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tt_products_cache']['backend'])) {
-		$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tt_products_cache']['backend'] = $backendCache;
-	}
-
-	if (!isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tt_products_cache']['options'])) {
-		$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tt_products_cache']['options'] = $optionsArray;
-	}
-}
-
 
 // add missing setup for the tt_content "list_type = 5" which is used by tt_products
 $addLine = 'tt_content.list.20.5 = < plugin.tt_products';
@@ -336,28 +266,6 @@ call_user_func($emClass . '::addTypoScript', TT_PRODUCTS_EXT, 'setup', '
 # Setting ' . TT_PRODUCTS_EXT . ' plugin TypoScript
 ' . $addLine . '
 ', 43);
-
-
-if (
-	version_compare(TYPO3_version, '7.0.0', '<') &&
-	isset($GLOBALS['typo3CacheFactory']) &&
-	is_object($GLOBALS['typo3CacheFactory'])
-) {
-    // register the cache in BE so it will be cleared with "clear all caches"
-    try {
-		$cacheName = 'tt_products_cache';
-		if (!$GLOBALS['typo3CacheManager']->hasCache($cacheName)) {
-			$GLOBALS['typo3CacheFactory']->create(
-				'tt_products_cache',
-				$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$cacheName]['frontend'],
-				$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$cacheName]['backend'],
-				$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][$cacheName]['options']
-			);
-		}
-    } catch (t3lib_cache_exception_DuplicateIdentifier $e) {
-        // do nothing, a tt_products_cache cache already exists
-    }
-}
 
 
 if (
@@ -380,3 +288,4 @@ if (
     // Register Status Report Hook
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['reports']['tx_reports']['status']['providers']['Shop System'][] = \JambageCom\TtProducts\Hooks\StatusProvider::class;
 }
+

@@ -37,6 +37,8 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 
 class tx_ttproducts_category extends tx_ttproducts_category_base {
 	var $tt_products_email;	// object of the type tx_table_db
@@ -46,12 +48,12 @@ class tx_ttproducts_category extends tx_ttproducts_category_base {
 	/**
 	 * initialization with table object and language table
 	 */
-	function init ($cObj, $functablename)	{
+	public function init ($cObj, $functablename)	{
 		$tablename = ($tablename ? $tablename : $functablename);
 
 		parent::init($pibase, $functablename);
 
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$this->tableconf = $cnf->getTableConf($functablename);
 		$tableObj = $this->getTableObj();
 		$tableObj->addDefaultFieldArray(array('sorting' => 'sorting'));
@@ -65,8 +67,8 @@ class tx_ttproducts_category extends tx_ttproducts_category_base {
 			if (version_compare($extensionInfo['version'], '0.5.0', '>=')) {
 
 				$tableDesc = $cnf->getTableDesc($functablename);
-				$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
-				$functablenameArray = t3lib_div::trimExplode(',',$tableDesc['leafFuncTables']);
+				$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
+				$functablenameArray = GeneralUtility::trimExplode(',',$tableDesc['leafFuncTables']);
 				$prodfunctablename = $functablenameArray[0];
 				if (!$prodfunctablename)	{
 					$prodfunctablename = 'tt_products';
@@ -152,7 +154,7 @@ class tx_ttproducts_category extends tx_ttproducts_category_base {
 			$tableObj = $this->getTableObj();
 			$rc = $rowArray = $this->get($uid . ' ', $pid, false);
 			$orderBy = $this->tableconf['orderBy'];
-			$uidArray = t3lib_div::trimExplode(',', $uid);
+			$uidArray = GeneralUtility::trimExplode(',', $uid);
 
 			foreach ($uidArray as $actUid) {
 				if (!in_array($actUid, $rootArray)) {
@@ -205,7 +207,7 @@ class tx_ttproducts_category extends tx_ttproducts_category_base {
 	) {
 		$bUseReference = false;
 		$relatedArray = array();
-		$uidArray = $rootArray = t3lib_div::trimExplode(',', $rootUids);
+		$uidArray = $rootArray = GeneralUtility::trimExplode(',', $rootUids);
 		$tableObj = $this->getTableObj();
 		$rootLine = $this->getRootline($uidArray, $currentCat, $pid);
 
@@ -367,7 +369,7 @@ class tx_ttproducts_category extends tx_ttproducts_category_base {
 	function getParamDefault ($theCode, $cat)	{
 
 		if (!$cat)	{
-			$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+			$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 
 			if ($this->getFuncTablename() == 'tt_products_cat')	{
 				$cat = $cnf->conf['defaultCategoryID'];
@@ -389,7 +391,7 @@ class tx_ttproducts_category extends tx_ttproducts_category_base {
 
 		if ($cat)	{
 			$tableConf = $this->getTableConf($theCode);
-			$catArray = t3lib_div::intExplode(',', $cat);
+			$catArray = GeneralUtility::intExplode(',', $cat);
 			$catArray = array_unique($catArray);
 
 			if (
@@ -433,9 +435,9 @@ class tx_ttproducts_category extends tx_ttproducts_category_base {
 	public function getRelationArray ($dataArray, $excludeCats='',$rootUids='',$allowedCats='') {
 
 		$relationArray = array();
-		$rootArray = t3lib_div::trimExplode(',', $rootUids);
-		$catArray = t3lib_div::trimExplode(',', $allowedCats);
-		$excludeArray = t3lib_div::trimExplode (',', $excludeCats);
+		$rootArray = GeneralUtility::trimExplode(',', $rootUids);
+		$catArray = GeneralUtility::trimExplode(',', $allowedCats);
+		$excludeArray = GeneralUtility::trimExplode (',', $excludeCats);
 		foreach ($excludeArray as $cat)	{
 			$excludeKey = array_search($cat, $catArray);
 			if ($excludeKey !== false)	{
@@ -503,7 +505,7 @@ class tx_ttproducts_category extends tx_ttproducts_category_base {
 				$result = $discount;
 			} else {
 				$rootCat = $this->getRootCat();
-				$rootArray = t3lib_div::trimExplode(',', $rootCat);
+				$rootArray = GeneralUtility::trimExplode(',', $rootCat);
 				$rootLine = $this->getRootline($rootArray, $cat, $pid);
 
 				if (is_array($rootLine) && count($rootLine)) {
@@ -532,7 +534,7 @@ class tx_ttproducts_category extends tx_ttproducts_category_base {
 		if (!$bDiscountDisable) {
 			$maxDiscount = $discount;
 			$rootCat = $this->getRootCat();
-			$rootArray = t3lib_div::trimExplode(',', $rootCat);
+			$rootArray = GeneralUtility::trimExplode(',', $rootCat);
 
 			foreach ($catArray as $cat) {
 

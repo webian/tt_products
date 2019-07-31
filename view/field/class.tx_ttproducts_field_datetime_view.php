@@ -40,12 +40,13 @@
 class tx_ttproducts_field_datetime_view extends tx_ttproducts_field_base_view {
 
 	function getRowMarkerArray ($functablename, $fieldname, $row, $markerKey, &$markerArray, $tagArray, $theCode, $id, $basketExtra, &$bSkip, $bHtml=true, $charset='', $prefix='', $suffix='', $imageRenderObj='')	{
+        $local_cObj = \JambageCom\TtProducts\Api\ControlApi::getCObj();
 
 		$stdWrap = 'date_stdWrap.';
 		if ($fieldname == 'usebydate' && $functablename == 'tt_products')	{
 			$stdWrap = 'usebyDate_stdWrap.';
 		}
-		$value = $this->cObj->stdWrap($row[$fieldname],$this->conf[$stdWrap]);
+		$value = $local_cObj->stdWrap($row[$fieldname],$this->conf[$stdWrap]);
 
 		return $value;
 	}

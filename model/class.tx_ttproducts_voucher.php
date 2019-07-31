@@ -37,6 +37,8 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 
 class tx_ttproducts_voucher extends tx_ttproducts_table_base {
 	var $amount;
@@ -49,7 +51,7 @@ class tx_ttproducts_voucher extends tx_ttproducts_table_base {
 	/**
 	 * Getting all tt_products_cat categories into internal array
 	 */
-	function init($cObj, $functablename)  {
+	public function init($cObj, $functablename)  {
 		parent::init($cObj, $functablename);
 		$usedCodeArray = $GLOBALS['TSFE']->fe_user->getKey('ses','vo');
 
@@ -64,26 +66,26 @@ class tx_ttproducts_voucher extends tx_ttproducts_table_base {
 		}
 	} // init
 
-	function getAmount ()	{
+	public function getAmount ()	{
 
 		return $this->amount;
 	}
 
-	function setAmount ($amount)	{
+	public function setAmount ($amount)	{
 		$this->amount = $amount;
 	}
 
-	function getAmountType ()	{
+	public function getAmountType ()	{
 		return $this->amountType;
 	}
 
-	function setAmountType ($amountType)	{
+	public function setAmountType ($amountType)	{
 		$this->amountType = $amountType;
 	}
 
 
-	function getPercentageAmount ($amount) {
-		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
+	public function getPercentageAmount ($amount) {
+		$basketObj = GeneralUtility::makeInstance('tx_ttproducts_basket');
 		$calculatedArray = $basketObj->getCalculatedArray();
 
 		$amount = $calculatedArray['priceTax']['goodstotal'] * ($amount / 100);
@@ -91,7 +93,7 @@ class tx_ttproducts_voucher extends tx_ttproducts_table_base {
 	}
 
 
-	function getRebateAmount ()	{
+	public function getRebateAmount ()	{
 
 		$amountType = $this->getAmountType();
 
@@ -105,17 +107,17 @@ class tx_ttproducts_voucher extends tx_ttproducts_table_base {
 	}
 
 
-	function setUsedCodeArray ($usedCodeArray)	{
+	public function setUsedCodeArray ($usedCodeArray)	{
 		if (isset($usedCodeArray) && is_array($usedCodeArray))	{
 			$this->usedCodeArray = $usedCodeArray;
 		}
 	}
 
-	function getUsedCodeArray ()	{
+	public function getUsedCodeArray ()	{
 		return $this->usedCodeArray;
 	}
 
-	function isCodeUsed ($code)	{
+	public function isCodeUsed ($code)	{
 
 		$result = false;
 
@@ -130,7 +132,7 @@ class tx_ttproducts_voucher extends tx_ttproducts_table_base {
 	}
 
 
-	function getVoucherArray ($code) {
+	public function getVoucherArray ($code) {
 		$result = false;
 
 		foreach ($this->usedCodeArray as $codeRow) {
@@ -144,7 +146,7 @@ class tx_ttproducts_voucher extends tx_ttproducts_table_base {
 	}
 
 
-	function getLastCodeUsed () {
+	public function getLastCodeUsed () {
 		$result = '';
 
 		if (count($this->usedCodeArray)) {
@@ -155,19 +157,19 @@ class tx_ttproducts_voucher extends tx_ttproducts_table_base {
 		return $result;
 	}
 
-	function setCodeUsed ($code, $row)	{
+	public function setCodeUsed ($code, $row)	{
 		array_push($this->usedCodeArray, $row);
 	}
 
-	function getCode ()	{
+	public function getCode ()	{
 		return $this->code;
 	}
 
-	function setCode ($code)	{
+	public function setCode ($code)	{
 		$this->code = $code;
 	}
 
-    function getVoucherTableName ()	{
+    public function getVoucherTableName ()	{
         $result = 'fe_users';
         if ($this->conf['table.']['voucher'])	{
             $result = $this->conf['table.']['voucher'];
@@ -178,15 +180,15 @@ class tx_ttproducts_voucher extends tx_ttproducts_table_base {
         return $result;
     }
 
-	function setValid($bValid=true)	{
+	public function setValid($bValid=true)	{
 		$this->bValid = $bValid;
 	}
 
-	function getValid()	{
+	public function getValid()	{
 		return $this->bValid;
 	}
 
-	function delete()	{
+	public function delete()	{
 		$voucherCode = $this->getLastCodeUsed();
 		$voucherArray = $this->getVoucherArray($voucherCode);
 
@@ -225,8 +227,7 @@ class tx_ttproducts_voucher extends tx_ttproducts_table_base {
 		}
 	}
 
-
-	function doProcessing(&$recs)	{
+	public function doProcessing(&$recs)	{
 		$voucherCode = $recs['tt_products']['vouchercode'];
 		$this->setCode($voucherCode);
 		if ($this->isCodeUsed($voucherCode) || $voucherCode == '')	{
@@ -311,6 +312,4 @@ class tx_ttproducts_voucher extends tx_ttproducts_table_base {
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/model/class.tx_ttproducts_voucher.php']) {
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/model/class.tx_ttproducts_voucher.php']);
 }
-
-
 

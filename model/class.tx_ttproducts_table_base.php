@@ -36,9 +36,10 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
-abstract class tx_ttproducts_table_base implements t3lib_Singleton	{
+abstract class tx_ttproducts_table_base implements \TYPO3\CMS\Core\SingletonInterface	{
 	public $bHasBeenInitialised = false;
 	public $cObj;
 	public $conf;
@@ -88,11 +89,11 @@ abstract class tx_ttproducts_table_base implements t3lib_Singleton	{
 	public function init ($cObj, $functablename)	{
 
 		$this->cObj = $cObj;
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
 
-		$this->tableObj = t3lib_div::makeInstance('tx_table_db');
+		$this->tableObj = GeneralUtility::makeInstance('tx_table_db');
 		$this->insertKey = 0;
 
 		$this->setFuncTablename($functablename);
@@ -176,14 +177,14 @@ abstract class tx_ttproducts_table_base implements t3lib_Singleton	{
 			if (is_int($uid))	{
 				$where .= ' AND '.$alias.'.uid = '.intval($uid);
 			} else if($uid)	{
-				$uidArray = t3lib_div::trimExplode(',',$uid);
+				$uidArray = GeneralUtility::trimExplode(',',$uid);
 				foreach ($uidArray as $k => $v)	{
 					$uidArray[$k] = intval($v);
 				}
 				$where .= ' AND '.$alias.'.uid IN ('.implode(',',$uidArray).')';
 			}
 			if ($pid)	{
-				$pidArray = t3lib_div::trimExplode(',',$pid);
+				$pidArray = GeneralUtility::trimExplode(',',$pid);
 				foreach ($pidArray as $k => $v)	{
 					$pidArray[$k] = intval($v);
 				}
@@ -400,7 +401,7 @@ abstract class tx_ttproducts_table_base implements t3lib_Singleton	{
 			}
 
 			$requiredFields = $this->getRequiredFields($theCode);
-			$requiredFieldArray = t3lib_div::trimExplode(',', $requiredFields);
+			$requiredFieldArray = GeneralUtility::trimExplode(',', $requiredFields);
 			$this->getTableObj()->setRequiredFieldArray($requiredFieldArray);
 
 			if (is_array($tableConf['language.']) &&
@@ -469,7 +470,7 @@ abstract class tx_ttproducts_table_base implements t3lib_Singleton	{
 		if ($theCode=='' && $this->getCode()!='')	{
 			$rc = $this->tableConf;
 		} else {
-			$cnf =t3lib_div::makeInstance('tx_ttproducts_config');
+			$cnf =GeneralUtility::makeInstance('tx_ttproducts_config');
 			$rc = &$cnf->getTableConf($this->getFuncTablename(), $theCode);
 		}
 		$this->fixTableConf($rc);
@@ -514,7 +515,7 @@ abstract class tx_ttproducts_table_base implements t3lib_Singleton	{
 			$fields = 'uid,pid';
 		}
 
-		$fieldArray = t3lib_div::trimExplode(',', $fields);
+		$fieldArray = GeneralUtility::trimExplode(',', $fields);
 		$requiredFieldArray = array();
 		$defaultFieldArray = $tableObj->getDefaultFieldArray();
 		$noTcaFieldArray = $tableObj->getNoTcaFieldArray();

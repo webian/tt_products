@@ -37,6 +37,9 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
+
 
 class tx_ttproducts_product extends tx_ttproducts_article_base {
 	public $marker = 'PRODUCT';
@@ -52,7 +55,7 @@ class tx_ttproducts_product extends tx_ttproducts_article_base {
 	public function init ($cObj, $functablename='tt_products')  {
 
 		parent::init($cObj, $functablename);
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$tableConfig = array();
 		$tableConfig['orderBy'] = $cnf->conf['orderBy'];
 
@@ -95,7 +98,7 @@ class tx_ttproducts_product extends tx_ttproducts_article_base {
 		$rowArray = $this->articleArray[$uid];
 
 		if (!$rowArray && $uid || $whereArticle!='') {
-			$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+			$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 			$articleObj = $tablesObj->get('tt_products_articles');
 			$rowArray = $articleObj->getWhereArray($uid, $whereArticle);
 			if (!$whereArticle)	{
@@ -109,7 +112,7 @@ class tx_ttproducts_product extends tx_ttproducts_article_base {
 	public function fillVariantsFromArticles (&$row)	{
 
 		$articleRowArray = $this->getArticleRows($row['uid']);
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		$articleObj = $tablesObj->get('tt_products_articles');
 
 		if (count($articleRowArray))	{
@@ -129,7 +132,7 @@ class tx_ttproducts_product extends tx_ttproducts_article_base {
 	public function getArticleRowsFromVariant ($row, $theCode, $variant) {
 
 		$articleRowArray = $this->getArticleRows(intval($row['uid']));
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		$articleObj = $tablesObj->get('tt_products_articles');
 	//	$articleRowArray = $articleObj->sortArticleRowsByUidArray($row['uid'],$articleRowArray);
 
@@ -144,7 +147,7 @@ class tx_ttproducts_product extends tx_ttproducts_article_base {
 
 		foreach ($this->variant->conf as $k => $field)	{
 			if ($productRow[$field] && $field != $this->variant->additionalField)	{
-				$fieldArray[$field] = t3lib_div::trimExplode(';', $productRow[$field]);
+				$fieldArray[$field] = GeneralUtility::trimExplode(';', $productRow[$field]);
 			}
 		}
 		$articleRow = array();
@@ -156,7 +159,7 @@ class tx_ttproducts_product extends tx_ttproducts_article_base {
 			foreach ($articleRows as $k => $row)	{
 				$bFits = true;
 				foreach ($fieldArray as $field => $valueArray)	{
-					$rowFieldArray = t3lib_div::trimExplode(';',$row[$field]);
+					$rowFieldArray = GeneralUtility::trimExplode(';',$row[$field]);
 					$intersectArray = array_intersect($valueArray, $rowFieldArray);
 
 					if ($row[$field] && !count($intersectArray) && $field != 'additional')	{
@@ -175,7 +178,7 @@ class tx_ttproducts_product extends tx_ttproducts_article_base {
 
 			if ($articleCount > 1)	{
 				// many articles fit here. So lets generated a merged article.
-				$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+				$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 				$articleObj = $tablesObj->get('tt_products_articles');
 				for ($i=1; $i < $articleCount; ++$i)	{
 					$articleObj->mergeAttributeFields($articleRow, $bFitArticleRowArray[$i], false, true, true);
@@ -192,7 +195,7 @@ class tx_ttproducts_product extends tx_ttproducts_article_base {
 
 
 	public function getArticleRow ($row, $theCode, $bUsePreset=true) {
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$fieldArray = $this->variant->getSelectableFieldArray();
 		$articleNo = false;
 		$regexpDelimiter = tx_ttproducts_model_control::determineRegExpDelimiter(';');
@@ -214,7 +217,7 @@ class tx_ttproducts_product extends tx_ttproducts_article_base {
 				$currentRow = $this->variant->getVariantRow($row, $presetVariantArray);
 			}
 		} else {
-			$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+			$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 			$articleObj = $tablesObj->get('tt_products_articles');
 
 			$articleRow = $articleObj->get($articleNo);
@@ -223,7 +226,7 @@ class tx_ttproducts_product extends tx_ttproducts_article_base {
 		}
 
 		$whereArray = array();
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		$articleObj = $tablesObj->get('tt_products_articles');
 
 		foreach ($fieldArray as $k => $field)	{
@@ -262,8 +265,8 @@ class tx_ttproducts_product extends tx_ttproducts_article_base {
 				isset($articleConf['fieldIndex.']) && is_array($articleConf['fieldIndex.']) &&
 				isset($articleConf['fieldIndex.']['image.']) && is_array($articleConf['fieldIndex.']['image.'])
 			)	{
-				$prodImageArray = t3lib_div::trimExplode(',',$row['image']);
-				$artImageArray = t3lib_div::trimExplode(',',$articleRow['image']);
+				$prodImageArray = GeneralUtility::trimExplode(',',$row['image']);
+				$artImageArray = GeneralUtility::trimExplode(',',$articleRow['image']);
 				$tmpDestArray = $prodImageArray;
 				foreach ($articleConf['fieldIndex.']['image.'] as $kImage => $vImage)	{
 					$tmpDestArray[$vImage-1] = $artImageArray[$kImage-1];
@@ -277,7 +280,7 @@ class tx_ttproducts_product extends tx_ttproducts_article_base {
 
 
 	public function getRowFromExt ($funcTablename, $row, $useArticles)	{
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		$priceRow = $row;
 
 		if (
@@ -310,7 +313,7 @@ class tx_ttproducts_product extends tx_ttproducts_article_base {
 
 
 	public function getArticleRowFromExt ($row)	{
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 
 		$rc = false;
 		$extArray = $row['ext'];
@@ -347,8 +350,8 @@ class tx_ttproducts_product extends tx_ttproducts_article_base {
 	 */
 	public function &reduceInStockItems (&$itemArray, $useArticles)	{
 		$instockTableArray = array();
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 
 		$instockField = $cnf->getTableDesc($this->getTableObj()->name, 'inStock');
 		$instockField = ($instockField ? $instockField : 'inStock');
@@ -389,7 +392,7 @@ class tx_ttproducts_product extends tx_ttproducts_article_base {
 	public function hasAdditional (&$row, $check)  {
 		$hasAdditional = false;
 		if (isset($row['additional'])) {
-			$additional = t3lib_div::xml2array($row['additional']);
+			$additional = GeneralUtility::xml2array($row['additional']);
 			$hasAdditional = tx_div2007_ff::get($additional, $check);
 		}
 
@@ -404,7 +407,7 @@ class tx_ttproducts_product extends tx_ttproducts_article_base {
 			// Call all addWhere hooks for categories at the end of this method
 		if (is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['prodCategory'])) {
 			foreach  ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['prodCategory'] as $classRef) {
-				$hookObj = t3lib_div::makeInstance($classRef);
+				$hookObj = GeneralUtility::makeInstance($classRef);
 				if (method_exists($hookObj, 'addWhereCat')) {
 
 					$whereNew = $hookObj->addWhereCat($this, $catObject, $cat, $where, $operator, $pid_list, $catObject->getDepth($theCode), $categoryAnd);
@@ -422,10 +425,10 @@ class tx_ttproducts_product extends tx_ttproducts_article_base {
 			$categoryAndArray = array();
 
 			if($cat || $cat == '0') {
-				$catArray = t3lib_div::intExplode(',', $cat);
+				$catArray = GeneralUtility::intExplode(',', $cat);
 			}
 			if($categoryAnd != '') {
-				$categoryAndArray = t3lib_div::intExplode(',', $categoryAnd);
+				$categoryAndArray = GeneralUtility::intExplode(',', $categoryAnd);
 			}
 			$newcatArray = array_merge($categoryAndArray, $catArray);
 			$newcatArray = array_unique($newcatArray);
@@ -450,7 +453,7 @@ class tx_ttproducts_product extends tx_ttproducts_article_base {
 			// Call all addWhere hooks for categories at the end of this method
 		if (is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['prodCategory'])) {
 			foreach  ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['prodCategory'] as $classRef) {
-				$hookObj= t3lib_div::makeInstance($classRef);
+				$hookObj= GeneralUtility::makeInstance($classRef);
 				if (method_exists($hookObj, 'addConfCatProduct')) {
 					$newTablenames = $hookObj->addConfCatProduct($this, $catObject, $selectConf, $aliasArray);
 					if ($newTablenames != '')	{
@@ -469,7 +472,7 @@ class tx_ttproducts_product extends tx_ttproducts_article_base {
 			// Call all addWhere hooks for categories at the end of this method
 		if (is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['prodCategory'])) {
 			foreach  ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['prodCategory'] as $classRef) {
-				$hookObj= t3lib_div::makeInstance($classRef);
+				$hookObj= GeneralUtility::makeInstance($classRef);
 				if (method_exists($hookObj, 'addselectConfCat')) {
 					$newTablenames = $hookObj->addselectConfCat($this, $catObject, $cat, $selectConf,$catObject->getDepth());
 					if ($newTablenames != '')	{
@@ -488,7 +491,7 @@ class tx_ttproducts_product extends tx_ttproducts_article_base {
 			// Call all addWhere hooks for categories at the end of this method
 		if (is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['prodCategory'])) {
 			foreach  ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['prodCategory'] as $classRef) {
-				$hookObj= t3lib_div::makeInstance($classRef);
+				$hookObj= GeneralUtility::makeInstance($classRef);
 				if (method_exists($hookObj, 'getPageUidsCat')) {
 					$hookObj->getPageUidsCat($this, $cat, $uidArray);
 				}
@@ -506,7 +509,7 @@ class tx_ttproducts_product extends tx_ttproducts_article_base {
 
 	public function getRequiredFields ($theCode='')	{
 		$tableConf = $this->getTableConf($theCode);
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 
 		if ($tableConf['requiredFields']!='')	{
 			$requiredFields = $tableConf['requiredFields'];
@@ -524,7 +527,7 @@ class tx_ttproducts_product extends tx_ttproducts_article_base {
 
 	public function getTotalDiscount (&$row, $pid = 0) {
 
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 
 		if (
 			$this->getFuncTablename() == 'tt_products' &&

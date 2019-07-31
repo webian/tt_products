@@ -38,6 +38,8 @@
  */
 
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 
 class tx_ttproducts_address extends tx_ttproducts_category_base {
 	var $dataArray = array(); // array of read in categories
@@ -52,9 +54,9 @@ class tx_ttproducts_address extends tx_ttproducts_category_base {
 	/**
 	 * Getting all address values into internal array
 	 */
-	function init($cObj, $functablename)	{
+	public function init($cObj, $functablename)	{
 		parent::init($cObj, $functablename);
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 
 		$tableconf = $cnf->getTableConf('address');
 		$tabledesc = $cnf->getTableDesc('address');
@@ -73,7 +75,7 @@ class tx_ttproducts_address extends tx_ttproducts_category_base {
 			$requiredFields = ($tmp ? $tmp : $requiredFields);
 		}
 
-		$requiredListArray = t3lib_div::trimExplode(',', $requiredFields);
+		$requiredListArray = GeneralUtility::trimExplode(',', $requiredFields);
 		$tableObj->setRequiredFieldArray($requiredListArray);
 		$tableObj->setTCAFieldArray($tablename);
 
@@ -83,7 +85,7 @@ class tx_ttproducts_address extends tx_ttproducts_category_base {
 	} // init
 
 
-	function getRootCat()	{
+	public function getRootCat()	{
 		$rc = $this->conf['rootAddressID'];
 		return $rc;
 	}
@@ -91,7 +93,7 @@ class tx_ttproducts_address extends tx_ttproducts_category_base {
 
 	public function getRelationArray ($dataArray, $excludeCats = '', $rootUids = '', $allowedCats = '') {
 		$relationArray = array();
-		$rootArray = t3lib_div::trimExplode(',', $rootUids);
+		$rootArray = GeneralUtility::trimExplode(',', $rootUids);
 
 		if (is_array($dataArray))	{
 			foreach ($dataArray as $k => $row)	{

@@ -37,7 +37,11 @@
  *
  */
 
-class tx_ttproducts_static_info implements t3lib_Singleton {
+
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
+
+class tx_ttproducts_static_info implements \TYPO3\CMS\Core\SingletonInterface {
 
 	static private $staticInfo = false;
 
@@ -55,26 +59,17 @@ class tx_ttproducts_static_info implements t3lib_Singleton {
 
 			if (is_array($eInfo)) {
 				$sitVersion = $eInfo['version'];
-				$class = '';
-				if (version_compare($sitVersion, '6.0.0', '>=')) {
-					$class = 'SJBR\\StaticInfoTables\\PiBaseApi';
-				} else {
-					$class = 'tx_staticinfotables_pi1';
-					$path = t3lib_extMgm::extPath('static_info_tables');
-					t3lib_div::requireOnce($path . 'pi1/class.tx_staticinfotables_pi1.php');
-				}
+                $class = 'SJBR\\StaticInfoTables\\PiBaseApi';
 
-				if (version_compare($sitVersion, '2.0.0', '>=')) {
-					// Initialise static info library
-					self::$staticInfo = t3lib_div::makeInstance('' . $class);
-					if (
-						!method_exists(self::$staticInfo, 'needsInit') ||
-						self::$staticInfo->needsInit()
-					) {
-						self::$staticInfo->init();
-					}
-				}
-
+                // Initialise static info library
+                self::$staticInfo = GeneralUtility::makeInstance('' . $class);
+                if (
+                    !method_exists(self::$staticInfo, 'needsInit') ||
+                    self::$staticInfo->needsInit()
+                ) {
+                    self::$staticInfo->init();
+                }
+	
 				if (is_object(self::$staticInfo)) {
 					$result = true;
 				} else {
@@ -92,6 +87,4 @@ class tx_ttproducts_static_info implements t3lib_Singleton {
 		return self::$staticInfo;
 	}
 }
-
-
 

@@ -41,9 +41,10 @@
  */
 
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
-class tx_ttproducts_pi1_base extends tslib_pibase implements t3lib_Singleton {
+class tx_ttproducts_pi1_base extends tslib_pibase implements \TYPO3\CMS\Core\SingletonInterface {
 	public $prefixId = TT_PRODUCTS_EXT;
 	public $scriptRelPath = 'pi1/class.tx_ttproducts_pi1_base.php';	// Path to this script relative to the extension dir.
 	public $extKey = TT_PRODUCTS_EXT;	// The extension key.
@@ -72,7 +73,7 @@ class tx_ttproducts_pi1_base extends tslib_pibase implements t3lib_Singleton {
         }
 
         $config = array();
-		$mainObj = t3lib_div::makeInstance('tx_ttproducts_main');	// fetch and store it as persistent object
+		$mainObj = GeneralUtility::makeInstance('tx_ttproducts_main');	// fetch and store it as persistent object
 		$errorCode = array();
 		$bDoProcessing = $mainObj->init($content, $conf, $config, get_class($this), $errorCode);
 

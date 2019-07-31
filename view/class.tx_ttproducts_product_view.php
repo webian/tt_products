@@ -37,6 +37,7 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
 class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
@@ -48,10 +49,10 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 	public $datafield;
 
 
-	function init ($langObj, $modelObj)	{
+	public function init ($modelObj)	{
 
-		$this->variant = t3lib_div::makeInstance('tx_ttproducts_variant_view');
-		parent::init($langObj, $modelObj);
+		$this->variant = GeneralUtility::makeInstance('tx_ttproducts_variant_view');
+		parent::init($modelObj);
 	}
 
 
@@ -156,8 +157,9 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 		$charset=''
 	)	{
 			// Returns a markerArray ready for substitution with information for the tt_producst record, $row
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		$modelObj = $this->getModelObj ();
+		$local_cObj = \JambageCom\Div2007\Utility\FrontendUtility::getContentObjectRenderer();
 
 		parent::getModelMarkerArray(
 			$row,
@@ -239,7 +241,7 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 				$pageObj = $tablesObj->get('pages');
 
 				$notePageArray = $pageObj->getNotes ($row['uid']);
-				$confObj = t3lib_div::makeInstance('tx_ttproducts_config');
+				$confObj = GeneralUtility::makeInstance('tx_ttproducts_config');
 				$contentConf = $confObj->getTableConf('tt_content', $code);
 
 				foreach($notePageArray as $k => $pid)	{
@@ -270,10 +272,10 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 									// Extension CSS styled content
 								if (t3lib_extMgm::isLoaded('css_styled_content')) {
 									$markerArray['###'.$index.'###'] =
-									tx_div2007_alpha5::RTEcssText($this->cObj, $contentEl[$fieldName]);
+									tx_div2007_alpha5::RTEcssText($local_cObj, $contentEl[$fieldName]);
 								} else if (is_array($this->conf['parseFunc.']))	{
 									$markerArray['###'.$index.'###'] =
-										$this->cObj->parseFunc($contentEl[$fieldName],$this->conf['parseFunc.']);
+										$local_cObj->parseFunc($contentEl[$fieldName],$this->conf['parseFunc.']);
 								}
 							}
 						}
@@ -288,7 +290,7 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 					}
 				}
 			}
-			$conf = &$this->getConf();
+			$conf = $this->getConf();
 
 				// check need for rating
 			if (($tagArray['RATING'] || $tagArray['RATING_STATIC']) && isset($conf['RATING']) && isset($conf['RATING.']))	{
@@ -301,7 +303,7 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 			}
 
 			if ($extKey != '' && t3lib_extMgm::isLoaded($extKey) && $api != '' && class_exists($api)) {
-				$apiObj = t3lib_div::makeInstance($api);
+				$apiObj = GeneralUtility::makeInstance($api);
 				if (method_exists($apiObj, 'getDefaultConfig'))	{
 					$ratingConf = $apiObj->getDefaultConfig();
 					if (isset($ratingConf) && is_array($ratingConf))	{
@@ -316,11 +318,11 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 				}
 				$ratingConf['ref'] = TT_PRODUCTS_EXT . '_' . $row['uid'];
 
-				$cObj = t3lib_div::makeInstance('tslib_cObj');
+				$cObj = GeneralUtility::makeInstance('tslib_cObj');
 				/* @var $cObj tslib_cObj */
 				$cObj->start(array());
 				$markerArray['###RATING###'] = $cObj->cObjGetSingle($cObjectType, $ratingConf);
-				$cObj = t3lib_div::makeInstance('tslib_cObj');
+				$cObj = GeneralUtility::makeInstance('tslib_cObj');
 				/* @var $cObj tslib_cObj */
 				$cObj->start(array());
 				$ratingConf['mode'] = 'static';
@@ -346,7 +348,7 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 
 			if ($extKey != '' && t3lib_extMgm::isLoaded($extKey) && $api != '' && class_exists($api)) {
 
-				$apiObj = t3lib_div::makeInstance($api);
+				$apiObj = GeneralUtility::makeInstance($api);
 				if (method_exists($apiObj, 'getDefaultConfig'))	{
 					$commentConf = $apiObj->getDefaultConfig($param);
 					if (isset($commentConf) && is_array($commentConf))	{
@@ -360,7 +362,7 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 					$commentConf = $conf1;
 				}
 				$commentConf['ref'] = TT_PRODUCTS_EXT . '_' . $row['uid'];
-				$urlObj = t3lib_div::makeInstance('tx_ttproducts_url_view');
+				$urlObj = GeneralUtility::makeInstance('tx_ttproducts_url_view');
 				$linkParams = $urlObj->getLinkParams(
 					'',
 					array(
@@ -372,7 +374,7 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 				);
 				$commentConf['linkParams'] = $linkParams;
 
-				$cObj = t3lib_div::makeInstance('tslib_cObj');
+				$cObj = GeneralUtility::makeInstance('tslib_cObj');
 				$cObj->start(array());
 				$markerArray['###COMMENT###'] = $cObj->cObjGetSingle($cObjectType, $commentConf);
 			} else {
@@ -381,9 +383,9 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 		}
 
 		if ($row['special_preparation'])	{
-			$markerArray['###'.$this->marker.'_SPECIAL_PREP###'] = $this->cObj->substituteMarkerArray($this->conf['specialPreparation'], $markerArray);
+			$markerArray['###' . $this->marker . '_SPECIAL_PREP###'] = $local_cObj->substituteMarkerArray($this->conf['specialPreparation'], $markerArray);
 		} else	{
-			$markerArray['###'.$this->marker.'_SPECIAL_PREP###'] = '';
+			$markerArray['###' . $this->marker . '_SPECIAL_PREP###'] = '';
 		}
 	} // getModelMarkerArray
 }

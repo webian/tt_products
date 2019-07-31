@@ -36,9 +36,10 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
-class tx_ttproducts_pdf_view implements t3lib_Singleton {
+class tx_ttproducts_pdf_view implements \TYPO3\CMS\Core\SingletonInterface {
 
 	/**
 	 * generates the bill as a PDF file
@@ -84,8 +85,8 @@ class tx_ttproducts_pdf_view implements t3lib_Singleton {
 				'iso-8859-1'
 			);
 
-			t3lib_div::requireOnce(PATH_BE_ttproducts . 'model/class.tx_ttproducts_pdf.php');
-			$pdf = t3lib_div::makeInstance('tx_ttproducts_pdf');
+			GeneralUtility::requireOnce(PATH_BE_ttproducts . 'model/class.tx_ttproducts_pdf.php');
+			$pdf = GeneralUtility::makeInstance('tx_ttproducts_pdf');
 			$pdf->init($cObj, 'Arial', '', 10);
 			$pdf->setHeader($header);
 			$pdf->setFooter($footer);

@@ -37,14 +37,15 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
-class tx_ttproducts_ajax implements t3lib_Singleton {
+class tx_ttproducts_ajax implements \TYPO3\CMS\Core\SingletonInterface {
 	var $taxajax;	// xajax object
 	var $conf; 	// conf coming from JavaScript via Ajax
 
 	public function init()	{
-		$this->taxajax = t3lib_div::makeInstance('tx_taxajax');
+		$this->taxajax = GeneralUtility::makeInstance('tx_taxajax');
 
 			// Encoding of the response to FE charset
 		$this->taxajax->setCharEncoding('UTF-8');
@@ -85,13 +86,13 @@ class tx_ttproducts_ajax implements t3lib_Singleton {
 		$this->taxajax->setWrapperPrefix('');
 
 
-// 		$reqURI = t3lib_div::getIndpEnv('TYPO3_REQUEST_URL');
+// 		$reqURI = GeneralUtility::getIndpEnv('TYPO3_REQUEST_URL');
 // 		$origUrlArray = explode('?', $reqURI);
-// 		$urlArray = t3lib_div::explodeUrl2Array($origUrlArray['1'],true);
+// 		$urlArray = GeneralUtility::explodeUrl2Array($origUrlArray['1'],true);
 // 		unset($urlArray['cHash']);
 // 		$urlArray['no_cache'] = 1;
 // 		$urlArray['eID'] = TT_PRODUCTS_EXT;
-// 		$reqURI = t3lib_div::implodeArrayForUrl('',$urlArray);
+// 		$reqURI = GeneralUtility::implodeArrayForUrl('',$urlArray);
 // 		$reqURI{0} = '?';
 // 		$reqURI = $origUrlArray['0'] . $reqURI;
 

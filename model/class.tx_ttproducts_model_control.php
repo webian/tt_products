@@ -36,6 +36,7 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
 
@@ -106,7 +107,7 @@ class tx_ttproducts_model_control {
 			self::$prefixId &&
 			!isset(self::$piVars[self::$prefixId])
 		) {
-			self::$piVars = t3lib_div::_GPmerged(self::$prefixId);
+			self::$piVars = GeneralUtility::_GPmerged(self::$prefixId);
 		}
 		$result = self::$piVars;
 		return $result;
@@ -193,7 +194,7 @@ class tx_ttproducts_model_control {
 		array &$tableConfArray,
 		array &$viewConfArray
 	)	{
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 
 		foreach ($functableArray as $ft)	{
 			$tableObj = $tablesObj->get($ft,0);
@@ -290,7 +291,7 @@ class tx_ttproducts_model_control {
 	public static function getTableVars ($searchFunctablename, &$searchTablename, &$searchAlias, &$tableAliasArray, &$bUseSearchboxArray, &$enableFieldArray)	{
 
 		if ($searchFunctablename != '')	{
-			$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+			$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 
 			$tableObj = $tablesObj->get($searchFunctablename, false);
 			$searchTablename = $tableObj->getTablename();
@@ -307,7 +308,7 @@ class tx_ttproducts_model_control {
 
 	public static function getWhereByFields ($tablename, $alias, $aliasPostfix, $fields, $sword, $delimiter)	{
 		$rc = false;
-		$fieldArray = t3lib_div::trimExplode(',',$fields);
+		$fieldArray = GeneralUtility::trimExplode(',',$fields);
 		if (isset($fieldArray) && is_array($fieldArray))	{
 			$rcArray = array();
 			$regexpDelimiter = self::determineRegExpDelimiter($delimiter);
@@ -322,8 +323,8 @@ class tx_ttproducts_model_control {
 
 
 	public static function getSearchInfo ($cObj, $searchVars,$functablename,$tablename,&$searchboxWhere,&$bUseSearchboxArray, &$sqlTableArray,&$sqlTableIndex,&$latest)	{
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 
 		$paramsTableArray = self::getParamsTableArray();
 		$searchParamArray = array();
@@ -345,9 +346,8 @@ class tx_ttproducts_model_control {
 
 			if($contentRow['pi_flexform']!='')	{
 
-				$contentRow['pi_flexform'] = t3lib_div::xml2array($contentRow['pi_flexform']);
-				include_once (PATH_BE_ttproducts.'control/class.tx_ttproducts_control_search.php');
-				$searchObj = t3lib_div::makeInstance('tx_ttproducts_control_search');	// fetch and store it as persistent object
+				$contentRow['pi_flexform'] = GeneralUtility::xml2array($contentRow['pi_flexform']);
+				$searchObj = GeneralUtility::makeInstance('tx_ttproducts_control_search');	// fetch and store it as persistent object
 				$controlConfig = $searchObj->getControlConfig($cObj, $cnf->conf, $contentRow);
 
 				self::getTableVars(
@@ -405,8 +405,7 @@ class tx_ttproducts_model_control {
 
 				if ($position == 'local' && isset($keyFieldArray[$searchFieldArray['local']]) && t3lib_extMgm::isLoaded('searchbox'))	{	// Todo
 
-					include_once (PATH_BE_searchbox.'model/class.tx_searchbox_model.php');
-					$modelObj = t3lib_div::makeInstance('tx_searchbox_model');
+					$modelObj = GeneralUtility::makeInstance('tx_searchbox_model');
 
 					$fullKeyFieldArray = $modelObj->getKeyFieldArray($tablename, '', '-', $searchFieldArray['local'], '1', $tmpCount);
 				} else if (isset($fullKeyFieldArray)) {
@@ -434,7 +433,7 @@ class tx_ttproducts_model_control {
 							$searchValue = substr($searchValue,1,strlen($searchValue)-2);
 						}
 						if (isset($fullKeyFieldArray) && is_array($fullKeyFieldArray))	{
-							$tmpArray = t3lib_div::trimExplode('|',$searchKey);
+							$tmpArray = GeneralUtility::trimExplode('|',$searchKey);
 
 							if ($tmpArray[1] == $searchFieldArray[$position] && isset($fullKeyFieldArray[$searchValue]))	{
 								$searchValue = $fullKeyFieldArray[$searchValue];
@@ -451,7 +450,7 @@ class tx_ttproducts_model_control {
 
 					$positionSearchKey = key($positionSearchVars);
 					$positionSearchValue = current($positionSearchVars);
- 					$partArray = t3lib_div::trimExplode('|',$positionSearchKey);
+ 					$partArray = GeneralUtility::trimExplode('|',$positionSearchKey);
  					$delimiter = ($partArray[2] ? $partArray[2] : '');
 					$searchTablename = '';
 					$searchParam = $partArray[0];
@@ -477,7 +476,7 @@ class tx_ttproducts_model_control {
 								if ($delimiter != '')	{
 									if ($searchVars['query'] == 'IN')	{
 										$valueArray = array();
-										$tmpParamArray = t3lib_div::trimExplode(',',$positionSearchValue);
+										$tmpParamArray = GeneralUtility::trimExplode(',',$positionSearchValue);
 										foreach ($tmpParamArray as $param => $v)	{
 											if ($v != '')	{
 												$valueArray[] = $GLOBALS['TYPO3_DB']->fullQuoteStr($v, $searchTablename);;
@@ -502,7 +501,7 @@ class tx_ttproducts_model_control {
 								} else {
 									if ($searchVars['query'] == 'IN')	{
 										$valueArray = array();
-										$tmpParamArray = t3lib_div::trimExplode(',',$positionSearchValue);
+										$tmpParamArray = GeneralUtility::trimExplode(',',$positionSearchValue);
 										foreach ($tmpParamArray as $param => $v)	{
 											if ($v != '')	{
 												$valueArray[] = $v;

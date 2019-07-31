@@ -37,6 +37,9 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
+
 
 class tx_ttproducts_field_datafield_view extends tx_ttproducts_field_base_view {
 
@@ -49,6 +52,8 @@ class tx_ttproducts_field_datafield_view extends tx_ttproducts_field_base_view {
 		$fieldname,
 		$tableConf
 	) {
+        $local_cObj = \JambageCom\Div2007\Utility\FrontendUtility::getContentObjectRenderer();
+
 		if (isset($tagArray[$marker])) {
 
 			if (
@@ -62,8 +67,8 @@ class tx_ttproducts_field_datafield_view extends tx_ttproducts_field_base_view {
 			}
 			$typolinkConf['parameter'] = $dirname . '/' . $dataFile;
 			$linkTxt = microtime();
-			$typoLink = $this->cObj->typoLink($linkTxt, $typolinkConf);
-			$wrappedSubpartArray['###' . $marker . '###'] = t3lib_div::trimExplode($linkTxt, $typoLink);
+			$typoLink = $local_cObj->typoLink($linkTxt, $typolinkConf);
+			$wrappedSubpartArray['###' . $marker . '###'] = GeneralUtility::trimExplode($linkTxt, $typoLink);
 		}
 	}
 
@@ -124,7 +129,7 @@ class tx_ttproducts_field_datafield_view extends tx_ttproducts_field_base_view {
 
 		if (isset($row[$fieldname])) {
 			$dirname = $this->getModelObj()->getDirname($row, $fieldname);
-			$dataFileArray = t3lib_div::trimExplode(',', $row[$fieldname]);
+			$dataFileArray = GeneralUtility::trimExplode(',', $row[$fieldname]);
 			$upperField = strtoupper($fieldname);
 
 			if (count($dataFileArray) && $dataFileArray[0])	{
@@ -216,10 +221,9 @@ class tx_ttproducts_field_datafield_view extends tx_ttproducts_field_base_view {
 		$dataFile
 	) {
 		$imageConf['file'] = $dirname . '/' . $dataFile;
-        $imageObj = t3lib_div::makeInstance('tx_ttproducts_field_image_view');
+        $imageObj = GeneralUtility::makeInstance('tx_ttproducts_field_image_view');
         $iconImgCode =
             $imageObj->getImageCode(
-                $this->cObj,
                 $imageConf,
                 $theCode
             ); // neu
@@ -251,7 +255,7 @@ class tx_ttproducts_field_datafield_view extends tx_ttproducts_field_base_view {
 
 		if (isset($imageRenderObj)) {
 
-            $imageObj = t3lib_div::makeInstance('tx_ttproducts_field_image_view');
+            $imageObj = GeneralUtility::makeInstance('tx_ttproducts_field_image_view');
 			$imageConf = $this->conf[$imageRenderObj . '.'];
 
 			if (isset($tagArray[$marker]) && isset($this->conf['datasheetIcon.']))	{
@@ -277,7 +281,6 @@ class tx_ttproducts_field_datafield_view extends tx_ttproducts_field_base_view {
 					$imageConf['file'] = $imageFilename;
                     $iconImgCode =
                         $imageObj->getImageCode(
-                            $this->cObj,
                             $imageConf,
                             $theCode
                         ); // neu
@@ -326,7 +329,7 @@ class tx_ttproducts_field_datafield_view extends tx_ttproducts_field_base_view {
 
 		if (isset($imageRenderObj) && $val && (isset($tagArray[$marker1]) || isset($tagArray[$marker2])))	{
 
-            $imageObj = t3lib_div::makeInstance('tx_ttproducts_field_image_view');
+            $imageObj = GeneralUtility::makeInstance('tx_ttproducts_field_image_view');
 			$imageConf = $this->conf[$imageRenderObj . '.'];
 			$dirname = $this->modelObj->getDirname($row, $fieldname);
 
@@ -335,7 +338,6 @@ class tx_ttproducts_field_datafield_view extends tx_ttproducts_field_base_view {
 					$imageConf['file'] = $this->conf['datasheetIcon.']['file'];
                     $iconImgCode =
                         $imageObj->getImageCode(
-                            $this->cObj,
                             $imageConf,
                             $theCode
                         ); // neu
@@ -350,7 +352,6 @@ class tx_ttproducts_field_datafield_view extends tx_ttproducts_field_base_view {
 				$imageConf['file'] = $dirname . '/' . $val;
                 $iconImgCode =
                     $imageObj->getImageCode(
-                        $this->cObj,
                         $imageConf,
                         $theCode
                     ); // neu

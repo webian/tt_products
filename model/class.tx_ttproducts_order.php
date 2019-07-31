@@ -37,6 +37,10 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
+
+
 
 class tx_ttproducts_order extends tx_ttproducts_table_base {
 
@@ -119,7 +123,7 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 	 */
 	public function getBlankUid ()	{
 	// an new orderUid has been created always because also payment systems can be used which do not accept a duplicate order id
-		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
+		$basketObj = GeneralUtility::makeInstance('tx_ttproducts_basket');
 		$orderUid = 0;
 
 		if (isset($basketObj->order['orderUid'])) {
@@ -148,7 +152,7 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 
 
 	public function getUid ()	{
-		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
+		$basketObj = GeneralUtility::makeInstance('tx_ttproducts_basket');
 		$rc = $basketObj->order['orderUid'];
 		return $rc;
 	}
@@ -216,8 +220,8 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 		&$address,
 		$status=0
 	)	{
-		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
-		$calculObj = t3lib_div::makeInstance('tx_ttproducts_basket_calculate');
+		$basketObj = GeneralUtility::makeInstance('tx_ttproducts_basket');
+		$calculObj = GeneralUtility::makeInstance('tx_ttproducts_basket_calculate');
         $tablename = $this->getTablename();
 
 		if (!$feusers_uid && isset($GLOBALS['TSFE']->fe_user->user) && is_array($GLOBALS['TSFE']->fe_user->user) && $GLOBALS['TSFE']->fe_user->user['uid'])	{
@@ -237,7 +241,7 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 		}
 
 		if ($deliveryInfo['date_of_birth'])	{
-			$dateArray = t3lib_div::trimExplode ('-', $deliveryInfo['date_of_birth']);
+			$dateArray = GeneralUtility::trimExplode ('-', $deliveryInfo['date_of_birth']);
 
 			if (
 				tx_div2007_core::testInt($dateArray[0]) &&
@@ -261,7 +265,7 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
             is_array($excludeArray) &&
             isset($excludeArray[$tablename])
         ) {
-            $excludeFieldArray = t3lib_div::trimExplode(',', $excludeArray[$tablename]);
+            $excludeFieldArray = GeneralUtility::trimExplode(',', $excludeArray[$tablename]);
         }
 
 		if (isset($deliveryInfo) && is_array($deliveryInfo)) {
@@ -318,7 +322,7 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 		}
 		$fieldsArray['giftservice'] = $deliveryInfo['giftservice'] . '||' . implode(',',$giftServiceArticleArray);
 
-		$fieldsArray['client_ip'] = t3lib_div::getIndpEnv('REMOTE_ADDR');
+		$fieldsArray['client_ip'] = GeneralUtility::getIndpEnv('REMOTE_ADDR');
 		$fieldsArray['cc_uid'] = $cardUid;
 		$fieldsArray['ac_uid'] = $accountUid;
 		$fieldsArray['giftcode'] = $basketObj->recs['tt_products']['giftcode'];
@@ -327,7 +331,7 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 		if ($billingInfo['tt_products_vat'] != '')	{
 			$fieldsArray['vat_id'] = $billingInfo['tt_products_vat'];
 
-			$paymentshippingObj = t3lib_div::makeInstance('tx_ttproducts_paymentshipping');
+			$paymentshippingObj = GeneralUtility::makeInstance('tx_ttproducts_paymentshipping');
 			$taxPercentage = $paymentshippingObj->getReplaceTaxPercentage($basketObj->basketExtra);
 			if (doubleval($taxPercentage) == 0)	{
 				$fieldsArray['tax_mode'] = 1;
@@ -354,7 +358,7 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 			$fieldsArrayFeUsers['tt_products_creditpoints'] =
 				floatval($GLOBALS['TSFE']->fe_user->user['tt_products_creditpoints'] -
 					$usedCreditpoints
-					/*+ t3lib_div::_GP('creditpoints_saved')*/);
+					/*+ GeneralUtility::_GP('creditpoints_saved')*/);
 			if ($fieldsArrayFeUsers['tt_products_creditpoints'] < 0) {
 				$fieldsArrayFeUsers['tt_products_creditpoints'] = 0;
 			}
@@ -421,8 +425,8 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 		if ($status == 1 && $this->conf['creditpoints.'] && $usedCreditpoints != '') {
 
 			$fieldsArray['creditpoints'] = $usedCreditpoints;
-			$fieldsArray['creditpoints_spended'] = intval(t3lib_div::_GP('creditpoints_spended'));
-			$fieldsArray['creditpoints_saved'] = intval(t3lib_div::_GP('creditpoints_saved'));
+			$fieldsArray['creditpoints_spended'] = intval(GeneralUtility::_GP('creditpoints_spended'));
+			$fieldsArray['creditpoints_saved'] = intval(GeneralUtility::_GP('creditpoints_saved'));
 			$fieldsArray['creditpoints_gifts'] = $cpArray['gift']['amount'];
 		}
 
@@ -452,8 +456,8 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 	 *
 	 */
 	public function createMM ($orderUid, &$itemArray)	{
-		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$basketObj = GeneralUtility::makeInstance('tx_ttproducts_basket');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 
 		if ($this->conf['useArticles'] != 2) {
 			$productTable = $tablesObj->get('tt_products', false);
@@ -540,8 +544,8 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 	 */
 	function setData ($orderUid, &$orderHTML, $status) {
 
-		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$basketObj = GeneralUtility::makeInstance('tx_ttproducts_basket');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 
 		$voucherObj = $tablesObj->get('voucher');
 		if ($status == 1)	{
@@ -556,7 +560,7 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 		$account = $tablesObj->get('sys_products_accounts');
 		$accountUid = $account->getUid();
 
-		$address = t3lib_div::makeInstance('tx_ttproducts_info_view');
+		$address = GeneralUtility::makeInstance('tx_ttproducts_info_view');
 		if ($address->needsInit())	{
 			echo 'internal error in tt_products (setData)';
 			return;

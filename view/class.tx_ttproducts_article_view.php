@@ -38,6 +38,8 @@
  */
 
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 
 
 class tx_ttproducts_article_view extends tx_ttproducts_article_base_view {
@@ -45,10 +47,10 @@ class tx_ttproducts_article_view extends tx_ttproducts_article_base_view {
 	public $type = 'article';
 	public $piVar = 'article';
 
-	function init($langObj, $modelObj)	{
+	public function init($modelObj)	{
 
-		$this->variant = t3lib_div::makeInstance('tx_ttproducts_variant_dummy_view');
-		parent::init($langObj, $modelObj);
+		$this->variant = GeneralUtility::makeInstance('tx_ttproducts_variant_dummy_view');
+		parent::init($modelObj);
 	}
 }
 

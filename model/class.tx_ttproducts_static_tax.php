@@ -38,6 +38,8 @@
  */
 
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 
 class tx_ttproducts_static_tax extends tx_ttproducts_table_base {
 	protected $uidStore;
@@ -49,11 +51,11 @@ class tx_ttproducts_static_tax extends tx_ttproducts_table_base {
 	/**
 	 * Getting all tt_products_cat categories into internal array
 	 */
-	function init ($cObj, $functablename) {
+	public function init ($cObj, $functablename) {
 		if ($this->isInstalled())	{
 			parent::init($cObj, $functablename);
 			$tablename = $this->getTablename();
-			$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+			$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 			$tableconf = $cnf->getTableConf('static_taxes');
 			$this->getTableObj()->setDefaultFieldArray(array('uid'=>'uid', 'pid'=>'pid'));
 			$this->getTableObj()->setTCAFieldArray('static_taxes');
@@ -63,7 +65,7 @@ class tx_ttproducts_static_tax extends tx_ttproducts_table_base {
 				$tmp = $tableconf['requiredFields'];
 				$requiredFields = ($tmp ? $tmp : $requiredFields);
 			}
-			$requiredListArray = t3lib_div::trimExplode(',', $requiredFields);
+			$requiredListArray = GeneralUtility::trimExplode(',', $requiredFields);
 			$this->getTableObj()->setRequiredFieldArray($requiredListArray);
 		}
 	} // init
@@ -99,14 +101,14 @@ class tx_ttproducts_static_tax extends tx_ttproducts_table_base {
 
 	public function setStoreData ($uidStore)	{
 		if ($this->isInstalled() && $uidStore > 0)	{
-			$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+			$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 			$orderAdressObj = $tablesObj->get('address', false);
 			$storeRow = $orderAdressObj->get($uidStore);
 			$theCountryCode = '';
 
 			if ($storeRow)	{
 				$staticInfoCountryField = $orderAdressObj->getField('static_info_country');
-				$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+				$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 				$tableconf = $cnf->getTableConf('address');
 
 				if (
@@ -191,7 +193,7 @@ class tx_ttproducts_static_tax extends tx_ttproducts_table_base {
 	public function getStaticTax (&$row, &$tax, &$taxArray)	{
 
 		if ($this->getUidStore() && $this->isInstalled())	{
-			$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
+			$basketObj = GeneralUtility::makeInstance('tx_ttproducts_basket');
 
 			if (isset($basketObj->recs) && is_array($basketObj->recs) && count($basketObj->recs))	{
 				$deliveryInfo = $basketObj->recs['delivery'];

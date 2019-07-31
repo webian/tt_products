@@ -37,8 +37,10 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class tx_ttproducts_graduated_price implements t3lib_Singleton {
+
+class tx_ttproducts_graduated_price implements \TYPO3\CMS\Core\SingletonInterface {
 	public $mmArray = array();
 	public $dataArray = array(); // array of read in products
 	public $tableObj;	// object of the type tx_table_db
@@ -52,8 +54,8 @@ class tx_ttproducts_graduated_price implements t3lib_Singleton {
 	/**
 	 * Getting the price formulas for graduated prices
 	 */
-	function init ($tablename, $mmtablename)  {
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+	public function init ($tablename, $mmtablename)  {
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
 
@@ -66,12 +68,12 @@ class tx_ttproducts_graduated_price implements t3lib_Singleton {
 		$this->tableconf = $cnf->getTableConf($tablename);
 		$this->tabledesc = $cnf->getTableDesc($tablename);
 
-		$this->tableObj = t3lib_div::makeInstance('tx_table_db');
+		$this->tableObj = GeneralUtility::makeInstance('tx_table_db');
 		$this->tableObj->setTCAFieldArray($tablename, 'tt_products_graduated_price');
 	} // init
 
 
-	function getFormulasByProduct ($uid=0,$where_clause='') {
+	public function getFormulasByProduct ($uid=0,$where_clause='') {
 		if ($uid && !is_array($uid) && isset($this->mmArray[$uid]) && is_array($this->mmArray[$uid]))	{
 			$rc = array();
 			foreach ($this->mmArray[$uid] as $v)	{

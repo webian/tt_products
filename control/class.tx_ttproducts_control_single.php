@@ -38,7 +38,7 @@
  */
 
 
-class tx_ttproducts_control_single implements t3lib_Singleton {
+class tx_ttproducts_control_single implements \TYPO3\CMS\Core\SingletonInterface {
 
 	/**
 	 * Triggers events when the single view has been called

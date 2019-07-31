@@ -36,8 +36,11 @@
  */
 
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class tx_ttproducts_variant implements tx_ttproducts_variant_int, t3lib_Singleton {
+
+
+class tx_ttproducts_variant implements tx_ttproducts_variant_int, \TYPO3\CMS\Core\SingletonInterface {
 	public $conf;	// reduced local conf
 	var $itemTable;
 	private $useArticles;
@@ -53,7 +56,7 @@ class tx_ttproducts_variant implements tx_ttproducts_variant_int, t3lib_Singleto
 	 * setting the local variables
 	 */
 	public function init ($itemTable, $tablename, $useArticles)  {
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 
 		$tmpArray = $cnf->getTableDesc($tablename);
 		$this->conf = (is_array($tmpArray) && is_array($tmpArray['variant.']) ? $tmpArray['variant.'] : array());
@@ -117,12 +120,12 @@ class tx_ttproducts_variant implements tx_ttproducts_variant_int, t3lib_Singleto
 			foreach ($fieldArray as $key => $field)	{
 				if ($this->selectableArray[$key])	{
 					$variantRow = $row[$field];
-					$variantValueArray = t3lib_div::trimExplode(';', $variantRow);
+					$variantValueArray = GeneralUtility::trimExplode(';', $variantRow);
 					$variantIndex = $variantArray[$count];
 					if (isset($variantValueArray[$variantIndex]))	{
 						$row[$field] = $variantValueArray[$variantIndex];
 					} else {
-						$tmpArray = t3lib_div::trimExplode(';', $row[$field]);
+						$tmpArray = GeneralUtility::trimExplode(';', $row[$field]);
 						$row[$field] = $tmpArray[0];
 					}
 					$count++;
@@ -175,7 +178,7 @@ class tx_ttproducts_variant implements tx_ttproducts_variant_int, t3lib_Singleto
 			foreach ($fieldArray as $key => $field)	{
 				if ($this->selectableArray[$key])	{
 					$variantValue = $variantRow[$field];
-					$prodVariantArray = t3lib_div::trimExplode(';', $row[$field]);
+					$prodVariantArray = GeneralUtility::trimExplode(';', $row[$field]);
 					if ($variantValue != '')	{
 						$varantIndex = array_search($variantValue, $prodVariantArray);
 						$variantArray[] = $varantIndex;
@@ -238,7 +241,7 @@ class tx_ttproducts_variant implements tx_ttproducts_variant_int, t3lib_Singleto
 			$rcRow = $row;
 			foreach ($fieldArray as $field)	{
 				$variants = $row[$field];
-				$tmpArray = t3lib_div::trimExplode (';', $variants);
+				$tmpArray = GeneralUtility::trimExplode (';', $variants);
 				$index = (isset($variantArray[$field]) ? $variantArray[$field] : 0);
 				$rcRow[$field] = $tmpArray[$index];
 			}
@@ -272,10 +275,10 @@ class tx_ttproducts_variant implements tx_ttproducts_variant_int, t3lib_Singleto
 				isset($productRow[$field])
 			) {
 				$valueArray = array();
-				$productValueArray = t3lib_div::trimExplode(';', $productRow[$field]);
+				$productValueArray = GeneralUtility::trimExplode(';', $productRow[$field]);
 
 				foreach ($articleRowArray as $articleRow)	{
-					$articleValueArray = t3lib_div::trimExplode(';',$articleRow[$field]);
+					$articleValueArray = GeneralUtility::trimExplode(';',$articleRow[$field]);
 
 					if ($articleValueArray[0])	{
 						$valueArray = array_merge($valueArray, $articleValueArray);
@@ -310,7 +313,7 @@ class tx_ttproducts_variant implements tx_ttproducts_variant_int, t3lib_Singleto
 		$variantRowArray = $this->getVariantValuesByArticle($articleRowArray, $row, false);
 		foreach ($variantRowArray as $field => $valueArray) {
 			if ($row[$field] != '') {
-				$variantRowArray[$field] = t3lib_div::trimExplode(';', $row[$field]);
+				$variantRowArray[$field] = GeneralUtility::trimExplode(';', $row[$field]);
 			}
 		}
 		$variantArray = explode(';', $variant);
@@ -330,7 +333,7 @@ class tx_ttproducts_variant implements tx_ttproducts_variant_int, t3lib_Singleto
 					$value = $articleRow[$field];
 
 					if ($value != '')	{
-						$tmpArray = t3lib_div::trimExplode (';', $value);
+						$tmpArray = GeneralUtility::trimExplode (';', $value);
 						$variantValue = $variantRowArray[$field][$variantIndex];
 
 						if (!in_array($variantValue, $tmpArray))	{

@@ -36,20 +36,23 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class tx_ttproducts_user_view implements t3lib_Singleton  {
+
+
+class tx_ttproducts_user_view implements \TYPO3\CMS\Core\SingletonInterface  {
 
 	public function printView (
 		$pibaseClass,
 		&$templateCode,
 		$theCode
 	)	{
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$conf = &$cnf->getConf();
 		$content = '';
 		$num = $theCode{4};
 
-		$pibaseObj = t3lib_div::makeInstance('' . $pibaseClass);
+		$pibaseObj = GeneralUtility::makeInstance('' . $pibaseClass);
 		$cObj = $pibaseObj->cObj;
 
 		if (isset($conf['USEROBJ' . $num . '.']) && is_array($conf['USEROBJ' . $num . '.']))	{

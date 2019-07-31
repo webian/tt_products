@@ -38,6 +38,9 @@
  */
 
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
+
 
 class tx_ttproducts_activity_finalize {
 	public $pibase; // reference to object of pibase
@@ -49,7 +52,7 @@ class tx_ttproducts_activity_finalize {
 
 	public function init ($pibase)  {
 		$this->pibase = $pibase;
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
 
@@ -102,17 +105,17 @@ class tx_ttproducts_activity_finalize {
 			error_log('doProcessing $orderUid = ' . $orderUid . chr(13), 3, $this->conf['errorLog']);
 		}
 
-		$basketView = t3lib_div::makeInstance('tx_ttproducts_basket_view');
-		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
-		$billdeliveryObj = t3lib_div::makeInstance('tx_ttproducts_billdelivery');
-		$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
-		$cnfObj = t3lib_div::makeInstance('tx_ttproducts_config');
-		$infoViewObj = t3lib_div::makeInstance('tx_ttproducts_info_view');
+		$basketView = GeneralUtility::makeInstance('tx_ttproducts_basket_view');
+		$basketObj = GeneralUtility::makeInstance('tx_ttproducts_basket');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
+		$billdeliveryObj = GeneralUtility::makeInstance('tx_ttproducts_billdelivery');
+		$markerObj = GeneralUtility::makeInstance('tx_ttproducts_marker');
+		$cnfObj = GeneralUtility::makeInstance('tx_ttproducts_config');
+		$infoViewObj = GeneralUtility::makeInstance('tx_ttproducts_info_view');
 		$emailObj = $tablesObj->get('tt_products_emails');
-		$calculObj = t3lib_div::makeInstance('tx_ttproducts_basket_calculate');
+		$calculObj = GeneralUtility::makeInstance('tx_ttproducts_basket_calculate');
 		$activityConf = $cnfObj->getBasketConf('activity', 'finalize');
-		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
+        $languageObj = GeneralUtility::makeInstance(\JambageCom\TtProducts\Api\Localization::class);
 
 		$fileArray = array(); // bill or delivery
 		$empty = '';
@@ -120,7 +123,7 @@ class tx_ttproducts_activity_finalize {
 
 		if (isset($activityConf) && is_array($activityConf)) {
 			if (isset($activityConf['clear'])) {
-				$clearArray = t3lib_div::trimExplode(',', $activityConf['clear']);
+				$clearArray = GeneralUtility::trimExplode(',', $activityConf['clear']);
 				foreach ($clearArray as $v) {
 					switch ($v) {
 						case 'memo':
@@ -137,7 +140,7 @@ class tx_ttproducts_activity_finalize {
 							if (isset($uidArray) && is_array($uidArray) && count($uidArray) && $memoItems != '') {
 								$newMemoItems = $memoItems;
 								foreach ($uidArray as $uid) {
-									$newMemoItems = t3lib_div::rmFromList($uid, $newMemoItems);
+									$newMemoItems = GeneralUtility::rmFromList($uid, $newMemoItems);
 								}
 
 								if ($newMemoItems != $memoItems) {
@@ -207,7 +210,7 @@ class tx_ttproducts_activity_finalize {
 		$orderConfirmationHTML = $this->pibase->cObj->substituteMarkerArray($orderConfirmationHTML,$markerArray);
 
 		if ($GLOBALS['TSFE']->absRefPrefix == '') {
-			$absRefPrefix = t3lib_div::getIndpEnv('TYPO3_SITE_URL');
+			$absRefPrefix = GeneralUtility::getIndpEnv('TYPO3_SITE_URL');
 			$markerArray['"index.php'] = '"' . $absRefPrefix . 'index.php';
 		}
 
@@ -264,7 +267,7 @@ class tx_ttproducts_activity_finalize {
 		}
 
 		$orderObj->setData($orderUid, $orderConfirmationHTML, 1);
-		$creditpointsObj = t3lib_div::makeInstance('tx_ttproducts_field_creditpoints');
+		$creditpointsObj = GeneralUtility::makeInstance('tx_ttproducts_field_creditpoints');
 		$creditpointsObj->pay();
 
 		// any gift orders in the extended basket?
@@ -300,9 +303,7 @@ class tx_ttproducts_activity_finalize {
 			// get bank account info
 			$account = $tablesObj->get('sys_products_accounts');
 			$accountUid = $account->getUid();
-
-			include_once (PATH_BE_ttproducts.'lib/class.tx_ttproducts_csv.php');
-			$csv = t3lib_div::makeInstance('tx_ttproducts_csv');
+			$csv = GeneralUtility::makeInstance('tx_ttproducts_csv');
 			$csv->init(
 				$this->pibase,
 				$itemArray,
@@ -373,7 +374,7 @@ class tx_ttproducts_activity_finalize {
 						}
 					}
 					if ($emailConfig['to'] != '') {
-						$emailArray = t3lib_div::trimExplode(',', $emailConfig['to']);
+						$emailArray = GeneralUtility::trimExplode(',', $emailConfig['to']);
 
 						foreach ($emailArray as $email) {
 							if (
@@ -387,7 +388,7 @@ class tx_ttproducts_activity_finalize {
 					}
 
 					if ($emailConfig['attachment'] != '') {
-						$emailControlArray[$suffix][$shippingPoint]['attachment'] = t3lib_div::trimExplode(',', $emailConfig['attachment']);
+						$emailControlArray[$suffix][$shippingPoint]['attachment'] = GeneralUtility::trimExplode(',', $emailConfig['attachment']);
 
 						foreach($emailControlArray[$suffix][$shippingPoint]['attachment'] as $attachmentType) {
 							$emailControlArray[$suffix][$shippingPoint]['attachmentFile'][] = $fileArray[$attachmentType];
@@ -433,7 +434,7 @@ class tx_ttproducts_activity_finalize {
 					}
 
 					if ($shippingPoint != 'none') {
-						$emailControlArray[$suffix][$shippingPoint]['recipient'] = array_unique(t3lib_div::trimExplode(',', $emailConfig['to']));
+						$emailControlArray[$suffix][$shippingPoint]['recipient'] = array_unique(GeneralUtility::trimExplode(',', $emailConfig['to']));
 						if ($emailConfig['subject'] != '') {
 							$emailControlArray[$suffix][$shippingPoint]['subject'] = $emailConfig['subject'];
 						}
@@ -487,7 +488,7 @@ class tx_ttproducts_activity_finalize {
 					foreach($htmlMailParts as $kkk => $vvv) {
 						if ($kkk%2) {
 							list($attrib) = $parser->get_tag_attributes($vvv);
-							if (t3lib_div::isFirstPartOfStr($attrib['src'],$this->conf['orderEmail_htmlmail.']['removeImagesWithPrefix'])) {
+							if (GeneralUtility::isFirstPartOfStr($attrib['src'],$this->conf['orderEmail_htmlmail.']['removeImagesWithPrefix'])) {
 								$htmlMailParts[$kkk]='';
 							}
 						}
@@ -498,7 +499,7 @@ class tx_ttproducts_activity_finalize {
 				// nothing to initialize
 			}
 
-			$agbAttachment = ($this->conf['AGBattachment'] ? t3lib_div::getFileAbsFileName($this->conf['AGBattachment']) : '');
+			$agbAttachment = ($this->conf['AGBattachment'] ? GeneralUtility::getFileAbsFileName($this->conf['AGBattachment']) : '');
 
 			if ($agbAttachment != '') {
 				$emailControlArray['customer']['none']['attachmentFile'][] = $agbAttachment;
@@ -553,7 +554,7 @@ class tx_ttproducts_activity_finalize {
 					if ($shipping_point) {
 						foreach ($emailControlArray as $suffix => $shippingControl) {
 							foreach ($shippingControl as $shippingKey => $shippingPointControl) {
-								$shippingKeyArray = t3lib_div::trimExplode(',', $shippingKey);
+								$shippingKeyArray = GeneralUtility::trimExplode(',', $shippingKey);
 								foreach ($shippingKeyArray as $key) {
 									if ($key == $shipping_point && isset($shippingControl[$shippingKey]) && is_array($shippingControl[$shippingKey])) {
 										$emailControlArray[$suffix][$shippingKey]['itemArray'][$sort][] = $actItem;
@@ -797,23 +798,23 @@ class tx_ttproducts_activity_finalize {
 			if (is_array($instockTableArray) && $this->conf['warningInStockLimit']) {
 				$tableDescArray = array ('tt_products' => 'product', 'tt_products_articles' => 'article');
 				foreach ($instockTableArray as $tablename => $instockArray) {
-					$tableDesc = tx_div2007_alpha5::getLL_fh003($langObj,$tableDescArray[$tablename]);
+					$tableDesc = $languageObj->getLabel($tableDescArray[$tablename]);
 
 					if (isset($instockArray) && is_array($instockArray)) {
 						foreach ($instockArray as $instockTmp => $count) {
-							$uidItemnrTitle = t3lib_div::trimExplode(',', $instockTmp);
+							$uidItemnrTitle = GeneralUtility::trimExplode(',', $instockTmp);
 							if ($count <= $this->conf['warningInStockLimit']) {
 
                                 $content =
 									sprintf(
-										tx_div2007_alpha5::getLL_fh003($langObj, 'instock_warning'),
+                                        $languageObj->getLabel('instock_warning'),
 										$tableDesc . ' ' . $uidItemnrTitle[2] . '',
 										$uidItemnrTitle[1],
 										intval($count)
 									);
                                 $subject =
 									sprintf(
-										tx_div2007_alpha5::getLL_fh003($langObj, 'instock_warning_header'),
+                                        $languageObj->getLabel('instock_warning_header'),
 										$uidItemnrTitle[2] . '',
 										intval($count)
 									);
@@ -855,7 +856,7 @@ class tx_ttproducts_activity_finalize {
 			// Call all finalizeOrder hooks
 		if (is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['finalizeOrder'])) {
 			foreach  ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['finalizeOrder'] as $classRef) {
-				$hookObj= t3lib_div::makeInstance($classRef);
+				$hookObj= GeneralUtility::makeInstance($classRef);
 				if (method_exists($hookObj, 'finalizeOrder')) {
 					$hookObj->finalizeOrder(
 						$this,

@@ -38,6 +38,9 @@
  */
 
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
+
 
 abstract class tx_ttproducts_article_base_view extends tx_ttproducts_table_base_view {
 	private $dataArray = array(); // array of read in products
@@ -51,10 +54,9 @@ abstract class tx_ttproducts_article_base_view extends tx_ttproducts_table_base_
 	protected $mm_table = ''; // only set if a mm table is used
 
 
-	public function init ($langObj, $modelObj)	{
-		parent::init($langObj, $modelObj);
-
-		$this->variant->init($langObj, $modelObj->variant);
+	public function init ($modelObj)	{
+		parent::init($modelObj);
+		$this->variant->init($modelObj->variant);
 	}
 
 
@@ -112,7 +114,7 @@ abstract class tx_ttproducts_article_base_view extends tx_ttproducts_table_base_
 
 	public function getPriceMarkerArray ($basketExtra, &$markerArray, $row, $markerKey, $id, $theCode)	{
 		$modelObj = $this->getModelObj();
-		$priceViewObj = t3lib_div::makeInstance('tx_ttproducts_field_price_view');
+		$priceViewObj = GeneralUtility::makeInstance('tx_ttproducts_field_price_view');
 
 		$functablename = $modelObj->getFuncTablename();
 		$mainId = $this->getId($row, $id, $theCode);
@@ -157,7 +159,7 @@ abstract class tx_ttproducts_article_base_view extends tx_ttproducts_table_base_
 		$charset=''
 	)	{
 		$modelObj = $this->getModelObj();
-		$imageObj = t3lib_div::makeInstance('tx_ttproducts_field_image_view');
+		$imageObj = GeneralUtility::makeInstance('tx_ttproducts_field_image_view');
 
 		if ($markerKey)	{
 			$marker = $markerKey;

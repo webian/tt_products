@@ -38,6 +38,9 @@
  */
 
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
+
 
 class tx_ttproducts_discountprice extends tx_ttproducts_pricecalc_base {
 	public $conf;
@@ -82,7 +85,7 @@ class tx_ttproducts_discountprice extends tx_ttproducts_pricecalc_base {
 		if (!$conf || !$itemArray || !count($itemArray)) {
 			return;
 		}
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$this->conf = $cnf->conf;
 
 		$additive = 0;

@@ -40,8 +40,10 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class tx_ttproducts_paymentshipping implements t3lib_Singleton {
+
+class tx_ttproducts_paymentshipping implements \TYPO3\CMS\Core\SingletonInterface {
 	var $cObj;
 	var $conf;
 	var $config;
@@ -52,11 +54,11 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 
 	public function init ($cObj, $priceObj) {
 		$this->cObj = $cObj;
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
 		$this->priceObj = clone $priceObj;	// new independant price object
-        $voucher = t3lib_div::makeInstance('tx_ttproducts_voucher');
+        $voucher = GeneralUtility::makeInstance('tx_ttproducts_voucher');
         $this->setVoucher($voucher);
 	}
 
@@ -80,7 +82,7 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 			isset ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT][$hookVar][$pskey]) &&
 			is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT][$hookVar][$pskey])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT][$hookVar][$pskey] as $classRef) {
-				$hookObj= t3lib_div::makeInstance($classRef);
+				$hookObj= GeneralUtility::makeInstance($classRef);
 				if (method_exists($hookObj, 'init')) {
 					$hookObj->init($this);
 				}
@@ -99,9 +101,9 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 
 		ksort($confArray);
 		if ($subkey != '')	{
-			$valueArray = t3lib_div::trimExplode('-', $basketRec['tt_products'][$pskey][$subkey]);
+			$valueArray = GeneralUtility::trimExplode('-', $basketRec['tt_products'][$pskey][$subkey]);
 		} else {
-			$valueArray = t3lib_div::trimExplode('-', $basketRec['tt_products'][$pskey]);
+			$valueArray = GeneralUtility::trimExplode('-', $basketRec['tt_products'][$pskey]);
 		}
 		$k = intval($valueArray[0]);
 
@@ -139,9 +141,9 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 	 */
 	public function getBasketRec ($row) {
 		$extraArray = array();
-		$tmpArray = t3lib_div::trimExplode(':', $row['payment']);
+		$tmpArray = GeneralUtility::trimExplode(':', $row['payment']);
 		$extraArray['payment'] = $tmpArray['0'];
-		$tmpArray = t3lib_div::trimExplode(':', $row['shipping']);
+		$tmpArray = GeneralUtility::trimExplode(':', $row['shipping']);
 		$extraArray['shipping'] = $tmpArray['0'];
 
 		$basketRec = array('tt_products' => $extraArray);
@@ -153,7 +155,7 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 	 * Setting shipping, payment methods
 	 */
 	public function getBasketExtras ($basketRec) {
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		$basketExtra = array();
 
 		// handling and shipping
@@ -205,7 +207,7 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 				// overwrite handling from shipping
 			if ($pskey == 'shipping' && $this->conf['handling.']) {
 				if ($excludeHandling)	{
-					$exclArr = t3lib_div::intExplode(',', $excludeHandling);
+					$exclArr = GeneralUtility::intExplode(',', $excludeHandling);
 					foreach($exclArr as $theVal)	{
 						unset($this->conf['handling.'][$theVal]);
 						unset($this->conf['handling.'][$theVal . '.']);
@@ -235,7 +237,7 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 			// payment
 		if ($this->conf['payment.']) {
 			if ($excludePayment)	{
-				$exclArr = t3lib_div::intExplode(',', $excludePayment);
+				$exclArr = GeneralUtility::intExplode(',', $excludePayment);
 				foreach($exclArr as $theVal)	{
 					unset($this->conf['payment.'][$theVal]);
 					unset($this->conf['payment.'][$theVal.'.']);
@@ -323,7 +325,7 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 		&$wrappedSubpartArray,
 		$framework
 	)	{
-		$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
+		$markerObj = GeneralUtility::makeInstance('tx_ttproducts_marker');
 
 		$typeArray = $this->getTypeArray();
 		$psArray = array('payment', 'shipping');
@@ -334,9 +336,9 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 
 		if (strpos($handleLib,'transactor') !== false && t3lib_extMgm::isLoaded($handleLib))	{
 
-			$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
+            $languageObj = GeneralUtility::makeInstance(\JambageCom\TtProducts\Api\Localization::class);
 				// Payment Transactor
-			tx_transactor_api::init($langObj, $this->cObj, $this->conf);
+			tx_transactor_api::init($languageObj, $this->cObj, $this->conf);
 
 			tx_transactor_api::getItemMarkerSubpartArrays(
 				$basketExtra['payment.']['handleLib.'],
@@ -443,7 +445,7 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 
 
 	protected function getTypeMarkerArray ($theCode, &$markerArray, $pskey, $subkey, $linkUrl, $calculatedArray, $basketExtra)	{
-		$priceViewObj = t3lib_div::makeInstance('tx_ttproducts_field_price_view');
+		$priceViewObj = GeneralUtility::makeInstance('tx_ttproducts_field_price_view');
 
 		if ($subkey != '')	{
 			$theCalculateArray = $calculatedArray[$pskey][$subkey];
@@ -460,14 +462,13 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 		$markerArray['###PRICE_' . $markerkey . '_ONLY_TAX###'] = $priceViewObj->priceFormat($theCalculateArray['priceTax'] - $theCalculateArray['priceNoTax']);
 		$markerArray['###' . $markerkey . '_SELECTOR###'] = $this->generateRadioSelect($theCode, $pskey, $subkey, $calculatedArray, $linkUrl, $basketExtra);
 		$imageCode = '';
-        $imageObj = t3lib_div::makeInstance('tx_ttproducts_field_image_view');
+        $imageObj = GeneralUtility::makeInstance('tx_ttproducts_field_image_view');
 
 		if ($subkey != '')	{
 			if (isset($basketExtra[$pskey . '.'][$subkey . '.']['image.'])) {
 // 				$imageCode = $this->cObj->IMAGE($basketExtra[$pskey . '.'][$subkey . '.']['image.']);
                 $imageCode =
                     $imageObj->getImageCode(
-                        $this->cObj,
                         $basketExtra[$pskey . '.'][$subkey . '.']['image.'],
                         $theCode
                     ); // neu
@@ -478,7 +479,6 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 // 				$imageCode = $this->cObj->IMAGE($basketExtra[$pskey . '.']['image.']);
                 $imageCode =
                     $imageObj->getImageCode(
-                        $this->cObj,
                         $basketExtra[$pskey . '.']['image.'],
                         $theCode
                     ); // neu
@@ -496,8 +496,8 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 	public function getMarkerArray ($theCode, &$markerArray, $pid, $bUseBackPid, $calculatedArray, $basketExtra) {
 
         $linkConf = array('useCacheHash' => true);
-		$priceViewObj = t3lib_div::makeInstance('tx_ttproducts_field_price_view');
-		$urlObj = t3lib_div::makeInstance('tx_ttproducts_url_view');
+		$priceViewObj = GeneralUtility::makeInstance('tx_ttproducts_field_price_view');
+		$urlObj = GeneralUtility::makeInstance('tx_ttproducts_url_view');
 		$basketUrl = htmlspecialchars(
 			tx_div2007_alpha5::getTypoLink_URL_fh003(
 				$this->cObj,
@@ -574,8 +574,8 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 				.wrap		[string]	<select>|</select> - wrap for the selectorboxes.  Only if .radio is false. See default value below
 				.template	[string]	Template string for the display of radiobuttons.  Only if .radio is true. See default below
 			 */
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
-        $imageObj = t3lib_div::makeInstance('tx_ttproducts_field_image_view');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
+        $imageObj = GeneralUtility::makeInstance('tx_ttproducts_field_image_view');
 
 		$active = $basketExtra[$pskey];
 		$activeArray = is_array($active) ? $active : array($active);
@@ -647,7 +647,7 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 							if (is_object($itemTable))	{
 								$markerFieldArray = array();
 								$parentArray = array();
-								$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
+								$markerObj = GeneralUtility::makeInstance('tx_ttproducts_marker');
 								$fieldsArray = $markerObj->getMarkerFields(
 									$item['title'],
 									$itemTable->getTableObj()->tableFieldArray,
@@ -707,7 +707,6 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 								if ($image != '') {
                                     $imageCode =
                                         $imageObj->getImageCode(
-                                            $this->cObj,
                                             $image,
                                             $theCode
                                         ); // neu
@@ -757,7 +756,7 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 		}
 
 		if (strstr($actTitle, '###'))	{
-			$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
+			$markerObj = GeneralUtility::makeInstance('tx_ttproducts_marker');
 			$markerArray = array();
 			$viewTagArray = array();
 			$parentArray = array();
@@ -881,7 +880,7 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 					}
 				}
 			} else if ($confArray['type'] == 'objectMethod' && isset($confArray['class'])) {
-				$obj= t3lib_div::makeInstance($confArray['class']);
+				$obj= GeneralUtility::makeInstance($confArray['class']);
 				if (method_exists($obj,'getConfiguredPrice')){
 					$funcParams = $confArray['method.'];
 					$priceNew = $obj->getConfiguredPrice($pskey, $subkey, $row, $itemArray, $calculatedArray, $basketExtra, $confArray, $countTotal, $priceTotalTax, $priceTax, $priceNoTax, $funcParams);
@@ -891,7 +890,7 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 			}
 
 			if(is_array($funcParams)){
-				$hookObj= t3lib_div::makeInstance($funcParams['class']);
+				$hookObj= GeneralUtility::makeInstance($funcParams['class']);
 				if (method_exists($hookObj, 'init')) {
 					$hookObj->init($this);
 				}
@@ -932,7 +931,7 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
                 isset($confArray['noCostsVoucher']) &&
                 is_object($voucher = $this->getVoucher()) &&
                 $voucher->getValid() &&
-                t3lib_div::inList($confArray['noCostsVoucher'], $voucher->getCode())
+                GeneralUtility::inList($confArray['noCostsVoucher'], $voucher->getCode())
             ) {
                 $priceNew = 0;
                 $priceTax = $priceNoTax = 0;
@@ -963,7 +962,7 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 		}
 
 		if ($calcSetup != '' && is_array($confArray['price.']) && isset($confArray['price.']['calc.']) && isset($confArray['price.']['calc.']['use']) && isset($this->conf[$calcSetup . '.']) && is_array($this->conf[$calcSetup . '.']))	{
-			$useArray = t3lib_div::trimExplode(',', $confArray['price.']['calc.']['use']);
+			$useArray = GeneralUtility::trimExplode(',', $confArray['price.']['calc.']['use']);
 			$specialCalc = array();
 
 			foreach ($this->conf[$calcSetup . '.'] as $k => $v)	{
@@ -972,8 +971,7 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 					$specialCalc[$k] = $v;
 				}
 			}
-			include_once (PATH_BE_ttproducts.'lib/class.tx_ttproducts_discountprice.php');
-			$discountPriceObj = t3lib_div::makeInstance('tx_ttproducts_discountprice');
+			$discountPriceObj = GeneralUtility::makeInstance('tx_ttproducts_discountprice');
 			$priceReduction = array();
 			$extMergeArray = array('tt_products_articles');
 			$discountPriceObj->getCalculatedData(
@@ -1205,7 +1203,7 @@ class tx_ttproducts_paymentshipping implements t3lib_Singleton {
 		$rc = '';
 
 		if (isset($basketExtra['handling.']) && is_array($basketExtra['handling.']))	{
-			$taxObj = t3lib_div::makeInstance('tx_ttproducts_field_tax');
+			$taxObj = GeneralUtility::makeInstance('tx_ttproducts_field_tax');
 			$pskey = 'handling';
 
 			foreach ($basketExtra[$pskey . '.'] as $k => $handlingRow)	{

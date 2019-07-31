@@ -38,7 +38,7 @@
 
 
 
-class tx_ttproducts_control_session implements t3lib_Singleton {
+class tx_ttproducts_control_session implements \TYPO3\CMS\Core\SingletonInterface {
 
 	static public function filterExtensionData ($session) {
 

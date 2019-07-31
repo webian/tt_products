@@ -37,8 +37,10 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class tx_ttproducts_basket_calculate implements t3lib_Singleton {
+
+class tx_ttproducts_basket_calculate implements \TYPO3\CMS\Core\SingletonInterface {
 
 	protected $calculatedArray = array();
 
@@ -53,7 +55,7 @@ class tx_ttproducts_basket_calculate implements t3lib_Singleton {
 
 
 	public static function getGoodsTotalTax ($basketExtra, $itemArray)	{
-		$priceObj = t3lib_div::makeInstance('tx_ttproducts_field_price');
+		$priceObj = GeneralUtility::makeInstance('tx_ttproducts_field_price');
 
 		$goodsTotalTax = 0;
 
@@ -85,11 +87,11 @@ class tx_ttproducts_basket_calculate implements t3lib_Singleton {
 
 	 */
 	public function calculate ($basketExt, $basketExtra, $funcTablename, $useArticles, $maxTax, &$itemArray)	{
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
-		$paymentshippingObj = t3lib_div::makeInstance('tx_ttproducts_paymentshipping');
-		$taxObj = t3lib_div::makeInstance('tx_ttproducts_field_tax');
-		$priceObj = t3lib_div::makeInstance('tx_ttproducts_field_price');
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
+		$paymentshippingObj = GeneralUtility::makeInstance('tx_ttproducts_paymentshipping');
+		$taxObj = GeneralUtility::makeInstance('tx_ttproducts_field_tax');
+		$priceObj = GeneralUtility::makeInstance('tx_ttproducts_field_price');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		$viewTableObj = $tablesObj->get($funcTablename);
 
 		$conf = &$cnf->conf;
@@ -117,8 +119,7 @@ class tx_ttproducts_basket_calculate implements t3lib_Singleton {
 
 				// Check if a special group price can be used
 				if ($getDiscount == 1)	{
-// 					include_once (PATH_BE_ttproducts.'lib/class.tx_ttproducts_discountprice.php');
-					$discountPrice = t3lib_div::makeInstance('tx_ttproducts_discountprice');
+					$discountPrice = GeneralUtility::makeInstance('tx_ttproducts_discountprice');
 					$discountArray = array();
 					$goodsTotalTax = self::getGoodsTotalTax($basketExtra, $itemArray);
 
@@ -137,7 +138,7 @@ class tx_ttproducts_basket_calculate implements t3lib_Singleton {
 
 			// set the 'calcprice' in itemArray
 			if ($conf['pricecalc.']) {
-				$pricecalc = t3lib_div::makeInstance('tx_ttproducts_pricecalc');
+				$pricecalc = GeneralUtility::makeInstance('tx_ttproducts_pricecalc');
 				$discountArray = array();
 
 				// do the price calculation
@@ -153,7 +154,7 @@ class tx_ttproducts_basket_calculate implements t3lib_Singleton {
 				);
 			}
 
-			$pricetablescalc = t3lib_div::makeInstance('tx_ttproducts_pricetablescalc');
+			$pricetablescalc = GeneralUtility::makeInstance('tx_ttproducts_pricetablescalc');
 			$pricetablescalc->init($pibaseObj);
 			$discountArray = array();
 			$pricetablescalc->getCalculatedData(
@@ -372,7 +373,7 @@ class tx_ttproducts_basket_calculate implements t3lib_Singleton {
 	public function calculateSums ($recs) {
 		$pricefactor = doubleval($this->conf['creditpoints.']['priceprod']);
 
-		$creditpointsObj = t3lib_div::makeInstance('tx_ttproducts_field_creditpoints');
+		$creditpointsObj = GeneralUtility::makeInstance('tx_ttproducts_field_creditpoints');
 		$autoCreditpointsTotal = $creditpointsObj->getBasketTotal();
 		if ($autoCreditpointsTotal > 0)	{
 			$creditpoints = $autoCreditpointsTotal;
@@ -407,7 +408,7 @@ class tx_ttproducts_basket_calculate implements t3lib_Singleton {
 
 	// This calculates the total for the voucher in the basket
 	public function addVoucherSums () {
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		$voucher = $tablesObj->get('voucher');
 		$voucherAmount = $voucher->getRebateAmount();
 

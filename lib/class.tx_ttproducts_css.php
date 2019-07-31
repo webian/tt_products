@@ -37,7 +37,10 @@
  */
 
 
-class tx_ttproducts_css implements t3lib_Singleton {
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
+
+class tx_ttproducts_css implements \TYPO3\CMS\Core\SingletonInterface {
 	var $pibase; // reference to object of pibase
 	public $conf;
 	protected $isCssStyled;
@@ -48,7 +51,7 @@ class tx_ttproducts_css implements t3lib_Singleton {
 	 */
 	public function init ($pibase)	{
 		$this->pibase = $pibase;
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$this->isCssStyled = ($cnf->conf['templateStyle'] == 'css-styled');
 		$this->conf = &$cnf->conf['CSS.']['ALL.'];
 	} // init
@@ -72,7 +75,7 @@ class tx_ttproducts_css implements t3lib_Singleton {
 
 	public function getConf ($tablename='', $theCode='ALL')	{
 
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$cssConf = $cnf->getSpecialConf('CSS', $tablename, $theCode);
 		return $cssConf;
 	}

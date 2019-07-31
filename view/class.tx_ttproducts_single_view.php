@@ -40,8 +40,10 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class tx_ttproducts_single_view implements t3lib_Singleton {
+
+class tx_ttproducts_single_view implements \TYPO3\CMS\Core\SingletonInterface {
 	public $conf;
 	public $pibaseClass;
 	public $config;
@@ -61,9 +63,9 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 	public function init ($pibaseClass, $uidArray, $extVars, $pid, $useArticles, $pid_list, $recursive) {
 
 		$this->pibaseClass = $pibaseClass;
-		$pibaseObj = t3lib_div::makeInstance(''.$pibaseClass);
+		$pibaseObj = GeneralUtility::makeInstance(''.$pibaseClass);
 		$this->cObj = $pibaseObj->cObj;
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
 
@@ -85,12 +87,12 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 		$this->variants = $extVars;
 		$this->pid = $pid;
 		$this->useArticles = $useArticles;
-		$this->urlObj = t3lib_div::makeInstance('tx_ttproducts_url_view');
-		$this->pidListObj = t3lib_div::makeInstance('tx_ttproducts_pid_list');
+		$this->urlObj = GeneralUtility::makeInstance('tx_ttproducts_url_view');
+		$this->pidListObj = GeneralUtility::makeInstance('tx_ttproducts_pid_list');
 		$this->pidListObj->init($this->cObj);
 		$this->pidListObj->applyRecursive($recursive, $pid_list, true);
 		$this->pidListObj->setPageArray();
-		$this->javaScriptMarker = t3lib_div::makeInstance('tx_ttproducts_javascript_marker');
+		$this->javaScriptMarker = GeneralUtility::makeInstance('tx_ttproducts_javascript_marker');
 		$this->javaScriptMarker->init($pibaseObj);
 	}
 
@@ -98,12 +100,12 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 	// returns the single view
 	public function printView (&$templateCode, &$error_code, $pageAsCategory, $templateSuffix = '') {
 
-		$pibaseObj = t3lib_div::makeInstance('tx_ttproducts_pi1_base');
-		$basketObj = t3lib_div::makeInstance('tx_ttproducts_basket');
-		$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
-		$subpartmarkerObj = t3lib_div::makeInstance('tx_ttproducts_subpartmarker');
+		$pibaseObj = GeneralUtility::makeInstance('tx_ttproducts_pi1_base');
+		$basketObj = GeneralUtility::makeInstance('tx_ttproducts_basket');
+		$markerObj = GeneralUtility::makeInstance('tx_ttproducts_marker');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
+		$subpartmarkerObj = GeneralUtility::makeInstance('tx_ttproducts_subpartmarker');
 		$theCode = 'SINGLE';
 
 		$bUseBackPid = true;
@@ -141,7 +143,7 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 		$itemTableConf = $rowArray;
 		$itemTableLangFields = $rowArray;
 		$content = '';
-		$javaScriptObj = t3lib_div::makeInstance('tx_ttproducts_javascript');
+		$javaScriptObj = GeneralUtility::makeInstance('tx_ttproducts_javascript');
 
 
 		if ($this->config['displayCurrentRecord'] && $this->type == 'product' && !$this->useArticles)	{
@@ -252,7 +254,7 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 					$excludeList = $viewParamConf['ignore'];
 				}
 				$categoryPivar = $viewCatViewTable->getPivar();
-				if (t3lib_div::inList($viewParamConf['item'], $categoryPivar))	{
+				if (GeneralUtility::inList($viewParamConf['item'], $categoryPivar))	{
 					// nothing
 				} else {
 					$prefixId = tx_ttproducts_model_control::getPrefixId();
@@ -273,7 +275,7 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 			);
 
 			if (!$itemFrameWork) {
-				$templateObj = t3lib_div::makeInstance('tx_ttproducts_template');
+				$templateObj = GeneralUtility::makeInstance('tx_ttproducts_template');
 				$error_code[0] = 'no_subtemplate';
 				$error_code[1] = '###'.$subPartMarker.'###';
 				$error_code[2] = $templateObj->getTemplateFile();
@@ -342,7 +344,7 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 				$itemFrameWork = $this->cObj->getSubpart($itemFrameWork,'###PRODUCT_DATA###');
 			}
 			$backPID = $pibaseObj->piVars['backPID'];
-			$backPID = ($backPID ? $backPID : t3lib_div::_GP('backPID'));
+			$backPID = ($backPID ? $backPID : GeneralUtility::_GP('backPID'));
 			$basketPID = $this->conf['PIDbasket'];
 			$bNeedSingleParams = false;
 
@@ -418,7 +420,7 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 			if ($cat) {
 				$currentCat = $pibaseObj->piVars[$viewCatViewTable->getPivar()];
 				if ($currentCat != '')	{
-					$currentCatArray = t3lib_div::trimExplode(',',$currentCat);
+					$currentCatArray = GeneralUtility::trimExplode(',',$currentCat);
 				}
 				if (isset($currentCatArray) && is_array($currentCatArray))	{
 					$inArray = $GLOBALS['TYPO3_DB']->fullQuoteArray($currentCatArray, 'tt_products');
@@ -620,7 +622,7 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 						$prodRow,  // $prodVariantRow,
 						'firstVariant'
 					);
-				$basketItemView = t3lib_div::makeInstance('tx_ttproducts_basketitem_view');
+				$basketItemView = GeneralUtility::makeInstance('tx_ttproducts_basketitem_view');
 				$basketItemView->init($this->pibaseClass,$basketObj->basketExt,$basketObj->getItemObj());
 
 				$basketItemView->getItemMarkerArray(
@@ -723,7 +725,7 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 			} else {
 
 				if(is_array($itemTableConf[$this->type]) && isset($itemTableConf[$this->type]['orderBy']))	{
-					$orderByFieldArray = t3lib_div::trimExplode(',',$itemTableConf[$this->type]['orderBy']);
+					$orderByFieldArray = GeneralUtility::trimExplode(',',$itemTableConf[$this->type]['orderBy']);
 					$count = count($orderByFieldArray);
 
 					if ($count)	{
@@ -866,7 +868,7 @@ class tx_ttproducts_single_view implements t3lib_Singleton {
 					!$itemTableArray[$this->type]->hasAdditional($row,'noGiftService')
 				);
 			}
-			$relatedListView = t3lib_div::makeInstance('tx_ttproducts_relatedlist_view');
+			$relatedListView = GeneralUtility::makeInstance('tx_ttproducts_relatedlist_view');
 			$relatedListView->init($this->cObj, $this->pidListObj->getPidlist(), $this->pidListObj->getRecursive());
 			$listMarkerArray = $relatedListView->getListMarkerArray('SINGLE',$this->pibaseClass,$templateCode, $markerArray, $viewTagArray, $itemTableArray[$this->type]->getFuncTablename(), $this->uid, $this->uidArray, $useArticles, $pageAsCategory, $this->pid, $error_code);
 

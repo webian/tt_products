@@ -40,21 +40,18 @@
 
 
 
-class tx_ttproducts_variant_view implements tx_ttproducts_variant_view_int, t3lib_Singleton {
+class tx_ttproducts_variant_view implements tx_ttproducts_variant_view_int, \TYPO3\CMS\Core\SingletonInterface {
 	public $modelObj;
-	public $cObj;
-	public $langObj;
 
 
-	public function init($langObj, $modelObj)	{
-		$this->langObj = $langObj;
-		$this->cObj = $langObj->cObj;
+	public function init($modelObj)	{
 		$this->modelObj = $modelObj;
 	}
 
 	public function getVariantSubpartMarkerArray (&$markerArray, &$subpartArray, &$wrappedSubpartArray, &$row, &$tempContent, $bUseSelects, &$conf, $bHasAdditional, $bGiftService)  {
 
 		if ($bUseSelects) {
+            $cObj = \JambageCom\Div2007\Utility\FrontendUtility::getContentObjectRenderer();
 			$areaArray = array();
 			if (is_array($this->conf))	{
 				foreach ($this->conf as $key => $field)	{
@@ -79,7 +76,7 @@ class tx_ttproducts_variant_view implements tx_ttproducts_variant_view_int, t3li
 			}
 
 			foreach ($areaArray as $k => $area) {
-				$subpartArray['###'.$area.'###'] = $this->cObj->getSubpart($tempContent,'###'.$area.'###');
+				$subpartArray['###' . $area . '###'] = $cObj->getSubpart($tempContent, '###' . $area . '###');
 			}
 		}
 		$this->removeEmptyMarkerSubpartArray($markerArray, $subpartArray, $wrappedSubpartArray, $row, $conf, $bHasAdditional, $bGiftService);

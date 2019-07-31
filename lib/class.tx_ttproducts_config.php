@@ -36,8 +36,10 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class tx_ttproducts_config implements t3lib_Singleton {
+
+class tx_ttproducts_config implements \TYPO3\CMS\Core\SingletonInterface {
 	public $conf;
 	public $config;
 	private $bHasBeenInitialised = false;
@@ -257,7 +259,7 @@ class tx_ttproducts_config implements t3lib_Singleton {
 	 */
 	public function hasConfig (&$row, $check)  {
 		$hasConfig = false;
-		$config = t3lib_div::xml2array($row['config']);
+		$config = GeneralUtility::xml2array($row['config']);
 		$hasConfig = tx_div2007_ff::get($config, $check);
 
 		return $hasConfig;

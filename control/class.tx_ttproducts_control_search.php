@@ -37,9 +37,11 @@
  */
 
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
-class tx_ttproducts_control_search implements t3lib_Singleton {
+
+class tx_ttproducts_control_search implements \TYPO3\CMS\Core\SingletonInterface {
 	public $cObj;
 	public $conf;
 	public $config;
@@ -50,10 +52,10 @@ class tx_ttproducts_control_search implements t3lib_Singleton {
 
 
 	public function init (&$content, &$conf, &$config, $pibaseClass, &$error_code) {
-		$pibaseObj = t3lib_div::makeInstance(''.$pibaseClass);
+		$pibaseObj = GeneralUtility::makeInstance(''.$pibaseClass);
 		$this->cObj = $pibaseObj->cObj;
 
-		$flexformArray = t3lib_div::xml2array($this->cObj->data['pi_flexform']);
+		$flexformArray = GeneralUtility::xml2array($this->cObj->data['pi_flexform']);
 		$flexformTyposcript = tx_div2007_ff::get($flexformArray, 'myTS');
 		if($flexformTyposcript) {
 			$tsparser = tx_div2007_core::newTsParser();
@@ -70,13 +72,12 @@ class tx_ttproducts_control_search implements t3lib_Singleton {
 		$this->piVars = &$pibaseObj->piVars;
 		$this->pibaseClass = $pibaseClass;
 
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$cnf->init(
 			$conf,
 			$config
 		);
 
-		tx_div2007_alpha5::loadLL_fh002($pibaseObj, 'EXT:' . TT_PRODUCTS_EXT . '/pi_search/locallang.xml');
 		$allText = tx_div2007_alpha5::getLL_fh003($pibaseObj, 'all');
 
 			// get all extending TCAs
@@ -84,10 +85,10 @@ class tx_ttproducts_control_search implements t3lib_Singleton {
 			tx_div2007_alpha5::loadTcaAdditions_fh002($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['extendingTCA']);
 		}
 		// $pibaseObj->pi_initPIflexForm();
-		$this->cObj->data['pi_flexform'] = t3lib_div::xml2array($this->cObj->data['pi_flexform']);
+		$this->cObj->data['pi_flexform'] = GeneralUtility::xml2array($this->cObj->data['pi_flexform']);
 		$newConfig = $this->getControlConfig($this->cObj, $conf, $this->cObj->data);
 		$config = array_merge($config, $newConfig);
-		$this->codeArray = t3lib_div::trimExplode(',', $config['code'],1);
+		$this->codeArray = GeneralUtility::trimExplode(',', $config['code'],1);
 		$config['LLkey'] = $pibaseObj->LLkey;
 		$config['templateSuffix'] = strtoupper($this->conf['templateSuffix']);
 		$templateSuffix = tx_div2007_ff::get($flexformArray, 'template_suffix');
@@ -95,16 +96,16 @@ class tx_ttproducts_control_search implements t3lib_Singleton {
 		$config['templateSuffix'] = ($templateSuffix ? $templateSuffix : $config['templateSuffix']);
 		$config['templateSuffix'] = ($config['templateSuffix'] ? '_'.$config['templateSuffix'] : '');
 
-		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
-		$langObj->init1($pibaseObj, $pibaseObj->cObj, $conf, 'control/class.tx_ttproducts_control_search.php');
+        $languageObj = GeneralUtility::makeInstance(\JambageCom\TtProducts\Api\Localization::class);
+		$languageObj->loadLocalLang( 'EXT:' . TT_PRODUCTS_EXT . '/pi_search/locallang.xml');
 
-		$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
+		$markerObj = GeneralUtility::makeInstance('tx_ttproducts_marker');
 		$markerObj->init(
 			$this->cObj,
 			$pibaseObj->piVars
 		);
 
-		$searchViewObj = t3lib_div::makeInstance('tx_ttproducts_search_view');
+		$searchViewObj = GeneralUtility::makeInstance('tx_ttproducts_search_view');
 		$searchViewObj->init(
 			$this->cObj
 		);
@@ -114,7 +115,7 @@ class tx_ttproducts_control_search implements t3lib_Singleton {
 
 
 	public function &getControlConfig ($cObj, &$conf, &$row)	{
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$ctrlArray = tx_ttproducts_model_control::getParamsTableArray();
 
 		$config = array();
@@ -149,7 +150,7 @@ class tx_ttproducts_control_search implements t3lib_Singleton {
 		$config['foreign_table'] = $cnf->getTableName($ctrlArray[$config['foreign_param']]);
 		if ($config['url'] != '')	{
 			$url = str_replace('index.php?','',$config['url']);
-			$urlArray = t3lib_div::trimExplode('=',$url);
+			$urlArray = GeneralUtility::trimExplode('=',$url);
 			if ($urlArray['0'] == 'id' && intval($urlArray['1']))	{
 				$id = $urlArray['1'];
 				$url = tx_div2007_alpha5::getPageLink_fh003($cObj,$id);
@@ -160,13 +161,13 @@ class tx_ttproducts_control_search implements t3lib_Singleton {
 	}
 
 
-	public function &run ($pibaseClass,&$errorCode,$content='')	{
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
-		$templateObj = t3lib_div::makeInstance('tx_ttproducts_template');
-		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
-		$pibaseObj = t3lib_div::makeInstance('' . $pibaseClass);
-		$subpartmarkerObj = t3lib_div::makeInstance('tx_ttproducts_subpartmarker');
-		$searchViewObj = t3lib_div::makeInstance('tx_ttproducts_search_view');
+	public function &run ($pibaseClass, &$errorCode, $content = '') {
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
+		$templateObj = GeneralUtility::makeInstance('tx_ttproducts_template');
+		$languageObj = GeneralUtility::makeInstance(\JambageCom\TtProducts\Api\Localization::class);
+		$pibaseObj = GeneralUtility::makeInstance('' . $pibaseClass);
+		$subpartmarkerObj = GeneralUtility::makeInstance('tx_ttproducts_subpartmarker');
+		$searchViewObj = GeneralUtility::makeInstance('tx_ttproducts_search_view');
 		$error_code = array();
 		$errorMessage = '';
 
@@ -174,7 +175,7 @@ class tx_ttproducts_control_search implements t3lib_Singleton {
 
 			$theCode = (string) trim($theCode);
 			$contentTmp = '';
-			$templateCode = $templateObj->get($theCode, $langObj, $this->cObj, $tmp='', $errorMessage);
+			$templateCode = $templateObj->get($theCode, $languageObj, $this->cObj, $tmp='', $errorMessage);
 			$theTemplateCode = $this->cObj->getSubpart($templateCode,$subpartmarkerObj->spMarker('###'.$theCode.$this->config['templateSuffix'].'###'));
 
 			switch($theCode)	{
@@ -250,21 +251,21 @@ class tx_ttproducts_control_search implements t3lib_Singleton {
 			}
 
 			if ($error_code[0]) {
-				$contentTmp .= $errorObj->getMessage($error_code, $langObj);
+				$contentTmp .= $errorObj->getMessage($error_code, $languageObj);
 			}
 
 			if ($contentTmp == 'error') {
 				$fileName = 'EXT:'.TT_PRODUCTS_EXT.'/template/products_help.tmpl';
 				$helpTemplate = $this->cObj->fileResource($fileName);
 				$content .=
-					tx_div2007_alpha5::displayHelpPage_fh003(
-						$langObj,
-						$this->cObj,
-						$helpTemplate,
-						TT_PRODUCTS_EXT,
-						$errorMessage,
-						$theCode
-					);
+                    \JambageCom\Div2007\Utility\ViewUtility::displayHelpPage(
+                        $languageObj,
+                        $this->cObj,
+                        $helpTemplate,
+                        TT_PRODUCTS_EXT,
+                        $errorMessage,
+                        $theCode
+                    );
 				unset($errorMessage);
 				break; // while
 			} else {

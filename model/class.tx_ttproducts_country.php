@@ -37,6 +37,7 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
 class tx_ttproducts_country extends tx_ttproducts_table_base {
@@ -49,10 +50,10 @@ class tx_ttproducts_country extends tx_ttproducts_table_base {
 	/**
 	 * Getting all tt_products_cat categories into internal array
 	 */
-	function init ($cObj, $functablename)	{
+	public function init ($cObj, $functablename)	{
 		parent::init($cObj, $functablename);
 		$tablename = $this->getTablename();
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$this->tableconf = $cnf->getTableConf('static_countries');
 		$this->getTableObj()->setDefaultFieldArray(array('uid'=>'uid', 'pid'=>'pid'));
 		$this->getTableObj()->setTCAFieldArray('static_countries');
@@ -62,7 +63,7 @@ class tx_ttproducts_country extends tx_ttproducts_table_base {
 			$tmp = $this->tableconf['requiredFields'];
 			$requiredFields = ($tmp ? $tmp : $requiredFields);
 		}
-		$requiredListArray = t3lib_div::trimExplode(',', $requiredFields);
+		$requiredListArray = GeneralUtility::trimExplode(',', $requiredFields);
 		$this->getTableObj()->setRequiredFieldArray($requiredListArray);
 
 		if (is_array($this->tableconf['generatePath.']) &&
@@ -78,7 +79,7 @@ class tx_ttproducts_country extends tx_ttproducts_table_base {
 	} // init
 
 
-	function isoGet ($country_code, $where, $fields='') {
+	public function isoGet ($country_code, $where, $fields='') {
 		if (!$fields)	{
 			$rc = $this->dataArray[$country_code];
 		}

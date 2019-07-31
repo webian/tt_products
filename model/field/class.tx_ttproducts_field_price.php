@@ -38,6 +38,9 @@
  */
 
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
+
 class tx_ttproducts_field_price extends tx_ttproducts_field_base {
 	private $bHasBeenInitialised = false;
 	private $bTaxIncluded;	// if tax is already included in the price
@@ -185,7 +188,7 @@ class tx_ttproducts_field_price extends tx_ttproducts_field_base {
 	 */
 	public function getPrice ($basketExtra, $price, $tax, $row, $bTaxIncluded=false, $bEnableTaxZero=false)	{
 		$rc = 0;
-		$taxObj = t3lib_div::makeInstance('tx_ttproducts_field_tax');
+		$taxObj = GeneralUtility::makeInstance('tx_ttproducts_field_tax');
 
 		$bTax = ($tax==1);
 		$price = $this->toNumber(true, $price);
@@ -209,7 +212,7 @@ class tx_ttproducts_field_price extends tx_ttproducts_field_base {
 		$taxFactor = 1 + $taxpercentage / 100;
 		// $bTaxIncluded = ($bTaxIncluded ? $bTaxIncluded : $this->conf['TAXincluded']);
 
-		$paymentshippingObj = t3lib_div::makeInstance('tx_ttproducts_paymentshipping');
+		$paymentshippingObj = GeneralUtility::makeInstance('tx_ttproducts_paymentshipping');
 		if (isset($paymentshippingObj) && is_object($paymentshippingObj))	{
 			$taxValue = '';
 			if (isset($row['tax'])) {
@@ -322,7 +325,7 @@ class tx_ttproducts_field_price extends tx_ttproducts_field_base {
 		$price0tax = $this->getResellerPrice($basketExtra, $internalRow, 1, 0);
 
 		if ($fieldname == 'price')	{
-			$taxObj = t3lib_div::makeInstance('tx_ttproducts_field_tax');
+			$taxObj = GeneralUtility::makeInstance('tx_ttproducts_field_tax');
 			$tax = $taxObj->getFieldValue($basketExtra, $row, 'tax');
 			$priceArray['taxperc'] = $tax;
 

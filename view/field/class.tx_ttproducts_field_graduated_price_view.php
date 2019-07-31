@@ -38,6 +38,9 @@
  */
 
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
+
 
 class tx_ttproducts_field_graduated_price_view extends tx_ttproducts_field_base_view {
 
@@ -55,14 +58,14 @@ class tx_ttproducts_field_graduated_price_view extends tx_ttproducts_field_base_
 		$basketExtra = array(),
 		$id = '1'
 	) {
-		$priceTablesViewObj = t3lib_div::makeInstance('tx_ttproducts_graduated_price_view');
+		$priceTablesViewObj = GeneralUtility::makeInstance('tx_ttproducts_graduated_price_view');
 		$priceTablesViewObj->getPriceSubpartArrays($templateCode, $row, $fieldname, $subpartArray, $wrappedSubpartArray, $tagArray, $theCode, $basketExtra, $id);
 	}
 
 
 	public function getRowMarkerArray ($functablename, $fieldname, $row, $markerKey, &$markerArray, $tagArray, $theCode, $id, $basketExtra, &$bSkip, $bHtml=true, $charset='', $prefix='', $suffix='', $imageRenderObj='')	{
 
-		$priceTablesViewObj = t3lib_div::makeInstance('tx_ttproducts_graduated_price_view');
+		$priceTablesViewObj = GeneralUtility::makeInstance('tx_ttproducts_graduated_price_view');
 		$priceTablesViewObj->getPriceMarkerArray($row, $basketExtra, $markerArray, $tagArray);
 	}
 }

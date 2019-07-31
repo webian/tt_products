@@ -37,6 +37,8 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 
 class tx_ttproducts_card_view extends tx_ttproducts_table_base_view {
 	public $marker='CARD';
@@ -54,16 +56,15 @@ class tx_ttproducts_card_view extends tx_ttproducts_table_base_view {
 	 * @access private
 	 */
 	public function getMarkerArray ($row, &$markerArray, $allowedArray, $tablename = 'sys_products_cards')	{
-		include_once (PATH_BE_ttproducts.'lib/class.tx_ttproducts_form_div.php');
-
-		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
+        $languageObj = GeneralUtility::makeInstance(\JambageCom\TtProducts\Api\Localization::class);
+        $local_cObj = \JambageCom\Div2007\Utility\FrontendUtility::getContentObjectRenderer();
 		$ccNumberArray = array();
 		$ccTypeTextSelected = '';
 
 		if (count($allowedArray))	{
 			$ccTypeText =
-				tx_ttproducts_form_div::createSelect (
-					$langObj,
+				tx_ttproducts_form_div::createSelect(
+					$languageObj,
 					$GLOBALS['TCA'][$tablename]['columns']['cc_type']['config']['items'],
 					'recs[creditcard][cc_type]',
 					$row['cc_type'],
@@ -93,11 +94,11 @@ class tx_ttproducts_card_view extends tx_ttproducts_table_base_view {
 		if (isset($row['cc_type']))	{ //
 			$tmp = $GLOBALS['TCA'][$tablename]['columns']['cc_type']['config']['items'][$row['cc_type']]['0'];
 			$tmp = tx_div2007_alpha5::sL_fh002($tmp);
-			$ccTypeTextSelected = tx_div2007_alpha5::getLL_fh003($langObj, $tmp);
+			$ccTypeTextSelected = $languageObj->getLabel($tmp);
 		}
 		$markerArray['###PERSON_CARDS_CC_TYPE_SELECTED###'] = $ccTypeTextSelected;
 		for ($i = 1; $i <= 4; ++$i)	{
-			$markerArray['###PERSON_CARDS_CC_NUMBER_'.$i.'###'] = $ccNumberArray[$i - 1];
+			$markerArray['###PERSON_CARDS_CC_NUMBER_' . $i . '###'] = $ccNumberArray[$i - 1];
 		}
 
 		$markerArray['###PERSON_CARDS_CC_NUMBER###'] = $row['cc_number'];
@@ -124,15 +125,15 @@ class tx_ttproducts_card_view extends tx_ttproducts_table_base_view {
 		$markerArray['###PERSON_CARDS_ENDTIME_YY###'] = $year;
 		$markerArray['###PERSON_CARDS_ENDTIME_YY_SELECT###'] = '';
 		$markerArray['###PERSON_CARDS_ENDTIME_MM_SELECT###'] = '';
-		$markerArray['###PERSON_CARDS_ENDTIME###'] = $this->cObj->stdWrap($row['endtime'],$this->conf['cardEndDate_stdWrap.']);
+		$markerArray['###PERSON_CARDS_ENDTIME###'] = $local_cObj->stdWrap($row['endtime'], $this->conf['cardEndDate_stdWrap.']);
 
-		if (is_array($this->conf['payment.']['creditcardSelect.']))	{
+		if (is_array($this->conf['payment.']['creditcardSelect.'])) {
 			$mmArray = $this->conf['payment.']['creditcardSelect.']['mm.'];
-			if (is_array($mmArray))	{
+			if (is_array($mmArray)) {
 				$valueArray = tx_ttproducts_form_div::fetchValueArray($mmArray['valueArray.']);
 				$markerArray['###PERSON_CARDS_ENDTIME_MM_SELECT###'] =
-					tx_ttproducts_form_div::createSelect (
-						$langObj,
+					tx_ttproducts_form_div::createSelect(
+						$languageObj,
 						$valueArray,
 						'recs[creditcard][endtime_mm]',
 						$month,
@@ -145,7 +146,7 @@ class tx_ttproducts_card_view extends tx_ttproducts_table_base_view {
 				$valueArray = tx_ttproducts_form_div::fetchValueArray($yyArray['valueArray.']);
 				$markerArray['###PERSON_CARDS_ENDTIME_YY_SELECT###'] =
 					tx_ttproducts_form_div::createSelect (
-						$langObj,
+						$languageObj,
 						$valueArray,
 						'recs[creditcard][endtime_yy]',
 						$year,

@@ -44,6 +44,8 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 
 if (!is_object($pibase) || !is_object($this->cObj)  || !is_object($this->basket))	die('tt_products: $pibase and $pibase->cObj must be objects!');
 
@@ -56,14 +58,14 @@ $lConf = $confScript;
 $localTemplateCode = $this->cObj->fileResource($lConf['templateFile'] ? $lConf['templateFile'] : 'EXT:tt_products/template/payment_DIBS_template.tmpl');		// Fetches the DIBS template file
 if (!is_object($basketView))	{
 	$error_code = '';
-	$basketView = t3lib_div::makeInstance('tx_ttproducts_basket_view',1);
+	$basketView = GeneralUtility::makeInstance('tx_ttproducts_basket_view',1);
 	$basketView->init ($pibase, array(), false, $this->templateCode, $error_code);
 }
-$markerObj = t3lib_div::makeInstance('tx_ttproducts_marker');
+$markerObj = GeneralUtility::makeInstance('tx_ttproducts_marker');
 $localTemplateCode = $this->cObj->substituteMarkerArrayCached($localTemplateCode, $markerObj->getGlobalMarkerArray());
 $calculatedArray = $this->basket->getCalculatedArray();
 
-$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
+$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 $order = $tablesObj->get('sys_products_orders');
 
 $orderUid = $order->getBlankUid();	// Gets an order number, creates a new order if no order is associated with the current session
@@ -77,7 +79,7 @@ $GLOBALS['TSFE']->fe_user->id.'-'.
 );
 
 $products_cmd = $pibase->piVars['products_cmd'];
-$products_cmd = ($products_cmd ? $products_cmd : t3lib_div::_GP('products_cmd'));
+$products_cmd = ($products_cmd ? $products_cmd : GeneralUtility::_GP('products_cmd'));
 switch($products_cmd)	{
 	case 'cardno':
 		$tSubpart = $lConf['soloe'] ? 'DIBS_SOLOE_TEMPLATE' : 'DIBS_CARDNO_TEMPLATE';		// If solo-e is selected, use different subpart from template
@@ -176,7 +178,7 @@ doPopup(this);" target="Betaling"'; // if this is empty then no popup window wil
 <input type="hidden" name="ordline1-4" value="Pris">
 ';
 			$cc=1;
-			$priceViewObj = t3lib_div::makeInstance('tx_ttproducts_field_price_view');
+			$priceViewObj = GeneralUtility::makeInstance('tx_ttproducts_field_price_view');
 			// loop over all items in the basket indexed by a sorting text
 			foreach ($this->basket->itemArray as $sort=>$actItemArray) {
 				foreach ($actItemArray as $k1=>$actItem) {
@@ -204,7 +206,7 @@ value="'.$priceViewObj->priceFormat($calculatedArray['priceTax']['total'] - $cal
 	break;
 	case 'decline':
 		$markerArray=array();
-		$markerArray['###REASON_CODE###'] = t3lib_div::_GP('reason');
+		$markerArray['###REASON_CODE###'] = GeneralUtility::_GP('reason');
 		$content =
 			$basketView->getView(
 				$localTemplateCode,
@@ -253,9 +255,9 @@ value="'.$priceViewObj->priceFormat($calculatedArray['priceTax']['total'] - $cal
 			// Checking transaction
 		$amount=round($calculatedArray['priceTax']['total'] *100);
 		$currency='208';
-		$transact=t3lib_div::_GP('transact');
+		$transact=GeneralUtility::_GP('transact');
 		$md5key= md5($k2.md5($k1.'transact='.$transact.'&amount='.$amount.'&currency='.$currency));
-		$authkey=t3lib_div::_GP('authkey');
+		$authkey=GeneralUtility::_GP('authkey');
 		if ($md5key != $authkey)	{
 			$content =
 				$basketView->getView(
@@ -268,7 +270,7 @@ value="'.$priceViewObj->priceFormat($calculatedArray['priceTax']['total'] - $cal
 					true,
 					'DIBS_DECLINE_MD5_TEMPLATE'
 				);		// This not only gets the output but also calculates the basket total, so it's NECESSARY!
-		} elseif (t3lib_div::_GP('orderid')!=$order->getNumber($orderUid)) {
+		} elseif (GeneralUtility::_GP('orderid')!=$order->getNumber($orderUid)) {
 			$content =
 				$basketView->getView(
 					$localTemplateCode,
@@ -281,7 +283,7 @@ value="'.$priceViewObj->priceFormat($calculatedArray['priceTax']['total'] - $cal
 				);		// This not only gets the output but also calculates the basket total, so it's NECESSARY!
 		} else {
 			$markerArray=array();
-			$markerArray['###TRANSACT_CODE###'] = t3lib_div::_GP('transact');
+			$markerArray['###TRANSACT_CODE###'] = GeneralUtility::_GP('transact');
 
 			$content =
 				$basketView->getView(

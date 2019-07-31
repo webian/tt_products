@@ -37,37 +37,37 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class tx_ttproducts_control_creator implements t3lib_Singleton {
+
+class tx_ttproducts_control_creator implements \TYPO3\CMS\Core\SingletonInterface {
 
 	public function init (&$conf, &$config, $pObj, $cObj)  {
 
 		if ($conf['errorLog'] == '{$plugin.tt_products.file.errorLog}') {
 			$conf['errorLog'] = '';
 		} else if ($conf['errorLog']) {
-			$conf['errorLog'] = t3lib_div::resolveBackPath(PATH_typo3conf . '../' . $conf['errorLog']);
+			$conf['errorLog'] = GeneralUtility::resolveBackPath(PATH_typo3conf . '../' . $conf['errorLog']);
 		}
 
-		$cnf = t3lib_div::makeInstance('tx_ttproducts_config');
-		$cnf->init(
-			$conf,
-			$config
-		);
-
-		$langObj = t3lib_div::makeInstance('tx_ttproducts_language');
+        $languageObj = static::getLanguageObj($pLangObj, $cObj, $conf);
 		if (is_object($pObj))	{
 			$pLangObj = &$pObj;
 		} else {
 			$pLangObj = &$this;
 		}
-		$langObj->init1($pLangObj, $cObj, $conf, 'pi1/class.tx_ttproducts_pi1.php');
 
-		tx_div2007_alpha5::loadLL_fh002($langObj, 'EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml');
-		tx_div2007_alpha5::loadLL_fh002($langObj, 'EXT:' . TT_PRODUCTS_EXT . '/pi_search/locallang_db.xml');
-		tx_div2007_alpha5::loadLL_fh002($langObj, 'EXT:' . TT_PRODUCTS_EXT . '/pi1/locallang.xml');
+ 		$config['LLkey'] = $languageObj->getLocalLangKey(); /* $pibaseObj->LLkey; */
 
-		$tablesObj = t3lib_div::makeInstance('tx_ttproducts_tables');
-		$tablesObj->init($langObj);
+		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
+		$cnf->init(
+			$conf,
+			$config
+		);
+		\JambageCom\TtProducts\Api\ControlApi::init($conf, $cObj);
+
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
+		$tablesObj->init();
 			// Call all init hooks
 		if (
 			isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['init']) &&
@@ -76,14 +76,46 @@ class tx_ttproducts_control_creator implements t3lib_Singleton {
 			$tableClassArray = $tablesObj->getTableClassArray();
 
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['init'] as $classRef) {
-				$hookObj= t3lib_div::makeInstance($classRef);
+				$hookObj= GeneralUtility::makeInstance($classRef);
 				if (method_exists($hookObj, 'init')) {
-					$hookObj->init($langObj, $tableClassArray);
+					$hookObj->init($languageObj, $tableClassArray);
 				}
 			}
 			$tablesObj->setTableClassArray($tableClassArray);
 		}
 	}
+
+    static public function getLanguageObj ($pLangObj, $cObj, $conf) {
+
+        $languageObj = GeneralUtility::makeInstance(\JambageCom\TtProducts\Api\Localization::class);
+        $confLocalLang = array();
+        if (isset($conf['_LOCAL_LANG.'])) {
+            $confLocalLang = $conf['_LOCAL_LANG.'];
+        }
+        if (isset($conf['marks.'])) {
+            $confLocalLang = array_merge($confLocalLang, $conf['marks.']);
+        }
+        $languageObj->init(
+            TT_PRODUCTS_EXT,
+            $confLocalLang,
+            DIV2007_LANGUAGE_SUBPATH
+        );
+
+        $languageObj->loadLocalLang(
+            'EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml',
+            false
+        );
+        $languageObj->loadLocalLang(
+            'EXT:' . TT_PRODUCTS_EXT . '/pi_search/locallang_db.xml',
+            false
+        );
+        $languageObj->loadLocalLang(
+            'EXT:' . TT_PRODUCTS_EXT . '/pi1/locallang.xml',
+            false
+        );
+
+        return $languageObj;
+    }
 
 	public function destruct () {
 		tx_ttproducts_control_basket::destruct();
