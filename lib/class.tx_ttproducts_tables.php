@@ -59,15 +59,11 @@ class tx_ttproducts_tables implements \TYPO3\CMS\Core\SingletonInterface	{
 		'tt_products_cat' => 'tx_ttproducts_category',
 		'tt_products_emails' => 'tx_ttproducts_email',
 		'tt_products_texts' => 'tx_ttproducts_text',
-		'voucher' => 'tx_ttproducts_voucher',
-		'tx_dam' => 'tx_ttproducts_dam',
-		'tx_dam_cat' => 'tx_ttproducts_damcategory'
+		'voucher' => 'tx_ttproducts_voucher'
 	);
 	protected $needExtensionArray = array(
 		'static_banks_de' => 'static_info_tables_banks_de',
-		'static_countries' => 'static_info_tables',
-		'tx_dam' => 'dam',
-		'tx_dam_cat' => 'dam'
+		'static_countries' => 'static_info_tables'
 	);
 	public $cnf;
 	public $conf;

@@ -592,21 +592,17 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 			if ($theCode != 'LISTRELATED' && t3lib_extMgm::isLoaded('taxajax')) {
 				$javaScriptObj->set('fetchdata', $param);
 			}
-		} else if ($itemTable->getType() == 'article' || $itemTable->getType() == 'dam' && $this->conf['productDAMCategoryID'] != '')	{
+		} else if ($itemTable->getType() == 'article')	{
 			$itemTableViewArray['product'] = $tablesObj->get('tt_products', true);
 			$itemTableArray['product'] = $itemTableViewArray['product']->getModelObj();
 		}
 		$cssConf = $cnf->getCSSConf($itemTable->getFuncTablename(), $theCode);
 
-		if ($itemTable->getType() == 'dam')	{
-			$categoryfunctablename = 'tx_dam_cat';
-		} else {
-			if (!$pageAsCategory || $pageAsCategory == 1)	{
-				$categoryfunctablename = 'tt_products_cat';
-			} else {
-				$categoryfunctablename = 'pages';
-			}
-		}
+        if (!$pageAsCategory || $pageAsCategory == 1)	{
+            $categoryfunctablename = 'tt_products_cat';
+        } else {
+            $categoryfunctablename = 'pages';
+        }
 		$categoryTableView = $tablesObj->get($categoryfunctablename, true);
 		$categoryTable = $categoryTableView->getModelObj();
 		$tableConfArray[$categoryfunctablename] = $categoryTable->getTableConf($theCode);
@@ -629,16 +625,6 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 			if ($product_where)	{
 				$product_where = $itemTable->getTableObj()->transformWhere($product_where);
 				$where .= ' AND ' . $product_where;
-			}
-		} else if ($itemTable->getType() == 'dam')	{
-			$dam_where = tx_div2007_ff::get($flexformArray, 'dam_where');
-			$dam_group_by = tx_div2007_ff::get($flexformArray, 'dam_group_by');
-			$dam_join_tables = tx_div2007_ff::get($flexformArray, 'dam_join_tables');
-			$damJoinTableArray = GeneralUtility::trimExplode(',',$dam_join_tables);
-
-			if ($dam_where)	{
-				$dam_where = $itemTable->getTableObj()->transformWhere($dam_where);
-				$where .= ' AND '.$dam_where;
 			}
 		}
 
@@ -786,17 +772,6 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 			break;
 			case 'LISTARTICLES':
 				$formName = 'ListArticlesForm';
-			break;
-			case 'LISTDAM':
-			case 'MEMODAM':
-				if ($theCode == 'LISTDAM')	{
-					$formName = 'ListDAMForm';
-					$templateArea = 'ITEM_LISTDAM_TEMPLATE' . $this->config['templateSuffix'];
-				} else if ($theCode == 'MEMODAM')	{
-					$formName = 'ListMemoDAMForm';
-					$bUseCache = false;
-				}
-				$rootCat = $this->conf['rootDAMCategoryID'];
 			break;
 			case 'LISTGIFTS':
 				$formName = 'GiftForm';
@@ -1010,33 +985,6 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 			$t['itemFrameWork'] = $this->cObj->getSubpart($t['categoryAndItemsFrameWork'],'###ITEM_LIST###');
 			$t['item'] = $this->cObj->getSubpart($t['itemFrameWork'],'###ITEM_SINGLE###');
 
-			if (isset($damJoinTableArray) && is_array($damJoinTableArray) && in_array('address',$damJoinTableArray))	{
-
-				$t['itemheader'] = array();
-				$t['itemheader']['address'] = $this->cObj->getSubpart($t['itemFrameWork'],'###ITEM_ADDRESS###');
-				if ($t['itemheader']['address'] != '')	{
-					$headerField = $itemTable->getField('address');
-					$headerFieldIndex = 0;
-					$headerFieldArray[$headerFieldIndex] = $headerField;
-					$headerTableArray[$headerFieldIndex] = 'address';
-					$headerTableObjArray['address'] = $tablesObj->get('address', true);
-					$markerFieldArray = array();
-					$headerViewTagArray[$headerFieldIndex] = array();
-					$headerParentArray[$headerFieldIndex] = array();
-
-					$headerTableFieldsArray[$headerFieldIndex] = $markerObj->getMarkerFields(
-						$t['itemheader']['address'],
-						$tablesObj->get('address')->getTableObj()->tableFieldArray,
-						$tablesObj->get('address')->getTableObj()->requiredFieldArray,
-						$markerFieldArray,
-						$tablesObj->get('tt_products')->marker,
-						$headerViewTagArray[$headerFieldIndex],
-						$headerParentArray[$headerFieldIndex]
-					);
-					// $foreignTableInfo = $tablesObj->getForeignTableInfo ($tablename,$itemTable->getField('address'));
-				}
-			}
-
 			$dum = strstr($t['item'], 'ITEM_SINGLE_POST_HTML');
 			$bItemPostHtml = (strstr($t['item'], 'ITEM_SINGLE_POST_HTML') != false);
 				// Get products count
@@ -1052,43 +1000,6 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 
 			$selectConf['where'] = '1=1 ' . $whereNew;
 			$selectConf['from'] = $itemTable->getTableObj()->getAdditionalTables();
-
-			if (isset($damJoinTableArray) && is_array($damJoinTableArray) && in_array('address',$damJoinTableArray))	{
-				$addressTable = $tablesObj->get('address', false);
-				$addressAlias = $addressTable->getAlias();
-				$addressTablename = $addressTable->getTablename();
-				$bTableAlreadyPresent = false;
-
-				foreach ($sqlTableArray['from'] as $fromTables)	{
-					if (strpos($fromTables,$addressTablename)!==false)	{
-						$bTableAlreadyPresent = true;
-					}
-				}
-				if (!$bTableAlreadyPresent)	{
-					$enableFieldArray = $addressTable->getTableObj()->getEnableFieldArray();
-					$foreignTableInfo = $tablesObj->getForeignTableInfo($tablename,$itemTable->fieldArray['address']);
-					$foreignTableInfo['table_field'] = $itemTable->fieldArray['address'];
-					$newSqlTableArray = array();
-					$aliasPostfix=($sqlTableIndex);
-					$tablesObj->prepareSQL($foreignTableInfo,$tableAliasArray,$aliasPostfix,$newSqlTableArray);
-					$sqlTableArray['from'][$sqlTableIndex] = $foreignTableInfo['foreign_table'];
-					if ($foreignTableInfo['where'] != '')	{
-						$sqlTableArray['where'][$sqlTableIndex] = $foreignTableInfo['where'];
-					}
-					if (isset($newSqlTableArray) && is_array($newSqlTableArray))	{
-						foreach ($sqlTableArray as $k => $tmpArray)	{
-							if (isset($newSqlTableArray[$k]))	{
-								$sqlTableArray[$k][$sqlTableIndex] = $newSqlTableArray[$k];
-							}
-						}
-					}
-					$sqlTableIndex++;
-				}
-// 		$sqlTableArray['from'] = array();
-// 		$sqlTableArray['join'] = array();
-// 		$sqlTableArray['local'] = array();
-// 		$sqlTableArray['where'] = array();
-			}
 
 			if (isset($sqlTableArray) && is_array($sqlTableArray) && isset($sqlTableArray['from']) && is_array($sqlTableArray['from']))	{
 				foreach ($sqlTableArray['from'] as $k => $sqlFrom)	{
@@ -1195,7 +1106,7 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 				if ($uidKey != '')	{
 					unset($fieldsArray[$uidKey]);
 				}
-			} else if ($itemTable->getType() == 'article' || $itemTable->getType() == 'dam') {
+			} else if ($itemTable->getType() == 'article') {
 				$viewProductsTagArray = array();
 				$productsParentArray = array();
 				$tmpFramework = ($t['productAndItemsFrameWork'] ? $t['productAndItemsFrameWork'] : $t['categoryAndItemsFrameWork']);
@@ -1249,34 +1160,23 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 				$itemTable->addConfCat($categoryTable, $selectConf, $aliasArray);
 			}
 
-			if ($orderByCat && ($pageAsCategory < 2 || $itemTable->getType() == 'dam'))	{
-			// if ($orderByCat && ($pageAsCategory < 2) || $itemTable->getType() == 'dam')	{
-				// $catFields = ($orderByCat == 'uid' ? $orderByCat : 'uid,'.$orderByCat);
+			if ($orderByCat && $pageAsCategory < 2)	{
 				$catOrderBy = $categoryTable->getTableObj()->transformOrderby($orderByCat);
 				$orderByCatFieldArray = GeneralUtility::trimExplode(',',$catOrderBy);
 				$selectConf['orderBy'] = $catOrderBy . ($selectConf['orderBy'] ? ($catOrderBy != '' ? ',' : '') . $selectConf['orderBy'] : '');
 
 				$catAlias = $categoryTable->getTableObj()->getAlias();
 
-				if ($itemTable->getType() == 'dam')	{
-					// SELECT *
-					// FROM tx_dam LEFT OUTER JOIN  tx_dam_mm_cat ON tx_dam.uid = tx_dam_mm_cat.uid_local
-
-					if ($selectConf['leftjoin'] == '')	{
-						$selectConf['leftjoin'] = 'tx_dam_mm_cat mm_cat1 ON '.$prodAlias.'.uid=mm_cat1.uid_local';
-					}
-				} else {
-					// SELECT *
-					// FROM tt_products
-					// LEFT OUTER JOIN tt_products_cat ON tt_products.category = tt_products_cat.uid
-					$selectConf['leftjoin'] = $categoryTable->getTableObj()->name . ' ' . $catAlias . ' ON ' . $catAlias . '.uid=' . $prodAlias . '.category';
-				}
+                // SELECT *
+                // FROM tt_products
+                // LEFT OUTER JOIN tt_products_cat ON tt_products.category = tt_products_cat.uid
+                $selectConf['leftjoin'] = $categoryTable->getTableObj()->name . ' ' . $catAlias . ' ON ' . $catAlias . '.uid=' . $prodAlias . '.category';
 				$catTables = $categoryTable->getTableObj()->getAdditionalTables(array($categoryTable->getTableObj()->getLangName()));
 
 				if ($selectConf['from'] != '')	{
 					$tmpDelim = ',';
 				}
-				if ($catTables!='')	{
+				if ($catTables != '')	{
 					$selectConf['from'] = $catTables . $tmpDelim . $selectConf['from'];
 				}
 
@@ -1297,17 +1197,6 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 
 			$selectFields = implode(',', $fieldsArray);
 			$selectConf['selectFields'] = 'DISTINCT ' . $itemTable->getTableObj()->transformSelect($selectFields, '', $collateConf) . $catSelect . $additionalSelect;
-
-			if (isset($damJoinTableArray) && is_array($damJoinTableArray) && in_array('address',$damJoinTableArray) && $addressAlias!='')	{
-
-				$addressConf = $addressTable->getTableConf($theCode);
-				if (isset($addressConf['requiredFields']))	{
-					$addressFieldArray = GeneralUtility::trimExplode(',',$addressConf['requiredFields']);
-					foreach ($addressFieldArray as $field)	{
-						$selectConf['selectFields'] .= ',' . $addressAlias . $aliasPostfix . '.' . $field . ' address_' . $field;
-					}
-				}
-			}
 
 			if (in_array($theCode, $viewedCodeArray) && $limit > 0)	{
 				if ($GLOBALS['TSFE']->loginUser)	{
@@ -1387,11 +1276,11 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 					}
 				}
 			}
-			$selectConf['groupBy'] = $dam_group_by;
+			$selectConf['groupBy'] = '';
 
 				// performing query to count all products (we need to know it for browsing):
 			$selectCountConf = $selectConf;
-			$selectCountConf['selectFields'] = 'count(distinct '.$itemTable->getAlias().'.uid)'; // .$catSelect;
+			$selectCountConf['selectFields'] = 'count(distinct ' . $itemTable->getAlias() . '.uid)';
 			$queryParts = $itemTable->getTableObj()->getQueryConf($this->cObj, $tablename, $selectCountConf, true);
 
 			if ($selectCountConf['groupBy'] != '')	{
@@ -1480,7 +1369,7 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 					$collateConf
 				);
 
-			$itemArray=array();
+			$itemArray = array();
 			$iCount = 0;
 			$uidArray = array();
 
@@ -1553,30 +1442,10 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 			if (strstr($itemLower, '<form') !== false)	{
 				$bFormPerItem = true;
 			}
-			$bUseDAM = false;
-			if (strstr($itemLower, '###dam_field_name###') !== false)	{
-				$bUseDAM = true;
-			}
 			$basketObj->getGraduatedPrices($uidArray);
 
 			if (!empty($itemArray))	{	// $itemArray must have numbered indexes to work, because the next item must be determined
 
-				if ($itemTable->getType() == 'dam')	{ //
-					$productDAMMarkerArray = $relatedListView->getListMarkerArray(
-						$theCode,
-						$this->pibaseClass,
-						$templateCode,
-						array(),
-						$mergeTagArray,
-						$functablename,
-						'',
-						$this->uidArray,
-						$this->useArticles,
-						$pageAsCategory,
-						$this->pid,
-						$error_code
-					);
-				}
 				$categoryMarkerArray = array();
 				$categorySubpartArray = array();
 				$categoryWrappedSubpartArray = array();
@@ -1731,7 +1600,7 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 						if ($catItemsListOut && $this->conf['displayListCatHeader'])	{
 							$out .= $this->advanceCategory($t['categoryAndItemsFrameWork'], $catItemsListOut, $categoryOut, $itemListSubpart, $oldFormCount, $formCount);
 						}
-						$currentArray['category'] = (($pageAsCategory < 2 || $itemTable->getType() == 'dam') ? $displayCat : $row['pid']);
+						$currentArray['category'] = (($pageAsCategory < 2) ? $displayCat : $row['pid']);
 						$bCategoryHasChanged = true;
 				// neu
 						$categoryMarkerArray = array();
@@ -2188,17 +2057,6 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 					if ($itemTable->getType() == 'article')	{
 						$productMarkerArray = array_merge ($productMarkerArray, $markerArray);
 						$markerArray = array_merge ($productMarkerArray, $markerArray);
-					} else if ($itemTable->getType() == 'dam' && $productDAMMarkerArray && is_array($productDAMMarkerArray))	{
-
-						$tmpMarkerArray = array();
-						$tmpMarkerArray['###DAM_UID###'] = $row['uid'];
-
-						foreach ($productDAMMarkerArray as $marker => $v)	{
-							$markerArray[$marker] = $this->cObj->substituteMarkerArray(
-								$v,
-								$tmpMarkerArray
-							);
-						}
 					}
 
 					if ($linkCat)	{
@@ -2221,15 +2079,6 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 					}
 					$markerArray = array_merge($productMarkerArray, $categoryMarkerArray, $markerArray);
 
-					if (isset($memoViewObj) && is_object($memoViewObj))	{
-						$memoViewObj->getFieldMarkerArray (
-							$row,
-							'MEMODAM',
-							$markerArray,
-							$mergeTagArray,
-							$bUseCheckBox
-						);
-					}
 					$jsMarkerArray = array_merge($jsMarkerArray, $productMarkerArray);
 					if ($theCode == 'LISTGIFTS') {
 						$markerArray = tx_ttproducts_gifts_div::addGiftMarkers($markerArray, $basketObj->giftnumber);
@@ -2252,12 +2101,6 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 						$markerArray['###FORM_NAME###'] = $markerArray['###ITEM_NAME###'];
 					}
 
-					if ($bUseDAM)	{
-						$damUid = $this->uidArray['dam'];
-						if ($damUid)	{
-							$tablesObj->get('tx_dam')->setFormMarkerArray($damUid, $markerArray);
-						}
-					}
 					$markerArray['###FORM_ONSUBMIT###'] = 'return checkParams (document.'.$markerArray['###FORM_NAME###'].');';
 					$rowEven = $cssConf['row.']['even'];
 					$rowEven = ($rowEven ? $rowEven : $this->conf['CSSRowEven']); // backwards compatible
@@ -2516,12 +2359,8 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 			$this->javaScriptMarker->getMarkerArray($jsMarkerArray, $markerArray);
 			$markerArray = array_merge($jsMarkerArray, $markerArray);
 
-			if ($calllevel == 0)	{
+			if ($calllevel == 0) {
 				$hiddenCount = 0;
-				if ($itemTable->getType() == 'dam')	{
-					$hiddenText .= '<input type="hidden" name="' . $prefixId . '[type][' . $hiddenCount . ']" value="product" />';
-					$hiddenCount++;
-				}
 				$hiddenText .= '<input type="hidden" name="' . $prefixId . '[type][' . $hiddenCount . ']" value="' . $itemTable->getType() . '" />';
 			}
 
@@ -2529,21 +2368,6 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 
 			if (isset($memoViewObj) && is_object($memoViewObj))	{
 				$memoViewObj->getHiddenFields($uidArray, $markerArray, $bUseCheckBox);
-			}
-
-			if ($itemTable->getType() == 'dam' && is_object($relatedListView))	{
-
-				$quantityMarkerArray = array();
-				$relatedListView->getQuantityMarkerArray (
-					$theCode,
-					$functablename,
-					$itemTableView->getMarker(),
-					$itemArray,
-					$this->useArticles,
- 					$quantityMarkerArray,
-					$mergeTagArray
-				);
-				$subpartArray['###ITEM_CATEGORY_AND_ITEMS###'] = $this->cObj->substituteMarkerArrayCached($subpartArray['###ITEM_CATEGORY_AND_ITEMS###'],$quantityMarkerArray);
 			}
 
 			$out = $this->cObj->substituteMarkerArrayCached(

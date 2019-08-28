@@ -43,8 +43,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class tx_ttproducts_control_memo {
 
 	static protected $memoTableFieldArray = array(
-		'tt_products' => 'memoItems',
-		'tx_dam' => 'memodam'
+		'tt_products' => 'memoItems'
 	);
 	static protected $memoItemArray = array();
 	static protected $controlVars = array(

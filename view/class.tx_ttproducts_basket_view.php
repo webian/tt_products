@@ -345,36 +345,6 @@ class tx_ttproducts_basket_view implements \TYPO3\CMS\Core\SingletonInterface {
 				}
 			}
 
-			$damViewTagArray = array();
-			// DAM support
-			if (t3lib_extMgm::isLoaded('dam') || $this->pibase->piVars['dam']) {
-				$damParentArray = array();
-				$damObj = $tablesObj->get('tx_dam');
-				$fieldsArray = $markerObj->getMarkerFields(
-					$itemFrameWork,
-					$damObj->getTableObj()->tableFieldArray,
-					$damObj->getTableObj()->requiredFieldArray,
-					$markerFieldArray,
-					$damObj->marker,
-					$damViewTagArray,
-					$damParentArray
-				);
-				$damCatObj = $tablesObj->get('tx_dam_cat');
-				$damCatMarker = $damCatObj->marker;
-				$damCatObj->marker = 'DAM_CAT';
-
-				$viewDamCatTagArray = array();
-				$catParentArray = array();
-				$catfieldsArray = $markerObj->getMarkerFields(
-					$itemFrameWork,
-					$damCatObj->getTableObj()->tableFieldArray,
-					$damCatObj->getTableObj()->requiredFieldArray,
-					$tmp = array(),
-					$damCatObj->marker,
-					$viewDamCatTagArray,
-					$catParentArray
-				);
-			}
 			$hiddenFields = '';
 
 			// loop over all items in the basket indexed by sorting text
@@ -626,58 +596,7 @@ class tx_ttproducts_basket_view implements \TYPO3\CMS\Core\SingletonInterface {
 					if (is_array($extArray) && is_array($extArray[$basketObj->getFuncTablename()]))	{
 						$addQueryString['variants'] = htmlspecialchars($extArray[$basketObj->getFuncTablename()][0]['vars']);
 					}
-					$isImageProduct = $itemTable->hasAdditional($row,'isImage');
-					$damMarkerArray = array();
-					$damCategoryMarkerArray = array();
 
-					if (($isImageProduct || $funcTablename == 'tt_products') && is_array($extArray) && is_array($extArray['tx_dam']))	{
-						reset($extArray['tx_dam']);
-						$damext = current($extArray['tx_dam']);
-						$damUid = $damext['uid'];
-						$damRow = $tablesObj->get('tx_dam')->get($damUid);
-						$damItem = array();
-						$damItem['rec'] = $damRow;
-						$damCategoryArray = $tablesObj->get('tx_dam_cat')->getCategoryArray ($damUid);
-						if (count($damCategoryArray))	{
-							reset ($damCategoryArray);
-							$damCat = current($damCategoryArray);
-						}
-
-						$tablesObj->get('tx_dam_cat',true)->getMarkerArray (
-							$damCategoryMarkerArray,
-							'',
-							$damCat,
-							$damRow['pid'],
-							$this->config['limitImage'],
-							'basketImage',
-							$viewDamCatTagArray,
-							array(),
-							$GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['pageAsCategory'],
-							'SINGLE',
-							1,
-							'',
-							''
-						);
-
-						$tablesObj->get('tx_dam',true)->getModelMarkerArray (
-							$damRow,
-							'',
-							$damMarkerArray,
-							$damCatRow['title'],
-							$this->config['limitImage'],
-							'basketImage',
-							$damViewTagArray,
-							$tmp,
-							$theCode,
-							$basketExtra,
-							$count,
-							'',
-							'',
-							'',
-							$bHtml
-						);
-					}
-					$markerArray = array_merge($markerArray, $damMarkerArray, $damCategoryMarkerArray);
 					$tempUrl = htmlspecialchars(
 						$this->pibase->pi_getPageLink(
 							$pid,
@@ -736,9 +655,7 @@ class tx_ttproducts_basket_view implements \TYPO3\CMS\Core\SingletonInterface {
 					$itemsOut = '';	// Clear the item-code var
 				}
 			}
-			if (isset($damCatMarker))	{
-				$damCatObj->marker = $damCatMarker; // restore original value
-			}
+
 			$subpartArray = array();
 			$wrappedSubpartArray = array();
 			$basketMarkerArray = $this->getMarkerArray($calculatedArray);

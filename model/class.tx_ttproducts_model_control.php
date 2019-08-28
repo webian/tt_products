@@ -47,8 +47,6 @@ class tx_ttproducts_model_control {
 		'a' => 'address',
 		'article' => 'tt_products_articles',
 		'cat' => 'tt_products_cat',
-		'dam' => 'tx_dam',
-		'damcat' => 'tx_dam_cat',
 		'pid' => 'pages',
 		'product' => 'tt_products',
 	);

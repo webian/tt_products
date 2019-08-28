@@ -299,7 +299,6 @@ class tx_ttproducts_db implements \TYPO3\CMS\Core\SingletonInterface {
 							}
 							$imageArray = $imageObj->getImageArray($row, 'image');
 							$dirname = $imageObj->getDirname($row);
-							$theImgDAM = array();
 							$markerArray = array();
 							$linkWrap = '';
 
@@ -319,12 +318,9 @@ class tx_ttproducts_db implements \TYPO3\CMS\Core\SingletonInterface {
 								$imageRenderObj,
 								$linkWrap,
 								$markerArray,
-								$theImgDAM,
 								$specialConf = array()
 							);
-
 							$v = $imgCodeArray;
-
 							break;
 
 						case 'inStock':

@@ -48,7 +48,7 @@ class tx_ttproducts_single_view implements \TYPO3\CMS\Core\SingletonInterface {
 	public $pibaseClass;
 	public $config;
 	public $uid; 	// product id
-	public $type='product'; 	// 'product', 'article' or 'dam'
+	public $type='product'; 	// 'product' or 'article'
 	public $variants; 	// different attributes
 	public $urlObj; // url functions
 	public $javascript; // JavaScript functions
@@ -78,9 +78,6 @@ class tx_ttproducts_single_view implements \TYPO3\CMS\Core\SingletonInterface {
 			} else if (isset($uidArray['article']))	{
 				$this->uid = $uidArray['article'];
 				$this->type = 'article';
-			} else if (isset($uidArray['dam']) && t3lib_extMgm::isLoaded('dam'))	{
-				$this->type = 'dam';
-				$this->uid = $uidArray['dam'];
 			}
 		}
 
@@ -134,12 +131,8 @@ class tx_ttproducts_single_view implements \TYPO3\CMS\Core\SingletonInterface {
 		$itemTableViewArray = array();
 		$itemTableViewArray['product'] = $tablesObj->get('tt_products', true);
 		$itemTableViewArray['article'] = $tablesObj->get('tt_products_articles', true);
-		if (t3lib_extMgm::isLoaded('dam'))	{
-			$itemTableArray['dam'] = $tablesObj->get('tx_dam');
-			$itemTableViewArray['dam'] = $tablesObj->get('tx_dam', true);
-		}
 
-		$rowArray = array('product' => array(), 'article' => array(), 'dam' => array());
+		$rowArray = array('product' => array(), 'article' => array());
 		$itemTableConf = $rowArray;
 		$itemTableLangFields = $rowArray;
 		$content = '';
@@ -153,9 +146,8 @@ class tx_ttproducts_single_view implements \TYPO3\CMS\Core\SingletonInterface {
 			$rowArray[$this->type] = $itemTableArray[$this->type]->get($this->uid, 0, true, $where);
 			$itemTableConf[$this->type] = $cnf->getTableConf($itemTableArray[$this->type]->getFuncTablename(), 'SINGLE');
 			$itemTableLangFields[$this->type] = $cnf->getTranslationFields($itemTableConf[$this->type]);
-			// TODO: $itemImageFields[$this->type] = $cnf->getImageFields($itemTableConf[$this->type]);
 
-			if ($this->type == 'product' || $this->type == 'dam')	{
+			if ($this->type == 'product')	{
 				if ($this->variants) {
 					$itemTableArray[$this->type]->variant->modifyRowFromVariant($rowArray[$this->type], $this->variants);
 				}
@@ -210,8 +202,6 @@ class tx_ttproducts_single_view implements \TYPO3\CMS\Core\SingletonInterface {
 					$subPartMarker = 'ITEM_SINGLE_DISPLAY';
 				} else if ($this->type == 'article'){
 					$subPartMarker = 'ARTICLE_SINGLE_DISPLAY';
-				} else if ($this->type == 'dam'){
-					$subPartMarker = 'DAM_SINGLE_DISPLAY';
 				}
 			}
 
@@ -219,8 +209,6 @@ class tx_ttproducts_single_view implements \TYPO3\CMS\Core\SingletonInterface {
 			if (!$pageAsCategory || $pageAsCategory == 1)	{
 				if ($this->type == 'product' || $this->type == 'article')	{
 					$catTablename = 'tt_products_cat';
-				} else if ($this->type == 'dam') {
-					$catTablename = 'tx_dam_cat';
 				}
 			} else {
 				$catTablename = 'pages';
@@ -904,20 +892,6 @@ class tx_ttproducts_single_view implements \TYPO3\CMS\Core\SingletonInterface {
 
 			if ($listMarkerArray && is_array($listMarkerArray)) {
 				$quantityMarkerArray = array();
-
-				if ($this->type == 'dam' && is_object($relatedListView))	{
-					$itemArray = array();
-					$itemArray[] = $row;
-					$relatedListView->getQuantityMarkerArray(
-						$theCode,
-						$itemTableArray[$this->type]->getFuncTablename(),
-						$itemTableViewArray[$this->type]->getMarker(),
-						$itemArray,
-						$useArticles,
-						$quantityMarkerArray,
-						$mergeTagArray
-					);
-				}
 
 				foreach ($listMarkerArray as $marker => $markerValue) {
 					$markerValue = $this->cObj->substituteMarkerArray($markerValue, $markerArray);

@@ -119,8 +119,6 @@ abstract class tx_ttproducts_category_base extends tx_ttproducts_table_base {
 			$functablename = $this->getFuncTablename();
 			if ($functablename == 'tt_products_cat')	{
 				$hookVar = 'prodCategory';
-			} else if($functablename == 'tx_dam_cat')	{
-				$hookVar = 'DAMCategory';
 			}
 				// Call all addWhere hooks for categories at the end of this method
 			if ($hookVar && isset ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT][$hookVar]) && is_array ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT][$hookVar])) {
@@ -164,8 +162,6 @@ abstract class tx_ttproducts_category_base extends tx_ttproducts_table_base {
 		$functablename = $this->getFuncTablename ();
 		if ($functablename == 'tt_products_cat')	{
 			$hookVar = 'prodCategory';
-		} else if($functablename == 'tx_dam_cat')	{
-			$hookVar = 'DAMCategory';
 		}
 
 		$tmpArray = array();
@@ -188,8 +184,6 @@ abstract class tx_ttproducts_category_base extends tx_ttproducts_table_base {
 		$funcTablename = $this->getFuncTablename ();
 		if ($funcTablename == 'tt_products_cat')	{
 			$rc = 'prodCategory';
-		} else if ($funcTablename == 'tx_dam_cat') {
-			$rc = 'DAMCategory';
 		}
 		return $rc;
 	}

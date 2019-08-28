@@ -111,7 +111,6 @@ class tx_ttproducts_field_image_view extends tx_ttproducts_field_media_view {
 		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 
 			// Get image
-		$theImgDAM = array();
 		$specialImgCode = array();
 		if (is_array($tableConf))	{
 			$imageMarkerArray = $tableConf['imageMarker.'];
@@ -246,7 +245,7 @@ class tx_ttproducts_field_image_view extends tx_ttproducts_field_media_view {
 			$dirname = $this->getModelObj()->getDirname($imageRow);
 		}
 
-		$theImgCode = $this->getCodeMarkerArray($functablename, 'PRODUCT_IMAGE', $theCode, $imageRow, $imgs, $dirname, $imageNum, $imageRenderObj, $linkWrap, $markerArray, $theImgDAM, $specialConf);
+		$theImgCode = $this->getCodeMarkerArray($functablename, 'PRODUCT_IMAGE', $theCode, $imageRow, $imgs, $dirname, $imageNum, $imageRenderObj, $linkWrap, $markerArray, $specialConf);
 
 		reset ($theImgCode);
 		$actImgCode = current($theImgCode);
@@ -281,14 +280,6 @@ class tx_ttproducts_field_image_view extends tx_ttproducts_field_media_view {
 				}
 			}
 
-			if (is_array($theImgDAM[$k1]))	{
-				foreach ($theImgDAM[$k1] as $field => $val2)	{
-					$key1 = '###'.$key.'_'.strtoupper($field).'###';
-					if (isset($tagArray[$key1]))	{
-						$markerArray[$key1] = $val2;
-					}
-				}
-			}
 			if (!$bIsSpecial)	{
 				$c++;
 			}
@@ -308,14 +299,6 @@ class tx_ttproducts_field_image_view extends tx_ttproducts_field_media_view {
 				$tagkey = $this->getMarkerkey($imageMarkerArray, 'PRODUCT_IMAGE', $imageName).strtoupper($suffix);
 				if (isset($tagArray[$tagkey]))	{
 					$markerArray['###'.$tagkey.'###'] = $imgValue;
-				}
-				if (is_array($theImgDAM[$imageName]))	{
-					foreach ($theImgDAM[$imageName] as $field => $val2)	{
-						$key1 = $tagkey.'_'.strtoupper($field);
-						if (isset($tagArray[$key1]))	{
-							$markerArray['###'.$key1.'###'] = $val2;
-						}
-					}
 				}
 			}
 		}

@@ -84,8 +84,6 @@ class tx_ttproducts_category extends tx_ttproducts_category_base {
 
 		if ($functablename == 'tt_products_cat')	{
 			$parentField = 'parent_category';
-		} else if ($functablename == 'tx_dam_cat')	{
-			$parentField = 'parent_id';
 		}
 
 		if (t3lib_extMgm::isLoaded('mbi_products_categories')) {
@@ -96,7 +94,7 @@ class tx_ttproducts_category extends tx_ttproducts_category_base {
 		}
 		if ($this->bUseLanguageTable($this->tableconf) && ($functablename == 'tt_products_cat'))	{
 			$this->getTableObj()->setLanguage ($this->config['LLkey']);
-			$langTable = 'tt_products_cat_language'; // TODO: DAM alternative language
+			$langTable = 'tt_products_cat_language';
 			$tableObj->setLangName($langTable);
 			$tableObj->setTCAFieldArray($this->getTableObj()->langname);
 		}
@@ -115,8 +113,6 @@ class tx_ttproducts_category extends tx_ttproducts_category_base {
 		$functablename = $this->getFuncTablename ();
 		if ($functablename == 'tt_products_cat')	{
 			$rc = $this->conf['rootCategoryID'];
-		} else if ($functablename == 'tx_dam_cat')	{
-			$rc = $this->conf['rootDAMCategoryID'];
 		}
 
 		if ($rc == '') {
@@ -382,10 +378,6 @@ class tx_ttproducts_category extends tx_ttproducts_category_base {
 						$cat = $catConfig;
 					}
 				}
-			}
-
-			if ($this->getFuncTablename() == 'tx_dam_cat')	{
-				$cat = $cnf->conf['defaultDAMCategoryID'];
 			}
 		}
 

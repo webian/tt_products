@@ -156,8 +156,6 @@ class tx_ttproducts_basketitem_view implements \TYPO3\CMS\Core\SingletonInterfac
 
 		if (is_array($extArray) && is_array($extArray['tt_products']))	{
 			$variant = $viewTable->variant->getVariantFromRow($row);
-		} else if (is_array($extArray) && is_array($extArray['tx_dam']))	{
-			$variant = $extArray['tx_dam'][0]['vars'];
 		}
 		$hiddenText = '';
 		$basketQuantityName = $this->getQuantityName($row['uid'], $callFunctableArray);
@@ -346,18 +344,6 @@ class tx_ttproducts_basketitem_view implements \TYPO3\CMS\Core\SingletonInterfac
 			}
 
 			$isImageProduct = $viewTable->hasAdditional($row,'isImage');
-			if ($functablename == 'tt_products' && is_array($extArray) && is_array($extArray['tx_dam']))	{
-				reset($extArray['tx_dam']);
-				$damext = current($extArray['tx_dam']);
-				$damUid = $damext['uid'];
-			} else if ($isImageProduct && isset($pibaseObj->piVars['dam']))	{
-				$damUid = $pibaseObj->piVars['dam'];
-			}
-			if ($damUid)	{
-				$tableVariant = $viewTable->variant->getTableUid('tx_dam', $damUid);
-				$variant .= $tableVariant;
-				$markerArray['###DAM_UID###'] = $damUid;
-			}
 			$giftService = !$viewTable->hasAdditional($row,'noGiftService');
  		}
 

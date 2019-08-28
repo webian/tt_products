@@ -166,33 +166,6 @@ class tx_ttproducts_relatedlist_view implements \TYPO3\CMS\Core\SingletonInterfa
 					);
 				break;
 
-			case 'tx_dam':
-				if (t3lib_extMgm::isLoaded('dam'))	{
-					if ($uid > 0)	{
-						$damext = array('tx_dam' =>
-							array(
-								array('uid' => $uid)
-							)
-						);
-						$extArray = array('ext' => $damext);
-					} else {
-						$extArray = array();
-					}
-					$result =
-						array(
-							'products' => array(
-								'marker' => 'DAM_PRODUCTS',
-								'template' => 'DAM_ITEM_LIST_TEMPLATE',
-								'require' => true,
-								'code' => $theCode,
-								'additionalPages' => false,
-								'mergeRow' => $extArray,
-								'functablename' => 'tt_products',
-								'callFunctableArray' => array($marker => 'tx_dam')
-							)
-						);
-				}
-				break;
 		}
 		return $result;
 	}

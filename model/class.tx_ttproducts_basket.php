@@ -228,15 +228,12 @@ class tx_ttproducts_basket implements \TYPO3\CMS\Core\SingletonInterface {
 		}
 
 		if (is_array($basketExtRaw)) {
-			if (isset($basketExtRaw['dam']))	{
-				$damUid = intval($basketExtRaw['dam']);
-			}
-
+            $damUid = 0;
 			foreach ($basketExtRaw as $uid => $basketItem)	{
 				if (
 					tx_div2007_core::testInt($uid)
 				) {
-					if (isset($typeArray) && is_array($typeArray) && $typeArray[0] == 'product' && $typeArray[1] != '' || $basketExtRaw['dam'])	{
+					if (isset($typeArray) && is_array($typeArray) && $typeArray[0] == 'product' && $typeArray[1] != '')	{
 
 						foreach ($basketItem as $damUid => $damBasketItem)	{
 							$this->addItem($viewTableObj, $uid, $damUid, $damBasketItem, $updateMode, $bStoreBasket,$newGiftData,$identGiftnumber,$sameGiftData);
@@ -375,11 +372,6 @@ class tx_ttproducts_basket implements \TYPO3\CMS\Core\SingletonInterface {
 			}
 			$variant = $viewTableObj->variant->getVariantFromRawRow($item);
 			$oldcount = $this->basketExt[$uid][$variant];
-			if ($damUid)	{
-				$tableVariant = $viewTableObj->variant->getTableUid('tx_dam', $damUid);
-				$variant .= $tableVariant;
-			}
-
 			$quantity = 0;
 			$quantity = $priceObj->toNumber($this->conf['quantityIsFloat'],$item['quantity']);
 			$count = $this->getMaxCount($quantity, $uid);
@@ -759,14 +751,6 @@ class tx_ttproducts_basket implements \TYPO3\CMS\Core\SingletonInterface {
 			$oldPriceTaxArray = $priceObj->convertOldPriceArray($priceTaxArray);
 			$extArray = $row['ext'];
 
-			if (is_array($extArray['tx_dam']))	{
-				reset($extArray['tx_dam']);
-				$firstDam = current($extArray['tx_dam']);
-				$extUid = $firstDam['uid'];
-				$tableVariant = $viewTableObj->variant->getTableUid('tx_dam', $extUid);
-				$variant .= $tableVariant;
-			}
-
 			if (isset($this->basketExt[$row['uid']]) && is_array($this->basketExt[$row['uid']]) && isset($this->basketExt[$row['uid']][$variant]))	{
 				$count = $this->basketExt[$row['uid']][$variant];
 			}
@@ -871,16 +855,6 @@ class tx_ttproducts_basket implements \TYPO3\CMS\Core\SingletonInterface {
 					$extUid = $uid;
 					$extArray = array('uid' => $extUid, 'vars' => $bextVars);
 					$currRow['ext'][$extTable][] = $extArray;
-
-					if ($bextVarArray[1] == 'tx_dam' && $bextVarArray[2])	{
-
-						$extTable = $bextVarArray[1];
-						$extUid = intval($bextVarArray[2]);
-						$damObj = $tablesObj->get('tx_dam');
-						$damObj->modifyItemRow($currRow, $extUid);
-						$currRow['ext'][$extTable][] = array('uid' => $extUid);
-					}
-					// $currRow['extVars'] = $bextVars;
 
 					if (in_array($useArticles, array(1,3)) && $funcTablename == 'tt_products') {
 						// get the article uid with these colors, sizes and gradings

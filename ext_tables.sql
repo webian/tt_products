@@ -28,7 +28,6 @@ CREATE TABLE tt_products (
 	prod_uid int(11) DEFAULT '0' NOT NULL,
 	accessory_uid int(11) DEFAULT '0' NOT NULL,
 	related_uid int(11) DEFAULT '0' NOT NULL,
-	dam_uid int(11) DEFAULT '0' NOT NULL,
 	itemnumber varchar(40) DEFAULT '' NOT NULL,
 	ean varchar(48) DEFAULT '' NOT NULL,
 	shipping_point varchar(24) DEFAULT '' NOT NULL,
@@ -51,7 +50,6 @@ CREATE TABLE tt_products (
 	datasheet text,
 	www varchar(160) DEFAULT '' NOT NULL,
 	category int(11) unsigned DEFAULT '0' NOT NULL,
-	damcat int(11) unsigned DEFAULT '0' NOT NULL,
 	address int(11) unsigned DEFAULT '0' NOT NULL,
 	inStock int(11) DEFAULT '1' NOT NULL,
 	basketminquantity decimal(19,2) DEFAULT '0.00' NOT NULL,
@@ -186,20 +184,6 @@ CREATE TABLE tt_products_accessory_articles_articles_mm (
 	sorting int(11) DEFAULT '0' NOT NULL,
 
 	PRIMARY KEY (uid),
-	KEY uid_local (uid_local),
-	KEY uid_foreign (uid_foreign),
-);
-
-
-#
-# Table structure for table 'tt_products_products_dam_mm'
-#
-#
-CREATE TABLE tt_products_products_dam_mm (
-	uid_local int(11) DEFAULT '0' NOT NULL,
-	uid_foreign int(11) DEFAULT '0' NOT NULL,
-	sorting int(11) DEFAULT '0' NOT NULL,
-
 	KEY uid_local (uid_local),
 	KEY uid_foreign (uid_foreign),
 );
@@ -722,7 +706,6 @@ CREATE TABLE sys_products_orders_mm_tt_products (
 #
 CREATE TABLE fe_users (
 	tt_products_memoItems tinytext,
-	tt_products_memodam tinytext,
 	tt_products_discount decimal(19,2) DEFAULT '0.00' NOT NULL,
 	tt_products_creditpoints decimal(10,0) DEFAULT '0' NOT NULL,
 	tt_products_vouchercode varchar(50) DEFAULT '',
@@ -773,19 +756,6 @@ CREATE TABLE sys_products_visited_products (
 #
 CREATE TABLE pages_language_overlay (
 	sorting int(11) DEFAULT '0' NOT NULL,
-);
-
-
-#
-# Table structure for table 'tt_products_products_mm_damcat'
-#
-CREATE TABLE tt_products_products_mm_damcat (
-  uid_local int(11) unsigned DEFAULT '0' NOT NULL,
-  uid_foreign int(11) unsigned DEFAULT '0' NOT NULL,
-  tablenames varchar(30) DEFAULT '' NOT NULL,
-  sorting int(11) unsigned DEFAULT '0' NOT NULL,
-  KEY uid_local (uid_local),
-  KEY uid_foreign (uid_foreign)
 );
 
 

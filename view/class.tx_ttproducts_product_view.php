@@ -87,8 +87,6 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 
 		if (is_array($extArray) && is_array($extArray['tt_products']))	{
 			$variant = $extArray['tt_products'][0]['vars'];
-		} else if (is_array($extArray) && is_array($extArray['tx_dam']))	{
-			$variant = $extArray['tx_dam'][0]['vars'];
 		}
 		$bGiftService = true;
 		if ($this->getModelObj()->hasAdditional($row,'noGiftService'))	{

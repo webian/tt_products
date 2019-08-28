@@ -141,18 +141,17 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 	}
 
 
-	public function &getCodeMarkerArray (
+	public function getCodeMarkerArray (
 		$functablename,
 		$markerKey,
 		$theCode,
 		&$imageRow,
 		&$imageArray,
 		$dirname,
-		$mediaNum=0,
+		$mediaNum,
 		$imageRenderObj,
 		$linkWrap,
 		&$markerArray,
-		&$theImgDAM,
 		&$specialConf
 	)	{
 		$cObj = GeneralUtility::makeInstance('tslib_cObj');	// Local cObj.
@@ -217,19 +216,6 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 					$imageConf['file'] = $dirname.$val;
 					$bUseImage = true;
 				}
-				if (t3lib_extMgm::isLoaded('dam') && $bUseImage && $bImages) {
-					$damObj = GeneralUtility::makeInstance('tx_dam');
-					if(method_exists($damObj,'meta_getDataForFile')) {
-						$fieldList = 'uid,pid,tstamp,crdate,active,media_type,title,category,index_type,file_mime_type,file_mime_subtype,
-							file_type,file_type_version,file_name,file_path,file_size,file_mtime,file_inode,file_ctime,file_hash,file_status,
-							file_orig_location,file_orig_loc_desc,file_creator,file_dl_name,file_usage,meta,ident,creator,
-							keywords,description,alt_text,caption,abstract,search_content,language,pages,publisher,copyright,
-							instructions,date_cr,date_mod,loc_desc,loc_country,loc_city,hres,vres,hpixels,vpixels,color_space,
-							width,height,height_unit';
-						$meta = $damObj->meta_getDataForFile($imageConf['file'], $fieldList);
-					}
-				}
-
 
 				if (!$this->conf['separateImage']) {
 					$key = 0;  // show all images together as one image
@@ -249,9 +235,6 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 
 				if ($tmpImgCode != '')	{
 					$imgCodeArray[$key] .= $tmpImgCode;
-				}
-				if ($meta)	{
-					$theImgDAM[$key] = $meta;
 				}
 
 				if ($tagkey && is_array($specialConf[$tagkey]))	{
@@ -308,7 +291,6 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 		$local_cObj = \JambageCom\Div2007\Utility\FrontendUtility::getContentObjectRenderer();
 
 			// Get image
-		$theImgDAM = array();
 		$specialImgCode = array();
 		if (is_array($tableConf))	{
 			$imageMarkerArray = $tableConf['imageMarker.'];
@@ -458,7 +440,7 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 			$dirname = $this->getModelObj()->getDirname($imageRow);
 		}
 
-		$theImgCode = $this->getCodeMarkerArray($functablename, $markerKey, $theCode, $imageRow, $imgs, $dirname, $mediaNum, $imageRenderObj, $linkWrap, $markerArray, $theImgDAM, $specialConf);
+		$theImgCode = $this->getCodeMarkerArray($functablename, $markerKey, $theCode, $imageRow, $imgs, $dirname, $mediaNum, $imageRenderObj, $linkWrap, $markerArray, $specialConf);
 		$actImgCode = current($theImgCode);
 		$markerArray['###'.$markerKey.'###'] = $actImgCode ? $actImgCode : ''; // for compatibility only
 
@@ -493,15 +475,6 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 				$countArray[$k1] = $c;
 			}
 
-			if (is_array($theImgDAM[$k1]))	{
-
-				foreach ($theImgDAM[$k1] as $field => $val2)	{
-					$key1 = '###'.$key.'_'.strtoupper($field).'###';
-					if (isset($tagArray[$key1]))	{
-						$markerArray[$key1] = $val2;
-					}
-				}
-			}
 			$c++;
 		} // foreach
 
@@ -519,14 +492,6 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 				$tagkey = $this->getMarkerkey($imageMarkerArray, $markerKey, $imageName).strtoupper($suffix);
 				if (isset($tagArray[$tagkey]))	{
 					$markerArray['###'.$tagkey.'###'] = $imgValue;
-				}
-				if (is_array($theImgDAM[$imageName]))	{
-					foreach ($theImgDAM[$imageName] as $field => $val2)	{
-						$key1 = $tagkey.'_'.strtoupper($field);
-						if (isset($tagArray[$key1]))	{
-							$markerArray['###'.$key1.'###'] = $val2;
-						}
-					}
 				}
 			}
 		}

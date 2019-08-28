@@ -13,17 +13,6 @@ $temporaryColumns = array (
 			'default' => ''
 		)
 	),
-	'tt_products_memodam' => array (
-		'exclude' => 1,
-		'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:fe_users.tt_products_memodam',
-		'config' => array (
-			'type' => 'input',
-			'size' => '50',
-			'max' => '256',
-			'eval' => 'null',
-			'default' => '',
-		)
-	),
 	'tt_products_discount' => array (
 		'exclude' => 1,
 		'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:fe_users.tt_products_discount',
@@ -129,7 +118,7 @@ $temporaryColumns = array (
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('fe_users', $temporaryColumns);
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
 	'fe_users',
-	'tt_products_creditpoints,tt_products_vouchercode,tt_products_memoItems,tt_products_memodam,tt_products_discount,tt_products_vat,tt_products_business_partner,tt_products_organisation_form'
+	'tt_products_creditpoints,tt_products_vouchercode,tt_products_memoItems,tt_products_discount,tt_products_vat,tt_products_business_partner,tt_products_organisation_form'
 );
 
 

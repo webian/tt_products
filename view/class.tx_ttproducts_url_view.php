@@ -69,8 +69,7 @@ class tx_ttproducts_url_view implements \TYPO3\CMS\Core\SingletonInterface {
 			array(
 				'article',
 				'product',
-				'variants',
-				'dam'
+				'variants'
 			);
 		$singleExcludeListArray = array_merge($excludeListArray, $singleExcludeListArray);
 
@@ -139,8 +138,7 @@ class tx_ttproducts_url_view implements \TYPO3\CMS\Core\SingletonInterface {
 				array(
 					'tt_products[article]',
 					'tt_products[product]',
-					'tt_products[variants]',
-					'tt_products[dam]'
+					'tt_products[variants]'
 				);
 			$excludeListArray = GeneralUtility::trimExplode(',', $excludeList);
 			$excludeListArray = array_merge($excludeListArray, $newExcludeListArray);

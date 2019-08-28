@@ -1,4 +1,7 @@
 
+2019-08-28 Franz Holzinger <franz@ttproducts.de>
+    * remove support for the dam extension
+
 2019-07-31 Franz Holzinger <franz@ttproducts.de>
     * remove tt_products_cache 
     * replace most t3lib_div classes by \TYPO3\CMS\Core\Utility\GeneralUtility

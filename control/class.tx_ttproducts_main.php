@@ -84,8 +84,6 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 		'HELP',
 		'INFO',
 		'MEMO',
-		'MEMODAM',
-		'MEMODAMOVERVIEW',
 		'ORDERS',
 		'OVERVIEW',
 		'PAYMENT',
@@ -289,7 +287,7 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 
 		} else {
 			$error_detail = '';
-			$paramArray = array('product', 'article', 'dam');
+			$paramArray = array('product', 'article');
 
 			foreach ($paramArray as $param)	{
 				$paramVal = ($this->piVars[$param] ? $this->piVars[$param] : '');
@@ -535,7 +533,6 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 				case 'LIST':
 				case 'LISTAFFORDABLE':
 				case 'LISTARTICLES':
-				case 'LISTDAM':
 				case 'LISTGIFTS':
 				case 'LISTHIGHLIGHTS':
 				case 'LISTNEWITEMS':
@@ -543,10 +540,6 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 				case 'LISTVIEWEDITEMS':
 				case 'LISTVIEWEDMOST':
 				case 'LISTVIEWEDMOSTOTHERS':
-
-					if ($theCode == 'LISTDAM' && !t3lib_extMgm::isLoaded('dam'))	{
-						continue;
-					}
 
 					if (count($this->tt_product_single) && !$this->conf['NoSingleViewOnList']) {
 						if (!$bRunAjax && $this->convertToUserInt()) {
@@ -563,27 +556,17 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 					$contentTmp = $this->products_display($templateCode, $theCode, $errorMessage, $error_code);
 				break;
 				case 'LISTCAT':
-				case 'LISTDAMCAT':
 				case 'LISTAD':
 				case 'MENUCAT':
-				case 'MENUDAMCAT':
 				case 'MENUAD':
 				case 'SELECTCAT':
-				case 'SELECTDAMCAT':
 				case 'SELECTAD':
-					if (strpos($theCode,'DAM') !== false && !t3lib_extMgm::isLoaded('dam'))	{
-						continue;
-					}
-
 					$codeTemplateArray = array(
 						'SELECTCAT' => 'ITEM_CATEGORY_SELECT_TEMPLATE',
-						'SELECTDAMCAT' => 'ITEM_DAMCATSELECT_TEMPLATE',
 						'SELECTAD' => 'ITEM_ADDRESS_SELECT_TEMPLATE',
 						'LISTCAT' => 'ITEM_CATLIST_TEMPLATE',
-						'LISTDAMCAT' => 'ITEM_DAMCATLIST_TEMPLATE',
 						'LISTAD' => 'ITEM_ADLIST_TEMPLATE',
 						'MENUCAT' => 'ITEM_CATEGORY_MENU_TEMPLATE',
-						'MEUNDAMCAT' => 'ITEM_DAMCATMENU_TEMPLATE',
 						'MENUAD' => 'ITEM_ADDRESS_MENU_TEMPLATE',
 					);
 
@@ -607,8 +590,6 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 							$messageArr =  explode('|', $message);
 							$errorMessage = $messageArr[0] . 'table.address' . $messageArr[1];
 						}
-					} else if (substr($theCode,-6,6) == 'DAMCAT')	{
-						$functablename = 'tx_dam_cat';
 					} else if (substr($theCode,-3,3) == 'CAT')	{
 						if ($this->pageAsCategory)	{
 							$functablename = 'pages';
@@ -671,8 +652,6 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 					$contentTmp = $this->products_tracking($error_code, $templateCode, $theCode, $conf);
 				break;
 				case 'MEMO':
-				case 'MEMODAM':
-				case 'MEMODAMOVERVIEW':
 					if (!$bRunAjax && $this->convertToUserInt()) {
 						return '';
 					}
@@ -706,7 +685,6 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 					$contentTmp = $orderView->printView($templateCode, $error_code);
 				break;
 				case 'SINGLECAT':
-				case 'SINGLEDAMCAT':
 				case 'SINGLEAD':
 					$catView = GeneralUtility::makeInstance('tx_ttproducts_cat_view');
 					$catView->init(
@@ -715,7 +693,7 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 						$this->config['pid_list'],
 						$this->config['recursive']
 					);
-					$tableInfoArray = array('SINGLECAT' => 'tt_products_cat', 'SINGLEDAMCAT' => 'tx_dam_cat', 'SINGLEAD' => 'address');
+					$tableInfoArray = array('SINGLECAT' => 'tt_products_cat', 'SINGLEAD' => 'address');
 					$functablename = $tableInfoArray[$theCode];
 					$uid = $pibaseObj->piVars[tx_ttproducts_model_control::getPivar($functablename)];
 
@@ -772,7 +750,7 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 							$this->cObj,
 							$pid,
 							$urlObj->getLinkParams(
-								'product,article,dam',
+								'product,article',
 								'',
 								true,
 								false
@@ -1100,8 +1078,6 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 
 			if ($theCode == 'LISTARTICLES' && $conf['useArticles'])	{
 				$functablename = 'tt_products_articles';
-			} else if ($theCode == 'LISTDAM')	{
-				$functablename = 'tx_dam';
 			} else {
 				$functablename = 'tt_products';
 			}

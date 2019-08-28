@@ -43,7 +43,7 @@ plugin.tt_products {
   clickEnlarge_list = 1
     # cat=plugin.products//; type=boolean; label= Click Enlarge, List display for items listed with a filter for a category having childs: See above
   clickEnlarge_listHasChilds = 1
-    # cat=plugin.products//; type=boolean; label= Click Enlarge, List display for items listed with a filter for a DAM root category
+    # cat=plugin.products//; type=boolean; label= Click Enlarge, List display for items listed with a filter for a root category
   clickEnlarge_basket = 1
     # cat=plugin.products//; type=boolean; label= Click Enlarge, Category images: As above, but for the category images
   clickEnlarge_listcat = 0
@@ -129,9 +129,9 @@ plugin.tt_products {
   maxW_list = 50
     # cat=plugin.products/dims; type=int+; label= Max image height, list display: The maximum height in pixels of an image when displayed in lists and searchresults.
   maxH_list = 100
-    # cat=plugin.products/dims; type=int+; label= Max image width, list display: DAM, the category has childs
+    # cat=plugin.products/dims; type=int+; label= Max image width, list display: The category has childs
   maxW_listHasChilds = 50
-    # cat=plugin.products/dims; type=int+; label= Max image height, list display: DAM, the category has childs
+    # cat=plugin.products/dims; type=int+; label= Max image height, list display: The category has childs
   maxH_listHasChilds = 100
     # cat=plugin.products/dims; type=int+; label= Max root image width, list display: The maximum width in pixels of an image when displayed in lists and searchresults on the category root level.
   maxW_listRoot = 50
@@ -209,12 +209,8 @@ plugin.tt_products {
   defaultProductID =
     # cat=plugin.products//; type=eint+; label=default category ID: ID of the default category that will be shown in the list view when no tt_products[cat] parameter is given
   defaultCategoryID =
-    # cat=plugin.products//; type=eint+; label=default DAM category ID: ID of the default DAM category that will be shown in the list view when no tt_products[damcat] parameter is given
-  defaultDAMCategoryID =
     # cat=plugin.products//; type=eint+; label=root category ID: The upper most category ID from where you want to start to list categories.
   rootCategoryID =
-    # cat=plugin.products//; type=eint+; label=root DAM category ID: The upper most DAM category ID from where you want to start to list DAM categories.
-  rootDAMCategoryID =
     # cat=plugin.products//; type=eint+; label=root page ID: The upper most page as category ID from where you want to start to list pages as categories.
   rootPageID =
     # cat=plugin.products//; type=int+; label=recursive levels: Number of recursive levels to select tt_products from in lists.

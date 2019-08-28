@@ -69,9 +69,6 @@ class tx_ttproducts_memo_view implements \TYPO3\CMS\Core\SingletonInterface {
 			tx_ttproducts_control_memo::bUseSession($conf)
 		) {
 			$functablename = 'tt_products';
-			if (strpos($theCode, 'DAM') !== false) {
-				$functablename = 'tx_dam';
-			}
 			$this->memoItems = tx_ttproducts_control_memo::getMemoItems($functablename);
 		}
 	}
@@ -102,12 +99,6 @@ class tx_ttproducts_memo_view implements \TYPO3\CMS\Core\SingletonInterface {
 				if ($theCode == 'MEMO')	{
 					$theTable = 'tt_products';
 					$templateArea = 'MEMO_TEMPLATE';
-				} else if ($theCode == 'MEMODAM')	{
-					$theTable = 'tx_dam';
-					$templateArea = 'MEMODAM_TEMPLATE';
-				} else if ($theCode == 'MEMODAMOVERVIEW')	{
-					$theTable = 'tx_dam';
-					$templateArea = 'MEMODAM_OVERVIEW_TEMPLATE';
 				} else {
 					return 'error';
 				}

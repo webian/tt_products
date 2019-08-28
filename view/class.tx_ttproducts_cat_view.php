@@ -28,7 +28,7 @@
  * Part of the tt_products (Shop System) extension.
  *
  * category single view functions
- * may be used for the category, party/partner/address, dam category and pages table
+ * may be used for the category, party/partner/address and pages table
  *
  * @author	Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
