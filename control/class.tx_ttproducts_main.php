@@ -525,7 +525,10 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 			}
 
 			switch($theCode)	{
-				case 'SEARCH':
+                case 'CONTROL': // this will come with tt_products 3.1
+                    continue 2;
+                    break;
+                case 'SEARCH':
 					if (!$bRunAjax && $this->convertToUserInt()) {
 						return '';
 					}
