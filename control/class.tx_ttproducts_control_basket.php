@@ -46,11 +46,40 @@ class tx_ttproducts_control_basket {
 	private static $bHasBeenInitialised = false;
 
 
-	static public function init () {
+	static public function init (array $recs = array(), $transmissionSecurity = false) {
 		if (!self::$bHasBeenInitialised) {
-			self::$recs = self::getStoredRecs();
-			self::$basketExt = self::getStoredBasketExt();
-			self::$bHasBeenInitialised = true;
+            if (is_object($GLOBALS['TSFE'])) {
+                if (empty($recs)) {
+                    $recs = self::getStoredRecs();
+                    if (empty($recs)) {
+                        $recs = array();
+                    } else if ($transmissionSecurity) {
+                        $errorCode = '';
+                        $errorMessage = '';
+                        $security = GeneralUtility::makeInstance(\JambageCom\Div2007\Security\TransmissionSecurity::class);
+                        $decrptionResult = $security->decryptIncomingFields(
+                            $recs,
+                            $errorCode,
+                            $errorMessage
+                        );
+
+                        if ($decrptionResult) {
+                            self::setStoredRecs($recs);
+                        }
+                    }
+                }
+                self::setRecs($recs);
+                self::setBasketExt(self::getStoredBasketExt());
+                $basketExtra =
+                    \tx_ttproducts_paymentshipping::getBasketExtras(
+                        $recs
+                    );
+                self::setBasketExtra($basketExtra);
+            } else {
+                self::setRecs($recs);
+                self::$basketExt = array();
+            }
+            self::$bHasBeenInitialised = true;
 		}
 	}
 
@@ -83,10 +112,15 @@ class tx_ttproducts_control_basket {
 
 
 	static public function getBasketExt () {
-		return self::$basketExt;
-	}
+        return self::$basketExt;
+    }
 
+    
+    static public function setBasketExt ($basketExt) {
+        self::$basketExt = $basketExt;
+    }
 
+    
 	static public function getStoredBasketExt () {
 		$rc = $GLOBALS['TSFE']->fe_user->getKey('ses','basketExt');
 		return $rc;

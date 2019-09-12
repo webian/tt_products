@@ -77,8 +77,17 @@ class tx_ttproducts_db implements \TYPO3\CMS\Core\SingletonInterface {
 // TODO: $cObj->start($contentRow,'tt_content');
 		}
 
-		$controlCreatorObj = GeneralUtility::makeInstance('tx_ttproducts_control_creator');
-		$controlCreatorObj->init($conf, $config, $pObj, $this->cObj);
+        $recs = GeneralUtility::_GP('recs');
+        if (is_array($recs)) {
+            $api = GeneralUtility::makeInstance( \JambageCom\Div2007\Api\Frontend::class);
+            // If any record registration is submitted, register the record.
+            $api->record_registration($recs, $GLOBALS['TYPO3_CONF_VARS']['FE']['maxSessionDataSize']);
+        } else {
+            $recs = array();
+        }
+
+        $controlCreatorObj = GeneralUtility::makeInstance('tx_ttproducts_control_creator');
+		$controlCreatorObj->init($conf, $config, $pObj, $this->cObj, $recs);
 
 		$modelCreatorObj = GeneralUtility::makeInstance('tx_ttproducts_model_creator');
 		$modelCreatorObj->init($conf, $config, $this->cObj);

@@ -1,3 +1,7 @@
+2019-09-12 Franz Holzinger <franz@ttproducts.de>
+    * compatibility with MySQL strict mode
+    * add the field parent_category to tt_products_cat
+    * compatibility for TYPO3: read in the recs array and process the record_registration method without the help of the TYPO3 core. No enableRecordRegistration is needed any more.
 
 2019-08-28 Franz Holzinger <franz@ttproducts.de>
     * remove support for the dam extension

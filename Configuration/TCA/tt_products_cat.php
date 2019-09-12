@@ -28,7 +28,7 @@ $result = array (
 		'crdate' => 'crdate',
 		'cruser_id' => 'cruser_id',
 		'iconfile' => PATH_TTPRODUCTS_ICON_TABLE_REL . 'tt_products_cat.gif',
-		'searchFields' => 'uid,title,subtitle,catid,keyword,note,note2',
+		'searchFields' => 'uid,title,subtitle,parent_category,catid,keyword,note,note2',
 	),
 	'interface' => array (
 		'showRecordFieldList' => 'hidden,starttime,endtime,fe_group,title, subtitle, catid, keyword, note, note2, image, discount, discount_disable, email_uid, highlight'
@@ -140,6 +140,28 @@ $result = array (
 				'cols' => '20',
 				'max' => '512',
 				'default' => ''
+			)
+		),
+		'parent_category' => array (
+			'exclude' => 1,
+			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products_cat.parent_category',
+			'config' => array(
+				'minitems' => 0,
+				'maxitems' => 1,
+				'type' => 'select',
+				'renderMode' => 'tree',
+				'foreign_table' => 'tt_products_cat',
+				'foreign_table_where' => ' ORDER BY tt_products_cat.title',
+				'treeConfig' => array(
+					'parentField' => 'parent_category',
+					'appearance' => array(
+						'expandAll' => 1,
+						'showHeader' => true,
+						'maxLevels' => 99,
+					)
+				),
+				'exclude' => 1,
+				'default' => 0
 			)
 		),
 		'catid' => Array (
@@ -265,7 +287,7 @@ $result = array (
                         )
                     )
                 ),
-                'showitem' => 'title, subtitle, catid, keyword, note, note2, email_uid,image, discount,discount_disable,highlight,hidden,--palette--;;1'
+                'showitem' => 'title, subtitle, parent_category, catid, keyword, note, note2, email_uid,image, discount,discount_disable,highlight,hidden,--palette--;;1'
             )
 	),
 	'palettes' => array (

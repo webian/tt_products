@@ -105,8 +105,6 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 		$this->setSingleFromList(false);
 		$this->tt_product_single = array();
 
-		tx_ttproducts_control_basket::init();
-
 		$pibaseObj = GeneralUtility::makeInstance(''.$pibaseClass);
 		$this->cObj = &$pibaseObj->cObj;
 		$flexformArray = GeneralUtility::xml2array($this->cObj->data['pi_flexform']);

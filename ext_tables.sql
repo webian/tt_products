@@ -245,6 +245,7 @@ CREATE TABLE tt_products_cat (
 	discount decimal(19,2) DEFAULT '0.00' NOT NULL,
 	discount_disable tinyint(3) unsigned DEFAULT '0' NOT NULL,
 	highlight int(11) DEFAULT '0' NOT NULL,
+	parent_category int(11) DEFAULT '0' NOT NULL,
 
 	PRIMARY KEY (uid),
 	KEY parent (pid),
@@ -625,7 +626,7 @@ CREATE TABLE sys_products_orders (
 	salutation int(11) DEFAULT '0' NOT NULL,
 	company varchar(80) DEFAULT '' NOT NULL,
 	vat_id varchar(20) DEFAULT '' NOT NULL,
-	address tinytext NOT NULL,
+	address varchar(255) DEFAULT '' NOT NULL,
 	house_no varchar(20) DEFAULT '' NOT NULL,
 	zip varchar(20) DEFAULT '' NOT NULL,
 	city varchar(50) DEFAULT '' NOT NULL,

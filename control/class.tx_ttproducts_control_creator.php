@@ -42,7 +42,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class tx_ttproducts_control_creator implements \TYPO3\CMS\Core\SingletonInterface {
 
-	public function init (&$conf, &$config, $pObj, $cObj)  {
+	public function init (&$conf, &$config, $pObj, $cObj, array $recs = array())  {
 
 		if ($conf['errorLog'] == '{$plugin.tt_products.file.errorLog}') {
 			$conf['errorLog'] = '';
@@ -56,6 +56,8 @@ class tx_ttproducts_control_creator implements \TYPO3\CMS\Core\SingletonInterfac
 		} else {
 			$pLangObj = &$this;
 		}
+
+		tx_ttproducts_control_basket::init($recs, $conf['transmissionSecurity']);
 
  		$config['LLkey'] = $languageObj->getLocalLangKey(); /* $pibaseObj->LLkey; */
 
