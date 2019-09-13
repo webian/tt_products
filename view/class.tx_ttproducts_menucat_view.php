@@ -151,7 +151,7 @@ class tx_ttproducts_menucat_view extends tx_ttproducts_catlist_view_base {
 						array(),
 						$pageAsCategory,
 						$theCode,
-						$basketObj->getBasketExtra(),
+						tx_ttproducts_control_basket::getBasketExtra(),
 						'',
 						'',
 						''

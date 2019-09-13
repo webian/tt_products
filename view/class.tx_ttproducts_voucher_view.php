@@ -63,6 +63,7 @@ class tx_ttproducts_voucher_view extends tx_ttproducts_table_base_view {
 	)	{
         $local_cObj = \JambageCom\Div2007\Utility\FrontendUtility::getContentObjectRenderer();
 		$modelObj = $this->getModelObj();
+        $languageObj = GeneralUtility::makeInstance(\JambageCom\TtProducts\Api\Localization::class);
 
 		$subpartArray['###SUB_VOUCHERCODE###'] = '';
         $wrappedSubpartArray['###SUB_VOUCHERCODE_START###'] = array();

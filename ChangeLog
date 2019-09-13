@@ -1,3 +1,6 @@
+2019-09-13 Franz Holzinger <franz@ttproducts.de>
+    * restructure code into the static class tx_ttproducts_control_basket
+
 2019-09-12 Franz Holzinger <franz@ttproducts.de>
     * compatibility with MySQL strict mode
     * add the field parent_category to tt_products_cat

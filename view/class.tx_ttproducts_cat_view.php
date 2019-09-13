@@ -224,7 +224,7 @@ class tx_ttproducts_cat_view implements \TYPO3\CMS\Core\SingletonInterface {
 				array(),
 				($functablename == 'pages'),
 				$theCode,
-				$basketObj->getBasketExtra(),
+				tx_ttproducts_control_basket::getBasketExtra(),
 				1,
 				''
 			);
@@ -248,7 +248,7 @@ class tx_ttproducts_cat_view implements \TYPO3\CMS\Core\SingletonInterface {
 				array(),
 				$pageAsCategory,
 				$theCode,
-				$basketObj->getBasketExtra(),
+				tx_ttproducts_control_basket::getBasketExtra(),
 				'',
 				'',
 				''

@@ -42,22 +42,36 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class tx_ttproducts_control_creator implements \TYPO3\CMS\Core\SingletonInterface {
 
-	public function init (&$conf, &$config, $pObj, $cObj, array $recs = array())  {
-
+	public function init (
+		&$conf,
+		&$config,
+		$pObj,
+		$cObj,
+		array $recs = array(),
+		array $basketRec = array()
+	) {
 		if ($conf['errorLog'] == '{$plugin.tt_products.file.errorLog}') {
 			$conf['errorLog'] = '';
 		} else if ($conf['errorLog']) {
 			$conf['errorLog'] = GeneralUtility::resolveBackPath(PATH_typo3conf . '../' . $conf['errorLog']);
 		}
 
-        $languageObj = static::getLanguageObj($pLangObj, $cObj, $conf);
+		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
+		$tablesObj->init();
+
+		$languageObj = static::getLanguageObj($pLangObj, $cObj, $conf);
 		if (is_object($pObj))	{
 			$pLangObj = &$pObj;
 		} else {
 			$pLangObj = &$this;
 		}
 
-		tx_ttproducts_control_basket::init($recs, $conf['transmissionSecurity']);
+		tx_ttproducts_control_basket::init(
+			$conf,
+			$tablesObj,
+			$recs,
+			$basketRec
+		);
 
  		$config['LLkey'] = $languageObj->getLocalLangKey(); /* $pibaseObj->LLkey; */
 
@@ -68,8 +82,6 @@ class tx_ttproducts_control_creator implements \TYPO3\CMS\Core\SingletonInterfac
 		);
 		\JambageCom\TtProducts\Api\ControlApi::init($conf, $cObj);
 
-		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
-		$tablesObj->init();
 			// Call all init hooks
 		if (
 			isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['init']) &&

@@ -138,7 +138,7 @@ class tx_ttproducts_catlist_view extends tx_ttproducts_catlist_view_base {
 				$pageAsCategory,
 				$row,
 				$theCode,
-				$basketObj->getBasketExtra()
+				tx_ttproducts_control_basket::getBasketExtra()
 			);
 
 			foreach($catArray[$depth] as $actCategory)	{
@@ -156,7 +156,7 @@ class tx_ttproducts_catlist_view extends tx_ttproducts_catlist_view_base {
 					$pageAsCategory,
 					$row,
 					$theCode,
-					$basketObj->getBasketExtra()
+					tx_ttproducts_control_basket::getBasketExtra()
 				);
 				$childArray = $row['child_category'];
 
@@ -199,8 +199,8 @@ class tx_ttproducts_catlist_view extends tx_ttproducts_catlist_view_base {
 									$currentCat,
 									$pageAsCategory,
 									$childRow,
-									$theCode,
-									$basketObj->getBasketExtra()
+									$theCode,									
+									tx_ttproducts_control_basket::getBasketExtra()
 								);
 
 								if ($t[$subCategoryMarker]['linkCategoryFrameWork'])	{

@@ -49,7 +49,6 @@ class tx_ttproducts_basket implements \TYPO3\CMS\Core\SingletonInterface {
 
 		// Internal: initBasket():
 	public $basket=array();			// initBasket() sets this array based on the registered items
-	public $basketExtra;			// initBasket() uses this for additional information like the current payment/shipping methods
 	public $recs = array(); 		// in initBasket this is set to the recs-array of fe_user.
 	public $basketExt=array();		// "Basket Extension" - holds extended attributes
 	public $order = array(); 		// order data
@@ -288,9 +287,6 @@ class tx_ttproducts_basket implements \TYPO3\CMS\Core\SingletonInterface {
 				$GLOBALS['TSFE']->fe_user->storeSessionData(); // The basket shall not get lost when coming back from external scripts
 			}
 		}
-
-		$basketExtra = $paymentshippingObj->getBasketExtras($formerBasket);
-		$this->basketExtra = $basketExtra;
 	} // init
 
 
@@ -651,11 +647,6 @@ class tx_ttproducts_basket implements \TYPO3\CMS\Core\SingletonInterface {
 
 	public function setUidArray ($uidArray)	{
 		$this->uidArray = $uidArray;
-	}
-
-
-	public function getBasketExtra () {
-		return $this->basketExtra;
 	}
 
 

@@ -236,7 +236,12 @@ class tx_ttproducts_tracking implements \TYPO3\CMS\Core\SingletonInterface {
 
 							if (isset($orderRow) && is_array($orderRow) && $orderRow['uid']) {
 								$basketRec = $paymentshippingObj->getBasketRec($orderRow);
-								$basketExtra = $paymentshippingObj->getBasketExtras($basketRec);
+                                $basketExtra =
+                                    tx_ttproducts_control_basket::getBasketExtras(
+                                        $tablesObj,
+                                        $basketRec,
+                                        $this->conf
+                                    );
 								if (isset($basketExtra) && is_array($basketExtra) && isset($basketExtra['payment.']) && isset($basketExtra['payment.']['mode'])) {
 									$modeText = $basketExtra['payment.']['mode'];
 									$colName = 'pay_mode';
@@ -598,7 +603,13 @@ class tx_ttproducts_tracking implements \TYPO3\CMS\Core\SingletonInterface {
 			$itemArray = $orderObj->getItemArray($orderRow, $calculatedArray, $infoArray);
 			$infoViewObj->init2($infoArray);
 			$basketRec = $paymentshippingObj->getBasketRec($orderRow);
-			$basketExtra = $paymentshippingObj->getBasketExtras($basketRec);
+            $basketExtra =
+                tx_ttproducts_control_basket::getBasketExtras(
+                    $tablesObj,
+                    $basketRec,
+                    $this->conf
+                );
+
 			$orderArray = array();
 			$orderArray['orderTrackingNo'] = $trackingCode;
 			$orderArray['orderUid'] = $orderRow['uid'];

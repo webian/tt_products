@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 Franz Holzinger (franz@ttproducts.de)
+*  (c) 2019 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -41,19 +41,25 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
 class tx_ttproducts_control_basket {
-	protected static $recs;
-	protected static $basketExt;
-	private static $bHasBeenInitialised = false;
+	static protected $recs;
+	static protected $basketExt;
+	static protected $basketExtra = array()
+	static private   $bHasBeenInitialised = false;
 
 
-	static public function init (array $recs = array(), $transmissionSecurity = false) {
+	static public function init (
+		&$conf,
+		$tablesObj,
+		array $recs = array(),
+		array $basketRec = array()
+	) {
 		if (!self::$bHasBeenInitialised) {
             if (is_object($GLOBALS['TSFE'])) {
                 if (empty($recs)) {
                     $recs = self::getStoredRecs();
                     if (empty($recs)) {
                         $recs = array();
-                    } else if ($transmissionSecurity) {
+                    } else if ($conf['transmissionSecurity']) {
                         $errorCode = '';
                         $errorMessage = '';
                         $security = GeneralUtility::makeInstance(\JambageCom\Div2007\Security\TransmissionSecurity::class);
@@ -70,16 +76,234 @@ class tx_ttproducts_control_basket {
                 }
                 self::setRecs($recs);
                 self::setBasketExt(self::getStoredBasketExt());
-                $basketExtra =
-                    \tx_ttproducts_paymentshipping::getBasketExtras(
-                        $recs
-                    );
+				$basketExtra = self::getBasketExtras($tablesObj, $recs, $conf);
                 self::setBasketExtra($basketExtra);
             } else {
                 self::setRecs($recs);
-                self::$basketExt = array();
+				self::setBasketExt(array());
+				self::setBasketExtra(array());
             }
             self::$bHasBeenInitialised = true;
+		}
+	}
+
+
+	/**
+	 * Setting shipping, payment methods
+	 */
+	static public function getBasketExtras ($tablesObj, $basketRec, &$conf) {
+
+		$basketExtra = array();
+
+		// handling and shipping
+		$pskeyArray = array('shipping' => false, 'handling' => true);	// keep this order, because shipping can unable some payment and handling configuration
+		$excludePayment = '';
+		$excludeHandling = '';
+
+		foreach ($pskeyArray as $pskey => $bIsMulti) {
+
+			if ($conf[$pskey . '.']) {
+
+				if ($bIsMulti) {
+					ksort($conf[$pskey . '.']);
+
+					foreach ($conf[$pskey . '.'] as $k => $confArray) {
+
+						if (strpos($k, '.') == strlen($k) - 1) {
+							$k1 = substr($k,0,strlen($k) - 1);
+
+							if (
+								tx_div2007_core::testInt($k1)
+							) {
+								self::getHandlingShipping(
+									$basketRec,
+									$pskey,
+									$k1,
+									$confArray,
+									$excludePayment,
+									$excludeHandling,
+									$basketExtra
+								);
+							}
+						}
+					}
+				} else {
+					$confArray = $conf[$pskey . '.'];
+					self::getHandlingShipping(
+						$basketRec,
+						$pskey,
+						'',
+						$confArray,
+						$excludePayment,
+						$excludeHandling,
+						$basketExtra
+					);
+				}
+			}
+
+				// overwrite handling from shipping
+			if ($pskey == 'shipping' && $conf['handling.']) {
+				if ($excludeHandling) {
+					$exclArr = GeneralUtility::intExplode(',', $excludeHandling);
+					foreach($exclArr as $theVal) {
+						unset($conf['handling.'][$theVal]);
+						unset($conf['handling.'][$theVal . '.']);
+					}
+				}
+			}
+		}
+
+		// overwrite payment from shipping
+		if (is_array($basketExtra['shipping.']) &&
+			is_array($basketExtra['shipping.']['replacePayment.'])) {
+			if (!$conf['payment.']) {
+				$conf['payment.'] = array();
+			}
+
+			foreach ($basketExtra['shipping.']['replacePayment.'] as $k1 => $replaceArray) {
+				foreach ($replaceArray as $k2 => $value2) {
+					if (is_array($value2)) {
+						$conf['payment.'][$k1][$k2] = array_merge($conf['payment.'][$k1][$k2], $value2);
+					} else {
+						$conf['payment.'][$k1][$k2] = $value2;
+					}
+				}
+			}
+		}
+
+			// payment
+		if ($conf['payment.']) {
+			if ($excludePayment) {
+				$exclArr = GeneralUtility::intExplode(',', $excludePayment);
+
+				foreach($exclArr as $theVal) {
+					unset($conf['payment.'][$theVal]);
+					unset($conf['payment.'][$theVal . '.']);
+				}
+			}
+
+			$confArray = self::cleanConfArr($conf['payment.']);
+			foreach($confArray as $key => $val) {
+				if ($val['show'] || !isset($val['show'])) {
+					if ($val['type'] == 'fe_users') {
+						if (
+                            $GLOBALS['TSFE']->loginUser &&
+                            is_array($GLOBALS['TSFE']->fe_user->user)
+                        ) {
+							$paymentField = $tablesObj->get('fe_users')->getFieldName('payment');
+							$paymentMethod = $GLOBALS['TSFE']->fe_user->user[$paymentField];
+							$conf['payment.'][$key . '.']['title'] = $paymentMethod;
+						} else {
+							unset($conf['payment.'][$key . '.']);
+						}
+					}
+					if (($val['visibleForGroupID'] != '') &&
+						(!$tablesObj->get('fe_users')->isUserInGroup($GLOBALS['TSFE']->fe_user->user, $val['visibleForGroupID']))) {
+						unset($conf['payment.'][$key . '.']);
+					}
+				}
+			}
+			ksort($conf['payment.']);
+			reset($conf['payment.']);
+			$k = intval($basketRec['tt_products']['payment']);
+			if (!self::checkExtraAvailable($conf['payment.'][$k . '.'])) {
+				$temp = self::cleanConfArr($conf['payment.'], 1);
+				$k = intval(key($temp));
+			}
+			$basketExtra['payment'] = array($k);
+			$basketExtra['payment.'] = $conf['payment.'][$k . '.'];
+		}
+
+		return $basketExtra;
+	} // getBasketExtras
+
+
+	static public function cleanConfArr ($confArray, $checkShow = 0) {
+		$outArr = array();
+		if (is_array($confArray)) {
+			foreach($confArray as $key => $val) {
+				if (
+					intval($key) &&
+					is_array($val) &&
+					!tx_div2007_core::testInt($key) &&
+					(!$checkShow || !isset($val['show']) || $val['show'])
+				) {
+					$i = intval($key);
+ 					$outArr[$i] = $val;
+				}
+			}
+		}
+		ksort($outArr);
+		reset($outArr);
+		return $outArr;
+	} // cleanConfArr
+
+
+	/**
+	 * Check if payment/shipping option is available
+	 */
+	static public function checkExtraAvailable ($confArray) {
+		$result = false;
+
+		if (
+			is_array($confArray) &&
+			(
+				!isset($confArray['show']) ||
+				$confArray['show']
+			)
+		) {
+			$result = true;
+		}
+
+		return $result;
+	} // checkExtraAvailable
+
+
+	/**
+	 * Setting shipping, payment methods
+	 */
+	static public function getHandlingShipping (
+		$basketRec,
+		$pskey,
+		$subkey,
+		$confArray,
+		&$excludePayment,
+		&$excludeHandling,
+		&$basketExtra
+	) {
+		ksort($confArray);
+		if ($subkey != '') {
+			$valueArray = GeneralUtility::trimExplode('-', $basketRec['tt_products'][$pskey][$subkey]);
+		} else {
+			$valueArray = GeneralUtility::trimExplode('-', $basketRec['tt_products'][$pskey]);
+		}
+		$k = intval($valueArray[0]);
+		if (!self::checkExtraAvailable($confArray[$k . '.'])) {
+			$temp = self::cleanConfArr($confArray, 1);
+			$valueArray[0] = $k = intval(key($temp));
+		}
+
+		if ($subkey != '') {
+			$basketExtra[$pskey . '.'][$subkey] = $valueArray;
+			$basketExtra[$pskey . '.'][$subkey . '.'] = $confArray[$k . '.'];
+			if ($pskey == 'shipping') {
+				$newExcludePayment = trim($basketExtra[$pskey . '.'][$subkey . '.']['excludePayment']);
+				$newExcludeHandling = trim($basketExtra[$pskey . '.'][$subkey . '.']['excludeHandling']);
+			}
+		} else {
+			$basketExtra[$pskey] = $valueArray;
+			$basketExtra[$pskey . '.'] = $confArray[$k . '.'];
+			if ($pskey == 'shipping') {
+				$newExcludePayment = trim($basketExtra[$pskey . '.']['excludePayment']);
+				$newExcludeHandling = trim($basketExtra[$pskey . '.']['excludeHandling']);
+			}
+		}
+
+		if ($newExcludePayment != '') {
+			$excludePayment = ($excludePayment != '' ? $excludePayment . ',' : '') . $newExcludePayment;
+		}
+		if ($newExcludeHandling != '') {
+			$excludeHandling = ($excludeHandling != '' ? $excludeHandling . ',' : '') . $newExcludeHandling;
 		}
 	}
 
@@ -120,7 +344,17 @@ class tx_ttproducts_control_basket {
         self::$basketExt = $basketExt;
     }
 
-    
+
+    static public function getBasketExtra () {
+        return self::$basketExtra;
+    }
+
+
+    static public function setBasketExtra ($basketExtra) {
+        self::$basketExtra = $basketExtra;
+    }
+
+
 	static public function getStoredBasketExt () {
 		$rc = $GLOBALS['TSFE']->fe_user->getKey('ses','basketExt');
 		return $rc;

@@ -1620,7 +1620,7 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 								$tmp = array(),
 								$pageAsCategory,
 								$theCode,
-								$basketObj->getBasketExtra(),
+                                tx_ttproducts_control_basket::getBasketExtra(),
 								'',
 								'',
 								''
@@ -1639,7 +1639,7 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 								array(),
 								$pageAsCategory,
 								$theCode,
-								$basketObj->getBasketExtra(),
+								tx_ttproducts_control_basket::getBasketExtra(),
 								1,
 								''
 							);
@@ -1656,7 +1656,7 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 										$categoryWrappedSubpartArray,
 										$viewCatTagArray,
 										$theCode,
-										$basketObj->getBasketExtra()
+										tx_ttproducts_control_basket::getBasketExtra()
 									);
 								}
 
@@ -1685,7 +1685,7 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 							$prodRow = $tablesObj->get('tt_products')->get($row['uid_product']);
 
 							// $variant = $itemTable->variant->getFirstVariantRow();
-							$item = $basketObj->getItem($basketObj->getBasketExtra(), $prodRow, 'firstVariant');
+							$item = $basketObj->getItem(tx_ttproducts_control_basket::getBasketExtra(), $prodRow, 'firstVariant');
 
 							$itemTableViewArray['product']->getModelMarkerArray (
 								$prodRow,
@@ -1697,7 +1697,7 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 								$viewProductsTagArray,
 								array(),
 								$theCode,
-								$basketObj->getBasketExtra(),
+								tx_ttproducts_control_basket::getBasketExtra(),
 								$iCount,
 								'',
 								'',
@@ -1714,7 +1714,7 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 								$wrappedSubpartArray,
 								$viewProductsTagArray,
 								$theCode,
-								$basketObj->getBasketExtra(),
+								tx_ttproducts_control_basket::getBasketExtra(),
 								$iCount
 							);
 
@@ -1843,7 +1843,7 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 						$row = array_merge($row, $mergeRow);
 					}
 					$markerArray = array();
-					$item = $basketObj->getItem($basketObj->getBasketExtra(), $row, 'firstVariant');
+					$item = $basketObj->getItem(tx_ttproducts_control_basket::getBasketExtra(), $row, 'firstVariant');
 					if (!empty($item)) {
 						$row = $item['rec'];
 					}
@@ -1882,7 +1882,7 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 							$articleViewTagArray,
 							array(),
 							$theCode,
-							$basketObj->getBasketExtra(),
+							tx_ttproducts_control_basket::getBasketExtra(),
 							'from-tt-products-articles',
 							'',
 							'',
@@ -1899,7 +1899,7 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 							$wrappedSubpartArray,
 							$articleViewTagArray,
 							$theCode,
-							$basketObj->getBasketExtra(),
+							tx_ttproducts_control_basket::getBasketExtra(),
 							$iCount
 						);
 					}
@@ -1915,7 +1915,7 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 							$prodVariantRow,
 							'',
 							$theCode,
-							$basketObj->getBasketExtra()
+							tx_ttproducts_control_basket::getBasketExtra()
 						);
 						$markerArray = array_merge($markerArray, $currPriceMarkerArray);
 
@@ -1980,7 +1980,7 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 						$viewTagArray,
 						array(),
 						$theCode,
-						$basketObj->getBasketExtra(),
+						tx_ttproducts_control_basket::getBasketExtra(),
 						'',
 						'',
 						'',
@@ -2037,7 +2037,7 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 							$wrappedSubpartArray,
 							$viewTagArray,
 							$theCode,
-							$basketObj->getBasketExtra(),
+							tx_ttproducts_control_basket::getBasketExtra(),
 							$iCount
 						);
  					} else {
@@ -2049,7 +2049,7 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 							$wrappedSubpartArray,
 							$viewTagArray,
 							$theCode,
-							$basketObj->getBasketExtra(),
+							tx_ttproducts_control_basket::getBasketExtra(),
 							$iCount
 						);
 					}
@@ -2071,7 +2071,7 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 							array(),
 							$pageAsCategory,
 							$theCode,
-							$basketObj->getBasketExtra(),
+							tx_ttproducts_control_basket::getBasketExtra(),
 							'',
 							''
 						);
@@ -2248,7 +2248,7 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 						$tmp = array(),
 						$pageAsCategory,
 						$theCode,
-						$basketObj->getBasketExtra(),
+						tx_ttproducts_control_basket::getBasketExtra(),
 						$iCount,
 						'',
 						''

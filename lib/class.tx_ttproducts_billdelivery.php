@@ -231,6 +231,8 @@ class tx_ttproducts_billdelivery implements \TYPO3\CMS\Core\SingletonInterface {
  		$basketObj = GeneralUtility::makeInstance('tx_ttproducts_basket');
 		$basketView = GeneralUtility::makeInstance('tx_ttproducts_basket_view');
 		$markerObj = GeneralUtility::makeInstance('tx_ttproducts_marker');
+		$cnfObj = GeneralUtility::makeInstance('tx_ttproducts_config');
+		$conf = $cnfObj->getConf();
 		$globalMarkerArray = $markerObj->getGlobalMarkerArray();
 		$orderObj = $tablesObj->get('sys_products_orders');
 		$infoViewObj = GeneralUtility::makeInstance('tx_ttproducts_info_view');
@@ -246,7 +248,12 @@ class tx_ttproducts_billdelivery implements \TYPO3\CMS\Core\SingletonInterface {
 		$infoViewObj->init2($infoArray);
 
 		$basketRec = $paymentshippingObj->getBasketRec($orderRow);
-		$basketExtra = $paymentshippingObj->getBasketExtras($basketRec);
+		$basketExtra =
+			tx_ttproducts_control_basket::getBasketExtras(
+				$tablesObj,
+				$basketRec,
+				$conf
+			);
 
 		if ($type == 'bill') {
 			$subpartMarker='BILL_TEMPLATE';

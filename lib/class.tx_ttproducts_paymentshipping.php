@@ -95,48 +95,6 @@ class tx_ttproducts_paymentshipping implements \TYPO3\CMS\Core\SingletonInterfac
 
 
 	/**
-	 * Setting shipping, payment methods
-	 */
-	public function getHandlingShipping ($basketRec, $pskey, $subkey, $confArray, &$excludePayment, &$excludeHandling, &$basketExtra) {
-
-		ksort($confArray);
-		if ($subkey != '')	{
-			$valueArray = GeneralUtility::trimExplode('-', $basketRec['tt_products'][$pskey][$subkey]);
-		} else {
-			$valueArray = GeneralUtility::trimExplode('-', $basketRec['tt_products'][$pskey]);
-		}
-		$k = intval($valueArray[0]);
-
-		if (!$this->checkExtraAvailable($confArray[$k . '.'])) {
-			$temp = $this->cleanConfArr($confArray,1);
-			$valueArray[0] = $k = intval(key($temp));
-		}
-		if ($subkey != '')	{
-			$basketExtra[$pskey . '.'][$subkey] = $valueArray;
-			$basketExtra[$pskey . '.'][$subkey . '.'] = $confArray[$k . '.'];
-
-			if ($pskey == 'shipping')	{
-				$newExcludePayment = trim($basketExtra[$pskey . '.'][$subkey . '.']['excludePayment']);
-				$newExcludeHandling = trim($basketExtra[$pskey . '.'][$subkey . '.']['excludeHandling']);
-			}
-		} else {
-			$basketExtra[$pskey] = $valueArray;
-			$basketExtra[$pskey . '.'] = $confArray[$k . '.'];
-			if ($pskey == 'shipping')	{
-				$newExcludePayment = trim($basketExtra[$pskey . '.']['excludePayment']);
-				$newExcludeHandling = trim($basketExtra[$pskey . '.']['excludeHandling']);
-			}
-		}
-		if ($newExcludePayment != '')	{
-			$excludePayment = ($excludePayment != '' ? $excludePayment . ',' : '') . $newExcludePayment;
-		}
-		if ($newExcludeHandling != '')	{
-			$excludeHandling = ($excludeHandling != '' ? $excludeHandling . ',' : '') . $newExcludeHandling;
-		}
-	}
-
-
-	/**
 	 * get basket record for tracking, billing and delivery data row
 	 */
 	public function getBasketRec ($row) {
@@ -150,137 +108,6 @@ class tx_ttproducts_paymentshipping implements \TYPO3\CMS\Core\SingletonInterfac
 
 		return $basketRec;
 	}
-
-	/**
-	 * Setting shipping, payment methods
-	 */
-	public function getBasketExtras ($basketRec) {
-		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
-		$basketExtra = array();
-
-		// handling and shipping
-		$pskeyArray = array('shipping' => false, 'handling' => true);	// keep this order, because shipping can unable some handling configuration
-		$excludePayment = '';
-		$excludeHandling = '';
-
-		foreach ($pskeyArray as $pskey => $bIsMulti)	{
-
-			if ($this->conf[$pskey . '.']) {
-
-				if ($bIsMulti) 	{
-					ksort($this->conf[$pskey . '.']);
-
-					foreach ($this->conf[$pskey . '.'] as $k => $confArray)	{
-
-						if (strpos($k,'.') == strlen($k) - 1)	{
-							$k1 = substr($k,0,strlen($k) - 1);
-
-							if (
-								tx_div2007_core::testInt($k1)
-							) {
-								$this->getHandlingShipping(
-									$basketRec,
-									$pskey,
-									$k1,
-									$confArray,
-									$excludePayment,
-									$excludeHandling,
-									$basketExtra
-								);
-							}
-						}
-					}
-				} else {
-					$confArray = $this->conf[$pskey . '.'];
-					$this->getHandlingShipping(
-						$basketRec,
-						$pskey,
-						'',
-						$confArray,
-						$excludePayment,
-						$excludeHandling,
-						$basketExtra
-					);
-				}
-			}
-
-				// overwrite handling from shipping
-			if ($pskey == 'shipping' && $this->conf['handling.']) {
-				if ($excludeHandling)	{
-					$exclArr = GeneralUtility::intExplode(',', $excludeHandling);
-					foreach($exclArr as $theVal)	{
-						unset($this->conf['handling.'][$theVal]);
-						unset($this->conf['handling.'][$theVal . '.']);
-					}
-				}
-			}
-		}
-
-		// overwrite payment from shipping
-		if (is_array($basketExtra['shipping.']) &&
-			is_array($basketExtra['shipping.']['replacePayment.']))	{
-			if (!$this->conf['payment.'])	{
-				$this->conf['payment.'] = array();
-			}
-
-			foreach ($basketExtra['shipping.']['replacePayment.'] as $k1 => $replaceArray)	{
-				foreach ($replaceArray as $k2 => $value2)	{
-					if (is_array($value2))	{
-						$this->conf['payment.'][$k1][$k2] = array_merge($this->conf['payment.'][$k1][$k2], $value2);
-					} else {
-						$this->conf['payment.'][$k1][$k2] = $value2;
-					}
-				}
-			}
-		}
-
-			// payment
-		if ($this->conf['payment.']) {
-			if ($excludePayment)	{
-				$exclArr = GeneralUtility::intExplode(',', $excludePayment);
-				foreach($exclArr as $theVal)	{
-					unset($this->conf['payment.'][$theVal]);
-					unset($this->conf['payment.'][$theVal.'.']);
-				}
-			}
-
-			$confArray = $this->cleanConfArr($this->conf['payment.']);
-			foreach($confArray as $key => $val) {
-				if ($val['show'] || !isset($val['show']))	{
-					if ($val['type'] == 'fe_users')	{
-						if (
-                            $GLOBALS['TSFE']->loginUser &&
-                            is_array($GLOBALS['TSFE']->fe_user->user)
-                        )	{
-							$paymentField = $tablesObj->get('fe_users')->getFieldName('payment');
-							$paymentMethod = $GLOBALS['TSFE']->fe_user->user[$paymentField];
-							$this->conf['payment.'][$key.'.']['title'] = $paymentMethod;
-						} else {
-							unset($this->conf['payment.'][$key.'.']);
-						}
-					}
-					if (
-                        $GLOBALS['TSFE']->loginUser &&
-                        ($val['visibleForGroupID'] != '') &&
-						(!$tablesObj->get('fe_users')->isUserInGroup($GLOBALS['TSFE']->fe_user->user, $val['visibleForGroupID']))
-                    ) {
-						unset($this->conf['payment.'][$key.'.']);
-					}
-				}
-			}
-			ksort($this->conf['payment.']);
-			reset($this->conf['payment.']);
-			$k = intval($basketRec['tt_products']['payment']);
-			if (!$this->checkExtraAvailable($this->conf['payment.'][$k . '.']))	{
-				$temp = $this->cleanConfArr($this->conf['payment.'],1);
-				$k = intval(key($temp));
-			}
-			$basketExtra['payment'] = array($k);
-			$basketExtra['payment.'] = $this->conf['payment.'][$k.'.'];
-		}
-
-		return $basketExtra;
-	} // getBasketExtras
 
 
 	/**
@@ -586,13 +413,13 @@ class tx_ttproducts_paymentshipping implements \TYPO3\CMS\Core\SingletonInterfac
 			$confArray = $this->conf[$pskey . '.'][$subkey . '.'];
 
 			// $confArray = array('TAXpercentage' => 19, '10.' => array('title' => 'Druckkosten', 'price' => 17));
- 			$confArray = $this->cleanConfArr($confArray);
+ 			$confArray = tx_ttproducts_control_basket::cleanConfArr($confArray);
 			$htmlInputAddition = '[' . $subkey . ']';
 			if (is_array($this->conf[$pskey . '.'][$subkey . '.']))	{
 				$type = $this->conf[$pskey . '.'][$subkey . '.']['radio'];
 			}
 		} else {
-			$confArray = $this->cleanConfArr($this->conf[$pskey . '.']);
+			$confArray = tx_ttproducts_control_basket::cleanConfArr($this->conf[$pskey . '.']);
 			$htmlInputAddition = '';
 			if (is_array($this->conf[$pskey . '.']))	{
 				$type = $this->conf[$pskey . '.']['radio'];
@@ -789,29 +616,6 @@ class tx_ttproducts_paymentshipping implements \TYPO3\CMS\Core\SingletonInterfac
 		}
 		return $out;
 	} // generateRadioSelect
-
-
-	public function cleanConfArr ($confArray,$checkShow=0)	{
-		$outArr=array();
-		if (is_array($confArray)) {
-			foreach($confArray as $key => &$val)	{
-
-				if (
-					intval($key) &&
-					is_array($val) &&
-					!tx_div2007_core::testInt($key) &&
-					(!$checkShow || !isset($val['show']) || $val['show'])
-				) {
-					$i = intval($key);
- 					$outArr[$i]=$val;
-				}
-			}
-		}
-		ksort($outArr);
-		reset($outArr);
-		return $outArr;
-	} // cleanConfArr
-
 
 	public function getConfiguredPrice (
 		$pskey,

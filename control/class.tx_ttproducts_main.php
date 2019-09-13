@@ -435,7 +435,8 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 		// *************************************
 		// *** Listing items:
 		// *************************************
-		$basketObj->create($basketObj->getBasketExtra(), $this->conf['useArticles'], $basketObj->getFuncTablename()); // get the basket->itemArray
+        $basketExtra = tx_ttproducts_control_basket::getBasketExtra();
+		$basketObj->create($basketExtra, $this->conf['useArticles'], $basketObj->getFuncTablename()); // get the basket->itemArray
 
 		$voucher = $tablesObj->get('voucher');
 		$recs = tx_ttproducts_control_basket::getRecs();
