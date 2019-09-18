@@ -302,7 +302,7 @@ class tx_ttproducts_voucher extends tx_ttproducts_table_base {
 				$this->setValid(true);
 
 				$this->setCodeUsed($voucherCode, $row);
-				$GLOBALS['TSFE']->fe_user->setKey('ses', 'vo', $this->getUsedCodeArray());
+				tx_ttproducts_control_session::writeSession('vo', $this->getUsedCodeArray());
 			}
 		}
 	}

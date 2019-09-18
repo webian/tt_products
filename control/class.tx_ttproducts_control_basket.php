@@ -330,8 +330,7 @@ class tx_ttproducts_control_basket {
 
 
 	static public function store ($type, $valArray) {
-		$GLOBALS['TSFE']->fe_user->setKey('ses', $type, $valArray);
-		$GLOBALS['TSFE']->fe_user->storeSessionData(); // The basket shall not get lost when coming back from external scripts
+        tx_ttproducts_control_session::writeSession($type, $valueArray);
 	}
 
 

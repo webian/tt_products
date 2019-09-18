@@ -90,7 +90,7 @@ class tx_ttproducts_card extends tx_ttproducts_table_base {
 
 				if ($newId)	{
 					$ccArray['cc_uid'] = $newId;
-					$GLOBALS['TSFE']->fe_user->setKey('ses','cc',$ccArray);
+					tx_ttproducts_control_session::writeSession('cc', $ccArray);
 					for ($i = 1; $i <= 3; ++$i)	{
 						$this->ccArray['cc_number_'.$i] = ($this->ccArray['cc_number_'.$i] ? $this->asteriskArray[$this->sizeArray['cc_number_'.$i]] : '');
 					}

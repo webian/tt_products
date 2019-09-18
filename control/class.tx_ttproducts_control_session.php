@@ -37,8 +37,7 @@
  */
 
 
-
-class tx_ttproducts_control_session implements \TYPO3\CMS\Core\SingletonInterface {
+class tx_ttproducts_control_session {
 
 	static public function filterExtensionData ($session) {
 
@@ -47,6 +46,30 @@ class tx_ttproducts_control_session implements \TYPO3\CMS\Core\SingletonInterfac
 			$result = $session['tt_products'];
 		}
 		return $result;
+	}
+
+	static public function readSession ($key) {
+		$result = '';
+		$data = $GLOBALS['TSFE']->fe_user->getKey('ses', $key);
+		if (!empty($data)) {
+			$result = $data;
+		}
+		return $result;
+	}
+
+	static public function writeSession ($key, $value) {
+
+        // Storing value ONLY if there is a confirmed cookie set,
+        // otherwise a shellscript could easily be spamming the fe_sessions table
+        // with bogus content and thus bloat the database
+
+        if (
+            !$GLOBALS['TYPO3_CONF_VARS']['FE']['maxSessionDataSize'] ||
+            $GLOBALS['TSFE']->fe_user->isCookieSet()
+        ) {
+            $GLOBALS['TSFE']->fe_user->setKey('ses', $key, $value);
+            $GLOBALS['TSFE']->fe_user->storeSessionData();  // The basket shall not get lost when coming back from external scripts
+		}
 	}
 
 	/*************************************
@@ -61,7 +84,8 @@ class tx_ttproducts_control_session implements \TYPO3\CMS\Core\SingletonInterfac
 	static public function readSessionData ($readAll = false) {
 		$sessionData = array();
 		$extKey = TT_PRODUCTS_EXT;
-		$allSessionData = $GLOBALS['TSFE']->fe_user->getKey('ses', 'feuser');
+		$allSessionData = static::readSession('feuser');
+
 		if (isset($allSessionData) && is_array($allSessionData)) {
 			if ($readAll) {
 				$sessionData = $allSessionData;
@@ -86,7 +110,7 @@ class tx_ttproducts_control_session implements \TYPO3\CMS\Core\SingletonInterfac
 		$clearSession = empty($data);
 		$extKey = TT_PRODUCTS_EXT;
 			// Read all session data
-		$allSessionData = self::readSessionData(true);
+		$allSessionData = static::readSessionData(true);
 
 		if (is_array($allSessionData[$extKey])) {
 			$keys = array_keys($allSessionData[$extKey]);
@@ -95,14 +119,12 @@ class tx_ttproducts_control_session implements \TYPO3\CMS\Core\SingletonInterfac
 					unset($allSessionData[$extKey][$key]);
 				}
 			}
-
 			tx_div2007_core::mergeRecursiveWithOverrule($allSessionData[$extKey], $data);
 		} else {
 			$allSessionData[$extKey] = $data;
 		}
-		$GLOBALS['TSFE']->fe_user->setKey('ses', 'feuser', $allSessionData);
-			// The feuser session data shall not get lost when coming back from external scripts
-		$GLOBALS['TSFE']->fe_user->storeSessionData();
+		static::writeSession('feuser', $allSessionData);
 	}
 }
+
 

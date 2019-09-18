@@ -1,3 +1,6 @@
+2019-09-18 Franz Holzinger <franz@ttproducts.de>
+    * store session value only if there is a confirmed cookie set
+
 2019-09-13 Franz Holzinger <franz@ttproducts.de>
     * restructure code into the static class tx_ttproducts_control_basket
 

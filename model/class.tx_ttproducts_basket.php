@@ -102,7 +102,7 @@ class tx_ttproducts_basket implements \TYPO3\CMS\Core\SingletonInterface {
             $bAgbSet = $this->recs['personinfo']['agb'];
             $this->recs['personinfo']['agb'] = (boolean) $_REQUEST['recs']['personinfo']['agb'];
             if ($bAgbSet != $this->recs['personinfo']['agb'])   {
-                $GLOBALS['TSFE']->fe_user->setKey('ses', 'recs', $this->recs); // store this change
+                tx_ttproducts_control_session::writeSession('recs', $this->recs); // store this change
             }
         }
 
