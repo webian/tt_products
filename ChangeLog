@@ -1,3 +1,6 @@
+2019-09-20 Franz Holzinger <franz@ttproducts.de>
+    * use namespace for the hook login_confirmed of felogin
+
 2019-09-18 Franz Holzinger <franz@ttproducts.de>
     * store session value only if there is a confirmed cookie set
 
