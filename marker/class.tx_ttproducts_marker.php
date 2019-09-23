@@ -227,7 +227,7 @@ class tx_ttproducts_marker implements \TYPO3\CMS\Core\SingletonInterface {
 					switch($key)	{
 						case 'image.':
 							foreach ($value as $k2 => $v2)	{
-								$fileresource = $this->cObj->fileResource($v2);
+                                $fileresource =  \JambageCom\Div2007\Utility\FrontendUtility::fileResource($v2);
 								$markerArray['###IMAGE' . strtoupper($k2) . '###'] = $fileresource;
 							}
 						break;

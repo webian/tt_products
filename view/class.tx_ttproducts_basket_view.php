@@ -139,7 +139,7 @@ class tx_ttproducts_basket_view implements \TYPO3\CMS\Core\SingletonInterface {
 
 		// This is for the Basketoverview
 		$markerArray['###NUMBER_GOODSTOTAL###'] = $calculatedArray['count'];
-		$fileresource = $this->cObj->fileResource($this->conf['basketPic']);
+        $fileresource =  \JambageCom\Div2007\Utility\FrontendUtility::fileResource($this->conf['basketPic']);
 		$markerArray['###IMAGE_BASKET###'] = $fileresource;
 
 		return $markerArray;
