@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2012 Franz Holzinger (franz@ttproducts.de)
+*  (c) 2019 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -40,6 +40,7 @@
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
+use JambageCom\Div2007\Utility\FrontendUtility;
 
 
 class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
@@ -312,6 +313,9 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 		&$subpartArray,
 		&$wrappedSubpartArray
 	)	{
+		$cObj = FrontendUtility::getContentObjectRenderer();
+		$languageObj = GeneralUtility::makeInstance(\JambageCom\TtProducts\Api\Localization::class);
+
 		$pibaseObj = GeneralUtility::makeInstance('' . $this->pibaseClass);
 		$subpartmarkerObj = GeneralUtility::makeInstance('tx_ttproducts_subpartmarker');
 		$pointerParam = tx_ttproducts_model_control::getPointerPiVar('LIST');
@@ -342,45 +346,24 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 
 		if ($productsCount > $limit)	{ // there is more than one page, so let's browse
 
-			$t['browseFrameWork'] = $this->cObj->getSubpart(
+            $t['browseFrameWork'] = tx_div2007_core::getSubpart(
 				$t['listFrameWork'],
 				$subpartmarkerObj->spMarker('###LINK_BROWSE###')
 			);
 
-			if ($t['browseFrameWork'] != '')	{
+			if ($t['browseFrameWork'] != '') {
 
-				$wrappedSubpartArray['###LINK_BROWSE###'] = array('','');
+				$wrappedSubpartArray['###LINK_BROWSE###'] = array('', '');
 
-				if (is_array($browserConf))	{
-					$bShowFirstLast = (isset($browserConf['showFirstLast']) ? $browserConf['showFirstLast'] : true);
-					$pagefloat = 0;
-					$imageArray = array();
-					$imageActiveArray = array();
-					$piVars = tx_ttproducts_model_control::getPiVars();
-					$browseObj = GeneralUtility::makeInstance('tx_div2007_alpha_browse_base');
-					$browseObj->init_fh001(
-						$piVars,
-						array(),
-						false,	// no autocache used yet
-						$pibaseObj->pi_USER_INT_obj,
-						$productsCount,
-						$limit,
-						10000,
-						$bShowFirstLast,
-						false,
-						$pagefloat,
-						$imageArray,
-						$imageActiveArray
-					);
-
+				if (is_array($browserConf)) {
 					$addQueryString = array();
 					$this->getSearchParams($addQueryString);
-					$languageObj = GeneralUtility::makeInstance(\JambageCom\TtProducts\Api\Localization::class);
+
 					$markerArray['###BROWSE_LINKS###'] =
-						tx_div2007_alpha5::list_browseresults_fh003(
+						FrontendUtility::listBrowser(
 							$browseObj,
 							$languageObj,
-							$pibaseObj->cObj,
+							$cObj,
 							$prefixId,
 							true,
 							1,
@@ -391,7 +374,7 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 							$addQueryString
 						);
 				} else {
-					for ($i = 0 ; $i < ($productsCount/$limit); $i++)	 {
+					for ($i = 0 ; $i < ($productsCount / $limit); $i++)	 {
 
 						if (($begin_at >= $i*$limit) && ($begin_at < $i*$limit+$limit))	{
 							$markerArray['###BROWSE_LINKS###'] .= ' <b>' . (string) ($i + 1) . '</b> ';
@@ -1298,6 +1281,10 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 			$productsCount = $row[0];
 
             $browserConf = $this->getBrowserConf($tableConfArray[$functablename]); // needed for the replacement of the method pi_linkTP_keepPIvars by FrontendUtility::linkTPKeepCtrlVars and the page browser
+            $maxPages = 10000;
+            if (isset($browserConf['maxPages'])) {
+                $maxPages = intval($browserConf['maxPages']);
+            }
 
             $browseObj =
                 $this->getBrowserObj(
@@ -1306,7 +1293,7 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
                     $browserConf,
                     $productsCount,
                     $limit,
-                    10000
+                    $maxPages
                 );
 
 				// range check to current productsCount

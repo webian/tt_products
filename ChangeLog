@@ -1,3 +1,9 @@
+
+
+2019-09-24 Franz Holzinger <franz@ttproducts.de>
+    * new feature: maxPages for the div2007 browser 
+    * bugfix: ###BROWSE_LINKS### has been wrongly used in one case.
+
 2019-09-20 Franz Holzinger <franz@ttproducts.de>
     * use namespace for the hook login_confirmed of felogin
 
