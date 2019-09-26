@@ -112,6 +112,7 @@
 			<label index="tt_products.download_info">Information required from the download</label>
 			<label index="tt_products.download_info.limitedToDomain">limited to a domain</label>
 			<label index="tt_products.title">Name:</label>
+            <label index="tt_products.slug">URL Segment</label>
 			<label index="tt_products.sellstarttime">Starttime for selling:</label>
 			<label index="tt_products.sellendtime">Endtime for selling:</label>
 			<label index="tt_products_language">Products (alternative language)</label>
@@ -163,6 +164,7 @@
 			<label index="tt_products_downloads.edition">Edition</label>
 			<label index="tt_products_downloads.edition.complete">Complete</label>
 			<label index="tt_products_downloads.edition.partial">Partial</label>
+			<label index="tt_products_downloads.open">Open for download</label>
 			<label index="tt_products_downloads.price_enable">Enable the Price</label>
 			<label index="tt_products_downloads.price">Price</label>
 			<label index="tt_products_downloads_language">Product Downloads (alternative language)</label>
@@ -391,6 +393,7 @@
 			<label index="tt_content.pi_flexform.display_mode.44">Products: list all users mostly visited</label>
 			<label index="tt_content.pi_flexform.display_mode.45">Products: list affordable items</label>
 			<label index="tt_content.pi_flexform.display_mode.46">Orders: downloads</label>
+			<label index="tt_content.pi_flexform.display_mode.control">Control</label>
 			<label index="tt_content.pi_flexform.display_mode.unused">Unused</label>
 			<label index="tt_content.pi_flexform.product_selection">Product selection</label>
 			<label index="tt_content.pi_flexform.category_selection">Category selection</label>
@@ -546,6 +549,7 @@
 			<label index="tt_products_downloads.edition">Ausgabe</label>
 			<label index="tt_products_downloads.edition.complete">Gesamtausgabe</label>
 			<label index="tt_products_downloads.edition.partial">Teilausgabe</label>
+			<label index="tt_products_downloads.open">Frei zum Download</label>
 			<label index="tt_products_downloads.price_enable">Aktivieren des Preises</label>
 			<label index="tt_products_downloads.price">Preis</label>
 			<label index="tt_products_downloads_language">Produkt herunterladbare Dateien (alternative Sprache)</label>

@@ -142,6 +142,25 @@ $result = array (
 				'default' => ''
 			)
 		),
+        'slug' => array (
+            'exclude' => 1,
+            'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.slug',
+            'config' => array (
+                'type' => 'slug',
+                'size' => 50,
+                'generatorOptions' => array (
+                    'fields' => array ('title', 'catid'),
+                    'fieldSeparator' => '/',
+                    'prefixParentPageSlug' => true,
+                    'replacements' => array (
+                        '/' => '',
+                    ),
+                ),
+                'fallbackCharacter' => '-',
+                'eval' => 'uniqueInSite',
+                'default' => ''
+            )
+        ),
 		'parent_category' => array (
 			'exclude' => 1,
 			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products_cat.parent_category',
@@ -287,7 +306,7 @@ $result = array (
                         )
                     )
                 ),
-                'showitem' => 'title, subtitle, parent_category, catid, keyword, note, note2, email_uid,image, discount,discount_disable,highlight,hidden,--palette--;;1'
+                'showitem' => 'title, subtitle, slug, parent_category, catid, keyword, note, note2, email_uid,image, discount,discount_disable,highlight,hidden,--palette--;;1'
             )
 	),
 	'palettes' => array (

@@ -105,6 +105,25 @@ $result = array (
 				'default' => ''
 			)
 		),
+        'slug' => array (
+            'exclude' => 1,
+            'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.slug',
+            'config' => array (
+                'type' => 'slug',
+                'size' => 50,
+                'generatorOptions' => array (
+                    'fields' => array ('name', 'crdate'),
+                    'fieldSeparator' => '/',
+                    'prefixParentPageSlug' => true,
+                    'replacements' => array (
+                        '/' => '',
+                    ),
+                ),
+                'fallbackCharacter' => '-',
+                'eval' => 'uniqueInSite',
+                'default' => ''
+            )
+        ),
 		'company' => array (
 			'exclude' => 1,
 			'label' => DIV2007_LANGUAGE_LGL . 'company',
@@ -666,7 +685,7 @@ $result = array (
                         )
                     ),
                 'showitem' =>
-                    'hidden,--palette--;;1, name, sys_language_uid,first_name,last_name,company,vat_id,salutation,address,house_no,zip,city,country,telephone,email,payment,shipping,amount,tax_mode,pay_mode,email_notify,tracking_code,status,fax,business_partner,organisation_form,agb,feusers_uid,creditpoints,creditpoints_spended,creditpoints_saved,creditpoints_gifts,desired_date,desired_time,client_ip,note,giftservice,foundby,giftcode,cc_uid,ac_uid,date_of_birth,date_of_payment,date_of_delivery,bill_no,radio1,ordered_products,' .
+                    'hidden,--palette--;;1, name, sys_language_uid,first_name,last_name,slug,company,vat_id,salutation,address,house_no,zip,city,country,telephone,email,payment,shipping,amount,tax_mode,pay_mode,email_notify,tracking_code,status,fax,business_partner,organisation_form,agb,feusers_uid,creditpoints,creditpoints_spended,creditpoints_saved,creditpoints_gifts,desired_date,desired_time,client_ip,note,giftservice,foundby,giftcode,cc_uid,ac_uid,date_of_birth,date_of_payment,date_of_delivery,bill_no,radio1,ordered_products,' .
 				'--div--;LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:sys_products_orders.orderHtmlDiv,orderHtml,'
             )
 	),

@@ -15,7 +15,6 @@ if (
 }
 
 
-
 $orderBySortingTablesArray = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['orderBySortingTables']);
 if (
     !empty($orderBySortingTablesArray) &&
@@ -25,8 +24,13 @@ if (
 }
 
 
-
 $excludeArray = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['exclude.'];
+if (
+    defined('TYPO3_version') &&
+    version_compare(TYPO3_version, '9.0.0', '<')
+) {
+    $excludeArray[$table] .= ',slug';
+}
 
 if (
     isset($excludeArray) &&

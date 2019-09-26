@@ -145,6 +145,25 @@ $result = array (
 				'default' => ''
 			)
 		),
+        'slug' => array (
+            'exclude' => 1,
+            'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.slug',
+            'config' => array (
+                'type' => 'slug',
+                'size' => 50,
+                'generatorOptions' => array (
+                    'fields' => array ('title', 'itemnumber'),
+                    'fieldSeparator' => '/',
+                    'prefixParentPageSlug' => true,
+                    'replacements' => array (
+                        '/' => '',
+                    ),
+                ),
+                'fallbackCharacter' => '-',
+                'eval' => 'uniqueInSite',
+                'default' => ''
+            )
+        ),
 		'keyword' => array (
 			'exclude' => 1,
 			'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.keyword',
@@ -451,7 +470,7 @@ $result = array (
     'palettes' => array (
         '1' => array('showitem' => 'starttime, endtime, fe_group'),
         '2' => array('showitem' => 'price2, config'),
-        '3' => array('showitem' => 'subtitle, keyword'),
+        '3' => array('showitem' => 'subtitle, slug, keyword'),
     )
 );
 

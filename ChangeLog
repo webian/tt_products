@@ -1,4 +1,6 @@
 
+2019-09-26 Franz Holzinger <franz@ttproducts.de>
+    * compatibility for TYPO3 9: add slug fields to support URL paths
 
 2019-09-24 Franz Holzinger <franz@ttproducts.de>
     * new feature: maxPages for the div2007 browser 
