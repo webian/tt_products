@@ -81,7 +81,7 @@ class tx_ttproducts_product extends tx_ttproducts_article_base {
 
 
 	public function fixTableConf (&$tableConf) {
-		if (t3lib_extMgm::isLoaded('static_info_tables_taxes')) {
+		if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('static_info_tables_taxes')) {
 			$eInfo = tx_div2007_alpha5::getExtensionInfo_fh003('static_info_tables_taxes');
 
 			if (is_array($eInfo)) {

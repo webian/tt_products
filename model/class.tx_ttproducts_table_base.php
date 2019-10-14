@@ -36,6 +36,7 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
@@ -322,10 +323,10 @@ abstract class tx_ttproducts_table_base implements \TYPO3\CMS\Core\SingletonInte
 				is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['fieldClass'][$funcTablename])
 			)	{
 				foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['fieldClass'][$funcTablename] as $extKey => $hookArray)	{
-					if (t3lib_extMgm::isLoaded($extKey)) {
+					if (ExtensionManagementUtility::isLoaded($extKey)) {
 						$class = $hookArray[$fieldname];
 						if ($class)	{
-							$path = t3lib_extMgm::extPath($extKey);
+							$path = ExtensionManagementUtility::extPath($extKey);
 							break;
 						}
 					}

@@ -53,7 +53,7 @@ class tx_ttproducts_static_info implements \TYPO3\CMS\Core\SingletonInterface {
 
 		if (
 			!is_object(self::$staticInfo) &&
-			t3lib_extMgm::isLoaded('static_info_tables')
+			\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('static_info_tables')
 		) {
 			$eInfo = tx_div2007_alpha5::getExtensionInfo_fh003('static_info_tables');
 

@@ -36,6 +36,7 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
@@ -401,7 +402,7 @@ class tx_ttproducts_model_control {
 				$positionSearchVars = array();
 				$foundKey = 0;
 
-				if ($position == 'local' && isset($keyFieldArray[$searchFieldArray['local']]) && t3lib_extMgm::isLoaded('searchbox'))	{	// Todo
+				if ($position == 'local' && isset($keyFieldArray[$searchFieldArray['local']]) && ExtensionManagementUtility::isLoaded('searchbox'))	{	// Todo
 
 					$modelObj = GeneralUtility::makeInstance('tx_searchbox_model');
 

@@ -63,7 +63,7 @@ class tx_ttproducts_info_view implements \TYPO3\CMS\Core\SingletonInterface {
 		$this->creditpointfields = 'tt_products_creditpoints,tt_products_vouchercode';
 
 		// if feuserextrafields is loaded use also these extra fields
-		if (t3lib_extMgm::isLoaded('feuserextrafields')) {
+		if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('feuserextrafields')) {
 			$this->feuserextrafields = ',tx_feuserextrafields_initials_name, tx_feuserextrafields_prefix_name, tx_feuserextrafields_gsm_tel,'.
 				'tx_feuserextrafields_company_deliv, tx_feuserextrafields_address_deliv, tx_feuserextrafields_housenumber,'.
 					'tx_feuserextrafields_housenumber_deliv, tx_feuserextrafields_housenumberadd, tx_feuserextrafields_housenumberadd_deliv,'.
@@ -458,7 +458,7 @@ class tx_ttproducts_info_view implements \TYPO3\CMS\Core\SingletonInterface {
                 // nothing to do
                 $bReady = true;
             } else if (
-                t3lib_extMgm::isLoaded('static_info_tables')
+                \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('static_info_tables')
             ) {
 				$eInfo = tx_div2007_alpha5::getExtensionInfo_fh003('static_info_tables');
 				$sitVersion = $eInfo['version'];

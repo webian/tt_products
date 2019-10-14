@@ -37,7 +37,7 @@
  */
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 class tx_ttproducts_api implements \TYPO3\CMS\Core\SingletonInterface {
 
@@ -230,9 +230,9 @@ class tx_ttproducts_api implements \TYPO3\CMS\Core\SingletonInterface {
 			}
 
 			if (
-				t3lib_extMgm::isLoaded('agency') ||
-				t3lib_extMgm::isLoaded('femanager') ||
-				t3lib_extMgm::isLoaded('sr_feuser_register')
+				ExtensionManagementUtility::isLoaded('agency') ||
+				ExtensionManagementUtility::isLoaded('femanager') ||
+				ExtensionManagementUtility::isLoaded('sr_feuser_register')
 			) {
 				if ($conf['useStaticInfoCountry'] && isset($infoArray['billing']['country_code'])) {
 					$insertFields['static_info_country'] = $infoArray['billing']['country_code'];
@@ -243,7 +243,7 @@ class tx_ttproducts_api implements \TYPO3\CMS\Core\SingletonInterface {
 
 			if(
 				$infoArray['billing']['date_of_birth'] &&
-				(t3lib_extMgm::isLoaded('sr_feuser_register') || t3lib_extMgm::isLoaded('agency'))
+				(ExtensionManagementUtility::isLoaded('sr_feuser_register') || ExtensionManagementUtility::isLoaded('agency'))
 			) {
 				$date = str_replace('-', '/', $infoArray['billing']['date_of_birth']);
 				$insertFields['date_of_birth'] = strtotime($date);

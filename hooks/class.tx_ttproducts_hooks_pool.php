@@ -37,7 +37,7 @@
  *
  */
 
-
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
@@ -50,7 +50,7 @@ class tx_ttproducts_hooks_pool extends tx_pool_hooks_base implements \TYPO3\CMS\
 
 	public function getViewData(&$content, &$header, &$docHeaderButtons, &$markerArray, $pOb)	{
 		$content = '<b>Suche &uuml;ber tt_products</b><br/>';
-		if (t3lib_extMgm::isLoaded('searchbox')) {
+		if (ExtensionManagementUtility::isLoaded('searchbox')) {
 
 			$searchBoxObj = GeneralUtility::makeInstance('tx_searchbox_view');
 
@@ -63,7 +63,7 @@ class tx_ttproducts_hooks_pool extends tx_pool_hooks_base implements \TYPO3\CMS\
 			);
 			$dbListConf = $searchBoxObj->getDblistConf($this->prefixId);
 		}
-		if (t3lib_extMgm::isLoaded('db_list')) {
+		if (ExtensionManagementUtility::isLoaded('db_list')) {
 			$dbListObj = GeneralUtility::makeInstance('tx_dblist_script');
 			$dbListObj->init($this->vars,$dbListConf);
 

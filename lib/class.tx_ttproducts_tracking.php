@@ -37,6 +37,7 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
@@ -547,8 +548,8 @@ class tx_ttproducts_tracking implements \TYPO3\CMS\Core\SingletonInterface {
 
 			if (!$oldMode) {
 // checks if t3jquery is loaded
-				if (t3lib_extMgm::isLoaded('t3jquery')) {
-					require_once(t3lib_extMgm::extPath('t3jquery').'class.tx_t3jquery.php');
+				if (ExtensionManagementUtility::isLoaded('t3jquery')) {
+					require_once(ExtensionManagementUtility::extPath('t3jquery') . 'class.tx_t3jquery.php');
 				}
 				// if t3jquery is loaded and the custom Library had been created
 				if (T3JQUERY === true) {

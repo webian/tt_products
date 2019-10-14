@@ -65,7 +65,7 @@ class tx_ttproducts_pdf_view implements \TYPO3\CMS\Core\SingletonInterface {
             $charset = $GLOBALS['TSFE']->renderCharset;
         }
 
-		if (t3lib_extMgm::isLoaded('fpdf')) {
+		if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('fpdf')) {
 			$csConvObj = $GLOBALS['TSFE']->csConvObj;
 			$header = $csConvObj->conv(
 				$header,

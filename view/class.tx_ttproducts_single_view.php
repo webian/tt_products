@@ -358,7 +358,7 @@ class tx_ttproducts_single_view implements \TYPO3\CMS\Core\SingletonInterface {
 
 			$forminfoArray = array('###FORM_NAME###' => 'item_'.$this->uid);
 
-			if ($this->type == 'product' && t3lib_extMgm::isLoaded('taxajax'))	{
+			if ($this->type == 'product' && \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('taxajax'))	{
 				$selectableVariantFieldArray = $itemTableArray[$this->type]->variant->getSelectableFieldArray();
 				$param = array($itemTableArray[$this->type]->getFuncTablename() => $selectableVariantFieldArray);
 				$javaScriptObj->set('fetchdata', $param, $this->cObj->currentRecord);

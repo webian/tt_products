@@ -45,7 +45,7 @@ class tx_ttproducts_hooks_be implements \TYPO3\CMS\Core\SingletonInterface {
 	public function displayCategoryTree ($PA, $fobj) {
 		$result = false;
 
-		if (t3lib_extMgm::isLoaded('mbi_products_categories')) {
+		if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('mbi_products_categories')) {
 			$treeObj = false;
 
 			if (class_exists('JambageCom\\MbiProductsCategories\\View\\TreeSelector')) {

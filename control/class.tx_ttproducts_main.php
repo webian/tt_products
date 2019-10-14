@@ -37,7 +37,7 @@
  *
  */
 
-
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
@@ -181,7 +181,7 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 		$urlObj->init($pibaseObj, $conf);
 
 			// initialise AJAX at the beginning because the AJAX functions can set piVars
-		if (!$bRunAjax && t3lib_extMgm::isLoaded('taxajax')) {
+		if (!$bRunAjax && ExtensionManagementUtility::isLoaded('taxajax')) {
 			$this->ajax = GeneralUtility::makeInstance('tx_ttproducts_ajax');
 			$this->ajax->init();
 
@@ -201,7 +201,7 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 			$db->init($conf, $config, $this->ajax, $pibaseObj); // this initializes tx_ttproducts_config inside of creator
 		}
 
-		if (!$bRunAjax && t3lib_extMgm::isLoaded('taxajax')) {
+		if (!$bRunAjax && ExtensionManagementUtility::isLoaded('taxajax')) {
 			if($_POST['xajax']){
 				global $trans;
 				$trans = $this;
@@ -399,7 +399,7 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 			$this->codeArray = array('HELP');
 		}
 
-		if (t3lib_extMgm::isLoaded('taxajax'))	{
+		if (ExtensionManagementUtility::isLoaded('taxajax'))	{
 			if ($bRunAjax)	{
 				// TODO: get AJAX configuration
 			} else {
@@ -579,9 +579,9 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 							$tablename = $this->conf['table.'][$functablename];
 						}
 						if (
-							$tablename == 'tx_party_addresses' && !t3lib_extMgm::isLoaded(PARTY_EXTkey) ||
-							$tablename == 'tx_partner_main' && !t3lib_extMgm::isLoaded(PARTNER_EXTkey) ||
-							$tablename == 'tt_address' && !t3lib_extMgm::isLoaded(TT_ADDRESS_EXTkey)
+							ExtensionManagementUtility == 'tx_party_addresses' && !ExtensionManagementUtility::isLoaded(PARTY_EXTkey) ||
+							$tablename == 'tx_partner_main' && !ExtensionManagementUtility::isLoaded(PARTNER_EXTkey) ||
+							$tablename == 'tt_address' && !ExtensionManagementUtility::isLoaded(TT_ADDRESS_EXTkey)
 						) {
 							$message = $languageObj->getLabel('extension_missing');
 							$messageArr =  explode('|', $message);

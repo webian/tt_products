@@ -37,10 +37,8 @@
  */
 
 
-require(t3lib_extMgm::extPath('fpdf') . 'class.tx_fpdf.php');
 
-
-class tx_ttproducts_pdf extends FPDF implements t3lib_Singleton {
+class tx_ttproducts_pdf extends FPDF implements \TYPO3\CMS\Core\SingletonInterface {
 	private $header;
 	private $footer;
 	private $body;

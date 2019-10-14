@@ -37,6 +37,7 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
@@ -187,7 +188,7 @@ class tx_ttproducts_account extends tx_ttproducts_table_base {
 	function checkRequired ()	{
 		$rc = '';
 		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
-		if (t3lib_extMgm::isLoaded('static_info_tables_banks_de')) {
+		if (ExtensionManagementUtility::isLoaded('static_info_tables_banks_de')) {
 			$bankObj = $tablesObj->get('static_banks_de');
 		}
 
@@ -196,7 +197,7 @@ class tx_ttproducts_account extends tx_ttproducts_table_base {
 				$rc = $field;
 				break;
 			}
-			if ($field == 'bic' && is_object($bankObj) /* && t3lib_extMgm::isLoaded('static_info_tables_banks_de')*/)	{
+			if ($field == 'bic' && is_object($bankObj) /* && ExtensionManagementUtility::isLoaded('static_info_tables_banks_de')*/)	{
 				$where_clause = 'sort_code=' . intval(implode('',GeneralUtility::trimExplode(' ',$this->acArray[$field]))) . ' AND level=1';
 				$bankRow = $bankObj->get('',0,false,$where_clause);
 				if (!$bankRow)	{

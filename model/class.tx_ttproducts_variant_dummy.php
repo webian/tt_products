@@ -37,7 +37,7 @@
  */
 
 
-class tx_ttproducts_variant_dummy  implements t3lib_Singleton, tx_ttproducts_variant_int {
+class tx_ttproducts_variant_dummy  implements \TYPO3\CMS\Core\SingletonInterface, tx_ttproducts_variant_int {
 	private $selectableArray = array();
 	public $conf;	// reduced local conf
 

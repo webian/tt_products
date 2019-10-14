@@ -38,6 +38,7 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 use JambageCom\Div2007\Utility\FrontendUtility;
@@ -572,7 +573,7 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 			$itemTableViewArray['article'] = $articleViewObj;
 			$param = array($itemTable->getFuncTablename() => $selectableVariantFieldArray);
 			$javaScriptObj = GeneralUtility::makeInstance('tx_ttproducts_javascript');
-			if ($theCode != 'LISTRELATED' && t3lib_extMgm::isLoaded('taxajax')) {
+			if ($theCode != 'LISTRELATED' && ExtensionManagementUtility::isLoaded('taxajax')) {
 				$javaScriptObj->set('fetchdata', $param);
 			}
 		} else if ($itemTable->getType() == 'article')	{
@@ -667,9 +668,9 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 		$addrTablename = $this->conf['table.']['address'];
 		if (
 			(
-				$addrTablename == 'tx_party_addresses' && t3lib_extMgm::isLoaded(PARTY_EXTkey) ||
-				$addrTablename == 'tx_partner_main' && t3lib_extMgm::isLoaded(PARTNER_EXTkey) ||
-				$addrTablename == 'tt_address' && t3lib_extMgm::isLoaded(TT_ADDRESS_EXTkey)
+				$addrTablename == 'tx_party_addresses' && ExtensionManagementUtility::isLoaded(PARTY_EXTkey) ||
+				$addrTablename == 'tx_partner_main' && ExtensionManagementUtility::isLoaded(PARTNER_EXTkey) ||
+				$addrTablename == 'tt_address' && ExtensionManagementUtility::isLoaded(TT_ADDRESS_EXTkey)
 			)
 			&& $addressUid && $itemTable->fieldArray['address']
 		)	{

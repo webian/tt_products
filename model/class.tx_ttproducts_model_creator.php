@@ -38,6 +38,7 @@
  */
 
 
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
@@ -49,14 +50,14 @@ class tx_ttproducts_model_creator implements \TYPO3\CMS\Core\SingletonInterface 
 		tx_ttproducts_static_info::init();
 
 		$bUseStaticTaxes = false;
-		if (t3lib_extMgm::isLoaded('static_info_tables')) {
+		if (ExtensionManagementUtility::isLoaded('static_info_tables')) {
 			$eInfo = tx_div2007_alpha5::getExtensionInfo_fh003('static_info_tables');
 
 			if (is_array($eInfo))	{
 				$sitVersion = $eInfo['version'];
 
 				if (version_compare($sitVersion, '2.0.0', '>='))	{
-					if ($conf['useStaticTaxes'] && t3lib_extMgm::isLoaded('static_info_tables_taxes')) {
+					if ($conf['useStaticTaxes'] && ExtensionManagementUtility::isLoaded('static_info_tables_taxes')) {
 						$eInfo2 = tx_div2007_alpha5::getExtensionInfo_fh003('static_info_tables_taxes');
 
 						if (is_array($eInfo2)) {

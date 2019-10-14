@@ -37,7 +37,8 @@
  *
  */
 
-class tx_ttproducts_hooks_transactor implements t3lib_Singleton {
+
+class tx_ttproducts_hooks_transactor implements \TYPO3\CMS\Core\SingletonInterface {
 
 	public function execute (
 		$pObj,

@@ -2,15 +2,6 @@
 
 $emClass = '\\TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility';
 
-if (
-	class_exists($emClass) &&
-	method_exists($emClass, 'extPath')
-) {
-	// nothing
-} else {
-	$emClass = 't3lib_extMgm';
-}
-
 $extensionPath = call_user_func($emClass . '::extPath', 'tt_products');
 
 return array(

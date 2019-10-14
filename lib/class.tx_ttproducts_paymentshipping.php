@@ -40,6 +40,7 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
@@ -161,7 +162,7 @@ class tx_ttproducts_paymentshipping implements \TYPO3\CMS\Core\SingletonInterfac
 
 		$handleLib = $basketExtra['payment.']['handleLib'];
 
-		if (strpos($handleLib,'transactor') !== false && t3lib_extMgm::isLoaded($handleLib))	{
+		if (strpos($handleLib,'transactor') !== false && ExtensionManagementUtility::isLoaded($handleLib))	{
 
             $languageObj = GeneralUtility::makeInstance(\JambageCom\TtProducts\Api\Localization::class);
 				// Payment Transactor
@@ -469,7 +470,7 @@ class tx_ttproducts_paymentshipping implements \TYPO3\CMS\Core\SingletonInterfac
 						$itemTableView = $tablesObj->get($tableName,true);
 						$itemTable = $itemTableView->getModelObj();
 
-						if (($tableName == 'static_countries') && t3lib_extMgm::isLoaded('static_info_tables')) {
+						if (($tableName == 'static_countries') && ExtensionManagementUtility::isLoaded('static_info_tables')) {
 							$viewTagArray = array();
 							if (is_object($itemTable))	{
 								$markerFieldArray = array();
@@ -1139,7 +1140,7 @@ class tx_ttproducts_paymentshipping implements \TYPO3\CMS\Core\SingletonInterfac
 		if (is_array($basketExtra['shipping.']) && isset($basketExtra['shipping.']['where.']))	{
 			switch ($tablename) {
 				case 'static_countries':
-					if (t3lib_extMgm::isLoaded('static_info_tables')) {
+					if (ExtensionManagementUtility::isLoaded('static_info_tables')) {
 						$eInfo = tx_div2007_alpha5::getExtensionInfo_fh003('static_info_tables');
 						$sitVersion = $eInfo['version'];
 					}
@@ -1226,7 +1227,7 @@ class tx_ttproducts_paymentshipping implements \TYPO3\CMS\Core\SingletonInterfac
 			(strpos($handleLib,'transactor') !== false) &&
 			is_array($payConf['handleLib.']) &&
 			$payConf['handleLib.']['gatewaymode'] == $request &&
-			t3lib_extMgm::isLoaded($handleLib)
+			ExtensionManagementUtility::isLoaded($handleLib)
 		)	{
 			$rc = $handleLib;
 		}

@@ -220,7 +220,7 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 			$addressRow = array();
 			$addressViewObj = $tablesObj->get('address',true);
 
-			if (($this->conf['table.']['address'] != 'tt_address' || t3lib_extMgm::isLoaded(TT_ADDRESS_EXTkey)) && $addressUid && $modelObj->fieldArray['address'])	{
+			if (($this->conf['table.']['address'] != 'tt_address' || \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded(TT_ADDRESS_EXTkey)) && $addressUid && $modelObj->fieldArray['address'])	{
 				$addressObj = $addressViewObj->getModelObj();
 				$addressRow = $addressObj->get($addressUid);
 			}
@@ -268,7 +268,7 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 							$markerArray['###'.$index.'###'] = $contentEl[$fieldName];
 							if (isset ($contentConf['displayFields.']) && is_array ($contentConf['displayFields.']) && $contentConf['displayFields.'][$fieldName] == 'RTEcssText')	{
 									// Extension CSS styled content
-								if (t3lib_extMgm::isLoaded('css_styled_content')) {
+								if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('css_styled_content')) {
 									$markerArray['###'.$index.'###'] =
 									tx_div2007_alpha5::RTEcssText($local_cObj, $contentEl[$fieldName]);
 								} else if (is_array($this->conf['parseFunc.']))	{
@@ -300,7 +300,7 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 				$extKey = '';
 			}
 
-			if ($extKey != '' && t3lib_extMgm::isLoaded($extKey) && $api != '' && class_exists($api)) {
+			if ($extKey != '' && \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded($extKey) && $api != '' && class_exists($api)) {
 				$apiObj = GeneralUtility::makeInstance($api);
 				if (method_exists($apiObj, 'getDefaultConfig'))	{
 					$ratingConf = $apiObj->getDefaultConfig();
@@ -344,7 +344,7 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 				$extKey = '';
 			}
 
-			if ($extKey != '' && t3lib_extMgm::isLoaded($extKey) && $api != '' && class_exists($api)) {
+			if ($extKey != '' && \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded($extKey) && $api != '' && class_exists($api)) {
 
 				$apiObj = GeneralUtility::makeInstance($api);
 				if (method_exists($apiObj, 'getDefaultConfig'))	{

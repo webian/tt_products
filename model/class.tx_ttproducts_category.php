@@ -37,12 +37,13 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
 class tx_ttproducts_category extends tx_ttproducts_category_base {
-	var $tt_products_email;	// object of the type tx_table_db
-	var $tableconf;
+	public $tt_products_email;	// object of the type tx_table_db
+	public $tableconf;
 	protected $tableAlias = 'cat';
 
 	/**
@@ -60,7 +61,7 @@ class tx_ttproducts_category extends tx_ttproducts_category_base {
 		$tablename = $this->getTablename();
 		$tableObj->setTCAFieldArray($tablename);
 
-		if (t3lib_extMgm::isLoaded('mbi_products_categories')) {
+		if (ExtensionManagementUtility::isLoaded('mbi_products_categories')) {
 
 			$extensionInfo = tx_div2007_alpha5::getExtensionInfo_fh003('mbi_products_categories');
 
@@ -86,7 +87,7 @@ class tx_ttproducts_category extends tx_ttproducts_category_base {
 			$parentField = 'parent_category';
 		}
 
-		if (t3lib_extMgm::isLoaded('mbi_products_categories')) {
+		if (ExtensionManagementUtility::isLoaded('mbi_products_categories')) {
 			$this->parentField = $parentField;
 			if ($functablename == 'tt_products_cat')	{
 				$this->referenceField = 'reference_category';

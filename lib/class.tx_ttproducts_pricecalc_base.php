@@ -39,7 +39,7 @@
 
 
 
-class tx_ttproducts_pricecalc_base implements t3lib_Singleton {
+class tx_ttproducts_pricecalc_base implements \TYPO3\CMS\Core\SingletonInterface {
 
 	function getPrice (&$conf, $offset, $num='1')	{
 		$rc = 0;

@@ -36,6 +36,7 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
@@ -202,7 +203,7 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 		if ($handleScript)	{
 			$paymentshippingObj = GeneralUtility::makeInstance('tx_ttproducts_paymentshipping');
 			$content = $paymentshippingObj->includeHandleScript($handleScript, $basketExtra['payment.']['handleScript.'], $this->conf['paymentActivity'], $bFinalize, $this->pibase, $infoViewObj);
-		} else if (strpos($handleLib, 'transactor') !== false && t3lib_extMgm::isLoaded($handleLib))	{
+		} else if (strpos($handleLib, 'transactor') !== false && ExtensionManagementUtility::isLoaded($handleLib))	{
             $languageObj = GeneralUtility::makeInstance(\JambageCom\TtProducts\Api\Localization::class);
 
 				// Payment Transactor
@@ -326,8 +327,8 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
                 $checkAllowed == 'email'
             ) {
                 if (
-                    t3lib_extMgm::isLoaded('sr_feuser_register') ||
-                    t3lib_extMgm::isLoaded('agency')
+                    ExtensionManagementUtility::isLoaded('sr_feuser_register') ||
+                    ExtensionManagementUtility::isLoaded('agency')
                 ) {
                     $languageKey = 'evalErrors_email_email';
                 } else {
@@ -335,7 +336,7 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
                 }
             }
 
-			if (t3lib_extMgm::isLoaded('sr_feuser_register')) {
+			if (ExtensionManagementUtility::isLoaded('sr_feuser_register')) {
                 if (!$languageKey) {
                     $languageKey = 'missing_' . $check;
                 }
@@ -350,7 +351,7 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 					$addParams = $this->urlObj->getLinkParams('',$srfeuserParams,true);
 					$markerArray['###FORM_URL_INFO###'] = $this->pibase->pi_getPageLink($editPID,'',$addParams);
 				}
-			} else if (t3lib_extMgm::isLoaded('agency')) {
+			} else if (ExtensionManagementUtility::isLoaded('agency')) {
                 if (!$languageKey) {
                     $languageKey = 'missing_' . $check;
                 }

@@ -486,7 +486,7 @@ if (!Array.prototype.indexOf) { // published by developer.mozilla.org
 
 				// XAJAX part
 				if (!$this->bAjaxAdded && is_object($this->ajax) && is_object($this->ajax->taxajax))	{
-					$code = $this->ajax->taxajax->getJavascript(t3lib_extMgm::siteRelPath(TAXAJAX_EXT));
+					$code = $this->ajax->taxajax->getJavascript(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::siteRelPath(TAXAJAX_EXT));
 					$this->bXajaxAdded = true;
 				}
 				$bDirectHTML = true;

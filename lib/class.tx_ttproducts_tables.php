@@ -37,6 +37,7 @@
  */
 
 
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
@@ -92,7 +93,7 @@ class tx_ttproducts_tables implements \TYPO3\CMS\Core\SingletonInterface	{
 		if ($functablename)	{
 
 			$neededExtension = $this->needExtensionArray[$functablename];
-			if (!isset($neededExtension) || t3lib_extMgm::isLoaded($neededExtension))	{
+			if (!isset($neededExtension) || ExtensionManagementUtility::isLoaded($neededExtension))	{
 				$rc = $this->tableClassArray[$functablename].($bView ? '_view': '');
 			} else {
 				$rc = 'skip';
@@ -120,7 +121,7 @@ class tx_ttproducts_tables implements \TYPO3\CMS\Core\SingletonInterface	{
 				if (strpos($className, ':') !== false) {
 					list($extKey,$className) = GeneralUtility::trimExplode(':', $className, true);
 
-					if (!t3lib_extMgm::isLoaded($extKey))	{
+					if (!ExtensionManagementUtility::isLoaded($extKey))	{
 						debug('Error in '.TT_PRODUCTS_EXT.'. No extension "'.$extKey.'" has been loaded to use class class.'.$className.'.','internal error', __LINE__, __FILE__); // keep this
 						continue;
 					}

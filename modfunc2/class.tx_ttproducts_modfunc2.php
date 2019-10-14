@@ -31,7 +31,7 @@
  * @package	TYPO3
  * @subpackage	tx_ttproducts
  */
-class tx_ttproducts_modfunc2 extends t3lib_extobjbase {
+class tx_ttproducts_modfunc2 extends \TYPO3\CMS\Backend\Module\AbstractFunctionModule {
 
 	/**
 	* Returns the module menu

@@ -317,7 +317,7 @@ class tx_ttproducts_basketitem_view implements \TYPO3\CMS\Core\SingletonInterfac
 					$markerKey = '###' . $viewTable->marker . '_' . $fieldMarker . '###';
 					$markerArray[$markerKey] = $text;
 					$markerKey = '###' . $viewTable->marker . '_' . $fieldMarker . '_FUNCTION1###';
-					if (t3lib_extMgm::isLoaded('taxajax')) {
+					if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('taxajax')) {
 						$markerArray[$markerKey] = 'doFetchRow(\'' . $functablename . '\',\'' . strtolower($theCode) . '\',' . $row['uid'] . ');';
 					} else {
 						$markerArray[$markerKey] = '';

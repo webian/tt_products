@@ -37,6 +37,7 @@
  *
  */
 
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 
 class tx_ttproducts_control_address {
@@ -57,15 +58,6 @@ class tx_ttproducts_control_address {
 
 	static public function getAddressTablename (&$extKey) {
         $emClass = '\\TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility';
-
-        if (
-            class_exists($emClass) &&
-            method_exists($emClass, 'isLoaded')
-        ) {
-            // nothing
-        } else {
-            $emClass = 't3lib_extMgm';
-        }
 
 		$extKey = '';
 		$addressTable = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['addressTable'];

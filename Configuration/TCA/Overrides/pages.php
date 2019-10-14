@@ -46,12 +46,6 @@ if (
             'contains-' . $pageType,
             $imageFile
         );
-    } else {
-        t3lib_SpriteManager::addTcaTypeIcon(
-            'pages',
-            'contains-' . $pageType,
-            $imageFile
-        );
     }
 
     $addToModuleSelection = true;
