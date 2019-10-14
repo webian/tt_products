@@ -32,7 +32,8 @@
  * @package	TYPO3
  * @subpackage	tx_ttproducts
  */
-class tx_ttproducts_modfunc1 extends t3lib_extobjbase {
+
+class tx_ttproducts_modfunc1 extends \TYPO3\CMS\Backend\Module\AbstractFunctionModule {
 
 	/**
 	* Returns the module menu
@@ -85,12 +86,12 @@ class tx_ttproducts_modfunc1 extends t3lib_extobjbase {
 // 			).$GLOBALS['LANG']->getLL('checklabel');
 
 			$content = '';
-			$content .= '<br />' . $GLOBALS['LANG']->getLL('pid_dest') . t3lib_BEfunc::getFuncInput(
+			$content .= '<br />' . $GLOBALS['LANG']->getLL('pid_dest') . \TYPO3\CMS\Backend\Utility\BackendUtility::getFuncInput(
 				$this->pObj->id,
 				'SET[tx_ttproducts_modfunc1_pid_dest]',
 				$destId
 			);
-			$content .= '<br />' . $GLOBALS['LANG']->getLL('age') . t3lib_BEfunc::getFuncInput(
+			$content .= '<br />' . $GLOBALS['LANG']->getLL('age') . \TYPO3\CMS\Backend\Utility\BackendUtility::getFuncInput(
 				$this->pObj->id,
 				'SET[tx_ttproducts_modfunc1_age]',
 				$age

@@ -504,11 +504,12 @@ class tx_ttproducts_basket implements \TYPO3\CMS\Core\SingletonInterface {
 			$viewTableObj = $tablesObj->get('tt_products');
 			$row = $viewTableObj->get($uid);
 			$count =
-				(
-					class_exists('t3lib_utility_Math') ?
-						t3lib_utility_Math::forceIntegerInRange($quantity, 0, $row['inStock'], 0) :
-						tx_div2007_core::intInRange($quantity, 0, $row['inStock'], 0)
-				);
+                \TYPO3\CMS\Core\Utility\MathUtility::forceIntegerInRange(
+                    $quantity,
+                    0,
+                    $row['inStock'],
+                    0
+                );
 		} elseif ($this->conf['basketMaxQuantity'] == 'creditpoint' && !empty($uid)) {
 			$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 			$viewTableObj = $tablesObj->get('tt_products');
@@ -541,11 +542,13 @@ class tx_ttproducts_basket implements \TYPO3\CMS\Core\SingletonInterface {
 			}
 		} else {
 			$count =
-				(
-					class_exists('t3lib_utility_Math') ?
-						t3lib_utility_Math::forceIntegerInRange($quantity, 0, $this->conf['basketMaxQuantity'], 0) :
-						tx_div2007_core::intInRange($quantity, 0, $this->conf['basketMaxQuantity'], 0)
-				);
+				
+                \TYPO3\CMS\Core\Utility\MathUtility::forceIntegerInRange(
+                    $quantity,
+                    0,
+                    $this->conf['basketMaxQuantity'],
+                    0
+                );
 		}
 		return $count;
 	}

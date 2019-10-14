@@ -762,7 +762,7 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 						);
 
 						if ($url != '') {
-							t3lib_utility_http::redirect($url);
+							\TYPO3\CMS\Core\Utility\HttpUtility::redirect($url);
 						}
 					}
 

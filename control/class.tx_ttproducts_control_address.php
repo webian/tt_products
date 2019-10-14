@@ -67,27 +67,7 @@ class tx_ttproducts_control_address {
 
 			foreach ($addressExtKeyTable as $addressTable => $extKey) {
 
-				$testIntResult = false;
-				if (class_exists('tx_div2007_core')) {
-					$testIntResult = tx_div2007_core::testInt($extKey);
-				} else { // workaround for bug #55727
-					$result = false;
-					$callingClassName = '\\TYPO3\\CMS\\Core\\Utility\\MathUtility';
-
-					if (
-						class_exists($callingClassName) &&
-						method_exists($callingClassName, 'canBeInterpretedAsInteger')
-					) {
-						$result = call_user_func($callingClassName . '::canBeInterpretedAsInteger', $extKey);
-					} else if (
-						class_exists('t3lib_utility_Math') &&
-						method_exists('t3lib_utility_Math', 'canBeInterpretedAsInteger')
-					) {
-						$result = t3lib_utility_Math::canBeInterpretedAsInteger($extKey);
-					}
-
-					$testIntResult = $result;
-				}
+                $testIntResult = tx_div2007_core::testInt($extKey);
 
 				if (
 					$testIntResult

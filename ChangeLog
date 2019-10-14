@@ -1,5 +1,6 @@
 2019-10-14 Franz Holzinger <franz@ttproducts.de>
-    * replace t3lib_extMgm classes by \TYPO3\CMS\Core\Utility\ExtensionManagementUtility
+    * replace t3lib_utility_Math class by \TYPO3\CMS\Core\Utility\MathUtility
+    * replace t3lib_extMgm class by \TYPO3\CMS\Core\Utility\ExtensionManagementUtility
 
 2019-09-26 Franz Holzinger <franz@ttproducts.de>
     * compatibility for TYPO3 9: add slug fields to support URL paths
