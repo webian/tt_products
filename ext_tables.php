@@ -13,30 +13,6 @@ if (!$loadTcaAdditions) {
 		call_user_func($emClass . '::addStaticFile', TT_PRODUCTS_EXT, 'Configuration/TypoScript/PluginSetup/Searchbox/', 'Shop System Search Box');
 	}
 
-	$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['5'] = 'layout,select_key';
-	$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['5'] = 'pi_flexform';
-
-	call_user_func($emClass . '::addPiFlexFormValue', '5', 'FILE:EXT:' . TT_PRODUCTS_EXT . '/pi1/flexform_ds_pi1.xml');
-
-	if (call_user_func($emClass . '::isLoaded', 'searchbox')) {
-
-		$listType = TT_PRODUCTS_EXT . '_pi_search';
-		$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist'][$listType] = 'layout,select_key';
-		$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist'][$listType] = 'pi_flexform';
-		call_user_func($emClass . '::addPiFlexFormValue', $listType, 'FILE:EXT:' . TT_PRODUCTS_EXT . '/pi_search/flexform_ds_pi_search.xml');
-		call_user_func($emClass . '::addPlugin', array('LLL:EXT:' . TT_PRODUCTS_EXT .
-			'/pi_search/locallang_db.xml:tt_content.list_type_pi_search', $listType), 'list_type');
-	}
-
-	$listType = TT_PRODUCTS_EXT . '_pi_int';
-	$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist'][$listType] = 'layout,select_key';
-	$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist'][$listType] = 'pi_flexform';
-	call_user_func($emClass . '::addPiFlexFormValue', $listType, 'FILE:EXT:' . TT_PRODUCTS_EXT . '/pi_int/flexform_ds_pi_int.xml');
-	call_user_func($emClass . '::addPlugin', array('LLL:EXT:' . TT_PRODUCTS_EXT .
-		'/pi_int/locallang_db.xml:tt_content.list_type_pi_int', $listType), 'list_type');
-	call_user_func($emClass . '::addPlugin', array('LLL:EXT:' . TT_PRODUCTS_EXT .
-	 '/locallang_db.xml:tt_content.list_type_pi1', '5'), 'list_type');
-
 	call_user_func($emClass . '::addToInsertRecords', 'tt_products');
 	call_user_func($emClass . '::addToInsertRecords', 'tt_products_language');
 	call_user_func($emClass . '::addToInsertRecords', 'tt_products_articles');

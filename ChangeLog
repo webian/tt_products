@@ -1,3 +1,7 @@
+2019-10-15 Franz Holzinger <franz@ttproducts.de>
+    * move the backend plugin configuration from ext_tables.php into TCA/Overrides/tt_content.php
+    * remove dependency from extension migration_core
+
 2019-10-14 Franz Holzinger <franz@ttproducts.de>
     * replace t3lib_utility_Math class by \TYPO3\CMS\Core\Utility\MathUtility
     * replace t3lib_extMgm class by \TYPO3\CMS\Core\Utility\ExtensionManagementUtility
@@ -712,7 +716,7 @@
 	* some error corrections for the single view
 
 2006-09-07 Franz Holzinger <franz@fholzinger.com>
-	* display special text in dependancy on the selected shipping item on the basket view
+	* display special text in dependency on the selected shipping item on the basket view
 
 2006-09-06 Franz Holzinger <franz@fholzinger.com>
 	* listing of products with ###ITEM_PRODUCT_AND_ITEMS### and ###ITEM_PRODUCT### in the article list
