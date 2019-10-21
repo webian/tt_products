@@ -43,7 +43,7 @@ class tx_ttproducts_ts implements \TYPO3\CMS\Core\SingletonInterface {
 	static $count = 0;
 
 	protected function getChilds ($uid = 0) {
-		$cObj = GeneralUtility::makeInstance('tx_div2007_cobj');
+        $cObj = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
 		$where = 'pid = ' . $uid . $cObj->enableFields('pages');
 
 		$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('uid', 'pages', $where);
@@ -80,7 +80,7 @@ class tx_ttproducts_ts implements \TYPO3\CMS\Core\SingletonInterface {
 
 	protected function getProductCount ($uid = 0) {
 		$result = 0;
-		$cObj = GeneralUtility::makeInstance('tx_div2007_cobj');
+		$cObj = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
 
 		$allChilds = $this->getAllChilds($uid);
 
@@ -101,7 +101,7 @@ class tx_ttproducts_ts implements \TYPO3\CMS\Core\SingletonInterface {
 
 	protected function getMemoCount ($uid = 0) {
 		$result = 0;
-		$cObj = GeneralUtility::makeInstance('tx_div2007_cobj');
+		$cObj = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
 		$where = 'pid = ' . $uid . $cObj->enableFields('tt_content');
 
 		$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('uid,CType,list_type,pi_flexform', 'tt_content', $where);

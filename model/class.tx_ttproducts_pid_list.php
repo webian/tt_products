@@ -107,7 +107,7 @@ class tx_ttproducts_pid_list {
 	}
 
 	public function applyRecursive ($recursive, &$pids, $bStore = false) {
-		$cObj = GeneralUtility::makeInstance('tx_div2007_cobj');
+		$cObj = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
 
 		if ($pids != '') {
 			$pid_list = &$pids;

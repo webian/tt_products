@@ -3,6 +3,7 @@
     * hook change: hooks/class.tx_ttproducts_hooks_cms.php -> Classes/Hooks/CmsBackend.php
     * replace tslib_pibase by \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
     * replace tslib_cObj by \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer
+    * replace tx_div2007_cobj by \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer
 
 2019-10-15 Franz Holzinger <franz@ttproducts.de>
     * move the backend plugin configuration from ext_tables.php into TCA/Overrides/tt_content.php
