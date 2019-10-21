@@ -316,12 +316,12 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 				}
 				$ratingConf['ref'] = TT_PRODUCTS_EXT . '_' . $row['uid'];
 
-				$cObj = GeneralUtility::makeInstance('tslib_cObj');
-				/* @var $cObj tslib_cObj */
+				$cObj = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
+				/* @var $cObj \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer */
 				$cObj->start(array());
 				$markerArray['###RATING###'] = $cObj->cObjGetSingle($cObjectType, $ratingConf);
-				$cObj = GeneralUtility::makeInstance('tslib_cObj');
-				/* @var $cObj tslib_cObj */
+				$cObj = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
+				/* @var $cObj \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer */
 				$cObj->start(array());
 				$ratingConf['mode'] = 'static';
 				$markerArray['###RATING_STATIC###'] = $cObj->cObjGetSingle($cObjectType, $ratingConf);
@@ -372,7 +372,7 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 				);
 				$commentConf['linkParams'] = $linkParams;
 
-				$cObj = GeneralUtility::makeInstance('tslib_cObj');
+				$cObj = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
 				$cObj->start(array());
 				$markerArray['###COMMENT###'] = $cObj->cObjGetSingle($cObjectType, $commentConf);
 			} else {

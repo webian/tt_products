@@ -166,7 +166,7 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 			}
 		}
 
-		if ($bDoProcessing && (method_exists($this->cObj, 'getUserObjectType') && $this->cObj->getUserObjectType() == tslib_cObj::OBJECTTYPE_USER)) {
+		if ($bDoProcessing && (method_exists($this->cObj, 'getUserObjectType') && $this->cObj->getUserObjectType() == \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::OBJECTTYPE_USER)) {
 			$intersection = array_intersect(self::$uncachedCodes, $this->codeArray);
 			if (count($intersection)) {
 				if ($this->convertToUserInt()) {
@@ -860,7 +860,7 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 	 */
 	protected function convertToUserInt() {
 		$result = false;
-		if (method_exists($this->cObj, 'getUserObjectType') && $this->cObj->getUserObjectType() == tslib_cObj::OBJECTTYPE_USER) {
+		if (method_exists($this->cObj, 'getUserObjectType') && $this->cObj->getUserObjectType() == \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::OBJECTTYPE_USER) {
 			$this->cObj->convertToUserIntObject();
 			$this->cObj->data['pi_flexform'] = $this->cObj->data['_original_pi_flexform'];
 			unset($this->cObj->data['_original_pi_flexform']);

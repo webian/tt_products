@@ -50,7 +50,6 @@ class tx_ttproducts_pi_search_base extends \TYPO3\CMS\Frontend\Plugin\AbstractPl
 	public $pi_checkCHash = true;		// activate cHash
 	public $bRunAjax = false;		// overrride this
 
-
 	/**
 	 * Main method. Call this from TypoScript by a USER cObject.
 	 */

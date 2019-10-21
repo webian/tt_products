@@ -154,7 +154,7 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 		&$markerArray,
 		&$specialConf
 	)	{
-		$cObj = GeneralUtility::makeInstance('tslib_cObj');	// Local cObj.
+		$cObj = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);	// Local cObj.
 		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		$theTableObj = $tablesObj->get($functablename);
 		$theTablename = $theTableObj->getTablename();

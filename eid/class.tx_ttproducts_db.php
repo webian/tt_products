@@ -72,7 +72,7 @@ class tx_ttproducts_db implements \TYPO3\CMS\Core\SingletonInterface {
 		) {
 			$this->cObj = $pObj->cObj;
 		} else {
-		    $this->cObj = GeneralUtility::makeInstance('tslib_cObj');	// Local cObj.
+		    $this->cObj = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);	// Local cObj.
 		    $this->cObj->start(array());
 // TODO: $cObj->start($contentRow,'tt_content');
 		}

@@ -50,9 +50,9 @@ class tx_ttproducts_pi1 implements \TYPO3\CMS\Core\SingletonInterface {
 	/**
 	 * The backReference to the mother cObj object set at call time
 	 *
-	 * @var tslib_cObj
+	 * @var \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer
 	 */
-	var $cObj;
+	public $cObj;
 
 
 	/**
