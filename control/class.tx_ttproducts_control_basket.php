@@ -43,7 +43,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class tx_ttproducts_control_basket {
 	static protected $recs;
 	static protected $basketExt;
-	static protected $basketExtra = array()
+	static protected $basketExtra = array();
 	static private   $bHasBeenInitialised = false;
 
 
