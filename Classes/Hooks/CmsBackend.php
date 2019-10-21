@@ -1,8 +1,11 @@
 <?php
+
+namespace JambageCom\TtProducts\Hooks;
+
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2007-2008 Franz Holzinger (franz@ttproducts.de)
+*  (c) 2018 Franz Holzinger <franz@ttproducts.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -30,7 +33,6 @@
  * hook functions for the TYPO3 cms
  *
  * @author	Franz Holzinger <franz@ttproducts.de>
- * @maintainer	Franz Holzinger <franz@ttproducts.de>
  * @package TYPO3
  * @subpackage tt_products
  *
@@ -38,14 +40,8 @@
  */
 
 
-class tx_ttproducts_hooks_cms extends tx_div2007_hooks_cms {
-	public $extKey=TT_PRODUCTS_EXT;
+class CmsBackend extends \JambageCom\Div2007\Base\CmsHookBase {
+    public $extensionKey = TT_PRODUCTS_EXT;
 
 }
-
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/hooks/class.tx_ttproducts_hooks_cms.php'])	{
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/hooks/class.tx_ttproducts_hooks_cms.php']);
-}
-
 

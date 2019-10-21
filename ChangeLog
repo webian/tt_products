@@ -1,3 +1,7 @@
+2019-10-21 Franz Holzinger <franz@ttproducts.de>
+    * change: useFlexforms is always true from now on!
+    * hook change: hooks/class.tx_ttproducts_hooks_cms.php -> Classes/Hooks/CmsBackend.php
+
 2019-10-15 Franz Holzinger <franz@ttproducts.de>
     * move the backend plugin configuration from ext_tables.php into TCA/Overrides/tt_content.php
     * remove dependency from extension migration_core

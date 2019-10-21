@@ -143,7 +143,7 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 				$conf['defaultCode'],
 				$this->cObj->data['pi_flexform'],
 				'display_mode',
-				$GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['useFlexforms']
+				true
 			);
 
 		$this->codeArray = GeneralUtility::trimExplode(',', $config['code'],1);

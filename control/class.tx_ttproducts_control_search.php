@@ -127,7 +127,7 @@ class tx_ttproducts_control_search implements \TYPO3\CMS\Core\SingletonInterface
 				$conf['defaultCode'],
 				$row['pi_flexform'],
 				'display_mode',
-				$GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['useFlexforms']
+				true
 			);
 
 		$flexformConfigArray = array(
