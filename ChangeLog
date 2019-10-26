@@ -1,5 +1,6 @@
 
 2019-10-26 Franz Holzinger <franz@ttproducts.de>
+    * bufix issue #51: template products_css_variants_de.html
     * bugfix to the code dependent template file setup
     * In order to compatible with https://getcomposer.org/doc/04-schema.md composer.json declarations had to be adjusted and previous replace statements dropped.
 
