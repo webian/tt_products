@@ -54,27 +54,16 @@ class tx_ttproducts_control_basket {
 		array $basketRec = array()
 	) {
 		if (!self::$bHasBeenInitialised) {
-            if (is_object($GLOBALS['TSFE'])) {
+            if (empty($recs)) {
+                $recs = self::getStoredRecs();
                 if (empty($recs)) {
-                    $recs = self::getStoredRecs();
-                    if (empty($recs)) {
-                        $recs = array();
-                    } else if ($conf['transmissionSecurity']) {
-                        $errorCode = '';
-                        $errorMessage = '';
-                        $security = GeneralUtility::makeInstance(\JambageCom\Div2007\Security\TransmissionSecurity::class);
-                        $decrptionResult = $security->decryptIncomingFields(
-                            $recs,
-                            $errorCode,
-                            $errorMessage
-                        );
-
-                        if ($decrptionResult) {
-                            self::setStoredRecs($recs);
-                        }
-                    }
+                    $recs = array();
                 }
-                self::setRecs($recs);
+            }
+
+            self::setRecs($recs);
+
+            if (is_object($GLOBALS['TSFE'])) {
                 self::setBasketExt(self::getStoredBasketExt());
 				$basketExtra = self::getBasketExtras($tablesObj, $recs, $conf);
                 self::setBasketExtra($basketExtra);

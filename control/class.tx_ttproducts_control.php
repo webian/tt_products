@@ -46,27 +46,23 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 	public $conf;
 	public $config;
 	public $basket; 	// the basket object
-	public $templateCode='';		// In init(), set to the content of the templateFile. Used by default in getView()
 	public $activityArray;		// activities for the CODEs
 	public $funcTablename;
-	public $error_code = array();
 	public $subpartmarkerObj; // subpart marker functions
 	public $urlObj; // url functions
 	public $urlArray; // overridden url destinations
 	public $useArticles;
 
 
-	public function init ($pibaseClass, $conf, $config, $funcTablename, &$templateCode, $useArticles, &$error_code)  {
+	public function init ($pibaseClass, $conf, $config, $funcTablename, $useArticles)  {
 		$this->pibaseClass = $pibaseClass;
 		$this->pibase = GeneralUtility::makeInstance('' . $pibaseClass);
 		$this->cObj = $this->pibase->cObj;
 		$this->conf = $conf;
 		$this->config = $config;
-		$this->templateCode = &$templateCode;
 		$this->basket = GeneralUtility::makeInstance('tx_ttproducts_basket');
 		$this->funcTablename = $funcTablename;
 		$this->useArticles = $useArticles;
-		$this->error_code = &$error_code;
 
 		$this->subpartmarkerObj = GeneralUtility::makeInstance('tx_ttproducts_subpartmarker');
 		$this->subpartmarkerObj->init($this->cObj);
@@ -404,6 +400,8 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 
 
 	public function getContent (
+		$templateCode,
+		$templateFilename,
 		$mainMarkerArray,
 		$calculatedArray,
 		$basketExtra,
@@ -428,6 +426,7 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 		$cardRow,
 		$accountObj,
 		&$markerArray,
+		&$errorCode,
 		&$errorMessage,
 		&$bFinalize
 	) {
@@ -468,25 +467,29 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 			if ($this->activityArray['products_overview']) {
 				tx_div2007_alpha5::load_noLinkExtCobj_fh002($this->pibase);	//
 				$contentEmpty = $this->cObj->getSubpart(
-					$this->templateCode,
+					templateCode,
 					$this->subpartmarkerObj->spMarker('###BASKET_OVERVIEW_EMPTY' . $this->config['templateSuffix'] . '###')
 				);
 
 				if (!$contentEmpty)	{
 					$contentEmpty = $this->cObj->getSubpart(
-						$this->templateCode,
+						$templateCode,
 						$this->subpartmarkerObj->spMarker('###BASKET_OVERVIEW_EMPTY###')
 					);
 				}
-			} else if ($this->activityArray['products_basket'] || $this->activityArray['products_info'] || $this->activityArray['products_payment']) {
+			} else if (
+                $this->activityArray['products_basket'] ||
+                $this->activityArray['products_info'] ||
+                $this->activityArray['products_payment']
+            ) {
 				$contentEmpty = $this->cObj->getSubpart(
-					$this->templateCode,
+					$templateCode,
 					$this->subpartmarkerObj->spMarker('###BASKET_TEMPLATE_EMPTY' . $this->config['templateSuffix'] . '###')
 				);
 
 				if (!$contentEmpty)	{
 					$contentEmpty = $this->cObj->getSubpart(
-						$this->templateCode,
+						$templateCode,
 						$this->subpartmarkerObj->spMarker('###BASKET_TEMPLATE_EMPTY###')
 					);
 				}
@@ -506,10 +509,21 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 			$calculatedArray = $basketObj->getCalculatedArray();
 			$basketMarkerArray = $basketView->getMarkerArray($calculatedArray);
 			$markerArray = $basketMarkerArray;
-		} else if (empty($checkRequired) && empty($checkAllowed) && empty($cardRequired) && empty($accountRequired) && empty($paymentErrorMsg) &&
-			(empty($pidagb) ||
-			$_REQUEST['recs']['personinfo']['agb'] || ($bPayment && GeneralUtility::_GET('products_payment')) || $infoArray['billing']['agb'])) {
-
+		} else if (
+            empty($checkRequired) &&
+            empty($checkAllowed) &&
+            empty($cardRequired) &&
+            empty($accountRequired) &&
+            empty($paymentErrorMsg) &&
+			(
+                empty($pidagb) ||
+                $_REQUEST['recs']['personinfo']['agb'] ||
+                (
+                    $bPayment && GeneralUtility::_GET('products_payment')
+                ) ||
+                $infoArray['billing']['agb']
+            )
+        ) {
             if (
                 !$basketEmpty &&
                 $bPayment &&
@@ -540,7 +554,7 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 			}
 
 			$paymentHTML = '';
-			if (!$bFinalize && $basket_tmpl != '')	{
+			if (!$bFinalize && $basket_tmpl != '') {
 				$infoViewObj = GeneralUtility::makeInstance('tx_ttproducts_info_view');
 				$paymentHTML = $basketView->getView(
 					$empty,
@@ -566,16 +580,16 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 			$requiredOut =
 				$markerObj->replaceGlobalMarkers(
 					$this->cObj->getSubpart(
-						$this->templateCode,
+						$templateCode,
 						$this->subpartmarkerObj->spMarker('###BASKET_REQUIRED_INFO_MISSING###')
 					)
 				);
 
             if (!$requiredOut) {
                 $templateObj = GeneralUtility::makeInstance('tx_ttproducts_template');
-                $this->error_code[0] = 'no_subtemplate';
-                $this->error_code[1] = '###BASKET_REQUIRED_INFO_MISSING###';
-                $this->error_code[2] = $templateObj->getTemplateFile();
+                $errorCode[0] = 'no_subtemplate';
+                $errorCode[1] = '###BASKET_REQUIRED_INFO_MISSING###';
+                $errorCode[2] = $templateObj->getTemplateFile();
                 return '';
             }
             $content .= $requiredOut;
@@ -595,6 +609,7 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 			);
 			$markerArray['###ERROR_DETAILS###'] = $label;
 		}
+
 		return $content;
 	} // getContent
 
@@ -605,6 +620,7 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 		$codeActivityArray,
 		$calculatedArray,
 		$basketExtra,
+		&$errorCode,
 		&$errorMessage
 	)	{
 		$basket_tmpl = '';
@@ -619,6 +635,7 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 		$paymentshippingObj = GeneralUtility::makeInstance('tx_ttproducts_paymentshipping');
 		$markerObj = GeneralUtility::makeInstance('tx_ttproducts_marker');
 		$languageObj = GeneralUtility::makeInstance(\JambageCom\TtProducts\Api\Localization::class);
+		$templateObj = GeneralUtility::makeInstance('tx_ttproducts_template');
 
 		$markerArray = array();
 		$markerArray['###ERROR_DETAILS###'] = '';
@@ -923,9 +940,22 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 				} // switch
 			}	// if ($value)
 
+			$templateFilename = '';
+			$templateCode = $templateObj->get(
+				$theCode,
+				$templateFilename,
+				$errorCode
+			);
+
+			if ($errorCode) {
+				return '';
+			}
+
 			if ($value) {
 				$newContent = $this->getContent(
-					$mainMarkerArray,
+                    $templateCode,
+					$templateFilename,
+                    $mainMarkerArray,
 					$calculatedArray,
 					$basketExtra,
 					$theCode,
@@ -949,6 +979,7 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 					$cardRow,
 					$accountObj,
 					$markerArray,
+					$errorCode,
 					$errorMessage,
 					$bFinalize
 				);
@@ -1009,7 +1040,7 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 					$orderObj
 				);
 				$contentTmp = $activityFinalize->doProcessing(
-					$this->templateCode,
+					$templateCode,
 					$mainMarkerArray,
 					$this->funcTablename,
 					$orderUid,
@@ -1054,15 +1085,15 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 				$this->basket->clearBasket();
 			} else {	// If not all required info-fields are filled in, this is shown instead:
 				$requiredOut = $this->cObj->getSubpart(
-					$this->templateCode,
+					$templateCode,
 					$this->subpartmarkerObj->spMarker('###BASKET_REQUIRED_INFO_MISSING###')
 				);
 
 				if (!$requiredOut) {
 					$templateObj = GeneralUtility::makeInstance('tx_ttproducts_template');
-					$this->error_code[0] = 'no_subtemplate';
-					$this->error_code[1] = '###BASKET_REQUIRED_INFO_MISSING###';
-					$this->error_code[2] = $templateObj->getTemplateFile();
+					$errorCode[0] = 'no_subtemplate';
+					$errorCode[1] = '###BASKET_REQUIRED_INFO_MISSING###';
+					$errorCode = $templateObj->getTemplateFile();
 					return '';
 				}
 
@@ -1108,20 +1139,33 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 	 * @param	array		  CODEs for display mode
 	 * @return	string	text to display
 	 */
-	public function doProcessing (&$codes, $calculatedArray, $basketExtra, &$errorMessage) {
+	public function doProcessing (
+		$codes,
+		$calculatedArray,
+		$basketExtra,
+		&$errorCode,
+		&$errorMessage
+	) {
 		$content = '';
 		$empty = '';
 		$activityArray = array();
 		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$infoViewObj = GeneralUtility::makeInstance('tx_ttproducts_info_view');
+        $templateObj = GeneralUtility::makeInstance('tx_ttproducts_template');
+        $templateFilename = '';
+        $templateCode = $templateObj->get(
+            '',
+            $templateFilename,
+            $errorCode
+        );
 		$basketView = GeneralUtility::makeInstance('tx_ttproducts_basket_view');
 		$basketView->init(
 			$this->pibaseClass,
 			$this->urlArray,
 			$this->useArticles,
-			$this->templateCode,
-			$this->error_code
+			$templateCode,
+			$errorCode
 		);
 		$activityVarsArray = array(
 			'clear_basket' => 'products_clear_basket',
@@ -1247,6 +1291,7 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 				$codeActivityArray,
 				$calculatedArray,
 				$basketExtra,
+				$errorCode,
 				$errorMessage
 			);
 		}

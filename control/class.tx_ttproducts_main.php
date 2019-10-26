@@ -100,7 +100,7 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 	 * @param	string		modified configuration array
 	 * @return	  bool		if true processing should be done
 	 */
-	public function init (&$content, &$conf, &$config, $pibaseClass, &$error_code, $bRunAjax = false) {
+	public function init (&$content, &$conf, &$config, $pibaseClass, &$errorCode, $bRunAjax = false) {
 		$rc = true;
 		$this->setSingleFromList(false);
 		$this->tt_product_single = array();
@@ -273,7 +273,7 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 		$rc &= $res;
 
 		if ($res == false)	{
-			$error_code = $markerObj->getErrorCode();
+			$errorCode = $markerObj->getErrorCode();
 			return false;
 		}
 
@@ -302,8 +302,8 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 			}
 
 			if ($error_detail != '')	{
-				$error_code[0] = 'wrong_' . $error_detail;
-				$error_code[1] = $paramVal;
+				$errorCode[0] = 'wrong_' . $error_detail;
+				$errorCode[1] = $paramVal;
 				return false;
 			}
 		}
@@ -374,7 +374,7 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 	}
 
 
-	public function &run ($pibaseClass, &$error_code, $content = '', $bRunAjax = false) {
+	public function &run ($pibaseClass, &$errorCode, $content = '', $bRunAjax = false) {
 		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$conf = $cnf->getConf();
 		$config = $cnf->getConfig();
@@ -455,7 +455,7 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 			$errorMessage
 		);
 
-		if (!$errorMessage && !count($error_code))	{
+		if (!$errorMessage && !count($errorCode))	{
 
 			$functablename = 'tt_products';
 			tx_ttproducts_control_memo::process($functablename, $pibaseObj->piVars, $this->conf);
@@ -465,9 +465,7 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 				$conf,
 				$cnf->getConfig(),
 				$basketObj->getFuncTablename(),
-				$templateCode,
-				$this->conf['useArticles'],
-				$error_code
+				$this->conf['useArticles']
 			);
 			$calculatedArray = $basketObj->getCalculatedSums();
 
@@ -475,6 +473,7 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 				$this->codeArray,
 				$calculatedArray,
 				$basketObj->basketExtra,
+				$errorCode,
 				$errorMessage
 			);
 		}
@@ -555,7 +554,7 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 						}
 					}
 
-					$contentTmp = $this->products_display($templateCode, $theCode, $errorMessage, $error_code);
+					$contentTmp = $this->products_display($templateCode, $theCode, $errorMessage, $errorCode);
 				break;
 				case 'LISTCAT':
 				case 'LISTAD':
@@ -617,7 +616,7 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 							$functablename,
 							$templateCode,
 							$theCode,
-							$error_code,
+							$errorCode,
 							$templateArea,
 							$this->pageAsCategory,
 							$this->config['templateSuffix']
@@ -625,7 +624,7 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 					}
 				break;
 				case 'SINGLE':
-					$contentTmp = $this->products_display($templateCode, $theCode, $errorMessage, $error_code);
+					$contentTmp = $this->products_display($templateCode, $theCode, $errorMessage, $errorCode);
 				break;
 				case 'BASKET':
 				case 'FINALIZE':
@@ -645,13 +644,13 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 					if (!$bRunAjax && $this->convertToUserInt()) {
 						return '';
 					}
-					$contentTmp = $this->products_tracking($error_code, $templateCode, $theCode, $conf);
+					$contentTmp = $this->products_tracking($errorCode, $templateCode, $theCode, $conf);
 				break;
 				case 'TRACKING':
 					if (!$bRunAjax && $this->convertToUserInt()) {
 						return '';
 					}
-					$contentTmp = $this->products_tracking($error_code, $templateCode, $theCode, $conf);
+					$contentTmp = $this->products_tracking($errorCode, $templateCode, $theCode, $conf);
 				break;
 				case 'MEMO':
 					if (!$bRunAjax && $this->convertToUserInt()) {
@@ -666,7 +665,7 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 						$conf,
 						$conf['useArticles']
 					);
-					$contentTmp = $this->memoView->printView($theCode, $templateCode, $this->pid, $error_code);
+					$contentTmp = $this->memoView->printView($theCode, $templateCode, $this->pid, $errorCode);
 				break;
 				case 'CURRENCY':
 					if (!$bRunAjax && $this->convertToUserInt()) {
@@ -684,7 +683,7 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 
 						// order view
 					$orderView = $tablesObj->get('sys_products_orders', true);
-					$contentTmp = $orderView->printView($templateCode, $error_code);
+					$contentTmp = $orderView->printView($templateCode, $errorCode);
 				break;
 				case 'SINGLECAT':
 				case 'SINGLEAD':
@@ -705,7 +704,7 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 							$functablename,
 							$uid,
 							$theCode,
-							$error_code,
+							$errorCode,
 							$this->config['templateSuffix']
 						);
 					}
@@ -729,7 +728,7 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 					$contentTmp = 'error';
 			}
 
-			if ($error_code[0]) {
+			if ($errorCode[0]) {
 
 				$messageArr = array();
 				$i = 0;
@@ -740,7 +739,7 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 					$urlObj = GeneralUtility::makeInstance('tx_ttproducts_url_view');
 				}
 
-				foreach ($error_code as $key => $indice) {
+				foreach ($errorCode as $key => $indice) {
 
 					if (
 						isset($errorConf[$indice . '.']) &&
@@ -774,7 +773,7 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 					}
 					$i++;
 				}
-				$error_code = array();
+				$errorCode = array();
 			}
 
 			if ($contentTmp == 'error') {
@@ -992,7 +991,7 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 	/**
 	 * Displaying single products/ the products list / searching
 	 */
-	public function products_display ($templateCode, $theCode, &$errorMessage, &$error_code)	{
+	public function products_display ($templateCode, $theCode, &$errorMessage, &$errorCode)	{
 		$pibaseObj = GeneralUtility::makeInstance('tx_ttproducts_pi1_base');
 		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$conf = $cnf->getConf();
@@ -1051,7 +1050,7 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 			);
 			$content = $this->singleView->printView(
 				$templateCode,
-				$error_code,
+				$errorCode,
 				$this->pageAsCategory,
 				$this->config['templateSuffix']
 			);
@@ -1094,7 +1093,7 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 				$functablename,
 				$allowedItems,
 				$bAllPages,
-				$error_code,
+				$errorCode,
 				$templateArea,
 				$this->pageAsCategory,
 				array()

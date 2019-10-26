@@ -1,3 +1,8 @@
+
+2019-10-26 Franz Holzinger <franz@ttproducts.de>
+    * bugfix to the code dependent template file setup
+    * In order to compatible with https://getcomposer.org/doc/04-schema.md composer.json declarations had to be adjusted and previous replace statements dropped.
+
 2019-10-21 Franz Holzinger <franz@ttproducts.de>
     * change: useFlexforms is always true from now on!
     * hook change: hooks/class.tx_ttproducts_hooks_cms.php -> Classes/Hooks/CmsBackend.php

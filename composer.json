@@ -21,7 +21,7 @@
     }
   ],
   "license": [
-    "GPL-2.0+"
+    "GPL-2.0-or-later"
   ],
   "require": {
     "typo3/cms-core": ">=6.2.0,<8.99.99",
@@ -54,7 +54,7 @@
     ]
   },
   "replace": {
-    "tt_products": "self.version",
+    "jambagecom/tt-products": "self.version",
     "typo3-ter/tt-products": "self.version"
   },
   "extra": {

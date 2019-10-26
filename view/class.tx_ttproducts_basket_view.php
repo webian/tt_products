@@ -70,7 +70,7 @@ class tx_ttproducts_basket_view implements \TYPO3\CMS\Core\SingletonInterface {
 	 */
 	public function init (
 		$pibaseClass,
-		$urlArray=array(),
+		$urlArray = array(),
 		$useArticles,
 		&$templateCode,
 		&$error_code

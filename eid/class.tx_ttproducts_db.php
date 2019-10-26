@@ -74,17 +74,25 @@ class tx_ttproducts_db implements \TYPO3\CMS\Core\SingletonInterface {
 		} else {
 		    $this->cObj = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);	// Local cObj.
 		    $this->cObj->start(array());
-// TODO: $cObj->start($contentRow,'tt_content');
 		}
 
         $recs = GeneralUtility::_GP('recs');
+        if ($conf['transmissionSecurity']) {
+            $errorCode = array();
+            $errorMessage = '';
+            $security = GeneralUtility::makeInstance(\JambageCom\Div2007\Security\TransmissionSecurity::class);
+            $decryptionResult = $security->decryptIncomingFields(
+                $recs,
+                $errorCode,
+                $errorMessage
+            );
+        }
         if (is_array($recs)) {
             $api = GeneralUtility::makeInstance( \JambageCom\Div2007\Api\Frontend::class);
             // If any record registration is submitted, register the record.
             $api->record_registration($recs, $GLOBALS['TYPO3_CONF_VARS']['FE']['maxSessionDataSize']);
-        } else {
-            $recs = array();
         }
+        $recs = tx_ttproducts_control_basket::getStoredRecs();
 
         $controlCreatorObj = GeneralUtility::makeInstance('tx_ttproducts_control_creator');
 		$controlCreatorObj->init($conf, $config, $pObj, $this->cObj, $recs);
