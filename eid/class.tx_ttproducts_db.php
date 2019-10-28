@@ -90,8 +90,7 @@ class tx_ttproducts_db implements \TYPO3\CMS\Core\SingletonInterface {
                 $errorCode,
                 $errorMessage
             );
-        }
-        
+        }        
 
         if (is_array($recs)) {
             $api = GeneralUtility::makeInstance( \JambageCom\Div2007\Api\Frontend::class);
@@ -99,6 +98,9 @@ class tx_ttproducts_db implements \TYPO3\CMS\Core\SingletonInterface {
             $api->record_registration($recs, $GLOBALS['TYPO3_CONF_VARS']['FE']['maxSessionDataSize']);
         }
         $recs = tx_ttproducts_control_basket::getStoredRecs();
+        if (empty($recs)) {
+            $recs = array();
+        }
 
         $controlCreatorObj = GeneralUtility::makeInstance('tx_ttproducts_control_creator');
 		$controlCreatorObj->init($conf, $config, $pObj, $this->cObj, $recs);

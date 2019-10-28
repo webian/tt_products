@@ -51,16 +51,9 @@ class tx_ttproducts_control_basket {
 		&$conf,
 		$tablesObj,
 		array $recs = array(),
-		array $basketRec = array()
+		array $basketRec = array() // TODO
 	) {
 		if (!self::$bHasBeenInitialised) {
-            if (empty($recs)) {
-                $recs = self::getStoredRecs();
-                if (empty($recs)) {
-                    $recs = array();
-                }
-            }
-
             self::setRecs($recs);
 
             if (is_object($GLOBALS['TSFE'])) {
@@ -308,7 +301,7 @@ class tx_ttproducts_control_basket {
 
 
 	static public function getStoredRecs () {
-		$rc = $GLOBALS['TSFE']->fe_user->getKey('ses','recs');
+		$rc = $GLOBALS['TSFE']->fe_user->getKey('ses', 'recs');
 		return $rc;
 	}
 
