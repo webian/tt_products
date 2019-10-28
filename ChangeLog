@@ -1,4 +1,8 @@
 
+
+2019-10-28 Franz Holzinger <franz@ttproducts.de>
+    * bufix: tt_products uses the field 'country_code' in the HTML template form for the recs of personinfo and delivery in replacement for the field static_info_country coming from the extensions agency, sr_feuser_register or femanager. It contains the 3 characters country ISO-3 or Alpha-3 code.
+
 2019-10-26 Franz Holzinger <franz@ttproducts.de>
     * bufix issue #51: template products_css_variants_de.html
     * bugfix to the code dependent template file setup

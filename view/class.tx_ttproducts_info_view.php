@@ -161,7 +161,7 @@ class tx_ttproducts_info_view implements \TYPO3\CMS\Core\SingletonInterface {
 						chr(10),
 						$GLOBALS['TSFE']->fe_user->user['address'].chr(10) . ($GLOBALS['TSFE']->fe_user->user['house_no'] != '' ? $GLOBALS['TSFE']->fe_user->user['house_no'] . chr(10) : '') .
 						$GLOBALS['TSFE']->fe_user->user['zip'].' '.$GLOBALS['TSFE']->fe_user->user['city'].chr(10).
-						($this->conf['useStaticInfoCountry'] ? $GLOBALS['TSFE']->fe_user->user['static_info_country']:$GLOBALS['TSFE']->fe_user->user['country']),
+						($this->conf['useStaticInfoCountry'] ? $GLOBALS['TSFE']->fe_user->user['static_info_country'] : $GLOBALS['TSFE']->fe_user->user['country']),
 						1
 					)
 				);
@@ -175,7 +175,7 @@ class tx_ttproducts_info_view implements \TYPO3\CMS\Core\SingletonInterface {
 			foreach ($fieldArray as $k => $field)	{
 				$this->infoArray['billing'][$field] = ($this->infoArray['billing'][$field] ? $this->infoArray['billing'][$field]: $GLOBALS['TSFE']->fe_user->user[$field]);
 			}
-			$this->infoArray['billing']['country'] = ($this->infoArray['billing']['country'] ? $this->infoArray['billing']['country'] : (($this->conf['useStaticInfoCountry'] || !$GLOBALS['TSFE']->fe_user->user['country']) ? $GLOBALS['TSFE']->fe_user->user['static_info_country']:$GLOBALS['TSFE']->fe_user->user['country']));
+			$this->infoArray['billing']['country'] = ($this->infoArray['billing']['country'] ? $this->infoArray['billing']['country'] : (($this->conf['useStaticInfoCountry'] || !$GLOBALS['TSFE']->fe_user->user['country']) ? $GLOBALS['TSFE']->fe_user->user['static_info_country'] : $GLOBALS['TSFE']->fe_user->user['country']));
 			$this->infoArray['billing']['agb'] = (isset($this->infoArray['billing']['agb']) ? $this->infoArray['billing']['agb'] : $GLOBALS['TSFE']->fe_user->user['agb']);
 
 			$dateBirth = $this->infoArray['billing']['date_of_birth'];
@@ -254,7 +254,7 @@ class tx_ttproducts_info_view implements \TYPO3\CMS\Core\SingletonInterface {
 						(
 							$this->infoArray['delivery'][$fName] == '0' && !$address
 						) ||
-                        in_array($fName, array('country', 'static_info_country', 'zone'))
+                        in_array($fName, array('country', 'country_code', 'zone'))
 					)
 				) {
 					$this->infoArray['delivery'][$fName] = $this->infoArray['billing'][$fName];
