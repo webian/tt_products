@@ -77,7 +77,11 @@ class tx_ttproducts_db implements \TYPO3\CMS\Core\SingletonInterface {
 		}
 
         $recs = GeneralUtility::_GP('recs');
-        if ($conf['transmissionSecurity']) {
+
+        if (
+            is_array($recs) &&
+            $conf['transmissionSecurity']
+        ) {
             $errorCode = array();
             $errorMessage = '';
             $security = GeneralUtility::makeInstance(\JambageCom\Div2007\Security\TransmissionSecurity::class);
@@ -87,6 +91,8 @@ class tx_ttproducts_db implements \TYPO3\CMS\Core\SingletonInterface {
                 $errorMessage
             );
         }
+        
+
         if (is_array($recs)) {
             $api = GeneralUtility::makeInstance( \JambageCom\Div2007\Api\Frontend::class);
             // If any record registration is submitted, register the record.
