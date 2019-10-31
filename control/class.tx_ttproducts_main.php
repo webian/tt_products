@@ -449,10 +449,8 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 		$templateFile = '';
 		$templateCode = $templateObj->get(
 			'BASKET',
-			$languageObj,
-			$this->cObj,
 			$templateFile,
-			$errorMessage
+			$errorCode
 		);
 
 		if (!$errorMessage && !count($errorCode))	{
@@ -488,9 +486,15 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 			$theCode = (string) trim($theCode);
 			$contentTmp = '';
 			if ($this->conf['fe'])	{
-				$templateCode = $templateObj->get($theCode, $languageObj, $this->cObj, $templateFile, $errorMessage);
+				$templateCode =
+                    $templateObj->get(
+                        $theCode,
+                        $templateFile, 
+                        $errorMessage
+                    );
 			}
-			if ($errorMessage || $bErrorFound) {
+			if ($errorMessage || !empty($errorCode)) {
+                $bErrorFound = true;
 				break;
 			}
 
@@ -767,7 +771,7 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 
 					if ($key == 0) {
 						$messageArr = explode('|', $message = $languageObj->getLabel($indice));
-						$contentTmp .= '<b>' . $languageObj->getLabel('tt_products').': '.$messageArr[0] . '</b>';
+						$contentTmp .= '<b>' . $languageObj->getLabel('tt_products') . ': ' . $messageArr[0] . '</b>';
 					} else {
 						$contentTmp .= '<b>' . $indice . $messageArr[$i] . '</b>';
 					}
@@ -943,7 +947,7 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 						$billdeliveryObj->writeFile($absFileName, $content);
 						$relfilename = $billdeliveryObj->getRelFilename($trackingCode, $type);
 						$message = $languageObj->getLabel('open_' . $type);
-						$content = '<a href="' . $relfilename . '" >' .$message . '</a>';
+						$content = '<a href="' . $relfilename . '">' .$message . '</a>';
 						break;
 					default:
 						debug('error in '.TT_PRODUCTS_EXT.' calling function products_tracking with $theCode = "' . $theCode . '"'); // keep this
