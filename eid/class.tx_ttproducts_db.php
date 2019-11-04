@@ -58,11 +58,10 @@ class tx_ttproducts_db implements \TYPO3\CMS\Core\SingletonInterface {
 		if (isset($ajax) && is_object($ajax))	{
 			$this->ajax = &$ajax;
 
-			$ajax->taxajax->registerFunction(array(TT_PRODUCTS_EXT.'_fetchRow',$this,'fetchRow'));
-			$ajax->taxajax->registerFunction(array(TT_PRODUCTS_EXT.'_commands',$this,'commands'));
+			$ajax->taxajax->registerFunction(array(TT_PRODUCTS_EXT . '_fetchRow',$this,'fetchRow'));
+			$ajax->taxajax->registerFunction(array(TT_PRODUCTS_EXT . '_commands',$this,'commands'));
 
 			$ajax->taxajax->registerFunction(array(TT_PRODUCTS_EXT . '_showArticle', $this, 'showArticle'));
-
 		}
 
 		if (
@@ -127,6 +126,7 @@ class tx_ttproducts_db implements \TYPO3\CMS\Core\SingletonInterface {
 		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		$basketObj = GeneralUtility::makeInstance('tx_ttproducts_basket');
+        $basketExtra = tx_ttproducts_control_basket::getBasketExtra();
 
 			// price
 		$priceObj = GeneralUtility::makeInstance('tx_ttproducts_field_price');
@@ -197,7 +197,7 @@ class tx_ttproducts_db implements \TYPO3\CMS\Core\SingletonInterface {
 							$priceTaxArray = array();
 
 							$priceTaxArray = $priceObj->getPriceTaxArray(
-								$this->conf['discountPriceMode'], $basketObj->basketExtra, 'price', tx_ttproducts_control_basket::getRoundFormat(), tx_ttproducts_control_basket::getRoundFormat('discount'), $tmpRow, $totalDiscountField, $priceTaxArray);
+								$this->conf['discountPriceMode'], $basketExtra, 'price', tx_ttproducts_control_basket::getRoundFormat(), tx_ttproducts_control_basket::getRoundFormat('discount'), $tmpRow, $totalDiscountField, $priceTaxArray);
 
 							$csConvObj = $GLOBALS['TSFE']->csConvObj;
 							$field = 'price';
@@ -301,7 +301,7 @@ class tx_ttproducts_db implements \TYPO3\CMS\Core\SingletonInterface {
 									$tmpArray,
 									$theCode,
 									'',
-									$basketObj->basketExtra,
+									$basketExtra,
 									$tmp=false,
 									true,
 									'',

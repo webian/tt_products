@@ -164,7 +164,6 @@ class tx_ttproducts_basket_view implements \TYPO3\CMS\Core\SingletonInterface {
 		$orderArray = array(),
 		$basketExtra = array()
 	)	{
-
 			/*
 				Very central function in the library.
 				By default it extracts the subpart, ###BASKET_TEMPLATE###, from the $templateCode (if given, else the default $this->templateCode)
@@ -186,9 +185,6 @@ class tx_ttproducts_basket_view implements \TYPO3\CMS\Core\SingletonInterface {
 		}
 		if (!count($orderArray))	{
 			$orderArray = $basketObj->order;
-		}
-		if (!count($basketExtra))	{
-			$basketExtra = $basketObj->basketExtra;
 		}
 
 		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
@@ -705,7 +701,7 @@ class tx_ttproducts_basket_view implements \TYPO3\CMS\Core\SingletonInterface {
 					ENT_NOQUOTES,
 					'UTF-8'
 				);
-			$wrappedSubpartArray['###LINK_BASKET###'] = array('<a href="'. $htmlUrl .'">','</a>');
+			$wrappedSubpartArray['###LINK_BASKET###'] = array('<a href="'. $htmlUrl .'">', '</a>');
 			$paymentshippingObj->getMarkerArray($theCode, $markerArray, $pid, $bUseBackPid, $calculatedArray, $basketExtra);
 
 			// for receipt from DIBS script

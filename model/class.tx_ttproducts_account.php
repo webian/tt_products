@@ -55,9 +55,10 @@ class tx_ttproducts_account extends tx_ttproducts_table_base {
 	public function init ($cObj, $functablename)	{
 		$basketObj = GeneralUtility::makeInstance('tx_ttproducts_basket');
 		$formerBasket = $basketObj->recs;
-		$bIsAllowed = $basketObj->basketExtra['payment.']['accounts'];
-		if (isset($basketObj->basketExtra['payment.']['useAsterisk']))	{
-			$this->useAsterisk = $basketObj->basketExtra['payment.']['useAsterisk'];
+		$basketExtra = tx_ttproducts_control_basket::getBasketExtra();
+		$bIsAllowed = $basketExtra['payment.']['accounts'];
+		if (isset($basketExtra['payment.']['useAsterisk']))	{
+			$this->useAsterisk = $basketExtra['payment.']['useAsterisk'];
 		}
 
 		parent::init($cObj, 'sys_products_accounts');

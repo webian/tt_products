@@ -54,7 +54,7 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 	public $useArticles;
 
 
-	public function init ($pibaseClass, $conf, $config, $funcTablename, $useArticles)  {
+	public function init ($pibaseClass, $conf, $config, $funcTablename, $useArticles, $basketExtra)  {
 		$this->pibaseClass = $pibaseClass;
 		$this->pibase = GeneralUtility::makeInstance('' . $pibaseClass);
 		$this->cObj = $this->pibase->cObj;
@@ -69,11 +69,11 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 		$this->urlObj = GeneralUtility::makeInstance('tx_ttproducts_url_view'); // a copy of it
 		// This handleURL is called instead of the THANKS-url in order to let handleScript process the information if payment by credit card or so.
 		$this->urlArray = array();
-		if ($this->basket->basketExtra['payment.']['handleURL'])	{
-			$this->urlArray['form_url_thanks'] = $this->basket->basketExtra['payment.']['handleURL'];
+		if ($basketExtra['payment.']['handleURL'])	{
+			$this->urlArray['form_url_thanks'] = $basketExtra['payment.']['handleURL'];
 		}
-		if ($this->basket->basketExtra['payment.']['handleTarget'])	{	// Alternative target
-			$this->urlArray['form_url_target'] = $this->basket->basketExtra['payment.']['handleTarget'];
+		if ($basketExtra['payment.']['handleTarget'])	{	// Alternative target
+			$this->urlArray['form_url_target'] = $basketExtra['payment.']['handleTarget'];
 		}
 		$this->urlObj->setUrlArray($this->urlArray);
 	} // init
@@ -565,7 +565,11 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 					$calculatedArray,
 					true,
 					$basket_tmpl,
-					$mainMarkerArray
+					$mainMarkerArray,
+                    '',
+                    array(),
+                    array(),
+					$basketExtra
 				);
 				$content .= $paymentHTML;
 			}
@@ -573,7 +577,7 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 			if ($orderUid && $paymentHTML != '') {
 
 				$orderObj = $tablesObj->get('sys_products_orders');
-				$orderObj->setData($orderUid, $paymentHTML, 0);
+				$orderObj->setData($orderUid, $paymentHTML, 0, $basketExtra);
 			}
 		} else {	// If not all required info-fields are filled in, this is shown instead:
 			$infoArray['billing']['error'] = 1;
@@ -787,7 +791,7 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 								tx_transactor_api::init($this->pibase, $this->cObj, $this->conf);
 								$referenceId = tx_transactor_api::getReferenceUid(
 									$handleLib,
-									$this->basket->basketExtra['payment.']['handleLib.'],
+									$basketExtra['payment.']['handleLib.'],
 									TT_PRODUCTS_EXT,
 									$orderUid
 								);
@@ -811,8 +815,8 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
                                     ) {
                                         $parameters = array(
                                             $referenceId,
-                                            $this->basket->basketExtra['payment.']['handleLib'],
-                                            $this->basket->basketExtra['payment.']['handleLib.'],
+                                            $basketExtra['payment.']['handleLib'],
+                                            $basketExtra['payment.']['handleLib.'],
                                             TT_PRODUCTS_EXT,
                                             $calculatedArray,
                                             $this->conf['paymentActivity'],
@@ -833,8 +837,8 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
                                 } else {
                                     $paymentErrorMsg = tx_transactor_api::checkRequired(
                                         $referenceId,
-                                        $this->basket->basketExtra['payment.']['handleLib'],
-                                        $this->basket->basketExtra['payment.']['handleLib.'],
+                                        $basketExtra['payment.']['handleLib'],
+                                        $basketExtra['payment.']['handleLib.'],
                                         TT_PRODUCTS_EXT,
                                         $calculatedArray,
                                         $this->conf['paymentActivity'],
@@ -1003,7 +1007,7 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 			$checkAllowed = $infoViewObj->checkAllowed($basketExtra);
 			if ($checkRequired == '' && $checkAllowed == '')	{
 				tx_div2007_alpha5::load_noLinkExtCobj_fh002($this->pibase);	// TODO
-				$handleScript = $GLOBALS['TSFE']->tmpl->getFileName($this->basket->basketExtra['payment.']['handleScript']);
+				$handleScript = $GLOBALS['TSFE']->tmpl->getFileName($basketExtra['payment.']['handleScript']);
 				$orderUid = $this->getOrderUid();
 				$orderNumber = $this->getOrdernumber($orderUid);
 
@@ -1044,6 +1048,7 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 					$mainMarkerArray,
 					$this->funcTablename,
 					$orderUid,
+					$basketExtra,
 					$errorMessage
 				);
 

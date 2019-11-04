@@ -52,7 +52,8 @@ class tx_ttproducts_card extends tx_ttproducts_table_base {
 
 		$basketObj = GeneralUtility::makeInstance('tx_ttproducts_basket');
 		$formerBasket = $basketObj->recs;
-		$allowedUids = $basketObj->basketExtra['payment.']['creditcards'];
+		$basketExtra = tx_ttproducts_control_basket::getBasketExtra();
+		$allowedUids = $basketExtra['payment.']['creditcards'];
 
 		parent::init($cObj, $functablename);
 

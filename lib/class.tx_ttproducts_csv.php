@@ -64,7 +64,7 @@ class tx_ttproducts_csv implements \TYPO3\CMS\Core\SingletonInterface {
 	} // init
 
 
-	function create ($functablename, &$address, $csvorderuid, &$csvfilepath, &$errorMessage) {
+	public function create ($functablename, &$address, $csvorderuid, $basketExtra, &$csvfilepath, &$errorMessage) {
 		$basket = GeneralUtility::makeInstance('tx_ttproducts_basket');
 		$priceViewObj = GeneralUtility::makeInstance('tx_ttproducts_field_price_view');
 		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
@@ -73,10 +73,10 @@ class tx_ttproducts_csv implements \TYPO3\CMS\Core\SingletonInterface {
 		$itemTable = $tablesObj->get($functablename, false);
 
 		$csvfilepath = trim($csvfilepath);
-		if ($csvfilepath{strlen($csvfilepath)-1} != '/') {
+		if ($csvfilepath{strlen($csvfilepath) - 1} != '/') {
 			$csvfilepath .= '/';
 		}
-		$csvfilepath .= $orderObj->getNumber($csvorderuid).'.csv';
+		$csvfilepath .= $orderObj->getNumber($csvorderuid) . '.csv';
 		$csvfile = fopen($csvfilepath, 'w');
 		if ($csvfile !== false)	{
 			// Generate invoice and delivery address
@@ -96,7 +96,7 @@ class tx_ttproducts_csv implements \TYPO3\CMS\Core\SingletonInterface {
 			}
 
 			// Generate shipping/payment information and delivery note
-			$csvlineshipping = '"' . $basket->basketExtra['shipping.']['title'] . '";"' .
+			$csvlineshipping = '"' . $basketExtra['shipping.']['title'] . '";"' .
 				$priceViewObj->priceFormat($this->calculatedArray['priceTax']['shipping']) . '";"' .
 				$priceViewObj->priceFormat($this->calculatedArray['priceNoTax']['shipping']) . '"';
 
@@ -109,7 +109,7 @@ class tx_ttproducts_csv implements \TYPO3\CMS\Core\SingletonInterface {
 				}
 			}
 
-			$csvlinepayment = '"' . $basket->basketExtra['payment.']['title'] . '";"' .
+			$csvlinepayment = '"' . $basketExtra['payment.']['title'] . '";"' .
 				$priceViewObj->priceFormat($this->calculatedArray['priceTax']['payment']) . '";"' .
 				$priceViewObj->priceFormat($this->calculatedArray['priceNoTax']['payment']) . '"';
 

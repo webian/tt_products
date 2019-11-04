@@ -99,6 +99,7 @@ class tx_ttproducts_activity_finalize {
 		&$mainMarkerArray,
 		$functablename,
 		$orderUid,
+		$basketExtra,
 		&$errorMessage
 	) {
 		if ($this->conf['errorLog']) {
@@ -259,6 +260,7 @@ class tx_ttproducts_activity_finalize {
                     $billdeliveryObj->generateBill(
                         $templateCode,
                         $mainMarkerArray,
+                        $basketExtra,
                         $type,
                         $this->conf[$type . '.']
                     );
@@ -266,7 +268,7 @@ class tx_ttproducts_activity_finalize {
 			}
 		}
 
-		$orderObj->setData($orderUid, $orderConfirmationHTML, 1);
+		$orderObj->setData($orderUid, $orderConfirmationHTML, 1, $basketExtra);
 		$creditpointsObj = GeneralUtility::makeInstance('tx_ttproducts_field_creditpoints');
 		$creditpointsObj->pay();
 
@@ -312,7 +314,7 @@ class tx_ttproducts_activity_finalize {
 			);
 			$csvfilepath = PATH_site.$this->conf['CSVdestination'];
 			$csvorderuid = $basketObj->order['orderUid'];
-			$csv->create($functablename, $infoViewObj, $csvorderuid, $csvfilepath, $errorMessage);
+			$csv->create($functablename, $infoViewObj, $csvorderuid, $basketExtra, $csvfilepath, $errorMessage);
 			if (!$this->conf['CSVnotInEmail']) {
 				$addcsv = $csvfilepath;
 			}

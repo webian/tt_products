@@ -943,14 +943,14 @@ class tx_ttproducts_basket implements \TYPO3\CMS\Core\SingletonInterface {
 	}
 
 
-	public function calculate ()	{
+	public function calculate ($basketExtra)	{
 		$cnfObj = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$useArticles = $cnfObj->getUseArticles();
 
 		$calculObj = GeneralUtility::makeInstance('tx_ttproducts_basket_calculate');
 		$calculObj->calculate(
 			$this->basketExt,
-			$this->basketExtra,
+			$basketExtra,
 			$this->getFuncTablename(),
 			$useArticles,
 			$this->maxTax,

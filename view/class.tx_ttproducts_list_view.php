@@ -1487,7 +1487,7 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 									$tmp=array(),
 									$headerViewTagArray[$headerFieldIndex],
 									$theCode,
-									$basketObj->basketExtra,
+									tx_ttproducts_control_basket::getBasketExtra(),
 									true,
 									'',
 									0,

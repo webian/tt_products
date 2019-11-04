@@ -348,9 +348,6 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 			$this->ajax
 		);
 
-			// basket view
-		$this->control = GeneralUtility::makeInstance('tx_ttproducts_control');
-
 		$subpartmarkerObj = GeneralUtility::makeInstance('tx_ttproducts_subpartmarker');
 		$subpartmarkerObj->init($this->cObj);
 
@@ -442,7 +439,7 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 		$recs = tx_ttproducts_control_basket::getRecs();
 
 		$voucher->doProcessing($recs);
-        $basketObj->calculate(); // get the calculated arrays
+        $basketObj->calculate($basketExtra); // get the calculated arrays
 		$basketObj->calculateSums();
 		$basketObj->addVoucherSums();
 
@@ -457,20 +454,20 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 
 			$functablename = 'tt_products';
 			tx_ttproducts_control_memo::process($functablename, $pibaseObj->piVars, $this->conf);
-
-			$this->control->init(
+            $controlObj = GeneralUtility::makeInstance(tx_ttproducts_control::class);
+			$controlObj->init(
 				$pibaseClass,
 				$conf,
 				$cnf->getConfig(),
 				$basketObj->getFuncTablename(),
-				$this->conf['useArticles']
+				$this->conf['useArticles'],
+				$basketExtra
 			);
 			$calculatedArray = $basketObj->getCalculatedSums();
-
-			$content .= $this->control->doProcessing(
+			$content .= $controlObj->doProcessing(
 				$this->codeArray,
 				$calculatedArray,
-				$basketObj->basketExtra,
+				$basketExtra,
 				$errorCode,
 				$errorMessage
 			);

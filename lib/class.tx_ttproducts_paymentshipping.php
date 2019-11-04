@@ -45,11 +45,11 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
 class tx_ttproducts_paymentshipping implements \TYPO3\CMS\Core\SingletonInterface {
-	var $cObj;
-	var $conf;
-	var $config;
-	var $basketView;
-	var $priceObj;	// price functions
+	public $cObj;
+	public $conf;
+	public $config;
+	public $basketView;
+	public $priceObj;	// price functions
 	protected $typeArray = array('handling','shipping','payment');
     protected $voucher;
 
@@ -162,8 +162,9 @@ class tx_ttproducts_paymentshipping implements \TYPO3\CMS\Core\SingletonInterfac
 
 		$handleLib = $basketExtra['payment.']['handleLib'];
 
-		if (strpos($handleLib,'transactor') !== false && ExtensionManagementUtility::isLoaded($handleLib))	{
-
+		if (
+            strpos($handleLib,'transactor') !== false && ExtensionManagementUtility::isLoaded($handleLib)
+        ) {
             $languageObj = GeneralUtility::makeInstance(\JambageCom\TtProducts\Api\Localization::class);
 				// Payment Transactor
 			tx_transactor_api::init($languageObj, $this->cObj, $this->conf);
@@ -294,7 +295,6 @@ class tx_ttproducts_paymentshipping implements \TYPO3\CMS\Core\SingletonInterfac
 
 		if ($subkey != '')	{
 			if (isset($basketExtra[$pskey . '.'][$subkey . '.']['image.'])) {
-// 				$imageCode = $this->cObj->IMAGE($basketExtra[$pskey . '.'][$subkey . '.']['image.']);
                 $imageCode =
                     $imageObj->getImageCode(
                         $basketExtra[$pskey . '.'][$subkey . '.']['image.'],
@@ -304,7 +304,6 @@ class tx_ttproducts_paymentshipping implements \TYPO3\CMS\Core\SingletonInterfac
 			$markerArray['###' . $markerkey . '_TITLE###'] = $basketExtra[$pskey . '.'][$subkey . '.']['title'];
 		} else {
 			if (isset($basketExtra[$pskey . '.']['image.'])) {
-// 				$imageCode = $this->cObj->IMAGE($basketExtra[$pskey . '.']['image.']);
                 $imageCode =
                     $imageObj->getImageCode(
                         $basketExtra[$pskey . '.']['image.'],
@@ -390,11 +389,11 @@ class tx_ttproducts_paymentshipping implements \TYPO3\CMS\Core\SingletonInterfac
 	}
 
 
-
 	/**
 	 * Generates a radio or selector box for payment shipping
 	 */
 	public function generateRadioSelect ($theCode, $pskey, $subkey, $calculatedArray, $basketUrl, &$basketExtra)	{
+
 			/*
 			 The conf-array for the payment/shipping/handling configuration has numeric keys for the elements
 			 But there are also these properties:
@@ -617,6 +616,7 @@ class tx_ttproducts_paymentshipping implements \TYPO3\CMS\Core\SingletonInterfac
 		}
 		return $out;
 	} // generateRadioSelect
+
 
 	public function getConfiguredPrice (
 		$pskey,
@@ -1211,7 +1211,6 @@ class tx_ttproducts_paymentshipping implements \TYPO3\CMS\Core\SingletonInterfac
 		}
 		return $rc;
 	}
-
 
 
 	public function getHandleLib ($request, $basketExtra)	{ // getGatewayRequestExt

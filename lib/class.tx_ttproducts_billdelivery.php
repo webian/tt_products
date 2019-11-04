@@ -101,7 +101,7 @@ class tx_ttproducts_billdelivery implements \TYPO3\CMS\Core\SingletonInterface {
 	}
 
 
-    public function generateBill ($templateCode, $mainMarkerArray, $type, $generationConf) {
+    public function generateBill ($templateCode, $mainMarkerArray, $basketExtra, $type, $generationConf) {
 
 		$basketView = GeneralUtility::makeInstance('tx_ttproducts_basket_view');
 		$basketObj = GeneralUtility::makeInstance('tx_ttproducts_basket');
@@ -126,7 +126,7 @@ class tx_ttproducts_billdelivery implements \TYPO3\CMS\Core\SingletonInterface {
                         $basketObj->getItemArray(),
                         $basketObj->getCalculatedArray(),
                         $basketObj->order,
-                        $basketObj->basketExtra,
+                        $basketExtra,
                         $basketObj->recs,
                         $type,
                         $generationConf,

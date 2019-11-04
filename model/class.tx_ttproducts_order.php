@@ -218,7 +218,8 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 		$amount,
 		&$orderConfirmationHTML,
 		&$address,
-		$status=0
+		$status,
+		$basketExtra
 	)	{
 		$basketObj = GeneralUtility::makeInstance('tx_ttproducts_basket');
 		$calculObj = GeneralUtility::makeInstance('tx_ttproducts_basket_calculate');
@@ -332,7 +333,7 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 			$fieldsArray['vat_id'] = $billingInfo['tt_products_vat'];
 
 			$paymentshippingObj = GeneralUtility::makeInstance('tx_ttproducts_paymentshipping');
-			$taxPercentage = $paymentshippingObj->getReplaceTaxPercentage($basketObj->basketExtra);
+			$taxPercentage = $paymentshippingObj->getReplaceTaxPercentage($basketExtra);
 			if (doubleval($taxPercentage) == 0)	{
 				$fieldsArray['tax_mode'] = 1;
 			}
@@ -542,7 +543,7 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 	 * @param	integer		$orderID: uid of dummy record
 	 * @return	void
 	 */
-	function setData ($orderUid, &$orderHTML, $status) {
+	public function setData ($orderUid, &$orderHTML, $status, $basketExtra) {
 
 		$basketObj = GeneralUtility::makeInstance('tx_ttproducts_basket');
 		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
@@ -572,12 +573,13 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 			$cardUid,
 			$accountUid,
 			$this->conf['email_notify_default'],	// Email notification is set here. Default email address is delivery email contact
-			$basketObj->basketExtra['payment'][0] . ': ' . $basketObj->basketExtra['payment.']['title'],
-			$basketObj->basketExtra['shipping'][0] . ': ' . $basketObj->basketExtra['shipping.']['title'],
+			$basketExtra['payment'][0] . ': ' . $basketExtra['payment.']['title'],
+			$basketExtra['shipping'][0] . ': ' . $basketExtra['shipping.']['title'],
 			$calculatedArray['priceTax']['total'],
 			$orderHTML,
 			$address,
-			$status
+			$status,
+			$basketExtra
 		);
 
 		$this->createMM($orderUid, $basketObj->itemArray);
