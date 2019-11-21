@@ -78,13 +78,7 @@ class tx_ttproducts_modfunc1 extends \TYPO3\CMS\Backend\Module\AbstractFunctionM
 		}
 
 		if ($GLOBALS['BE_USER']->user['admin']) {
-			$menu=array();
-// 			$menu[]=t3lib_BEfunc::getFuncCheck(
-// 				$this->wizard->pObj->id,
-// 				'SET[tx_ttproducts_modfunc1_check]',
-// 				$this->wizard->pObj->MOD_SETTINGS['tx_ttproducts_modfunc1_check']
-// 			).$GLOBALS['LANG']->getLL('checklabel');
-
+			$menu = array();
 			$content = '';
 			$content .= '<br />' . $GLOBALS['LANG']->getLL('pid_dest') . \TYPO3\CMS\Backend\Utility\BackendUtility::getFuncInput(
 				$this->pObj->id,

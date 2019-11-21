@@ -113,7 +113,8 @@ class tx_ttproducts_match_condition implements \TYPO3\CMS\Core\SingletonInterfac
 		$bBukily = false;
 		tx_ttproducts_control_basket::init();
 		$recs = tx_ttproducts_control_basket::getRecs();
-		$cObj = GeneralUtility::makeInstance('tslib_cObj');
+        $cObj = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);	// Local cObj.
+        $cObj->start(array());
 		$basketExt = tx_ttproducts_control_basket::getBasketExt();
 
 		if (isset($basketExt) && is_array($basketExt)) {
