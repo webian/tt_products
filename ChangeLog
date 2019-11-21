@@ -1,3 +1,5 @@
+2019-11-21 Franz Holzinger <franz@ttproducts.de>
+    * bugfix: The recs POST data and FE sessions are available only in the Front End.
 
 2019-11-04 Franz Holzinger <franz@ttproducts.de>
     * bugfix: The object of tx_ttproducts_basket has no basketExtra member variable. Use tx_ttproducts_control_basket::getBasketExtra() instead.

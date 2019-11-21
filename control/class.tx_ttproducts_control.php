@@ -467,7 +467,7 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 			if ($this->activityArray['products_overview']) {
 				tx_div2007_alpha5::load_noLinkExtCobj_fh002($this->pibase);	//
 				$contentEmpty = $this->cObj->getSubpart(
-					templateCode,
+					$templateCode,
 					$this->subpartmarkerObj->spMarker('###BASKET_OVERVIEW_EMPTY' . $this->config['templateSuffix'] . '###')
 				);
 

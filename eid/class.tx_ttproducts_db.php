@@ -75,28 +75,35 @@ class tx_ttproducts_db implements \TYPO3\CMS\Core\SingletonInterface {
 		    $this->cObj->start(array());
 		}
 
-        $recs = GeneralUtility::_GP('recs');
+        if (TYPO3_MODE == 'FE') {
+            $recs = GeneralUtility::_GP('recs');
 
-        if (
-            is_array($recs) &&
-            $conf['transmissionSecurity']
-        ) {
-            $errorCode = array();
-            $errorMessage = '';
-            $security = GeneralUtility::makeInstance(\JambageCom\Div2007\Security\TransmissionSecurity::class);
-            $decryptionResult = $security->decryptIncomingFields(
-                $recs,
-                $errorCode,
-                $errorMessage
-            );
-        }        
+            if (
+                is_array($recs) &&
+                $conf['transmissionSecurity']
+            ) {
+                $errorCode = array();
+                $errorMessage = '';
+                $security = GeneralUtility::makeInstance(\JambageCom\Div2007\Security\TransmissionSecurity::class);
+                $decryptionResult = $security->decryptIncomingFields(
+                    $recs,
+                    $errorCode,
+                    $errorMessage
+                );
+            }        
 
-        if (is_array($recs)) {
-            $api = GeneralUtility::makeInstance( \JambageCom\Div2007\Api\Frontend::class);
-            // If any record registration is submitted, register the record.
-            $api->record_registration($recs, $GLOBALS['TYPO3_CONF_VARS']['FE']['maxSessionDataSize']);
+            if (is_array($recs)) {
+                $api = GeneralUtility::makeInstance( \JambageCom\Div2007\Api\Frontend::class);
+                // If any record registration is submitted, register the record.
+                $api->record_registration(
+                    $recs,
+                    $GLOBALS['TYPO3_CONF_VARS']['FE']['maxSessionDataSize'],
+                    $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['checkCookies']
+                );
+            }
+            $recs = tx_ttproducts_control_basket::getStoredRecs();
         }
-        $recs = tx_ttproducts_control_basket::getStoredRecs();
+
         if (empty($recs)) {
             $recs = array();
         }
@@ -117,7 +124,7 @@ class tx_ttproducts_db implements \TYPO3\CMS\Core\SingletonInterface {
 	}
 
 
-	public function &fetchRow ($data) {
+	public function fetchRow ($data) {
 		$rc = '';
 		$view = '';
 		$rowArray = array();
@@ -243,7 +250,7 @@ class tx_ttproducts_db implements \TYPO3\CMS\Core\SingletonInterface {
 	}
 
 
-	protected function &generateResponse ($view, &$rowArray, &$variantArray)	{
+	protected function generateResponse ($view, &$rowArray, &$variantArray)	{
 		$csConvObj = $GLOBALS['TSFE']->csConvObj;
 
 		$theCode = strtoupper($view);

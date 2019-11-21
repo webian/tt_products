@@ -225,7 +225,7 @@ class tx_ttproducts_relatedlist_view implements \TYPO3\CMS\Core\SingletonInterfa
 							'functablename' => $functablename,
 							'uid' => $uid
 						);
-						$tmpContent = $listView->printView (
+						$tmpContent = $listView->printView(
 							$templateCode,
 							$funcArray['code'],
 							$funcArray['functablename'],
