@@ -327,7 +327,10 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 		$fieldsArray['cc_uid'] = $cardUid;
 		$fieldsArray['ac_uid'] = $accountUid;
 		$fieldsArray['giftcode'] = $basketObj->recs['tt_products']['giftcode'];
-		$fieldsArray['sys_language_uid'] = $GLOBALS['TSFE']->config['config']['sys_language_uid'];
+        $api =
+            GeneralUtility::makeInstance(\JambageCom\Div2007\Api\Frontend::class);
+        $sys_language_uid = $api->getLanguageId();
+        $fieldsArray['sys_language_uid'] = $sys_language_uid;
 
 		if ($billingInfo['tt_products_vat'] != '')	{
 			$fieldsArray['vat_id'] = $billingInfo['tt_products_vat'];

@@ -1,4 +1,5 @@
 2019-11-21 Franz Holzinger <franz@ttproducts.de>
+    * compatibility: support for TYPO3 9 setting of sys_language_uid
     * bugfix: The recs POST data and FE sessions are available only in the Front End.
 
 2019-11-04 Franz Holzinger <franz@ttproducts.de>
@@ -9,7 +10,7 @@
     * bufix: tt_products uses the field 'country_code' in the HTML template form for the recs of personinfo and delivery in replacement for the field static_info_country coming from the extensions agency, sr_feuser_register or femanager. It contains the 3 characters country ISO-3 or Alpha-3 code.
 
 2019-10-26 Franz Holzinger <franz@ttproducts.de>
-    * bufix issue #51: template products_css_variants_de.html
+    * bugfix issue #51: template products_css_variants_de.html
     * bugfix to the code dependent template file setup
     * In order to compatible with https://getcomposer.org/doc/04-schema.md composer.json declarations had to be adjusted and previous replace statements dropped.
 

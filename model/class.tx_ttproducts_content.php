@@ -66,7 +66,11 @@ class tx_ttproducts_content extends tx_ttproducts_table_base {
 			$sql->prepareFields($this->getTableObj(), 'select', '*');
 			$sql->prepareFields($this->getTableObj(), 'orderBy', 'sorting');
 			$sql->prepareWhereFields ($this->getTableObj(), 'pid', '=', intval($pid));
-			$sql->prepareWhereFields ($this->getTableObj(), 'sys_language_uid', '=', intval($GLOBALS['TSFE']->config['config']['sys_language_uid']));
+            $api =
+                GeneralUtility::makeInstance(\JambageCom\Div2007\Api\Frontend::class);
+            $sys_language_uid = $api->getLanguageId();
+
+			$sql->prepareWhereFields ($this->getTableObj(), 'sys_language_uid', '=', intval($sys_language_uid));
 			$enableFields = $this->getTableObj()->enableFields();
 			$sql->where_clause .= $enableFields;
 

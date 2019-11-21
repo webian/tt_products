@@ -450,16 +450,22 @@ abstract class tx_ttproducts_table_base implements \TYPO3\CMS\Core\SingletonInte
 	}
 
 	public function bUseLanguageTable ($tableConf) 	{
-		$rc = false;
-		$sys_language_uid = $GLOBALS['TSFE']->config['config']['sys_language_uid'];
+        $rc = false;
+        $api =
+            GeneralUtility::makeInstance(\JambageCom\Div2007\Api\Frontend::class);
+        $sys_language_uid = $api->getLanguageId();
 
-		if (is_numeric($sys_language_uid))	{
-			if ((is_array($tableConf['language.']) && $tableConf['language.']['type'] == 'table' && $sys_language_uid > 0))	{
-				$rc = true;
-			}
-		}
-		return $rc;
-	}
+        if (is_numeric($sys_language_uid)) {
+            if (
+                is_array($tableConf['language.']) &&
+                $tableConf['language.']['type'] == 'table' &&
+                $sys_language_uid > 0
+            ) {
+                $result = true;
+            }
+        }
+        return $result;
+    }
 
 
 	public function fixTableConf (&$tableConf)	{
