@@ -176,20 +176,20 @@ abstract class tx_ttproducts_table_base implements \TYPO3\CMS\Core\SingletonInte
 			$where = '1=1';
 
 			if (is_int($uid))	{
-				$where .= ' AND '.$alias.'.uid = '.intval($uid);
+				$where .= ' AND ' . $alias . '.uid = ' . intval($uid);
 			} else if($uid)	{
 				$uidArray = GeneralUtility::trimExplode(',',$uid);
 				foreach ($uidArray as $k => $v)	{
 					$uidArray[$k] = intval($v);
 				}
-				$where .= ' AND '.$alias.'.uid IN ('.implode(',',$uidArray).')';
+				$where .= ' AND ' . $alias . '.uid IN (' . implode(',', $uidArray) . ')';
 			}
 			if ($pid)	{
-				$pidArray = GeneralUtility::trimExplode(',',$pid);
+				$pidArray = GeneralUtility::trimExplode(',', $pid);
 				foreach ($pidArray as $k => $v)	{
 					$pidArray[$k] = intval($v);
 				}
-				$where .= ' AND '.$alias.'.pid IN ('.implode(',',$pidArray).')';
+				$where .= ' AND ' . $alias . '.pid IN (' . implode(',', $pidArray) . ')';
 			}
 			if ($where_clause)	{
 				if (strpos($where_clause, $enableFields) !== false) {
@@ -292,12 +292,12 @@ abstract class tx_ttproducts_table_base implements \TYPO3\CMS\Core\SingletonInte
 	}
 
 
-	public function needsInit ()	{
+	public function needsInit () {
 		return !$this->bHasBeenInitialised;
 	}
 
 
-	public function destruct ()	{
+	public function destruct () {
 		$this->bHasBeenInitialised = false;
 	}
 
@@ -575,7 +575,7 @@ abstract class tx_ttproducts_table_base implements \TYPO3\CMS\Core\SingletonInte
 	}
 
 
-	public function &addInsertRow ($row, &$k='')	{
+	public function addInsertRow ($row, &$k='')	{
 		$bUseInsertKey = false;
 
 		if ($k == '')	{
@@ -589,7 +589,7 @@ abstract class tx_ttproducts_table_base implements \TYPO3\CMS\Core\SingletonInte
 	}
 
 
-	public function &getInsertRowArray ()	{
+	public function getInsertRowArray ()	{
 		return $this->insertRowArray;
 	}
 }
