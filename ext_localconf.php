@@ -1,12 +1,25 @@
 <?php
 defined('TYPO3_MODE') || die('Access denied.');
 
-$_EXTCONF = unserialize($_EXTCONF);    // unserializing the configuration so we can use it here:
-
 // these constants shall be used in the future:
 if (!defined ('TT_PRODUCTS_EXT')) {
 	define('TT_PRODUCTS_EXT', 'tt_products');
 }
+
+
+$extensionConfiguration = array();
+
+if (
+    defined('TYPO3_version') &&
+    version_compare(TYPO3_version, '9.0.0', '>=')
+) {
+    $extensionConfiguration = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+        \TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class
+    )->get(TT_PRODUCTS_EXT);
+} else {
+    $extensionConfiguration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][TT_PRODUCTS_EXT]);
+}
+
 
 if (!defined ('PATH_BE_TTPRODUCTS')) {
 	define('PATH_BE_TTPRODUCTS', \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath(TT_PRODUCTS_EXT));
@@ -141,8 +154,8 @@ if (isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]) && is_array($
 }
 
 
-if (isset($_EXTCONF) && is_array($_EXTCONF)) {
-	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT] = $_EXTCONF;
+if (isset($extensionConfiguration) && is_array($extensionConfiguration)) {
+	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT] = $extensionConfiguration;
 	if (isset($tmpArray) && is_array($tmpArray)) {
 		$GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT] = array_merge($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT], $tmpArray);
 	}
@@ -150,14 +163,14 @@ if (isset($_EXTCONF) && is_array($_EXTCONF)) {
 	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT] = array();
 }
 
-if (isset($_EXTCONF) && is_array($_EXTCONF)) {
-	if (isset($_EXTCONF['where.']) && is_array($_EXTCONF['where.'])) {
-		$GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['where.'] = $_EXTCONF['where.'];
+if (isset($extensionConfiguration) && is_array($extensionConfiguration)) {
+	if (isset($extensionConfiguration['where.']) && is_array($extensionConfiguration['where.'])) {
+		$GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['where.'] = $extensionConfiguration['where.'];
 	}
 
-	if (isset($_EXTCONF['exclude.']) && is_array($_EXTCONF['exclude.'])) {
+	if (isset($extensionConfiguration['exclude.']) && is_array($extensionConfiguration['exclude.'])) {
 		$excludeArray = array();
-		foreach ($_EXTCONF['exclude.'] as $tablename => $excludefields) {
+		foreach ($extensionConfiguration['exclude.'] as $tablename => $excludefields) {
 			if ($excludefields != '') {
 				$excludeArray[$tablename] = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $excludefields);
 			}
