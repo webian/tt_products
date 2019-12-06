@@ -1743,10 +1743,14 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 							$parentUid = intval($parentDataArray['uid']);
 						}
 					}
-					if ($this->conf['noArticleSingleView'] && !$parentUid && $itemTable->getType() == 'article') {
 
-						$parentUid = $row['uid_product'];
-					}
+					if (
+                        $this->conf['noArticleSingleView'] &&
+                        !$parentUid &&
+                        $itemTable->getType() == 'article'
+                    ) {
+                        $parentUid = $prodRow['uid'];
+                    }
 					if ($parentUid) {
 							$addQueryString[$itemTableViewArray['product']->getPivar()] = $parentUid;
 					}
