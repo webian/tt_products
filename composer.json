@@ -24,7 +24,7 @@
     "GPL-2.0-or-later"
   ],
   "require": {
-    "typo3/cms-core": ">=6.2.0,<8.99.99",
+    "typo3/cms-core": ">=6.2.0,<9.5.99",
     "jambagecom/div2007": ">=1.10.25",
     "jambagecom/table": ">=0.7.0",
     "jambagecom/tsparser": ">=0.2.5"
