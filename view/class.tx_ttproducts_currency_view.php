@@ -42,10 +42,10 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class tx_ttproducts_currency_view implements \TYPO3\CMS\Core\SingletonInterface {
 
-	var $pibase; // reference to object of pibase
-	var $conf;
-	var $subpartMarkerObj; // marker functions
-	var $urlObj;
+	public $pibase; // reference to object of pibase
+	public $conf;
+	public $subpartMarkerObj; // marker functions
+	public $urlObj;
 
 	public function init($pibase) {
 		$this->pibase = $pibase;
@@ -73,7 +73,7 @@ class tx_ttproducts_currency_view implements \TYPO3\CMS\Core\SingletonInterface 
 			$index ++ ;
 		}
 
-		$content = $this->pibase->cObj->getSubpart($this->templateCode,$this->subpartmarkerObj->spMarker('###CURRENCY_SELECTOR###'));
+		$content = tx_div2007_core::getSubpart($this->templateCode, $this->subpartmarkerObj->spMarker('###CURRENCY_SELECTOR###'));
 		$content = $this->pibase->cObj->substituteMarker( $content, '###CURRENCY_FORM_NAME###', 'tt_products_currsel_form' );
 		$onChange = 'if (!document.tt_products_currsel_form.C.options[document.tt_products_currsel_form.C.selectedIndex].value) return; top.location.replace(currlink[document.tt_products_currsel_form.C.selectedIndex] );';
 		$selector = $this->exchangeRate->buildCurrSelector($this->BaseCurrency,'C','',$this->currency, $onChange);

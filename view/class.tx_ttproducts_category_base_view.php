@@ -39,12 +39,12 @@
 
 
 abstract class tx_ttproducts_category_base_view extends tx_ttproducts_table_base_view {
-	var $dataArray;  // array of read in categories
-	var $titleArray; // associative array of read in categories with title as index
+	public $dataArray;  // array of read in categories
+	public $titleArray; // associative array of read in categories with title as index
 	public $marker = 'CATEGORY';
-	var $markerObj;
-	var $mm_table = ''; // only set if a mm table is used
-	var $parentField; // reference field name for parent
+	public $markerObj;
+	public $mm_table = ''; // only set if a mm table is used
+	public $parentField; // reference field name for parent
 
 
 	public function setMarkerArrayCatTitle (&$markerArray, $catTitle, $prefix)	{
@@ -60,7 +60,7 @@ abstract class tx_ttproducts_category_base_view extends tx_ttproducts_table_base
 	}
 
 
-	public function &getSubpartArrays ($urlmarkerObj, $row, &$subpartArray, &$wrappedSubpartArray, &$tagArray, $pid, $linkMarker)	{
+	public function getSubpartArrays ($urlmarkerObj, $row, &$subpartArray, &$wrappedSubpartArray, &$tagArray, $pid, $linkMarker)	{
         $local_cObj = \JambageCom\Div2007\Utility\FrontendUtility::getContentObjectRenderer();
 		$addQueryString = array();
 		$addQueryString[$this->piVar] = $row['uid'];

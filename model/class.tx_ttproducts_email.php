@@ -41,8 +41,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
 class tx_ttproducts_email extends tx_ttproducts_table_base {
-	var $emailArray;	// array of read in emails
-	var $table;		 // object of the type tx_table_db
+	public $emailArray;	// array of read in emails
+	public $table;		 // object of the type tx_table_db
 
 	/**
 	 * Getting all tt_products_cat categories into internal array

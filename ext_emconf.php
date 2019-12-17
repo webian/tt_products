@@ -18,8 +18,8 @@ $EM_CONF[$_EXTKEY] = array(
 	'version' => '2.9.7',
 	'constraints' => array(
 		'depends' => array(
-			'div2007' => '1.10.26-0.0.0',
-			'php' => '5.6.0-7.2.99',
+			'div2007' => '1.10.27-0.0.0',
+			'php' => '5.6.0-7.3.99',
 			'table' => '0.7.0-0.0.0',
 			'tsparser' => '0.2.5-0.0.0',
 			'typo3' => '6.2.0-9.5.99',
@@ -29,6 +29,7 @@ $EM_CONF[$_EXTKEY] = array(
 		'suggests' => array(
 			'func_wizards' => '',
 			'addons_em' => '0.2.1-0.0.0',
+            'typo3db_legacy' => '1.0.0-1.1.99',
 		)
 	)
 );

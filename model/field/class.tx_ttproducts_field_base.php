@@ -41,10 +41,10 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 abstract class tx_ttproducts_field_base implements tx_ttproducts_field_int, \TYPO3\CMS\Core\SingletonInterface {
 	private $bHasBeenInitialised = false;
-	var $cObj;
-	var $conf;		// original configuration
-	var $config;		// modified configuration
-	var $viewObj;		// view object
+	public $cObj;
+	public $conf;		// original configuration
+	public $config;		// modified configuration
+	public $viewObj;		// view object
 
 	public function init ($cObj)	{
 		$this->cObj = $cObj;

@@ -95,10 +95,17 @@ class tx_ttproducts_graduated_price_view implements \TYPO3\CMS\Core\SingletonInt
 	public function getPriceSubpartArrays (&$templateCode, &$row, $fieldname, &$subpartArray, &$wrappedSubpartArray, &$tagArray, $theCode='', $basketExtra=array(), $id='1') {
 
         $local_cObj = \JambageCom\Div2007\Utility\FrontendUtility::getContentObjectRenderer();
+		$parser = $local_cObj;
+        if (
+            defined('TYPO3_version') &&
+            version_compare(TYPO3_version, '7.0.0', '>=')
+        ) {
+            $parser = tx_div2007_core::newHtmlParser(false);
+        }
 		$subpartmarkerObj = GeneralUtility::makeInstance('tx_ttproducts_subpartmarker');
 		$t = array();
-		$t['listFrameWork'] = $local_cObj->getSubpart($templateCode,'###GRADPRICE_FORMULA_ITEMS###');
-		$t['itemFrameWork'] = $local_cObj->getSubpart($t['listFrameWork'],'###ITEM_FORMULA###');
+		$t['listFrameWork'] = tx_div2007_core::getSubpart($templateCode, '###GRADPRICE_FORMULA_ITEMS###');
+		$t['itemFrameWork'] = tx_div2007_core::getSubpart($t['listFrameWork'], '###ITEM_FORMULA###');
 
 		$priceFormulaArray = $this->modelObj->getFormulasByProduct($row['uid']);
 		if (count($priceFormulaArray))	{
@@ -108,8 +115,8 @@ class tx_ttproducts_graduated_price_view implements \TYPO3\CMS\Core\SingletonInt
 					$itemMarkerArray = array();
 					$this->getFormulaMarkerArray($basketExtra, $row, $priceFormula, $itemMarkerArray);
 
-					$formulaContent = $local_cObj->substituteMarkerArray($t['itemFrameWork'],$itemMarkerArray);
-					$content .= $local_cObj->substituteSubpart($t['listFrameWork'],'###ITEM_FORMULA###',$formulaContent) ;
+					$formulaContent = $parser->substituteMarkerArray($t['itemFrameWork'], $itemMarkerArray);
+					$content .= $parser->substituteSubpart($t['listFrameWork'],  '###ITEM_FORMULA###', $formulaContent) ;
 				}
 			}
 			$subpartArray['###GRADPRICE_FORMULA_ITEMS###'] = $content;

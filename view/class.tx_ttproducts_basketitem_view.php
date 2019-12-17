@@ -190,7 +190,7 @@ class tx_ttproducts_basketitem_view implements \TYPO3\CMS\Core\SingletonInterfac
 		$markerArray['###BASKET_IN_STOCK###'] = $languageObj->getLabel( ($row['inStock'] > 0 ? 'in_stock' : 'not_in_stock'));
 		$basketFile = $GLOBALS['TSFE']->tmpl->getFileName($this->conf['basketPic']);
 		$markerArray['###IMAGE_BASKET_SRC###'] = $basketFile;
-		$fileresource = $pibaseObj->cObj->fileResource($this->conf['basketPic']);
+		$fileresource =  \JambageCom\Div2007\Utility\FrontendUtility::fileResource($basketFile);
 		$markerArray['###IMAGE_BASKET###'] = $fileresource;
 
 		if (isset($fieldArray) && is_array($fieldArray))	{

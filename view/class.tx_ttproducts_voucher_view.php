@@ -42,11 +42,11 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
 class tx_ttproducts_voucher_view extends tx_ttproducts_table_base_view {
-	var $amount;
-	var $code;
-	var $bValid;
-	var $marker = 'VOUCHER';
-	var $usedCodeArray = array();
+	public $amount;
+	public $code;
+	public $bValid;
+	public $marker = 'VOUCHER';
+	public $usedCodeArray = array();
 
 
 	/**

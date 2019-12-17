@@ -104,6 +104,13 @@ class tx_ttproducts_single_view implements \TYPO3\CMS\Core\SingletonInterface {
 		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		$subpartmarkerObj = GeneralUtility::makeInstance('tx_ttproducts_subpartmarker');
 		$theCode = 'SINGLE';
+        $parser = $this->cObj;
+        if (
+            defined('TYPO3_version') &&
+            version_compare(TYPO3_version, '7.0.0', '>=')
+        ) {
+            $parser = tx_div2007_core::newHtmlParser(false);
+        }
 
 		$bUseBackPid = true;
 		$viewControlConf = $cnf->getViewControlConf('SINGLE');
@@ -218,7 +225,7 @@ class tx_ttproducts_single_view implements \TYPO3\CMS\Core\SingletonInterface {
 
 			// Add the template suffix
 			$subPartMarker = $subPartMarker . $templateSuffix;
-			$itemFrameWork = $this->cObj->getSubpart($templateCode,$subpartmarkerObj->spMarker('###'.$subPartMarker.'###'));
+			$itemFrameWork = tx_div2007_core::getSubpart($templateCode, $subpartmarkerObj->spMarker('###' . $subPartMarker . '###'));
 
 			$checkExpression = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['templateCheck'];
 			if (!empty($checkExpression)) {
@@ -279,7 +286,7 @@ class tx_ttproducts_single_view implements \TYPO3\CMS\Core\SingletonInterface {
 				$wrappedSubpartArray
 			);
 
-			$itemFrameWork = $this->cObj->substituteMarkerArrayCached(
+			$itemFrameWork = tx_div2007_core::substituteMarkerArrayCached(
 				$itemFrameWork,
 				$markerArray,
 				$subpartArray,
@@ -327,9 +334,9 @@ class tx_ttproducts_single_view implements \TYPO3\CMS\Core\SingletonInterface {
 			}
 
 			if (count($giftNumberArray)) {
-				$personDataFrameWork = $this->cObj->getSubpart($itemFrameWork,'###PERSON_DATA###');
+				$personDataFrameWork = tx_div2007_core::getSubpart($itemFrameWork, '###PERSON_DATA###');
 				// the itemFramework is a smaller part here
-				$itemFrameWork = $this->cObj->getSubpart($itemFrameWork,'###PRODUCT_DATA###');
+				$itemFrameWork = tx_div2007_core::getSubpart($itemFrameWork, '###PRODUCT_DATA###');
 			}
 			$backPID = $pibaseObj->piVars['backPID'];
 			$backPID = ($backPID ? $backPID : GeneralUtility::_GP('backPID'));
@@ -894,8 +901,8 @@ class tx_ttproducts_single_view implements \TYPO3\CMS\Core\SingletonInterface {
 				$quantityMarkerArray = array();
 
 				foreach ($listMarkerArray as $marker => $markerValue) {
-					$markerValue = $this->cObj->substituteMarkerArray($markerValue, $markerArray);
-					$markerValue = $this->cObj->substituteMarkerArray($markerValue, $quantityMarkerArray);
+					$markerValue = $parser->substituteMarkerArray($markerValue, $markerArray);
+					$markerValue = $parser->substituteMarkerArray($markerValue, $quantityMarkerArray);
 					$markerArray[$marker] = $markerValue;
 				}
 			}
@@ -936,7 +943,7 @@ class tx_ttproducts_single_view implements \TYPO3\CMS\Core\SingletonInterface {
 			$markerArray = $markerObj->reduceMarkerArray($itemFrameWork, $markerArray);
 
 				// Substitute
-			$content = $this->cObj->substituteMarkerArrayCached($itemFrameWork,$markerArray,$subpartArray,$wrappedSubpartArray);
+			$content = tx_div2007_core::substituteMarkerArrayCached($itemFrameWork, $markerArray, $subpartArray, $wrappedSubpartArray);
 
 			if ($personDataFrameWork) {
 				$subpartArray = array();
@@ -953,7 +960,7 @@ class tx_ttproducts_single_view implements \TYPO3\CMS\Core\SingletonInterface {
 
 					$markerArray['###FIELD_NAME###'] = 'ttp_gift[item]['.$row['uid'].']['.$this->variants.']'; // here again, because this is here in ITEM_LIST view
 					$markerArray['###FIELD_QTY###'] = $basketObj->basketExt['gift'][$giftnumber]['item'][$row['uid']][$this->variants];
-					$content .= $this->cObj->substituteMarkerArrayCached($personDataFrameWork,$markerArray,$subpartArray,$wrappedSubpartArray);
+					$content .= tx_div2007_core::substituteMarkerArrayCached($personDataFrameWork, $markerArray, $subpartArray, $wrappedSubpartArray);
 				}
 				$javaScriptObj->set('email');  // other JavaScript checks can come here
 			}

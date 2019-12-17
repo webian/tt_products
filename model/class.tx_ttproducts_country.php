@@ -41,11 +41,11 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
 class tx_ttproducts_country extends tx_ttproducts_table_base {
-	var $dataArray; // array of read in contents
-	var $table;	// object of the type tx_table_db
+	public $dataArray; // array of read in contents
+	public $table;	// object of the type tx_table_db
 	public $marker = 'STATICCOUNTRIES';
 
-//	var $defaultFieldArray = array('uid'=>'uid', 'pid'=>'pid'); // TYPO3 default fields
+//	public $defaultFieldArray = array('uid'=>'uid', 'pid'=>'pid'); // TYPO3 default fields
 
 	/**
 	 * Getting all tt_products_cat categories into internal array

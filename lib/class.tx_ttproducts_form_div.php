@@ -144,7 +144,7 @@ class tx_ttproducts_form_div {
 
 						if (is_array($keyMarkerArray) && isset($keyMarkerArray[$key]))	{
 
-							$tmpText = $langObj->cObj->substituteMarkerArray(
+							$tmpText = $parser->substituteMarkerArray(
 								$tmpText,
 								$keyMarkerArray[$key]
 							);

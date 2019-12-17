@@ -42,12 +42,12 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
 class tx_ttproducts_address extends tx_ttproducts_category_base {
-	var $dataArray = array(); // array of read in categories
-	var $pibase; // reference to object of pibase
-	var $conf;
-	var $config;
-	var $piVar = 'a';
-	var $marker = 'ADDRESS';
+	public $dataArray = array(); // array of read in categories
+	public $pibase; // reference to object of pibase
+	public $conf;
+	public $config;
+	public $piVar = 'a';
+	public $marker = 'ADDRESS';
 
 	public $tableObj;	// object of the type tx_table_db
 

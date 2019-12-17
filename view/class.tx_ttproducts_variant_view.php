@@ -76,7 +76,7 @@ class tx_ttproducts_variant_view implements tx_ttproducts_variant_view_int, \TYP
 			}
 
 			foreach ($areaArray as $k => $area) {
-				$subpartArray['###' . $area . '###'] = $cObj->getSubpart($tempContent, '###' . $area . '###');
+				$subpartArray['###' . $area . '###'] = tx_div2007_core::getSubpart($tempContent, '###' . $area . '###');
 			}
 		}
 		$this->removeEmptyMarkerSubpartArray($markerArray, $subpartArray, $wrappedSubpartArray, $row, $conf, $bHasAdditional, $bGiftService);

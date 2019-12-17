@@ -42,13 +42,13 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class tx_ttproducts_variant implements tx_ttproducts_variant_int, \TYPO3\CMS\Core\SingletonInterface {
 	public $conf;	// reduced local conf
-	var $itemTable;
+	public $itemTable;
 	private $useArticles;
 	private $selectableArray;
-	var $fieldArray = array();	// array of fields which are variants with comma separated values
+	public $fieldArray = array();	// array of fields which are variants with comma separated values
 	private $selectableFieldArray = array();
-	var $firstVariantRow = '';
-	var $additionalKey;
+	public $firstVariantRow = '';
+	public $additionalKey;
 	public $additionalField = 'additional';
 
 

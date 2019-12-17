@@ -42,11 +42,11 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
 class tx_ttproducts_javascript_marker implements \TYPO3\CMS\Core\SingletonInterface {
-	var $pibase; // reference to object of pibase
-	var $conf;
-	var $config;
-	var $needXajax;
-	var $marker = 'JAVASCRIPT';
+	public $pibase; // reference to object of pibase
+	public $conf;
+	public $config;
+	public $needXajax;
+	public $marker = 'JAVASCRIPT';
 
 
 	function init($pibase) {
@@ -71,18 +71,27 @@ class tx_ttproducts_javascript_marker implements \TYPO3\CMS\Core\SingletonInterf
 	 * @return	array
 	 * @access private
 	 */
-	function getMarkerArray (&$markerArray, &$itemMarkerArray)	{
+	public function getMarkerArray (&$markerArray, &$itemMarkerArray)	{
 
 		if (is_array($this->conf['javaScript.']))	{
+            $parser =  $this->pibase->cObj;
+            if (
+                defined('TYPO3_version') &&
+                version_compare(TYPO3_version, '7.0.0', '>=')
+            ) {
+                $parser = tx_div2007_core::newHtmlParser(false);
+            }
+
 			$javaScriptObj = GeneralUtility::makeInstance('tx_ttproducts_javascript');
 
 			$jsItemMarkerArray = array();
 			foreach ($itemMarkerArray as $marker => $value)	{
 				$jsItemMarkerArray[$marker] = $javaScriptObj->jsspecialchars($value);
 			}
+
 			foreach ($this->conf['javaScript.'] as $key => $confJS)	{
 				$marker = rtrim($key,'.');
-				$jsText = $this->pibase->cObj->substituteMarkerArray($confJS['value'], $jsItemMarkerArray);
+				$jsText = $parser->substituteMarkerArray($confJS['value'],  $jsItemMarkerArray);
 				$paramsArray = array($marker => $jsText);
 				$javaScriptObj->set('direct', $paramsArray, $this->pibase->cObj->currentRecord);
 				$marker = '###'.$this->marker.'_'.strtoupper($marker).'###';

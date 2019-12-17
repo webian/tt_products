@@ -42,12 +42,12 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
 class tx_ttproducts_orderaddress extends tx_ttproducts_table_base {
-	var $dataArray; // array of read in frontend users
-	var $table;		 // object of the type tx_table_db
-	var $fields = array();
-	var $tableconf;
-	var $piVar = 'fe';
-	var $marker = 'FEUSER';
+	public $dataArray; // array of read in frontend users
+	public $table;		 // object of the type tx_table_db
+	public $fields = array();
+	public $tableconf;
+	public $piVar = 'fe';
+	public $marker = 'FEUSER';
 
 	private $bCondition = false;
 	private $bConditionRecord = false;

@@ -42,8 +42,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
 class tx_ttproducts_address_view extends tx_ttproducts_category_base_view {
-	var $piVar = 'a';
-	var $marker = 'ADDRESS';
+	public $piVar = 'a';
+	public $marker = 'ADDRESS';
 
 
 	/**

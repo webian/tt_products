@@ -42,17 +42,17 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
 class tx_ttproducts_cat_view implements \TYPO3\CMS\Core\SingletonInterface {
-	var $pibase; // reference to object of pibase
-	var $conf;
-	var $config;
+	public $pibase; // reference to object of pibase
+	public $conf;
+	public $config;
 
-	var $subpartmarkerObj; // subpart marker functions
-	var $urlObj; // url functions
-	var $javascript; // JavaScript functions
-	var $javaScriptMarker; // JavaScript marker functions
-	var $pid; // PID where to go
-	var $pidListObj;
-	var $cOjb;
+	public $subpartmarkerObj; // subpart marker functions
+	public $urlObj; // url functions
+	public $javascript; // JavaScript functions
+	public $javaScriptMarker; // JavaScript marker functions
+	public $pid; // PID where to go
+	public $pidListObj;
+	public $cOjb;
 
 	public function init($pibase, $pid, $pid_list, $recursive) {
 		$this->pibase = $pibase;
@@ -121,7 +121,7 @@ class tx_ttproducts_cat_view implements \TYPO3\CMS\Core\SingletonInterface {
 
 			// Add the template suffix
 			$subPartMarker = substr($subPartMarker, 0, -3).$templateSuffix.'###';
-			$itemFrameWork = $this->cObj->getSubpart($templateCode,$this->subpartmarkerObj->spMarker($subPartMarker));
+			$itemFrameWork = tx_div2007_core::getSubpart($templateCode, $this->subpartmarkerObj->spMarker($subPartMarker));
 
 			if (!$itemFrameWork) {
 				$templateObj = GeneralUtility::makeInstance('tx_ttproducts_template');
@@ -139,7 +139,7 @@ class tx_ttproducts_cat_view implements \TYPO3\CMS\Core\SingletonInterface {
 				$wrappedSubpartArray
 			);
 
-			$itemFrameWork = $this->cObj->substituteMarkerArrayCached($itemFrameWork,$markerArray,$subpartArray,$wrappedSubpartArray);
+			$itemFrameWork = tx_div2007_core::substituteMarkerArrayCached($itemFrameWork, $markerArray, $subpartArray, $wrappedSubpartArray);
 
 			$markerFieldArray = array();
 			$viewTagArray = array();
@@ -372,7 +372,7 @@ class tx_ttproducts_cat_view implements \TYPO3\CMS\Core\SingletonInterface {
 			$markerArray = array_merge($jsMarkerArray, $markerArray);
 
 				// Substitute
-			$content = $this->cObj->substituteMarkerArrayCached($itemFrameWork,$markerArray,$subpartArray,$wrappedSubpartArray);
+			$content = tx_div2007_core::substituteMarkerArrayCached($itemFrameWork,$markerArray,$subpartArray,$wrappedSubpartArray);
 		} else {
 			$error_code[0] = 'wrong_parameter';
 			$error_code[1] = (($functablename == 'pages') ? 'page' : 'cat');

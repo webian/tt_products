@@ -197,17 +197,17 @@ abstract class tx_ttproducts_catlist_view_base implements \TYPO3\CMS\Core\Single
 	)	{
 		$markerObj = GeneralUtility::makeInstance('tx_ttproducts_marker');
 		$subpart = $this->subpartmarkerObj->spMarker('###'.$area.'###');
-		$t['listFrameWork'] = $this->pibase->cObj->getSubpart($templateCode,$subpart);
+		$t['listFrameWork'] = tx_div2007_core::getSubpart($templateCode, $subpart);
 
 				// add Global Marker Array
 		$globalMarkerArray = $markerObj->getGlobalMarkerArray();
-		$t['listFrameWork'] = $this->pibase->cObj->substituteMarkerArrayCached($t['listFrameWork'], $globalMarkerArray);
+		$t['listFrameWork'] = tx_div2007_core::substituteMarkerArrayCached($t['listFrameWork'], $globalMarkerArray);
 
 		if ($t['listFrameWork'])	{
-			$t['categoryFrameWork'] = $this->pibase->cObj->getSubpart($t['listFrameWork'],'###CATEGORY_SINGLE###');
+			$t['categoryFrameWork'] = tx_div2007_core::getSubpart($t['listFrameWork'], '###CATEGORY_SINGLE###');
 
 //		###SUBCATEGORY_A_1###
-			$t['linkCategoryFrameWork'] = $this->pibase->cObj->getSubpart($t['categoryFrameWork'],'###LINK_CATEGORY###');
+			$t['linkCategoryFrameWork'] = tx_div2007_core::getSubpart($t['categoryFrameWork'], '###LINK_CATEGORY###');
 		}
 	}
 
@@ -215,7 +215,7 @@ abstract class tx_ttproducts_catlist_view_base implements \TYPO3\CMS\Core\Single
 	public function getBrowserMarkerArray (&$markerArray, &$t, $resCount, $limit, $maxPages, $bShowFirstLast, $bAlwaysPrev, $pagefloat, $imageArray, $imageActiveArray)	{
 		$subpartmarkerObj = GeneralUtility::makeInstance('tx_ttproducts_subpartmarker');
 
-		$t['browseFrameWork'] = $this->cObj->getSubpart($t['listFrameWork'],$subpartmarkerObj->spMarker('###LINK_BROWSE###'));
+		$t['browseFrameWork'] = tx_div2007_core::getSubpart($t['listFrameWork'], $subpartmarkerObj->spMarker('###LINK_BROWSE###'));
 		$markerArray['###BROWSE_LINKS###']='';
 
 		if ($t['browseFrameWork'] != '')	{
@@ -286,6 +286,14 @@ abstract class tx_ttproducts_catlist_view_base implements \TYPO3\CMS\Core\Single
 		$mode = '';
 		$this->getFrameWork($t, $templateCode, $templateArea . $templateSuffix);
 		$checkExpression = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['templateCheck'];
+        $parser = $pibaseObj->cObj;
+        if (
+            defined('TYPO3_version') &&
+            version_compare(TYPO3_version, '7.0.0', '>=')
+        ) {
+            $parser = tx_div2007_core::newHtmlParser(false);
+        }
+
 		if (!empty($checkExpression)) {
 			$wrongPounds = preg_match_all($checkExpression, $t['listFrameWork'], $matches);
 
@@ -522,7 +530,7 @@ abstract class tx_ttproducts_catlist_view_base implements \TYPO3\CMS\Core\Single
 					array(),
 					array()
 				);
-				$t['listFrameWork'] = $pibaseObj->cObj->substituteMarkerArray($t['listFrameWork'], $browseMarkerArray);
+				$t['listFrameWork'] = $parser->substituteMarkerArray($t['listFrameWork'],  $browseMarkerArray);
 			}
 		} else if (!$t['listFrameWork']) {
 			$templateObj = GeneralUtility::makeInstance('tx_ttproducts_template');

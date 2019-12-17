@@ -466,13 +466,13 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 			$contentEmpty = '';
 			if ($this->activityArray['products_overview']) {
 				tx_div2007_alpha5::load_noLinkExtCobj_fh002($this->pibase);	//
-				$contentEmpty = $this->cObj->getSubpart(
+				$contentEmpty = tx_div2007_core::getSubpart(
 					$templateCode,
 					$this->subpartmarkerObj->spMarker('###BASKET_OVERVIEW_EMPTY' . $this->config['templateSuffix'] . '###')
 				);
 
 				if (!$contentEmpty)	{
-					$contentEmpty = $this->cObj->getSubpart(
+					$contentEmpty = tx_div2007_core::getSubpart(
 						$templateCode,
 						$this->subpartmarkerObj->spMarker('###BASKET_OVERVIEW_EMPTY###')
 					);
@@ -482,13 +482,13 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
                 $this->activityArray['products_info'] ||
                 $this->activityArray['products_payment']
             ) {
-				$contentEmpty = $this->cObj->getSubpart(
+				$contentEmpty = tx_div2007_core::getSubpart(
 					$templateCode,
 					$this->subpartmarkerObj->spMarker('###BASKET_TEMPLATE_EMPTY' . $this->config['templateSuffix'] . '###')
 				);
 
 				if (!$contentEmpty)	{
-					$contentEmpty = $this->cObj->getSubpart(
+					$contentEmpty = tx_div2007_core::getSubpart(
 						$templateCode,
 						$this->subpartmarkerObj->spMarker('###BASKET_TEMPLATE_EMPTY###')
 					);
@@ -583,7 +583,7 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 			$infoArray['billing']['error'] = 1;
 			$requiredOut =
 				$markerObj->replaceGlobalMarkers(
-					$this->cObj->getSubpart(
+					tx_div2007_core::getSubpart(
 						$templateCode,
 						$this->subpartmarkerObj->spMarker('###BASKET_REQUIRED_INFO_MISSING###')
 					)
@@ -640,6 +640,13 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 		$markerObj = GeneralUtility::makeInstance('tx_ttproducts_marker');
 		$languageObj = GeneralUtility::makeInstance(\JambageCom\TtProducts\Api\Localization::class);
 		$templateObj = GeneralUtility::makeInstance('tx_ttproducts_template');
+		$parser = $this->cObj;
+        if (
+            defined('TYPO3_version') &&
+            version_compare(TYPO3_version, '7.0.0', '>=')
+        ) {
+            $parser = tx_div2007_core::newHtmlParser(false);
+        }
 
 		$markerArray = array();
 		$markerArray['###ERROR_DETAILS###'] = '';
@@ -992,7 +999,7 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 				$overwriteMarkerArray = array();
 				$overwriteMarkerArray = $this->urlObj->addURLMarkers(0, array(),$addQueryString);
 				$markerArray = array_merge($markerArray,$overwriteMarkerArray);
-				$content = $this->cObj->substituteMarkerArray($content . $newContent, $markerArray);
+				$content = $parser->substituteMarkerArray($content . $newContent, $markerArray);
 			}
 		} // foreach ($activityArray as $activity=>$value)
 
@@ -1033,8 +1040,6 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 				} else {
 					$mainMarkerArray['###MESSAGE_PAYMENT_SCRIPT###'] = '';
 				}
-
-				GeneralUtility::requireOnce (PATH_BE_ttproducts.'control/class.tx_ttproducts_activity_finalize.php');
 
 					// order finalization
 				$activityFinalize = GeneralUtility::makeInstance('tx_ttproducts_activity_finalize');
@@ -1089,7 +1094,7 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 				// Empties the shopping basket!
 				$this->basket->clearBasket();
 			} else {	// If not all required info-fields are filled in, this is shown instead:
-				$requiredOut = $this->cObj->getSubpart(
+				$requiredOut = tx_div2007_core::getSubpart(
 					$templateCode,
 					$this->subpartmarkerObj->spMarker('###BASKET_REQUIRED_INFO_MISSING###')
 				);
@@ -1120,7 +1125,7 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 				$markerArray = array_merge($mainMarkerArray, $urlMarkerArray);
 
 				$content .= $requiredOut;
-				$content = $this->cObj->substituteMarkerArray(
+				$content = $parser->substituteMarkerArray(
 					$content,
 					$markerArray
 				);

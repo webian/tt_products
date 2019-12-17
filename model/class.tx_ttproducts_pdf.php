@@ -219,7 +219,7 @@ class tx_ttproducts_pdf extends FPDF implements \TYPO3\CMS\Core\SingletonInterfa
 	}
 
 	public function Body () {
-		$tempContent = $this->cObj->getSubpart($this->body, '###PDF_TABLE_1###');
+		$tempContent = tx_div2007_core::getSubpart($this->body, '###PDF_TABLE_1###');
 		$tempContentArray = preg_split('/[\n]+/', $tempContent);
 		$dataArray = array();
 		foreach ($tempContentArray as $tmpContent) {
@@ -232,7 +232,7 @@ class tx_ttproducts_pdf extends FPDF implements \TYPO3\CMS\Core\SingletonInterfa
 		unset($dataArray['0']);
 		$this->ImprovedTable($header, $dataArray);
 
-		$restBody = $this->cObj->substituteMarkerArrayCached(
+		$restBody = tx_div2007_core::substituteMarkerArrayCached(
 				$this->body,
 				array(),
 				array('###PDF_TABLE_1###' => ''),

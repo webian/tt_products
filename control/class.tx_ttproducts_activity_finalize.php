@@ -76,7 +76,7 @@ class tx_ttproducts_activity_finalize {
 		if (empty($text)) {	// the user did not use the subject field
 			$text = $subject;
 		}
-		$text = $this->pibase->cObj->substituteMarkerArrayCached($text,$markerArray);
+		$text = tx_div2007_core::substituteMarkerArrayCached($text,$markerArray);
 		if (empty($subject)) {
 			$subject = $this->conf['orderEmail_subject'];
 		}
@@ -120,7 +120,13 @@ class tx_ttproducts_activity_finalize {
 
 		$fileArray = array(); // bill or delivery
 		$empty = '';
-
+		$parser = $this->pibase->cObj;
+        if (
+            defined('TYPO3_version') &&
+            version_compare(TYPO3_version, '7.0.0', '>=')
+        ) {
+            $parser = tx_div2007_core::newHtmlParser(false);
+        }
 
 		if (isset($activityConf) && is_array($activityConf)) {
 			if (isset($activityConf['clear'])) {
@@ -208,7 +214,11 @@ class tx_ttproducts_activity_finalize {
 				$mainMarkerArray
 			);
 
-		$orderConfirmationHTML = $this->pibase->cObj->substituteMarkerArray($orderConfirmationHTML,$markerArray);
+		$orderConfirmationHTML =
+            $parser->substituteMarkerArray(
+                $orderConfirmationHTML,
+                $markerArray
+            );
 
 		if ($GLOBALS['TSFE']->absRefPrefix == '') {
 			$absRefPrefix = GeneralUtility::getIndpEnv('TYPO3_SITE_URL');
@@ -472,11 +482,11 @@ class tx_ttproducts_activity_finalize {
 		if ($posEmailPlaintext !== false || $this->conf['orderEmail_htmlmail']) {
 
 			if ($this->conf['orderEmail_htmlmail']) {	// If htmlmail lib is included, then generate a nice HTML-email
-				$HTMLmailShell = $this->pibase->cObj->getSubpart($templateCode, '###EMAIL_HTML_SHELL###');
-				$customerHTMLmailContent = $this->pibase->cObj->substituteMarker($HTMLmailShell, '###HTML_BODY###', $customerEmailHTML);
+				$HTMLmailShell = tx_div2007_core::getSubpart($templateCode, '###EMAIL_HTML_SHELL###');
+				$customerHTMLmailContent = $parser->substituteMarker($HTMLmailShell, '###HTML_BODY###', $customerEmailHTML);
 
 				$customerHTMLmailContent =
-					$this->pibase->cObj->substituteMarkerArray(
+					$parser->substituteMarkerArray(
 						$customerHTMLmailContent,
 						$markerArray
 					);
@@ -484,12 +494,12 @@ class tx_ttproducts_activity_finalize {
 					// Remove image tags to the products:
 				if ($this->conf['orderEmail_htmlmail.']['removeImagesWithPrefix']) {
 
-					$parser = tx_div2007_core::newHtmlParser();
-					$htmlMailParts = $parser->splitTags('img', $customerHTMLmailContent);
+					$htmlParser = tx_div2007_core::newHtmlParser();
+					$htmlMailParts = $htmlParser->splitTags('img', $customerHTMLmailContent);
 
 					foreach($htmlMailParts as $kkk => $vvv) {
 						if ($kkk%2) {
-							list($attrib) = $parser->get_tag_attributes($vvv);
+							list($attrib) = $htmlParser->get_tag_attributes($vvv);
 							if (GeneralUtility::isFirstPartOfStr($attrib['src'],$this->conf['orderEmail_htmlmail.']['removeImagesWithPrefix'])) {
 								$htmlMailParts[$kkk]='';
 							}
@@ -635,7 +645,7 @@ class tx_ttproducts_activity_finalize {
                                 $HTMLmailContent = $this->pibase->cObj->substituteMarker($HTMLmailShell, '###HTML_BODY###', $basketHtml);
 
                                 $HTMLmailContent =
-                                    $this->pibase->cObj->substituteMarkerArray(
+                                    $parser->substituteMarkerArray(
                                         $HTMLmailContent,
                                         $markerArray
                                     );
@@ -723,7 +733,7 @@ class tx_ttproducts_activity_finalize {
 							$textContent
 						);
 						$textContent =
-							$this->pibase->cObj->substituteMarkerArray(
+							$parser->substituteMarkerArray(
 								$textContent,
 								$markerArray
 							);
@@ -756,7 +766,7 @@ class tx_ttproducts_activity_finalize {
                                     );
 
                                 $HTMLmailContent =
-                                    $this->pibase->cObj->substituteMarkerArray(
+                                    $parser->substituteMarkerArray(
                                         $HTMLmailContent,
                                         $markerArray
                                     );

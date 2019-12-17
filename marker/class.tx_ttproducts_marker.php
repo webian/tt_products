@@ -132,7 +132,7 @@ class tx_ttproducts_marker implements \TYPO3\CMS\Core\SingletonInterface {
 	public function replaceGlobalMarkers (&$content, $markerArray = array())	{
 		$globalMarkerArray = $this->getGlobalMarkerArray();
 		$markerArray = array_merge($globalMarkerArray, $markerArray);
-		$rc = $this->cObj->substituteMarkerArrayCached($content, $markerArray);
+		$rc = tx_div2007_core::substituteMarkerArrayCached($content, $markerArray);
 		return $rc;
 	}
 

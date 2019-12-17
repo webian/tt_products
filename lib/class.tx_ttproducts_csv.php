@@ -43,11 +43,11 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
 class tx_ttproducts_csv implements \TYPO3\CMS\Core\SingletonInterface {
-	var $pibase; // reference to object of pibase
-	var $conf;
-	var $calculatedArray; // reference to calculated basket array
-	var $itemArray; // reference to the bakset item array
-	var $accountUid;
+	public $pibase; // reference to object of pibase
+	public $conf;
+	public $calculatedArray; // reference to calculated basket array
+	public $itemArray; // reference to the bakset item array
+	public $accountUid;
 
 
 	/**

@@ -119,11 +119,11 @@ abstract class tx_ttproducts_field_base_view implements tx_ttproducts_field_view
 		$templateAreaList = $markerKey . '_' . $upperField . '_LIST';
 
 		$t = array();
-		$t['listFrameWork'] = $local_cObj->getSubpart($templateCode, '###' . $templateAreaList . '###');
+		$t['listFrameWork'] = tx_div2007_core::getSubpart($templateCode, '###' . $templateAreaList . '###');
 
 		$templateAreaSingle = $markerKey . '_' . $upperField . '_SINGLE';
 
-		$t['singleFrameWork'] = $local_cObj->getSubpart($t['listFrameWork'], '###' . $templateAreaSingle . '###');
+		$t['singleFrameWork'] = tx_div2007_core::getSubpart($t['listFrameWork'], '###' . $templateAreaSingle . '###');
 
 		if ($t['singleFrameWork'] != '') {
 			$repeatedTagArray = $markerObj->getAllMarkers($t['singleFrameWork']);
@@ -165,7 +165,7 @@ abstract class tx_ttproducts_field_base_view implements tx_ttproducts_field_view
 						$tagArray
 					);
 
-					$newContent = $local_cObj->substituteMarkerArrayCached(
+					$newContent = tx_div2007_core::substituteMarkerArrayCached(
 						$t['singleFrameWork'],
 						$repeatedMarkerArray,
 						$repeatedSubpartArray,

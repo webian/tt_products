@@ -779,7 +779,7 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 
 			if ($contentTmp == 'error') {
 				$fileName = 'EXT:'.TT_PRODUCTS_EXT.'/template/products_help.tmpl';
-				$helpTemplate = $this->cObj->fileResource($fileName);
+				$helpTemplate =  \JambageCom\Div2007\Utility\FrontendUtility::fileResource($fileName);
                 $content .=
                     \JambageCom\Div2007\Utility\ViewUtility::displayHelpPage(
                         $languageObj,
@@ -811,7 +811,7 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 			$cssObj = GeneralUtility::makeInstance('tx_ttproducts_css');
 
 			if ($cssObj->isCSSStyled() && !$cssObj->getIncluded())	{
-				$rc = '<style type="text/css">'.$this->cObj->fileResource($cssObj->conf['file']).'</style>'.chr(13).$content;
+				$rc = '<style type="text/css">' .  \JambageCom\Div2007\Utility\FrontendUtility::fileResource($cssObj->conf['file']) . '</style>' . chr(13) . $content;
 				$cssObj->setIncluded();
 			} else {
 				$rc = $content;
@@ -910,8 +910,14 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 		$languageObj = GeneralUtility::makeInstance(\JambageCom\TtProducts\Api\Localization::class);
 		$markerObj = GeneralUtility::makeInstance('tx_ttproducts_marker');
 		$globalMarkerArray = $markerObj->getGlobalMarkerArray();
+        $parser =  $this->cObj;
+        if (
+            defined('TYPO3_version') &&
+            version_compare(TYPO3_version, '7.0.0', '>=')
+        ) {
+            $parser = tx_div2007_core::newHtmlParser(false);
+        }
 
-//		$trackingTemplateCode = &$this->cObj->substituteMarkerArray($templateCode,$globalMarkerArray);
 		$trackingTemplateCode = &$templateCode;
 		$admin = $this->shopAdmin($updateCode);
 		$subpartMarker = '';
@@ -957,7 +963,7 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 		}
 
 		if ($subpartMarker)	{
-			$content = $this->cObj->getSubpart($trackingTemplateCode, $subpartmarkerObj->spMarker($subpartMarker));
+			$content = tx_div2007_core::getSubpart($trackingTemplateCode, $subpartmarkerObj->spMarker($subpartMarker));
 
 			if ($content == '') {
 				$templateObj = GeneralUtility::makeInstance('tx_ttproducts_template');
@@ -968,13 +974,13 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 			}
 
 			if (!$GLOBALS['TSFE']->beUserLogin)	{
-				$content = $this->cObj->substituteSubpart($content,'###ADMIN_CONTROL###','');
+				$content = $parser->substituteSubpart($content,'###ADMIN_CONTROL###','');
 			}
 		}
 
 		$markerArray = $globalMarkerArray;
 		$markerArray['###FORM_URL###'] = $pibaseObj->pi_getPageLink($GLOBALS['TSFE']->id,'',$urlObj->getLinkParams('',array(),true)) ;
-		$content = $this->cObj->substituteMarkerArray($content, $markerArray);
+		$content = $parser->substituteMarkerArray($content, $markerArray);
 		return $content;
 	}  // products_tracking
 

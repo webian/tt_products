@@ -42,9 +42,9 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
 class tx_ttproducts_content extends tx_ttproducts_table_base {
-	var $dataArray=array(); // array of read in contents
-	var $dataPageArray=array(); // array of read in contents with page id as index
-	var $table;		 // object of the type tx_table_db
+	public $dataArray=array(); // array of read in contents
+	public $dataPageArray=array(); // array of read in contents with page id as index
+	public $table;		 // object of the type tx_table_db
 
 	/**
 	 * Getting all tt_products_cat categories into internal array

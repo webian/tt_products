@@ -131,8 +131,6 @@ class tx_ttproducts_paymentshipping implements \TYPO3\CMS\Core\SingletonInterfac
 
 		if ($bActive)	{
 			$wrappedSubpartArray[$theMarker] = '';
-			// $tmpSubpart = $this->cObj->getSubpart($framework,$theMarker);
-			// $subpartArray[$theMarker] = $this->cObj->substituteMarkerArrayCached($tmpSubpart,$markerArray);
 		} else {
 			$subpartArray[$theMarker] = '';
 		}
@@ -159,6 +157,13 @@ class tx_ttproducts_paymentshipping implements \TYPO3\CMS\Core\SingletonInterfac
 		$psArray = array('payment', 'shipping');
 		$psMessageArray = array();
 		$tmpSubpartArray = array();
+		$parser = $this->cObj;
+        if (
+            defined('TYPO3_version') &&
+            version_compare(TYPO3_version, '7.0.0', '>=')
+        ) {
+            $parser = tx_div2007_core::newHtmlParser(false);
+        }
 
 		$handleLib = $basketExtra['payment.']['handleLib'];
 
@@ -196,10 +201,10 @@ class tx_ttproducts_paymentshipping implements \TYPO3\CMS\Core\SingletonInterfac
 						$psKey .= '_';
 					}
 					$psKey .= $value;
-					$subFrameWork = $this->cObj->getSubpart($framework, '###' . $markerPrefix . '###');
+					$subFrameWork = tx_div2007_core::getSubpart($framework, '###' . $markerPrefix . '###');
 					if ($subFrameWork != '') {
-						$tmpSubpartArray[$pskey] = $this->cObj->getSubpart($subFrameWork, '###MESSAGE_' . $marker . '_' . $psKey . '###');
-						$psMessageArray[$pskey] .= $this->cObj->substituteMarkerArray($tmpSubpartArray[$pskey], $markerArray);
+						$tmpSubpartArray[$pskey] = tx_div2007_core::getSubpart($subFrameWork, '###MESSAGE_' . $marker . '_' . $psKey . '###');
+						$psMessageArray[$pskey] .= $parser->substituteMarkerArray($tmpSubpartArray[$pskey], $markerArray);
 					}
 					$subpartArray['###MESSAGE_' . $marker . '_NE_' . $psKey . '###'] = '';
 				}
@@ -257,9 +262,9 @@ class tx_ttproducts_paymentshipping implements \TYPO3\CMS\Core\SingletonInterfac
 
 					if ($bCheckNE && strpos($k3,'_NE_') !== false)	{
 						$wrappedSubpartArray['###' . $k3 . '###'] = '';
-						$tmpSubpartArray[$pskey] = $this->cObj->getSubpart($framework,'###' . $k3 . '###');
+						$tmpSubpartArray[$pskey] = tx_div2007_core::getSubpart($framework, '###' . $k3 . '###');
 						$psMessageArray[$pskey] .=
-							$this->cObj->substituteMarkerArrayCached(
+							tx_div2007_core::substituteMarkerArrayCached(
 								$tmpSubpartArray[$pskey],
 								$markerArray
 							);
@@ -517,7 +522,7 @@ class tx_ttproducts_paymentshipping implements \TYPO3\CMS\Core\SingletonInterfac
 									) {
 										$markerArray = array();
 										$itemTableView->getRowMarkerArray($row, $markerArray, $fieldsArray);
-										$title = $this->cObj->substituteMarkerArrayCached($t['title'], $markerArray);
+										$title = tx_div2007_core::substituteMarkerArrayCached($t['title'], $markerArray);
 									}
 									$value = $key . '-' . $row['uid'];
 									if ($value == implode('-',$activeArray))	{
@@ -552,14 +557,14 @@ class tx_ttproducts_paymentshipping implements \TYPO3\CMS\Core\SingletonInterfac
 									$markerArray
 								);
 
-								$out .= $this->cObj->substituteMarkerArrayCached($template, $markerArray) . chr(10);
+								$out .= tx_div2007_core::substituteMarkerArrayCached($template,  $markerArray) . chr(10);
 							}
 						} else {
 							foreach ($addItems as $k1 => $row)	{
 								if (is_array($row))	{
 									$markerArray = array();
 									$itemTableView->getRowMarkerArray($row, $markerArray, $fieldsArray);
-									$title = $this->cObj->substituteMarkerArrayCached($t['title'], $markerArray);
+									$title = tx_div2007_core::substituteMarkerArrayCached($t['title'], $markerArray);
 									$title = htmlentities($title, ENT_QUOTES, 'UTF-8');
 									$value = $key . '-' . $row['uid'];
 									if ($value == implode('-',$activeArray))	{
@@ -601,7 +606,7 @@ class tx_ttproducts_paymentshipping implements \TYPO3\CMS\Core\SingletonInterfac
 			foreach ($viewTagArray as $tag => $v)	{
 				$markerArray['###' . $tag . '###'] = '?';
 			}
-			$actTitle = $this->cObj->substituteMarkerArrayCached($actTitle, $markerArray);
+			$actTitle = tx_div2007_core::substituteMarkerArrayCached($actTitle, $markerArray);
 		}
 		if ($subkey != '')	{
 

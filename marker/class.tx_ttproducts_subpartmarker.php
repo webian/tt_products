@@ -42,8 +42,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
 class tx_ttproducts_subpartmarker implements \TYPO3\CMS\Core\SingletonInterface {
-	var $cObj; // reference to object
-	var $conf;
+	public $cObj; // reference to object
+	public $conf;
 
 
 	/**

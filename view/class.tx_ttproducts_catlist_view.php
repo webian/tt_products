@@ -54,6 +54,13 @@ class tx_ttproducts_catlist_view extends tx_ttproducts_catlist_view_base {
 		$templateSuffix=''
 	) {
 		$basketObj = GeneralUtility::makeInstance('tx_ttproducts_basket');
+		$parser = $this->cObj;
+        if (
+            defined('TYPO3_version') &&
+            version_compare(TYPO3_version, '7.0.0', '>=')
+        ) {
+            $parser = tx_div2007_core::newHtmlParser(false);
+        }
 		$t = array();
 		$ctrlArray = array();
 		parent::getPrintViewArrays(
@@ -204,20 +211,20 @@ class tx_ttproducts_catlist_view extends tx_ttproducts_catlist_view_base {
 								);
 
 								if ($t[$subCategoryMarker]['linkCategoryFrameWork'])	{
-									$newOut = $this->cObj->substituteMarkerArray($t[$subCategoryMarker]['linkCategoryFrameWork'], $childMarkerArray);
+									$newOut = $parser->substituteMarkerArray($t[$subCategoryMarker]['linkCategoryFrameWork'], $childMarkerArray);
 									$childOut = $linkOutArray[0].$newOut.$linkOutArray[1];
 								}
 								$wrappedSubpartArray = array();
 								$this->urlObj->getWrappedSubpartArray($wrappedSubpartArray);
 								$subpartArray = array();
 								$subpartArray['###CATEGORY_SINGLE###'] = $childOut;
-								$childsOut .= $this->cObj->substituteMarkerArrayCached($t[$subCategoryMarker]['categoryFrameWork'], $childMarkerArray, $subpartArray, $wrappedSubpartArray);
+								$childsOut .= tx_div2007_core::substituteMarkerArrayCached($t[$subCategoryMarker]['categoryFrameWork'], $childMarkerArray, $subpartArray, $wrappedSubpartArray);
 							}
 							$subpartArray = array();
 							$wrappedSubpartArray = array();
 							$this->urlObj->getWrappedSubpartArray($wrappedSubpartArray);
 							$subpartArray['###CATEGORY_SINGLE###'] = $childsOut;
-							$childsOut = $this->cObj->substituteMarkerArrayCached($t[$subCategoryMarker]['listFrameWork'], array(), $subpartArray, $wrappedSubpartArray);
+							$childsOut = tx_div2007_core::substituteMarkerArrayCached($t[$subCategoryMarker]['listFrameWork'], array(), $subpartArray, $wrappedSubpartArray);
 							$markerArray['###'.$subCategoryMarker.'###'] = $childsOut;
 						}
 					}
@@ -240,7 +247,7 @@ class tx_ttproducts_catlist_view extends tx_ttproducts_catlist_view_base {
 						$viewCatTagArray,
 						$theCode
 					);
-					$categoryOut = $this->cObj->substituteMarkerArrayCached($t['linkCategoryFrameWork'], $markerArray, $subpartArray, $wrappedSubpartArray);
+					$categoryOut = tx_div2007_core::substituteMarkerArrayCached($t['linkCategoryFrameWork'], $markerArray, $subpartArray, $wrappedSubpartArray);
 					$out .= $categoryOut;
 				}
 			} // foreach
@@ -248,7 +255,7 @@ class tx_ttproducts_catlist_view extends tx_ttproducts_catlist_view_base {
 			$markerArray = $currentMarkerArray;
 			$markerArray[$this->htmlPartsMarkers[0]] = '';
 			$markerArray[$this->htmlPartsMarkers[1]] = '';
-			$out = $this->cObj->substituteMarkerArrayCached($out, $markerArray);
+			$out = tx_div2007_core::substituteMarkerArrayCached($out, $markerArray);
 			$markerArray = array();
 			$subpartArray = array();
 			$wrappedSubpartArray = array();
@@ -265,7 +272,7 @@ class tx_ttproducts_catlist_view extends tx_ttproducts_catlist_view_base {
 				$controlViewObj = GeneralUtility::makeInstance('tx_ttproducts_control_view');
 				$controlViewObj->getMarkerArray($markerArray, $allMarkers, $this->getTableConfArray());
 			}
-			$out = $this->cObj->substituteMarkerArrayCached($t['listFrameWork'], $markerArray, $subpartArray, $wrappedSubpartArray);
+			$out = tx_div2007_core::substituteMarkerArrayCached($t['listFrameWork'], $markerArray, $subpartArray, $wrappedSubpartArray);
 			$content = $out;
 		} else {
 			$contentEmpty = $subpartmarkerObj->getSubpart($templateCode, $subpartmarkerObj->spMarker('###' . $templateArea . $templateSuffix . '_EMPTY###'), $error_code);
@@ -274,7 +281,7 @@ class tx_ttproducts_catlist_view extends tx_ttproducts_catlist_view_base {
 		if ($contentEmpty != '') {
 
 			$globalMarkerArray = $markerObj->getGlobalMarkerArray();
-			$content = $this->cObj->substituteMarkerArray($contentEmpty, $globalMarkerArray);
+			$content = $parser->substituteMarkerArray($contentEmpty, $globalMarkerArray);
 		}
 
 		return $content;

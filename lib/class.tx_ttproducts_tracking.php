@@ -42,8 +42,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
 class tx_ttproducts_tracking implements \TYPO3\CMS\Core\SingletonInterface {
-	var $cObj;
-	var $conf;		  // original configuration
+	public $cObj;
+	public $conf;		  // original configuration
 	private $statusCodeArray;
 
 
@@ -348,7 +348,7 @@ class tx_ttproducts_tracking implements \TYPO3\CMS\Core\SingletonInterface {
 		}
 
 			// Getting the template stuff and initialize order data.
-		$template=$this->cObj->getSubpart($templateCode,'###TRACKING_DISPLAY_INFO###');
+		$template = tx_div2007_core::getSubpart($templateCode, '###TRACKING_DISPLAY_INFO###');
 		$this->searchOrderStatus($status_log, $orderPaid, $orderClosed);
 		$globalMarkerArray = &$markerObj->getGlobalMarkerArray();
 
@@ -359,11 +359,11 @@ class tx_ttproducts_tracking implements \TYPO3\CMS\Core\SingletonInterface {
 			$subpartArray=Array();
 			$subpartArray['###STATUS_CODE_60###'] = '';
 
-			$template = $this->cObj->substituteMarkerArrayCached($template,$markerArray,$subpartArray);
+			$template = tx_div2007_core::substituteMarkerArrayCached($template,$markerArray,$subpartArray);
 		}
 
 			// Status:
-		$STATUS_ITEM = $this->cObj->getSubpart($template,'###STATUS_ITEM###');
+		$STATUS_ITEM = tx_div2007_core::getSubpart($template, '###STATUS_ITEM###');
 		$STATUS_ITEM_c='';
 		if (is_array($status_log)) {
 			foreach($status_log as $k => $v) {
@@ -374,7 +374,7 @@ class tx_ttproducts_tracking implements \TYPO3\CMS\Core\SingletonInterface {
 				$markerArray['###ORDER_STATUS_INFO###'] = ($info ? $info : $v['info']);
 				$markerArray['###ORDER_STATUS_COMMENT###'] = nl2br($v['comment']);
 
-				$STATUS_ITEM_c .= $this->cObj->substituteMarkerArrayCached($STATUS_ITEM, $markerArray);
+				$STATUS_ITEM_c .= tx_div2007_core::substituteMarkerArrayCached($STATUS_ITEM, $markerArray);
 			}
 		}
 
@@ -404,7 +404,7 @@ class tx_ttproducts_tracking implements \TYPO3\CMS\Core\SingletonInterface {
 		$viewTagArray = array();
 		$parentArray = array();
 		$t = array();
-		$t['orderFrameWork'] = $this->cObj->getSubpart($template,'###ORDER_ITEM###');
+		$t['orderFrameWork'] = tx_div2007_core::getSubpart($template, '###ORDER_ITEM###');
 
 		$fieldsArray = $markerObj->getMarkerFields(
 			$t['orderFrameWork'],
@@ -428,7 +428,7 @@ class tx_ttproducts_tracking implements \TYPO3\CMS\Core\SingletonInterface {
 				$tmp=array()
 			);
 
-			$subpartArray['###ORDER_ITEM###'] = $this->cObj->substituteMarkerArrayCached($t['orderFrameWork'], $orderMarkerArray);
+			$subpartArray['###ORDER_ITEM###'] = tx_div2007_core::substituteMarkerArrayCached($t['orderFrameWork'], $orderMarkerArray);
 		} else {
 			$subpartArray['###ORDER_ITEM###'] = '';
 		}
@@ -683,7 +683,7 @@ class tx_ttproducts_tracking implements \TYPO3\CMS\Core\SingletonInterface {
 			}
 		}
 
-		$content = $this->cObj->substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
+		$content = tx_div2007_core::substituteMarkerArrayCached($template, $markerArray, $subpartArray, $wrappedSubpartArray);
 		return $content;
 	} // getTrackingInformation
 }

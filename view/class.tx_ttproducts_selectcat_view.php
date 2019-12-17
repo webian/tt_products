@@ -43,8 +43,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class tx_ttproducts_selectcat_view extends tx_ttproducts_catlist_view_base {
 
-	var $htmlTagMain = 'select';	// main HTML tag
-	var $htmlTagElement = 'option';
+	public $htmlTagMain = 'select';	// main HTML tag
+	public $htmlTagElement = 'option';
 
 	// returns the products list view
 	public function printView ($functablename, &$templateCode, $theCode, &$error_code, $templateArea = 'ITEM_CATEGORY_SELECT_TEMPLATE', $pageAsCategory, $templateSuffix = '') {
@@ -262,7 +262,7 @@ class tx_ttproducts_selectcat_view extends tx_ttproducts_catlist_view_base {
 			}
 
 			$out =
-				$this->pibase->cObj->substituteMarkerArrayCached(
+				tx_div2007_core::substituteMarkerArrayCached(
 					$t['listFrameWork'],
 					$markerArray,
 					$subpartArray,

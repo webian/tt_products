@@ -41,7 +41,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
 class tx_ttproducts_css implements \TYPO3\CMS\Core\SingletonInterface {
-	var $pibase; // reference to object of pibase
+	public $pibase; // reference to object of pibase
 	public $conf;
 	protected $isCssStyled;
 	private $bIncluded = false;

@@ -413,6 +413,14 @@ class tx_ttproducts_info_view implements \TYPO3\CMS\Core\SingletonInterface {
 	 */
 	public function getRowMarkerArray ($basketExtra, &$markerArray, $bHtml, $bSelectSalutation)	{
 		$cObj = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
+		$parser = $cObj;
+        if (
+            defined('TYPO3_version') &&
+            version_compare(TYPO3_version, '7.0.0', '>=')
+        ) {
+            $parser = tx_div2007_core::newHtmlParser(false);
+        }
+
 		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		$languageObj = GeneralUtility::makeInstance(\JambageCom\TtProducts\Api\Localization::class);
@@ -683,7 +691,7 @@ class tx_ttproducts_info_view implements \TYPO3\CMS\Core\SingletonInterface {
 								foreach ($row as $field => $value) {
 									$boxMarkerArray['###' . strtoupper($field) . '###'] = $value;
 								}
-								$boxContent = $cObj->substituteMarkerArray($layout, $boxMarkerArray);
+								$boxContent = $parser->substituteMarkerArray($layout,  $boxMarkerArray);
 							} else {
 								$partRow = array();
 								foreach ($tableFieldArray[$tablename] as $field) {

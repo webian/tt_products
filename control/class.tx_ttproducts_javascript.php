@@ -42,13 +42,13 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
 class tx_ttproducts_javascript implements \TYPO3\CMS\Core\SingletonInterface {
-	var $pibase; // reference to object of pibase
-	var $conf;
-	var $config;
-	var $ajax;
-	var $bAjaxAdded;
-	var $bCopyrightShown;
-	var $copyright;
+	public $pibase; // reference to object of pibase
+	public $conf;
+	public $config;
+	public $ajax;
+	public $bAjaxAdded;
+	public $bCopyrightShown;
+	public $copyright;
 	public $fixInternetExplorer;
 
 

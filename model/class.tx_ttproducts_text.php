@@ -40,12 +40,12 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
 class tx_ttproducts_text extends tx_ttproducts_table_base {
-	var $dataArray; // array of read in categories
-	var $marker = 'TEXT';
-	var $pibase; // reference to object of pibase
-	var $conf;
-	var $config;
-	var $tt_products_texts; // element of class tx_table_db
+	public $dataArray; // array of read in categories
+	public $marker = 'TEXT';
+	public $pibase; // reference to object of pibase
+	public $conf;
+	public $config;
+	public $tt_products_texts; // element of class tx_table_db
 
 
 	public function &getTagMarkerArray (&$tagArray, $parentMarker)	{

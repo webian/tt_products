@@ -144,9 +144,9 @@ class tx_ttproducts_email_div {
 		$recipients = GeneralUtility::trimExplode(',',$recipients,1);
 
 		if (count($recipients)) {	// If any recipients, then compile and send the mail.
-			$emailContent=trim($cObj->getSubpart($templateCode,'###'.$templateMarker.$config['templateSuffix'].'###'));
+			$emailContent=trim(tx_div2007_core::getSubpart($templateCode, '###' . $templateMarker . $config['templateSuffix'] . '###'));
 			if (!$emailContent)	{
-				$emailContent=trim($cObj->getSubpart($templateCode,'###'.$templateMarker.'###'));
+				$emailContent=trim(tx_div2007_core::getSubpart($templateCode, '###' . $templateMarker . '###'));
 			}
 			if ($emailContent)  {		// If there is plain text content - which is required!!
 				$markerObj = GeneralUtility::makeInstance('tx_ttproducts_marker');
@@ -177,7 +177,7 @@ class tx_ttproducts_email_div {
 
 				$markerArray['###ORDER_TRACKING_NO###'] = $tracking;
 				$markerArray['###ORDER_UID###'] = $orderNumber;
-				$emailContent = $cObj->substituteMarkerArrayCached($emailContent, $markerArray);
+				$emailContent = tx_div2007_core::substituteMarkerArrayCached($emailContent, $markerArray);
 				$parts = explode(chr(10),$emailContent,2);
 				$subject = trim($parts[0]);
 				$plain_message = trim($parts[1]);
@@ -195,12 +195,19 @@ class tx_ttproducts_email_div {
 		$senderemail = ($giftRow['personemail'] ? $giftRow['personemail'] : $conf['orderEmail_from']);
 		$recipients = $recipient;
 		$recipients = GeneralUtility::trimExplode(',',$recipients,1);
+        $parser =  $cObj;
+        if (
+            defined('TYPO3_version') &&
+            version_compare(TYPO3_version, '7.0.0', '>=')
+        ) {
+            $parser = tx_div2007_core::newHtmlParser(false);
+        }
 
 		if (count($recipients)) {	// If any recipients, then compile and send the mail.
-			$emailContent=trim($cObj->getSubpart($templateCode,'###'.$templateMarker.'###'));
+			$emailContent=trim(tx_div2007_core::getSubpart($templateCode, '###' . $templateMarker . '###'));
 			if ($emailContent)  {		// If there is plain text content - which is required!!
 				$markerObj = GeneralUtility::makeInstance('tx_ttproducts_marker');
-				$globalMarkerArray = &$markerObj->getGlobalMarkerArray();
+				$globalMarkerArray = $markerObj->getGlobalMarkerArray();
 				$priceViewObj = GeneralUtility::makeInstance('tx_ttproducts_field_price_view');
 
 				$parts = explode(chr(10),$emailContent,2);	// First line is subject
@@ -214,15 +221,15 @@ class tx_ttproducts_email_div {
 				$markerArray['###PERSON_NAME###'] = $giftRow['personname'];
 				$markerArray['###DELIVERY_NAME###'] = $giftRow['deliveryname'];
 				$markerArray['###ORDER_STATUS_COMMENT###'] = $giftRow['note'].($bHtmlMail?'\n':chr(13)).$comment;
-				$emailContent = $cObj->substituteMarkerArrayCached($plain_message, $markerArray);
+				$emailContent = tx_div2007_core::substituteMarkerArrayCached($plain_message, $markerArray);
 
 				$recipients = implode($recipients,',');
 
 				if ($bHtmlMail) {	// If htmlmail lib is included, then generate a nice HTML-email
-					$HTMLmailShell = $cObj->getSubpart($this->templateCode,'###EMAIL_HTML_SHELL###');
-					$HTMLmailContent = $cObj->substituteMarker($HTMLmailShell,'###HTML_BODY###',$emailContent);
+					$HTMLmailShell = tx_div2007_core::getSubpart($this->templateCode, '###EMAIL_HTML_SHELL###');
+					$HTMLmailContent = $parser->substituteMarker($HTMLmailShell, '###HTML_BODY###', $emailContent);
 					$markerObj = GeneralUtility::makeInstance('tx_ttproducts_marker');
-					$HTMLmailContent=$cObj->substituteMarkerArray($HTMLmailContent, $markerObj->getGlobalMarkerArray());
+					$HTMLmailContent = $parser->substituteMarkerArray($HTMLmailContent,  $markerObj->getGlobalMarkerArray());
 
 					self::send_mail($recipients,  $subject, $emailContent, $HTMLmailContent, $senderemail, $sendername, $conf['GiftAttachment']);
 				} else {		// ... else just plain text...

@@ -41,11 +41,11 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
 class tx_ttproducts_card extends tx_ttproducts_table_base {
-	var $ccArray;	// credit card data
-	var $allowedArray = array(); // allowed uids of credit cards
-	var $inputFieldArray = array('cc_type', 'cc_number_1','cc_number_2','cc_number_3', 'cc_number_4', 'owner_name', 'cvv2', 'endtime_mm', 'endtime_yy');
-	var $sizeArray = array('cc_type' => 4, 'cc_number_1' => 4,'cc_number_2' => 4,'cc_number_3' => 4, 'cc_number_4' => 4, 'owner_name' => 0, 'cvv2' => 4, 'endtime_mm' => 2, 'endtime_yy'  => 2);
-	var $asteriskArray = array(2 => '**', 4 => '****');
+	public $ccArray;	// credit card data
+	public $allowedArray = array(); // allowed uids of credit cards
+	public $inputFieldArray = array('cc_type', 'cc_number_1','cc_number_2','cc_number_3', 'cc_number_4', 'owner_name', 'cvv2', 'endtime_mm', 'endtime_yy');
+	public $sizeArray = array('cc_type' => 4, 'cc_number_1' => 4,'cc_number_2' => 4,'cc_number_3' => 4, 'cc_number_4' => 4, 'owner_name' => 0, 'cvv2' => 4, 'endtime_mm' => 2, 'endtime_yy'  => 2);
+	public $asteriskArray = array(2 => '**', 4 => '****');
 
 
 	public function init ($cObj, $functablename)	{

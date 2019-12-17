@@ -176,7 +176,7 @@ class tx_ttproducts_control_search implements \TYPO3\CMS\Core\SingletonInterface
 			$theCode = (string) trim($theCode);
 			$contentTmp = '';
 			$templateCode = $templateObj->get($theCode, $languageObj, $this->cObj, $tmp='', $errorMessage);
-			$theTemplateCode = $this->cObj->getSubpart($templateCode,$subpartmarkerObj->spMarker('###'.$theCode.$this->config['templateSuffix'].'###'));
+			$theTemplateCode = tx_div2007_core::getSubpart($templateCode,$subpartmarkerObj->spMarker('###' . $theCode . $this->config['templateSuffix'] . '###'));
 
 			switch($theCode)	{
 				case 'FIRSTLETTER':

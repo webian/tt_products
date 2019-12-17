@@ -1,9 +1,10 @@
 <?php
 defined('TYPO3_MODE') || die('Access denied.');
+defined('TYPO3_version') || die('The constant TYPO3_version is undefined in tt_products!');
 
 // these constants shall be used in the future:
 if (!defined ('TT_PRODUCTS_EXT')) {
-	define('TT_PRODUCTS_EXT', 'tt_products');
+    define('TT_PRODUCTS_EXT', 'tt_products');
 }
 
 call_user_func(function () {
@@ -218,26 +219,31 @@ call_user_func(function () {
         }
     }
 
-    // Extending TypoScript from static template uid=43 to set up userdefined tag:
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript(TT_PRODUCTS_EXT, 'editorcfg',  'tt_content.CSS_editor.ch.tt_products = < plugin.tt_products.CSS_editor', 43);
+    if (
+        defined('TYPO3_version') &&
+        version_compare(TYPO3_version, '9.0.0', '<')
+    ) {
+        // Extending TypoScript from static template uid=43 to set up userdefined tag:
+        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript(TT_PRODUCTS_EXT, 'editorcfg',  'tt_content.CSS_editor.ch.tt_products = < plugin.tt_products.CSS_editor', 43);
+
+        if (isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['livesearch']) && is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['livesearch'])) {
+            // TYPO3 4.5 with livesearch
+            $GLOBALS['TYPO3_CONF_VARS']['SYS']['livesearch'] = array_merge(
+                $GLOBALS['TYPO3_CONF_VARS']['SYS']['livesearch'],
+                array(
+                    'tt_products' => 'tt_products',
+                    'tt_products_language' => 'tt_products_language',
+                    'tt_products_articles' => 'tt_products_articles',
+                    'tt_products_articles_language' => 'tt_products_articles_language',
+                    'tt_products_cat' => 'tt_products_cat',
+                    'tt_products_cat_language' => 'tt_products_cat_language',
+                    'sys_products_orders' => 'sys_products_orders'
+                )
+            );
+        }
+    }
 
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tce']['formevals']['JambageCom\\Div2007\\Hooks\\Evaluation\\Double6'] = '';
-
-    if (isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['livesearch']) && is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['livesearch'])) {
-        // TYPO3 4.5 with livesearch
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['livesearch'] = array_merge(
-            $GLOBALS['TYPO3_CONF_VARS']['SYS']['livesearch'],
-            array(
-                'tt_products' => 'tt_products',
-                'tt_products_language' => 'tt_products_language',
-                'tt_products_articles' => 'tt_products_articles',
-                'tt_products_articles_language' => 'tt_products_articles_language',
-                'tt_products_cat' => 'tt_products_cat',
-                'tt_products_cat_language' => 'tt_products_cat_language',
-                'sys_products_orders' => 'sys_products_orders'
-            )
-        );
-    }
 
     if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('searchbox')) {
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPItoST43(TT_PRODUCTS_EXT, 'pi_search/class.tx_ttproducts_pi_search.php', '_pi_search', 'list_type', 0 );

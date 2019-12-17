@@ -70,6 +70,13 @@ class tx_ttproducts_order_view extends tx_ttproducts_table_base_view {
 
 	public function printView(&$templateCode, &$error_code)	 {
         $local_cObj = \JambageCom\Div2007\Utility\FrontendUtility::getContentObjectRenderer();
+		$parser = $local_cObj;
+        if (
+            defined('TYPO3_version') &&
+            version_compare(TYPO3_version, '7.0.0', '>=')
+        ) {
+            $parser = tx_div2007_core::newHtmlParser(false);
+        }
 
 		$feusers_uid = $GLOBALS['TSFE']->fe_user->user['uid'];
 		$priceViewObj = GeneralUtility::makeInstance('tx_ttproducts_field_price_view');
@@ -83,8 +90,8 @@ class tx_ttproducts_order_view extends tx_ttproducts_table_base_view {
 			// order
 		$orderObj = $tablesObj->get('sys_products_orders');
 		if (!$feusers_uid)	{
-			$frameWork = $local_cObj->getSubpart($templateCode,$subpartmarkerObj->spMarker('###MEMO_NOT_LOGGED_IN###'));
-			$content = $local_cObj->substituteMarkerArray($frameWork, $globalMarkerArray);
+			$frameWork = tx_div2007_core::getSubpart($templateCode, $subpartmarkerObj->spMarker('###MEMO_NOT_LOGGED_IN###'));
+			$content = $parser->substituteMarkerArray($frameWork, $globalMarkerArray);
 			return $content;
 		}
 
@@ -92,7 +99,7 @@ class tx_ttproducts_order_view extends tx_ttproducts_table_base_view {
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'sys_products_orders', $where);
 		$templateArea = 'ORDERS_LIST_TEMPLATE';
 
-		$frameWork = $local_cObj->getSubpart($templateCode,$subpartmarkerObj->spMarker('###' . $templateArea . '###'));
+		$frameWork = tx_div2007_core::getSubpart($templateCode, $subpartmarkerObj->spMarker('###' . $templateArea . '###'));
 
 		if (!$frameWork) {
 			$templateObj = GeneralUtility::makeInstance('tx_ttproducts_template');
@@ -103,7 +110,7 @@ class tx_ttproducts_order_view extends tx_ttproducts_table_base_view {
 		}
 
 		$content = $local_cObj->substituteMarkerArray($frameWork, $globalMarkerArray);
-		$orderitem = $local_cObj->getSubpart($content,'###ORDER_ITEM###');
+		$orderitem = tx_div2007_core::getSubpart($content, '###ORDER_ITEM###');
 		$count = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
 
 		if ($count) {
@@ -171,10 +178,10 @@ class tx_ttproducts_order_view extends tx_ttproducts_table_base_view {
 			$markerArray['###CALC_DATE###'] = date('d M Y');
 			$subpartArray['###ORDER_LIST###'] = $orderlistc;
 			$subpartArray['###ORDER_NOROWS###'] = '';
-			$content = $local_cObj->substituteMarkerArrayCached($content,$markerArray,$subpartArray);
+			$content = tx_div2007_core::substituteMarkerArrayCached($content, $markerArray, $subpartArray);
 		} else {
 			$GLOBALS['TYPO3_DB']->sql_free_result($res);
-			$norows = $local_cObj->getSubpart($content,'###ORDER_NOROWS###');
+			$norows = tx_div2007_core::getSubpart($content, '###ORDER_NOROWS###');
 			$content = $norows;
 		} // else of if ($GLOBALS['TYPO3_DB']->sql_num_rows($res))
 

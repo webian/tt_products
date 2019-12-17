@@ -41,8 +41,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
 class tx_ttproducts_ajax implements \TYPO3\CMS\Core\SingletonInterface {
-	var $taxajax;	// xajax object
-	var $conf; 	// conf coming from JavaScript via Ajax
+	public $taxajax;	// xajax object
+	public $conf; 	// conf coming from JavaScript via Ajax
 
 	public function init()	{
 		$this->taxajax = GeneralUtility::makeInstance('tx_taxajax');

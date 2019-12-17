@@ -158,6 +158,13 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		$modelObj = $this->getModelObj ();
 		$local_cObj = \JambageCom\Div2007\Utility\FrontendUtility::getContentObjectRenderer();
+        $parser = $local_cObj;
+        if (
+            defined('TYPO3_version') &&
+            version_compare(TYPO3_version, '7.0.0', '>=')
+        ) {
+            $parser = tx_div2007_core::newHtmlParser(false);
+        }
 
 		parent::getModelMarkerArray(
 			$row,
@@ -381,7 +388,7 @@ class tx_ttproducts_product_view extends tx_ttproducts_article_base_view {
 		}
 
 		if ($row['special_preparation'])	{
-			$markerArray['###' . $this->marker . '_SPECIAL_PREP###'] = $local_cObj->substituteMarkerArray($this->conf['specialPreparation'], $markerArray);
+			$markerArray['###' . $this->marker . '_SPECIAL_PREP###'] = $parser->substituteMarkerArray($this->conf['specialPreparation'], $markerArray);
 		} else	{
 			$markerArray['###' . $this->marker . '_SPECIAL_PREP###'] = '';
 		}

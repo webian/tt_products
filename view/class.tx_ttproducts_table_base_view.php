@@ -388,6 +388,13 @@ abstract class tx_ttproducts_table_base_view  implements \TYPO3\CMS\Core\Singlet
 		$linkWrap=''
 	)	{
         $local_cObj = \JambageCom\Div2007\Utility\FrontendUtility::getContentObjectRenderer();
+        $parser = $local_cObj;
+        if (
+            defined('TYPO3_version') &&
+            version_compare(TYPO3_version, '7.0.0', '>=')
+        ) {
+            $parser = tx_div2007_core::newHtmlParser(false);
+        }
 
 		$rowMarkerArray = array();
 		if ($prefix === false)	{
@@ -508,10 +515,10 @@ abstract class tx_ttproducts_table_base_view  implements \TYPO3\CMS\Core\Singlet
 								$tableconf['field.'][$modField . '.'],
 								TT_PRODUCTS_EXT
 							);
-							$modValue = $local_cObj->substituteMarkerArray($fieldContent,$fieldMarkerArray);
+							$modValue =
+                                $parser->substituteMarkerArray($fieldContent, $fieldMarkerArray);
 						}
 						$markerKey = $markerPrefix . strtoupper($modField . $suffix);
-
 
 						if (!isset($markerArray['###' . $markerKey . '###'])) {
 

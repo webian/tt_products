@@ -42,10 +42,10 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
 class tx_ttproducts_pid_list {
-	var $pid_list;				// list of page ids
-	var $recursive;
-	var $pageArray = array();		// pid_list as array
-	var $cObj;
+	public $pid_list;				// list of page ids
+	public $recursive;
+	public $pageArray = array();		// pid_list as array
+	public $cObj;
 
 	/**
 	 * Getting all tt_products_cat categories into internal array
@@ -72,7 +72,7 @@ class tx_ttproducts_pid_list {
 
 
 	/**
-	 * Gets the pid_list internal var or the child pid_list of the page id as parameter
+	 * Gets the pid_list internal variable or the child pid_list of the page id as parameter
 	 */
 	public function getPidlist ($pid='')	{
 		$rc = '';

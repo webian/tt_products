@@ -41,12 +41,12 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
 class tx_ttproducts_voucher extends tx_ttproducts_table_base {
-	var $amount;
-	var $amountType;
-	var $code;
-	var $bValid = false;
-	var $marker = 'VOUCHER';
-	var $usedCodeArray = array();
+	public $amount;
+	public $amountType;
+	public $code;
+	public $bValid = false;
+	public $marker = 'VOUCHER';
+	public $usedCodeArray = array();
 
 	/**
 	 * Getting all tt_products_cat categories into internal array

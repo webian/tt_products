@@ -1,3 +1,5 @@
+2019-12-17 Franz Holzinger <franz@ttproducts.de>
+    * compatibility for TYPO3 9: tt_products 2.9.7 now runs fully under TYPO3 9.5.
 
 2019-12-06 Franz Holzinger <franz@ttproducts.de>
     * bugfix: with article mode > 0 and a set noArticleSingleView did not show the product uid in the single view link from a related article list.

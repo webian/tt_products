@@ -73,6 +73,13 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 		&$row
 	)	{
         $local_cObj = \JambageCom\Div2007\Utility\FrontendUtility::getContentObjectRenderer();
+        $parser = $local_cObj;
+        if (
+            defined('TYPO3_version') &&
+            version_compare(TYPO3_version, '7.0.0', '>=')
+        ) {
+            $parser = tx_div2007_core::newHtmlParser(false);
+        }
 		$confArray = array('params', 'altText', 'titleText');
 		if (!count($markerArray))	{
 			$this->getExtItemMarkerArray($markerArray, $imageConf, $row);
@@ -80,7 +87,7 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 		foreach ($confArray as $conftype)	{
 			if ($imageConf[$conftype])	{
 				$text = $imageConf[$conftype];
-				$text = $local_cObj->substituteMarkerArray($text, $markerArray);
+				$text = $parser->substituteMarkerArray($text, $markerArray);
 				$imageConf[$conftype] = $text;
 			}
 		}

@@ -41,12 +41,12 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
 abstract class tx_ttproducts_category_base extends tx_ttproducts_table_base {
-	var $dataArray;  // array of read in categories
-	var $titleArray; // associative array of read in categories with title as index
+	public $dataArray;  // array of read in categories
+	public $titleArray; // associative array of read in categories with title as index
 	public $marker = 'CATEGORY';
-	var $markerObj;
+	public $markerObj;
 	protected $mm_table = ''; // only set if a mm table is used
-	var $parentField; // field name for parent
+	public $parentField; // field name for parent
 	public $referenceField; // field name for reference element
 
 

@@ -41,13 +41,13 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
 class tx_ttproducts_memo_view implements \TYPO3\CMS\Core\SingletonInterface {
-	var $cObj;
-	var $pid_list;
-	var $pid; // pid where to go
-	var $useArticles;
-	var $memoItems;
-	var $pibaseClass;
-	var $conf;
+	public $cObj;
+	public $pid_list;
+	public $pid; // pid where to go
+	public $useArticles;
+	public $memoItems;
+	public $pibaseClass;
+	public $conf;
 
 	public function init (
 			$pibaseClass,
@@ -121,7 +121,7 @@ class tx_ttproducts_memo_view implements \TYPO3\CMS\Core\SingletonInterface {
 				);
 
 				$templateArea = 'MEMO_EMPTY';
-				$content = $this->cObj->getSubpart($templateCode,$subpartmarkerObj->spMarker('###'.$templateArea.'###'));
+				$content = tx_div2007_core::getSubpart($templateCode, $subpartmarkerObj->spMarker('###' . $templateArea . '###'));
 				$content = $markerObj->replaceGlobalMarkers($content);
 			}
 		} else if (tx_ttproducts_control_memo::bIsAllowed('fe_users', $this->conf)) {
@@ -134,7 +134,7 @@ class tx_ttproducts_memo_view implements \TYPO3\CMS\Core\SingletonInterface {
 
 			$templateArea = 'MEMO_NOT_LOGGED_IN';
 			$templateAreaMarker = $subpartmarkerObj->spMarker('###'.$templateArea.'###');
-			$content = $this->cObj->getSubpart($templateCode,$templateAreaMarker);
+			$content = tx_div2007_core::getSubpart($templateCode, $templateAreaMarker);
 			$content = $markerObj->replaceGlobalMarkers($content);
 		}
 

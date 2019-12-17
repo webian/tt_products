@@ -41,10 +41,10 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
 class tx_ttproducts_url_view implements \TYPO3\CMS\Core\SingletonInterface {
-	var $pibase; // reference to object of pibase
-	var $cObj;
-	var $conf;
-	var $urlArray;
+	public $pibase; // reference to object of pibase
+	public $cObj;
+	public $conf;
+	public $urlArray;
 
 
 	/**

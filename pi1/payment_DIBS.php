@@ -54,15 +54,16 @@ if (!is_object($pibase) || !is_object($this->cObj)  || !is_object($this->basket)
 // Loads the handleScript TypoScript into $lConf.
 $lConf = $confScript;
 
+$fileresource =  \JambageCom\Div2007\Utility\FrontendUtility::fileResource($lConf['templateFile'] ? $lConf['templateFile'] : 'EXT:tt_products/template/payment_DIBS_template.tmpl');
 
-$localTemplateCode = $this->cObj->fileResource($lConf['templateFile'] ? $lConf['templateFile'] : 'EXT:tt_products/template/payment_DIBS_template.tmpl');		// Fetches the DIBS template file
+$localTemplateCode = $fileresource;		// Fetches the DIBS template file
 if (!is_object($basketView))	{
 	$error_code = '';
 	$basketView = GeneralUtility::makeInstance('tx_ttproducts_basket_view',1);
 	$basketView->init ($pibase, array(), false, $this->templateCode, $error_code);
 }
 $markerObj = GeneralUtility::makeInstance('tx_ttproducts_marker');
-$localTemplateCode = $this->cObj->substituteMarkerArrayCached($localTemplateCode, $markerObj->getGlobalMarkerArray());
+$localTemplateCode = tx_div2007_core::substituteMarkerArrayCached($localTemplateCode, $markerObj->getGlobalMarkerArray());
 $calculatedArray = $this->basket->getCalculatedArray();
 
 $tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
@@ -202,7 +203,7 @@ value="'.$priceViewObj->priceFormat($calculatedArray['payment']['priceTax']).'">
 value="'.$priceViewObj->priceFormat($calculatedArray['priceTax']['total'] - $calculatedArray['priceNoTax']['total']).'">';
 			$markerArray['###HIDDENFIELDS###'].=$theFields;
 		}
-		$content= $pibase->cObj->substituteMarkerArrayCached($content, $markerArray);
+		$content= tx_div2007_core::substituteMarkerArrayCached($content, $markerArray);
 	break;
 	case 'decline':
 		$markerArray=array();
