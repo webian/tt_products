@@ -49,12 +49,18 @@ class tx_ttproducts_pi1_base extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin i
 	public $scriptRelPath = 'pi1/class.tx_ttproducts_pi1_base.php';	// Path to this script relative to the extension dir.
 	public $extKey = TT_PRODUCTS_EXT;	// The extension key.
 	public $bRunAjax = false;		// overrride this
+	/**
+	 * The backReference to the mother cObj object set at call time
+	 *
+	 * @var \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer
+	 */
+	public $cObj;
 
 
 	/**
 	 * Main method. Call this from TypoScript by a USER or USER_INT cObject.
 	 */
-	public function main ($content,$conf)	{
+	public function main ($content, $conf)	{
 		tx_ttproducts_model_control::setPrefixId($this->prefixId);
         $this->conf = &$conf;
 

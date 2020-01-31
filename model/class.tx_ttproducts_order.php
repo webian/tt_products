@@ -399,7 +399,7 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 		}
 
 			// Default status_log entry
-		$status_log=array();
+		$status_log = array();
 		$status_log[] = array(
 			'time' => time(),
 			'info' => $this->conf['statusCodes.'][$fieldsArray['status']],

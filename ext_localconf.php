@@ -12,7 +12,6 @@ call_user_func(function () {
     $extensionConfiguration = array();
 
     if (
-        defined('TYPO3_version') &&
         version_compare(TYPO3_version, '9.0.0', '>=')
     ) {
         $extensionConfiguration = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
@@ -220,14 +219,13 @@ call_user_func(function () {
     }
 
     if (
-        defined('TYPO3_version') &&
         version_compare(TYPO3_version, '9.0.0', '<')
     ) {
         // Extending TypoScript from static template uid=43 to set up userdefined tag:
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript(TT_PRODUCTS_EXT, 'editorcfg',  'tt_content.CSS_editor.ch.tt_products = < plugin.tt_products.CSS_editor', 43);
 
         if (isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['livesearch']) && is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['livesearch'])) {
-            // TYPO3 4.5 with livesearch
+            // TYPO3 4.5 - 8.7 with livesearch
             $GLOBALS['TYPO3_CONF_VARS']['SYS']['livesearch'] = array_merge(
                 $GLOBALS['TYPO3_CONF_VARS']['SYS']['livesearch'],
                 array(

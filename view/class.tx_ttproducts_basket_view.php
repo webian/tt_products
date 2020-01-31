@@ -53,7 +53,6 @@ class tx_ttproducts_basket_view implements \TYPO3\CMS\Core\SingletonInterface {
 	public $config;
 	public $price; // price object
 	public $templateCode='';		// In init(), set to the content of the templateFile. Used by default in getView()
-	public $subpartmarkerObj; // subpart marker functions
 	public $urlObj; // url functions
 	public $urlArray; // overridden url destinations
 	public $funcTablename;
@@ -85,8 +84,6 @@ class tx_ttproducts_basket_view implements \TYPO3\CMS\Core\SingletonInterface {
 		$this->error_code = &$error_code;
 		$this->useArticles = $useArticles;
 
-		$this->subpartmarkerObj = GeneralUtility::makeInstance('tx_ttproducts_subpartmarker');
-		$this->subpartmarkerObj->init($pibase->cObj);
 		$this->urlObj = GeneralUtility::makeInstance('tx_ttproducts_url_view'); // a copy of it
 		$this->urlObj->setUrlArray($urlArray);
 	} // init
@@ -174,6 +171,7 @@ class tx_ttproducts_basket_view implements \TYPO3\CMS\Core\SingletonInterface {
 		$out = '';
 		$basketObj = GeneralUtility::makeInstance('tx_ttproducts_basket');
 		$markerObj = GeneralUtility::makeInstance('tx_ttproducts_marker');
+		$subpartmarkerObj = GeneralUtility::makeInstance('tx_ttproducts_subpartmarker');
 		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		$creditpointsObj = GeneralUtility::makeInstance('tx_ttproducts_field_creditpoints');
 		$languageObj = GeneralUtility::makeInstance(\JambageCom\TtProducts\Api\Localization::class);
@@ -227,7 +225,7 @@ class tx_ttproducts_basket_view implements \TYPO3\CMS\Core\SingletonInterface {
 		$t = array();
 		$feuserSubpartArray = array();
 		$feuserWrappedSubpartArray = array();
-		$tempContent = tx_div2007_core::getSubpart($templateCode, $this->subpartmarkerObj->spMarker('###'.$subpartMarker.$this->config['templateSuffix'].'###'));
+		$tempContent = tx_div2007_core::getSubpart($templateCode, $subpartmarkerObj->spMarker('###'.$subpartMarker.$this->config['templateSuffix'].'###'));
 
 		$viewTagArray = $markerObj->getAllMarkers($tempContent);
 
@@ -240,7 +238,7 @@ class tx_ttproducts_basket_view implements \TYPO3\CMS\Core\SingletonInterface {
 		);
 
 		if (!$tempContent)	{
-			$tempContent = tx_div2007_core::getSubpart($templateCode, $this->subpartmarkerObj->spMarker('###' . $subpartMarker . '###'));
+			$tempContent = tx_div2007_core::getSubpart($templateCode, $subpartmarkerObj->spMarker('###' . $subpartMarker . '###'));
 		}
 
 		$markerArray = array();

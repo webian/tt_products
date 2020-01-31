@@ -58,13 +58,12 @@ class tx_ttproducts_pi1 implements \TYPO3\CMS\Core\SingletonInterface {
 	/**
 	 * Main method. Call this from TypoScript by a USER cObject.
 	 */
-	public function main ($content,$conf)	{
-
+	public function main ($content, $conf)	{
 		$pibaseObj = GeneralUtility::makeInstance('tx_ttproducts_pi1_base');
 		$pibaseObj->cObj = $this->cObj;
 
 		if ($conf['templateFile'] != '')	{
-			$content = $pibaseObj->main($content,$conf);
+			$content = $pibaseObj->main($content, $conf);
 		} else {
 			tx_div2007_alpha5::loadLL_fh002($pibaseObj, 'EXT:' . TT_PRODUCTS_EXT . '/pi1/locallang.xml');
 			$content = tx_div2007_alpha5::getLL_fh003($pibaseObj, 'no_template') . ' plugin.tt_products.templateFile';
@@ -77,7 +76,7 @@ class tx_ttproducts_pi1 implements \TYPO3\CMS\Core\SingletonInterface {
 	/**
 	 * Main method for the cached object. Call this from TypoScript by a USER or COBJ cObject.
 	 */
-	public function getUserFunc ($content,$conf)	{
+	public function getUserFunc ($content, $conf)	{
 		$conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tt_products.'];
 
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['getUserFunc'])) {
