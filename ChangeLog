@@ -1,3 +1,7 @@
+
+2020-02-04 Franz Holzinger <franz@ttproducts.de>
+    * bugfix: do not use a second ###BASKET_REQUIRED_INFO_MISSING### in finalize activity
+
 2020-01-31 Franz Holzinger <franz@ttproducts.de>
     * bugfix: wrong unnecessary second initialization of class tx_ttproducts_subpartmarker
 

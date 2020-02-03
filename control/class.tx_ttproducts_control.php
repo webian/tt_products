@@ -314,7 +314,8 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 		$cardRequired,
 		$accountRequired,
 		$paymentErrorMsg
-	) {
+    )
+    {
         if ($checkRequired || $checkAllowed) {
             $check = ($checkRequired ? $checkRequired : $checkAllowed);
             $languageKey = '';
@@ -392,7 +393,7 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 		} else {
 			$message = $languageObj->getLabel('internal_error');
 			$messageArr = explode('|', $message);
-			$label = $messageArr[0].'TTP_2'.$messageArr[1].'products_payment'.$messageArr[2];
+			$label = $messageArr[0] . 'TTP_2' . $messageArr[1] . 'products_payment'.$messageArr[2];
 		}
 
 		return $label;
@@ -597,7 +598,6 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
                 return '';
             }
             $content .= $requiredOut;
-
 			$label = '';
 			$label = $this->getErrorLabel(
 				$languageObj,
@@ -998,7 +998,7 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 				$addQueryString = array();
 				$overwriteMarkerArray = array();
 				$overwriteMarkerArray = $this->urlObj->addURLMarkers(0, array(),$addQueryString);
-				$markerArray = array_merge($markerArray,$overwriteMarkerArray);
+				$markerArray = array_merge($markerArray, $overwriteMarkerArray);
 				$content = $parser->substituteMarkerArray($content . $newContent, $markerArray);
 			}
 		} // foreach ($activityArray as $activity=>$value)
@@ -1070,7 +1070,7 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 						$tmpl,
 						$mainMarkerArray
 					);
-					if ($contentTmpThanks != '')	{
+					if ($contentTmpThanks != '') {
 						$contentTmp = $contentTmpThanks;
 					}
 				}
@@ -1093,38 +1093,10 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 
 				// Empties the shopping basket!
 				$this->basket->clearBasket();
-			} else {	// If not all required info-fields are filled in, this is shown instead:
-				$requiredOut = tx_div2007_core::getSubpart(
-					$templateCode,
-					$this->subpartmarkerObj->spMarker('###BASKET_REQUIRED_INFO_MISSING###')
-				);
-
-				if (!$requiredOut) {
-					$templateObj = GeneralUtility::makeInstance('tx_ttproducts_template');
-					$errorCode[0] = 'no_subtemplate';
-					$errorCode[1] = '###BASKET_REQUIRED_INFO_MISSING###';
-					$errorCode = $templateObj->getTemplateFile();
-					return '';
-				}
-
-				$label = $this->getErrorLabel(
-					$languageObj,
-					$accountObj,
-					$cardObj,
-					$pidagb,
-					$infoViewObj->infoArray,
-					$checkRequired,
-					$checkAllowed,
-					$cardRequired,
-					$accountRequired,
-					$paymentErrorMsg
-				);
-
-				$mainMarkerArray['###ERROR_DETAILS###'] = $label;
+			} else {
 				$urlMarkerArray = $this->urlObj->addURLMarkers(0, array());
 				$markerArray = array_merge($mainMarkerArray, $urlMarkerArray);
 
-				$content .= $requiredOut;
 				$content = $parser->substituteMarkerArray(
 					$content,
 					$markerArray
@@ -1306,7 +1278,7 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 			);
 		}
 		return $content;
-	} //
+	}
 }
 
 
