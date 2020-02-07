@@ -728,7 +728,8 @@ class tx_ttproducts_basket_view implements \TYPO3\CMS\Core\SingletonInterface {
 				$markerArray,
 				array(),
 				'',
-				$bUseBackPid
+				$bUseBackPid,
+				0
 			); // Applied it here also...
 
 			$taxFromShipping = $paymentshippingObj->getReplaceTaxPercentage($basketExtra);

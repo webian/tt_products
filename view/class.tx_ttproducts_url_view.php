@@ -38,7 +38,7 @@
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-
+use JambageCom\Div2007\Utility\FrontendUtility;
 
 class tx_ttproducts_url_view implements \TYPO3\CMS\Core\SingletonInterface {
 	public $pibase; // reference to object of pibase
@@ -93,7 +93,7 @@ class tx_ttproducts_url_view implements \TYPO3\CMS\Core\SingletonInterface {
 		&$wrappedSubpartArray,
 		$addQueryString=array(),
 		$css_current='',
-		$bUseBackPid=true
+		$bUseBackPid = true
 	)	{
 		$pidBasket = ($this->conf['PIDbasket'] ? $this->conf['PIDbasket'] : $GLOBALS['TSFE']->id);
 		$pageLink = tx_div2007_alpha5::getPageLink_fh003(
@@ -107,21 +107,23 @@ class tx_ttproducts_url_view implements \TYPO3\CMS\Core\SingletonInterface {
 				$bUseBackPid
 			)
 		) ;
-		$wrappedSubpartArray['###LINK_BASKET###'] = array('<a href="' . htmlspecialchars($pageLink) . '"' . $css_current . '>','</a>');
+		$wrappedSubpartArray['###LINK_BASKET###'] = array('<a href="' . htmlspecialchars($pageLink) . '"' . $css_current . '>', '</a>');
 	}
 
 
-	/**
-	 * Adds URL markers to a markerArray
-	 */
-	public function addURLMarkers (
-		$pidNext,
-		$markerArray,
-		$addQueryString=array(),
-		$excludeList='',
-		$bUseBackPid=true,
-		$bExcludeSingleVar=true
-	)	{
+    /**
+    * Adds URL markers to a markerArray
+    */
+    public function addURLMarkers (
+        $pidNext,
+        $markerArray,
+        $addQueryString = array(),
+        $excludeList = '',
+        $bUseBackPid = true,
+        $backPid = 0,
+        $bExcludeSingleVar = true
+    )	
+    {
 		$charset = 'UTF-8';
 		$urlMarkerArray = array();
 		$conf = array('useCacheHash' => true);
@@ -161,8 +163,36 @@ class tx_ttproducts_url_view implements \TYPO3\CMS\Core\SingletonInterface {
 			$target,
 			$conf
 		);
+		$urlConfig = array(
+			'FORM_URL' => array(
+					'pid' => $formUrlPid,
+					'excludeList' => $urlExcludeList
+				),
+			'FORM_URL_CURRENT' => array(
+					'pid' => $GLOBALS['TSFE']->id,
+					'excludeList' => $excludeList
+				)
+		);
 
-		$urlMarkerArray['###FORM_URL###'] = htmlspecialchars($url, ENT_NOQUOTES, $charset);
+		foreach ($urlConfig as $markerKey => $keyConfig) {
+			$url = FrontendUtility::getTypoLink_URL(
+				$local_cObj,
+				$keyConfig['pid'],
+				$this->getLinkParams(
+					$keyConfig['excludeList'],
+					$addQueryString,
+					true,
+					$bUseBackPid,
+					$backPid
+				),
+				$target,
+				$conf
+			);
+
+			$urlMarkerArray['###' . $markerKey . '###'] = htmlspecialchars($url, ENT_NOQUOTES, $charset);
+			$urlMarkerArray['###' . $markerKey . '_VALUE###'] =
+				$url;
+		}
 
 		$commandArray = array('basket', 'info', 'payment', 'finalize', 'thanks', 'search', 'memo', 'tracking', 'billing', 'delivery', 'agb', 'user1', 'user2', 'user3', 'user4', 'user5');
 

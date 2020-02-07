@@ -1,3 +1,8 @@
+2020-02-07 Franz Holzinger <franz@ttproducts.de>
+    * new feature: markers ###FORM_URL###, ###FORM_URL_CURRENT###, ###FORM_URL_VALUE###, ###FORM_URL_CURRENT_VALUE###
+
+2020-02-05 Franz Holzinger <franz@ttproducts.de>
+    * new feature: marker ###FORM_URL_NEXT_ACTIVITY### links to the page with the next activity
 
 2020-02-04 Franz Holzinger <franz@ttproducts.de>
     * bugfix: do not use a second ###BASKET_REQUIRED_INFO_MISSING### in finalize activity

@@ -38,6 +38,7 @@
 
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use JambageCom\Div2007\Utility\FrontendUtility;
 
 class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 	public $pibase; // reference to object of pibase
@@ -53,6 +54,17 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 	public $urlArray; // overridden url destinations
 	public $useArticles;
 
+    static public $nextActivity = array(
+            'basket'  => 'info',
+            'info'    => 'payment',
+            'payment' => 'finalize'
+        );
+    static public $activityMap = array(
+            'basket'  => 'products_basket',
+            'info'    => 'products_info',
+            'payment' => 'products_payment',
+            'finalize' => 'products_finalize'
+        );
 
 	public function init ($pibaseClass, $conf, $config, $funcTablename, $useArticles, $basketExtra)  {
 		$this->pibaseClass = $pibaseClass;
@@ -557,6 +569,29 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 			$paymentHTML = '';
 			if (!$bFinalize && $basket_tmpl != '') {
 				$infoViewObj = GeneralUtility::makeInstance('tx_ttproducts_info_view');
+                if (is_array($activityArray)) {
+                    $shortActivity = '';
+                    $nextActivity = '';
+                    foreach ($activityArray as $activity) {
+                        $shortActivity = array_search($activity, static::$activityMap);
+                        $nextActivity  = static::$nextActivity[$activity];
+                        break;
+                    }
+
+                    if ($shortActivity) {
+                        $xhtmlFix = \JambageCom\Div2007\Utility\HtmlUtility::getXhtmlFix();
+                        $hiddenFields .= '<input type="hidden" name="' . TT_PRODUCTS_EXT . '[activity][' . $shortActivity . ']" value="1"' . $xhtmlFix . '>';
+                    }
+                }
+                $mainMarkerArray['###HIDDENFIELDS###'] = $hiddenFields;
+                $nextUrl = FrontendUtility::getTypoLink_URL(
+                    $this->cObj,
+                    $this->conf['PID' . $nextActivity],
+                    array()
+                );
+
+                $mainMarkerArray['###FORM_URL_NEXT_ACTIVITY###'] = $nextUrl;
+
 				$paymentHTML = $basketView->getView(
 					$empty,
 					$theCode,

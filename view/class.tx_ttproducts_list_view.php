@@ -43,6 +43,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 use JambageCom\Div2007\Utility\FrontendUtility;
 
+use JambageCom\TtProducts\Api\PluginApi;
+
 
 class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 	public $cObj;
@@ -438,6 +440,7 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 		$basketObj = GeneralUtility::makeInstance('tx_ttproducts_basket');
 		$markerObj = GeneralUtility::makeInstance('tx_ttproducts_marker');
 		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
+		$backPid = 0;
 		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		$subpartmarkerObj = GeneralUtility::makeInstance('tx_ttproducts_subpartmarker');
 		$itemTableArray = array();
@@ -467,6 +470,9 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 		}
 
 		$bUseBackPid = (isset($viewParamConf) && $viewParamConf['use'] == 'backPID' ? true : false);
+		if (PluginApi::isRelatedCode($theCode)) {
+			$backPid = $config['backPID']; // stay with the current backPid
+		}
 
 		if (strpos($theCode,'MEMO') === false)	{
 			$memoViewObj = GeneralUtility::makeInstance('tx_ttproducts_memo_view');
@@ -835,7 +841,15 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 					}
 				}
 
-				$markerArray = $this->urlObj->addURLMarkers($tmpPid,array(),$addQueryString,$excludeList,$bUseBackPid);
+				$markerArray =
+                    $this->urlObj->addURLMarkers(
+                        $tmpPid,
+                        array(),
+                        $addQueryString,
+                        $excludeList,
+                        $bUseBackPid,
+                        $backPid
+                    );
 					// add Global Marker Array
 				$markerArray = array_merge($markerArray, $globalMarkerArray);
 				$markerArray['###FORM_NAME###'] = $formName;
@@ -925,7 +939,15 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 			$this->getSearchParams($addQueryString);
 			$markerArray = array();
 			$markerArray['###HIDDENFIELDS###'] = '';
-			$markerArray = $this->urlObj->addURLMarkers($this->pid,$markerArray,$addQueryString,$excludeList,$bUseBackPid); // clickIntoBasket
+			$markerArray =
+                $this->urlObj->addURLMarkers(
+                    $this->pid,
+                    $markerArray,
+                    $addQueryString,
+                    $excludeList,
+                    $bUseBackPid,
+                    $backPid
+                ); // clickIntoBasket
 
 			$wrappedSubpartArray = array();
 			$this->urlObj->getWrappedSubpartArray($wrappedSubpartArray,array(),'',$bUseBackPid);
@@ -2087,7 +2109,14 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 					$addQueryString = array();
 					$addQueryString = $this->uidArray;
 					$this->getSearchParams($addQueryString);
-					$markerArray = $this->urlObj->addURLMarkers($this->pid,$markerArray,$addQueryString,'',$bUseBackPid);   // clickIntoBasket
+					$markerArray =
+                        $this->urlObj->addURLMarkers(
+                            $this->pid,$markerArray,
+                            $addQueryString,
+                            '',
+                            $bUseBackPid,
+                            $backPid
+                        );   // clickIntoBasket
 					$oldFormCount = $formCount;
 					$markerArray['###FORM_NAME###'] = $formName . ($bFormPerItem ? $formCount : '');
 
@@ -2350,7 +2379,8 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 					$markerArray,
 					$addQueryString,
 					$excludeList,
-					$bUseBackPid
+					$bUseBackPid,
+					$backPid
 				);
 			$markerArray['###AMOUNT_CREDITPOINTS###'] = number_format($GLOBALS['TSFE']->fe_user->user['tt_products_creditpoints'],0);
 			$markerArray['###ITEMS_SELECT_COUNT###'] = $productsCount;
