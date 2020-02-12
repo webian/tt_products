@@ -1,3 +1,6 @@
+2020-02-12 Franz Holzinger <franz@ttproducts.de>
+    * bugfix: The billing frontend user id must be of type integer
+
 2020-02-07 Franz Holzinger <franz@ttproducts.de>
     * new feature: markers ###FORM_URL###, ###FORM_URL_CURRENT###, ###FORM_URL_VALUE###, ###FORM_URL_CURRENT_VALUE###
 

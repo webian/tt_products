@@ -224,8 +224,9 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 		$basketObj = GeneralUtility::makeInstance('tx_ttproducts_basket');
 		$calculObj = GeneralUtility::makeInstance('tx_ttproducts_basket_calculate');
         $tablename = $this->getTablename();
+        $feusers_uid = 0;
 
-		if (!$feusers_uid && isset($GLOBALS['TSFE']->fe_user->user) && is_array($GLOBALS['TSFE']->fe_user->user) && $GLOBALS['TSFE']->fe_user->user['uid'])	{
+		if (isset($GLOBALS['TSFE']->fe_user->user) && is_array($GLOBALS['TSFE']->fe_user->user) && $GLOBALS['TSFE']->fe_user->user['uid'])	{
 			$feusers_uid = $GLOBALS['TSFE']->fe_user->user['uid'];
 		}
 
@@ -236,7 +237,10 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 			$deliveryInfo = $billingInfo;
 		}
 
-		$feusers_uid = $billingInfo['feusers_uid'];
+        if (is_array($billingInfo) && isset($billingInfo['feusers_uid'])) {
+            $feusers_uid = $billingInfo['feusers_uid'];
+		}
+
 		if ($deliveryInfo['name'] == '') {
 			$deliveryInfo['name'] = $deliveryInfo['last_name'] . ' ' . $deliveryInfo['first_name'];
 		}
@@ -287,7 +291,7 @@ class tx_ttproducts_order extends tx_ttproducts_table_base {
 			}
 		}
 
-		$fieldsArray['feusers_uid'] = $feusers_uid;
+		$fieldsArray['feusers_uid'] = intval($feusers_uid);
 
 			// can be changed after order is set.
 		$fieldsArray['payment'] = $payment;
