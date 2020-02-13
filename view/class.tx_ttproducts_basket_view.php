@@ -711,7 +711,8 @@ class tx_ttproducts_basket_view implements \TYPO3\CMS\Core\SingletonInterface {
 
 			// for receipt from DIBS script
 			$markerArray['###TRANSACT_CODE###'] = GeneralUtility::_GP('transact');
-			$markerArray['###CUR_SYM###'] = ' '.$this->conf['currencySymbol'];
+            $markerArray['###CUR_SYM###'] = ' ' . ($bHtml ? htmlentities($this->conf['currencySymbol'], ENT_QUOTES) : $this->conf['currencySymbol']);
+
 			$markerArray['###PRICE_TAX_DISCOUNT###'] = $markerArray['###PRICE_DISCOUNT_TAX###'] = $priceViewObj->priceFormat($calculatedArray['price0Tax']['goodstotal']-$calculatedArray['priceTax']['goodstotal']);
 			$markerArray['###PRICE_VAT###'] = $priceViewObj->priceFormat($calculatedArray['priceTax']['goodstotal']-$calculatedArray['priceNoTax']['goodstotal']);
 

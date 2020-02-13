@@ -378,15 +378,16 @@ abstract class tx_ttproducts_table_base_view  implements \TYPO3\CMS\Core\Singlet
 		&$tagArray,
 		$theCode,
 		$basketExtra,
-		$bHtml=true,
+		$bHtml = true,
 		$charset='',
-		$imageNum=0,
-		$imageRenderObj='image',
-		$id='',	// id part to be added
-		$prefix='', // if false, then no table marker will be added
-		$suffix='',	// this could be a number to discern between repeated rows
-		$linkWrap=''
-	)	{
+		$imageNum = 0,
+		$imageRenderObj = 'image',
+		$id = '',	// id part to be added
+		$prefix = '', // if false, then no table marker will be added
+		$suffix = '',	// this could be a number to discern between repeated rows
+		$linkWrap = ''
+	)
+	{
         $local_cObj = \JambageCom\Div2007\Utility\FrontendUtility::getContentObjectRenderer();
         $parser = $local_cObj;
         if (
@@ -429,6 +430,7 @@ abstract class tx_ttproducts_table_base_view  implements \TYPO3\CMS\Core\Singlet
 
 			$rowMarkerArray['###' . $markerPrefix . 'NAME###'] = $extTableName . '-' . $row['uid'];
 			$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
+			$conf = $cnf->getConf();
 			$tableconf = $cnf->getTableConf($functablename,$theCode);
 			$tabledesc = $cnf->getTableDesc($functablename);
 
@@ -501,7 +503,7 @@ abstract class tx_ttproducts_table_base_view  implements \TYPO3\CMS\Core\Singlet
 				}
 
 				if (!$bSkip)	{
-					$tableName = $this->conf['table.'][$functablename];
+					$tableName = $conf['table.'][$functablename];
 
 					foreach ($modifiedRow as $modField => $modValue)	{
 						if (is_array($tableconf['field.'][$modField . '.']))	{
@@ -561,6 +563,8 @@ abstract class tx_ttproducts_table_base_view  implements \TYPO3\CMS\Core\Singlet
 				}
 			}
 		}
+
+		$rowMarkerArray['###CUR_SYM###'] = ' ' . ($bHtml ? htmlentities($conf['currencySymbol'], ENT_QUOTES) : $conf['currencySymbol']);
 
 		$this->getRowMarkerArrayHooks(
 			$this,

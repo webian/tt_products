@@ -214,8 +214,6 @@ class tx_ttproducts_field_price_view implements tx_ttproducts_field_view_int, \T
 			}
 		}
 
-		$priceMarkerArray['###CUR_SYM###'] = ' ' . ($conf['currencySymbol'] ? ($charset ? htmlentities($this->conf['currencySymbol'], ENT_QUOTES, $charset) : $conf['currencySymbol']) : '');
-
 		$priceMarkerArray['###TAX_INCL_EXCL###'] = ($taxInclExcl ? $languageObj->getLabel($taxInclExcl) : '');
 
 		if (is_array($markerArray))	{

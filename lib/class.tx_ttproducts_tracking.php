@@ -493,7 +493,7 @@ class tx_ttproducts_tracking implements \TYPO3\CMS\Core\SingletonInterface {
 					$markerArray['###OTHER_ORDERS_OPTIONS###'] .=
 						'<option ' . $class . ' value="' . $row['tracking_code'] . '"' . ($row['uid'] == $orderRow['uid'] ? 'selected="selected"' : '') . '>'.
 							htmlspecialchars($row['uid'].' ('.$row['bill_no'].'): '.
-								$row['name'] . ' (' . $priceViewObj->priceFormat($row['amount']) . ' ' . $this->conf['currencySymbol'] . ') /' . $row['status']
+								$row['name'] . ' (' . $priceViewObj->priceFormat($row['amount']) . ' ' . htmlentities($this->conf['currencySymbol'], ENT_QUOTES) . ') /' . $row['status']
 							) .
 						'</option>';
 				} else {
@@ -539,7 +539,7 @@ class tx_ttproducts_tracking implements \TYPO3\CMS\Core\SingletonInterface {
 						}
 						$fieldMarkerArray['###ORDER_' . strtoupper($field) . '###'] = $value;
 					}
-					$fieldMarkerArray['###CUR_SYM###'] = $this->conf['currencySymbol'];
+					$fieldMarkerArray['###CUR_SYM###'] = htmlentities($this->conf['currencySymbol'], ENT_QUOTES);
 					$valueArray[$row['tracking_code']] = $row['uid'];
 					$keyMarkerArray[$row['tracking_code']] = $fieldMarkerArray;
 				}

@@ -1,3 +1,8 @@
+
+
+2020-02-13 Franz Holzinger <franz@ttproducts.de>
+    * security: use htmlentities with the constant currencySymbol and the marker ###CUR_SYM###.
+
 2020-02-12 Franz Holzinger <franz@ttproducts.de>
     * bugfix: The billing frontend user id must be of type integer
 
