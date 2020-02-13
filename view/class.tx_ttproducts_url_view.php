@@ -58,7 +58,6 @@ class tx_ttproducts_url_view implements \TYPO3\CMS\Core\SingletonInterface {
 	public function init ($pibase, $conf)	{
  		$this->pibase = $pibase;
 		$this->cObj = $this->pibase->cObj;
-
  		$this->conf = $conf;
 	}
 
@@ -176,7 +175,7 @@ class tx_ttproducts_url_view implements \TYPO3\CMS\Core\SingletonInterface {
 
 		foreach ($urlConfig as $markerKey => $keyConfig) {
 			$url = FrontendUtility::getTypoLink_URL(
-				$local_cObj,
+				$this->cObj,
 				$keyConfig['pid'],
 				$this->getLinkParams(
 					$keyConfig['excludeList'],

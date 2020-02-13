@@ -178,7 +178,7 @@ abstract class tx_ttproducts_field_base_view implements tx_ttproducts_field_view
 					}
 				}
 
-				$newContent = $local_cObj->substituteMarkerArrayCached(
+				$newContent = tx_div2007_core::substituteMarkerArrayCached(
 					$t['listFrameWork'],
 					array(),
 					array('###' . $templateAreaSingle . '###' => $content),

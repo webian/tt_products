@@ -369,7 +369,7 @@ abstract class tx_ttproducts_catlist_view_base implements \TYPO3\CMS\Core\Single
 			}
 			$subpartArray = array();
 			$subpartArray['###LINK_CATEGORY###'] = '###CATEGORY_TMP###';
-			$tmp = $pibaseObj->cObj->substituteMarkerArrayCached($t['categoryFrameWork'],array(),$subpartArray);
+			$tmp = tx_div2007_core::substituteMarkerArrayCached($t['categoryFrameWork'], array(), $subpartArray);
 			$htmlParts = GeneralUtility::trimExplode('###CATEGORY_TMP###', $tmp);
 			$rootCat = $categoryTable->getRootCat();
 

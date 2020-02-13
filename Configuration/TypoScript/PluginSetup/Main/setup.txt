@@ -340,7 +340,7 @@ plugin.tt_products {
 	field {
 	  weight = TEXT
 	  weight {
-		preUserFunc = tx_div2007_alpha->phpFunc
+		preUserFunc = JambageCom\Div2007\Utility\SystemUtility->phpFunc
 		preUserFunc {
 			php = round($value,2);
 		}
