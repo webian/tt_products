@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2019 Franz Holzinger (franz@ttproducts.de)
+*  (c) 2020 Franz Holzinger (franz@ttproducts.de)
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -144,7 +144,7 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 	}
 
 
-	public function &advanceProduct (
+	public function advanceProduct (
 		&$productAndItemsFrameWork,
 		&$productFrameWork,
 		&$itemListOut,
@@ -447,6 +447,14 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 		$itemTableViewArray = array();
 		$globalMarkerArray = $markerObj->getGlobalMarkerArray();
 		$whereCat = '';
+
+		$parser = $this->cObj;
+        if (
+            defined('TYPO3_version') &&
+            version_compare(TYPO3_version, '7.0.0', '>=')
+        ) {
+            $parser = tx_div2007_core::newHtmlParser(false);
+        }
 
 		$relatedListView = GeneralUtility::makeInstance('tx_ttproducts_relatedlist_view');
 		$relatedListView->init($this->cObj, $this->pidListObj->getPidlist(), $this->pidListObj->getRecursive());

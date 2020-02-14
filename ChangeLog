@@ -1,4 +1,5 @@
-
+2020-02-14 Franz Holzinger <franz@ttproducts.de>
+    * bugfix: List view failed to show up because of uninitialized parser object.
 
 2020-02-13 Franz Holzinger <franz@ttproducts.de>
     * bugfix for TYPO3 9.5: Do not use cObj->substituteMarkerArrayCached.

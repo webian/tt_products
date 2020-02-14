@@ -240,7 +240,7 @@ class tx_ttproducts_marker implements \TYPO3\CMS\Core\SingletonInterface {
 						$langArray[$key] = $value;
 						$out = $value;
 					}
-					$markerArray['###'.strtoupper($key).'###'] = $out;
+					$markerArray['###' . strtoupper($key) . '###'] = $out;
 				}
 			}
 		}
@@ -364,7 +364,10 @@ class tx_ttproducts_marker implements \TYPO3\CMS\Core\SingletonInterface {
 				}
 			}
 			$tagArray = $retTagArray;
+		} else {
+            $tagArray = array();
 		}
+
 		$parentArray = array_unique($parentArray);
 		sort($parentArray);
 
