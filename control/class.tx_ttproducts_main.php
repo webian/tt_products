@@ -524,7 +524,7 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 			}
 
 			switch($theCode)	{
-                case 'CONTROL': // this will come with tt_products 3.1
+                case 'CONTROL': // this will be introduced with tt_products 3.1
                     continue 2;
                     break;
                 case 'SEARCH':
@@ -728,81 +728,84 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 					}
 					$contentTmp = 'error';
 			}
+		}
 
-			if ($errorCode[0]) {
+        if ($errorCode[0]) {
+            $messageArr = array();
+            $i = 0;
+            $errorConf = array();
+            if (isset($this->conf['error.'])) {
+                $errorConf = $this->conf['error.'];
+                $urlObj = GeneralUtility::makeInstance('tx_ttproducts_url_view');
+            }
 
-				$messageArr = array();
-				$i = 0;
-
-				$errorConf = array();
-				if (isset($this->conf['error.'])) {
-					$errorConf = $this->conf['error.'];
-					$urlObj = GeneralUtility::makeInstance('tx_ttproducts_url_view');
-				}
-
-				foreach ($errorCode as $key => $indice) {
-
-					if (
-						isset($errorConf[$indice . '.']) &&
-						isset($errorConf[$indice . '.']['redirect.']) &&
-						isset($errorConf[$indice . '.']['redirect.']['pid'])
-					) {
-						$pid = $errorConf[$indice . '.']['redirect.']['pid'];
-						$url = tx_div2007_alpha5::getTypoLink_URL_fh003(
-							$this->cObj,
-							$pid,
-							$urlObj->getLinkParams(
-								'product,article',
-								'',
-								true,
-								false
-							),
-							'',
-							array()
-						);
-
-						if ($url != '') {
-							\TYPO3\CMS\Core\Utility\HttpUtility::redirect($url);
-						}
-					}
-
-					if ($key == 0) {
-						$messageArr = explode('|', $message = $languageObj->getLabel($indice));
-						$contentTmp .= '<b>' . $languageObj->getLabel('tt_products') . ': ' . $messageArr[0] . '</b>';
-					} else {
-						$contentTmp .= '<b>' . $indice . $messageArr[$i] . '</b>';
-					}
-					$i++;
-				}
-				$errorCode = array();
-			}
-
-			if ($contentTmp == 'error') {
-				$fileName = 'EXT:'.TT_PRODUCTS_EXT.'/template/products_help.tmpl';
-				$helpTemplate =  \JambageCom\Div2007\Utility\FrontendUtility::fileResource($fileName);
-                $content .=
-                    \JambageCom\Div2007\Utility\ViewUtility::displayHelpPage(
-                        $languageObj,
+            foreach ($errorCode as $key => $indice) {
+                if (
+                    isset($errorConf[$indice . '.']) &&
+                    isset($errorConf[$indice . '.']['redirect.']) &&
+                    isset($errorConf[$indice . '.']['redirect.']['pid'])
+                ) {
+                    $pid = $errorConf[$indice . '.']['redirect.']['pid'];
+                    $url = tx_div2007_alpha5::getTypoLink_URL_fh003(
                         $this->cObj,
-                        $helpTemplate,
-                        TT_PRODUCTS_EXT,
-                        $errorMessage,
-                        $theCode
+                        $pid,
+                        $urlObj->getLinkParams(
+                            'product,article',
+                            '',
+                            true,
+                            false
+                        ),
+                        '',
+                        array()
                     );
-				$bErrorFound = true;
-				unset($errorMessage);
-			}
 
-			if (intval($this->conf['wrapInCode']))	{
-				$content .= tx_div2007_alpha5::wrapContentCode_fh004($contentTmp,$theCode,$pibaseObj->prefixId,$this->cObj->data['uid']);
-			} else if (!$bErrorFound) {
-				$content .= $contentTmp;
-			}
-		}
+                    if ($url != '') {
+                        \TYPO3\CMS\Core\Utility\HttpUtility::redirect($url);
+                    }
+                }
 
-		if ($errorMessage) {
-			$content = '<p><b>'.$errorMessage.'</b></p>';
-		}
+                if ($key == 0) {
+                    $messageArr = explode('|', $message = $languageObj->getLabel($indice));
+                    $contentTmp .= '<b>' . $languageObj->getLabel('tt_products') . ': ' . $messageArr[0] . '</b>';
+                } else {
+                    $contentTmp .= '<b>' . $indice . $messageArr[$i] . '</b>';
+                }
+                $i++;
+            }
+            $errorCode = array();
+        }
+
+        if ($contentTmp == 'error') {
+            $fileName = 'EXT:' . TT_PRODUCTS_EXT . '/template/products_help.tmpl';
+            $helpTemplate =  \JambageCom\Div2007\Utility\FrontendUtility::fileResource($fileName);
+            $content .=
+                \JambageCom\Div2007\Utility\ViewUtility::displayHelpPage(
+                    $languageObj,
+                    $this->cObj,
+                    $helpTemplate,
+                    TT_PRODUCTS_EXT,
+                    $errorMessage,
+                    $theCode
+                );
+            $bErrorFound = true;
+            unset($errorMessage);
+        }
+
+        if (intval($this->conf['wrapInCode'])) {
+            $content .=
+                tx_div2007_alpha5::wrapContentCode_fh004(
+                    $contentTmp,
+                    $theCode,
+                    $pibaseObj->prefixId,
+                    $this->cObj->data['uid']
+                );
+        } else if (!$bErrorFound) {
+            $content .= $contentTmp;
+        }
+
+        if ($errorMessage) {
+            $content = '<p><b>' . $errorMessage . '</b></p>';
+        }
 
 		if ($bRunAjax || !intval($this->conf['wrapInBaseClass']))	{
 			$rc = $content;
