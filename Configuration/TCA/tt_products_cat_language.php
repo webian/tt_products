@@ -116,6 +116,22 @@ $result = array (
 				)
 			)
 		),
+        'fe_group' => array (
+            'exclude' => 1,
+            'label' => DIV2007_LANGUAGE_LGL . 'fe_group',
+            'config' => array (
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'items' => array (
+                    array('', 0),
+                    array(DIV2007_LANGUAGE_LGL . 'hide_at_login', -1),
+                    array(DIV2007_LANGUAGE_LGL . 'any_login', -2),
+                    array(DIV2007_LANGUAGE_LGL . 'usergroups', '--div--')
+                ),
+                'foreign_table' => 'fe_groups',
+                'default' => 0,
+            )
+        ),
 		'title' => array (
 			'exclude' => 0,
 			'label' => DIV2007_LANGUAGE_LGL . 'title',

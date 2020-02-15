@@ -177,6 +177,7 @@ $result = array (
 						'expandAll' => 1,
 						'showHeader' => true,
 						'maxLevels' => 99,
+						'width' => 500,
 					)
 				),
 				'exclude' => 1,
