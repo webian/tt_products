@@ -710,6 +710,9 @@ CREATE TABLE sys_products_orders_mm_tt_products (
 # Table structure for table 'fe_users'
 #
 CREATE TABLE fe_users (
+	static_info_country char(3) DEFAULT '' NOT NULL,
+	zone varchar(45) DEFAULT '' NOT NULL,
+	cnum varchar(50) DEFAULT '' NOT NULL,
 	tt_products_memoItems tinytext,
 	tt_products_discount decimal(19,2) DEFAULT '0.00' NOT NULL,
 	tt_products_creditpoints decimal(10,0) DEFAULT '0' NOT NULL,

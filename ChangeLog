@@ -1,3 +1,8 @@
+
+
+2020-02-18 Franz Holzinger <franz@ttproducts.de>
+    * add missing fe_users fields: static_info_country, zone, cnum
+
 2020-02-14 Franz Holzinger <franz@ttproducts.de>
     * bugfix: List view failed to show up because of uninitialized parser object.
     * bugfix: An error in a basket view did not get shown in the front end.

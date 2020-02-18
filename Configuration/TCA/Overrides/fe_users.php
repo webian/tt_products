@@ -1,7 +1,42 @@
 <?php
 defined('TYPO3_MODE') || die('Access denied.');
 
+$table = 'fe_users';
+
 $temporaryColumns = array (
+    'cnum' => array(
+        'exclude' => 0,
+        'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:' . $table . '.cnum',
+        'config' => array(
+            'type' => 'input',
+            'size' => '20',
+            'max' => '50',
+            'eval' => 'trim',
+            'default' => ''
+        )
+    ),
+    'static_info_country' => array(
+        'exclude' => 0,
+        'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:' . $table . '.static_info_country',
+        'config' => array(
+            'type' => 'input',
+            'size' => '5',
+            'max' => '3',
+            'eval' => '',
+            'default' => ''
+        )
+    ),
+    'zone' => array(
+        'exclude' => 0,
+        'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:' . $table . '.zone',
+        'config' => array(
+            'type' => 'input',
+            'size' => '20',
+            'max' => '40',
+            'eval' => 'trim',
+            'default' => ''
+        )
+    ),
 	'tt_products_memoItems' => array (
 		'exclude' => 1,
 		'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:fe_users.tt_products_memoItems',
@@ -115,10 +150,20 @@ $temporaryColumns = array (
 	),
 );
 
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('fe_users', $temporaryColumns);
+$columns = array_keys($temporaryColumns);
+
+foreach ($columns as $column) {
+    if (isset($GLOBALS['TCA'][$table]['columns'][$column])) {
+        unset($temporaryColumns[$column]);
+    }
+}
+
+$columns = array_keys($temporaryColumns);
+
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns($table, $temporaryColumns);
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
-	'fe_users',
-	'tt_products_creditpoints,tt_products_vouchercode,tt_products_memoItems,tt_products_discount,tt_products_vat,tt_products_business_partner,tt_products_organisation_form'
+    $table,
+    implode(',', $columns)
 );
 
 
