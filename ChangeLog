@@ -1,4 +1,6 @@
 
+2020-02-19 Franz Holzinger <franz@ttproducts.de>
+    * add missing tt_products_texts field: t3ver_label
 
 2020-02-18 Franz Holzinger <franz@ttproducts.de>
     * add missing fe_users fields: static_info_country, zone, cnum
