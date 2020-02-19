@@ -232,7 +232,7 @@ class tx_ttproducts_basket_calculate implements \TYPO3\CMS\Core\SingletonInterfa
 					$this->calculatedArray['noDiscountPriceNoTax']['goodstotal'] += $priceObj->getPrice($basketExtra, $row['price'] * $actItem['count'], false, $row, $conf['TAXincluded']);
 
 					if ($conf['TAXmode'] == '1')	{
-						$taxstr = strval(number_format($tax,2)); // needed for floating point taxes as in Swizzerland
+						$taxstr = strval(number_format($tax, 2)); // needed for floating point taxes as in Swizzerland
 						$itemArray[$sort][$k1]['totalTax'] = $priceObj->getPrice($basketExtra, $itemArray[$sort][$k1]['totalNoTax'], true, $row, false);
 						$itemArray[$sort][$k1]['total0Tax'] = $priceObj->getPrice($basketExtra, $itemArray[$sort][$k1]['total0NoTax'], true, $row, false);
 						$this->calculatedArray['priceNoTax']['goodssametaxtotal'][$taxstr] +=  $itemArray[$sort][$k1]['totalNoTax'];
