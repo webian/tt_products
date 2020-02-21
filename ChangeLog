@@ -1,4 +1,7 @@
 
+2020-02-21 Franz Holzinger <franz@ttproducts.de>
+    * bugfix: calculatedArray for sametaxtotal must consider the tax as array key
+    
 2020-02-19 Franz Holzinger <franz@ttproducts.de>
     * add missing tt_products_texts field: t3ver_label
 

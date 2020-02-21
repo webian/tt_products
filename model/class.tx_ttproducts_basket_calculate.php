@@ -302,10 +302,10 @@ class tx_ttproducts_basket_calculate implements \TYPO3\CMS\Core\SingletonInterfa
 						$taxRow['tax'] = floatval($tax);
 						$newPriceTax = $priceObj->getModePrice($basketExtra, $conf['TAXmode'], $value, true, $taxRow, false, true);
 						$priceTax += $newPriceTax;
+                        $this->calculatedArray[$keyTax]['sametaxtotal'][$tax] = $newPriceTax;
+                        $this->calculatedArray[$keyNoTax]['sametaxtotal'][$tax] = $value;
 					}
-					$this->calculatedArray[$keyNoTax]['sametaxtotal'] = $this->calculatedArray[$keyNoTax]['goodssametaxtotal'];
-					$this->calculatedArray[$keyTax]['goodstotal'] = $priceTax;
-					// $this->calculatedArray['priceTax']['total'] += $priceTax;
+                    $this->calculatedArray[$keyTax]['goodstotal'] = $priceTax;
 				}
 
 				$controlCatCalcCatArray = array('categoryPriceTax' => 'categoryPriceNoTax');
@@ -320,6 +320,8 @@ class tx_ttproducts_basket_calculate implements \TYPO3\CMS\Core\SingletonInterfa
 								$newPriceTax = $priceObj->getModePrice($basketExtra, $conf['TAXmode'], $value, true, $taxRow, false);
 								$priceTax += $newPriceTax;
 								$priceTaxArray[$cat] = $newPriceTax;
+								$this->calculatedArray[$keyNoTax]['sametaxtotal'][$cat][$tax] = $value;
+								$this->calculatedArray[$keyTax]['sametaxtotal'][$cat][$tax] = $newPriceTax;
 							}
 						}
 					}
