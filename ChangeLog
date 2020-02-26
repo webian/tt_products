@@ -1,3 +1,5 @@
+2020-02-26 Franz Holzinger <franz@ttproducts.de>
+    * bugfix issue #53: add the missing language variable
 
 2020-02-21 Franz Holzinger <franz@ttproducts.de>
     * bugfix: calculatedArray for sametaxtotal must consider the tax as array key
