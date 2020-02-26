@@ -63,11 +63,15 @@ class tx_ttproducts_template implements \TYPO3\CMS\Core\SingletonInterface {
 		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$conf = $cnf->getConf();
 		$templateFile = $cnf->getTemplateFile($theCode);
-
+		$pathFilename = '';
 		if ($templateFile) {
+            $pathFilename = $GLOBALS['TSFE']->tmpl->getFileName($templateFile);
+		}
+
+		if (file_exists($pathFilename)) {
 
 			// template file is fetched. The whole template file from which the various subpart are extracted.
-			$templateCode = file_get_contents($GLOBALS['TSFE']->tmpl->getFileName($templateFile));
+			$templateCode = file_get_contents($pathFilename);
 		}
 
 		if (
@@ -81,7 +85,7 @@ class tx_ttproducts_template implements \TYPO3\CMS\Core\SingletonInterface {
 			if (!count($errorCode)) {
 				$errorCode[0] = 'no_template';
 				$errorCode[1] =  ' plugin.' . TT_PRODUCTS_EXT . '.' . $tmplText . ' = ' .
-					($templateFile ? "'" . $templateFile . "'" : '""');
+					($templateFile ? $templateFile : '');
 			}
 		}
 
