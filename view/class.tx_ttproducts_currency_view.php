@@ -27,7 +27,7 @@
 /**
  * Part of the tt_products (Shop System) extension.
  *
- * currency functions
+ * This has never been used. It is removed from now on.
  *
  * @author  Milosz Klosowicz <typo3@miklobit.com>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
@@ -63,27 +63,8 @@ class tx_ttproducts_currency_view implements \TYPO3\CMS\Core\SingletonInterface 
 	 * currency selector
 	 */
 	function printView()  {
-		$currList = $this->exchangeRate->initCurrencies($this->BaseCurrency);
-		$jScript =  '	var currlink = new Array(); '.chr(10);
-		$index = 0;
-		foreach( $currList as $key => $value)	{
-			//$url = $this->getLinkUrl('','',array('C' => 'C='.$key));
-			$url = $this->pibase->pi_getPageLink($GLOBALS['TSFE']->id,'',$this->urlObj->getLinkParams('',array('C' => 'C='.$key),true));
-			$jScript .= '	currlink['.$index.'] = "'.$url.'"; '.chr(10) ;
-			$index ++ ;
-		}
-
-		$content = tx_div2007_core::getSubpart($this->templateCode, $this->subpartmarkerObj->spMarker('###CURRENCY_SELECTOR###'));
-		$content = $this->pibase->cObj->substituteMarker( $content, '###CURRENCY_FORM_NAME###', 'tt_products_currsel_form' );
-		$onChange = 'if (!document.tt_products_currsel_form.C.options[document.tt_products_currsel_form.C.selectedIndex].value) return; top.location.replace(currlink[document.tt_products_currsel_form.C.selectedIndex] );';
-		$selector = $this->exchangeRate->buildCurrSelector($this->BaseCurrency,'C','',$this->currency, $onChange);
-		$content = $this->pibase->cObj->substituteMarker( $content, '###SELECTOR###', $selector );
-
-		// javascript to submit correct get parameters for each currency
-		$GLOBALS['TSFE']->additionalHeaderData['tx_ttproducts'] = '<script type="text/javascript">'.chr(10).$jScript.'</script>';
-		return $content ;
+		return false;
 	}
-
 }
 
 

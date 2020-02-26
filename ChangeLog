@@ -1,5 +1,6 @@
 2020-02-26 Franz Holzinger <franz@ttproducts.de>
     * bugfix issue #54: make the templateFile based on a plugin code
+    * remove function printView of class class.tx_ttproducts_currency_view
 
 2020-02-26 Franz Holzinger <franz@ttproducts.de>
     * bugfix issue #53: add the missing language variable
