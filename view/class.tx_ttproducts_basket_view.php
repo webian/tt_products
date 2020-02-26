@@ -52,7 +52,7 @@ class tx_ttproducts_basket_view implements \TYPO3\CMS\Core\SingletonInterface {
 	public $conf;
 	public $config;
 	public $price; // price object
-	public $templateCode='';		// In init(), set to the content of the templateFile. Used by default in getView()
+	public $templateCode = '';		// In init(), set to the content of the templateFile. Used by default in getView()
 	public $urlObj; // url functions
 	public $urlArray; // overridden url destinations
 	public $funcTablename;
@@ -71,7 +71,7 @@ class tx_ttproducts_basket_view implements \TYPO3\CMS\Core\SingletonInterface {
 		$pibaseClass,
 		$urlArray = array(),
 		$useArticles,
-		&$templateCode,
+        $templateCode,
 		&$error_code
 	)	{
 		$this->pibaseClass = $pibaseClass;
@@ -80,7 +80,7 @@ class tx_ttproducts_basket_view implements \TYPO3\CMS\Core\SingletonInterface {
 		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$this->conf = &$cnf->conf;
 		$this->config = &$cnf->config;
-		$this->templateCode = &$templateCode;
+		$this->templateCode = $templateCode;
 		$this->error_code = &$error_code;
 		$this->useArticles = $useArticles;
 
@@ -147,7 +147,7 @@ class tx_ttproducts_basket_view implements \TYPO3\CMS\Core\SingletonInterface {
 	 * This generates the shopping basket layout and also calculates the totals. Very important function.
 	 */
 	public function getView (
-		&$templateCode,
+		$templateCode,
 		$theCode,
 		$infoObj,
 		$bSelectSalutation,
@@ -163,7 +163,7 @@ class tx_ttproducts_basket_view implements \TYPO3\CMS\Core\SingletonInterface {
 	)	{
 			/*
 				Very central function in the library.
-				By default it extracts the subpart, ###BASKET_TEMPLATE###, from the $templateCode (if given, else the default $this->templateCode)
+				By default it extracts the subpart, ###BASKET_TEMPLATE###, from the $templateCode 
 				and substitutes a lot of fields and subparts.
 				Any pre-preparred fields can be set in $mainMarkerArray, which is substituted in the subpart before the item-and-categories part is substituted.
 			*/
@@ -215,17 +215,24 @@ class tx_ttproducts_basket_view implements \TYPO3\CMS\Core\SingletonInterface {
 
 		$paymentshippingObj = GeneralUtility::makeInstance('tx_ttproducts_paymentshipping');
 		$priceViewObj = GeneralUtility::makeInstance('tx_ttproducts_field_price_view');
-
 		$this->urlObj = GeneralUtility::makeInstance('tx_ttproducts_url_view'); // a copy of it
 
-		if ($templateCode == '')	{
-			$templateCode = &$this->templateCode;
+
+		if ($templateCode == '') {
+			$templateCode = $this->templateCode;
+			if ($templateCode == '') {
+				$templateObj = GeneralUtility::makeInstance('tx_ttproducts_template');
+				$this->error_code[0] = 'empty_template';
+				$this->error_code[1] = ($templateFilename ? $templateFilename : $templateObj->getTemplateFile());
+				return '';
+			}
 		}
+
 			// Getting subparts from the template code.
 		$t = array();
 		$feuserSubpartArray = array();
 		$feuserWrappedSubpartArray = array();
-		$tempContent = tx_div2007_core::getSubpart($templateCode, $subpartmarkerObj->spMarker('###'.$subpartMarker.$this->config['templateSuffix'].'###'));
+		$tempContent = tx_div2007_core::getSubpart($templateCode, $subpartmarkerObj->spMarker('###' . $subpartMarker . $this->config['templateSuffix'] . '###'));
 
 		$viewTagArray = $markerObj->getAllMarkers($tempContent);
 
@@ -238,8 +245,12 @@ class tx_ttproducts_basket_view implements \TYPO3\CMS\Core\SingletonInterface {
 		);
 
 		if (!$tempContent)	{
-			$tempContent = tx_div2007_core::getSubpart($templateCode, $subpartmarkerObj->spMarker('###' . $subpartMarker . '###'));
-		}
+			$tempContent =
+                tx_div2007_core::getSubpart(
+                    $templateCode,
+                    $subpartmarkerObj->spMarker('###' . $subpartMarker . '###')
+                );
+        }
 
 		$markerArray = array();
 		if (isset($mainMarkerArray) && is_array($mainMarkerArray))	{

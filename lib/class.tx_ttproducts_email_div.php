@@ -226,7 +226,7 @@ class tx_ttproducts_email_div {
 				$recipients = implode($recipients,',');
 
 				if ($bHtmlMail) {	// If htmlmail lib is included, then generate a nice HTML-email
-					$HTMLmailShell = tx_div2007_core::getSubpart($this->templateCode, '###EMAIL_HTML_SHELL###');
+					$HTMLmailShell = tx_div2007_core::getSubpart($templateCode, '###EMAIL_HTML_SHELL###');
 					$HTMLmailContent = $parser->substituteMarker($HTMLmailShell, '###HTML_BODY###', $emailContent);
 					$markerObj = GeneralUtility::makeInstance('tx_ttproducts_marker');
 					$HTMLmailContent = $parser->substituteMarkerArray($HTMLmailContent,  $markerObj->getGlobalMarkerArray());

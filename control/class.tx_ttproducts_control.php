@@ -593,7 +593,7 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
                 $mainMarkerArray['###FORM_URL_NEXT_ACTIVITY###'] = $nextUrl;
 
 				$paymentHTML = $basketView->getView(
-					$empty,
+                    $templateCode,
 					$theCode,
 					$infoViewObj,
 					$this->activityArray['products_info'],
@@ -800,11 +800,16 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 						}
 					break;
 					case 'products_info':
-						// if (!$activityArray['products_payment'] && !$activityArray['products_finalize']) {
-						tx_div2007_alpha5::load_noLinkExtCobj_fh002($this->pibase); // TODO
+						tx_div2007_alpha5::load_noLinkExtCobj_fh002($this->pibase);
 						$basket_tmpl = 'BASKET_INFO_TEMPLATE';
-						// }
-					break;
+                        if (
+                            $codeActivityArray[$activity] ||
+                            $activityArray['products_basket'] == false
+                        ) {
+                            $theCode = 'INFO';
+                        }
+
+                        break;
 					case 'products_payment':
 						$bPayment = true;
 						$orderUid = $this->getOrderUid();
