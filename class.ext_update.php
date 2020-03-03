@@ -49,13 +49,13 @@ class ext_update  {
 			$content .= '<p>You have integrated ' . $count . ' articles into the table tt_products_products_mm_articles</p>';
 			$content .= '<p>Done</p>';
 		} else {
-			$linkScript = \TYPO3\CMS\Core\Utility\GeneralUtility::slashJS(\TYPO3\CMS\Core\Utility\GeneralUtility::linkThisScript());
+			$linkScript = str_replace('\'', '\\\'', \TYPO3\CMS\Core\Utility\GeneralUtility::linkThisScript());
 
 			$content .= '<br /><br />';
 			$content .= 'This integration works only once. When you added entries in the articles table <br />'.
 				'and you want to do it again you have to select \'UPDATE!\' in the EM.';
 			$content .= '<br /><br />';
-			$content .= '<input type="submit" name="integrate" value="Integrate the product articles table into the relational mm table" onclick="this.form.action=\''.$linkScript.'\';submit();" />';
+			$content .= '<input type="submit" name="integrate" value="Integrate the product articles table into the relational mm table" onclick="this.form.action=\'' . $linkScript . '\';submit();" />';
 		}
 
 		return $content;
