@@ -304,6 +304,7 @@ class tx_ttproducts_basket_calculate implements \TYPO3\CMS\Core\SingletonInterfa
 						$priceTax += $newPriceTax;
                         $this->calculatedArray[$keyTax]['sametaxtotal'][$tax] = $newPriceTax;
                         $this->calculatedArray[$keyNoTax]['sametaxtotal'][$tax] = $value;
+                        $this->calculatedArray[$keyTax]['goodssametaxtotal'][$tax] = $newPriceTax;
 					}
                     $this->calculatedArray[$keyTax]['goodstotal'] = $priceTax;
 				}
