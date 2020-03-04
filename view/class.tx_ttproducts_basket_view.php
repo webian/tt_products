@@ -1147,7 +1147,7 @@ class tx_ttproducts_basket_view implements \TYPO3\CMS\Core\SingletonInterface {
 
 			$frameWork = $parser->substituteSubpart($t['basketFrameWork'], '###ITEM_CATEGORY_AND_ITEMS###', $out);
 
-			$paymentshippingObj->getSubpartArrays($basketExtra, $markerArray, $subpartArray, $wrappedSubpartArray, $frameWork);
+			$paymentshippingObj->getSubpartArrays($subpartArray, $wrappedSubpartArray, $basketExtra, $markerArray, $frameWork);
 			$feUsersViewObj->getWrappedSubpartArray(
 				$viewTagArray,
 				$bUseBackPid,

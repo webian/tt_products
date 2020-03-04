@@ -145,10 +145,10 @@ class tx_ttproducts_paymentshipping implements \TYPO3\CMS\Core\SingletonInterfac
 	 * @access private
 	 */
 	public function getSubpartArrays (
-		$basketExtra,
-		$markerArray,
 		&$subpartArray,
 		&$wrappedSubpartArray,
+		$basketExtra,
+		$markerArray,
 		$framework
 	)	{
 		$markerObj = GeneralUtility::makeInstance('tx_ttproducts_marker');
@@ -210,7 +210,7 @@ class tx_ttproducts_paymentshipping implements \TYPO3\CMS\Core\SingletonInterfac
 				}
 			}
 		}
-		$tagArray = &$markerObj->getAllMarkers($framework);
+		$tagArray = $markerObj->getAllMarkers($framework);
 
 		foreach($typeArray as $k => $pskey)	{
 			$marker = strtoupper($pskey);

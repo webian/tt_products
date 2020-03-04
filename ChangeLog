@@ -1,3 +1,6 @@
+2020-03-04 Franz Holzinger <franz@ttproducts.de>
+    * bugfix: ###MESSAGE_PAYMENT### markers did not work on the FINALIZE plugin
+
 2020-02-26 Franz Holzinger <franz@ttproducts.de>
     * add calculatedArray for indices priceTax and goodssametaxtotal
 

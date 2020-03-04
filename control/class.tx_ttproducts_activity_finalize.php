@@ -211,7 +211,11 @@ class tx_ttproducts_activity_finalize {
 				$basketObj->getCalculatedArray(),
 				true,
 				'BASKET_ORDERCONFIRMATION_TEMPLATE',
-				$mainMarkerArray
+				$mainMarkerArray,
+				'',
+				array(),
+				array(),
+				$basketExtra
 			);
 
 		$orderConfirmationHTML =
@@ -322,7 +326,7 @@ class tx_ttproducts_activity_finalize {
 				$basketObj->getCalculatedArray(),
 				$accountUid
 			);
-			$csvfilepath = PATH_site.$this->conf['CSVdestination'];
+			$csvfilepath = PATH_site . $this->conf['CSVdestination'];
 			$csvorderuid = $basketObj->order['orderUid'];
 			$csv->create($functablename, $infoViewObj, $csvorderuid, $basketExtra, $csvfilepath, $errorMessage);
 			if (!$this->conf['CSVnotInEmail']) {
