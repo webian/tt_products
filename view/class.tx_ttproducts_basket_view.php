@@ -149,7 +149,7 @@ class tx_ttproducts_basket_view implements \TYPO3\CMS\Core\SingletonInterface {
 	public function getView (
 		$templateCode,
 		$theCode,
-		$infoObj,
+		$infoViewObj,
 		$bSelectSalutation,
 		$bSelectVariants,
 		$calculatedArray,
@@ -990,8 +990,8 @@ class tx_ttproducts_basket_view implements \TYPO3\CMS\Core\SingletonInterface {
 			if (!$GLOBALS['TSFE']->loginUser)	{		// Remove section for FE_USERs only, if there are no fe_user
 				$subpartArray['###FE_USER_SECTION###'] = '';
 			}
-			if (is_object($infoObj))	{
-				$infoObj->getRowMarkerArray($basketExtra, $markerArray, $bHtml, $bSelectSalutation);
+			if (is_object($infoViewObj))	{
+				$infoViewObj->getRowMarkerArray($basketExtra, $markerArray, $bHtml, $bSelectSalutation);
 			}
 
 			$fieldsTempArray = $markerObj->getMarkerFields(

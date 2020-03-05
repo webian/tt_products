@@ -36,8 +36,6 @@
  *
  * DIBS:	http://www.dibs.dk
  *
- * $Id: payment_DIBS.php 6 2011-03-09 11:29:28Z svn $
- *
  * @author  Kasper Skårhøj <kasperYYYY@typo3.com>
  * @author  Franz Holzinger <franz@ttproducts.de>
  * @maintainer	Franz Holzinger <franz@ttproducts.de>
@@ -57,10 +55,11 @@ $lConf = $confScript;
 $fileresource =  \JambageCom\Div2007\Utility\FrontendUtility::fileResource($lConf['templateFile'] ? $lConf['templateFile'] : 'EXT:tt_products/template/payment_DIBS_template.tmpl');
 
 $localTemplateCode = $fileresource;		// Fetches the DIBS template file
+
 if (!is_object($basketView))	{
 	$error_code = '';
 	$basketView = GeneralUtility::makeInstance('tx_ttproducts_basket_view',1);
-	$basketView->init ($pibase, array(), false, $this->templateCode, $error_code);
+	$basketView->init ($pibase, array(), false, $localTemplateCode, $error_code);
 }
 $markerObj = GeneralUtility::makeInstance('tx_ttproducts_marker');
 $localTemplateCode = tx_div2007_core::substituteMarkerArrayCached($localTemplateCode, $markerObj->getGlobalMarkerArray());
@@ -299,7 +298,7 @@ value="'.$priceViewObj->priceFormat($calculatedArray['priceTax']['total'] - $cal
 					$markerArray
 				);
 			$error=''; // TODO
-			$this->order->finalize($basketView->templateCode, $basketView, $this->basket->tt_products /* TODO */,$this->basket->tt_products_cat, $this->basket->price, $orderUid,$content,$error);  // Important: $oder->finalize MUST come after the call of prodObj->getBasket, because this function, getBasket, calculates the order! And that information is used in the finalize-function
+			$this->order->finalize($localTemplateCode, $basketView, $this->basket->tt_products /* TODO */,$this->basket->tt_products_cat, $this->basket->price, $orderUid,$content,$error);  // Important: $oder->finalize MUST come after the call of prodObj->getBasket, because this function, getBasket, calculates the order! And that information is used in the finalize-function
 		}
 	break;
 	default:

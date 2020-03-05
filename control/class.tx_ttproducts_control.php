@@ -306,7 +306,10 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 					true,
 					'TRANSACTOR_FORM_TEMPLATE',
 					$markerArray,
-					$templateFilename
+					$templateFilename,
+					$this->basket->getItemArray(),
+					array(),
+					$basketExtra
 				);
 			}
 		}
@@ -603,7 +606,7 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 					$basket_tmpl,
 					$mainMarkerArray,
                     '',
-                    array(),
+                    $this->basket->getItemArray(),
                     array(),
 					$basketExtra
 				);
@@ -1108,8 +1111,13 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 						$calculatedArray,
 						true,
 						$tmpl,
-						$mainMarkerArray
+						$mainMarkerArray,
+						'',
+						$this->basket->getItemArray(),
+						array(),
+						$basketExtra
 					);
+
 					if ($contentTmpThanks != '') {
 						$contentTmp = $contentTmpThanks;
 					}
@@ -1127,7 +1135,11 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 					$calculatedArray,
 					true,
 					'BASKET_ORDERCONFIRMATION_NOSAVE_TEMPLATE',
-					$mainMarkerArray
+					$mainMarkerArray,
+					'',
+					$this->basket->getItemArray(),
+					array(),
+					$basketExtra
 				);
 				$content .= $contentNoSave;
 

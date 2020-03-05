@@ -213,7 +213,7 @@ class tx_ttproducts_activity_finalize {
 				'BASKET_ORDERCONFIRMATION_TEMPLATE',
 				$mainMarkerArray,
 				'',
-				array(),
+				$itemArray,
 				array(),
 				$basketExtra
 			);
@@ -239,7 +239,11 @@ class tx_ttproducts_activity_finalize {
 				$basketObj->getCalculatedArray(),
 				true,
 				$emailControlArray['customer']['none']['htmltemplate'],
-				$markerArray
+				$markerArray,
+				'',
+				$itemArray,
+				array(),
+				$basketExtra
 			);
 
 		$result = $orderConfirmationHTML;
@@ -614,9 +618,12 @@ class tx_ttproducts_activity_finalize {
 									$suffixControlArray['template'],
 									$mainMarkerArray,
 									'',
-									$basketItemArray
+									$basketItemArray,
+                                    array(),
+                                    $basketExtra
 								);
 							$basketText = trim($basketText);
+
                             if ($this->conf['orderEmail_htmlmail']) {
                                 $basketHtml =
                                     $basketView->getView(
@@ -624,13 +631,15 @@ class tx_ttproducts_activity_finalize {
                                         'EMAIL',
                                         $infoViewObj,
                                         false,
-                                        true,
+                                        false,
                                         $calculatedArray,
                                         true,
                                         $suffixControlArray['htmltemplate'],
                                         $mainMarkerArray,
                                         '',
-                                        $basketItemArray
+                                        $basketItemArray,
+                                        array(),
+                                        $basketExtra
                                     );
                             }
                             $basketHtml = trim($basketHtml);
@@ -714,7 +723,7 @@ class tx_ttproducts_activity_finalize {
 							$emailKey = 'customer';
 						}
 
-						$calculatedArray = $calculObj->getCalculatedArray();  // Todo: use a different calculation
+						$calculatedArray = $calculObj->getCalculatedArray();  // TODO: use a different calculation
 						$reducedBasketPlaintext =
 							trim (
 								$basketView->getView(
@@ -728,7 +737,9 @@ class tx_ttproducts_activity_finalize {
 									$emailControlArray[$emailKey]['none']['template'],
 									$mainMarkerArray,
 									'',
-									$reducedItemArray
+									$reducedItemArray,
+                                    array(),
+                                    $basketExtra
 								)
 							);
 						$this->splitSubjectAndText(
@@ -751,13 +762,15 @@ class tx_ttproducts_activity_finalize {
 										'EMAIL',
 										$infoViewObj,
 										false,
-										true,
+										false,
 										$calculatedArray,
 										true,
 										$emailControlArray[$emailKey]['none']['htmltemplate'],
 										$mainMarkerArray,
 										'',
-										$reducedItemArray
+										$reducedItemArray,
+										array(),
+										$basketExtra
 									)
 								);
 
@@ -796,7 +809,6 @@ class tx_ttproducts_activity_finalize {
 
 			if ($emailControlArray['radio1']['none']['plaintext'] && is_array($emailControlArray['radio1']['none']['recipient'])) {
 				foreach ($emailControlArray['radio1']['none']['recipient'] as $key => $recipient) {
-
                     tx_ttproducts_email_div::send_mail(
 						$recipient,
 						$apostrophe . $emailControlArray['radio1']['none']['subject'] . $apostrophe,

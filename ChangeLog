@@ -1,4 +1,5 @@
-2020-03-04 Franz Holzinger <franz@ttproducts.de>
+2020-03-05 Franz Holzinger <franz@ttproducts.de>
+    * bugfix: provide all parameters to calls of tx_ttproducts_basket_view::getView
     * bugfix: ###MESSAGE_PAYMENT### markers did not work on the FINALIZE plugin
 
 2020-02-26 Franz Holzinger <franz@ttproducts.de>

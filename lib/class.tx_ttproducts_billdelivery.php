@@ -154,7 +154,11 @@ class tx_ttproducts_billdelivery implements \TYPO3\CMS\Core\SingletonInterface {
                     $basketObj->getCalculatedArray(),
                     false,
                     $subpart,
-                    $mainMarkerArray
+                    $mainMarkerArray,
+                    '',
+                    $basketObj->getItemArray(),
+                    array(),
+                    $basketExtra
                 );
                 $subpart = $typeCode . '_PDF_TEMPLATE';
                 $body = $basketView->getView(
@@ -166,7 +170,11 @@ class tx_ttproducts_billdelivery implements \TYPO3\CMS\Core\SingletonInterface {
                     $basketObj->getCalculatedArray(),
                     false,
                     $subpart,
-                    $mainMarkerArray
+                    $mainMarkerArray,
+                    '',
+                    $basketObj->getItemArray(),
+                    array(),
+                    $basketExtra
                 );
 
                 $subpart = $typeCode . '_PDF_FOOTER_TEMPLATE';
@@ -179,7 +187,11 @@ class tx_ttproducts_billdelivery implements \TYPO3\CMS\Core\SingletonInterface {
                     $basketObj->getCalculatedArray(),
                     false,
                     $subpart,
-                    $mainMarkerArray
+                    $mainMarkerArray,
+                    '',
+                    $basketObj->getItemArray(),
+                    array(),
+                    $basketExtra
                 );
                 $absFileName = $this->getFileAbsFileName($type, $basketObj->order['orderTrackingNo'], 'pdf');
 
@@ -202,7 +214,11 @@ class tx_ttproducts_billdelivery implements \TYPO3\CMS\Core\SingletonInterface {
                     $basketObj->getCalculatedArray(),
                     true,
                     $subpart,
-                    $mainMarkerArray
+                    $mainMarkerArray,
+                    '',
+                    $basketObj->getItemArray(),
+                    array(),
+                    $basketExtra
                 );
 
                 if (!isset($basketView->error_code) || $basketView->error_code[0]=='') {
