@@ -862,7 +862,7 @@ class tx_ttproducts_basket implements \TYPO3\CMS\Core\SingletonInterface {
 							$articleRowArray = $viewTableObj->getArticleRowsFromVariant($currRow, 'BASKET', $bextVars);
 						}
 
-						if (count($articleRowArray))	{
+						if (!empty($articleRowArray))	{
 							foreach ($articleRowArray as $articleRow)	{
 
 									// use the fields of the article instead of the product

@@ -107,6 +107,7 @@ class tx_ttproducts_variant_dummy  implements \TYPO3\CMS\Core\SingletonInterface
 	}
 
 	public function filterArticleRowsByVariant($row, $variant, $articleRows, $bCombined=false) {
+        return array();
 	}
 
 	public function getFieldArray ()	{
