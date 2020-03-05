@@ -38,6 +38,7 @@
  */
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\MathUtility;
 
 
 
@@ -101,9 +102,12 @@ class tx_ttproducts_pricetablescalc extends tx_ttproducts_pricecalc_base {
 						$len = strlen($formula);
 						$lastChar = substr($formula,-1,1);
 
-						if (
-							tx_div2007_core::testInt($lastChar)
-						) {
+                        if (
+                            $lastChar != '' &&
+                            (
+                                !MathUtility::canBeInterpretedAsInteger($lastChar)
+                            )
+                        ) {
 							$formula = substr($formula,0,strlen($formula)-1);
 							switch ($lastChar)	{
 								case '%':
