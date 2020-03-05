@@ -137,7 +137,7 @@ class tx_ttproducts_basket implements \TYPO3\CMS\Core\SingletonInterface {
 					if ($radioUid)	{
 						$rowArray = $viewTableObj->get('',0,false,$inputConf['where']);
 
-						if (count($rowArray))	{
+						if (!empty($rowArray))	{
 							foreach($rowArray as $uid => $row)	{
 								if ($uid == $radioUid)	{
 									$basketExtRaw[$uid]['quantity'] = 1;
@@ -321,7 +321,7 @@ class tx_ttproducts_basket implements \TYPO3\CMS\Core\SingletonInterface {
 		$cnfObj = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$basketConf = $cnfObj->getBasketConf('view', 'input');
 		$result = false;
-		if (count($basketConf)) {
+		if (!empty($basketConf)) {
 			foreach ($basketConf as $lineNo => $inputConf) {
 				if (strpos($lineNo, '.') !== false)	{
 					$bIsValid = tx_ttproducts_sql::isValid($row, $inputConf['where']);
@@ -594,7 +594,7 @@ class tx_ttproducts_basket implements \TYPO3\CMS\Core\SingletonInterface {
 
 	public function isInBasket ($prod_uid)	{
 		$rc = false;
-		if (count($this->itemArray))	{
+		if (!empty($this->itemArray))	{
 			// loop over all items in the basket indexed by a sort string
 			foreach ($this->itemArray as $sort => $actItemArray) {
 				foreach ($actItemArray as $k1 => $actItem) {
