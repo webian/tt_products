@@ -1,5 +1,7 @@
-2020-03-05 Franz Holzinger <franz@ttproducts.de>
+2020-03-06 Franz Holzinger <franz@ttproducts.de>
+    * bugfix: slugs cannot have the slash / as a separator, because this makes troubles with the resolving of the spelling url. Use a hyphen - as separator.
 
+2020-03-05 Franz Holzinger <franz@ttproducts.de>
     * bugfix no. 86976 forge: count usage on not array
     * bugfix no. 90646 forge: wrong integer comparison in pricetables calculation
     * bugfix: provide all parameters to calls of tx_ttproducts_basket_view::getView
