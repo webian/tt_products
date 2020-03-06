@@ -114,7 +114,7 @@ $result = array (
                 'generatorOptions' => array (
                     'fields' => array ('name', 'crdate'),
                     'fieldSeparator' => '-',
-                    'prefixParentPageSlug' => true,
+                    'prefixParentPageSlug' => false,
                     'replacements' => array (
                         '/' => '',
                     ),

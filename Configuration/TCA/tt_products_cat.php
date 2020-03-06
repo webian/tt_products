@@ -151,7 +151,7 @@ $result = array (
                 'generatorOptions' => array (
                     'fields' => array ('title', 'catid'),
                     'fieldSeparator' => '-',
-                    'prefixParentPageSlug' => true,
+                    'prefixParentPageSlug' => false,
                     'replacements' => array (
                         '/' => '',
                     ),

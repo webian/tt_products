@@ -161,7 +161,7 @@ $result = array(
                 'generatorOptions' => array (
                     'fields' => array ('title', 'itemnumber'),
                     'fieldSeparator' => '-',
-                    'prefixParentPageSlug' => true,
+                    'prefixParentPageSlug' => false,
                     'replacements' => array (
                         '/' => '',
                     ),
@@ -887,9 +887,9 @@ $result = array(
                     )
                 ),
 
-                'showitem' => 'title,--palette--;;7, itemnumber,--palette--;;2, category, price,--palette--;;3, tax;;4, offer,--palette--;;6,weight,--palette--;;8,creditpoints,hidden,--palette--;;1,' .
+                'showitem' => 'title,--palette--;;7, keyword,--palette--;;8, itemnumber,--palette--;;2, category, price,--palette--;;3, tax;;4, offer,--palette--;;6,weight,--palette--;;9,creditpoints,hidden,--palette--;;1,' .
 			'--div--;LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.descriptions,note, note2,note_uid,text_uid,image,smallimage,datasheet,'.
-			'--div--;LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.variants,color,color2,--palette--;;9,size,size2,--palette--;;10,description,gradings,material,quality,--palette--;;,additional,--palette--;;11,'.
+			'--div--;LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.variants,color,color2,--palette--;;10,size,size2,--palette--;;11,description,gradings,material,quality,--palette--;;,additional,--palette--;;12,'.
 			'--div--;LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.graduated,graduated_price_uid,'.
 			'--div--;LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.relations,article_uid,related_uid,accessory_uid,download_info,download_uid,'.
 			'--div--;LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.shippingdiv,shipping_point,shipping,shipping2,handling,delivery,'
@@ -907,14 +907,16 @@ $result = array(
 		'6' =>
 			array('showitem' => 'highlight,bargain'),
 		'7' =>
-			array('showitem' => 'subtitle,slug,keyword,www'),
+			array('showitem' => 'subtitle,www'),
 		'8' =>
-			array('showitem' => 'bulkily,special_preparation,unit,unit_factor'),
+			array('showitem' => 'slug'),
 		'9' =>
-			array('showitem' => 'color3'),
+			array('showitem' => 'bulkily,special_preparation,unit,unit_factor'),
 		'10' =>
-			array('showitem' => 'size3'),
+			array('showitem' => 'color3'),
 		'11' =>
+			array('showitem' => 'size3'),
+		'12' =>
 			array('showitem' => 'usebydate')
 	)
 );

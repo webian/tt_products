@@ -154,7 +154,7 @@ $result = array (
                 'generatorOptions' => array (
                     'fields' => array ('title', 'itemnumber'),
                     'fieldSeparator' => '-',
-                    'prefixParentPageSlug' => true,
+                    'prefixParentPageSlug' => false,
                     'replacements' => array (
                         '/' => '',
                     ),
@@ -464,13 +464,13 @@ $result = array (
                     )
                 ),
 
-                'showitem' => 'hidden,--palette--;;1, title,--palette--;;3, itemnumber, inStock, basketminquantity, price,--palette--;;2;;, weight, color, color2, color3, size, size2, size3, description, gradings, material, quality, note,note2,image,smallimage'
+                'showitem' => 'hidden,--palette--;;1, title,--palette--;;3, itemnumber, slug, inStock, basketminquantity, price,--palette--;;2;;, weight, color, color2, color3, size, size2, size3, description, gradings, material, quality, note,note2,image,smallimage'
             )
     ),
     'palettes' => array (
         '1' => array('showitem' => 'starttime, endtime, fe_group'),
         '2' => array('showitem' => 'price2, config'),
-        '3' => array('showitem' => 'subtitle, slug, keyword'),
+        '3' => array('showitem' => 'subtitle, keyword'),
     )
 );
 
