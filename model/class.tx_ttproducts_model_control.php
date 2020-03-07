@@ -237,7 +237,7 @@ class tx_ttproducts_model_control {
 							}
 							switch ($type)	{
 								case 'sortSelect':
-									if (count($fitArray))	{
+									if (is_array($fitArray) && count($fitArray))	{
 										$fieldArray = array();
 										foreach ($fitArray as $fitRow)	{
 											$fieldArray[] = $fitRow['field'];

@@ -168,7 +168,7 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 
 		if ($bDoProcessing && (method_exists($this->cObj, 'getUserObjectType') && $this->cObj->getUserObjectType() == \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::OBJECTTYPE_USER)) {
 			$intersection = array_intersect(self::$uncachedCodes, $this->codeArray);
-			if (count($intersection)) {
+			if (!empty($intersection)) {
 				if ($this->convertToUserInt()) {
                     $bDoProcessing = false;
 				}
@@ -450,7 +450,7 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 			$errorCode
 		);
 
-		if (!$errorMessage && !count($errorCode))	{
+		if (!$errorMessage && empty($errorCode))	{
 
 			$functablename = 'tt_products';
 			tx_ttproducts_control_memo::process($functablename, $pibaseObj->piVars, $this->conf);
@@ -500,7 +500,7 @@ class tx_ttproducts_main implements \TYPO3\CMS\Core\SingletonInterface {
 			foreach($tableArray as $functablename) {
 				$tableConf = $cnf->getTableConf($functablename, $theCode);
 				$hideIds = '';
-				if (count($tableConf)) {
+				if (!empty($tableConf)) {
 					if (isset($tableConf['hideID'])) {
 						$hideIds = $tableConf['hideID'];
 					}

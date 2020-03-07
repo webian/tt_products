@@ -138,7 +138,7 @@ class tx_ttproducts_memo_view implements \TYPO3\CMS\Core\SingletonInterface {
 			$content = $markerObj->replaceGlobalMarkers($content);
 		}
 
-		if (!$content && !count($error_code)) {
+		if (!$content && empty($error_code)) {
 			$templateObj = GeneralUtility::makeInstance('tx_ttproducts_template');
 			$error_code[0] = 'no_subtemplate';
 			$error_code[1] = '###' . $templateArea . $templateObj->getTemplateSuffix() . '###';

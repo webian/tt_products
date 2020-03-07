@@ -58,7 +58,6 @@ class tx_ttproducts_template implements \TYPO3\CMS\Core\SingletonInterface {
 		&$templateFile,
 		&$errorCode
 	) {
-
 		$templateCode = '';
 		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$conf = $cnf->getConf();
@@ -82,7 +81,8 @@ class tx_ttproducts_template implements \TYPO3\CMS\Core\SingletonInterface {
 			}
 			$tmplText .= 'templateFile';
 
-			if (!count($errorCode)) {
+			if (empty($errorCode)) {
+                $errorCode = [];
 				$errorCode[0] = 'no_template';
 				$errorCode[1] =  ' plugin.' . TT_PRODUCTS_EXT . '.' . $tmplText . ' = ' .
 					($templateFile ? $templateFile : '');

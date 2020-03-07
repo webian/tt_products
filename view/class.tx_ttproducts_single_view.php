@@ -60,7 +60,7 @@ class tx_ttproducts_single_view implements \TYPO3\CMS\Core\SingletonInterface {
 	public $cObj;
 
 
-	public function init ($pibaseClass, $uidArray, $extVars, $pid, $useArticles, $pid_list, $recursive) {
+	public function init ($pibaseClass, array $uidArray, $extVars, $pid, $useArticles, $pid_list, $recursive) {
 
 		$this->pibaseClass = $pibaseClass;
 		$pibaseObj = GeneralUtility::makeInstance(''.$pibaseClass);
@@ -114,7 +114,7 @@ class tx_ttproducts_single_view implements \TYPO3\CMS\Core\SingletonInterface {
 
 		$bUseBackPid = true;
 		$viewControlConf = $cnf->getViewControlConf('SINGLE');
-		if (count($viewControlConf)) {
+		if (is_array($viewControlConf) && count($viewControlConf)) {
 			if (isset($viewControlConf['param.']) && is_array($viewControlConf['param.'])) {
 				$viewParamConf = $viewControlConf['param.'];
 			}
@@ -200,7 +200,7 @@ class tx_ttproducts_single_view implements \TYPO3\CMS\Core\SingletonInterface {
 
 			if ($this->config['displayCurrentRecord'])	{
 				$subPartMarker = 'ITEM_SINGLE_DISPLAY_RECORDINSERT';
-			} else if (count($giftNumberArray)) {
+			} else if (is_array($giftNumberArray) && count($giftNumberArray)) {
 				$subPartMarker = 'ITEM_SINGLE_DISPLAY_GIFT';
 			} else if (!$this->conf['alwaysInStock'] && $row['inStock'] <= 0 && $this->conf['showNotinStock'] && is_array($GLOBALS['TCA'][$itemTableArray[$this->type]->getTableObj()->name]['columns']['inStock']) ) {
 				$subPartMarker = 'ITEM_SINGLE_DISPLAY_NOT_IN_STOCK';
@@ -333,7 +333,7 @@ class tx_ttproducts_single_view implements \TYPO3\CMS\Core\SingletonInterface {
 				}
 			}
 
-			if (count($giftNumberArray)) {
+			if (is_array($giftNumberArray) && count($giftNumberArray)) {
 				$personDataFrameWork = tx_div2007_core::getSubpart($itemFrameWork, '###PERSON_DATA###');
 				// the itemFramework is a smaller part here
 				$itemFrameWork = tx_div2007_core::getSubpart($itemFrameWork, '###PRODUCT_DATA###');
@@ -387,13 +387,14 @@ class tx_ttproducts_single_view implements \TYPO3\CMS\Core\SingletonInterface {
 			$cat = $row['category'];
 			$itemTableConf['category'] = $cnf->getTableConf($viewCatTable->getFuncTablename(), 'SINGLE');
 			$catArray = $viewCatTable->getCategoryArray($row['uid'],$itemTableConf['category']['orderBy']);
-			if (count($catArray))	{
+
+			if (is_array($catArray) && count($catArray))	{
 				reset($catArray);
 				$cat = current($catArray);
 			}
 
 			$categoryMarkerArray = array();
-			$viewCatViewTable->getMarkerArray (
+			$viewCatViewTable->getMarkerArray(
 				$categoryMarkerArray,
 				'',
 				$cat,
@@ -410,12 +411,12 @@ class tx_ttproducts_single_view implements \TYPO3\CMS\Core\SingletonInterface {
 				''
 			);
 
-			$categoryJoin='';
+			$categoryJoin  = '';
 			$whereCat = '';
 			if ($cat) {
 				$currentCat = $pibaseObj->piVars[$viewCatViewTable->getPivar()];
 				if ($currentCat != '')	{
-					$currentCatArray = GeneralUtility::trimExplode(',',$currentCat);
+					$currentCatArray = GeneralUtility::trimExplode(',', $currentCat);
 				}
 				if (isset($currentCatArray) && is_array($currentCatArray))	{
 					$inArray = $GLOBALS['TYPO3_DB']->fullQuoteArray($currentCatArray, 'tt_products');
@@ -426,9 +427,9 @@ class tx_ttproducts_single_view implements \TYPO3\CMS\Core\SingletonInterface {
 						$cat = $currentCat;
 						if ($catMMTable)	{
 							$categoryJoin = $itemTableArray[$this->type]->getTablename().' '.$itemTableArray[$this->type]->getAlias().' INNER JOIN '.$viewCatTable->getMMTablename().' M ON '.$itemTableArray[$this->type]->getAlias().'.uid=M.uid_local';
-							$whereCat = ' AND M.uid_foreign IN ('.$inCat.') ';
+							$whereCat = ' AND M.uid_foreign IN (' . $inCat . ') ';
 						} else {
-							$whereCat = ' AND category IN ('.$inCat.') ';
+							$whereCat = ' AND category IN (' . $inCat . ') ';
 						}
 					}
 				}
@@ -495,7 +496,7 @@ class tx_ttproducts_single_view implements \TYPO3\CMS\Core\SingletonInterface {
 
 			$catTitle = $viewCatViewTable->getMarkerArrayCatTitle($categoryMarkerArray);
 			$viewParentCatTagArray = array();
-			$viewCatViewTable->getParentMarkerArray (
+			$viewCatViewTable->getParentMarkerArray(
 				$parentArray,
 				$row,
 				$catParentArray,

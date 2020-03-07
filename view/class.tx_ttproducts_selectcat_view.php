@@ -80,7 +80,7 @@ class tx_ttproducts_selectcat_view extends tx_ttproducts_catlist_view_base {
 			$ctrlArray
 		);
 
-		if (!count($error_code)) 	{
+		if (empty($error_code)) 	{
 			$count = 0;
 			$depth = 1;
 

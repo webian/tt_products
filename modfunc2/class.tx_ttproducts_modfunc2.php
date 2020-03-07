@@ -132,7 +132,7 @@ class tx_ttproducts_modfunc2 extends \TYPO3\CMS\Backend\Module\AbstractFunctionM
 					}
 				}
 
-				if (count($uidNotFoundArray)) {
+				if (is_array($uidNotFoundArray) && count($uidNotFoundArray)) {
 					$content .= '<br />' . $GLOBALS['LANG']->getLL('no_alternative_product') . ': ' . implode(',', $uidNotFoundArray);
 				}
 

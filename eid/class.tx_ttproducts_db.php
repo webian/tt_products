@@ -470,7 +470,7 @@ class tx_ttproducts_db implements \TYPO3\CMS\Core\SingletonInterface {
 		$mainObj->codeArray = array($code);
 		$tagId = 'tt-products-' . strtolower($code);
 
-		if ($bDoProcessing || count($errorCode)) {
+		if ($bDoProcessing || !empty($errorCode)) {
 			$content = $mainObj->run('tx_ttproducts_pi1_base', $errorCode, $content, true);
 		}
 
@@ -539,7 +539,7 @@ class tx_ttproducts_db implements \TYPO3\CMS\Core\SingletonInterface {
 			);
 
 		if ($tagId != '') {
-			if ($bDoProcessing || count($errorCode)) {
+			if ($bDoProcessing || !empty($errorCode)) {
 				$content = $mainObj->run('tx_ttproducts_pi1_base', $errorCode, $content, true);
 
 				$objResponse->addAssign($tagId, 'innerHTML', $content);

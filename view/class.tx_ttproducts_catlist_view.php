@@ -90,9 +90,9 @@ class tx_ttproducts_catlist_view extends tx_ttproducts_catlist_view_base {
 		$catView = $tablesObj->get($functablename, true);
 		$catTableObj = $catView->getModelObj();
 
-		if (count($error_code)) {
+		if (!empty($error_code)) {
 			// nothing
-		} else if (count($categoryArray)) {
+		} else if (!empty($categoryArray)) {
 			$count = 0;
 			$depth = 1;
 			$countArray = array();
@@ -264,7 +264,7 @@ class tx_ttproducts_catlist_view extends tx_ttproducts_catlist_view_base {
 			$subpartArray['###CATEGORY_SINGLE###'] = $out;
 			$viewConfArray = $this->getViewConfArray();
 
-			if (count($viewConfArray))	{
+			if (!empty($viewConfArray))	{
 				$allMarkers = $this->getTemplateMarkers($t);
 				$addQueryString = array();
 				$markerArray = $this->urlObj->addURLMarkers($GLOBALS['TSFE']->id,$markerArray,$addQueryString,false);

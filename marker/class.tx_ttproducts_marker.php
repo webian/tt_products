@@ -114,7 +114,7 @@ class tx_ttproducts_marker implements \TYPO3\CMS\Core\SingletonInterface {
 		return $this->errorCode;
 	}
 
-	public function setErrorCode ($errorCode)	{
+	public function setErrorCode (array $errorCode)	{
 		$this->errorCode = $errorCode;
 	}
 
@@ -122,11 +122,11 @@ class tx_ttproducts_marker implements \TYPO3\CMS\Core\SingletonInterface {
 		$this->langArray = $langArray;
 	}
 
-	public function &getLangArray ()	{
+	public function getLangArray ()	{
 		return $this->langArray;
 	}
 
-	public function &getGlobalMarkerArray ()	{
+	public function getGlobalMarkerArray ()	{
 		return $this->globalMarkerArray;
 	}
 

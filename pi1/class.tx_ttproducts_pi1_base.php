@@ -83,7 +83,7 @@ class tx_ttproducts_pi1_base extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin i
 		$errorCode = array();
 		$bDoProcessing = $mainObj->init($content, $conf, $config, get_class($this), $errorCode);
 
-		if ($bDoProcessing || count($errorCode))	{
+		if ($bDoProcessing || !empty($errorCode))	{
 			$content = $mainObj->run(get_class($this), $errorCode, $content);
 		}
 		return $content;

@@ -46,7 +46,7 @@ class tx_ttproducts_discountprice extends tx_ttproducts_pricecalc_base {
 	public $conf;
 
 	protected function handlePriceItems (
-		$priceItems,
+		array $priceItems,
 		&$itemArray,
 		&$priceReduction,
 		&$discountArray,

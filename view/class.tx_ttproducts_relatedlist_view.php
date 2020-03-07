@@ -90,7 +90,7 @@ class tx_ttproducts_relatedlist_view implements \TYPO3\CMS\Core\SingletonInterfa
 			if (isset($viewTagArray[$funcArray['marker']]) && $funcArray['require'])	{
 				$relatedIds = $itemObj->getRelated($uid, $subtype);
 
-				if (count($relatedIds))	{
+				if (is_array($relatedIds) && count($relatedIds))	{
 
 					$quantitiyMarkerArray = array();
 					tx_ttproducts_control_basketquantity::getQuantityMarkerArray (
@@ -199,7 +199,7 @@ class tx_ttproducts_relatedlist_view implements \TYPO3\CMS\Core\SingletonInterfa
 				if (isset($viewTagArray[$funcArray['marker']]) && $funcArray['require'])	{
 					$relatedIds = $itemObj->getRelated($uid, $subtype);
 
-					if (count($relatedIds))	{
+					if (is_array($relatedIds) && count($relatedIds))	{
 						// List all products:
 						if (!is_object($listView))	{
 
@@ -220,7 +220,6 @@ class tx_ttproducts_relatedlist_view implements \TYPO3\CMS\Core\SingletonInterfa
 						} else {
 							$listPids = $this->pidListObj->getPidlist();
 						}
-
 						$parentDataArray = array(
 							'functablename' => $functablename,
 							'uid' => $uid

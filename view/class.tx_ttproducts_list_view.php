@@ -429,7 +429,7 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 		$callFunctableArray = array(),
 		$parentDataArray = array()
 	) {
-		if (count($error_code))	{
+		if (!empty($error_code))	{
 			return '';
 		}
 
@@ -461,7 +461,7 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 
 		$viewControlConf = $cnf->getViewControlConf($theCode);
 
-		if (count($viewControlConf)) {
+		if (is_array($viewControlConf) && count($viewControlConf)) {
 			if (
 				isset($viewControlConf['param.']) &&
 				is_array($viewControlConf['param.'])
@@ -888,7 +888,7 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 
 		if ($this->conf['clickItemsIntoSubmenu'])	{
 			$childCatArray = $categoryTable->getChildCategoryArray($currentCat);
-			if (count($childCatArray))	{
+			if (is_array($childCatArray) && count($childCatArray))	{
 				$templateArea = 'HAS_CHILDS_' . $templateArea;
 			}
 		}
@@ -1401,7 +1401,7 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 			while($iCount < $limit && ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)))	{
 
 				$iCount++;
-				if (count($itemTableLangFields))	{
+				if (is_array($itemTableLangFields) && count($itemTableLangFields))	{
 					foreach($itemTableLangFields as $field => $langfield)	{
 						$row[$field] = $row[$langfield];
 					}
@@ -1481,8 +1481,8 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 
 					$bHeaderFieldChanged = false;
 
-					if (count($headerTableArray))	{
-						if (count($currentHeaderRow))	{
+					if (is_array($headerTableArray) && count($headerTableArray))	{
+						if (is_array($currentHeaderRow) && count($currentHeaderRow))	{
 							foreach($headerTableArray as $headertable)	{
 								$headerTableLen = strlen($headertable);
 
@@ -1498,7 +1498,7 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 							}
 						}
 
-						if ($bHeaderFieldChanged || !count($currentHeaderRow))	{
+						if ($bHeaderFieldChanged || empty($currentHeaderRow))	{
 							$bHeaderFieldChanged = true;
 							$headerMarkerArray = array();
 							foreach($headerTableArray as $headertable)	{
@@ -1571,7 +1571,7 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 						$catLineArray = $categoryTable->getLineArray($displayCat, array(0 => $currentCat));
 						$catLineArray = array_reverse($catLineArray);
 						reset($catLineArray);
-						$confDisplayColumns = $this->getDisplayInfo($displayConf, 'columns', $depth,  !count($childCatArray));
+						$confDisplayColumns = $this->getDisplayInfo($displayConf, 'columns', $depth,  empty($childCatArray));
 						$displayColumns =
 							(
 								tx_div2007_core::testInt($confDisplayColumns) ?
@@ -1579,7 +1579,7 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 									$displayColumns
 							);
 
-						if (count($childCatArray))	{
+						if (is_array($childCatArray) && count($childCatArray))	{
 							$linkCat = next($catLineArray);
 
 							if ($linkCat)	{
@@ -1602,7 +1602,7 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 					} else {
 						$displayCat = $currentCat;
 					}
-					$displayCatHeader = $this->getDisplayInfo($displayConf, 'header', $depth, !count($childCatArray));
+					$displayCatHeader = $this->getDisplayInfo($displayConf, 'header', $depth, empty($childCatArray));
 
 					if ($displayCatHeader == 'current')	{
 						$displayCat = $currentCat;
@@ -1868,7 +1868,7 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 						$bUseBackPid
 					);
 
-					if (count($mergeRow))	{
+					if (is_array($mergeRow) && count($mergeRow))	{
 						$row = array_merge($row, $mergeRow);
 					}
 					$markerArray = array();
@@ -2227,7 +2227,7 @@ class tx_ttproducts_list_view implements \TYPO3\CMS\Core\SingletonInterface {
 					$nextRow = $itemArray[$iCount];
 					$nextCat = $nextRow['category'];
 					$catArray = $categoryTable->getCategoryArray($nextRow['uid']);
-					if (count($catArray))	{
+					if (is_array($catArray) && count($catArray))	{
 						reset($catArray);
 						$this->getCategories($categoryTable, $catArray, $rootCatArray, $rootLineArray, $cat, $nextCurrentCat, $nextCat);
 					}

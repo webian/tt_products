@@ -100,10 +100,10 @@ abstract class tx_ttproducts_category_base_view extends tx_ttproducts_table_base
 					if ($count < $parent) {
 						$currentCategory = $parentCategory;
 					}
-				} while ($count < $parent && count($currentRow));
+				} while ($count < $parent && is_array($currentRow) && count($currentRow));
 				$currentCategory = $parentCategory;
 
-				if (count($currentRow))	{
+				if (is_array($currentRow) && count($currentRow))	{
 					$this->getMarkerArray (
 						$markerArray,
 						'',

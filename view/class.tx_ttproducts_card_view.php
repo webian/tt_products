@@ -61,7 +61,7 @@ class tx_ttproducts_card_view extends tx_ttproducts_table_base_view {
 		$ccNumberArray = array();
 		$ccTypeTextSelected = '';
 
-		if (count($allowedArray))	{
+		if (is_array($allowedArray) && count($allowedArray))	{
 			$ccTypeText =
 				tx_ttproducts_form_div::createSelect(
 					$languageObj,

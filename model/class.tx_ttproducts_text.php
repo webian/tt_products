@@ -61,7 +61,7 @@ class tx_ttproducts_text extends tx_ttproducts_table_base {
 		return $rcArray;
 	}
 
-	public function getChildUidArray ($theCode, $uid, $tagMarkerArray, $parenttable='tt_products')	{
+	public function getChildUidArray ($theCode, $uid, array $tagMarkerArray, $parenttable='tt_products')	{
 		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 		$functablename = $this->getFuncTablename();
 		$fallback = false;

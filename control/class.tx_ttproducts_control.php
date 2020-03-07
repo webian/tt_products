@@ -165,7 +165,7 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 				$codeActivities['products_payment'] = false;
 			}
 		}
-		if ($codeActivities['products_basket'] && count($codeActivities)>1) {
+		if ($codeActivities['products_basket'] && count($codeActivities) > 1) {
 			$codeActivities['products_basket'] = false;
 		}
 
@@ -1318,7 +1318,7 @@ class tx_ttproducts_control implements \TYPO3\CMS\Core\SingletonInterface {
 			$infoViewObj->mapPersonIntoDelivery();
 		}
 
-		if (count($this->activityArray)) {
+		if (!empty($this->activityArray)) {
 			$content = $this->processActivities(
 				$this->activityArray,
 				$activityVarsArray,

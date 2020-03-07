@@ -83,7 +83,7 @@ class tx_ttproducts_menucat_view extends tx_ttproducts_catlist_view_base {
 			$ctrlArray
 		);
 
-		if (!count($error_code))	{
+		if (empty($error_code))	{
 			$markerObj = GeneralUtility::makeInstance('tx_ttproducts_marker');
 			$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 			$categoryTableViewObj = $tablesObj->get($functablename,true);
@@ -122,7 +122,10 @@ class tx_ttproducts_menucat_view extends tx_ttproducts_catlist_view_base {
 				$iCount++;
 				$css = 'class="w'.$iCount.'"';
 
-				if($countArray[$depth] < count($catArray[$depth]))	{
+				if(
+                    is_array($catArray[$depth]) &&
+                    $countArray[$depth] < count($catArray[$depth])
+                ) {
 					$markerArray = array();
 					$actCategory = $catArray[$depth][$countArray[$depth]];
 					$row = $categoryArray[$actCategory];

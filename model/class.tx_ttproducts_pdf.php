@@ -107,7 +107,7 @@ class tx_ttproducts_pdf extends FPDF implements \TYPO3\CMS\Core\SingletonInterfa
 	}
 
 	//Better table
-	public function ImprovedTable ($header, $data) {
+	public function ImprovedTable (array $header, array $data) {
 		$this->getDimensions($widthArray);
 
 		$totalWidth = 0;

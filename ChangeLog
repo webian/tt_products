@@ -1,3 +1,7 @@
+
+2020-03-07 Franz Holzinger <franz@ttproducts.de>
+    * bugfix: resolve issues where the count function might be applied on a variable which is not an array 
+
 2020-03-06 Franz Holzinger <franz@ttproducts.de>
     * bugfix: set prefixParentPageSlug = false. The page sysfolder slug shall not be added during the auto generation.
     * bugfix: The slug field in the backend TCA must be visible inside of the form.

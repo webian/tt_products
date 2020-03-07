@@ -108,7 +108,7 @@ class tx_ttproducts_graduated_price_view implements \TYPO3\CMS\Core\SingletonInt
 		$t['itemFrameWork'] = tx_div2007_core::getSubpart($t['listFrameWork'], '###ITEM_FORMULA###');
 
 		$priceFormulaArray = $this->modelObj->getFormulasByProduct($row['uid']);
-		if (count($priceFormulaArray))	{
+		if (is_array($priceFormulaArray) && count($priceFormulaArray))	{
 			$content = '';
 			foreach ($priceFormulaArray as $k => $priceFormula)	{
 				if (isset($priceFormula) && is_array($priceFormula))	{

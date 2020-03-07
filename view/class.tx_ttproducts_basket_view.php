@@ -890,7 +890,7 @@ class tx_ttproducts_basket_view implements \TYPO3\CMS\Core\SingletonInterface {
 				$subpartArray['###MESSAGE_MINPRICE###'] = $parser->substituteMarkerArray($tmpSubpart, $markerArray);
 			}
 
-			if (count($minQuantityArray))	{
+			if (is_array($minQuantityArray) && count($minQuantityArray))	{
 				$subpartArray['###MESSAGE_MINQUANTITY###'] = '';
 				$tmpSubpart = tx_div2007_core::getSubpart($t['basketFrameWork'], '###MESSAGE_MINQUANTITY_ERROR###');
 					//	$minQuantityArray[] = array('rec' => $row, 'minQuantity' => $minQuantity, 'quantity' => $quantity);
@@ -912,7 +912,7 @@ class tx_ttproducts_basket_view implements \TYPO3\CMS\Core\SingletonInterface {
 				$subpartArray['###MESSAGE_MINQUANTITY###'] = $parser->substituteMarkerArray($tmpSubpart, $markerArray);
 			}
 
-			if (count($minQuantityArray) || !$minPriceSuccess)	{
+			if (is_array($minQuantityArray) && count($minQuantityArray) || !$minPriceSuccess)	{
 				$subpartArray['###MESSAGE_NO_ERROR###'] = '';
 			} else {
 				$subpartArray['###MESSAGE_ERROR###'] = '';

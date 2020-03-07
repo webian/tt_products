@@ -203,7 +203,7 @@ class tx_ttproducts_field_image_view extends tx_ttproducts_field_media_view {
 					}
 					$directory->close();
 				}
-				if (count($imgs))	{
+				if (is_array($imgs) && count($imgs))	{
 					$bImages = true;
 				}
 			}

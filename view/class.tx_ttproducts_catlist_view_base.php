@@ -340,7 +340,7 @@ abstract class tx_ttproducts_catlist_view_base implements \TYPO3\CMS\Core\Single
 		$orderBy = $GLOBALS['TYPO3_DB']->stripOrderBy($tableConf['orderBy']);
 		$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 
-		if (!count($error_code) && $t['listFrameWork'] && is_object($categoryTable))	{
+		if (empty($error_code) && $t['listFrameWork'] && is_object($categoryTable))	{
 //		###SUBCATEGORY_A_1###
 			$subCategoryMarkerArray = array();
 			$catArray = array();
@@ -486,7 +486,7 @@ abstract class tx_ttproducts_catlist_view_base implements \TYPO3\CMS\Core\Single
 					$relatedArray = $categoryTable->getRelated($rootCat, 0, $pids, $orderBy);	// read only related categories
 				} else {
 					// read in all categories
-					$latest = ($latest ? $latest+count($rootCat) : '');
+					$latest = ($latest ? $latest : '');
 					$relatedArray = $categoryTable->get('', $this->pidListObj->getPidlist(),true,$where_clause,'',$orderBy,$latest,'',false,$aliasPostfix);	// read all categories
 					$excludeCat = 0;
 				}

@@ -328,12 +328,12 @@ class tx_ttproducts_tracking implements \TYPO3\CMS\Core\SingletonInterface {
 				}
 			}
 
-			if (count($fieldsArray)) {		// If any items in the field array, save them
+			if (!empty($fieldsArray)) {		// If any items in the field array, save them
 				if (!$admin) {	// only these fields may be updated in an already stored order
 					$fieldsArray = array_intersect_key($fieldsArray, array_flip($allowUpdateFields));
 				}
 
-				if (count($fieldsArray)) {
+				if (!empty($fieldsArray)) {
 					$fieldsArray['tstamp'] = time();
 					$GLOBALS['TYPO3_DB']->exec_UPDATEquery('sys_products_orders', 'uid='.intval($orderRow['uid']), $fieldsArray);
 					$orderRow = $orderObj->getRecord($orderRow['uid']);

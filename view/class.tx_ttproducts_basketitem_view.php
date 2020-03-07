@@ -125,7 +125,7 @@ class tx_ttproducts_basketitem_view implements \TYPO3\CMS\Core\SingletonInterfac
 		$uid = $row['uid'];
 		$presetVariantArray = tx_ttproducts_control_product::getPresetVariantArray($uid);
 
-		if ($theCode=='SINGLE' && !count($presetVariantArray) && $bSelect && $functablename=='tt_products')	{
+		if ($theCode=='SINGLE' && empty($presetVariantArray) && $bSelect && $functablename=='tt_products')	{
 			$articleNo = tx_ttproducts_control_product::getActiveArticleNo();
 
 			if ($articleNo !== false)	{

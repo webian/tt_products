@@ -115,7 +115,7 @@ class tx_ttproducts_product extends tx_ttproducts_article_base {
 		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		$articleObj = $tablesObj->get('tt_products_articles');
 
-		if (count($articleRowArray))	{
+		if (!empty($articleRowArray))	{
 			// $articleObj->sortArticleRowsByUidArray($row['uid'],$articleRowArray);
 			$variantRow = $this->variant->getVariantValuesByArticle($articleRowArray, $row, true);
 			$selectableFieldArray = $this->variant->getSelectableFieldArray();

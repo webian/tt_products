@@ -65,9 +65,8 @@ class tx_ttproducts_pi_int_base extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugi
 		$mainObj->bNoCachePossible = false;
 		$errorCode = array();
 		$bDoProcessing = $mainObj->init($content, $this->conf, $config, get_class($this), $errorCode);
-		$errorCode = array();
 
-		if ($bDoProcessing || count($errorCode))	{
+		if ($bDoProcessing || !empty($errorCode))	{
 			$content = $mainObj->run(get_class($this),$errorCode,$content);
 		}
 		return $content;

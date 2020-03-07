@@ -81,7 +81,7 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
             $parser = tx_div2007_core::newHtmlParser(false);
         }
 		$confArray = array('params', 'altText', 'titleText');
-		if (!count($markerArray))	{
+		if (is_array($markerArray) && !count($markerArray))	{
 			$this->getExtItemMarkerArray($markerArray, $imageConf, $row);
 		}
 		foreach ($confArray as $conftype)	{
@@ -171,7 +171,7 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 		$tableConf = array();
 		$markerArray['###'.$markerKey.'_PATH###'] = $dirname;
 
-		if (count($imageArray))	{
+		if (is_array($imageArray) && count($imageArray))	{
 			$cnf = GeneralUtility::makeInstance('tx_ttproducts_config');
 			$tableConf = $cnf->getTableConf($functablename, $theCode);
 			if (is_array($tableConf))	{
@@ -405,7 +405,8 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 				}
 				$directory->close();
 			}
-			if (count($imgs))	{
+
+			if (is_array($imgs) && count($imgs))	{
 				$bImages = true;
 			}
 		} // if (!$bImages) {
@@ -532,7 +533,7 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 					}
 				}
 				$partArray = $codeArray['part'];
-				if (count($partArray))	{
+				if (is_array($partArray) && count($partArray))	{
 					foreach ($partArray as $k => $part)	{
 						if (strpos($theCode, $part) !== false)	{
 							$mediaNum = $codeArray['num'];
@@ -592,7 +593,7 @@ class tx_ttproducts_field_media_view extends tx_ttproducts_field_base_view {
 				}
 			}
 
-			if (count($mediaMarkerKeyArray))	{
+			if (is_array($mediaMarkerKeyArray) && count($mediaMarkerKeyArray))	{
 				$mediaNum =
 					$this->getMediaNum(
 						$functablename,

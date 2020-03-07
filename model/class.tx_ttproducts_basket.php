@@ -790,7 +790,7 @@ class tx_ttproducts_basket implements \TYPO3\CMS\Core\SingletonInterface {
 
 		$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
 		$cnfObj = GeneralUtility::makeInstance('tx_ttproducts_config');
-		$conf = &$cnfObj->conf;
+		$conf = $cnfObj->conf;
 		$theCode = 'BASKET';
 		$itemTableConf = $cnfObj->getTableConf($funcTablename, $theCode);
 		$viewTableObj = $tablesObj->get($funcTablename, false);

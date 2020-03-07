@@ -63,7 +63,7 @@ class tx_ttproducts_pi_search_base extends \TYPO3\CMS\Frontend\Plugin\AbstractPl
 		$errorCode = array();
 		$bDoProcessing = $mainObj->init($content, $this->conf, $config, get_class($this), $errorCode);
 
-		if ($bDoProcessing || count($errorCode))	{
+		if ($bDoProcessing || !empty($errorCode))	{
 			$content = $mainObj->run(get_class($this),$errorCode,$content);
 		}
 		return $content;

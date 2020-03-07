@@ -114,7 +114,7 @@ class tx_ttproducts_variant implements tx_ttproducts_variant_int, \TYPO3\CMS\Cor
 		}
 		$variantArray = explode(';', $variant);
 		$useArticles = $this->getUseArticles();
-		if (in_array($useArticles, array(1,3)) || !$useArticles && count($this->selectableArray))	{
+		if (in_array($useArticles, array(1,3)) || !$useArticles && !empty($this->selectableArray))	{
 			$fieldArray = $this->getFieldArray();
 			$count = 0;
 			foreach ($fieldArray as $key => $field)	{
@@ -171,7 +171,7 @@ class tx_ttproducts_variant implements tx_ttproducts_variant_int, \TYPO3\CMS\Cor
 		}
 		$useArticles = $this->getUseArticles();
 
-		if (isset($variantRow) && count($variantRow) && ($useArticles == 1 || count($this->selectableArray)))	{
+		if (isset($variantRow) && count($variantRow) && ($useArticles == 1 || !empty($this->selectableArray)))	{
 			$fieldArray = $this->getFieldArray();
 			$count = 0;
 
@@ -208,7 +208,7 @@ class tx_ttproducts_variant implements tx_ttproducts_variant_int, \TYPO3\CMS\Cor
 		$variantArray = array();
 		$useArticles = $this->getUseArticles();
 
-		if ($useArticles == 1 || count($this->selectableArray))	{
+		if ($useArticles == 1 || !empty($this->selectableArray))	{
 			$fieldArray = $this->getFieldArray();
 			$count = 0;
 

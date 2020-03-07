@@ -144,7 +144,7 @@ class tx_ttproducts_static_tax extends tx_ttproducts_table_base {
 		}
 	}
 
-	protected function didValuesChange ($countryArray)	{
+	protected function didValuesChange (array $countryArray)	{
 		if (count($this->countryArray['customer']))	{
 			$rc = (count(array_diff_assoc($this->countryArray['customer'], $countryArray['customer'])) > 0);
 		} else {

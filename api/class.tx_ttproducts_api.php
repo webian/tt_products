@@ -251,7 +251,7 @@ class tx_ttproducts_api implements \TYPO3\CMS\Core\SingletonInterface {
 
 			$res = $GLOBALS['TYPO3_DB']->exec_INSERTquery('fe_users', $insertFields);
 			// send new user mail
-			if (count($infoArray['billing']['email'])) {
+			if (!empty($infoArray['billing']['email'])) {
 				$empty = '';
 				$emailContent = trim(
 					$basketView->getView(

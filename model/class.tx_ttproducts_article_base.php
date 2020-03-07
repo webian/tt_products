@@ -124,7 +124,7 @@ abstract class tx_ttproducts_article_base extends tx_ttproducts_table_base {
 			if ($type == 'articles') {
 				$relatedArticles = $this->getArticleRows($uid);
 
-				if (count($relatedArticles)) {
+				if (is_array($relatedArticles) && count($relatedArticles)) {
 					$rowArray = array();
 					foreach ($relatedArticles as $k => $articleRow) {
 						$resultArray[] = $articleRow['uid'];
