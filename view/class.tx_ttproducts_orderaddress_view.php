@@ -67,7 +67,11 @@ class tx_ttproducts_orderaddress_view extends tx_ttproducts_table_base_view {
 					$groupNumber = substr($tagPart1, 0, $offset);
 
 					if (tx_div2007_core::testInt($groupNumber)) {
-						if (GeneralUtility::inList($GLOBALS['TSFE']->gr_list, $groupNumber)) {
+                        $comparatorNumber = $groupNumber;
+                        if (!$comparatorNumber) {
+                            $comparatorNumber = -1; // Also a logged in Front End User has group 0! 
+                        }
+						if (GeneralUtility::inList($GLOBALS['TSFE']->gr_list, $comparatorNumber)) {
 							$wrappedSubpartArray['###FE_GROUP_' . $groupNumber . '_TEMPLATE###'] = array('', '');
 						} else {
 							$subpartArray['###FE_GROUP_' . $groupNumber . '_TEMPLATE###'] = '';
@@ -99,15 +103,15 @@ class tx_ttproducts_orderaddress_view extends tx_ttproducts_table_base_view {
 		}
 
 		if (
-			isset($viewTagArray['FE_CONDITION1_true_TEMPLATE']) ||
-			isset($viewTagArray['FE_CONDITION1_false_TEMPLATE'])
+			isset($viewTagArray['FE_CONDITION1_TRUE_TEMPLATE']) ||
+			isset($viewTagArray['FE_CONDITION1_FALSE_TEMPLATE'])
 		) {
 			if ($this->getModelObj()->getCondition() || !$this->getModelObj()->getConditionRecord()) {
-				$wrappedSubpartArray['###FE_CONDITION1_true_TEMPLATE###'] = array('', '');
-				$subpartArray['###FE_CONDITION1_false_TEMPLATE###'] = '';
+				$wrappedSubpartArray['###FE_CONDITION1_TRUE_TEMPLATE###'] = array('', '');
+				$subpartArray['###FE_CONDITION1_FALSE_TEMPLATE###'] = '';
 			} else {
-				$wrappedSubpartArray['###FE_CONDITION1_false_TEMPLATE###'] = array('', '');
-				$subpartArray['###FE_CONDITION1_true_TEMPLATE###'] = '';
+				$wrappedSubpartArray['###FE_CONDITION1_FALSE_TEMPLATE###'] = array('', '');
+				$subpartArray['###FE_CONDITION1_TRUE_TEMPLATE###'] = '';
 			}
 		}
 	}
