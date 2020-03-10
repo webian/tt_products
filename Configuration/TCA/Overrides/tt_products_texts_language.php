@@ -40,7 +40,7 @@ if (
             'foreign_table' => 'fe_groups',
             'default' => 0
         )
-    ),
+    );
 }
 
 $excludeArray = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['exclude.'];

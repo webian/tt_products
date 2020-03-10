@@ -41,5 +41,5 @@ if (
             'foreign_table' => 'fe_groups',
             'default' => 0
         )
-    ),
+    );
 }
