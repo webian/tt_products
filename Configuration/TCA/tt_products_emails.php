@@ -90,22 +90,35 @@ $result = array (
 				)
 			)
 		),
-		'fe_group' => array (
-			'exclude' => 1,
-			'label' => DIV2007_LANGUAGE_LGL . 'fe_group',
-			'config' => array (
-				'type' => 'select',
-				'renderType' => 'selectSingle',
-				'items' => array (
-					array('', 0),
-					array(DIV2007_LANGUAGE_LGL . 'hide_at_login', -1),
-					array(DIV2007_LANGUAGE_LGL . 'any_login', -2),
-					array(DIV2007_LANGUAGE_LGL . 'usergroups', '--div--')
-				),
-				'foreign_table' => 'fe_groups',
-				'default' => 0
-			)
-		),
+        'fe_group' => [
+            'exclude' => true,
+            'l10n_mode' => 'exclude',
+            'label'  => DIV2007_LANGUAGE_LGL . 'fe_group',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectMultipleSideBySide',
+                'size' => 7,
+                'maxitems' => 20,
+                'items' => [
+                    [
+                        DIV2007_LANGUAGE_LGL . 'hide_at_login',
+                        -1
+                    ],
+                    [
+                        DIV2007_LANGUAGE_LGL . 'any_login',
+                        -2
+                    ],
+                    [
+                        DIV2007_LANGUAGE_LGL . 'usergroups',
+                        '--div--'
+                    ]
+                ],
+                'exclusiveKeys' => '-1,-2',
+                'foreign_table' => 'fe_groups',
+                'foreign_table_where' => 'ORDER BY fe_groups.title',
+                'enableMultiSelectFilterTextfield' => true
+            ]
+        ],
 		'name' => array (
 			'label' => DIV2007_LANGUAGE_LGL . 'name',
 			'config' => array (

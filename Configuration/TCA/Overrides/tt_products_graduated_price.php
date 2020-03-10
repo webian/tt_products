@@ -22,4 +22,23 @@ if (
     $GLOBALS['TCA'][$table]['ctrl']['sortby'] = 'sorting';
 }
 
-
+if (
+    defined('TYPO3_version') &&
+    version_compare(TYPO3_version, '7.0.0', '<')
+) {
+    $GLOBALS['TCA'][$table]['columns']['fe_group'] = array (
+        'exclude' => 1,
+        'label' => DIV2007_LANGUAGE_LGL . 'fe_group',
+        'config' => array (
+            'type' => 'select',
+            'items' => array (
+                array('', 0),
+                array(DIV2007_LANGUAGE_LGL . 'hide_at_login', -1),
+                array(DIV2007_LANGUAGE_LGL . 'any_login', -2),
+                array(DIV2007_LANGUAGE_LGL . 'usergroups', '--div--')
+            ),
+            'foreign_table' => 'fe_groups',
+            'default' => 0
+        )
+    ),
+}

@@ -1,3 +1,6 @@
+2020-03-10 Franz Holzinger <franz@ttproducts.de>
+    * bugfix: It must be possible to assign multiple front end groups in the field fe_group.
+
 2020-03-09 Franz Holzinger <franz@ttproducts.de>
     * bugfix: ###FE_GROUP_0_TEMPLATE### if no frontend user has logged in must check for the group=-1 and not for 0. Every logged in frontend user is member of group 0 now!
     * bugfix: markers must be uppercase. ###FE_CONDITION1_FALSE_TEMPLATE###
