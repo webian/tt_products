@@ -1,3 +1,7 @@
+
+2020-03-11 Franz Holzinger <franz@ttproducts.de>
+    * improvement: increase the limit of the endtimeYear to 2038
+
 2020-03-10 Franz Holzinger <franz@ttproducts.de>
     * bugfix: It must be possible to assign multiple front end groups in the field fe_group.
 

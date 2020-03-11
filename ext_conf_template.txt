@@ -15,7 +15,7 @@ templateFile = EXT:tt_products/template/example_template_bill_de.tmpl
   # cat=basic/enable; type=string; label=template check: Perl regular expression to check the template file for validity
 templateCheck = /([^#]+(#{2}|#{5}|#{7,8})([^#])+?)/
   # cat=basic/enable; type=integer; label=endtime year: Enter the year for the endtime field. Some Microsoft Windows systems are limited to 2038 for the PHP function mktime.
-endtimeYear = 2027
+endtimeYear = 2038
   # cat=basic/enable; type=string; label=category where: Foreign table where for the selection of categories. See TSConfig for more info.
 where.category =
   # cat=basic/enable; type=boolean; label=Page Title: Here you can activate the hook of tt_products to show the product title in the single view and maybe on other places.
