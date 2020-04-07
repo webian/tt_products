@@ -442,8 +442,8 @@ class tx_ttproducts_paymentshipping implements \TYPO3\CMS\Core\SingletonInterfac
 		// $template = $confArray['template'] ? ereg_replace('\' *\. *\$pskey *\. *\'',$pskey, $confArray['template']) : '###IMAGE### <input type="radio" name="recs[tt_products][' . $pskey . ']' . $htmlInputAddition . '" onClick="'.$submitCode.'" value="###VALUE###"###CHECKED###> ###TITLE###<br>';
 
 		$template = (
-			$conf[$pskey.'.']['template'] ?
-				preg_replace('/[[:space:]]*\\.[[:space:]]*' . $pskey . '[[:space:]]*\\.[[:space:]]*/', $pskey, $conf[$pskey . '.']['template']) :
+			$this->conf[$pskey . '.']['template'] ?
+				preg_replace('/[[:space:]]*\\.[[:space:]]*' . $pskey . '[[:space:]]*\\.[[:space:]]*/', $pskey, $this->conf[$pskey . '.']['template']) :
 				'<input type="radio" name="recs[tt_products][' . $pskey . ']' . $htmlInputAddition . '" onClick="' . $submitCode . '" value="###VALUE###"###CHECKED###> ###TITLE### &nbsp;&nbsp;&nbsp; ###IMAGE###<br>'
 			);
 		$wrap = $confArray['wrap'] ? $confArray['wrap'] :'<select id="' . $pskey . ($subkey != '' ? '-' . $subkey : '') . '-select" name="recs[tt_products][' . $pskey . ']' . $htmlInputAddition . '" onChange="' . $submitCode . '">|</select>';
