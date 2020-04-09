@@ -45,7 +45,7 @@ class tx_ttproducts_menucat_view extends tx_ttproducts_catlist_view_base {
 	public $htmlTagElement = 'li'; // HTML tag element
 
 	// returns the products list view
-	public function printView(
+	public function printView (
 		$functablename,
 		&$templateCode,
 		$theCode,
@@ -82,7 +82,6 @@ class tx_ttproducts_menucat_view extends tx_ttproducts_catlist_view_base {
 			$subCategoryMarkers,
 			$ctrlArray
 		);
-
 		if (empty($error_code))	{
 			$markerObj = GeneralUtility::makeInstance('tx_ttproducts_marker');
 			$tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
@@ -215,5 +214,4 @@ class tx_ttproducts_menucat_view extends tx_ttproducts_catlist_view_base {
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/view/class.tx_ttproducts_menucat_view.php'])	{
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/tt_products/view/class.tx_ttproducts_menucat_view.php']);
 }
-
 

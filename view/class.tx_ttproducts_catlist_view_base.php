@@ -372,7 +372,6 @@ abstract class tx_ttproducts_catlist_view_base implements \TYPO3\CMS\Core\Single
 			$tmp = tx_div2007_core::substituteMarkerArrayCached($t['categoryFrameWork'], array(), $subpartArray);
 			$htmlParts = GeneralUtility::trimExplode('###CATEGORY_TMP###', $tmp);
 			$rootCat = $categoryTable->getRootCat();
-
 			$currentCat = $categoryTable->getParamDefault($theCode, $pibaseObj->piVars[tx_ttproducts_model_control::getPiVar($functablename)]);
 			$startCat = $currentCat;
 			if (strpos($theCode, 'SELECT') !== false) {
@@ -476,7 +475,7 @@ abstract class tx_ttproducts_catlist_view_base implements \TYPO3\CMS\Core\Single
 						}
 					}
 					$relatedArray = $categoryTable->getRelated($rootCat, $startCat, $pids, $orderBy);	// read only related categories
-				} else if ($tableConf['rootChildsOfCurrent']) { // +++ neu
+				} else if ($tableConf['rootChildsOfCurrent']) {
 					$pids = $this->pidListObj->getPidlist();
 					$rootCat = $categoryTable->getAllChildCats($pids, $orderBy, $startCat);
 					if ($rootCat == '') {
