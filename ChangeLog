@@ -1,3 +1,6 @@
+2020-04-09 Franz Holzinger <franz@ttproducts.de>
+    * bugfix for MySQL strict mode
+
 2020-03-31 Franz Holzinger <franz@ttproducts.de>
     * compatibility TYPO3 9.5: use the class MatchCondition instead of class.tx_ttproducts_match_condition
 

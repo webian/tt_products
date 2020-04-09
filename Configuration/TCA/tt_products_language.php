@@ -148,7 +148,8 @@ $result = array (
                 'exclusiveKeys' => '-1,-2',
                 'foreign_table' => 'fe_groups',
                 'foreign_table_where' => 'ORDER BY fe_groups.title',
-                'enableMultiSelectFilterTextfield' => true
+                'enableMultiSelectFilterTextfield' => true,
+                'default' => 0,
             ]
         ],
 		'prod_uid' => array (
