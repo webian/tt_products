@@ -102,16 +102,16 @@ class tx_ttproducts_ajax implements \TYPO3\CMS\Core\SingletonInterface {
 			'eID' => TT_PRODUCTS_EXT
 		);
 
-
-		$excludeList = 'cHash';
+		$excludeList = '';
 		$queryString = $urlObj->getLinkParams(
 			$excludeList,
-			$addQueryString,
-			false,
+			[],
+			true,
 			false,
 			$piVarSingle,
 			$piVarCat
 		);
+		$queryString = array_merge($queryString, $addQueryString);
 
 		$linkConf = array('useCacheHash' => 0);
 		$target = '';
