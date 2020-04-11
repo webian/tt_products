@@ -1,3 +1,6 @@
+2020-04-11 Franz Holzinger <franz@ttproducts.de>
+    * bugfix for TYPO3 9.5: The Ajax call requires the current page id. This information is lost in the routing enhancer without the help of the new div2007 methods.
+
 2020-04-09 Franz Holzinger <franz@ttproducts.de>
     * bugfix for MySQL strict mode
     * bugfix: The xAjax call must keep the tt_products parameters

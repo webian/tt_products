@@ -44,8 +44,19 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 global $TYPO3_CONF_VARS, $TSFE, $TT, $BE_USER, $error;
 
 
+$pageId = '';
 
-tx_div2007_alpha5::initFE();
+if (
+    defined('TYPO3_version') &&
+    version_compare(TYPO3_version, '9.0.0', '>=')
+) {
+    $pageId = \JambageCom\Div2007\Utility\FrontendUtility::getPageId();
+    if (!$pageId) {
+        throw new RuntimeException('Error in tt_products: No page id for Ajax call.');
+    }
+}
+
+\JambageCom\Div2007\Utility\FrontendUtility::init($pageId);
 
 
 // ******************************************************
