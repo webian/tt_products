@@ -356,10 +356,6 @@ class tx_ttproducts_paymentshipping implements \TYPO3\CMS\Core\SingletonInterfac
 
  		if (isset($basketExtra['handling.']))	{
 
-// 			foreach ($basketExtra['handling.'] as $k => $confArray)	{
-// 				$this->getTypeMarkerArray($markerArray, 'handling', $basketUrl);
-// 			}
-
  			foreach ($basketExtra['handling.'] as $k => $confArray)	{
 				if (strpos($k,'.') == strlen($k) - 1)	{
 
@@ -439,22 +435,18 @@ class tx_ttproducts_paymentshipping implements \TYPO3\CMS\Core\SingletonInterfac
 
 		$out='';
 		$submitCode = 'this.form.action=\''.$basketUrl.'\';this.form.submit();';
-		// $template = $confArray['template'] ? ereg_replace('\' *\. *\$pskey *\. *\'',$pskey, $confArray['template']) : '###IMAGE### <input type="radio" name="recs[tt_products][' . $pskey . ']' . $htmlInputAddition . '" onClick="'.$submitCode.'" value="###VALUE###"###CHECKED###> ###TITLE###<br>';
-
 		$template = (
 			$this->conf[$pskey . '.']['template'] ?
 				preg_replace('/[[:space:]]*\\.[[:space:]]*' . $pskey . '[[:space:]]*\\.[[:space:]]*/', $pskey, $this->conf[$pskey . '.']['template']) :
-				'<input type="radio" name="recs[tt_products][' . $pskey . ']' . $htmlInputAddition . '" onClick="' . $submitCode . '" value="###VALUE###"###CHECKED###> ###TITLE### &nbsp;&nbsp;&nbsp; ###IMAGE###<br>'
+				'<input type="radio" name="recs[tt_products][' . $pskey . ']' . $htmlInputAddition . '" onClick="' . $submitCode . '" value="###VALUE###"###CHECKED###>###TITLE###&nbsp;&nbsp;&nbsp; ###IMAGE###<br>'
 			);
 		$wrap = $confArray['wrap'] ? $confArray['wrap'] :'<select id="' . $pskey . ($subkey != '' ? '-' . $subkey : '') . '-select" name="recs[tt_products][' . $pskey . ']' . $htmlInputAddition . '" onChange="' . $submitCode . '">|</select>';
 		$bWrapSelect = (count($confArray) > 1);
 		$t = array();
 		if ($subkey != '')	{
 			$localBasketExtra = &$basketExtra[$pskey . '.'][$subkey . '.'];
-// 			$actTitle = $basketObj->basketExtra[$pskey . '.'][$subkey . '.']['title'];
 		} else {
 			$localBasketExtra = &$basketExtra[$pskey . '.'];
-// 			$actTitle = $basketObj->basketExtra[$pskey . '.']['title'];
 		}
 		$actTitle = $localBasketExtra['title'];
 
@@ -541,11 +533,7 @@ class tx_ttproducts_paymentshipping implements \TYPO3\CMS\Core\SingletonInterfac
                                         $imageObj->getImageCode(
                                             $image,
                                             $theCode
-                                        ); // neu
-// 									$imageCode = $this->cObj->IMAGE($image);
-// 									if ($theCode == 'EMAIL') {
-// 										tx_div2007_alpha5::fixImageCodeAbsRefPrefix($imageCode);
-// 									}
+                                        );
 								}
 
 								$this->getModelMarkerArray(
