@@ -51,19 +51,9 @@ class MatchCondition {
         $result = false;
 
         if (isset($params) && is_array($params)) {
-            $conf = $GLOBALS['TSFE']->tmpl->setup['plugin.'][TT_PRODUCTS_EXT . '.'];
-            $cObj = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
-            $cObj->start(array());
-            $tablesObj = GeneralUtility::makeInstance('tx_ttproducts_tables');
             $recs = \tx_ttproducts_control_basket::getStoredRecs();
-
-            \tx_ttproducts_control_basket::init(
-                $conf,
-                $tablesObj,
-                $recs
-            );
-			$infoArray = \tx_ttproducts_control_basket::getInfoArray();
-
+            \tx_ttproducts_control_basket::setRecs($recs);
+            $infoArray = \tx_ttproducts_control_basket::getInfoArray();
             \tx_ttproducts_control_basket::fixCountries($infoArray);
             $type = $params['0'];
             $field = $params['1'];
@@ -88,8 +78,6 @@ class MatchCondition {
                 $valueArray = GeneralUtility::trimExplode(',', $value);
                 $result = !in_array($infoArray[$type][$field], $valueArray);
             }
-
-            \tx_ttproducts_control_basket::destruct();
 
             if (
                 !$result &&
@@ -122,10 +110,10 @@ class MatchCondition {
 
     public function hasBulkilyItem ($where) {
         $bBukily = false;
-        \tx_ttproducts_control_basket::init();
-        $recs = \tx_ttproducts_control_basket::getRecs();
+        $recs = \tx_ttproducts_control_basket::getStoredRecs();
         $cObj = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);	// Local cObj.
         $cObj->start(array());
+        \tx_ttproducts_control_basket::setBasketExt(\tx_ttproducts_control_basket::getStoredBasketExt());
         $basketExt = \tx_ttproducts_control_basket::getBasketExt();
 
         if (isset($basketExt) && is_array($basketExt)) {
@@ -153,7 +141,6 @@ class MatchCondition {
             }
         }
 
-        \tx_ttproducts_control_basket::destruct();
         return ($bBukily);
     }
 }

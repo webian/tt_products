@@ -1,3 +1,6 @@
+2020-04-21 Franz Holzinger <franz@ttproducts.de>
+    * bugfix: The MatchCondition method must not use the setup of tt_products, because a condition must be determined before the setup can be generated and will be available.
+
 2020-04-11 Franz Holzinger <franz@ttproducts.de>
     * bugfix for TYPO3 9.5: The Ajax call requires the current page id. This information is lost in the routing enhancer without the help of the new div2007 methods.
 
