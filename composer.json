@@ -33,8 +33,7 @@
   "suggest": {
     "jambagecom/func-wizards": ">=0.0.1",
     "jambagecom/addons-em": ">=0.2.1",
-    "friendsoftypo3/typo3db-legacy": ">=1.0.0,<1.99",
-    "bugfix/patchcache": ">=1.0.0,<1.0",
+    "friendsoftypo3/typo3db-legacy": ">=1.0.0,<1.99"
   },
   "autoload": {
     "psr-4": {

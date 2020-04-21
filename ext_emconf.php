@@ -30,7 +30,6 @@ $EM_CONF[$_EXTKEY] = array(
 			'func_wizards' => '',
 			'addons_em' => '0.2.1-0.0.0',
             'typo3db_legacy' => '1.0.0-1.1.99',
-            'patchcache' => '0.1.0-1.0.0',
 		)
 	)
 );
