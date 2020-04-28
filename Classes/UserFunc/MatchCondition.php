@@ -51,6 +51,7 @@ class MatchCondition {
         $result = false;
 
         if (isset($params) && is_array($params)) {
+            \tx_ttproducts_control_basket::storeNewRecs();
             $recs = \tx_ttproducts_control_basket::getStoredRecs();
             \tx_ttproducts_control_basket::setRecs($recs);
             $infoArray = \tx_ttproducts_control_basket::getInfoArray();
@@ -110,7 +111,6 @@ class MatchCondition {
 
     public function hasBulkilyItem ($where) {
         $bBukily = false;
-        $recs = \tx_ttproducts_control_basket::getStoredRecs();
         $cObj = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);	// Local cObj.
         $cObj->start(array());
         \tx_ttproducts_control_basket::setBasketExt(\tx_ttproducts_control_basket::getStoredBasketExt());
@@ -144,5 +144,3 @@ class MatchCondition {
         return ($bBukily);
     }
 }
-
-

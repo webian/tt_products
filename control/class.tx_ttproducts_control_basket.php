@@ -47,11 +47,40 @@ class tx_ttproducts_control_basket {
 	static private   $bHasBeenInitialised = false;
 
 
+    static public function storeNewRecs ($transmissionSecurity = false) {
+        $recs = GeneralUtility::_GP('recs');
+        if (
+            is_array($recs) &&
+            $transmissionSecurity
+        ) {
+            $errorCode = array();
+            $errorMessage = '';
+            $security = GeneralUtility::makeInstance(\JambageCom\Div2007\Security\TransmissionSecurity::class);
+            $decryptionResult = $security->decryptIncomingFields(
+                $recs,
+                $errorCode,
+                $errorMessage
+            );
+        }
+
+        if (
+            is_array($recs)
+        ) {
+            $api = GeneralUtility::makeInstance( \JambageCom\Div2007\Api\Frontend::class);
+            // If any record registration is submitted, register the record.
+            $api->record_registration(
+                $recs,
+                $GLOBALS['TYPO3_CONF_VARS']['FE']['maxSessionDataSize'],
+                $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['checkCookies']
+            );
+        }
+    }
+
 	static public function init (
 		&$conf,
 		$tablesObj,
 		array $recs = array(),
-		array $basketRec = array() // TODO
+		array $basketRec = array()
 	) {
 		if (!self::$bHasBeenInitialised) {
             self::setRecs($recs);

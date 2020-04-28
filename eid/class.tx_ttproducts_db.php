@@ -76,31 +76,7 @@ class tx_ttproducts_db implements \TYPO3\CMS\Core\SingletonInterface {
 		}
 
         if (TYPO3_MODE == 'FE') {
-            $recs = GeneralUtility::_GP('recs');
-
-            if (
-                is_array($recs) &&
-                $conf['transmissionSecurity']
-            ) {
-                $errorCode = array();
-                $errorMessage = '';
-                $security = GeneralUtility::makeInstance(\JambageCom\Div2007\Security\TransmissionSecurity::class);
-                $decryptionResult = $security->decryptIncomingFields(
-                    $recs,
-                    $errorCode,
-                    $errorMessage
-                );
-            }        
-
-            if (is_array($recs)) {
-                $api = GeneralUtility::makeInstance( \JambageCom\Div2007\Api\Frontend::class);
-                // If any record registration is submitted, register the record.
-                $api->record_registration(
-                    $recs,
-                    $GLOBALS['TYPO3_CONF_VARS']['FE']['maxSessionDataSize'],
-                    $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['checkCookies']
-                );
-            }
+            \tx_ttproducts_control_basket::storeNewRecs($conf['transmissionSecurity']);
             $recs = tx_ttproducts_control_basket::getStoredRecs();
         }
 

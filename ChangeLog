@@ -1,3 +1,6 @@
+2020-04-28 Franz Holzinger <franz@ttproducts.de>
+    * bugfix: The MatchCondition method checkShipping must read the recs and store them automatically.
+
 2020-04-21 Franz Holzinger <franz@ttproducts.de>
     * bugfix: The MatchCondition method must not use the setup of tt_products, because a condition must be determined before the setup can be generated and will be available.
 
