@@ -1,181 +1,186 @@
 <?php
 defined('TYPO3_MODE') || die('Access denied.');
 
-$table = 'tt_products';
-$bSelectTaxMode = false;
+call_user_func(function () {
+    $table = 'tt_products';
+    $bSelectTaxMode = false;
 
-if (
-    version_compare(TYPO3_version, '8.7.0', '<')
-) {
-    $fieldArray = array('tstamp', 'crdate', 'starttime', 'endtime', 'usebydate', 'sellstarttime', 'sellendtime');
+    if (
+        version_compare(TYPO3_version, '8.7.0', '<')
+    ) {
+        $fieldArray = array('tstamp', 'crdate', 'starttime', 'endtime', 'usebydate', 'sellstarttime', 'sellendtime');
 
-    foreach ($fieldArray as $field) {
-        unset($GLOBALS['TCA'][$table]['columns'][$field]['config']['renderType']);
-        $GLOBALS['TCA'][$table]['columns'][$field]['config']['max'] = '20';
-    }
-}
-
-if (
-    defined('STATIC_INFO_TABLES_TAXES_EXT') &&
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded(STATIC_INFO_TABLES_TAXES_EXT)
-) {
-    $eInfo = tx_div2007_alpha5::getExtensionInfo_fh003(STATIC_INFO_TABLES_TAXES_EXT);
-
-    if (is_array($eInfo)) {
-        $sittVersion = $eInfo['version'];
-        if (version_compare($sittVersion, '0.3.0', '>=')) {
-            $bSelectTaxMode = true;
+        foreach ($fieldArray as $field) {
+            unset($GLOBALS['TCA'][$table]['columns'][$field]['config']['renderType']);
+            $GLOBALS['TCA'][$table]['columns'][$field]['config']['max'] = '20';
         }
     }
-}
+
+    if (
+        defined('STATIC_INFO_TABLES_TAXES_EXT') &&
+        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded(STATIC_INFO_TABLES_TAXES_EXT)
+    ) {
+        $eInfo = tx_div2007_alpha5::getExtensionInfo_fh003(STATIC_INFO_TABLES_TAXES_EXT);
+
+        if (is_array($eInfo)) {
+            $sittVersion = $eInfo['version'];
+            if (version_compare($sittVersion, '0.3.0', '>=')) {
+                $bSelectTaxMode = true;
+            }
+        }
+    }
 
 
-if ($bSelectTaxMode) {
-    $whereTaxCategory = \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields('static_tax_categories');
+    if ($bSelectTaxMode) {
+        $whereTaxCategory = \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields('static_tax_categories');
 
-    $temporaryColumns = array (
-        'tax_id' => array (
-            'exclude' => 0,
-            'label' => 'LLL:EXT:' . STATIC_INFO_TABLES_TAXES_EXT . '/locallang_db.xml:static_taxes.tx_rate_id',
-            'config' => array (
-                'type' => 'select',
-                'renderType' => 'selectSingle',
-                'items' => array (
-                    array('LLL:EXT:' . STATIC_INFO_TABLES_TAXES_EXT . '/locallang_db.xml:static_taxes.tx_rate_id.I.0', '0'),
-                    array('LLL:EXT:' . STATIC_INFO_TABLES_TAXES_EXT . '/locallang_db.xml:static_taxes.tx_rate_id.I.1', '1'),
-                    array('LLL:EXT:' . STATIC_INFO_TABLES_TAXES_EXT . '/locallang_db.xml:static_taxes.tx_rate_id.I.2', '2'),
-                    array('LLL:EXT:' . STATIC_INFO_TABLES_TAXES_EXT . '/locallang_db.xml:static_taxes.tx_rate_id.I.3', '3'),
-                    array('LLL:EXT:' . STATIC_INFO_TABLES_TAXES_EXT . '/locallang_db.xml:static_taxes.tx_rate_id.I.4', '4'),
-                    array('LLL:EXT:' . STATIC_INFO_TABLES_TAXES_EXT . '/locallang_db.xml:static_taxes.tx_rate_id.I.5', '5'),
-                ),
-                'default' => 0
-            )
-        ),
-    );
-
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns(
-        $table,
-        $temporaryColumns
-    );
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
-        $table,
-        'tax_id',
-        '',
-        'replace:tax_dummy'
-    );
-
-    $GLOBALS['TCA'][$table]['interface']['showRecordFieldList'] = str_replace(',tax,', ',tax,tax_id,', $GLOBALS['TCA'][$table]['interface']['showRecordFieldList']);
-}
-
-
-
-switch ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['articleMode']) {
-    case '1':
-        $GLOBALS['TCA'][$table]['columns']['article_uid'] = array (
-            'exclude' => 1,
-            'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.article_uid',
-            'config' => array (
-                'type' => 'group',
-                'internal_type' => 'db',
-                'allowed' => 'tt_products_articles',
-                'MM' => 'tt_products_products_mm_articles',
-                'foreign_table' => 'tt_products_articles',
-                'foreign_table_where' => ' ORDER BY tt_products_articles.title',
-                'size' => 10,
-                'selectedListStyle' => 'width:450px',
-                'minitems' => 0,
-                'maxitems' => 1000,
-                'default' => 0
-            )
-        );
-        break;
-    case '2':
-        // leave the settings of article_uid
-        break;
-    case '0':
-    default:
-        unset($GLOBALS['TCA'][$table]['columns']['article_uid']);
-        // neu Anfang
-        $result['types']['0'] = str_replace(',article_uid,', ',', $GLOBALS['TCA'][$table]['types']['0']);
-        // neu Ende
-        break;
-}
-
-$addressTable = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['addressTable'];
-
-if (!$addressTable) {
-    $addressTable = 'fe_users';
-}
-
-$GLOBALS['TCA'][$table]['columns']['address'] = array (
-    'exclude' => 1,
-    'label' => DIV2007_LANGUAGE_LGL . 'address',
-    'config' => array (
-        'type' => 'group',
-        'internal_type' => 'db',
-        'allowed' => $addressTable,
-        'size' => 1,
-        'minitems' => 0,
-        'maxitems' => 1,
-        'default' => 0
-    )
-);
-
-$newFields = 'address';
-
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
-    $table,
-    $newFields,
-    '',
-    'before:price'
-);
-
-$orderBySortingTablesArray = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['orderBySortingTables']);
-if (
-    !empty($orderBySortingTablesArray) &&
-    in_array($table, $orderBySortingTablesArray)
-) {
-    $GLOBALS['TCA'][$table]['ctrl']['sortby'] = 'sorting';
-}
-
-if (
-    defined('TYPO3_version') &&
-    version_compare(TYPO3_version, '7.0.0', '<')
-) {
-    $GLOBALS['TCA'][$table]['columns']['fe_group'] = array (
-        'exclude' => 1,
-        'label' => DIV2007_LANGUAGE_LGL . 'fe_group',
-        'config' => array (
-            'type' => 'select',
-            'items' => array (
-                array('', 0),
-                array(DIV2007_LANGUAGE_LGL . 'hide_at_login', -1),
-                array(DIV2007_LANGUAGE_LGL . 'any_login', -2),
-                array(DIV2007_LANGUAGE_LGL . 'usergroups', '--div--')
+        $temporaryColumns = array (
+            'tax_id' => array (
+                'exclude' => 0,
+                'label' => 'LLL:EXT:' . STATIC_INFO_TABLES_TAXES_EXT . '/locallang_db.xml:static_taxes.tx_rate_id',
+                'config' => array (
+                    'type' => 'select',
+                    'renderType' => 'selectSingle',
+                    'items' => array (
+                        array('LLL:EXT:' . STATIC_INFO_TABLES_TAXES_EXT . '/locallang_db.xml:static_taxes.tx_rate_id.I.0', '0'),
+                        array('LLL:EXT:' . STATIC_INFO_TABLES_TAXES_EXT . '/locallang_db.xml:static_taxes.tx_rate_id.I.1', '1'),
+                        array('LLL:EXT:' . STATIC_INFO_TABLES_TAXES_EXT . '/locallang_db.xml:static_taxes.tx_rate_id.I.2', '2'),
+                        array('LLL:EXT:' . STATIC_INFO_TABLES_TAXES_EXT . '/locallang_db.xml:static_taxes.tx_rate_id.I.3', '3'),
+                        array('LLL:EXT:' . STATIC_INFO_TABLES_TAXES_EXT . '/locallang_db.xml:static_taxes.tx_rate_id.I.4', '4'),
+                        array('LLL:EXT:' . STATIC_INFO_TABLES_TAXES_EXT . '/locallang_db.xml:static_taxes.tx_rate_id.I.5', '5'),
+                    ),
+                    'default' => 0
+                )
             ),
-            'foreign_table' => 'fe_groups',
+        );
+
+        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns(
+            $table,
+            $temporaryColumns
+        );
+        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
+            $table,
+            'tax_id',
+            '',
+            'replace:tax_dummy'
+        );
+
+        $GLOBALS['TCA'][$table]['interface']['showRecordFieldList'] = str_replace(',tax,', ',tax,tax_id,', $GLOBALS['TCA'][$table]['interface']['showRecordFieldList']);
+    }
+
+
+
+    switch ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['articleMode']) {
+        case '1':
+            $GLOBALS['TCA'][$table]['columns']['article_uid'] = array (
+                'exclude' => 1,
+                'label' => 'LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.article_uid',
+                'config' => array (
+                    'type' => 'group',
+                    'internal_type' => 'db',
+                    'allowed' => 'tt_products_articles',
+                    'MM' => 'tt_products_products_mm_articles',
+                    'foreign_table' => 'tt_products_articles',
+                    'foreign_table_where' => ' ORDER BY tt_products_articles.title',
+                    'size' => 10,
+                    'selectedListStyle' => 'width:450px',
+                    'minitems' => 0,
+                    'maxitems' => 1000,
+                    'default' => 0
+                )
+            );
+            break;
+        case '2':
+            // leave the settings of article_uid
+            break;
+        case '0':
+        default:
+            unset($GLOBALS['TCA'][$table]['columns']['article_uid']);
+            // neu Anfang
+            $result['types']['0'] = str_replace(',article_uid,', ',', $GLOBALS['TCA'][$table]['types']['0']);
+            // neu Ende
+            break;
+    }
+
+    $addressTable = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['addressTable'];
+
+    if (!$addressTable) {
+        $addressTable = 'fe_users';
+    }
+
+    $GLOBALS['TCA'][$table]['columns']['address'] = array (
+        'exclude' => 1,
+        'label' => DIV2007_LANGUAGE_LGL . 'address',
+        'config' => array (
+            'type' => 'group',
+            'internal_type' => 'db',
+            'allowed' => $addressTable,
+            'size' => 1,
+            'minitems' => 0,
+            'maxitems' => 1,
             'default' => 0
         )
     );
-}
 
+    $newFields = 'address';
 
-$excludeArray = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['exclude.'];
-if (
-    defined('TYPO3_version') &&
-    version_compare(TYPO3_version, '9.0.0', '<')
-) {
-    $excludeArray[$table] .= ',slug';
-}
-
-if (
-    isset($excludeArray) &&
-    is_array($excludeArray) &&
-    isset($excludeArray[$table])
-) {
-    \JambageCom\Div2007\Utility\TcaUtility::removeField(
-        $GLOBALS['TCA'][$table],
-        $excludeArray[$table]
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
+        $table,
+        $newFields,
+        '',
+        'before:price'
     );
-}
+
+    $orderBySortingTablesArray = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['orderBySortingTables']);
+    if (
+        !empty($orderBySortingTablesArray) &&
+        in_array($table, $orderBySortingTablesArray)
+    ) {
+        $GLOBALS['TCA'][$table]['ctrl']['sortby'] = 'sorting';
+    }
+
+    if (
+        defined('TYPO3_version') &&
+        version_compare(TYPO3_version, '7.0.0', '<')
+    ) {
+        $GLOBALS['TCA'][$table]['columns']['fe_group'] = array (
+            'exclude' => 1,
+            'label' => DIV2007_LANGUAGE_LGL . 'fe_group',
+            'config' => array (
+                'type' => 'select',
+                'items' => array (
+                    array('', 0),
+                    array(DIV2007_LANGUAGE_LGL . 'hide_at_login', -1),
+                    array(DIV2007_LANGUAGE_LGL . 'any_login', -2),
+                    array(DIV2007_LANGUAGE_LGL . 'usergroups', '--div--')
+                ),
+                'foreign_table' => 'fe_groups',
+                'default' => 0
+            )
+        );
+    }
+
+
+    $excludeArray = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][TT_PRODUCTS_EXT]['exclude.'];
+    if (
+        defined('TYPO3_version') &&
+        version_compare(TYPO3_version, '9.0.0', '<')
+    ) {
+        $excludeArray[$table] .= ',slug';
+    }
+
+    if (
+        isset($excludeArray) &&
+        is_array($excludeArray) &&
+        isset($excludeArray[$table])
+    ) {
+        \JambageCom\Div2007\Utility\TcaUtility::removeField(
+            $GLOBALS['TCA'][$table],
+            $excludeArray[$table]
+        );
+    }
+
+
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToInsertRecords($table);
+});
 

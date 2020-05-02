@@ -12,29 +12,12 @@ call_user_func(function () {
         call_user_func($emClass . '::addStaticFile', TT_PRODUCTS_EXT, 'Configuration/TypoScript/PluginSetup/Searchbox/', 'Shop System Search Box');
     }
 
-    call_user_func($emClass . '::addToInsertRecords', 'tt_products');
-    call_user_func($emClass . '::addToInsertRecords', 'tt_products_language');
-    call_user_func($emClass . '::addToInsertRecords', 'tt_products_articles');
-    call_user_func($emClass . '::addToInsertRecords', 'tt_products_articles_language');
-    call_user_func($emClass . '::addToInsertRecords', 'tt_products_products_mm_articles');
-    call_user_func($emClass . '::addToInsertRecords', 'tt_products_cat');
-    call_user_func($emClass . '::addToInsertRecords', 'tt_products_cat_language');
-    call_user_func($emClass . '::addToInsertRecords', 'tt_products_downloads');
-    call_user_func($emClass . '::addToInsertRecords', 'tt_products_downloads_language');
-    call_user_func($emClass . '::addToInsertRecords', 'tt_products_emails');
-    call_user_func($emClass . '::addToInsertRecords', 'tt_products_graduated_price');
-    call_user_func($emClass . '::addToInsertRecords', 'tt_products_mm_graduated_price');
-    call_user_func($emClass . '::addToInsertRecords', 'tt_products_texts');
-    call_user_func($emClass . '::addToInsertRecords', 'tt_products_texts_language');
-
     call_user_func($emClass . '::allowTableOnStandardPages', 'tt_products');
     call_user_func($emClass . '::allowTableOnStandardPages', 'tt_products_language');
     call_user_func($emClass . '::allowTableOnStandardPages', 'tt_products_articles');
     call_user_func($emClass . '::allowTableOnStandardPages', 'tt_products_articles_language');
     call_user_func($emClass . '::allowTableOnStandardPages', 'tt_products_cat');
     call_user_func($emClass . '::allowTableOnStandardPages', 'tt_products_cat_language');
-    call_user_func($emClass . '::allowTableOnStandardPages', 'tt_products_downloads');
-    call_user_func($emClass . '::allowTableOnStandardPages', 'tt_products_downloads_language');
     call_user_func($emClass . '::allowTableOnStandardPages', 'tt_products_graduated_price');
     call_user_func($emClass . '::allowTableOnStandardPages', 'tt_products_emails');
     call_user_func($emClass . '::allowTableOnStandardPages', 'tt_products_mm_graduated_price');

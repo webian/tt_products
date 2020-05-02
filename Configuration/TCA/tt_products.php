@@ -905,7 +905,7 @@ $result = array(
 			'--div--;LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.descriptions,note, note2,note_uid,text_uid,image,smallimage,datasheet,'.
 			'--div--;LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.variants,color,color2,--palette--;;10,size,size2,--palette--;;11,description,gradings,material,quality,--palette--;;,additional,--palette--;;12,'.
 			'--div--;LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.graduated,graduated_price_uid,'.
-			'--div--;LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.relations,article_uid,related_uid,accessory_uid,download_info,download_uid,'.
+			'--div--;LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.relations,article_uid,related_uid,accessory_uid,'.
 			'--div--;LLL:EXT:' . TT_PRODUCTS_EXT . '/locallang_db.xml:tt_products.shippingdiv,shipping_point,shipping,shipping2,handling,delivery,'
         )
 	),
