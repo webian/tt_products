@@ -5,13 +5,6 @@ call_user_func(function () {
     $emClass = '\\TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility';
     $divClass = '\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility';
 
-    call_user_func($emClass . '::addStaticFile', TT_PRODUCTS_EXT, 'Configuration/TypoScript/PluginSetup/Main/', 'Shop System CSS Styled');
-    call_user_func($emClass . '::addStaticFile', TT_PRODUCTS_EXT, 'Configuration/TypoScript/PluginSetup/Int/',  'Shop System Variable Content');
-
-    if (call_user_func($emClass . '::isLoaded', 'searchbox')) {
-        call_user_func($emClass . '::addStaticFile', TT_PRODUCTS_EXT, 'Configuration/TypoScript/PluginSetup/Searchbox/', 'Shop System Search Box');
-    }
-
     call_user_func($emClass . '::allowTableOnStandardPages', 'tt_products');
     call_user_func($emClass . '::allowTableOnStandardPages', 'tt_products_language');
     call_user_func($emClass . '::allowTableOnStandardPages', 'tt_products_articles');
@@ -64,5 +57,4 @@ call_user_func(function () {
         );
     }
 });
-
 

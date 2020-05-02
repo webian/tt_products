@@ -2,6 +2,7 @@
 2020-05-02 Franz Holzinger <franz@ttproducts.de>
     * bugfix: the tables tt_products_downloads and tt_products_downloads_language will come with version 2.13.2.
     * compatibility TYPO3 9.5: move \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToInsertRecords() into the files Overrides/tablename.php 
+    * compatibility TYPO3 9.5: move \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile() into Configuration/TCA/Overrides/sys_template.php .
 
 2020-04-28 Franz Holzinger <franz@ttproducts.de>
     * bugfix: The MatchCondition method checkShipping must read the recs and store them automatically.
